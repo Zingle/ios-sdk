@@ -6,6 +6,8 @@ Zingle is the global leader in omni-channel communication management.  Our award
 
 Throughout the documentation on this page we will use the object name "MyZingleApp" for the instance of your ZingleSDK.
 
+To view the latest API documentation, please refer to: http://api.zingle.me/docs/index.html
+
 ### Instantiating the SDK
 
 ```Objective-C

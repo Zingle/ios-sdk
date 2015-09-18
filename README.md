@@ -10,17 +10,17 @@ To view the latest API documentation, please refer to: http://api.zingle.me/docs
 
 Model | Description
 --- | ---
-ZingleSDK | This is the master class.  You must instantiate the SDK before you can perform any SDK operations.
-ZingleAccount | After authenticating, you are granted specific privileges to Accounts and Services within the Zingle platform.  It is often easiest to think of an Account as specific Business Location, where the Services within that account are seperate distinct messaging centers.
-ZingleService | An Account is a container for 1 or more Services.  A Service is a distinct messaging center that contains collections of conversations.  NOTE: Most objects within the Zingle SDK are required to know which Service they belong to.
+ZingleSDK | You must instantiate the SDK with proper credentials before you can perform any SDK operations.
+ZingleAccount | The Account is the master record for a Zingle Customer.  As the developer you will be granted access to specific Accounts and operate on their behalf.
+ZingleService | A valid Account is a container for 1 or more Services.  A Service is a distinct messaging center that contains collections of conversations.
 ZinglePlan | Every Service must have an associated Plan.  The plan defines the messaging limitations, features, and cost of the Zingle Service.
-ZingleContact | Contacts are people that are communicating with a Zingle Service.
-ZingleLabel | Labels are user-defined colored tags that can be applied to Contacts.  A Service can define 0 or more custom Labels.
+ZingleContact | Contacts are individuals that communicate in a 2-way conversation with a Zingle Service.
+ZingleLabel | Labels are user-defined colored tags that can be applied to Contacts.  A Service can define 0 or more custom Labels.  You can message all Contacts with a given Label for group messaging capabilities.
 ZingleCustomField | Custom Fields are user-defined meta-data that can be applied to Contacts. A Service can define 0 or more Custom Fields.
-ZingleChannelType | Channels are mediums which are used to facilitate communication between the Contact and the Service.  Example Channel Types are: Phone Number, Email Address, User Defined.  For IP based communication, you can specify custom Channel Types which you can give a custom friendly name.
-ZingleServiceChannel | A Service contains 1 or more Service Channels, which are specific defined mediums of communication.  A Service Channel will contain the Channel Type (Phone Number) and the Channel Value (+18585555555).  Service Channels must be unique across the entire Zingle universe, and they may never overlap.
-ZingleContactChannel | A Contact contains 1 or more Contact Channels.  Like Service Channels, they define the medium at which communication will be facilitated.  A Contact Channel also contains the Channel Type and Channel Value.
-ZingleMessage | The message defines the sender, recipient, message body, and any attachments.
+ZingleChannelType | Channels Types define the mediums which can be used to facilitate communication between the Contact and the Service.  Example Channel Types are: Phone Number, Email Address, and User Defined.
+ZingleServiceChannel | A Service Channel is a specific defined medium of communication.  A Service Channel will contain the Channel Type (Phone Number) and the Channel Value (+18585555555).  Service Channels must be unique across the entire Zingle universe.  A Service may contain 1 or more Service Channels of differing Channel Types.
+ZingleContactChannel | A Contact Channel is a specific defined medium of communication.  A Contact Channel will contain the Channel Type (Phone Number) and the Channel Value (+18585555555).  Contact Channels must be unique within a specific Service, meaning no 2 Contacts may share the same Channel within a Service.  A Contact may contain 1 or more Contact Channels of differing Channel Types.
+ZingleMessage | Messages define the sender, recipient(s), message body, and attachments.  Messages are sent to/from Contacts and Services via their respective Channels: SMS, Email, Web Based IP User Defined channels, etc...
 
 ### Instantiating the SDK
 

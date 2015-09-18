@@ -84,7 +84,8 @@ serviceSearch.serviceState = @"CA";
 One of Zingle's most widely used Channel Types is Phone Number.  As part of the SDK you can search for available Phone Numbers around the world, and assign the Phone Number to a Service Channel.  Contacts can then communicate with your Service via your unique Phone Number. (note: charges may apply)
 
 ```Objective-C
-- (void)searchForPhoneNumbersInCountry:(NSString *)countryCode withAreaCode:(NSString *)areaCode forService:(ZingleService *)service
+- (void)searchForPhoneNumbersInCountry:(NSString *)countryCode 
+        withAreaCode:(NSString *)areaCode forService:(ZingleService *)service
 {
     // Instantiate the Phone Number Search object from a Zingle Service instance
     ZingleAvailablePhoneNumberSearch *phoneNumberSearch = [service availablePhoneNumberSearch];

@@ -2,13 +2,15 @@
 
 ## Overview
 
-Zingle is the global leader in omni-channel communication management.  Our award winning platform is used by businesses all over the world to enhance the consumer to business conversation experience. The Zingle SDK aims to provide application developers an easy-to-use layer on top of the Zingle API.
-
-Throughout the documentation on this page we will use the object name "MyZingleApp" for the instance of your ZingleSDK.
+Zingle is the global leader in omni-channel communication management.  Our award winning platform is used by businesses all over the world to enhance the consumer to business conversation experience. The Zingle SDK aims to provide mobile application developers an easy-to-use layer on top of the Zingle API.
 
 To view the latest API documentation, please refer to: http://api.zingle.me/docs/index.html
 
 ### Instantiating the SDK
+
+~~~~
+**Note:** This page will use the object name "MyZingleApp" for the instance of your ZingleSDK.
+~~~~
 
 ```Objective-C
 - (void)buildZingleSDK

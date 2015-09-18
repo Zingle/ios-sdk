@@ -142,3 +142,34 @@ contactSearch.firstName = @"Bob*";
 [contactSearch setDelegate:self withSelector:@selector(contactSearchResults:)];
 [contactSearch search];
 ```
+
+### Labels
+
+#### Search Labels on a Service
+
+```Objective-C
+// Instantiate the Label Search object from a ZingleService instance
+ZingleServiceLabelSearch *labelSearch = [myHotelConciergeService labelSearch];
+
+// Delegate will receive NSError, or NSArray of 0 or more ZingleLabel objects
+[labelSearch setDelegate:self withSelector:@selector(labelSearchResults:)];
+[labelSearch search];
+```
+
+#### Create a new Label for a Service
+
+```Objective-C
+// Create a new Label object from a ZingleService instance
+ZingleLabel *myNewLabel = [myHotelConciergeService newLabel];
+
+// Set your new label properties
+myNewLabel.displayName = @"VIP";
+myNewLabel.backgroundColor = [UIColor greenColor];
+myNewLabel.textColor = [UIColor whiteColor];
+
+// Delegate will receive NSError, or a reference back to your newly created Label 
+[newLabel setDelegate:self withSelector:@selector(labelCreationResult:)];
+
+// Save the Label
+[newLabel save];
+```

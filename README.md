@@ -6,7 +6,17 @@ Zingle is the global leader in omni-channel communication management.  Our award
 
 To view the latest API documentation, please refer to: http://api.zingle.me/docs/index.html
 
-### Instantiating the SDK
+### Zingle Models Overview
+
+Model | Description
+--- | ---
+ZingleSDK | 
+ZingleAccount | After authenticating, you are granted specific privileges to Accounts and Services within the Zingle platform.  It is often easiest to think of an Account as specific Business Location, where the Services within that account would be seperate distinct message centers for that Account.
+ZingleService | An Account is a container for 1 or more Service subscriptions.  Most objects within the SDK are required to know which Service they belong to.
+ZingleContact | A Contact is the 
+ZingleLabel | Labels are custom colored tags that can be applied to Contacts.  A Service can contain 0 or more Labels.
+
+### [Instantiating the SDK](#ZingleSDK)
 
 **Note:** This page will use the object name "MyZingleApp" for the instance of your ZingleSDK.
 
@@ -35,20 +45,8 @@ To view the latest API documentation, please refer to: http://api.zingle.me/docs
 }
 ```
 
-### Zingle Models Overview
-
-Model | Description
---- | ---
-ZingleSDK | 
-ZingleAccount | After authenticating, you are granted specific privileges to Accounts and Services within the Zingle platform.  It is often easiest to think of an Account as specific Business Location, where the Services within that account would be seperate distinct message centers for that Account.
-ZingleService | An Account is a container for 1 or more Service subscriptions.  Most objects within the SDK are required to know which Service they belong to.
-ZingleContact | A Contact is the 
-ZingleLabel | Labels are custom colored tags that can be applied to Contacts.  A Service can contain 0 or more Labels.
-
 
 ### Accounts
-
-
 
 ```Objective-C
 // Build your account search

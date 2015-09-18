@@ -10,7 +10,7 @@ To view the latest API documentation, please refer to: http://api.zingle.me/docs
 
 Model | Description
 --- | ---
-[ZingleSDK](README.md#instantiating-the-sdk) | 
+ZingleSDK | This is the master SDK Class.  You must instantiate the SDK before you can perform SDK operations.
 ZingleAccount | After authenticating, you are granted specific privileges to Accounts and Services within the Zingle platform.  It is often easiest to think of an Account as specific Business Location, where the Services within that account would be seperate distinct message centers for that Account.
 ZingleService | An Account is a container for 1 or more Service subscriptions.  Most objects within the SDK are required to know which Service they belong to.
 ZingleContact | A Contact is the 

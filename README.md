@@ -51,12 +51,11 @@ ZingleMessage | Messages define the sender, recipient(s), message body, and atta
 }
 ```
 
-
-### Accounts
+### Account Search
 
 ```Objective-C
-// Build your account search
-ZingleAccountSearch *accountSearch = [MyZingleApp accountSearch];
+// Build your Account Search object from the ZingleSDK instance.
+ZingleAccountSearch *accountSearch = [myZingleApp accountSearch];
 
 // Specify search criteria; note stars are used as wild cards.
 accountSearch.displayName = @"*Test*";
@@ -66,3 +65,18 @@ accountSearch.displayName = @"*Test*";
 [accountSearch search];
 ```
 
+### Service Search
+
+```
+// Build the Service Search object from a ZingleAccount instance.
+ZingleServiceSearch *serviceSearch = [myZingleAccount serviceSearch];
+
+// Specify search criteria
+serviceSearch.planId = @"00000000-0000-0000-0000-000000000000";
+serviceSearch.serviceDisplayName = @"*Concierge*";
+serviceSearch.serviceState = @"CA";
+
+// Delegate will receive NSError, or NSArray of ZingleService objects
+[serviceSearch setDelegate:self withSelector:@selector(serviceSearchResults:)];
+[serviceSearch search];
+```

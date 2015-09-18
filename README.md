@@ -7,40 +7,41 @@ Zingle is the global leader in omni-channel communication management.  Our award
 ### Instantiating the SDK
 
 ```Objective-C
-// Instantiate the master ZingleSDK instance
-ZingleSDK *Zingle = [Zingle SDKWithToken:@"API_TOKEN" andKey:@"API_KEY"];
+- (void)buildZingleSDK
+{
+    // Instantiate the master ZingleSDK instance
+    ZingleSDK *Zingle = [Zingle SDKWithToken:@"API_TOKEN" andKey:@"API_KEY"];
+    
+    // Before making any API request via the SDK, you must specify a callback selector to get called 
+    // with the result of the request.
+    [Zingle setDelegate:self withSelector:@selector(validationResponse:)];
 
-// Before making a service request, you must specify a callback selector to get called 
-// with the result of the request.
-[Zingle setDelegate:self withSelector:@selector(validationResponse:)];
+    // This method validates the supplied credentials.
+    [Zingle validateAuthentication];
+}
 
-// Validate the supplied authentication credentials.This step is not required to begin 
-// making SDK calls, but should be your first step to validate you have a positive 
-// connection to the Zingle API when you start development.
-[Zingle validateAuthentication];
-```
-
-**Delegate**
-
-```Objective-C
 - (void)validationResponse:(id)response
 {
     NSLog(@"%@", response.message);
     
     if( [response isTypeOfClass:[NSError class]] )
     {
-        // An error occurred    
+        // An error occurred, authentication validation failed.
     }
 }
 ```
 
-### Asyncronous Model
+### Accounts
 
-The SDK provides a simple to use layer on top of the Zingle API.  Models have many methods on them that require a web service call to the internet.  You will be required to specify a callback method before you make these calls if you want to be notified of the results of the call.
-
-**Example**
+Authenticating with the API will grant you privileges to Accounts and Services within the Zingle platform.
 
 ```Objective-C
+// Instantiate the SDK
+ZingleSDK *Zingle = [Zingle SDKWithToken:@"API_TOKEN" andKey:@"API_KEY"];
 
+// Build your account search
+ZingleAccountSearch *accountSearch = [Zingle accountSearch];
+[accountSearch setDelegate:self withSelector:@selector(accountSearchResults:)];
+[accountSearch search];
 ```
 

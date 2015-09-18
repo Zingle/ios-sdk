@@ -79,7 +79,7 @@ serviceSearch.serviceState = @"CA";
 [serviceSearch search];
 ```
 
-### Available Phone Number Search
+### Available Phone Number Search & Provisioning
 
 One of Zingle's most widely used Channel Types is Phone Number.  As part of the SDK you can search for available Phone Numbers around the world, and assign the Phone Number to a Service Channel.  Contacts can then communicate with your Service via your unique Phone Number. (note: charges may apply)
 

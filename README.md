@@ -100,17 +100,17 @@ One of Zingle's most widely used Channel Types is Phone Number.  As part of the 
 
 - (void)phoneNumberSearchResults:(id)result
 {
-    if( [response isTypeOfClass:[NSError class]] )
+    if( [result isTypeOfClass:[NSError class]] )
     {
         // An error occurred
     }
     else 
     {
-        NSArray *results = (NSArray *)result;
-        if( [results count] > 0 )
+        NSArray *availablePhoneNumbers = (NSArray *)result;
+        if( [availablePhoneNumbers count] > 0 )
         {
             // Grab the first available phone number from the array
-            ZingleAvailablePhoneNumber *firstPhoneNumber = [results firstObject];
+            ZingleAvailablePhoneNumber *firstPhoneNumber = [availablePhoneNumbers firstObject];
             NSLog(@"First Available Phone Number: %@", firstPhoneNUmber);
             
             // We build a new Channel from the phone number which will associate to the Service

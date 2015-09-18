@@ -58,7 +58,7 @@ ZingleAccountSearch *accountSearch = [myZingleApp accountSearch];
 // Specify search criteria; note stars are used as wild cards.
 accountSearch.displayName = @"*Test*";
 
-// Delegate will receive NSError, or NSArray of ZingleAccount objects
+// Delegate will receive NSError, or NSArray of 0 or more ZingleAccount objects
 [accountSearch setDelegate:self withSelector:@selector(accountSearchResults:)];
 [accountSearch search];
 ```
@@ -74,7 +74,7 @@ serviceSearch.planId = @"00000000-0000-0000-0000-000000000000";
 serviceSearch.serviceDisplayName = @"*Concierge*";
 serviceSearch.serviceState = @"CA";
 
-// Delegate will receive NSError, or NSArray of ZingleService objects
+// Delegate will receive NSError, or NSArray of 0 or more ZingleService objects
 [serviceSearch setDelegate:self withSelector:@selector(serviceSearchResults:)];
 [serviceSearch search];
 ```
@@ -94,7 +94,7 @@ One of Zingle's most widely used Channel Types is Phone Number.  As part of the 
     phoneNumberSearch.country = countryCode;
     phoneNumberSearch.areaCode = areaCode;
     
-    // Delegate will receive NSError, or NSArray of ZingleAvailablePhoneNumber objects
+    // Delegate will receive NSError, or NSArray of 0 or more ZingleAvailablePhoneNumber objects
     [phoneNumberSearch setDelegate:self withSelector:@selector(phoneNumberSearchResults:)];
     [phoneNumberSearch search];
 }
@@ -108,6 +108,7 @@ One of Zingle's most widely used Channel Types is Phone Number.  As part of the 
     else 
     {
         NSArray *availablePhoneNumbers = (NSArray *)result;
+        
         if( [availablePhoneNumbers count] > 0 )
         {
             // Grab the first available phone number from the array
@@ -126,4 +127,18 @@ One of Zingle's most widely used Channel Types is Phone Number.  As part of the 
         }
     }
 }
+```
+
+### Contact Search
+
+```Objective-C
+// Instantiate the Contact Search object from a ZingleService instance
+ZingleServiceContactSearch *contactSearch = [myHotelConciergeService contactSearch];
+
+// Specify your search criteria; stars act as wild-cards
+contactSearch.firstName = @"Bob*";
+
+// Delegate will receive NSError, or NSArray of 0 or more ZingleContact objects
+[contactSearch setDelegate:self withSelector:@selector(contactSearchResults:)];
+[contactSearch search];
 ```

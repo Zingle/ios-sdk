@@ -67,7 +67,7 @@ accountSearch.displayName = @"*Test*";
 
 ### Service Search
 
-```
+```Objective-C
 // Build the Service Search object from a ZingleAccount instance.
 ZingleServiceSearch *serviceSearch = [myZingleAccount serviceSearch];
 

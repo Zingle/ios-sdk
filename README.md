@@ -28,21 +28,35 @@ ZNGMessageCorrespondent | Message Correspondents are the abstract representation
 ZNGMessageAttachment | Message Attachments provide the ability to add binary data, such as images, to messages.
 ZNGAutomation | Automations perform triggered tasks, based on conditions, within the Zingle platform without any direct user interaction.  Tasks include messaging contacts, applying labels, applying custom fields, printing to Zingle Printers, and much more.
 
-### Instantiating the SDK
+### Asynchronous and Synchronous
+
+The iOS SDK allows both synchronous and asynchronous operation.  Every method that makes a web service request, will also contain another similar method with two additional parameters for callback blocks on success and error.
 
 ```Objective-C
-- (void)buildZingleSDK
-{
-    // Instantiate the master ZingleSDK instance
-    ZingleSDK *myZingleApp = [ZingleSDK SDKWithToken:@"API_TOKEN" andKey:@"API_KEY"];
-    
-    // Before making any API request via the SDK, you must specify a callback selector to get called 
-    // with the result of the request.
-    [MyZingleApp setDelegate:self withSelector:@selector(validationResponse:)];
+// Syncronous operation sends, waits, and returns an array of ZNGAccount objects
+NSArray *accounts = [(ZNGAccountSearch *)accountSearch search]; 
+NSLog(@"Search Complete.  Got Accounts: %@", accounts);
 
-    // This method validates the supplied credentials.
-    [MyZingleApp validateAuthentication];
-}
+// Asyncronous variation will continue on main thread, and callback on success or error
+[(ZNGAccountSearch *)accountSearch searchWithCompletionBlock:^(NSArray *results) {
+    NSLog(@"Search Complete.  Got Accounts: %@", results);
+} errorBlock:^(NSError *error) {
+    NSLog(@"Got Error: %@", error);
+}];
+```
+
+### Quick Start
+
+```Objective-C
+// Before any 
+ZingleSDK *myZingleApp = [ZingleSDK SDKWithToken:@"API_TOKEN" andKey:@"API_KEY"];
+
+// Before making any API request via the SDK, you must specify a callback selector to get called 
+// with the result of the request.
+[MyZingleApp setDelegate:self withSelector:@selector(validationResponse:)];
+
+// This method validates the supplied credentials.
+[MyZingleApp validateAuthentication];
 
 - (void)validationResponse:(id)response
 {

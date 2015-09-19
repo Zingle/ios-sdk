@@ -2,7 +2,7 @@
 
 ## Overview
 
-Zingle is a communications platform that allows the sending, receiving and automating of conversations between a Business and a Customer, over a variety of messaging channels.  Zingle is typically interacted with by Businesses via a web browser to manage these conversations with their customers.  The Zingle API provides functionality to developers to act on behalf of either the Business or the Customer.  The Zingle iOS SDK provides mobile application developers an easy-to-use layer on top of the Zingle API.
+Zingle is a multi-channel communications platform that allows the sending, receiving and automating of conversations between a Business and a Customer.  Zingle is typically interacted with by Businesses via a web browser to manage these conversations with their customers.  The Zingle API provides functionality to developers to act on behalf of either the Business or the Customer.  The Zingle iOS SDK provides mobile application developers an easy-to-use layer on top of the Zingle API.
 
 To view the latest API documentation, please refer to: http://api.zingle.me/docs/index.html
 

@@ -101,8 +101,8 @@ else
                 [newServiceChannel save];
                 
                 ZNGContact *contact = [newService newContact];
-                [contact setFirstName:@"David"];
-                [contact setLastName:@"Peace"];
+                [contact setFirstName:@"David"]; // Enter your first name here
+                [contact setLastName:@"Peace"];  // Enter your last name here
                 [contact save];
                 
                 ZNGContactChannel *contactChannel = [contact newContactChannel];
@@ -112,7 +112,7 @@ else
                 
                 ZNGMessage *newMessage = [newService newMessage];
                 [newMessage addRecipient:contact];
-                newMessage.body = @"Welcome to Zingle - you have successfully set up, and messaged from a New Service";
+                newMessage.body = @"Dear {FIRST_NAME}, welcome to Zingle - you have successfully set up, and messaged from a New Service.";
                 [newMessage send];
             }
         }

@@ -11,8 +11,8 @@ To view the latest API documentation, please refer to: http://api.zingle.me/docs
 Model | Description
 --- | ---
 ZingleSDK | A singleton master object that holds the credentials, stateful information, and the distribution of notifications in the ZingleSDK.
-ZNGAccount | An Account is the master record for a Business that uses Zingle.  As the developer you will be granted access to specific Accounts, and be provided the ability to perform operations on their behalf.
-ZNGService | An Account is a container for Services.  A Service is a distinct messaging center that contains collections of conversations.
+ZNGAccount | An Account is the master record for a Business that uses Zingle.  As the developer you will be granted access to specific Accounts, and be provided the ability to perform operations on their behalf.  An Account is a container for one or more Services.
+ZNGService | A Service is a distinct messaging center that contains collections of conversations with Contacts. 
 ZNGPlan | Every Service must have an associated Plan.  The plan defines the messaging limitations, features, and cost of the Zingle Service.
 ZNGContact | Contacts are customers to the Business. They are individuals that communicate in a two-way conversation with a Zingle Service.
 ZNGLabel | Labels are customizeable colored tags that can be applied to Contacts. Services may message all Contacts with a given Label for group messaging capabilities.

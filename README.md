@@ -107,11 +107,12 @@ else
                 
                 ZNGContactChannel *contactChannel = [contact newContactChannel];
                 contactChannel.channelType = [newService channelTypeWithClass:@"PhoneNumber"];
-                contactChannel.channelValue = @"+18585555555";
+                contactChannel.channelValue = @"+18585555555"; // Enter your SMS capable cell phone number here
                 [contactChannel save];
                 
                 ZNGMessage *newMessage = [newService newMessage];
                 [newMessage addRecipient:contact];
+                newMessage.body = @"Welcome to Zingle - you have successfully set up, and messaged from a New Service";
                 [newMessage send];
             }
         }

@@ -147,7 +147,7 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
 ### Asynchronous Quick Start
 
 ```Objective-C
-- (void)zingleSynchronousTest
+- (void)zingleAsynchronousTest
 {
     [[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
 

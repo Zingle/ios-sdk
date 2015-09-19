@@ -15,6 +15,7 @@ ZNGAccount | An Account is the master record for a Business that uses Zingle.  A
 ZNGService | A Service is a distinct messaging center that contains collections of conversations with Contacts. 
 ZNGPlan | Every Service must have an associated Plan.  The plan defines the messaging limitations, features, and cost of the Zingle Service.
 ZNGContact | Contacts are customers to the Business. They are individuals that communicate in a two-way conversation with a Zingle Service.
+ZNGAvailablePhoneNumber | As part of the Zingle platform, you are able to search for, and provision new SMS-cabable Phone Numbers.  These phone numbers will become an additional Channel on which Contacts can communicate to your Service.
 ZNGLabel | Labels are customizeable colored tags that can be applied to Contacts. Services may message all Contacts with a given Label for group messaging capabilities.
 ZNGCustomField | Custom Fields provide the ability to add variable meta data to Contacts. Custom Fields are useful for maintaining relevant stateful information about your Contacts.
 ZNGCustomFieldOption | Custom Fields may be either simple types (like a string), or be an option list.  Custom Field Options are the invididual values within an option list.

@@ -49,7 +49,7 @@ NSLog(@"Search Complete.  Got Accounts: %@", accounts);
 
 The following code snippet will search for an Account you have access to.  Create a new Service, provision a new Phone Number channel, and send a message to a Contact Phone Number.
 
-**Syncronous**
+**Synchronous Example**
 
 ```Objective-C
 [[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
@@ -188,6 +188,8 @@ One of Zingle's most widely used Channel Types is Phone Number.  As part of the 
     }
 }
 ```
+
+**Asynchronous Example**
 
 ### Contact Search
 

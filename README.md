@@ -47,8 +47,6 @@ NSLog(@"Search Complete.  Got Accounts: %@", accounts);
 
 ### Quick Start
 
-The following code snippet will search for an Account you have access to.  Create a new Service, provision a new Phone Number channel, and send a message to a Contact Phone Number.
-
 **Synchronous Example**
 
 ```Objective-C

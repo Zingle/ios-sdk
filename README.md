@@ -30,7 +30,7 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
 
 ### Asynchronous and Synchronous
 
-The iOS SDK allows both synchronous and asynchronous operation.  Every method that makes a web service request, will also contain another similar method with two additional parameters for callback blocks on success and error.
+The iOS SDK allows both synchronous and asynchronous operation.  Every method that makes a web service request, will also contain another similar method with two additional parameters for callback blocks on completion and error.
 
 ```Objective-C
 // Syncronous operation sends, waits, and returns an array of ZNGAccount objects

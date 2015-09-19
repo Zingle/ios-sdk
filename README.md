@@ -100,9 +100,19 @@ else
                 newServiceChannel.is_default = YES;
                 [newServiceChannel save];
                 
-                ZNGMessage *newMessage = [service newMessage];
-                ZNGMessageCorrespondent *recipient = [newMessage newCorrespondent];
+                ZNGContact *contact = [newService newContact];
+                [contact setFirstName:@"David"];
+                [contact setLastName:@"Peace"];
+                [contact save];
                 
+                ZNGContactChannel *contactChannel = [contact newContactChannel];
+                contactChannel.channelType = [newService channelTypeWithClass:@"PhoneNumber"];
+                contactChannel.channelValue = @"+18585555555";
+                [contactChannel save];
+                
+                ZNGMessage *newMessage = [newService newMessage];
+                [newMessage addRecipient:contact];
+                [newMessage send];
             }
         }
     }

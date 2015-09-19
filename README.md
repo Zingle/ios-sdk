@@ -82,7 +82,22 @@ else
             ZNGService *newService = [firstAccount newService];
             newService.displayName = @"My new service";
             newService.plan = sandboxPlan;
+            newService.address.address = @"1234 Jovin Street";
+            newService.address.city = @"Carlsbad";
+            newService.address.state = @"CA";
+            newService.address.postalCode = @"92101";
+            newService.address.country = @"US";
             [newService save];
+            
+            ZNGCustomField *membershipNumber = [newService newCustomField];
+            membershipNumber.displayName = @"Membership Number";
+            [membershipNumber save];
+            
+            ZNGLabel *vipLabel = [newService newLabel];
+            vipLabel.backgroundColor = [UIColor yellowColor];
+            vipLabel.foregroundColor = [UIColor blueColor];
+            vipLabel.displayName = @"VIP";
+            [vipLabel save];
             
             ZNGPhoneNumberSearch *phoneNumberSearch = [newService phoneNumberSearch];
             phoneNumberSearch.country = @"US";
@@ -101,9 +116,12 @@ else
                 [newServiceChannel save];
                 
                 ZNGContact *contact = [newService newContact];
-                [contact setFirstName:@"David"]; // Enter your first name here
-                [contact setLastName:@"Peace"];  // Enter your last name here
+                [contact setValue:@"David" forCustomField:@"First Name"]; // Enter your first name here
+                [contact setValue:@"Peace" forCustomField:@"Last Name"];  // Enter your last name here
+                [contact setValue:@"123-467-98" forCustomField:@"Membership Number"];
                 [contact save];
+                
+                [contact applyLabel:vipLabel];
                 
                 ZNGContactChannel *contactChannel = [contact newContactChannel];
                 contactChannel.channelType = [newService channelTypeWithClass:@"PhoneNumber"];
@@ -112,41 +130,10 @@ else
                 
                 ZNGMessage *newMessage = [newService newMessage];
                 [newMessage addRecipient:contact];
-                newMessage.body = @"Dear {FIRST_NAME}, welcome to Zingle - you have successfully set up, and messaged from a New Service.";
+                newMessage.body = @"Dear {FIRST_NAME}, welcome to Zingle - you have successfully set up, and messaged from a New Service. Your membership # is: {MEMBERSHIP_NUMBER}.";
                 [newMessage send];
             }
         }
     }
 }
-```
-
-### Labels
-
-#### Search Labels on a Service
-
-```Objective-C
-// Instantiate the Label Search object from a ZingleService instance
-ZingleServiceLabelSearch *labelSearch = [myHotelConciergeService labelSearch];
-
-// Delegate will receive NSError, or NSArray of 0 or more ZingleLabel objects
-[labelSearch setDelegate:self withSelector:@selector(labelSearchResults:)];
-[labelSearch search];
-```
-
-#### Create a new Label for a Service
-
-```Objective-C
-// Create a new Label object from a ZingleService instance
-ZingleLabel *myNewLabel = [myHotelConciergeService newLabel];
-
-// Set your new label properties
-myNewLabel.displayName = @"VIP";
-myNewLabel.backgroundColor = [UIColor greenColor];
-myNewLabel.textColor = [UIColor whiteColor];
-
-// Delegate will receive NSError, or a reference back to your newly created Label 
-[newLabel setDelegate:self withSelector:@selector(labelCreationResult:)];
-
-// Save the Label
-[newLabel save];
 ```

@@ -47,24 +47,64 @@ NSLog(@"Search Complete.  Got Accounts: %@", accounts);
 
 ### Quick Start
 
+The following code snippet will search for an Account you have access to.  Create a new Service, provision a new Phone Number channel, and send a message to a Contact Phone Number.
+
+**Syncronous**
+
 ```Objective-C
-// Before any 
-ZingleSDK *myZingleApp = [ZingleSDK SDKWithToken:@"API_TOKEN" andKey:@"API_KEY"];
+[[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
 
-// Before making any API request via the SDK, you must specify a callback selector to get called 
-// with the result of the request.
-[MyZingleApp setDelegate:self withSelector:@selector(validationResponse:)];
+BOOL validated = [[ZingleSDK sharedSDK] validateAuthentication];
 
-// This method validates the supplied credentials.
-[MyZingleApp validateAuthentication];
-
-- (void)validationResponse:(id)response
+if( !validated )
 {
-    NSLog(@"%@", response.message);
-    
-    if( [response isTypeOfClass:[NSError class]] )
+    NSLog(@"Invalid Credentials");
+}
+else 
+{
+    ZNGAccountSearch *accountSearch = [[ZingleSDK sharedSDK] accountSearch];
+    NSArray *accounts = [accountSearch search];
+    if( [accounts length] == 0 )
     {
-        // An error occurred, authentication validation failed.
+        NSLog(@"You don't have access to any accounts.");
+    }
+    else
+    {
+        ZNGAccount *firstAccount = [accounts firstObject];
+        ZNGPlanSearch *planSearch = [firstAccount planSearch];
+        planSearch.code = @"zingle_sandbox";
+        NSArray *plans = [planSearch search];
+        
+        if( [plans length] > 0 )
+        {
+            ZNGPlan *sandboxPlan = [plans firstObject];
+            
+            ZNGService *newService = [firstAccount newService];
+            newService.displayName = @"My new service";
+            newService.plan = sandboxPlan;
+            [newService save];
+            
+            ZNGPhoneNumberSearch *phoneNumberSearch = [newService phoneNumberSearch];
+            phoneNumberSearch.country = @"US";
+            phoneNumberSearch.areaCode = @"858";
+            
+            NSArray *availablePhoneNumbers = [phoneNumberSearch search];
+            if( [availablePhoneNumbers length] == 0 )
+            {
+                NSLog(@"No available phone numbers found.");
+            }
+            else
+            {
+                ZNGAvailablePhoneNumber *firstAvailablePhoneNumber = [availablePhoneNumbers firstObject];
+                ZNGServiceChannel *newServiceChannel = [firstAvailablePhoneNumber newServiceChannel];
+                newServiceChannel.is_default = YES;
+                [newServiceChannel save];
+                
+                ZNGMessage *newMessage = [service newMessage];
+                ZNGMessageCorrespondent *recipient = [newMessage newCorrespondent];
+                
+            }
+        }
     }
 }
 ```

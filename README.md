@@ -2,25 +2,26 @@
 
 ## Overview
 
-Zingle is the global leader in omni-channel communication management.  Our award winning platform is used by businesses all over the world to enhance the consumer to business conversation experience. The Zingle SDK aims to provide mobile application developers an easy-to-use layer on top of the Zingle API.
+Zingle is a communications platform that allows the sending, receiving and automating of conversations between a Business and a Customer, over a variety of messaging channels.  Zingle is typically interacted with by Businesses via a web browser to manage these conversations with their customers.  The Zingle API provides functionality to developers to act on behalf of either the Business or the Customer.  The Zingle iOS SDK provides mobile application developers an easy-to-use layer on top of the Zingle API.
 
 To view the latest API documentation, please refer to: http://api.zingle.me/docs/index.html
 
-### Zingle Model Core-Concepts
+### Zingle Object Model
 
 Model | Description
 --- | ---
-ZingleSDK | You must instantiate the SDK with proper credentials before you can perform any SDK operations.
-ZingleAccount | The Account is the master record for a Zingle Customer.  As the developer you will be granted access to specific Accounts and operate on their behalf.
-ZingleService | A valid Account is a container for 1 or more Services.  A Service is a distinct messaging center that contains collections of conversations.
-ZinglePlan | Every Service must have an associated Plan.  The plan defines the messaging limitations, features, and cost of the Zingle Service.
-ZingleContact | Contacts are individuals that communicate in a 2-way conversation with a Zingle Service.
-ZingleLabel | Labels are user-defined colored tags that can be applied to Contacts.  A Service can define 0 or more custom Labels.  You can message all Contacts with a given Label for group messaging capabilities.
-ZingleCustomField | Custom Fields are user-defined meta-data that can be applied to Contacts. A Service can define 0 or more Custom Fields.
-ZingleChannelType | Channel Types define the mediums which can be used to facilitate communication between the Contact and the Service.  Example Channel Types are: Phone Number, Email Address, and User Defined.
-ZingleServiceChannel | A Service Channel is a specific defined medium of communication.  A Service Channel will contain the Channel Type (Phone Number) and the Channel Value (+18585555555).  Service Channels must be unique across the entire Zingle universe.  A Service may contain 1 or more Service Channels of differing Channel Types.
-ZingleContactChannel | A Contact Channel is a specific defined medium of communication.  A Contact Channel will contain the Channel Type (Phone Number) and the Channel Value (+18585555555).  Contact Channels must be unique within a specific Service, meaning no 2 Contacts may share the same Channel within a Service.  A Contact may contain 1 or more Contact Channels of differing Channel Types.
-ZingleMessage | Messages define the sender, recipient(s), message body, and attachments.  Messages are sent to/from Contacts and Services via their respective Channels: SMS, Email, Web Based IP User Defined channels, etc...
+ZingleSDK | A singleton master object that holds the credentials, stateful information, and the distribution of notifications in the ZingleSDK.
+ZNGAccount | An Account is the master record for a Business that uses Zingle.  As the developer you will be granted access to specific Accounts, and be provided the ability to perform operations on their behalf.
+ZNGService | An Account is a container for 1 or more Services.  A Service is a distinct messaging center that contains collections of conversations.
+ZNGPlan | Every Service must have an associated Plan.  The plan defines the messaging limitations, features, and cost of the Zingle Service.
+ZNGContact | Contacts are customers to the Business. They are individuals that communicate in a two-way conversation with a Zingle Service.
+ZNGLabel | Labels are customizeable colored tags that can be applied to Contacts. Services may message all Contacts with a given Label for group messaging capabilities.
+ZNGCustomField | Custom Fields provide the ability to add variable meta data to Contacts. Custom Fields are useful for maintaining relevant stateful information about your Contacts.
+ZNGChannelType | Channel Types are the medium that facilitate communication between the Contact and the Service.  Example Channel Types are: Phone Number, Email Address, and User Defined.
+ZNGServiceChannel | A Service Channel is the way Contacts can communicate with a Service.  A Service Channel might have a Channel Type of Phone Number, with a Channel Value of +18585555555.  Service Channels **must** be unique across the entire Zingle platform.  A Service may contain multiple Service Channels of differing Channel Types.
+ZNGContactChannel | A Contact Channel is the way Services can communicate with a Contact.  A Contact Channel might have a Channel Type of Phone Number, with a Channel Value of +18585555555.  Contact Channels **must** be unique within a Zingle Service.  A Contact may contain multiple Contact Channels of differing Channel Types.
+ZNGMessage | Messages define the sender, recipient(s), message body, and attachments.  Messages are sent to/from Contacts, Services and Labels via Channels.
+
 
 ### Instantiating the SDK
 

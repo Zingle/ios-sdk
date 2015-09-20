@@ -159,7 +159,7 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
 @property (nonatomic, retain) NSArray *accounts, *services, *plans;
 @property (nonatomic, retain) ZNGAccount *firstAccount;
 @property (nonatomic, retain) ZNGService *myNewService;
-@proptery (nonatomic, retain) ZNGCustomField *membershipNumberField;
+@property (nonatomic, retain) ZNGCustomField *membershipNumberField;
 @property (nonatomic, retain) ZNGLabel *vipLabel;
 @property (nonatomic, retain) ZNGContact *myNewContact;
 
@@ -334,16 +334,27 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
     // Create a new Phone Number Contact Channel
     // Use your own SMS-capable cell phone number for testing
     ZNGContactChannel *contactChannel = [contact newContactChannel];
-    contactChannel.channelType = [newService channelTypeWithClass:@"PhoneNumber"];
+    contactChannel.channelType = [self.myNewService channelTypeWithClass:@"PhoneNumber"];
     contactChannel.channelValue = @"+18585555555";
-    [contactChannel save];
-    
+    [contactChannel saveWithCompletionBlock:^{
+        [self sendMessage];
+    } errorBlock:^(NSError *error) {
+        NSLog( @"An error occurred: %@", error );
+    }];
+}
+
+- (void)sendMessage
+{
     // WARNING: Sending this message will actually send a real SMS from the Service Channel
-    // Phone Number, to the Contact Channel Phone Number.  Please ensure your are
-    // operating responsibly.
-    ZNGMessage *newMessage = [newService newMessage];
-    [newMessage addRecipient:contact];
+    // Phone Number, to the Contact Channel Phone Number.  Ensure you have permission to 
+    // send a text message to the number you supplied.
+    ZNGMessage *newMessage = [self.myNewService newMessage];
+    [newMessage addRecipient:self.myNewContact];
     newMessage.body = @"Dear {FIRST_NAME}, welcome to Zingle - you have successfully set up, and messaged from a New Service. Your membership # is: {MEMBERSHIP_NUMBER}.";
-    [newMessage send];
+    [newMessage sendWithCompletionBlock:^{
+        NSLog( @"Ayncronous Test Completed Successfully" );
+    } errorBlock:^(NSError *error) {
+        NSLog( @"An error occurred: %@", error );
+    }];
 }
 ```

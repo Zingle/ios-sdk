@@ -28,6 +28,8 @@ ZNGMessageCorrespondent | Message Correspondents are the abstract representation
 ZNGMessageAttachment | Message Attachments provide the ability to add binary data, such as images, to messages.
 ZNGAutomation | Automations perform triggered tasks, based on conditions, within the Zingle platform without any direct user interaction.  Tasks include messaging contacts, applying labels, applying custom fields, printing to Zingle Printers, and much more.
 
+To view the Quick Start using synchronous examples, please see: [SynchronousQuickStart.md](SynchronousQuickStart.md)
+
 ### Asynchronous Quick Start
 
 ```Objective-C

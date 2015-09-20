@@ -357,4 +357,5 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
         NSLog( @"An error occurred: %@", error );
     }];
 }
+@end
 ```

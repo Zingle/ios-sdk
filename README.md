@@ -31,6 +31,9 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
 ### Synchronous Quick Start
 
 ```Objective-C
+
+@implementation ViewController
+
 - (void)zingleSynchronousTest
 {
     [[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
@@ -142,12 +145,29 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
     newMessage.body = @"Dear {FIRST_NAME}, welcome to Zingle - you have successfully set up, and messaged from a New Service. Your membership # is: {MEMBERSHIP_NUMBER}.";
     [newMessage send];
 }
+
+@end
 ```
 
 ### Asynchronous Quick Start
 
 ```Objective-C
-- (void)zingleAsynchronousTest
+
+@interface ZingleAsynchronousTest ()
+
+@property (nonatomic, retain) NSArray *accounts, *services, *plans;
+@property (nonatomic, retain) ZNGAccount *currentAccount;
+@property (nonatomic, retain) ZNGService *currentService;
+@property (nonatomic, retain) ZNGPlan *sandboxPlan;
+@proptery (nonatomic, retain) ZNGCustomField *membershipNumberField;
+@property (nonatomic, retain) ZNGLabel *vipLabel;
+@property (nonatomic, retain) ZNGContact *currentContact;
+
+@end
+
+@implementation ZingleAsynchronousTest
+
+- (void)startAsynchronousTest
 {
     [[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
 
@@ -238,7 +258,17 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
     // set on any Contact.
     [membershipNumber saveWithCompletionBlock:^{
         
-        // Create a new Label available to your Service.
+        [self customFieldSaved:newService];
+        
+    } errorBlock:^(NSError *error) {
+        NSLog( @"An error occurred: %@", error );
+        return;
+    }];
+}
+
+- (void)customFieldSaved:(ZNGService *)newService
+{
+    // Create a new Label available to your Service.
         ZNGLabel *vipLabel = [newService newLabel];
         vipLabel.backgroundColor = [UIColor yellowColor];
         vipLabel.foregroundColor = [UIColor blueColor];
@@ -295,10 +325,5 @@ ZNGAutomation | Automations perform triggered tasks, based on conditions, within
         [newMessage addRecipient:contact];
         newMessage.body = @"Dear {FIRST_NAME}, welcome to Zingle - you have successfully set up, and messaged from a New Service. Your membership # is: {MEMBERSHIP_NUMBER}.";
         [newMessage send];
-        
-    } errorBlock:^(NSError *error) {
-        NSLog( @"An error occurred: %@", error );
-        return;
-    }];
 }
 ```

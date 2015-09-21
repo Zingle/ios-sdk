@@ -11,21 +11,21 @@ To view the latest API documentation, please refer to: https://github.com/Zingle
 Model | Description
 --- | ---
 ZingleSDK | A singleton master object that holds the credentials, stateful information, and the distribution of notifications in the ZingleSDK.
-ZNGAccount | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGService | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGPlan | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGContact | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
+ZNGAccount | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGService | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGPlan | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGContact | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
 ZNGAvailablePhoneNumber | As part of the Zingle platform, you are able to search for, and provision new SMS-capable Phone Numbers.  These phone numbers will become an additional Channel on which Contacts can communicate to your Service.
-ZNGLabel | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGCustomField | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGCustomFieldOption | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGCustomFieldValue | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGChannelType | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGServiceChannel | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
-ZNGContactChannel | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
+ZNGLabel | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGCustomField | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGCustomFieldOption | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGCustomFieldValue | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGChannelType | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGServiceChannel | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGContactChannel | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
 ZNGMessageCorrespondent | Message Correspondents are the abstract representation of either the Sender or Recipient on a Message.
 ZNGMessageAttachment | Message Attachments provide the ability to add binary data, such as images, to messages.
-ZNGAutomation | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
+ZNGAutomation | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
 
 To view the Quick Start using synchronous examples, please see: [SynchronousQuickStart.md](SynchronousQuickStart.md)
 

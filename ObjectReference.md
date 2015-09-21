@@ -77,3 +77,29 @@ Method | Description
 ```- (ZNGServiceChannel *)newServiceChannelFor:(ZNGService *)service``` | 
 ```- (ZNGServiceChannel *)provisionAsServiceDefault:(BOOL)asDefault``` | 
 ```- (ZNGServiceChannel *)provisionForService:(ZNGService *)service asServiceDefault:(BOOL)asDefault``` | 
+
+## ZNGAddress
+
+Property | Type
+--- | ---
+```address``` | NSString
+```city``` | NSString
+```country``` | NSString
+```postalCode``` | NSString
+```state``` | NSString
+
+## ZNGLabel
+
+Property | Type
+--- | ---
+```service``` | ZNGService
+```displayName``` | NSString
+```isAutomatic``` | BOOL
+```isGlobal``` | BOOL
+```backgroundColor``` | UIColor
+```textColor``` | UIColor
+
+Method | Description
+--- | ---
+```- (void)save``` | 
+```- (void)saveWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | 

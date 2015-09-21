@@ -67,9 +67,9 @@ Method | Description
 
 Property | Type
 --- | ---
-phoneNumber | NSString
-formattedPhoneNumber | NSString
-country | NSString
+```phoneNumber``` | NSString
+```formattedPhoneNumber``` | NSString
+```country``` | NSString
 
 Method | Description
 --- | ---

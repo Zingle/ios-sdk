@@ -43,7 +43,6 @@ Property | Type
 
 Method | Description
 --- | ---
-```- (void)cancelSubscriptionNow``` |
 ```- (ZNGContact *)newContact``` |
 ```- (ZNGContact *)contactWithID:(NSString *)contactID``` |
 ```- (NSMutableArray *)channelTypesWithClass:(NSString *)typeClass``` |
@@ -62,6 +61,12 @@ Method | Description
 ```- (ZNGAutomationSearch *)automationSearch``` |
 ```- (ZNGWebServiceLogSearch *)webServiceLogSearch``` |
 ```- (ZNGAvailablePhoneNumberSearch *)availablePhoneNumberSearch``` |
+```- (void)save``` | Syncronously save the object
+```- (void)saveWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously save the object
+```- (void)refresh``` | Syncronously refresh the Object data from the API
+```- (void)refreshWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously refresh the Object data from the API
+```- (void)cancelNow``` | Syncronously Cancel the Service (note: this will release any provisioned phone numbers)
+```- (void)cancelNowCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Aayncronously Cancel the Service (note: this will release any provisioned phone numbers)
 
 ## ZNGAvailablePhoneNumber
 
@@ -101,5 +106,7 @@ Property | Type
 
 Method | Description
 --- | ---
-```- (void)save``` | 
-```- (void)saveWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | 
+```- (void)save``` | Syncronously save the object
+```- (void)saveWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously save the object
+```- (void)refresh``` | Syncronously refresh the Object data from the API
+```- (void)refreshWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously refresh the Object data from the API

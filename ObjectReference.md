@@ -31,8 +31,8 @@ Method |  Description
 
 ## ZNGService
 
-Property | Type | Description
---- | --- | ---
+Property | Type
+--- | --- 
 ```account``` | ZNGAccount
 ```displayName``` | NSString
 ```timeZone``` | NSString
@@ -62,3 +62,18 @@ Method | Description
 ```- (ZNGAutomationSearch *)automationSearch``` |
 ```- (ZNGWebServiceLogSearch *)webServiceLogSearch``` |
 ```- (ZNGAvailablePhoneNumberSearch *)availablePhoneNumberSearch``` |
+
+## ZNGAvailablePhoneNumber
+
+Property | Type
+--- | ---
+phoneNumber | NSString
+formattedPhoneNumber | NSString
+country | NSString
+
+Method | Description
+--- | ---
+```- (ZNGServiceChannel *)newServiceChannel``` | 
+```- (ZNGServiceChannel *)newServiceChannelFor:(ZNGService *)service``` | 
+```- (ZNGServiceChannel *)provisionAsServiceDefault:(BOOL)asDefault``` | 
+```- (ZNGServiceChannel *)provisionForService:(ZNGService *)service asServiceDefault:(BOOL)asDefault``` | 

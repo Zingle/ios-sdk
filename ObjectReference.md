@@ -18,13 +18,47 @@ Method | Description
 
 ## ZNGAccount
 
+Property | Type
+--- | --- | ---
+```displayName``` | NSString
+
+Method |  Description
+--- | ---
+```- (ZNGServiceSearch *)serviceSearch``` | Builds and returns a new Service Search object
+```- (ZNGService *)newService``` | Builds and returns a new empty Service object. (unsaved)
+```- (ZNGService *)serviceWithID:(NSString *)serviceID``` |  Builds a returns a new Service object, with the ID set. (unsaved)
+```- (ZNGPlanSearch *)planSearch``` | Builds and returns a new Plan Search object, to find plans, and prices available to you within an Account.
+
+## ZNGService
+
 Property | Type | Description
 --- | --- | ---
-displayName | NSString | The name of the Account.
+```account``` | ZNGAccount
+```displayName``` | NSString
+```timeZone``` | NSString
+```plan``` | ZNGPlan
+```address``` | ZNGAddress
+```channels``` | NSArray
+```channelTypes``` | NSArray
 
-Method | Returns | Description
---- | --- | ---
-serviceSearch | ZNGServiceSearch | Builds and returns a new Service Search object
-newService | ZNGService | Builds and returns a new empty Service object.
-serviceWithID:(NSString *)serviceID | ZNGService | Builds a returns a new Service object, with the ID set as passed.
-planSearch | ZNGPlanSearch | Builds and returns a new Plan Search object, to find plans, and prices available to you within an Account.
+Method | Description
+--- | ---
+```- (void)cancelSubscriptionNow``` |
+```- (ZNGContact *)newContact``` |
+```- (ZNGContact *)contactWithID:(NSString *)contactID``` |
+```- (NSMutableArray *)channelTypesWithClass:(NSString *)typeClass``` |
+```- (NSMutableArray *)channelTypesWithClass:(NSString *)typeClass andDisplayName:(NSString *)displayName``` |
+```- (ZNGChannelType *)firstChannelTypeWithClass:(NSString *)typeClass``` |
+```- (ZNGChannelType *)firstChannelTypeWithClass:(NSString *)typeClass andDisplayName:(NSString *)displayName``` |
+```- (ZNGChannelType *)channelTypeWithID:(NSString *)channelTypeID``` |
+```- (ZNGLabel *)newLabel``` |
+```- (ZNGCustomField *)newCustomField``` |
+```- (ZNGServiceSettingsSearch *)serviceSettingsSearch``` |
+```- (ZNGContactSearch *)contactSearch``` |
+```- (ZNGServiceChannel *)newChannel``` |
+```- (ZNGLabelSearch *)labelSearch``` |
+```- (ZNGCustomFieldSearch *)customFieldSearch``` |
+```- (ZNGMessageSearch *)messageSearch``` |
+```- (ZNGAutomationSearch *)automationSearch``` |
+```- (ZNGWebServiceLogSearch *)webServiceLogSearch``` |
+```- (ZNGAvailablePhoneNumberSearch *)availablePhoneNumberSearch``` |

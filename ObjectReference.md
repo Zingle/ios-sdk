@@ -6,15 +6,15 @@ The following is a reference for the SDK Objects.
 
 Method | Description
 --- | ---
-```+ (ZingleSDK *)sharedSDK``` | Returns the singleton ZingleSDK object.
+```(Objective-C)+ (ZingleSDK *)sharedSDK``` | Returns the singleton ZingleSDK object.
 ```- (void)setToken:(NSString *)token andKey:(NSString *)key``` | Sets the API credentials on the SDK singleton
 ```- (BOOL)hasCredentials``` | Returns YES if Token and Key are set on SDK, does not validate credentials.
 ```- (BOOL)validateCredentials``` | Synchronous API call to validate credentials
 ```- (void)validateCredentialsWithCompletionBlock:( void (^)(void) )completionBlock errorBlock:( void (^)( NSError *error ) )errorBlock``` | Asynchronous API call to validate credentials.  Completion Block is called on success, otherwise the Error Block.
 ```- (void)clearCredentials``` | Remove credentials from the SDK object.
-```- (ZNGAccountSearch *)accountSearch | Builds and returns a ZNGAccountSearch object, to search for Accounts
-```- (ZNGTimeZoneSearch *)timeZoneSearch | Builds and returns a ZNGTimeZoneSearch object, to list all allowed Time Zones.
-```- (ZNGAvailablePhoneNumberSearch *)availablePhoneNumberSearch | Builds and returns a ZNGAvailablePhoneNumberSearch object to searh for, and list phone numbers available for provisioning.
+```- (ZNGAccountSearch *)accountSearch``` | Builds and returns a ZNGAccountSearch object, to search for Accounts
+```- (ZNGTimeZoneSearch *)timeZoneSearch``` | Builds and returns a ZNGTimeZoneSearch object, to list all allowed Time Zones.
+```- (ZNGAvailablePhoneNumberSearch *)availablePhoneNumberSearch``` | Builds and returns a ZNGAvailablePhoneNumberSearch object to searh for, and list phone numbers available for provisioning.
 
 ## ZNGAccount
 

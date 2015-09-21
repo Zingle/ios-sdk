@@ -4,7 +4,7 @@ Method | Description
 --- | ---
 ```+ (ZingleSDK *)sharedSDK``` | Returns the singleton ZingleSDK object.
 ```- (void)setToken:(NSString *)token andKey:(NSString *)key``` | Sets the API credentials on the SDK singleton
-```- (BOOL)hasCredentials | Returns YES if Token and Key are set on SDK, does not validate credentials.
+```- (BOOL)hasCredentials``` | Returns YES if Token and Key are set on SDK, does not validate credentials.
 ```- (BOOL)validateCredentials``` | Synchronous API call to validate credentials
 ```- (void)validateCredentialsWithCompletionBlock:( void (^)(void) )completionBlock errorBlock:( void (^)( NSError *error ) )errorBlock``` | Asynchronous API call to validate credentials.  Completion Block is called on success, otherwise the Error Block.
 

@@ -3,13 +3,13 @@
 ## Properties
 
 Property | Type | Description
---- | ---
+--- | --- | ---
 displayName | NSString | The name of the Account.
 
 ## Methods
 
 Property | Returns | Description
---- | ---
+--- | --- | ---
 serviceSearch | ZNGServiceSearch | Builds and returns a new Service Search object
 newService | ZNGService | Builds and returns a new empty Service object.
 serviceWithID:(NSString *)serviceID | ZNGService | Builds a returns a new Service object, with the ID set as passed.

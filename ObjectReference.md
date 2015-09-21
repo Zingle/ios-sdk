@@ -1,14 +1,10 @@
 # ZNGAccount
 
-## Properties
-
 Property | Type | Description
 --- | --- | ---
 displayName | NSString | The name of the Account.
 
-## Methods
-
-Property | Returns | Description
+Method | Returns | Description
 --- | --- | ---
 serviceSearch | ZNGServiceSearch | Builds and returns a new Service Search object
 newService | ZNGService | Builds and returns a new empty Service object.

@@ -11,7 +11,7 @@ To view the latest API documentation, please refer to: https://github.com/Zingle
 Model | Description
 --- | ---
 ZingleSDK | A singleton master object that holds the credentials, stateful information, and the distribution of notifications in the ZingleSDK.
-ZNGAccount | - [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
+ZNGAccount | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
 ZNGService | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
 ZNGPlan | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)
 ZNGContact | [See Zingle Object Overview](https://github.com/Zingle/rest-api/blob/master/object_overview.md)

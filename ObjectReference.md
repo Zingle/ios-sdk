@@ -110,3 +110,5 @@ Method | Description
 ```- (void)saveWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously save the object
 ```- (void)refresh``` | Syncronously refresh the Object data from the API
 ```- (void)refreshWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously refresh the Object data from the API
+```- (void)destroy``` | Syncronously delete the object
+```- (void)destroyWithCompletionBlock:(void (^) (void))completionBlock errorBlock:(void (^) (NSError *error))errorBlock``` | Asyncronously delete the object

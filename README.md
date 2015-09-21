@@ -11,21 +11,21 @@ To view the latest API documentation, please refer to: https://github.com/Zingle
 Model | Description
 --- | ---
 ZingleSDK | A singleton master object that holds the credentials, stateful information, and the distribution of notifications in the ZingleSDK.
-ZNGAccount | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGService | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGPlan | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGContact | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGAvailablePhoneNumber | As part of the Zingle platform, you are able to search for, and provision new SMS-capable Phone Numbers.  These phone numbers will become an additional Channel on which Contacts can communicate to your Service.
-ZNGLabel | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGCustomField | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGCustomFieldOption | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGCustomFieldValue | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGChannelType | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGServiceChannel | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
-ZNGContactChannel | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGAccount | [See Zingle Resource Overview - Account](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#account)
+ZNGService | [See Zingle Resource Overview - Service](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#service)
+ZNGPlan | [See Zingle Resource Overview - Plan](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#plan)
+ZNGContact | [See Zingle Resource Overview - Contact](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#contact)
+ZNGAvailablePhoneNumber | [See Zingle Resource Overview - Available Phone Number](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#available-phone-number)
+ZNGLabel | [See Zingle Resource Overview - Label](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#label)
+ZNGCustomField | [See Zingle Resource Overview - Custom Field](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#custom-field)
+ZNGCustomFieldOption | [See Zingle Resource Overview Custom Field Option](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#custom-field-option)
+ZNGCustomFieldValue | [See Zingle Resource Overview - Custom Field Value](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#custom-field-value)
+ZNGChannelType | [See Zingle Resource Overview - Channel Type](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#channel-type)
+ZNGServiceChannel | [See Zingle Resource Overview  - Service Channel](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#service-channel)
+ZNGContactChannel | [See Zingle Resource Overview - Contact Channel](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#contact-channel)
 ZNGMessageCorrespondent | Message Correspondents are the abstract representation of either the Sender or Recipient on a Message.
 ZNGMessageAttachment | Message Attachments provide the ability to add binary data, such as images, to messages.
-ZNGAutomation | [See Zingle Resource Overview](https://github.com/Zingle/rest-api/blob/master/resource_overview.md)
+ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#automation)
 
 To view the Quick Start using synchronous examples, please see: [SynchronousQuickStart.md](SynchronousQuickStart.md)
 

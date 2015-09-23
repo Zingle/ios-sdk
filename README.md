@@ -48,7 +48,7 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
     [[ZingleSDK sharedSDK] setToken:@"" andKey:@""];
     
     // Uncomment the following line to see detailed logging on the underlying API
-     [[ZingleSDK sharedSDK] setGlobalLogLevel:ZINGLE_LOG_LEVEL_VERBOSE];
+    // [[ZingleSDK sharedSDK] setGlobalLogLevel:ZINGLE_LOG_LEVEL_VERBOSE];
 
     // Ensure your API credential are valid
     [[ZingleSDK sharedSDK] validateCredentialsWithCompletionBlock:^{

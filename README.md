@@ -41,7 +41,6 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
 @property (nonatomic, retain) NSArray *contactCustomFields;
 @end
 
-
 @implementation ZingleAsyncQuickStart
 
 - (void)startAsynchronousTest
@@ -50,10 +49,7 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
     
     // Uncomment the following line to see detailed logging on the underlying API
      [[ZingleSDK sharedSDK] setGlobalLogLevel:ZINGLE_LOG_LEVEL_VERBOSE];
-    
-    //    [[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
 
-    
     // Ensure your API credential are valid
     [[ZingleSDK sharedSDK] validateCredentialsWithCompletionBlock:^{
         self.authenticated = YES;

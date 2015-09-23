@@ -36,19 +36,19 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
 @interface ZingleAsynchronousTest ()
 
 @property (nonatomic) BOOL authenticated;
-@property (nonatomic, retain) NSArray *accounts, *services, *plans;
 @property (nonatomic, retain) ZNGAccount *firstAccount;
 @property (nonatomic, retain) ZNGService *myNewService;
-@property (nonatomic, retain) ZNGCustomField *membershipNumberField;
-@property (nonatomic, retain) ZNGLabel *vipLabel;
 @property (nonatomic, retain) ZNGContact *myNewContact;
-
+@property (nonatomic) BOOL authenticated;
 @end
 
 @implementation ZingleAsynchronousTest
 
 - (void)startAsynchronousTest
 {
+    // Uncomment the following line to see detailed logging on the underlying API
+    // [[ZingleSDK sharedSDK] setGlobalLogLevel:ZINGLE_LOG_LEVEL_VERBOSE];
+    
     [[ZingleSDK sharedSDK] setToken:@"API_TOKEN" andKey:@"API_KEY"];
 
     // Ensure your API credential are valid
@@ -56,14 +56,15 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
         self.authenticated = YES;
         [self getAllMyAccounts];
     } errorBlock:^(NSError *error) {
-        NSLog(@"Invalid Credentials");
+        self.authenticated = NO;
+        NSLog(@"An error occurred: %@", error);
     }];
 }
 
 - (void)getAllMyAccounts
 {
     // Searches for all Accounts your credentials grant access to
-    [[ZingleSDK sharedSDK] accountSearchWithCompletionBlock:^(NSArray *accounts) {
+    [[ZingleSDK sharedSDK] allAccountsWithCompletionBlock:^(NSArray *accounts) {
         self.accounts = accounts;
         
         if( [accounts length] == 0 ) {
@@ -82,13 +83,9 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
 
 - (void)findSandboxPlan
 {
-    // Search for the "zingle_sandbox" plan, which grants special privileges for development testing.
-    ZNGPlanSearch *planSearch = [self.firstAccount planSearch];
-    planSearch.code = @"zingle_sandbox";
-    
-    [planSearch searchWithCompletionBlock:^(NSArray *plans){
-        ZNGPlan *sandboxPlan = [plans firstObject];
-        [self createServiceWithPlan:sandboxPlan];
+    // Search for the "sandbox" plan, which grants special privileges for development testing.
+    [self.firstAccount findPlanByCode:@"sandbox" withCompletionBlock:^(ZNGPlan *plan){
+        [self createServiceWithPlan:plan];
     } errorBlock:^(NSError *error) {
         NSLog( @"An error occurred: %@", error );
     }];

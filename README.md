@@ -41,6 +41,8 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
 @property (nonatomic, retain) ZNGService *myNewService;
 @property (nonatomic, retain) ZNGContact *myNewContact;
 @property (nonatomic, retain) NSArray *contactCustomFields;
+@property (nonatomic, retain) ZNGConversation *conversation;
+@property (nonatomic, retain) ZNGConversationViewController *conversationViewController;
 @end
 
 @implementation ZingleAsyncQuickStart
@@ -183,7 +185,17 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
 
 - (void)getConversation
 {
-     
+     self.conversation = [[ZNGConversation alloc] initWithService:self.myNewService];
+    [self.conversation setContact:myNewContact];
+    
+    self.conversationViewController = [[ZNGConversationViewController alloc] initWithConversation:self.conversation];
+    
+    self.conversationViewController.horizontalMargin = 5;
+    self.conversationViewController.outboundBackgroundColor = [UIColor greenColor];
+    self.conversationViewController.inboundBackgroundColor = [UIColor purpleColor];
+    self.conversationViewController.arrowPosition = ZINGLE_ARROW_POSITION_BOTTOM;
+    
+    [self presentViewController:self.conversationViewController animated:YES completion:nil];
 }
 
 @end

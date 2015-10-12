@@ -180,10 +180,17 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
 
 - (void)sendMessage
 {
+    ZNGMessage *message = [self.myNewContact newMessageToContact];
+    message.body = @"Congratulations! You've successfully set up a new Service and messaged yourself!"
     
+    [mesage sendWithCompletionBlock:^{
+        [self showConversation];
+    } errorBlock:^(NSError *error) {
+        NSLog(@"Error sending message to contact: %@", error);
+    }];
 }
 
-- (void)getConversation
+- (void)showConversation
 {
      self.conversation = [[ZNGConversation alloc] initWithService:self.myNewService];
     [self.conversation setContact:myNewContact];

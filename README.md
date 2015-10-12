@@ -195,6 +195,7 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
     self.conversationViewController.outboundBackgroundColor = [UIColor greenColor];
     self.conversationViewController.inboundBackgroundColor = [UIColor purpleColor];
     self.conversationViewController.arrowPosition = ZINGLE_ARROW_POSITION_BOTTOM;
+    self.conversationViewController.cornerRadius = 5;
     
     [self presentViewController:self.conversationViewController animated:YES completion:nil];
 }

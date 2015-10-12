@@ -26,6 +26,7 @@ ZNGContactChannel | [See Zingle Resource Overview - Contact Channel](https://git
 ZNGMessageCorrespondent | Message Correspondents are the abstract representation of either the Sender or Recipient on a Message.
 ZNGMessageAttachment | Message Attachments provide the ability to add binary data, such as images, to messages.
 ZNGConversation | Model responsible for maintaining the state of a conversation between a Contact and a Service.
+ZNGConversationViewController | UI that manages the conversation between a Contact and a Service.
 ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#automation)
 
 To view the Quick Start using synchronous examples, please see: [SynchronousQuickStart.md](SynchronousQuickStart.md)

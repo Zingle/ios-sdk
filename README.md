@@ -188,7 +188,8 @@ To view the Quick Start using synchronous examples, please see: [SynchronousQuic
      self.conversation = [[ZNGConversation alloc] initWithService:self.myNewService];
     [self.conversation setContact:myNewContact];
     
-    self.conversationViewController = [[ZNGConversationViewController alloc] initWithConversation:self.conversation];
+    self.conversationViewController = [[ZNGConversationViewController alloc]
+                                           initWithConversation:self.conversation];
     
     self.conversationViewController.horizontalMargin = 5;
     self.conversationViewController.outboundBackgroundColor = [UIColor greenColor];

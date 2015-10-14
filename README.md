@@ -8,11 +8,9 @@ To view the latest API documentation, please refer to: https://github.com/Zingle
 
 ### Integrated UI
 
-In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a contact and a service.  The UI is fully customizeable to your needs.
-
+In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI is fully customizeable to your needs, and can be used on behalf of the Contact, or on behalf of the Zingle Service.
 
 ![](https://github.com/Zingle/ios-sdk/blob/master/files/message_layout.png)
-
 
 ### Zingle Object Model
 

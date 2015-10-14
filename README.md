@@ -6,6 +6,14 @@ Zingle is a multi-channel communications platform that allows the sending, recei
 
 To view the latest API documentation, please refer to: https://github.com/Zingle/rest-api/
 
+### Integrated UI
+
+In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a contact and a service.  The UI is fully customizeable to your needs.
+
+
+
+
+
 ### Zingle Object Model
 
 Model | Description

@@ -44,6 +44,3 @@ To view Quick Start using synchronous examples, please see: [SynchronousQuickSta
 #### Asynchronous
 
 To view Quick Start using asynchronous examples, please see: [AsynchronousQuickStart.md](Examples/AsynchronousQuickStart.md)
-
-@end
-```

@@ -60,6 +60,7 @@
 		CE5030FE1BC2D8DC0087087E /* ZNGArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = CE5030FD1BC2D8DC0087087E /* ZNGArrowView.m */; settings = {ASSET_TAGS = (); }; };
 		CED4DC1E1BCBEE070005D33E /* ZNGConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = CED4DC1D1BCBEE070005D33E /* ZNGConversation.m */; settings = {ASSET_TAGS = (); }; };
 		CED4DC211BD91F3D0005D33E /* ZNGChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = CED4DC201BD91F3D0005D33E /* ZNGChannel.m */; settings = {ASSET_TAGS = (); }; };
+		CED4DC231BD9F02A0005D33E /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = CED4DC221BD9F02A0005D33E /* camera.png */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -179,6 +180,7 @@
 		CED4DC1D1BCBEE070005D33E /* ZNGConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGConversation.m; sourceTree = "<group>"; };
 		CED4DC1F1BD91F3D0005D33E /* ZNGChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGChannel.h; sourceTree = "<group>"; };
 		CED4DC201BD91F3D0005D33E /* ZNGChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGChannel.m; sourceTree = "<group>"; };
+		CED4DC221BD9F02A0005D33E /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -240,6 +242,7 @@
 		CE1F3D2D1BA76B460076518A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CED4DC221BD9F02A0005D33E /* camera.png */,
 				CE1F3D2E1BA76B460076518A /* Info.plist */,
 				CE1F3D2F1BA76B460076518A /* main.m */,
 			);
@@ -481,6 +484,7 @@
 			files = (
 				CE1F3D391BA76B460076518A /* Main.storyboard in Resources */,
 				CE1F3D3E1BA76B460076518A /* LaunchScreen.xib in Resources */,
+				CED4DC231BD9F02A0005D33E /* camera.png in Resources */,
 				CE1F3D3B1BA76B460076518A /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

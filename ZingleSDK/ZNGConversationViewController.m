@@ -10,6 +10,7 @@
 #import "ZNGMessageView.h"
 #import "ZNGConversation.h"
 #import "ZNGService.h"
+#import "ZNGMessage.h"
 
 int const ZINGLE_ARROW_POSITION_BOTTOM = 0;
 int const ZINGLE_ARROW_POSITION_SIDE = 1;
@@ -69,21 +70,21 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         self.responseView.layer.borderWidth= 1;
         self.responseView.layer.borderColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5].CGColor;
         
-        self.replyButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
         self.replyButton.frame = CGRectMake(0, 0, 50, 30);
         [self.replyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//        self.replyButton.enabled = NO;
+//        self.cameraButton.
         [self.replyButton addTarget:self action:@selector(sendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
         [self.responseView addSubview:self.replyButton];
         
         
         self.cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
-        self.replyButton.frame = CGRectMake(0, 0, 50, 30);
-        //        self.replyButton.enabled = NO;
-        [self.replyButton addTarget:self action:@selector(sendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self.responseView addSubview:self.replyButton];
+        [self.cameraButton setImage:[UIImage imageNamed:@"camera.png"] forState:UIControlStateNormal];
+        self.cameraButton.adjustsImageWhenHighlighted = YES;
+        self.cameraButton.frame = CGRectMake(0, 0, 30, 30);
+        [self.cameraButton addTarget:self action:@selector(cameraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        [self.responseView addSubview:self.cameraButton];
         
         self.responseTextBackground = [[UITextField alloc] initWithFrame:CGRectMake(43, 7, 495, 30)];
         [self.responseTextBackground setBorderStyle:UITextBorderStyleRoundedRect];
@@ -125,6 +126,41 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     NSLog(@"send button pressed");
 }
 
+- (void)cameraButtonPressed:(id)sender
+{
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Send Picture" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take a Picture", @"Choose a Picture", nil];
+
+    [actionSheet showInView:self.view];
+}
+
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    
+    if( buttonIndex == 0 )
+    {
+        picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+    }
+    else if( buttonIndex == 1)
+    {
+        picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    }
+    
+    [self presentViewController:picker animated:YES completion:NULL];
+}
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
+    
+    [picker dismissViewControllerAnimated:YES completion:NULL];
+    
+    
+}
+
 - (void)textViewDidChange:(UITextView *)textView
 {
     [self refreshDisplay];
@@ -154,6 +190,12 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 {
     if( self.conversation == nil ) {
         [NSException raise:@"Conversation View Controller requires initialization with a Conversation object." format:@"Missing Conversation Object"];
+    }
+    
+    NSArray *messages = [self.conversation messages];
+    for( ZNGMessage *message in messages ) {
+        NSLog(@"DIRECTION: %@", [self.conversation messageDirectionFor:message]);
+        [self addMessage:message withDirection:[self.conversation messageDirectionFor:message]];
     }
     
     self.view.backgroundColor = self.containerBackgroundColor;
@@ -262,11 +304,11 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [self refreshMessages];
 }
 
-- (ZNGMessageView *)addMessage:(NSString*)message withDirection:(NSString *)direction andTime:(NSString *)time
+- (ZNGMessageView *)addMessage:(ZNGMessage *)message withDirection:(NSString *)direction
 {
     ZNGMessageView *messageView = [[ZNGMessageView alloc] initWithViewController:self];
     messageView.frame = CGRectMake(0, self.bottomY, self.scrollView.frame.size.width, 150);
-    [messageView setMessage:message withDirection:direction andTime:time];
+    [messageView setMessage:message withDirection:direction];
     
     [self.messages addObject:messageView];
     
@@ -305,6 +347,9 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
 
     self.replyButton.frame = CGRectMake(self.responseView.frame.size.width - self.replyButton.frame.size.width - 10, 8, self.replyButton.frame.size.width, self.replyButton.frame.size.height);
+    
+    self.cameraButton.frame = CGRectMake(8, 8, self.cameraButton.frame.size.width, self.cameraButton.frame.size.height);
+    
     
     self.responseText.frame = CGRectMake(self.responseText.frame.origin.x, self.responseText.frame.origin.y, self.replyButton.frame.origin.x - self.responseText.frame.origin.x - 15, textViewSize.height);
     

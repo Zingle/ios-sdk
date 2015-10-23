@@ -6,6 +6,7 @@
 //
 
 #import "ZNGMessage.h"
+#import "NSMutableDictionary+json.h"
 #import "ZingleModel.h"
 #import "ZNGChannelType.h"
 #import "ZNGService.h"
@@ -14,6 +15,8 @@
 #import "ZingleSDK.h"
 #import "ZingleDAO.h"
 #import "ZingleDAOResponse.h"
+#import "ZNGContact.h"
+#import "ZNGLabel.h"
 
 @implementation ZNGMessage
 
@@ -37,6 +40,92 @@
     } else {
         return [NSString stringWithFormat:@"services/%@/messages", self.service.ID];
     }
+}
+
+- (void)hydrateDates:(NSMutableDictionary *)data
+{
+    [super hydrateDates:data];
+    
+    NSNumber *readAt = [data objectAtPath:@"read_at" expectedClass:[NSNumber class] default:nil];\
+    
+    self.readAt = nil;
+    if( readAt != nil )
+    {
+        self.readAt = [[NSDate alloc] initWithTimeIntervalSince1970:[readAt intValue]];
+    }
+}
+
+- (void)hydrate:(NSMutableDictionary *)data
+{
+    [self hydrateDates:data];
+    
+    self.ID = [data objectAtPath:@"id" expectedClass:[NSString class] default:nil];
+    self.body = [data objectAtPath:@"body" expectedClass:[NSString class] default:@""];
+    self.bodyLanguageCode = [data objectAtPath:@"body_language_code" expectedClass:[NSString class] default:nil];
+    self.translatedBody = [data objectAtPath:@"translated_body" expectedClass:[NSString class] default:nil];
+    self.translatedBodyLanguageCode = [data objectAtPath:@"translated_body_language_code" expectedClass:[NSString class] default:nil];
+    
+    self.templateID = [data objectAtPath:@"template_id" expectedClass:[NSString class] default:nil];
+    self.direction = [data objectAtPath:@"communication_direction" expectedClass:[NSString class] default:@""];
+    
+    
+    NSString *senderType = [data objectAtPath:@"sender_type" expectedClass:[NSString class] default:@""];
+    NSString *senderID = [data objectAtPath:@"sender.id" expectedClass:[NSString class] default:@""];
+    ZingleModel *senderModel = [self buildModelForType:senderType withID:senderID];
+    
+    NSString *recipientType = [data objectAtPath:@"recipient_type" expectedClass:[NSString class] default:@""];
+    NSString *recipientID = [data objectAtPath:@"recipient.id" expectedClass:[NSString class] default:@""];
+    ZingleModel *recipientModel = [self buildModelForType:recipientType withID:recipientID];
+    
+    ZNGService *masterService;
+    if( ([senderType isEqualToString:ZINGLE_CORRESPONDENT_TYPE_SERVICE] &&
+        ![recipientType isEqualToString:ZINGLE_CORRESPONDENT_TYPE_SERVICE]) )
+    {
+        masterService = (ZNGService *)senderModel;
+    } else if( (![senderType isEqualToString:ZINGLE_CORRESPONDENT_TYPE_SERVICE] &&
+                [recipientType isEqualToString:ZINGLE_CORRESPONDENT_TYPE_SERVICE]) ) {
+        masterService = (ZNGService *)recipientModel;
+    }
+    
+    self.service = masterService;
+    
+    self.sender = [[ZNGMessageCorrespondent alloc] init];
+    [self.sender setCorrespondent:senderModel];
+    self.sender.channelValue = [data objectAtPath:@"sender.channel.value" expectedClass:[NSString class] default:@""];
+    self.sender.formattedChannelValue = [data objectAtPath:@"sender.channel.formatted_value" expectedClass:[NSString class] default:@""];
+
+    ZNGMessageCorrespondent *recipient = [[ZNGMessageCorrespondent alloc] init];
+    [recipient setCorrespondent:recipientModel];
+    recipient.channelValue = [data objectAtPath:@"recipient.channel.value" expectedClass:[NSString class] default:@""];
+    recipient.formattedChannelValue = [data objectAtPath:@"recipient.channel.formatted_value" expectedClass:[NSString class] default:@""];
+    
+    self.recipients = [NSMutableArray arrayWithObjects:recipient, nil];
+    
+    self.attachments = [NSMutableArray array];
+    
+    NSMutableArray *attachmentData = [data objectAtPath:@"attachments" expectedClass:[NSArray class] default:[NSMutableArray array]];
+    
+    for( NSString *attachmentUrl in attachmentData ) {
+        ZNGMessageAttachment *attachment = [[ZNGMessageAttachment alloc] init];
+        attachment.url = attachmentUrl;
+        [self.attachments addObject:attachment];
+    }
+}
+
+- (ZingleModel *)buildModelForType:(NSString *)type withID:(NSString *)ID
+{
+    ZingleModel *model;
+    if( [type isEqualToString:ZINGLE_CORRESPONDENT_TYPE_CONTACT] ) {
+        model = [[ZNGContact alloc] init];
+    } else if( [type isEqualToString:ZINGLE_CORRESPONDENT_TYPE_SERVICE] ) {
+        model = [[ZNGService alloc] init];
+    } else if( [type isEqualToString:ZINGLE_CORRESPONDENT_TYPE_LABEL] ) {
+        model = [[ZNGLabel alloc] init];
+    }
+    
+    model.ID = ID;
+    
+    return model;
 }
 
 - (ZNGMessageCorrespondent *)newRecipient
@@ -124,9 +213,13 @@
                      errorBlock:(void (^) (NSError *error))errorBlock
 {
     [self saveWithCompletionBlock:^{
-        completionBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock();
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -171,9 +264,13 @@
     [self prepareMarkRead];
     
     [self markReadAsyncWithCompletionBlock:^{
-        completionBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock();
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -185,9 +282,13 @@
     [self.DAO setPostVar:[NSNumber numberWithInt:[readAt timeIntervalSince1970]] forKey:@"read_at"];
     
     [self markReadAsyncWithCompletionBlock:^{
-        completionBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock();
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -196,14 +297,18 @@
 {
     [self.DAO sendAsynchronousRequestTo:[self baseURIWithID:YES]
                         completionBlock:^(ZingleDAOResponse *response) {
-                            if( [response successful] ) {
-                                [self hydrate:[response result]];
-                            } else {
-                                // Error
-                            }
-                            completionBlock();
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if( [response successful] ) {
+                                    [self hydrate:[response result]];
+                                } else {
+                                    // Error
+                                }
+                                completionBlock();
+                            });
                         } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-                            errorBlock(error);
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                errorBlock(error);
+                            });
                         }];
 }
 
@@ -247,6 +352,11 @@
     description = [description stringByAppendingFormat:@"    recipients: %@\r", self.recipients];
     description = [description stringByAppendingFormat:@"    attachments: %@\r", self.attachments];
     description = [description stringByAppendingFormat:@"    body: %@\r", self.body];
+    description = [description stringByAppendingFormat:@"    bodyLanguageCode: %@\r", self.bodyLanguageCode];
+    description = [description stringByAppendingFormat:@"    translatedBody: %@\r", self.translatedBody];
+    description = [description stringByAppendingFormat:@"    translatedBodyLanguageCode: %@\r", self.translatedBodyLanguageCode];
+    description = [description stringByAppendingFormat:@"    templateID: %@\r", self.templateID];
+    description = [description stringByAppendingFormat:@"    direction: %@\r", self.direction];
     description = [description stringByAppendingFormat:@"    readAt: %@\r", self.readAt];
     description = [description stringByAppendingString:@"}"];
     

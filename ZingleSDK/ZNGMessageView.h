@@ -8,13 +8,12 @@
 #import <UIKit/UIKit.h>
 
 @class ZNGConversationViewController;
+@class ZNGMessage;
 
 @interface ZNGMessageView : UIView
 
 - (id)initWithViewController:(ZNGConversationViewController *)parentViewController;
-- (void)setMessage:(NSString *)message withDirection:(NSString *)direction andTime:(NSString *)time;
-- (void)setAssetUrls:(NSArray *)assetUrls;
-- (void)setAuthor:(NSString *)author;
+- (void)setMessage:(ZNGMessage *)message withDirection:(NSString *)direction;
 - (void)refresh;
 
 @end

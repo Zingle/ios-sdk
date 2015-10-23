@@ -101,10 +101,15 @@
     
     [self.DAO sendAsynchronousRequestTo:[self baseURIWithID:YES]
                         completionBlock:^(ZingleDAOResponse *response) {
-                            [self hydrate:[response result]];
-                            completionBlock();
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self hydrate:[response result]];
+                                completionBlock();
+                            });
                         } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-                            errorBlock(error);
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                errorBlock(error);
+                            });
                         }];
 }
 
@@ -157,14 +162,18 @@
     [self.DAO sendAsynchronousRequestTo:[self saveToRequestURI]
                         completionBlock:^(ZingleDAOResponse *response) {
                             
-                            if( [response successful] ) {
-                                [self hydrate:[response result]];
-                                completionBlock();
-                            } else {
-                                // Error
-                            }
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if( [response successful] ) {
+                                    [self hydrate:[response result]];
+                                    completionBlock();
+                                } else {
+                                    // Error
+                                }
+                            });
                         } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-                            errorBlock(error);
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                errorBlock(error);
+                            });
                         }];
 }
 
@@ -216,9 +225,13 @@
     
     [self.DAO sendAsynchronousRequestTo:[self baseURIWithID:YES]
                         completionBlock:^(ZingleDAOResponse *response) {
-                            completionBlock();
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                completionBlock();
+                            });
                         } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-                            errorBlock(error);
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                errorBlock(error);
+                            });
                         }];
 }
 

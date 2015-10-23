@@ -57,7 +57,9 @@ extern int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES;
 - (NSArray *)allTimeZonesWithError:(NSError **)error;
 - (void)allTimeZonesWithCompletionBlock:( void (^)(NSArray *timeZones) )completionBlock errorBlock:( void (^)(NSError *error) )errorBlock;
 
-- (ZNGConversation *)conversationFrom:(ZNGMessageCorrespondent *)from to:(ZNGMessageCorrespondent *)to usingChannelType:(ZNGChannelType *)channelType;
+- (ZNGConversation *)conversationWithService:(ZNGService *)service to:(ZNGMessageCorrespondent *)to usingChannelType:(ZNGChannelType *)channelType;
+
+- (ZNGConversation *)conversationWithService:(ZNGService *)service from:(ZNGMessageCorrespondent *)from usingChannelType:(ZNGChannelType *)channelType;
 
 - (void)setGlobalLogLevel:(int)logLevel;
 - (int)globalLogLevel;

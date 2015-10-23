@@ -95,14 +95,18 @@ int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES = 5120;
 {
     [self.DAO resetDefaults];
     [self.DAO sendAsynchronousRequestTo:@"" completionBlock:^(ZingleDAOResponse *response) {
-        NSError *error = [response error];
-        if( error ) {
-            errorBlock(error);
-        } else {
-            completionBlock();
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSError *error = [response error];
+            if( error ) {
+                errorBlock(error);
+            } else {
+                completionBlock();
+            }
+        });
     } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -131,9 +135,13 @@ int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES = 5120;
     account.ID = accountID;
     
     [account refreshWithCompletionBlock:^{
-        completionBlock(account);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(account);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -151,9 +159,13 @@ int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES = 5120;
     service.ID = serviceID;
     
     [service refreshWithCompletionBlock:^{
-        completionBlock(service);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(service);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -167,15 +179,28 @@ int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES = 5120;
 {
     ZNGAccountSearch *accountSearch = [[ZNGAccountSearch alloc] init];
     [accountSearch searchWithCompletionBlock:^(NSArray *results) {
-        completionBlock(results);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(results);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
-- (ZNGConversation *)conversationFrom:(ZNGMessageCorrespondent *)from to:(ZNGMessageCorrespondent *)to usingChannelType:(ZNGChannelType *)channelType;
+- (ZNGConversation *)conversationWithService:(ZNGService *)service to:(ZNGMessageCorrespondent *)to usingChannelType:(ZNGChannelType *)channelType
 {
-    ZNGConversation *conversation = [[ZNGConversation alloc] initWithFrom:from to:to usingChannelType:channelType];
+    ZNGConversation *conversation = [[ZNGConversation alloc] initWithService:service usingChannelType:channelType];
+    [conversation toCorrespondant:to];
+    
+    return conversation;
+}
+
+- (ZNGConversation *)conversationWithService:(ZNGService *)service from:(ZNGMessageCorrespondent *)from usingChannelType:(ZNGChannelType *)channelType
+{
+    ZNGConversation *conversation = [[ZNGConversation alloc] initWithService:service usingChannelType:channelType];
+    [conversation fromCorrespondant:from];
     
     return conversation;
 }
@@ -190,9 +215,13 @@ int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES = 5120;
 {
     ZNGTimeZoneSearch *timeZoneSearch = [[ZNGTimeZoneSearch alloc] init];
     [timeZoneSearch searchWithCompletionBlock:^(NSArray *results) {
-        completionBlock(results);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(results);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 

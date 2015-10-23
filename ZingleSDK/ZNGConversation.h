@@ -11,12 +11,19 @@
 @class ZNGContact;
 @class ZNGMessageCorrespondent;
 @class ZNGChannelType;
+@class ZNGMessage;
 
 @interface ZNGConversation : NSObject
 
+@property (nonatomic, retain) ZNGService *service;
 @property (nonatomic, retain) ZNGMessageCorrespondent *from, *to;
 @property (nonatomic, retain) ZNGChannelType *channelType;
 
-- (id)initWithFrom:(ZNGMessageCorrespondent *)from to:(ZNGMessageCorrespondent *)to usingChannelType:(ZNGChannelType *)channelType;
+- (id)initWithService:(ZNGService *)service usingChannelType:(ZNGChannelType *)channelType;
+- (NSArray *)messages;
+- (BOOL)isFromService;
+- (void)toCorrespondant:(ZNGMessageCorrespondent *)to;
+- (void)fromCorrespondant:(ZNGMessageCorrespondent *)from;
+- (NSString *)messageDirectionFor:(ZNGMessage *)message;
 
 @end

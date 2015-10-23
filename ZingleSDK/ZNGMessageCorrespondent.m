@@ -81,7 +81,10 @@ NSString * const ZINGLE_CORRESPONDENT_TYPE_LABEL = @"label";
 {
     NSString *description = @"<ZNGMessageCorrespondent> {\r";
     description = [description stringByAppendingFormat:@"    correspondent: %@\r", self.correspondent];
+    description = [description stringByAppendingFormat:@"    correspondentType: %@\r", [self correspondentType]];
+    description = [description stringByAppendingFormat:@"    channelType: %@\r", self.channelType];
     description = [description stringByAppendingFormat:@"    channelValue: %@\r", self.channelValue];
+    description = [description stringByAppendingFormat:@"    formattedChannelValue: %@\r", self.formattedChannelValue];
     description = [description stringByAppendingString:@"}"];
     
     return description;

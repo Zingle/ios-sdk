@@ -24,7 +24,6 @@ extern int const ZINGLE_ARROW_POSITION_SIDE;
 
 - (id)initWithConversation:(ZNGConversation *)conversation;
 
-- (ZNGMessageView *)addMessage:(NSString *)message withDirection:(NSString *)direction andTime:(NSString *)time;
 - (void)setBackgroundColor:(UIColor *)backgroundColor;
 - (void)clear;
 - (void)refreshDisplay;

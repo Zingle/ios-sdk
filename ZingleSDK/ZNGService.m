@@ -164,10 +164,14 @@
     customFieldSearch.pageSize = 1000;
     
     [customFieldSearch searchWithCompletionBlock:^(NSArray *results) {
-        self.contactCustomFields = [results mutableCopy];
-        completionBlock();
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.contactCustomFields = [results mutableCopy];
+            completionBlock();
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -205,10 +209,14 @@
     ZNGServiceChannel *newChannel = [self buildServicePhoneNumberChannelFor:availablePhoneNumber asDefault:isDefault];
     
     [newChannel saveWithCompletionBlock:^{
-        [self.channels addObject:newChannel];
-        completionBlock(newChannel);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.channels addObject:newChannel];
+            completionBlock(newChannel);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 

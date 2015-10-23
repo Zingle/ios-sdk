@@ -76,9 +76,13 @@
 {
     ZNGServiceSearch *serviceSearch = [[ZNGServiceSearch alloc] initWithAccount:self];
     return [serviceSearch searchWithCompletionBlock:^(NSArray *results) {
-        completionBlock(results);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(results);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -92,9 +96,13 @@
 {
     ZNGPlanSearch *planSearch = [[ZNGPlanSearch alloc] initWithAccount:self];
     [planSearch searchWithCompletionBlock:^(NSArray *results) {
-        completionBlock(results);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(results);
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 
@@ -127,21 +135,25 @@
     ZNGPlanSearch *planSearch = [[ZNGPlanSearch alloc] initWithAccount:self];
     planSearch.code = planCode;
     [planSearch searchWithCompletionBlock:^(NSArray *results) {
-        if( results && [results count] == 1 ) {
-            ZNGPlan *plan = (ZNGPlan *)[results objectAtIndex:0];
-            completionBlock(plan);
-        } else {
-            NSString *errorMessage = @"Could not find plan.";
-            ZingleError *error = [[ZingleError alloc] initWithDomain:ZINGLE_ERROR_DOMAIN code:ZINGLE_HTTP_STATUS_NOT_FOUND userInfo:[NSDictionary dictionaryWithObject:errorMessage forKey:NSLocalizedDescriptionKey]];
-            error.zingleErrorCode     = ZINGLE_HTTP_STATUS_NOT_FOUND;
-            error.httpStatusCode      = ZINGLE_HTTP_STATUS_NOT_FOUND;
-            error.errorText           = errorMessage;
-            error.errorDescription    = errorMessage;
-            
-            errorBlock(error);
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if( results && [results count] == 1 ) {
+                ZNGPlan *plan = (ZNGPlan *)[results objectAtIndex:0];
+                completionBlock(plan);
+            } else {
+                NSString *errorMessage = @"Could not find plan.";
+                ZingleError *error = [[ZingleError alloc] initWithDomain:ZINGLE_ERROR_DOMAIN code:ZINGLE_HTTP_STATUS_NOT_FOUND userInfo:[NSDictionary dictionaryWithObject:errorMessage forKey:NSLocalizedDescriptionKey]];
+                error.zingleErrorCode     = ZINGLE_HTTP_STATUS_NOT_FOUND;
+                error.httpStatusCode      = ZINGLE_HTTP_STATUS_NOT_FOUND;
+                error.errorText           = errorMessage;
+                error.errorDescription    = errorMessage;
+                
+                errorBlock(error);
+            }
+        });
     } errorBlock:^(NSError *error) {
-        errorBlock(error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
     }];
 }
 

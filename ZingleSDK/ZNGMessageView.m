@@ -8,15 +8,16 @@
 #import "ZNGMessageView.h"
 #import "ZNGConversationViewController.h"
 #import "ZNGArrowView.h"
+#import "ZNGMessage.h"
+#import "ZNGMessageAttachment.h"
 
 @interface ZNGMessageView()
 
 @property (nonatomic, retain) ZNGConversationViewController *parentViewController;
 @property (nonatomic, retain) UIView *bodyView, *arrowView;
-@property (nonatomic, retain) NSString *direction, *message, *author, *time;
+@property (nonatomic, retain) NSString *direction;
+@property (nonatomic, retain) ZNGMessage *message;
 @property (nonatomic, retain) UILabel *timeLabel, *authorLabel;
-@property (nonatomic, retain) NSArray *assetUrls;
-@property (nonatomic, retain) NSMutableArray *assets;
 @property (nonatomic, retain) UITextView *messageTextView;
 @property (nonatomic, retain) ZNGArrowView *arrow;
 
@@ -54,54 +55,64 @@
         self.authorLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
         self.authorLabel.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
         [self addSubview:self.authorLabel];
-        
-        self.author = @"David Peace";
     }
     return self;
 }
 
-- (void)setMessage:(NSString *)message withDirection:(NSString *)direction andTime:(NSString *)time
+- (void)setMessage:(ZNGMessage *)message withDirection:(NSString *)direction
 {
-    message = [message stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
-    message = [message stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
-    message = [message stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
-    
     self.message = message;
     self.direction = direction;
-    self.time = time;
+    
+    for( ZNGMessageAttachment *attachment in message.attachments ) {
+        [attachment getImageWithCompletionBlock:^(UIImage *image) {
+            
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+            int bodyPadding = self.parentViewController.bodyPadding;
+            imageView.frame = CGRectMake(bodyPadding, bodyPadding, self.bodyView.frame.size.width - (bodyPadding*2), self.bodyView.frame.size.height - (bodyPadding*2));
+            
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            [self.bodyView addSubview:imageView];
+            
+            
+        } errorBlock:^(NSError *requestError) {
+            NSLog(@"Could not load image. %@", requestError);
+        }];
+        
+        break;
+    }
     
     [self refresh];
 }
 
-- (void)setAssetUrls:(NSArray *)assetUrls
+- (NSString *)body
 {
-    _assetUrls = assetUrls;
-    [self refresh];
-}
-
-- (void)setAuthor:(NSString *)author
-{
-    _author = author;
-    [self refresh];
+    NSString *body = self.message.body;
+    body = [body stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
+    body = [body stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
+    body = [body stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
+    
+    return body;
 }
 
 - (void)refresh
 {    
-    self.messageTextView.text = self.message;
+    self.messageTextView.text = [self body];
     if( self.parentViewController.messageFont )
     {
         self.messageTextView.font = self.parentViewController.messageFont;
     }
     
+    NSString *author;
     if( [self.direction isEqualToString:@"inbound"] )
     {
-        _author = @"Hotel California";
+        author = @"Received";
         self.bodyView.backgroundColor = self.parentViewController.inboundBackgroundColor;
         self.messageTextView.textColor = self.parentViewController.inboundTextColor;
     }
     else if( [self.direction isEqualToString:@"outbound"] )
     {
-        _author = @"David Peace";
+        author = @"Me";
         self.bodyView.backgroundColor = self.parentViewController.outboundBackgroundColor;
         self.messageTextView.textColor = self.parentViewController.outboundTextColor;
     }
@@ -141,10 +152,10 @@
     
     self.authorLabel.frame = CGRectMake(0, 0, 0, 0);
     
-    if( self.author && ![self.author isEqualToString:@""] )
+    if( author && ![author isEqualToString:@""] )
     {
         self.authorLabel.frame = CGRectMake(bodyX + self.parentViewController.cornerRadius, 0, bodyWidth - (self.parentViewController.cornerRadius * 2), 20);
-        self.authorLabel.text = self.author;
+        self.authorLabel.text = author;
         self.authorLabel.textColor = self.parentViewController.authorTextColor;
     }
     
@@ -153,10 +164,16 @@
     self.messageTextView.frame = CGRectMake(bodyPadding, bodyPadding, bodyWidth - (bodyPadding * 2), textViewSize.height + bodyPadding);
     int messageViewBottom = self.messageTextView.frame.origin.y + self.messageTextView.frame.size.height;
     
+    if( [self.message.attachments count] > 0 ) {
+        messageViewBottom += 200;
+    }
+    
     self.bodyView.frame = CGRectMake(bodyX,
                                      self.authorLabel.frame.origin.y + self.authorLabel.frame.size.height,
                                      bodyWidth,
                                      messageViewBottom);
+    
+    
     
     CGRect arrowFrame = CGRectMake(0, 0, 0, 0);
     int arrowBottomHeight = 0;

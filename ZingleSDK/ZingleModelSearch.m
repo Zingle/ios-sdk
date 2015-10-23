@@ -121,10 +121,13 @@ NSString * const ZINGLE_SORT_DIRECTION_DESC = @"desc";
     self.lastResponse = [[ZingleDAOResponse alloc] init];
     
     [self sendSearchRequestWithCompletionBlock:^(ZingleDAOResponse *response) {
-
-        completionBlock( [self results] );
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock( [self results] );
+        });
     } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-        errorBlock( error );
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock( error );
+        });
     }];
 }
 
@@ -137,12 +140,16 @@ NSString * const ZINGLE_SORT_DIRECTION_DESC = @"desc";
     
     [self.DAO sendAsynchronousRequestTo:[self requestURI]
                         completionBlock:^(ZingleDAOResponse *response) {
-        self.lastResponse = response;
-        completionBlock(response);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.lastResponse = response;
+            completionBlock(response);
+        });
     }
                              errorBlock:^(ZingleDAOResponse *response, NSError *error) {
-        self.lastResponse = response;
-        errorBlock(response, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.lastResponse = response;
+            errorBlock(response, error);
+        });
     }];
 }
 

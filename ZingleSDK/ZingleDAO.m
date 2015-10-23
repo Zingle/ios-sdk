@@ -174,36 +174,42 @@ NSString * const ZINGLE_REQUEST_METHOD_DELETE = @"DELETE";
     [NSURLConnection sendAsynchronousRequest:request
                                        queue:[[NSOperationQueue alloc] init]
                            completionHandler:^(NSURLResponse *response, NSData *data, NSError *error) {
-         if( self.loading ) {
-             
-             NSString *requestURL = [self requestURLForURI:requestURI];
-             
-             [self log:[NSString stringWithFormat:@"START Async Request: %@ %@", self.requestMethod, requestURL] forLevel:ZINGLE_LOG_LEVEL_NOTICE];
-             
-             ZingleDAOResponse *zingleResponse = [[ZingleDAOResponse alloc] init];
-             zingleResponse.requestedMethod    = self.requestMethod;
-             zingleResponse.requestedURL       = requestURL;
-             zingleResponse.requestedPayload   = [self jsonPayload];
-             zingleResponse.urlResponse        = response;
-             zingleResponse.urlResponseData    = data;
-             zingleResponse.urlResponseError   = error;
-             NSLog(@"%@", [self jsonPayload] );
-             self.loading = NO;
-             NSError *zingleError = [zingleResponse error];
-             if( zingleError == nil ) {
-                 [self log:[NSString stringWithFormat:@"END Async Request: %@", requestURL] forLevel:ZINGLE_LOG_LEVEL_NOTICE];
-                 [self log:[NSString stringWithFormat:@"%@", zingleResponse] forLevel:ZINGLE_LOG_LEVEL_VERBOSE];
-                 
-                 completionBlock( zingleResponse );
-             } else {
-                 [self log:[NSString stringWithFormat:@"END Async Request: %@", requestURL] forLevel:ZINGLE_LOG_LEVEL_NOTICE];
-                 [self log:[NSString stringWithFormat:@"%@", zingleResponse] forLevel:ZINGLE_LOG_LEVEL_VERBOSE];
-                 
-                 [self log:[NSString stringWithFormat:@"Async Error: %@", zingleError]  forLevel:ZINGLE_LOG_LEVEL_ERROR];
-                 
-                 errorBlock( zingleResponse, zingleError );
-             }
-         }
+         
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if( self.loading ) {
+                    
+                    NSString *requestURL = [self requestURLForURI:requestURI];
+                    
+                    [self log:[NSString stringWithFormat:@"START Async Request: %@ %@", self.requestMethod, requestURL] forLevel:ZINGLE_LOG_LEVEL_NOTICE];
+                    
+                    ZingleDAOResponse *zingleResponse = [[ZingleDAOResponse alloc] init];
+                    zingleResponse.requestedMethod    = self.requestMethod;
+                    zingleResponse.requestedURL       = requestURL;
+                    zingleResponse.requestedPayload   = [self jsonPayload];
+                    zingleResponse.urlResponse        = response;
+                    zingleResponse.urlResponseData    = data;
+                    zingleResponse.urlResponseError   = error;
+                    NSLog(@"%@", [self jsonPayload] );
+                    self.loading = NO;
+                    NSError *zingleError = [zingleResponse error];
+                    if( zingleError == nil ) {
+                        [self log:[NSString stringWithFormat:@"END Async Request: %@", requestURL] forLevel:ZINGLE_LOG_LEVEL_NOTICE];
+                        [self log:[NSString stringWithFormat:@"%@", zingleResponse] forLevel:ZINGLE_LOG_LEVEL_VERBOSE];
+                        
+                        completionBlock( zingleResponse );
+                    } else {
+                        [self log:[NSString stringWithFormat:@"END Async Request: %@", requestURL] forLevel:ZINGLE_LOG_LEVEL_NOTICE];
+                        [self log:[NSString stringWithFormat:@"%@", zingleResponse] forLevel:ZINGLE_LOG_LEVEL_VERBOSE];
+                        
+                        [self log:[NSString stringWithFormat:@"Async Error: %@", zingleError]  forLevel:ZINGLE_LOG_LEVEL_ERROR];
+                        
+                        errorBlock( zingleResponse, zingleError );
+                    }
+                }
+                
+            });
+            
     }];
 }
 

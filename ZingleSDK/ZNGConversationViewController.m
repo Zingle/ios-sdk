@@ -69,6 +69,10 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         self.responseView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:0.75];
         self.responseView.layer.borderWidth= 1;
         self.responseView.layer.borderColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5].CGColor;
+    
+        self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.activity.alpha = 0;
+        [self.responseView addSubview:self.activity];
         
         self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
@@ -76,6 +80,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         [self.replyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
 //        self.cameraButton.
         [self.replyButton addTarget:self action:@selector(sendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+        self.replyButton.enabled = NO;
         [self.responseView addSubview:self.replyButton];
         
         
@@ -121,9 +126,28 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [self refreshDisplay];
 }
 
-- (void)sendButtonPressed:(id)sender
+- (void)sendButtonPressed:(UIButton *)sender
 {
-    NSLog(@"send button pressed");
+    self.activity.frame = sender.frame;
+    self.activity.alpha = 1;
+    [self.activity startAnimating];
+    [self.responseView bringSubviewToFront:self.activity];
+   
+    self.responseText.editable = NO;
+    
+    [self.conversation sendMessageWithBody:self.responseText.text completionBlock:^{
+        
+        self.responseText.editable = YES;
+        self.responseText.text = @"";
+        
+    } errorBlock:^(NSError *error) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+        
+        [alert show];
+        
+        NSLog(@"error: %@", error);
+    }];
 }
 
 - (void)cameraButtonPressed:(id)sender
@@ -132,7 +156,6 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
     [actionSheet showInView:self.view];
 }
-
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -163,6 +186,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)textViewDidChange:(UITextView *)textView
 {
+    self.replyButton.enabled = ![textView.text isEqualToString:@""];
     [self refreshDisplay];
 }
 
@@ -194,7 +218,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     NSArray *messages = [self.conversation messages];
     for( ZNGMessage *message in messages ) {
-        NSLog(@"DIRECTION: %@", [self.conversation messageDirectionFor:message]);
+
         [self addMessage:message withDirection:[self.conversation messageDirectionFor:message]];
     }
     
@@ -354,6 +378,8 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     self.responseText.frame = CGRectMake(self.responseText.frame.origin.x, self.responseText.frame.origin.y, self.replyButton.frame.origin.x - self.responseText.frame.origin.x - 15, textViewSize.height);
     
     self.responseTextBackground.frame = CGRectMake(self.responseTextBackground.frame.origin.x, self.responseTextBackground.frame.origin.y, self.responseText.frame.size.width + 14, self.responseText.frame.size.height);
+    
+    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.responseView.frame.size.height);
 }
 
 - (void)clear

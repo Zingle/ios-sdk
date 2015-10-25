@@ -421,4 +421,126 @@
     return [[ZNGAvailablePhoneNumberSearch alloc] initWithService:self];
 }
 
+- (ZNGContact *)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeID
+                                     andChannelValue:(NSString *)channelValue
+                                               error:(NSError **)error
+{
+    ZNGContactSearch *contactSearch = [[ZNGContactSearch alloc] initWithService:self];
+    contactSearch.channelTypeID = channelTypeID;
+    contactSearch.channelValue = channelValue;
+    
+    NSArray *contacts = [contactSearch searchWithError:error];
+    if( error == nil ) {
+        for( ZNGContact *contact in contacts ) {
+            for( ZNGContactChannel *contactChannel in contact.channels ) {
+                if( [contactChannel.channelType.ID isEqualToString:channelTypeID] ) {
+                    return contact;
+                }
+            }
+        }
+        
+        // A contact wasn't found, so let's create a new one.
+        
+        ZNGContact *contact = [self createContactWithChannelTypeID:channelTypeID andChannelValue:channelValue error:error];
+        
+        if( error == nil ) {
+            return contact;
+        }
+    }
+    
+    return nil;
+}
+
+- (void)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeID
+                             andChannelValue:(NSString *)channelValue
+                             completionBlock:(void (^) (ZNGContact *contact))completionBlock
+                                  errorBlock:(void (^) (NSError *error))errorBlock
+{
+    ZNGContactSearch *contactSearch = [[ZNGContactSearch alloc] initWithService:self];
+    contactSearch.channelTypeID = channelTypeID;
+    contactSearch.channelValue = channelValue;
+    
+    [contactSearch searchWithCompletionBlock:^(NSArray *results) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            for( ZNGContact *contact in results ) {
+                for( ZNGContactChannel *contactChannel in contact.channels ) {
+                    if( [contactChannel.channelType.ID isEqualToString:channelTypeID] ) {
+                        completionBlock(contact);
+                    }
+                }
+            }
+            
+            // A contact wasn't found, so let's create a new one.
+            
+            [self createContactWithChannelTypeID:channelTypeID andChannelValue:channelValue completionBlock:^(ZNGContact *contact) {
+                 dispatch_async(dispatch_get_main_queue(), ^{
+                     completionBlock(contact);
+                 });
+            } errorBlock:^(NSError *error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    errorBlock(error);
+                });
+            }];
+            
+            completionBlock(nil);
+        });
+    } errorBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
+    }];
+}
+
+- (ZNGContact *)createContactWithChannelTypeID:(NSString *)channelTypeID
+                               andChannelValue:(NSString *)channelValue
+                                         error:(NSError **)error
+{
+    ZNGChannelType *channelType = [self channelTypeWithID:channelTypeID];
+    
+    ZNGContact *contact = [[ZNGContact alloc] initWithService:self];
+    [contact saveWithError:error];
+    
+    if( error == nil ) {
+        ZNGContactChannel *contactChannel = [contact newChannel];
+        contactChannel.channelType = channelType;
+        contactChannel.value = channelValue;
+        [contactChannel saveWithError:error];
+        
+        return contact;
+    }
+    
+    return nil;
+}
+
+- (void)createContactWithChannelTypeID:(NSString *)channelTypeID
+                       andChannelValue:(NSString *)channelValue
+                       completionBlock:(void (^) (ZNGContact *contact))completionBlock
+                            errorBlock:(void (^) (NSError *error))errorBlock
+{
+    
+    ZNGChannelType *channelType = [self channelTypeWithID:channelTypeID];
+    
+    ZNGContact *contact = [[ZNGContact alloc] initWithService:self];
+    [contact saveWithCompletionBlock:^{
+        
+        ZNGContactChannel *contactChannel = [contact newChannel];
+        contactChannel.channelType = channelType;
+        contactChannel.value = channelValue;
+        [contactChannel saveWithCompletionBlock:^{
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 completionBlock(contact);
+             });
+        } errorBlock:^(NSError *error) {
+             dispatch_async(dispatch_get_main_queue(), ^{
+                 errorBlock(error);
+             });
+        }];
+        
+    } errorBlock:^(NSError *error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            errorBlock(error);
+        });
+    }];
+}
+
 @end

@@ -179,29 +179,30 @@
     self.channelTypes = [NSMutableArray array];
 }
 
-- (void)preSaveValidation
+- (NSError *)preSaveValidation
 {
-    if( ![self isNew] )
-    {
-        [NSException raise:@"ZINGLE_CANNOT_RESEND" format:@"Cannot resend an existing communication."];
-    }
-    
-    if( self.service == nil )
-    {
-        [NSException raise:@"ZINGLE_SERVICE_MISSING_SERVICE" format:@"Missing service."];
-    }
-    if( self.sender == nil )
-    {
-        [NSException raise:@"ZINGLE_SERVICE_MISSING_SENDER" format:@"Missing sender."];
-    }
-    if( [self.recipients count] == 0 )
-    {
-        [NSException raise:@"ZINGLE_SERVICE_MISSING_RECIPIENTS" format:@"No recipients."];
-    }
-    if( self.body == nil || [self.body length] == 0 )
-    {
-        [NSException raise:@"ZINGLE_SERVICE_MISSING_BODY" format:@"Please supply a body"];
-    }
+    return nil;
+//    if( ![self isNew] )
+//    {
+//        [NSException raise:@"ZINGLE_CANNOT_RESEND" format:@"Cannot resend an existing communication."];
+//    }
+//    
+//    if( self.service == nil )
+//    {
+//        [NSException raise:@"ZINGLE_SERVICE_MISSING_SERVICE" format:@"Missing service."];
+//    }
+//    if( self.sender == nil )
+//    {
+//        [NSException raise:@"ZINGLE_SERVICE_MISSING_SENDER" format:@"Missing sender."];
+//    }
+//    if( [self.recipients count] == 0 )
+//    {
+//        [NSException raise:@"ZINGLE_SERVICE_MISSING_RECIPIENTS" format:@"No recipients."];
+//    }
+//    if( self.body == nil || [self.body length] == 0 )
+//    {
+//        [NSException raise:@"ZINGLE_SERVICE_MISSING_BODY" format:@"Please supply a body"];
+//    }
 }
 
 - (BOOL)sendWithError:(NSError **)error
@@ -323,13 +324,18 @@
     }
     [dictionary setObject:channelTypeIDs forKey:@"channel_type_ids"];
     
+    [dictionary setObject:self.sender.correspondentType forKey:@"sender_type"];
     [dictionary setObject:[self.sender asDictionary] forKey:@"sender"];
     
     NSMutableArray *recipients = [NSMutableArray array];
+    NSString *recipientType;
     for( ZNGMessageCorrespondent *recipient in self.recipients )
     {
+        recipientType = recipient.correspondentType;
         [recipients addObject:[recipient asDictionary]];
     }
+    
+    [dictionary setObject:recipientType forKey:@"recipient_type"];
     [dictionary setObject:recipients forKey:@"recipients"];
     
     [dictionary setObject:self.body forKey:@"body"];

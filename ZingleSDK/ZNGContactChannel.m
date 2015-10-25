@@ -74,9 +74,17 @@
 {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     
-    [dictionary setObject:self.value forKey:@"value"];
-    [dictionary setObject:self.country forKey:@"country"];
-    [dictionary setObject:self.channelType.ID forKey:@"channel_type_id"];
+    if( self.value != nil ) {
+        [dictionary setObject:self.value forKey:@"value"];
+    }
+    
+    if( self.country != nil ) {
+        [dictionary setObject:self.country forKey:@"country"];
+    }
+    
+    if( self.channelType != nil && ![self.channelType isNew] ) {
+        [dictionary setObject:self.channelType.ID forKey:@"channel_type_id"];
+    }
     
     return dictionary;
 }

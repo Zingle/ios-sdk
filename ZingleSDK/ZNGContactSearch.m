@@ -9,6 +9,8 @@
 #import "ZingleDAO.h"
 #import "ZNGService.h"
 #import "ZNGContact.h"
+#import "ZNGContactChannel.h"
+#import "ZNGChannelType.h"
 
 
 @implementation ZNGContactSearch
@@ -25,6 +27,18 @@
 {
     return [NSString stringWithFormat:@"services/%@/contacts", self.service.ID];
 }
+
+
+- (NSMutableDictionary *)queryVars
+{
+    NSMutableDictionary *queryVars = [NSMutableDictionary dictionary];
+    
+    [self ifExistsSetValue:self.channelValue forKey:@"channel_value" inDictionary:queryVars];
+    [self ifExistsSetValue:self.labelID forKey:@"label_id" inDictionary:queryVars];
+    
+    return queryVars;
+}
+
 
 - (NSArray *)results
 {

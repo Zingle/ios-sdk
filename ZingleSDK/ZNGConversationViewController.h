@@ -27,6 +27,5 @@ extern int const ZINGLE_ARROW_POSITION_SIDE;
 - (void)setBackgroundColor:(UIColor *)backgroundColor;
 - (void)clear;
 - (void)refreshDisplay;
-//- (void)addActivityView;
 
 @end

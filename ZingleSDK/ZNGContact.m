@@ -263,7 +263,9 @@ NSString * const ZINGLE_CUSTOM_FIELD_LAST_NAME = @"Last Name";
 
 - (ZNGContactChannel *)newChannel
 {
-    return [[ZNGContactChannel alloc] initWithContact:self];
+    ZNGContactChannel *contactChannel = [[ZNGContactChannel alloc] initWithContact:self];
+    [self.channels addObject:contactChannel];
+    return contactChannel;
 }
 
 - (ZNGMessage *)newMessageToContact

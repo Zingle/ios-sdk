@@ -29,6 +29,7 @@
     NSMutableDictionary *queryVars = [NSMutableDictionary dictionary];
     
     [self ifExistsSetValue:self.contactId forKey:@"contact_id" inDictionary:queryVars];
+    [self ifExistsSetValue:self.contactChannelId forKey:@"contact_channel_id" inDictionary:queryVars];
     [self ifExistsSetValue:self.templateId forKey:@"template_id" inDictionary:queryVars];
     [self ifExistsSetValue:self.communicationDirection forKey:@"communication_direction" inDictionary:queryVars];
     

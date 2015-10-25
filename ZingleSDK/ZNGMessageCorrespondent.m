@@ -33,12 +33,12 @@ NSString * const ZINGLE_CORRESPONDENT_TYPE_LABEL = @"label";
 {
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     
-    if( ![self.correspondent isNew] )
+    if( self.correspondent != nil && ![self.correspondent isNew] )
     {
         [dictionary setObject:self.correspondent.ID forKey:@"id"];
     }
     
-    if( ![self.correspondent isKindOfClass:[ZNGLabel class]] )
+    if( ![self.correspondent isKindOfClass:[ZNGLabel class]] && self.channelValue != nil && ![self.channelValue isEqualToString:@""] )
     {
         [dictionary setObject:self.channelValue forKey:@"channel_value"];
     }

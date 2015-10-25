@@ -6,6 +6,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @class ZNGService;
 @class ZNGContact;
@@ -25,5 +26,16 @@
 - (void)toCorrespondant:(ZNGMessageCorrespondent *)to;
 - (void)fromCorrespondant:(ZNGMessageCorrespondent *)from;
 - (NSString *)messageDirectionFor:(ZNGMessage *)message;
+
+- (ZNGMessage *)sendMessageWithBody:(NSString *)body error:(NSError **)error;
+- (ZNGMessage *)sendMessageWithImage:(UIImage *)image error:(NSError **)error;
+
+- (void)sendMessageWithBody:(NSString *)body
+            completionBlock:(void (^) (void))completionBlock
+                 errorBlock:(void (^) (NSError *error))errorBlock;
+
+- (void)sendMessageWithImage:(UIImage *)image
+             completionBlock:(void (^) (void))completionBlock
+                  errorBlock:(void (^) (NSError *error))errorBlock;
 
 @end

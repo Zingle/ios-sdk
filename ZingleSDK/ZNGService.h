@@ -68,5 +68,22 @@
 - (ZNGWebServiceLogSearch *)webServiceLogSearch;
 - (ZNGAvailablePhoneNumberSearch *)availablePhoneNumberSearch;
 
+- (ZNGContact *)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeID
+                                     andChannelValue:(NSString *)channelValue
+                                               error:(NSError **)error;
+
+- (void)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeID
+                             andChannelValue:(NSString *)channelValue
+                             completionBlock:(void (^) (ZNGContact *contact))completionBlock
+                                  errorBlock:(void (^) (NSError *error))errorBlock;
+
+- (ZNGContact *)createContactWithChannelTypeID:(NSString *)channelTypeID
+                               andChannelValue:(NSString *)channelValue
+                                         error:(NSError **)error;
+
+- (void)createContactWithChannelTypeID:(NSString *)channelTypeID
+                            andChannelValue:(NSString *)channelValue
+                            completionBlock:(void (^) (ZNGContact *contact))completionBlock
+                                errorBlock:(void (^) (NSError *error))errorBlock;
 
 @end

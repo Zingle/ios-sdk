@@ -169,6 +169,27 @@ int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES = 5120;
     }];
 }
 
+- (void)useServiceWithID:(NSString *)serviceID error:(NSError **)error
+{
+    self.currentService = [self findServiceByID:serviceID withError:error];
+}
+
+- (void)useServiceWithID:(NSString *)serviceID
+         completionBlock:( void (^)(void) )completionBlock
+              errorBlock:( void (^)(NSError *error) )errorBlock
+{
+    [self findServiceByID:serviceID withCompletionBlock:^(ZNGService *service) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.currentService = service;
+            completionBlock();
+        });
+    } errorBlock:^(NSError *error) {
+         dispatch_async(dispatch_get_main_queue(), ^{
+             errorBlock(error);
+         });
+    }];
+}
+
 - (NSArray *)allAccountsWithError:(NSError **)error
 {
     ZNGAccountSearch *accountSearch = [[ZNGAccountSearch alloc] init];

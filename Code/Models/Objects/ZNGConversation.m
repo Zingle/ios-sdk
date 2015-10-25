@@ -6,6 +6,7 @@
 //
 
 #import "ZNGConversation.h"
+#import "ZingleSDK.h"
 #import "ZNGContact.h"
 #import "ZNGService.h"
 #import "ZNGMessageSearch.h"
@@ -25,6 +26,15 @@
 {
     if( self = [super init]  ) {
         self.service = service;
+        self.channelType = channelType;
+    }
+    return self;
+}
+
+- (id)initWithChannelType:(ZNGChannelType *)channelType
+{
+    if( self = [super init]  ) {
+        self.service = [ZingleSDK sharedSDK].currentService;
         self.channelType = channelType;
     }
     return self;

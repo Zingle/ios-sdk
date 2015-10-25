@@ -21,6 +21,9 @@
 @property (nonatomic, retain) ZNGChannelType *channelType;
 
 - (id)initWithService:(ZNGService *)service usingChannelType:(ZNGChannelType *)channelType;
+
+- (id)initWithChannelType:(ZNGChannelType *)channelType;
+
 - (NSArray *)messages;
 - (BOOL)isFromService;
 - (void)toCorrespondant:(ZNGMessageCorrespondent *)to;

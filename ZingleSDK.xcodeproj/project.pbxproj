@@ -59,6 +59,7 @@
 		CED2FDDE1BDD8C92007294FB /* ZNGMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CED2FDAD1BDD8C92007294FB /* ZNGMessageView.m */; settings = {ASSET_TAGS = (); }; };
 		CED2FDDF1BDD8C92007294FB /* ZingleAsyncQuickStart.m in Sources */ = {isa = PBXBuildFile; fileRef = CED2FDB01BDD8C92007294FB /* ZingleAsyncQuickStart.m */; settings = {ASSET_TAGS = (); }; };
 		CED2FDE01BDD8C92007294FB /* ZingleSyncQuickStart.m in Sources */ = {isa = PBXBuildFile; fileRef = CED2FDB21BDD8C92007294FB /* ZingleSyncQuickStart.m */; settings = {ASSET_TAGS = (); }; };
+		CED2FDE31BDD973B007294FB /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = CED2FDE21BDD973B007294FB /* camera.png */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -165,6 +166,7 @@
 		CED2FDB01BDD8C92007294FB /* ZingleAsyncQuickStart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZingleAsyncQuickStart.m; sourceTree = "<group>"; };
 		CED2FDB11BDD8C92007294FB /* ZingleSyncQuickStart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZingleSyncQuickStart.h; sourceTree = "<group>"; };
 		CED2FDB21BDD8C92007294FB /* ZingleSyncQuickStart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZingleSyncQuickStart.m; sourceTree = "<group>"; };
+		CED2FDE21BDD973B007294FB /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -370,6 +372,7 @@
 		CED2FDA71BDD8C92007294FB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				CED2FDE11BDD973B007294FB /* Assets */,
 				CED2FDA81BDD8C92007294FB /* ZNGArrowView.h */,
 				CED2FDA91BDD8C92007294FB /* ZNGArrowView.m */,
 				CED2FDAA1BDD8C92007294FB /* ZNGConversationViewController.h */,
@@ -389,6 +392,14 @@
 				CED2FDB21BDD8C92007294FB /* ZingleSyncQuickStart.m */,
 			);
 			path = Examples;
+			sourceTree = "<group>";
+		};
+		CED2FDE11BDD973B007294FB /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				CED2FDE21BDD973B007294FB /* camera.png */,
+			);
+			path = Assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -450,6 +461,7 @@
 			files = (
 				CED2FD3F1BDD87A2007294FB /* LaunchScreen.storyboard in Resources */,
 				CED2FD3C1BDD87A2007294FB /* Assets.xcassets in Resources */,
+				CED2FDE31BDD973B007294FB /* camera.png in Resources */,
 				CED2FD3A1BDD87A2007294FB /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -32,6 +32,7 @@ extern int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES;
 @interface ZingleSDK : NSObject
 
 @property (nonatomic) int maxAttachmentSizeBytes;
+@property (nonatomic, retain) ZNGService *currentService;
 
 + (ZingleSDK *)sharedSDK;
 
@@ -50,6 +51,11 @@ extern int const ZINGLE_DEFAULT_MAX_ATTACHMENT_SIZE_BYTES;
 
 - (ZNGService *)findServiceByID:(NSString *)serviceID withError:(NSError **)error;
 - (void)findServiceByID:(NSString *)serviceID withCompletionBlock:( void (^)(ZNGService *service) )completionBlock errorBlock:( void (^)(NSError *error) )errorBlock;
+
+- (void)useServiceWithID:(NSString *)serviceID error:(NSError **)error;
+- (void)useServiceWithID:(NSString *)serviceID
+         completionBlock:( void (^)(void) )completionBlock
+              errorBlock:( void (^)(NSError *error) )errorBlock;
 
 - (NSArray *)allAccountsWithError:(NSError **)error;
 - (void)allAccountsWithCompletionBlock:( void (^)(NSArray *accounts) )completionBlock errorBlock:( void (^)(NSError *error) )errorBlock;

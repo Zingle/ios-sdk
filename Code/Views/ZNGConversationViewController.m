@@ -6,11 +6,13 @@
 //
 
 #import <QuartzCore/QuartzCore.h>
+#import "ZingleSDK.h"
 #import "ZNGConversationViewController.h"
 #import "ZNGMessageView.h"
 #import "ZNGConversation.h"
 #import "ZNGService.h"
 #import "ZNGMessage.h"
+#import "ZNGMessageCorrespondent.h"
 
 int const ZINGLE_ARROW_POSITION_BOTTOM = 0;
 int const ZINGLE_ARROW_POSITION_SIDE = 1;
@@ -33,79 +35,120 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 @implementation ZNGConversationViewController
 
+- (id)initWithChannelTypeName:(NSString *)channelTypeName to:(NSString *)to
+{
+    if( self = [super init] ) {
+        
+        ZNGService *service = [ZingleSDK sharedSDK].currentService;
+        ZNGChannelType *channelType = [service firstChannelTypeWithClass:@"UserDefinedChannel" andDisplayName:channelTypeName];
+        
+        ZNGMessageCorrespondent *correspondent = [[ZNGMessageCorrespondent alloc] init];
+        [correspondent setCorrespondentType:ZINGLE_CORRESPONDENT_TYPE_CONTACT];
+        [correspondent setChannelType:channelType];
+        [correspondent setChannelValue:to];
+        
+        self.conversation = [[ZingleSDK sharedSDK] conversationWithService:service to:correspondent usingChannelType:channelType];
+        [self initializeUI];
+    }
+    return self;
+}
+
+- (id)initWithChannelTypeName:(NSString *)channelTypeName from:(NSString *)from
+{
+    if( self = [super init] ) {
+        
+        ZNGService *service = [ZingleSDK sharedSDK].currentService;
+        ZNGChannelType *channelType = [service firstChannelTypeWithClass:@"UserDefinedChannel" andDisplayName:channelTypeName];
+        
+        ZNGMessageCorrespondent *correspondent = [[ZNGMessageCorrespondent alloc] init];
+        [correspondent setCorrespondentType:ZINGLE_CORRESPONDENT_TYPE_CONTACT];
+        [correspondent setChannelType:channelType];
+        [correspondent setChannelValue:from];
+        
+        self.conversation = [[ZingleSDK sharedSDK] conversationWithService:service from:correspondent usingChannelType:channelType];
+        [self initializeUI];
+    }
+    return self;
+}
+
+
 - (id)initWithConversation:(ZNGConversation *)conversation
 {
     if( self = [super init]) {
 
         self.conversation = conversation;
-        
-        self.scrollView = [[UIScrollView alloc] init];
-        
-        self.messages = [[NSMutableArray alloc] init];
-        self.bottomY = 10;
-        self.scrollView.backgroundColor = [UIColor clearColor];
-        self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
-        
-        _containerBackgroundColor = [UIColor whiteColor];
-        
-        _inboundBackgroundColor = [UIColor colorWithRed:225.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1.0f];
-        _outboundBackgroundColor = [UIColor colorWithRed:229.0f/255.0f green:245.0f/255.0f blue:252.0f/255.0f alpha:1.0f];
-        _eventBackgroundColor = [UIColor colorWithRed:182.0f/255.0f green:184.0f/255.0f blue:186.0f/255.0f alpha:1.0f];
-        
-        _inboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-        _outboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-        _eventTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-        _authorTextColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
-        
-        _messageHorziontalMargin = 25;
-        _messageVerticalMargin = 8;
-        _messageIndentAmount = 40;
-        _bodyPadding = 14;
-        _cornerRadius = 10;
-        _arrowOffset = 10;
-        _arrowSize = CGSizeMake(20, 10);
-        
-        self.responseView = [[UIView alloc] init];
-        self.responseView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:0.75];
-        self.responseView.layer.borderWidth= 1;
-        self.responseView.layer.borderColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5].CGColor;
-    
-        self.sendActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        self.sendActivity.alpha = 0;
-        [self.responseView addSubview:self.sendActivity];
-        
-        self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
-        [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
-        self.replyButton.frame = CGRectMake(0, 0, 50, 30);
-        [self.replyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
-//        self.cameraButton.
-        [self.replyButton addTarget:self action:@selector(sendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        self.replyButton.enabled = NO;
-        [self.responseView addSubview:self.replyButton];
-        
-        
-        self.cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.cameraButton setImage:[UIImage imageNamed:@"camera.png"] forState:UIControlStateNormal];
-        self.cameraButton.adjustsImageWhenHighlighted = YES;
-        self.cameraButton.frame = CGRectMake(0, 0, 30, 30);
-        [self.cameraButton addTarget:self action:@selector(cameraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-        [self.responseView addSubview:self.cameraButton];
-        
-        self.responseTextBackground = [[UITextField alloc] initWithFrame:CGRectMake(43, 7, 495, 30)];
-        [self.responseTextBackground setBorderStyle:UITextBorderStyleRoundedRect];
-        [self.responseView addSubview:self.responseTextBackground];
-        
-        self.responseText = [[UITextView alloc] initWithFrame:CGRectMake(50, 7, 479, 30)];
-        self.responseText.backgroundColor = [UIColor clearColor];
-        self.responseText.delegate = self;
-        [self.responseView addSubview:self.responseText];
-        
-        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self selector:@selector(keyboardOnScreen:) name:UIKeyboardWillShowNotification object:nil];
-        [center addObserver:self selector:@selector(keyboardClosed) name:UIKeyboardWillHideNotification object:nil];
-        self.keyboardHeight = 0;
+        [self initializeUI];
     }
     return self;
+}
+
+- (void)initializeUI
+{
+    self.scrollView = [[UIScrollView alloc] init];
+    
+    self.messages = [[NSMutableArray alloc] init];
+    self.bottomY = 10;
+    self.scrollView.backgroundColor = [UIColor clearColor];
+    self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    
+    _containerBackgroundColor = [UIColor whiteColor];
+    
+    _inboundBackgroundColor = [UIColor colorWithRed:225.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1.0f];
+    _outboundBackgroundColor = [UIColor colorWithRed:229.0f/255.0f green:245.0f/255.0f blue:252.0f/255.0f alpha:1.0f];
+    _eventBackgroundColor = [UIColor colorWithRed:182.0f/255.0f green:184.0f/255.0f blue:186.0f/255.0f alpha:1.0f];
+    
+    _inboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    _outboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    _eventTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    _authorTextColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
+    
+    _messageHorziontalMargin = 25;
+    _messageVerticalMargin = 8;
+    _messageIndentAmount = 40;
+    _bodyPadding = 14;
+    _cornerRadius = 10;
+    _arrowOffset = 10;
+    _arrowSize = CGSizeMake(20, 10);
+    
+    self.responseView = [[UIView alloc] init];
+    self.responseView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:0.75];
+    self.responseView.layer.borderWidth= 1;
+    self.responseView.layer.borderColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5].CGColor;
+    
+    self.sendActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    self.sendActivity.alpha = 0;
+    [self.responseView addSubview:self.sendActivity];
+    
+    self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
+    self.replyButton.frame = CGRectMake(0, 0, 50, 30);
+    [self.replyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    //        self.cameraButton.
+    [self.replyButton addTarget:self action:@selector(sendButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    self.replyButton.enabled = NO;
+    [self.responseView addSubview:self.replyButton];
+    
+    
+    self.cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.cameraButton setImage:[UIImage imageNamed:@"camera.png"] forState:UIControlStateNormal];
+    self.cameraButton.adjustsImageWhenHighlighted = YES;
+    self.cameraButton.frame = CGRectMake(0, 0, 30, 30);
+    [self.cameraButton addTarget:self action:@selector(cameraButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    [self.responseView addSubview:self.cameraButton];
+    
+    self.responseTextBackground = [[UITextField alloc] initWithFrame:CGRectMake(43, 7, 495, 30)];
+    [self.responseTextBackground setBorderStyle:UITextBorderStyleRoundedRect];
+    [self.responseView addSubview:self.responseTextBackground];
+    
+    self.responseText = [[UITextView alloc] initWithFrame:CGRectMake(50, 7, 479, 30)];
+    self.responseText.backgroundColor = [UIColor clearColor];
+    self.responseText.delegate = self;
+    [self.responseView addSubview:self.responseText];
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(keyboardOnScreen:) name:UIKeyboardWillShowNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardClosed) name:UIKeyboardWillHideNotification object:nil];
+    self.keyboardHeight = 0;
 }
 
 - (void)keyboardOnScreen:(NSNotification *)notification

@@ -266,6 +266,7 @@ NSString * const ZINGLE_REQUEST_METHOD_DELETE = @"DELETE";
 {
     if( logLevel <= [[ZingleSDK sharedSDK] globalLogLevel] ||
         logLevel <= [self logLevel] ) {
+        NSLog(@"%@", message);
     }
 }
 

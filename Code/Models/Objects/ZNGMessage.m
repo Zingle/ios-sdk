@@ -57,6 +57,10 @@
 
 - (void)hydrate:(NSMutableDictionary *)data
 {
+    if( data == nil ) {
+        return;
+    }
+    
     [self hydrateDates:data];
     
     self.ID = [data objectAtPath:@"id" expectedClass:[NSString class] default:nil];

@@ -190,7 +190,7 @@ NSString * const ZINGLE_REQUEST_METHOD_DELETE = @"DELETE";
                     zingleResponse.urlResponse        = response;
                     zingleResponse.urlResponseData    = data;
                     zingleResponse.urlResponseError   = error;
-                    NSLog(@"%@", [self jsonPayload] );
+                    
                     self.loading = NO;
                     NSError *zingleError = [zingleResponse error];
                     if( zingleError == nil ) {
@@ -216,7 +216,6 @@ NSString * const ZINGLE_REQUEST_METHOD_DELETE = @"DELETE";
 - (ZingleDAOResponse *)sendSynchronousRequestTo:(NSString *)requestURI error:(NSError **)zingleError
 {
     NSURLRequest *request = [self buildRequestWithURI:requestURI];
-    NSLog(@"URI: %@", requestURI);
     NSURLResponse* response;
     NSError* error = nil;
     
@@ -267,7 +266,6 @@ NSString * const ZINGLE_REQUEST_METHOD_DELETE = @"DELETE";
 {
     if( logLevel <= [[ZingleSDK sharedSDK] globalLogLevel] ||
         logLevel <= [self logLevel] ) {
-        NSLog(@"%@", message);
     }
 }
 

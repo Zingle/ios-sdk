@@ -25,7 +25,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 @property (strong, nonatomic) UIButton *replyButton, *cameraButton;
 
 @property (nonatomic, retain) NSMutableArray *messages;
-@property (nonatomic, retain) UIActivityIndicatorView *activity;
+@property (nonatomic, retain) UIActivityIndicatorView *sendActivity, *loadActivity;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIColor *containerBackgroundColor;
 
@@ -70,9 +70,9 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         self.responseView.layer.borderWidth= 1;
         self.responseView.layer.borderColor = [UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:0.5].CGColor;
     
-        self.activity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        self.activity.alpha = 0;
-        [self.responseView addSubview:self.activity];
+        self.sendActivity = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.sendActivity.alpha = 0;
+        [self.responseView addSubview:self.sendActivity];
         
         self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
         [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
@@ -115,43 +115,49 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     CGRect rawFrame = [value CGRectValue];
     self.keyboardHeight = [self.view convertRect:rawFrame fromView:nil].size.height;
-    NSLog(@"keyboard on screen %i", self.keyboardHeight);
+    
     [self refreshDisplay];
 }
 
 - (void)keyboardClosed
 {
-    NSLog(@"keyboard off screen");
     self.keyboardHeight = 0;
     [self refreshDisplay];
 }
 
 - (void)sendButtonPressed:(UIButton *)sender
 {
-    self.activity.frame = sender.frame;
-    self.activity.alpha = 1;
-    [self.activity startAnimating];
-    [self.responseView bringSubviewToFront:self.activity];
-   
+    self.sendActivity.frame = sender.frame;
+    self.sendActivity.alpha = 1;
+    self.replyButton.alpha = 0;
+    
+    [self.sendActivity startAnimating];
+    [self.responseView bringSubviewToFront:self.sendActivity];
+    
+    [self.responseView resignFirstResponder];
     self.responseText.editable = NO;
     
     [self.conversation sendMessageWithBody:self.responseText.text completionBlock:^{
         
         self.responseText.editable = YES;
         self.responseText.text = @"";
+        self.replyButton.alpha = 1;
+        self.sendActivity.alpha = 0;
+        
+        [self refresh];
         
     } errorBlock:^(NSError *error) {
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
         
         [alert show];
-        
-        NSLog(@"error: %@", error);
     }];
 }
 
 - (void)cameraButtonPressed:(id)sender
 {
+    [self.responseView resignFirstResponder];
+    
     UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Send Picture" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take a Picture", @"Choose a Picture", nil];
 
     [actionSheet showInView:self.view];
@@ -159,6 +165,10 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
+    if( buttonIndex == [actionSheet cancelButtonIndex] ) {
+        return;
+    }
+    
     UIImagePickerController *picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
     picker.allowsEditing = YES;
@@ -179,7 +189,32 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 {
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
     
-    [picker dismissViewControllerAnimated:YES completion:NULL];
+    self.responseText.editable = NO;
+    [picker dismissViewControllerAnimated:YES completion:^{
+        
+        self.sendActivity.frame = self.replyButton.frame;
+        self.sendActivity.alpha = 1;
+        self.replyButton.alpha = 0;
+        
+        [self.sendActivity startAnimating];
+        [self.responseView bringSubviewToFront:self.sendActivity];
+        self.responseText.editable = NO;
+        
+        [self.conversation sendMessageWithImage:chosenImage completionBlock:^{
+            
+            self.responseText.editable = YES;
+            self.replyButton.alpha = 1;
+            self.sendActivity.alpha = 0;
+            
+            [self refresh];
+            
+        } errorBlock:^(NSError *error) {
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            
+            [alert show];
+        }];
+    }];
     
     
 }
@@ -212,18 +247,26 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [self refresh];
+    [super viewDidAppear:animated];
+}
+
+- (void)refresh
+{
     if( self.conversation == nil ) {
         [NSException raise:@"Conversation View Controller requires initialization with a Conversation object." format:@"Missing Conversation Object"];
     }
+    [self clear];
     
     NSArray *messages = [self.conversation messages];
     for( ZNGMessage *message in messages ) {
-
+        
         [self addMessage:message withDirection:[self.conversation messageDirectionFor:message]];
     }
     
     self.view.backgroundColor = self.containerBackgroundColor;
-    [super viewDidAppear:animated];
+    
+    [self scrollToBottom:NO];
 }
 
  - (void)setInboundBackgroundColor:(UIColor *)inboundBackgroundColor
@@ -379,7 +422,15 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     self.responseTextBackground.frame = CGRectMake(self.responseTextBackground.frame.origin.x, self.responseTextBackground.frame.origin.y, self.responseText.frame.size.width + 14, self.responseText.frame.size.height);
     
-    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.responseView.frame.size.height);
+    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.responseView.frame.size.height - self.keyboardHeight);
+    
+    [self scrollToBottom:YES];
+}
+
+- (void)scrollToBottom:(BOOL)animated
+{
+    CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+    [self.scrollView setContentOffset:bottomOffset animated:animated];
 }
 
 - (void)clear
@@ -388,15 +439,16 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     {
         [messageView removeFromSuperview];
     }
-    [self.activity removeFromSuperview];
+    [self.sendActivity removeFromSuperview];
     self.messages = [[NSMutableArray alloc] init];
     self.bottomY = 10;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 }
 
-
+//
 //- (void)addActivityView
 //{
+//    
 //    self.activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, self.bottomY, self.frame.size.width, 50)];
 //    [self.activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
 //
@@ -409,7 +461,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 //    [self.activity startAnimating];
 //    [self addSubview:self.activity];
 //}
-
+//
 
 
 - (void)viewDidLayoutSubviews {

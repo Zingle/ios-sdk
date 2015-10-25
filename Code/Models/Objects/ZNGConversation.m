@@ -108,6 +108,7 @@
 {
     ZNGMessageSearch *messageSearch = [[ZNGMessageSearch alloc] initWithService:self.service];
     messageSearch.contactChannelId = [self contactChannelID];
+    [messageSearch setPageSize:100];
     return [messageSearch searchWithError:nil];
 }
 

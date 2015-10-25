@@ -39,10 +39,10 @@ NSString * const ZINGLE_CONTENT_TYPE_IMAGE_PNG = @"image/png";
 
 - (void)setData:(NSData *)data withContentType:(NSString *)contentType
 {
-    if( [data length] > [ZingleSDK sharedSDK].maxAttachmentSizeBytes )
-    {
-        [NSException raise:@"ZINGLE_MAX_ATTACHMENT_SIZE_REACHED" format:@"The attachment has exceeded the size limit."];
-    }
+//    if( [data length] > [ZingleSDK sharedSDK].maxAttachmentSizeBytes )
+//    {
+//        [NSException raise:@"ZINGLE_MAX_ATTACHMENT_SIZE_REACHED" format:@"The attachment has exceeded the size limit."];
+//    }
     
     self.imageData = data;
     self.contentType  = contentType;

@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CE1F3D291BA76B460076518A"
+               BlueprintIdentifier = "CED2FD2B1BDD87A2007294FB"
                BuildableName = "ZingleSDK.app"
                BlueprintName = "ZingleSDK"
-               ReferencedContainer = "container:ZingleSDK.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CE1F3D421BA76B460076518A"
-               BuildableName = "ZingleSDKTests.xctest"
-               BlueprintName = "ZingleSDKTests"
                ReferencedContainer = "container:ZingleSDK.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,21 +28,11 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CE1F3D421BA76B460076518A"
-               BuildableName = "ZingleSDKTests.xctest"
-               BlueprintName = "ZingleSDKTests"
-               ReferencedContainer = "container:ZingleSDK.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CE1F3D291BA76B460076518A"
+            BlueprintIdentifier = "CED2FD2B1BDD87A2007294FB"
             BuildableName = "ZingleSDK.app"
             BlueprintName = "ZingleSDK"
             ReferencedContainer = "container:ZingleSDK.xcodeproj">
@@ -79,7 +55,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CE1F3D291BA76B460076518A"
+            BlueprintIdentifier = "CED2FD2B1BDD87A2007294FB"
             BuildableName = "ZingleSDK.app"
             BlueprintName = "ZingleSDK"
             ReferencedContainer = "container:ZingleSDK.xcodeproj">
@@ -98,7 +74,7 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "CE1F3D291BA76B460076518A"
+            BlueprintIdentifier = "CED2FD2B1BDD87A2007294FB"
             BuildableName = "ZingleSDK.app"
             BlueprintName = "ZingleSDK"
             ReferencedContainer = "container:ZingleSDK.xcodeproj">

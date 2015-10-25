@@ -17,7 +17,7 @@
 #import "ZNGAccount.h"
 #import "ZNGConversation.h"
 
-NSString * const ZINGLE_API_HOST = @"qa3-api.zingle.me";
+NSString * const ZINGLE_API_HOST = @"api.zingle.me";
 NSString * const ZINGLE_API_VERSION = @"v1";
 NSString * const ZINGLE_ERROR_DOMAIN = @"me.zingle.sdk";
 

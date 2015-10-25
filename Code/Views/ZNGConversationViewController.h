@@ -14,7 +14,7 @@
 extern int const ZINGLE_ARROW_POSITION_BOTTOM;
 extern int const ZINGLE_ARROW_POSITION_SIDE;
 
-@interface ZNGConversationViewController : ViewController <UITextViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate>
+@interface ZNGConversationViewController : ViewController <UITextViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic, retain) UIColor *inboundBackgroundColor, *outboundBackgroundColor, *inboundTextColor, *outboundTextColor, *eventBackgroundColor, *eventTextColor, *authorTextColor;
 @property (nonatomic) int bodyPadding, messageHorziontalMargin, messageVerticalMargin, messageIndentAmount, cornerRadius, arrowOffset, arrowPosition, arrowBias;
@@ -26,6 +26,5 @@ extern int const ZINGLE_ARROW_POSITION_SIDE;
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor;
 - (void)clear;
-- (void)refreshDisplay;
 
 @end

@@ -9,4 +9,6 @@
 
 @interface ZingleSyncQuickStart : NSObject
 
+- (void)startSynchronousTest;
+
 @end

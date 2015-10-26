@@ -197,7 +197,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         
         self.responseText.text = @"";
         
-        [self refresh];
+        [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
         
         self.responseText.editable = YES;
         self.replyButton.enabled = YES;
@@ -259,10 +259,10 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         
         [self.conversation sendMessageWithImage:chosenImage completionBlock:^{
             
-            [self refresh];
-            
             self.responseText.editable = YES;
             self.replyButton.enabled = YES;
+            
+            [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
             
         } errorBlock:^(NSError *error) {
             
@@ -443,7 +443,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     int contentHeight = (self.bottomY < self.scrollView.frame.size.height) ? self.scrollView.frame.size.height : self.bottomY + 15;
     
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, contentHeight);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, contentHeight + 30);
     [self.scrollView addSubview:messageView];
     
     return messageView;
@@ -461,7 +461,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         self.bottomY = self.bottomY + messageView.frame.size.height;
     }
     
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.bottomY + 30);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.bottomY + 50);
     
     [self refreshDisplay];
 }
@@ -504,23 +504,23 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.height);
 }
 
-//
-//- (void)addActivityView
-//{
-//    
-//    self.activity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, self.bottomY, self.frame.size.width, 50)];
-//    [self.activity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
-//
+
+- (void)addActivityView
+{
+    
+    self.loadActivity = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, self.bottomY, self.scrollView.frame.size.width, 50)];
+    [self.loadActivity setActivityIndicatorViewStyle:UIActivityIndicatorViewStyleGray];
+
 //    self.bottomY = self.bottomY + self.activity.frame.size.height;
 //
 //    int contentHeight = (self.bottomY < self.frame.size.height) ? self.frame.size.height : self.bottomY + 15;
-//
+
 //    self.contentSize = CGSizeMake(self.frame.size.width, contentHeight);
-//
-//    [self.activity startAnimating];
-//    [self addSubview:self.activity];
-//}
-//
+
+    [self.loadActivity startAnimating];
+    [self.scrollView addSubview:self.loadActivity];
+}
+
 
 
 - (void)viewDidLayoutSubviews {

@@ -19,6 +19,7 @@ extern int const ZINGLE_ARROW_POSITION_SIDE;
 @property (nonatomic, retain) UIColor *inboundBackgroundColor, *outboundBackgroundColor, *inboundTextColor, *outboundTextColor, *eventBackgroundColor, *eventTextColor, *authorTextColor;
 @property (nonatomic) int bodyPadding, messageHorziontalMargin, messageVerticalMargin, messageIndentAmount, cornerRadius, arrowOffset, arrowPosition, arrowBias;
 @property (nonatomic, retain) UIFont *messageFont;
+@property (nonatomic, retain) NSString *fromName, *toName;
 @property (nonatomic) CGSize arrowSize;
 @property (nonatomic, retain) ZNGConversation *conversation;
 

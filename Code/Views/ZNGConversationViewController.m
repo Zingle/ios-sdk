@@ -42,6 +42,10 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         ZNGService *service = [ZingleSDK sharedSDK].currentService;
         ZNGChannelType *channelType = [service firstChannelTypeWithClass:@"UserDefinedChannel" andDisplayName:channelTypeName];
         
+        if( channelType == nil ) {
+            [NSException raise:@"ZINGLE_SDK_INVALID_CHANNEL_TYPE" format:@"Channel type supplied does not exist for current Service."];
+        }
+        
         ZNGMessageCorrespondent *correspondent = [[ZNGMessageCorrespondent alloc] init];
         [correspondent setCorrespondentType:ZINGLE_CORRESPONDENT_TYPE_CONTACT];
         [correspondent setChannelType:channelType];
@@ -59,6 +63,10 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         
         ZNGService *service = [ZingleSDK sharedSDK].currentService;
         ZNGChannelType *channelType = [service firstChannelTypeWithClass:@"UserDefinedChannel" andDisplayName:channelTypeName];
+        
+        if( channelType == nil ) {
+            [NSException raise:@"ZINGLE_SDK_INVALID_CHANNEL_TYPE" format:@"Channel type supplied does not exist for current Service."];
+        }
         
         ZNGMessageCorrespondent *correspondent = [[ZNGMessageCorrespondent alloc] init];
         [correspondent setCorrespondentType:ZINGLE_CORRESPONDENT_TYPE_CONTACT];
@@ -110,6 +118,9 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     _arrowOffset = 10;
     _arrowSize = CGSizeMake(20, 10);
     
+    _fromName = @"Me";
+    _toName = @"Received";
+    
     self.responseView = [[UIView alloc] init];
     self.responseView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:0.75];
     self.responseView.layer.borderWidth= 1;
@@ -149,6 +160,15 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [center addObserver:self selector:@selector(keyboardOnScreen:) name:UIKeyboardWillShowNotification object:nil];
     [center addObserver:self selector:@selector(keyboardClosed) name:UIKeyboardWillHideNotification object:nil];
     self.keyboardHeight = 0;
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTap)];
+    tapGesture.numberOfTapsRequired = 2;
+    [self.scrollView addGestureRecognizer:tapGesture];
+}
+
+- (void)didDoubleTap
+{
+    [self refresh];
 }
 
 - (void)keyboardOnScreen:(NSNotification *)notification
@@ -170,26 +190,25 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)sendButtonPressed:(UIButton *)sender
 {
-    self.sendActivity.frame = sender.frame;
-    self.sendActivity.alpha = 1;
-    self.replyButton.alpha = 0;
-    
-    [self.sendActivity startAnimating];
-    [self.responseView bringSubviewToFront:self.sendActivity];
-    
-    [self.responseView resignFirstResponder];
+    self.replyButton.enabled = NO;
     self.responseText.editable = NO;
     
     [self.conversation sendMessageWithBody:self.responseText.text completionBlock:^{
+        
+        self.responseText.text = @"";
+        
+        [self refresh];
+        
+        self.responseText.editable = YES;
+        self.replyButton.enabled = YES;
+        
+    } errorBlock:^(NSError *error) {
         
         self.responseText.editable = YES;
         self.responseText.text = @"";
         self.replyButton.alpha = 1;
         self.sendActivity.alpha = 0;
         
-        [self refresh];
-        
-    } errorBlock:^(NSError *error) {
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
         
@@ -233,25 +252,23 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     UIImage *chosenImage = info[UIImagePickerControllerEditedImage];
     
     self.responseText.editable = NO;
+    
     [picker dismissViewControllerAnimated:YES completion:^{
-        
-        self.sendActivity.frame = self.replyButton.frame;
-        self.sendActivity.alpha = 1;
-        self.replyButton.alpha = 0;
-        
-        [self.sendActivity startAnimating];
-        [self.responseView bringSubviewToFront:self.sendActivity];
+        self.replyButton.enabled = NO;
         self.responseText.editable = NO;
         
         [self.conversation sendMessageWithImage:chosenImage completionBlock:^{
             
+            [self refresh];
+            
+            self.responseText.editable = YES;
+            self.replyButton.enabled = YES;
+            
+        } errorBlock:^(NSError *error) {
+            
             self.responseText.editable = YES;
             self.replyButton.alpha = 1;
             self.sendActivity.alpha = 0;
-            
-            [self refresh];
-            
-        } errorBlock:^(NSError *error) {
             
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
             
@@ -467,7 +484,6 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.responseView.frame.size.height - self.keyboardHeight);
     
-    [self scrollToBottom:YES];
 }
 
 - (void)scrollToBottom:(BOOL)animated

@@ -106,13 +106,13 @@
     NSString *author;
     if( [self.direction isEqualToString:@"inbound"] )
     {
-        author = @"Received";
+        author = self.parentViewController.toName;
         self.bodyView.backgroundColor = self.parentViewController.inboundBackgroundColor;
         self.messageTextView.textColor = self.parentViewController.inboundTextColor;
     }
     else if( [self.direction isEqualToString:@"outbound"] )
     {
-        author = @"Me";
+        author = self.parentViewController.fromName;
         self.bodyView.backgroundColor = self.parentViewController.outboundBackgroundColor;
         self.messageTextView.textColor = self.parentViewController.outboundTextColor;
     }

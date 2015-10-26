@@ -12,6 +12,32 @@ In addition to the standard API conveniences, the iOS SDK also provides an easy 
 
 ![](https://github.com/Zingle/ios-sdk/blob/master/Assets/message_layout.png)
 
+UI Examples
+
+```obj-c
+[[ZingleSDK sharedSDK] setToken:@"dpeace+4S@zingle.me" andKey:@"sPaTud8x@w?y"];
+[[ZingleSDK sharedSDK] useServiceWithID:serviceID error:nil];
+ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
+
+// OPTIONAL UI SETTINGS
+chatViewController.inboundBackgroundColor = [UIColor colorWithRed:225.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1.0f];
+chatViewController.outboundBackgroundColor = [UIColor colorWithRed:229.0f/255.0f green:245.0f/255.0f blue:252.0f/255.0f alpha:1.0f];
+chatViewController.inboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+chatViewController.outboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+chatViewController.authorTextColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
+chatViewController.messageHorziontalMargin = 25;
+chatViewController.messageVerticalMargin = 8;
+chatViewController.messageIndentAmount = 40;
+chatViewController.bodyPadding = 14;
+chatViewController.cornerRadius = 10;
+chatViewController.arrowOffset = 10;
+chatViewController.arrowSize = CGSizeMake(20, 10);
+chatViewController.fromName = @"Me";
+chatViewController.toName = @"Received";
+
+[self presentViewController:chatViewController animated:YES completion:nil];
+```
+
 ### Zingle Object Model
 
 Model | Description

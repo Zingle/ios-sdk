@@ -30,6 +30,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 @property (nonatomic, retain) UIActivityIndicatorView *sendActivity, *loadActivity;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIColor *containerBackgroundColor;
+@property (nonatomic) BOOL wasAtBottom;
 
 @end
 
@@ -173,6 +174,8 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)keyboardOnScreen:(NSNotification *)notification
 {
+    self.wasAtBottom = [self isScrolledToBottom];
+    
     NSDictionary *info = notification.userInfo;
     NSValue *value = info[UIKeyboardFrameEndUserInfoKey];
     
@@ -193,22 +196,27 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     self.replyButton.enabled = NO;
     self.responseText.editable = NO;
     
+    self.sendActivity.frame = self.replyButton.frame;
+    self.sendActivity.alpha = 1;
+    [self.sendActivity startAnimating];
+    [self.responseView bringSubviewToFront:self.sendActivity];
+    self.replyButton.alpha = 0;
+    
     [self.conversation sendMessageWithBody:self.responseText.text completionBlock:^{
         
         self.responseText.text = @"";
         
         [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
         
-        self.responseText.editable = YES;
-        self.replyButton.enabled = YES;
         
     } errorBlock:^(NSError *error) {
         
-        self.responseText.editable = YES;
         self.responseText.text = @"";
-        self.replyButton.alpha = 1;
+        self.responseText.editable = YES;
+        self.replyButton.enabled = YES;
+        [self.sendActivity stopAnimating];
         self.sendActivity.alpha = 0;
-        
+        self.replyButton.alpha = 1;
         
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
         
@@ -253,6 +261,13 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     self.responseText.editable = NO;
     
+    self.sendActivity.frame = self.replyButton.frame;
+    self.sendActivity.alpha = 1;
+    [self.sendActivity startAnimating];
+    [self.responseView bringSubviewToFront:self.sendActivity];
+    self.replyButton.alpha = 0;
+
+    
     [picker dismissViewControllerAnimated:YES completion:^{
         self.replyButton.enabled = NO;
         self.responseText.editable = NO;
@@ -260,15 +275,17 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         [self.conversation sendMessageWithImage:chosenImage completionBlock:^{
             
             self.responseText.editable = YES;
-            self.replyButton.enabled = YES;
             
             [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
             
         } errorBlock:^(NSError *error) {
             
             self.responseText.editable = YES;
-            self.replyButton.alpha = 1;
+            self.responseText.editable = YES;
+            self.replyButton.enabled = YES;
+            [self.sendActivity stopAnimating];
             self.sendActivity.alpha = 0;
+            self.replyButton.alpha = 1;
             
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
             
@@ -281,7 +298,6 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)textViewDidChange:(UITextView *)textView
 {
-    self.replyButton.enabled = ![textView.text isEqualToString:@""];
     [self refreshDisplay];
 }
 
@@ -326,7 +342,13 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     self.view.backgroundColor = self.containerBackgroundColor;
     
-    [self scrollToBottom:NO];
+    [self scrollToBottom:YES];
+    
+    self.responseText.editable = YES;
+    self.replyButton.enabled = YES;
+    [self.sendActivity stopAnimating];
+    self.sendActivity.alpha = 0;
+    self.replyButton.alpha = 1;
 }
 
  - (void)setInboundBackgroundColor:(UIColor *)inboundBackgroundColor
@@ -443,7 +465,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     int contentHeight = (self.bottomY < self.scrollView.frame.size.height) ? self.scrollView.frame.size.height : self.bottomY + 15;
     
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, contentHeight + 30);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, contentHeight);
     [self.scrollView addSubview:messageView];
     
     return messageView;
@@ -474,6 +496,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
 
     self.replyButton.frame = CGRectMake(self.responseView.frame.size.width - self.replyButton.frame.size.width - 10, 8, self.replyButton.frame.size.width, self.replyButton.frame.size.height);
+    self.sendActivity.frame = self.replyButton.frame;
     
     self.cameraButton.frame = CGRectMake(8, 8, self.cameraButton.frame.size.width, self.cameraButton.frame.size.height);
     
@@ -482,14 +505,25 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     self.responseTextBackground.frame = CGRectMake(self.responseTextBackground.frame.origin.x, self.responseTextBackground.frame.origin.y, self.responseText.frame.size.width + 14, self.responseText.frame.size.height);
     
-    self.scrollView.frame = CGRectMake(self.scrollView.frame.origin.x, self.scrollView.frame.origin.y, self.view.frame.size.width, self.view.frame.size.height - self.responseView.frame.size.height - self.keyboardHeight);
+    self.scrollView.frame = CGRectMake(0, [UIApplication sharedApplication].statusBarFrame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.responseView.frame.size.height - self.keyboardHeight - [UIApplication sharedApplication].statusBarFrame.size.height);
     
+    if( self.wasAtBottom ) {
+        [self scrollToBottom:NO];
+    }
 }
 
 - (void)scrollToBottom:(BOOL)animated
 {
+    if( self.bottomY > self.scrollView.frame.size.height ) {
+        CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+        [self.scrollView setContentOffset:bottomOffset animated:animated];
+    }
+}
+
+- (BOOL)isScrolledToBottom
+{
     CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
-    [self.scrollView setContentOffset:bottomOffset animated:animated];
+    return (self.scrollView.contentOffset.y == bottomOffset.y);
 }
 
 - (void)clear
@@ -498,10 +532,10 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     {
         [messageView removeFromSuperview];
     }
-    [self.sendActivity removeFromSuperview];
+    
     self.messages = [[NSMutableArray alloc] init];
     self.bottomY = 10;
-    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    self.scrollView.contentSize = CGSizeMake(self.scrollView.frame.size.width, 50);
 }
 
 

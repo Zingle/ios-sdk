@@ -15,7 +15,7 @@ In addition to the standard API conveniences, the iOS SDK also provides an easy 
 UI Examples
 
 ```obj-c
-[[ZingleSDK sharedSDK] setToken:@"dpeace+4S@zingle.me" andKey:@"sPaTud8x@w?y"];
+[[ZingleSDK sharedSDK] setToken:@"" andKey:@""];
 [[ZingleSDK sharedSDK] useServiceWithID:serviceID error:nil];
 ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
 

@@ -6,6 +6,31 @@ Zingle is a multi-channel communications platform that allows the sending, recei
 
 To view the latest API documentation, please refer to: https://github.com/Zingle/rest-api/
 
+## Installation with CocoaPods
+
+[CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like the ZingleSDK in your projects. You can install it with the following command:
+
+```bash
+$ gem install cocoapods
+```
+
+#### Podfile
+
+To integrate the ZingleSDK into your Xcode project using CocoaPods, specify it in your `Podfile`:
+
+```ruby
+source 'https://github.com/CocoaPods/Specs.git'
+platform :ios, '8.0'
+
+pod 'ZingleSDK', '~> 0.1'
+```
+
+Then, run the following command:
+
+```bash
+$ pod install
+```
+
 ### Integrated UI
 
 In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI is fully customizeable to your needs, and can be used on behalf of the Contact, or on behalf of the Zingle Service.

@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/Models/Errors/ZingleError.h

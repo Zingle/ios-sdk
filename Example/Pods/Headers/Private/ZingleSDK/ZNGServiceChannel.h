@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/Models/Objects/ZNGServiceChannel.h

@@ -63,10 +63,6 @@ ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Z
 
 ### QuickStarts
 
-#### Synchronous
-
-To view Quick Start using synchronous examples, please see: [ZingleSyncQuickStart.m](Examples/ZingleSyncQuickStart.m)
-
 #### Asynchronous
 
-To view Quick Start using asynchronous examples, please see: [ZingleAsyncQuickStart.m](Examples/ZingleAsyncQuickStart.m)
+To view Quick Start using asynchronous examples, please see: [ZingleAsyncQuickStart.m](Example/ZingleSDK/ZingleAsyncQuickStart.m)

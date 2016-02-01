@@ -7,7 +7,7 @@
 //
 
 #import "ZNGViewController.h"
-#import "ZingleAsyncQuickStart.h"
+#import "ZNGQuickStart.h"
 
 @interface ZNGViewController ()
 
@@ -19,7 +19,7 @@
 {
     [super viewDidLoad];
     
-    ZingleAsyncQuickStart *test = [[ZingleAsyncQuickStart alloc] init];
+    ZNGQuickStart *test = [[ZNGQuickStart alloc] init];
     [test startAsynchronousTest];
 	// Do any additional setup after loading the view, typically from a nib.
 }

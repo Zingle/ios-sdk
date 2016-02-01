@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
   DESC
 
   s.homepage         = "https://github.com/Zingle/ios-sdk"
-  # s.screenshots    = "https://github.com/Zingle/ios-sdk/blob/master/Assets/message_layout.png"
+  s.screenshots      = "https://github.com/Zingle/ios-sdk/blob/master/Assets/message_layout.png"
   s.license          = 'MIT'
   s.author           = { "David Peace" => "david@zingleme.com", "Ryan Farley" => "rfarley@zingleme.com" }
   s.source           = { :git => "https://github.com/Zingle/ios-sdk.git", :tag => s.version.to_s }

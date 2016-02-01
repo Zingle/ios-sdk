@@ -133,13 +133,13 @@
 		6003F593195388D20070C39A /* Example for ZingleSDK */ = {
 			isa = PBXGroup;
 			children = (
-				DFC402161C5FD4FA006C74BB /* ZingleAsyncQuickStart.h */,
-				DFC402171C5FD4FA006C74BB /* ZingleAsyncQuickStart.m */,
 				6003F59C195388D20070C39A /* ZNGAppDelegate.h */,
 				6003F59D195388D20070C39A /* ZNGAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* ZNGViewController.h */,
 				6003F5A6195388D20070C39A /* ZNGViewController.m */,
+				DFC402161C5FD4FA006C74BB /* ZingleAsyncQuickStart.h */,
+				DFC402171C5FD4FA006C74BB /* ZingleAsyncQuickStart.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);

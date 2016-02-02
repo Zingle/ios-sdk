@@ -18,6 +18,13 @@
 #import "ZNGContact.h"
 #import "ZNGLabel.h"
 
+@interface ZingleModel ()
+
+- (void)prepareSaveDAO;
+- (NSString *)saveToRequestURI;
+
+@end
+
 @implementation ZNGMessage
 
 - (id)initWithService:(ZNGService *)service
@@ -94,7 +101,9 @@
     self.service = masterService;
     
     self.sender = [[ZNGMessageCorrespondent alloc] init];
-    [self.sender setCorrespondent:senderModel];
+    if (senderModel) {
+        [self.sender setCorrespondent:senderModel];
+    }
     self.sender.channelValue = [data objectAtPath:@"sender.channel.value" expectedClass:[NSString class] default:@""];
     self.sender.formattedChannelValue = [data objectAtPath:@"sender.channel.formatted_value" expectedClass:[NSString class] default:@""];
 
@@ -209,23 +218,51 @@
 //    }
 }
 
-- (BOOL)sendWithError:(NSError **)error
+- (BOOL)saveWithError:(NSError **)error
 {
-    return [self saveWithError:error];
+    NSError *validationError = [self preSaveValidation];
+    if( validationError ) {
+        *error = validationError;
+        return NO;
+    }
+    
+    [self prepareSaveDAO];
+    
+    ZingleDAOResponse *response = [self.DAO sendSynchronousRequestTo:[self saveToRequestURI] error:error];
+    
+    if( [response successful] ) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
-- (void)sendWithCompletionBlock:(void (^) (void))completionBlock
+- (void)saveWithCompletionBlock:(void (^) (void))completionBlock
                      errorBlock:(void (^) (NSError *error))errorBlock
 {
-    [self saveWithCompletionBlock:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completionBlock();
-        });
-    } errorBlock:^(NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            errorBlock(error);
-        });
-    }];
+    NSError *validationError = [self preSaveValidation];
+    if( validationError ) {
+        errorBlock(validationError);
+        return;
+    }
+    
+    [self prepareSaveDAO];
+    
+    [self.DAO sendAsynchronousRequestTo:[self saveToRequestURI]
+                        completionBlock:^(ZingleDAOResponse *response) {
+                            
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                if( [response successful] ) {
+                                    completionBlock();
+                                } else {
+                                    // Error
+                                }
+                            });
+                        } errorBlock:^(ZingleDAOResponse *response, NSError *error) {
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                errorBlock(error);
+                            });
+                        }];
 }
 
 - (void)prepareMarkRead

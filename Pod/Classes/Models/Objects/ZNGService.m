@@ -248,14 +248,18 @@
 - (NSMutableArray *)channelTypesWithClass:(NSString *)typeClass andDisplayName:(NSString *)displayName
 {
     NSMutableArray *channelTypes = [self channelTypesWithClass:typeClass];
+    NSMutableArray *discardedChannelTypes = [NSMutableArray array];
     
-    for( ZNGChannelType *channelType in channelTypes )
+    for (ZNGChannelType *channelType in channelTypes)
     {
         if( ![channelType.displayName isEqualToString:displayName] )
         {
-            [channelTypes removeObject:channelType];
+            [discardedChannelTypes addObject:channelTypes];
         }
     }
+    
+    [channelTypes removeObjectsInArray:discardedChannelTypes];
+    
     return channelTypes;
 }
 

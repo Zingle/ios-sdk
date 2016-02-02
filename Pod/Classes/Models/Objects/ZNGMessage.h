@@ -34,11 +34,6 @@
 - (void)clearAttchments;
 - (void)clearChannelTypes;
 
-- (BOOL)sendWithError:(NSError **)error;
-- (void)sendWithCompletionBlock:(void (^) (void))completionBlock
-errorBlock:(void (^) (NSError *error))errorBlock;
-
-
 - (BOOL)markAsReadNowWithError:(NSError **)error;
 - (BOOL)markAsReadAt:(NSDate *)readAt withError:(NSError **)error;
 - (void)markAsReadNowWithCompletionBlock:(void (^) (void))completionBlock

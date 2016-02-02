@@ -141,14 +141,14 @@
 - (ZNGMessage *)sendMessageWithBody:(NSString *)body error:(NSError **)error
 {
     ZNGMessage *newMessage = [self prepareMessageWithBody:body andImage:nil];
-    [newMessage sendWithError:error];
+    [newMessage saveWithError:error];
     return nil;
 }
 
 - (ZNGMessage *)sendMessageWithImage:(UIImage *)image error:(NSError **)error
 {
     ZNGMessage *newMessage = [self prepareMessageWithBody:@"" andImage:image];
-    [newMessage sendWithError:error];
+    [newMessage saveWithError:error];
     return nil;
 }
 
@@ -157,7 +157,7 @@
                  errorBlock:(void (^) (NSError *error))errorBlock
 {
     ZNGMessage *newMessage = [self prepareMessageWithBody:body andImage:nil];
-    [newMessage sendWithCompletionBlock:^{
+    [newMessage saveWithCompletionBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             completionBlock();
         });
@@ -173,7 +173,7 @@
                   errorBlock:(void (^) (NSError *error))errorBlock
 {
     ZNGMessage *newMessage = [self prepareMessageWithBody:@"" andImage:image];
-    [newMessage sendWithCompletionBlock:^{
+    [newMessage saveWithCompletionBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
             completionBlock();
         });

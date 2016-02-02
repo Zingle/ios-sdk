@@ -1,5 +1,5 @@
 PODS:
-  - ZingleSDK (0.1.4)
+  - ZingleSDK (0.1.5)
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  ZingleSDK: 674b4f9a3fa32407efb9b19c752fa19504dbc941
+  ZingleSDK: 5328fdd4739447971bad99eef12a65f6cfd8e588
 
 COCOAPODS: 0.39.0

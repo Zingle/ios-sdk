@@ -141,7 +141,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [self.responseView addSubview:self.replyButton];
  
     NSBundle *bundle = [NSBundle bundleForClass:[self class]];
-    UIImage *cameraImage = [[UIImage imageNamed:@"camera.png" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UIImage *cameraImage = [[UIImage imageNamed:@"camera" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.cameraButton setImage:cameraImage forState:UIControlStateNormal];
     self.cameraButton.adjustsImageWhenHighlighted = YES;

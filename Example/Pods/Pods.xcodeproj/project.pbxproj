@@ -30,7 +30,6 @@
 		4BD86087B6FCE572687B1D18 /* ZNGAutomation.h in Headers */ = {isa = PBXBuildFile; fileRef = 18EB3C680255E6E17E1B20D0 /* ZNGAutomation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C24C26975E236138258800C /* CJSONSerializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 74A713D5D7AEF9E4CF154B74 /* CJSONSerializer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C683818D687D47BD10993AE /* ZNGContactSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = F48B31E33F5FE05DF791D86D /* ZNGContactSearch.m */; };
-		4D3DB76FC0B2C697F38DDA6B /* Contents.json in Sources */ = {isa = PBXBuildFile; fileRef = B32925FF6C6F46347EB9DFB8 /* Contents.json */; };
 		4F9BEE99E0E2B06DE8C370EF /* ZNGAvailablePhoneNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = B8995F54B8781A494CE65A4A /* ZNGAvailablePhoneNumber.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F9D768FFF0CF64AF5BE334F /* ZNGMessageCorrespondent.h in Headers */ = {isa = PBXBuildFile; fileRef = 2CBC1A34A2FBACC13F0FBAED /* ZNGMessageCorrespondent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		51961CB3D5AE513B91B035DE /* ZNGCustomFieldOption.h in Headers */ = {isa = PBXBuildFile; fileRef = F99AC14A455A655E462ABA37 /* ZNGCustomFieldOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -43,7 +42,6 @@
 		6FD0336704472C526045ECDA /* ZNGAutomation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1F2E063505C03C627A4A8E /* ZNGAutomation.m */; };
 		74F49EE8803DCF1834B65895 /* ZNGMessageSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FE1DC18E015E5AF671EAD56 /* ZNGMessageSearch.m */; };
 		75BD17FE36539C7AFFD68FE4 /* ZNGContactChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 74BDA5FC128AE6048ED541FE /* ZNGContactChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7646F2CBA81FF1019E2457E1 /* camera.png in Sources */ = {isa = PBXBuildFile; fileRef = 3BAE04E6E0D97A174A1E6AEA /* camera.png */; };
 		78833D1009AEBC4BA97CB25F /* ZNGPlanSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 569B8F56FB8F8DDD36DFF0A6 /* ZNGPlanSearch.m */; };
 		7C4991D3740219B5076C93DC /* ZingleDAO.h in Headers */ = {isa = PBXBuildFile; fileRef = FEE0D7C8AAC09D143054D0A7 /* ZingleDAO.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7E71A198176458EC6D9F49E6 /* ZNGServiceSettingsSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = D29BCC46E5682E6206801717 /* ZNGServiceSettingsSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -85,7 +83,6 @@
 		BC18FB4CCDFC9693092C3285 /* Pods-ZingleSDK_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 862927972AD27913CB41CC38 /* Pods-ZingleSDK_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BCD87D4C578530E975B616FA /* ZNGPlanSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 94E6C2E5DCFFBD4B4E473E91 /* ZNGPlanSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BD095DE21DF0088464D67928 /* ZingleModelSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D11A694C7563B0636814360 /* ZingleModelSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C0E705BF179D271DEF378D8E /* Contents.json in Sources */ = {isa = PBXBuildFile; fileRef = 38F586D681AEDA77BC1A49FF /* Contents.json */; };
 		C33DB4C2EC0AAE0D80E1B7B3 /* ZNGCustomFieldValue.h in Headers */ = {isa = PBXBuildFile; fileRef = B5A0A7DEA6A0E070E052CDB6 /* ZNGCustomFieldValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C39DF2F13212531967BC25D1 /* ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 98B5E93A62C506AF4873179E /* ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C50C728BE1FB5389DA597422 /* ZNGService.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A9DDB69A556F4CE4F55A4BF /* ZNGService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,6 +97,8 @@
 		D54FC06FD7F5D2E18739B0E9 /* ZNGServiceChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = BE42F078C0C8905F090D4F2F /* ZNGServiceChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAFC033B2176F05693C69D6B /* ZNGMessageSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = 5664F388D5BBA7597D5101B9 /* ZNGMessageSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DCE5D985F0EFFF2833B7753A /* ZNGAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 8364A1C9AB6CA50F048B788F /* ZNGAccount.m */; };
+		DF643B641C6140B900FC105B /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 38F586D681AEDA77BC1A49FF /* Contents.json */; };
+		DF643B651C6140B900FC105B /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = B32925FF6C6F46347EB9DFB8 /* Contents.json */; };
 		ECFBD0C431C42066632DEB6E /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D9CC16299E5980B0AEEC589E /* ZNGConversationViewController.m */; };
 		F00F3E52384C192624419F37 /* ZNGConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = FB89AD69B91B3B1028A2CB81 /* ZNGConversation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F224548206CAC30D48918069 /* ZNGCustomFieldValue.m in Sources */ = {isa = PBXBuildFile; fileRef = D0E9A1A609F8F668CA942CE7 /* ZNGCustomFieldValue.m */; };
@@ -248,6 +247,7 @@
 		DD78F27E7F02CD8E431AE05B /* ZNGMessageCorrespondent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageCorrespondent.m; sourceTree = "<group>"; };
 		DD90423EFE6720675979CB81 /* ZNGAccountSearch.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountSearch.m; sourceTree = "<group>"; };
 		DF1D4E13DBEEA2B0F90E73E7 /* Pods-ZingleSDK_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Example-resources.sh"; sourceTree = "<group>"; };
+		DF643B621C61408000FC105B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		E3D9493421AA055BC60747FC /* ZNGChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannel.h; sourceTree = "<group>"; };
 		E43457C26B78BD45CE02BF6A /* JSONRepresentation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = JSONRepresentation.h; sourceTree = "<group>"; };
 		E53E2621FE11F2C04D10324B /* ZNGWebServiceLogSearch.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGWebServiceLogSearch.m; sourceTree = "<group>"; };
@@ -321,6 +321,7 @@
 		1418C3B50D8B947416EE49FE = {
 			isa = PBXGroup;
 			children = (
+				DF643B621C61408000FC105B /* Images.xcassets */,
 				7E3E4B4468D02A1250E11DAF /* Podfile */,
 				1BCC449906468FF3998AB468 /* Development Pods */,
 				B6AB96CAFD8CC9FAE474E4B4 /* Frameworks */,
@@ -795,6 +796,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF643B641C6140B900FC105B /* Contents.json in Resources */,
+				DF643B651C6140B900FC105B /* Contents.json in Resources */,
 				06133991DECE32E17D827B37 /* ZingleSDK.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -813,11 +816,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7646F2CBA81FF1019E2457E1 /* camera.png in Sources */,
 				A6E8626C76BCB05B0AC7A37E /* CJSONDeserializer.m in Sources */,
 				AABB8897BF77902C01B32AF2 /* CJSONSerializer.m in Sources */,
-				4D3DB76FC0B2C697F38DDA6B /* Contents.json in Sources */,
-				C0E705BF179D271DEF378D8E /* Contents.json in Sources */,
 				C94679CC1F9BA9042C8B05CF /* NSDictionary_JSONExtensions.m in Sources */,
 				89BAC96D9A1B8A872B09A63E /* NSMutableDictionary+json.m in Sources */,
 				B77A0A7A31110603CE086EA5 /* ZingleDAO.m in Sources */,

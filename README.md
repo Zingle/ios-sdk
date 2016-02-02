@@ -31,6 +31,11 @@ Then, run the following command:
 $ pod install
 ```
 
+Import the SDK header file where needed:
+```objective-c
+#import <ZingleSDK/ZingleSDK.h>
+```
+
 ### Integrated UI
 
 In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI is fully customizeable to your needs, and can be used on behalf of the Contact, or on behalf of the Zingle Service.
@@ -40,8 +45,8 @@ In addition to the standard API conveniences, the iOS SDK also provides an easy 
 UI Examples
 
 ```obj-c
-[[ZingleSDK sharedSDK] setToken:@"" andKey:@""];
-[[ZingleSDK sharedSDK] useServiceWithID:serviceID error:nil];
+[[ZingleSDK sharedSDK] setToken:@"YOUR TOKEN HERE" andKey:@"YOUR KEY HERE"];
+[[ZingleSDK sharedSDK] useServiceWithID:@"YOUR SERVICE ID HERE" error:nil];
 ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
 
 // OPTIONAL UI SETTINGS

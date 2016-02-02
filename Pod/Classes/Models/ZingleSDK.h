@@ -17,6 +17,7 @@
 #import "ZNGConversation.h"
 #import "ZNGAddress.h"
 #import "ZNGContact.h"
+#import "ZNGConversationViewController.h"
 
 extern NSString * const ZINGLE_API_HOST;
 extern NSString * const ZINGLE_API_VERSION;

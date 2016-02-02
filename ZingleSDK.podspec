@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ZingleSDK"
-  s.version          = "0.1.3"
+  s.version          = "0.1.4"
   s.summary          = "Zingle iOS SDK"
 
   s.description      = <<-DESC

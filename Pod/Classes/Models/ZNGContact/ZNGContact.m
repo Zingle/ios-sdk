@@ -13,43 +13,43 @@
 
 @implementation ZNGContact
 
-+(NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"contactId" : @"id",
-             @"isConfirmed" : @"is_confirmed",
-             @"isStarred" : @"is_starred",
-             @"lastMessage" : @"last_messages",
-             @"channels" : @"channels",
-             @"customFieldValues" : @"custom_field_values",
-             @"labels" : @"labels",
-             @"createdAt" : @"created_at",
-             @"updatedAt" : @"udpated_at"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"contactId" : @"id",
+    @"isConfirmed" : @"is_confirmed",
+    @"isStarred" : @"is_starred",
+    @"lastMessage" : @"last_messages",
+    @"channels" : @"channels",
+    @"customFieldValues" : @"custom_field_values",
+    @"labels" : @"labels",
+    @"createdAt" : @"created_at",
+    @"updatedAt" : @"udpated_at"
+  };
 }
 
-+ (NSValueTransformer *)lastMessageJSONTransformer {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
++ (NSValueTransformer*)lastMessageJSONTransformer {
+  return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
 }
 
-+ (NSValueTransformer *)channelsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannel.class];
++ (NSValueTransformer*)channelsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannel.class];
 }
 
-+ (NSValueTransformer *)customFieldValuesJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGCustomFieldValue.class];
++ (NSValueTransformer*)customFieldValuesJSONTransformer {
+  return
+      [MTLJSONAdapter arrayTransformerWithModelClass:ZNGCustomFieldValue.class];
 }
 
-+ (NSValueTransformer *)labelsJSONTransformer {
-        return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGLabel.class];
++ (NSValueTransformer*)labelsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGLabel.class];
 }
 
-+ (NSValueTransformer *)createdAtJSONTransformer {
-    return [ZingleValueTransformers dateValueTransformer];
++ (NSValueTransformer*)createdAtJSONTransformer {
+  return [ZingleValueTransformers dateValueTransformer];
 }
 
-+ (NSValueTransformer *)updatedAtJSONTransformer {
-    return [ZingleValueTransformers dateValueTransformer];
++ (NSValueTransformer*)updatedAtJSONTransformer {
+  return [ZingleValueTransformers dateValueTransformer];
 }
 
 @end

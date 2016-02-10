@@ -11,8 +11,8 @@
 
 @interface ZNGCustomFieldValue : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *value;
-@property (nonatomic, strong) NSString *selectedCustomFieldOptionId;
-@property (nonatomic, strong) ZNGCustomField *customField;
+@property(nonatomic, strong) NSString* value;
+@property(nonatomic, strong) NSString* selectedCustomFieldOptionId;
+@property(nonatomic, strong) ZNGCustomField* customField;
 
 @end

@@ -7,20 +7,13 @@
 //
 
 #import "ZNGServiceAddressClient.h"
-#import "ZNGConstants.h"
 
 @implementation ZNGServiceAddressClient
 
 #pragma mark - ZNGClientProtocol
 
-+ (Class)responseObject
-{
-    return [ZNGServiceAddressClient class];
-}
-
-+ (NSString *)resourcePath
-{
-    return kServiceResourcePath;
++ (Class)responseObject {
+  return [ZNGServiceAddressClient class];
 }
 
 @end

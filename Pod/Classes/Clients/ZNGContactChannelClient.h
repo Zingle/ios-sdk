@@ -13,35 +13,37 @@
 
 #pragma mark - GET methods
 
-+ (void)contactChannelWithId:(NSString *)contactChannelId
-               withContactId:(NSString *)contactId
-               withServiceId:(NSString *)serviceId
-                     success:(void (^)(ZNGContactChannel *contactChannel))success
-                     failure:(void (^)(ZNGError *error))failure;
-
++ (void)contactChannelWithId:(NSString*)contactChannelId
+               withContactId:(NSString*)contactId
+               withServiceId:(NSString*)serviceId
+                     success:
+                         (void (^)(ZNGContactChannel* contactChannel))success
+                     failure:(void (^)(ZNGError* error))failure;
+                     
 #pragma mark - POST methods
 
-+ (void)saveContactChannel:(ZNGContactChannel *)contactChannel
-             withContactId:(NSString *)contactId
-             withServiceId:(NSString *)serviceId
-                   success:(void (^)(ZNGContactChannel *contactChannel))success
-                   failure:(void (^)(ZNGError *error))failure;
-
++ (void)saveContactChannel:(ZNGContactChannel*)contactChannel
+             withContactId:(NSString*)contactId
+             withServiceId:(NSString*)serviceId
+                   success:(void (^)(ZNGContactChannel* contactChannel))success
+                   failure:(void (^)(ZNGError* error))failure;
+                   
 #pragma mark - PUT methods
 
-+ (void)updateContactChannelWithId:(NSString *)contactChannelId
-                    withParameters:(NSDictionary *)parameters
-                     withContactId:(NSString *)contactId
-                     withServiceId:(NSString *)serviceId
-                           success:(void (^)(ZNGContactChannel *contactChannel))success
-                           failure:(void (^)(ZNGError *error))failure;
-
++ (void)updateContactChannelWithId:(NSString*)contactChannelId
+                    withParameters:(NSDictionary*)parameters
+                     withContactId:(NSString*)contactId
+                     withServiceId:(NSString*)serviceId
+                           success:(void (^)(ZNGContactChannel* contactChannel))
+                                       success
+                           failure:(void (^)(ZNGError* error))failure;
+                           
 #pragma mark - DELETE methods
 
-+ (void)deleteContactChannelWithId:(NSString *)contactChannelId
-                     withContactId:(NSString *)contactId
-                     withServiceId:(NSString *)serviceId
++ (void)deleteContactChannelWithId:(NSString*)contactChannelId
+                     withContactId:(NSString*)contactId
+                     withServiceId:(NSString*)serviceId
                            success:(void (^)())success
-                           failure:(void (^)(ZNGError *error))failure;
-
+                           failure:(void (^)(ZNGError* error))failure;
+                           
 @end

@@ -10,9 +10,9 @@
 
 @interface ZNGCustomField : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *customFieldId;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic) BOOL isGlobal;
-@property (nonatomic, strong) NSArray *options;
+@property(nonatomic, strong) NSString* customFieldId;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic) BOOL isGlobal;
+@property(nonatomic, strong) NSArray* options;
 
 @end

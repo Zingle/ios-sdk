@@ -11,14 +11,14 @@
 
 @interface ZNGNewMessage : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *senderType;
-@property (nonatomic, strong) ZNGSender *sender;
-@property (nonatomic, strong) NSString *recipientType;
-//Array of ZNGRecipient
-@property (nonatomic, strong) NSArray *recipients;
-//Array of NSStrings
-@property (nonatomic, strong) NSArray *channelTypeIds;
-@property (nonatomic, strong) NSString *body;
-@property (nonatomic, strong) NSArray *attachments;
+@property(nonatomic, strong) NSString* senderType;
+@property(nonatomic, strong) ZNGSender* sender;
+@property(nonatomic, strong) NSString* recipientType;
+// Array of ZNGRecipient
+@property(nonatomic, strong) NSArray* recipients;
+// Array of NSStrings
+@property(nonatomic, strong) NSArray* channelTypeIds;
+@property(nonatomic, strong) NSString* body;
+@property(nonatomic, strong) NSArray* attachments;
 
 @end

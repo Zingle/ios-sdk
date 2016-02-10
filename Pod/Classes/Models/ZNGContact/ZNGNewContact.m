@@ -11,28 +11,29 @@
 
 @implementation ZNGNewContact
 
-+(NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return  @{
-              @"customFieldValues" : @"custom_field_values",
-              @"isStarred" : @"is_starred",
-              @"isConfirmed" : @"is_confirmed"
-              };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"customFieldValues" : @"custom_field_values",
+    @"isStarred" : @"is_starred",
+    @"isConfirmed" : @"is_confirmed"
+  };
 }
 
-- (id)initWithContact:(ZNGContact *)contact
-{
-    self = [super init];
-    if (self) {
-        _customFieldValues = contact.customFieldValues;
-        _isStarred = contact.isStarred;
-        _isConfirmed = contact.isConfirmed;
-    }
-    return self;
+- (id)initWithContact:(ZNGContact*)contact {
+  self = [super init];
+  
+  if (self) {
+    _customFieldValues = contact.customFieldValues;
+    _isStarred = contact.isStarred;
+    _isConfirmed = contact.isConfirmed;
+  }
+  
+  return self;
 }
 
-+ (NSValueTransformer *)customFieldValuesJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGCustomFieldValue.class];
++ (NSValueTransformer*)customFieldValuesJSONTransformer {
+  return
+      [MTLJSONAdapter arrayTransformerWithModelClass:ZNGCustomFieldValue.class];
 }
 
 @end

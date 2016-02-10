@@ -11,18 +11,17 @@
 
 @implementation ZNGSetting
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"settingId" : @"id",
-             @"displayName" : @"display_name",
-             @"dataType" : @"data_type",
-             @"options" : @"options"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"settingId" : @"id",
+    @"displayName" : @"display_name",
+    @"dataType" : @"data_type",
+    @"options" : @"options"
+  };
 }
 
-+ (NSValueTransformer *)optionsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGFieldOption.class];
++ (NSValueTransformer*)optionsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGFieldOption.class];
 }
 
 @end

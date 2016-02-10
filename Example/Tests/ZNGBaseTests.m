@@ -51,6 +51,7 @@
     address.state       = @"IL";
     address.country     = @"US";
     address.postalCode  = @"60622";
+    
     return address;
 }
 
@@ -64,6 +65,7 @@
     plan.setupPrice = @0;
     plan.displayName = @"Sandbox";
     plan.isPrinterPlan = false;
+    
     return plan;
 }
 
@@ -75,6 +77,7 @@
     service.timeZone = [self timeZone];
     service.plan = [self plan];
     service.serviceAddress = [self serviceAddress];
+    
     return service;
 }
 
@@ -82,6 +85,7 @@
 {
     ZNGAccount *account = [[ZNGAccount alloc] init];
     account.accountId = @"bbc1f555-bc73-447b-90e5-4893e895acb7";
+    
     return account;
 }
 
@@ -94,6 +98,7 @@
 {
     ZNGChannelType *channelType = [[ZNGChannelType alloc] init];
     channelType.channelTypeId = @"0a293ea3-4721-433e-a031-610ebcf43255";
+    
     return channelType;
 }
 
@@ -125,6 +130,7 @@
 {
     ZNGContact *contact = [[ZNGContact alloc] init];
     contact.isConfirmed = true;
+    
     return contact;
 }
 

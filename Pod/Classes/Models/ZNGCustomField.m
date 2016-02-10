@@ -11,18 +11,17 @@
 
 @implementation ZNGCustomField
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"customFieldId" : @"id",
-             @"displayName" : @"display_name",
-             @"isGlobal" : @"is_global",
-             @"options" : @"options"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"customFieldId" : @"id",
+    @"displayName" : @"display_name",
+    @"isGlobal" : @"is_global",
+    @"options" : @"options"
+  };
 }
 
-+ (NSValueTransformer *)optionsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGFieldOption.class];
++ (NSValueTransformer*)optionsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGFieldOption.class];
 }
 
 @end

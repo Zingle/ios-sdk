@@ -7,29 +7,19 @@
 //
 
 #import "ZNGAvailablePhoneNumberClient.h"
-#import "ZNGConstants.h"
 
 @implementation ZNGAvailablePhoneNumberClient
 
-+ (Class)responseObject
-{
-    return [ZNGAvailablePhoneNumber class];
-}
-
-+ (NSString *)resourcePath
-{
-    return kAvailablePhoneNumbersPath;
-}
-
-+ (void)availablePhoneNumberListForCountry:(NSString *)country
-                                   success:(void (^)(NSArray *availableNumbers))success
-                                   failure:(void (^)(ZNGError *error))failure
-{
-    [self getListWithParameters:@{@"country" : country}
-                           path:[self resourcePath]
-                 responseClass:[self responseObject]
-                        success:success
-                        failure:failure];
++ (void)availablePhoneNumberListForCountry:(NSString*)country
+                                   success:(void (^)(NSArray* availableNumbers))
+                                               success
+                                   failure:(void (^)(ZNGError* error))failure {
+  [self getListWithParameters:@{
+    @"country" : country
+  } path:@"available-phone-numbers"
+                responseClass:[ZNGAvailablePhoneNumber class]
+                      success:success
+                      failure:failure];
 }
 
 @end

@@ -11,10 +11,10 @@
 
 @interface ZNGNewContact : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSArray *customFieldValues;
-@property (nonatomic) BOOL isStarred;
-@property (nonatomic) BOOL isConfirmed;
+@property(nonatomic, strong) NSArray* customFieldValues;
+@property(nonatomic) BOOL isStarred;
+@property(nonatomic) BOOL isConfirmed;
 
-- (id)initWithContact:(ZNGContact *)contact;
+- (id)initWithContact:(ZNGContact*)contact;
 
 @end

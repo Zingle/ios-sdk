@@ -6,7 +6,7 @@
 //
 //
 
-#import "ZNGBaseClient.h"   
+#import "ZNGBaseClient.h"
 
 @interface ZNGServiceAddressClient : ZNGBaseClient
 

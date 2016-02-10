@@ -10,15 +10,14 @@
 
 @implementation ZNGLabel
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"labelId" : @"id",
-             @"displayName" : @"display_name",
-             @"backgroundColor" : @"background_color",
-             @"textColor" : @"text_color",
-             @"isGlobal" : @"is_global"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"labelId" : @"id",
+    @"displayName" : @"display_name",
+    @"backgroundColor" : @"background_color",
+    @"textColor" : @"text_color",
+    @"isGlobal" : @"is_global"
+  };
 }
 
 @end

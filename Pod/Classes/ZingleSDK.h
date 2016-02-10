@@ -11,10 +11,10 @@
 
 @interface ZingleSDK : NSObject
 
-//Initialization
+// Initialization
 + (instancetype)sharedSDK;
-- (void)setToken:(NSString *)token andKey:(NSString *)key;
+- (void)setToken:(NSString*)token andKey:(NSString*)key;
 
-- (AFHTTPSessionManager *)sharedSessionManager;
+- (AFHTTPSessionManager*)sharedSessionManager;
 
 @end

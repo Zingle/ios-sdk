@@ -10,16 +10,16 @@
 
 @implementation ZNGAccountPlan
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return @{
-             @"planId" : @"id",
-             @"code" : @"code",
-             @"monthlyOrUnitPrice" : @"monthly_or_unit_price",
-             @"termMonths" : @"term_months",
-             @"setupPrice" : @"setup_price",
-             @"displayName" : @"display_name",
-             @"isPrinterPlan" : @"is_printer_plan"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"planId" : @"id",
+    @"code" : @"code",
+    @"monthlyOrUnitPrice" : @"monthly_or_unit_price",
+    @"termMonths" : @"term_months",
+    @"setupPrice" : @"setup_price",
+    @"displayName" : @"display_name",
+    @"isPrinterPlan" : @"is_printer_plan"
+  };
 }
 
 @end

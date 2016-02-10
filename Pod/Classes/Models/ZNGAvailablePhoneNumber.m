@@ -10,13 +10,12 @@
 
 @implementation ZNGAvailablePhoneNumber
 
-+(NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"phoneNumber" : @"phone_number",
-             @"formattedPhoneNumber" : @"formatted_phone_number",
-             @"country" : @"country"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"phoneNumber" : @"phone_number",
+    @"formattedPhoneNumber" : @"formatted_phone_number",
+    @"country" : @"country"
+  };
 }
 
 @end

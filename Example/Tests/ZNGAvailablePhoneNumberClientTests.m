@@ -16,17 +16,20 @@
 
 @implementation ZNGAvailablePhoneNumberClientTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     [super tearDown];
 }
 
 #pragma mark - GET methods
 
-- (void)testAvailablePhoneNumberList {
+- (void)testAvailablePhoneNumberList
+{
     [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers) {
         
         XCTAssert(availableNumbers != nil, @"Available numbers are nil!");

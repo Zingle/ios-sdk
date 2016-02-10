@@ -12,13 +12,13 @@
 
 @interface ZNGNewService : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *accountId;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic, strong) NSString *businessName;
-@property (nonatomic, strong) NSString *timeZone;
-@property (nonatomic, strong) NSString *planCode;
-@property (nonatomic, strong) ZNGServiceAddress *serviceAddress;
+@property(nonatomic, strong) NSString* accountId;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic, strong) NSString* businessName;
+@property(nonatomic, strong) NSString* timeZone;
+@property(nonatomic, strong) NSString* planCode;
+@property(nonatomic, strong) ZNGServiceAddress* serviceAddress;
 
-- (id)initWithService:(ZNGService *)service;
+- (id)initWithService:(ZNGService*)service;
 
 @end

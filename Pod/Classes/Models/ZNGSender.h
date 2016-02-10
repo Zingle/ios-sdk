@@ -10,7 +10,7 @@
 
 @interface ZNGSender : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *senderId;
-@property (nonatomic, strong) NSString *channelValue;
+@property(nonatomic, strong) NSString* senderId;
+@property(nonatomic, strong) NSString* channelValue;
 
 @end

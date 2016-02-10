@@ -10,9 +10,9 @@
 
 @interface ZNGSetting : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *settingId;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic, strong) NSString *dataType;
-@property (nonatomic, strong) NSArray *options;
+@property(nonatomic, strong) NSString* settingId;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic, strong) NSString* dataType;
+@property(nonatomic, strong) NSArray* options;
 
 @end

@@ -15,6 +15,7 @@
 {
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    
     return YES;
 }
 

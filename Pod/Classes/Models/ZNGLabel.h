@@ -10,10 +10,10 @@
 
 @interface ZNGLabel : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *labelId;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic, strong) NSString *backgroundColor;
-@property (nonatomic, strong) NSString *textColor;
-@property (nonatomic) BOOL isGlobal;
+@property(nonatomic, strong) NSString* labelId;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic, strong) NSString* backgroundColor;
+@property(nonatomic, strong) NSString* textColor;
+@property(nonatomic) BOOL isGlobal;
 
 @end

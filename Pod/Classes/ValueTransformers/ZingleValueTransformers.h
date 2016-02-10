@@ -10,6 +10,6 @@
 
 @interface ZingleValueTransformers : NSObject
 
-+ (NSValueTransformer *)dateValueTransformer;
++ (NSValueTransformer*)dateValueTransformer;
 
 @end

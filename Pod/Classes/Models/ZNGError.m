@@ -10,15 +10,19 @@
 
 @implementation ZNGError
 //
-//- (NSString *)description
-//{
+// - (NSString *)description
+// {
 //    NSString *description = [super description];
-//    description = [description stringByAppendingFormat:@"{\r    httpStatusCode: %i\r", self.httpStatusCode];
-//    description = [description stringByAppendingFormat:@"    zingleErrorCode: %i\r", self.zingleErrorCode];
-//    description = [description stringByAppendingFormat:@"    errorText: %@\r", self.errorText];
-//    description = [description stringByAppendingFormat:@"    errorDescription: %@\r}", self.errorDescription];
-//    
+//    description = [description stringByAppendingFormat:@"{\r
+//    httpStatusCode: %i\r", self.httpStatusCode];
+//    description = [description stringByAppendingFormat:@"    zingleErrorCode:
+//    %i\r", self.zingleErrorCode];
+//    description = [description stringByAppendingFormat:@"    errorText: %@\r",
+//    self.errorText];
+//    description = [description stringByAppendingFormat:@"    errorDescription:
+//    %@\r}", self.errorDescription];
+//
 //    return description;
-//}
+// }
 
 @end

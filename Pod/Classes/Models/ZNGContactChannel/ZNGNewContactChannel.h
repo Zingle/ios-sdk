@@ -12,12 +12,12 @@
 
 @interface ZNGNewContactChannel : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *channelTypeId;
-@property (nonatomic, strong) NSString *value;
-@property (nonatomic, strong) NSString *country;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic) BOOL isDefaultForType;
+@property(nonatomic, strong) NSString* channelTypeId;
+@property(nonatomic, strong) NSString* value;
+@property(nonatomic, strong) NSString* country;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic) BOOL isDefaultForType;
 
-- (id)initWithContactChannel:(ZNGContactChannel *)contactChannel;
+- (id)initWithContactChannel:(ZNGContactChannel*)contactChannel;
 
 @end

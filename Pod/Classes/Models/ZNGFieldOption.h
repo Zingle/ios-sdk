@@ -10,9 +10,9 @@
 
 @interface ZNGFieldOption : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *optionId;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic, strong) NSString *value;
-@property (nonatomic, strong) NSNumber *sortOrder;
+@property(nonatomic, strong) NSString* optionId;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic, strong) NSString* value;
+@property(nonatomic, strong) NSNumber* sortOrder;
 
 @end

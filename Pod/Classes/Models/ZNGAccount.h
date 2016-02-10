@@ -10,12 +10,12 @@
 
 @interface ZNGAccount : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *accountId;
-@property (nonatomic, strong) NSString *displayName;
-@property (nonatomic, strong) NSNumber *termMonths;
-@property (nonatomic, strong) NSDate *currentTermStartDate;
-@property (nonatomic, strong) NSDate *currentTermEndDate;
-@property (nonatomic, strong) NSDate *createdAt;
-@property (nonatomic, strong) NSDate *updatedAt;
+@property(nonatomic, strong) NSString* accountId;
+@property(nonatomic, strong) NSString* displayName;
+@property(nonatomic, strong) NSNumber* termMonths;
+@property(nonatomic, strong) NSDate* currentTermStartDate;
+@property(nonatomic, strong) NSDate* currentTermEndDate;
+@property(nonatomic, strong) NSDate* createdAt;
+@property(nonatomic, strong) NSDate* updatedAt;
 
 @end

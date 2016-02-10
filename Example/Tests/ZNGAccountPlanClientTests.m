@@ -12,16 +12,17 @@
 
 @interface ZNGAccountPlanClientTests : ZNGBaseTests
 
-
 @end
 
 @implementation ZNGAccountPlanClientTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     [super tearDown];
 }
 

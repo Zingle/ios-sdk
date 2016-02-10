@@ -10,9 +10,9 @@
 
 @interface ZNGError : NSError
 
-@property (nonatomic, strong) NSString *errorText;
-@property (nonatomic, strong) NSString *errorDescription;
-@property (nonatomic) int httpStatusCode;
-@property (nonatomic) int zingleErrorCode;
+@property(nonatomic, strong) NSString* errorText;
+@property(nonatomic, strong) NSString* errorDescription;
+@property(nonatomic) int httpStatusCode;
+@property(nonatomic) int zingleErrorCode;
 
 @end

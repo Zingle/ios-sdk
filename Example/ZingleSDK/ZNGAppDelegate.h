@@ -8,7 +8,7 @@
 
 @import UIKit;
 
-@interface ZNGAppDelegate : UIResponder <UIApplicationDelegate>
+@interface ZNGAppDelegate : UIResponder<UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 

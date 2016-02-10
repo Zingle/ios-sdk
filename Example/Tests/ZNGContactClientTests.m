@@ -18,15 +18,18 @@
 
 @implementation ZNGContactClientTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     [super tearDown];
 }
 
-- (void)testContactList {
+- (void)testContactList
+{
     [ZNGContactClient contactListWithServiceId:[self serviceId] parameters:nil success:^(NSArray *contacts) {
         
         XCTAssert(contacts != nil, @"Contacts are nil!");
@@ -41,7 +44,8 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testContactList"];
 }
 
-- (void)testUpdateContactCustomFieldValue {
+- (void)testUpdateContactCustomFieldValue
+{
     
     [ZNGContactClient contactListWithServiceId:[self serviceId] parameters:nil success:^(NSArray *contacts) {
         
@@ -72,7 +76,8 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testUpdateContactCustomFieldValue"];
 }
 
-- (void)testTriggerAutomation {
+- (void)testTriggerAutomation
+{
     
     [ZNGContactClient contactListWithServiceId:[self serviceId] parameters:nil success:^(NSArray *contacts) {
         
@@ -98,7 +103,8 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testTriggerAutomation"];
 }
 
-- (void)testAddLabelToContact {
+- (void)testAddLabelToContact
+{
     
     [ZNGContactClient contactListWithServiceId:[self serviceId] parameters:nil success:^(NSArray *contacts) {
         
@@ -124,7 +130,8 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testAddLabelToContact"];
 }
 
-- (void)testRemoveLabelFromContact {
+- (void)testRemoveLabelFromContact
+{
     
     [ZNGContactClient contactListWithServiceId:[self serviceId] parameters:nil success:^(NSArray *contacts) {
         
@@ -150,9 +157,10 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testRemoveLabelFromContact"];
 }
 
-- (void)testContactClient {
+- (void)testContactClient
+{
 
-    [ZNGContactClient saveContact: [self contact] withServiceId:[self serviceId] success:^(ZNGContact *contact) {
+    [ZNGContactClient saveContact:[self contact] withServiceId:[self serviceId] success:^(ZNGContact *contact) {
         
         self.savedContactId = contact.contactId;
         XCTAssert(contact != nil, @"Contact is nil!");
@@ -161,13 +169,13 @@
             
             XCTAssert(contact != nil, @"Contact is nil!");
             
-            [NSThread sleepForTimeInterval: 3.0];
+            [NSThread sleepForTimeInterval:3.0];
             
             [ZNGContactClient updateContactWithId:self.savedContactId withServiceId:[self serviceId] withParameters:nil success:^(ZNGContact *contact) {
                 
                 XCTAssert(contact != nil, @"Contact is nil!");
                 
-                [NSThread sleepForTimeInterval: 3.0];
+                [NSThread sleepForTimeInterval:3.0];
                 
                 [ZNGContactClient deleteContactWithId:self.savedContactId withServiceId:[self serviceId] success:^{
                     

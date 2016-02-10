@@ -15,67 +15,69 @@
 
 @implementation ZNGService
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey {
-    return @{
-             @"serviceId" : @"id",
-             @"displayName" : @"display_name",
-             @"businessName" : @"business_name",
-             @"timeZone" : @"time_zone",
-             @"account" : @"account",
-             @"plan" : @"plan",
-             @"channels" : @"channels",
-             @"channelTypes" : @"channel_types",
-             @"contactLabels" : @"contact_labels",
-             @"contactCustomFields" : @"contact_custom_fields",
-             @"settings" : @"settings",
-             @"serviceAddress" : @"service_address",
-             @"createdAt" : @"created_at",
-             @"updatedAt" : @"updated_at"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{
+    @"serviceId" : @"id",
+    @"displayName" : @"display_name",
+    @"businessName" : @"business_name",
+    @"timeZone" : @"time_zone",
+    @"account" : @"account",
+    @"plan" : @"plan",
+    @"channels" : @"channels",
+    @"channelTypes" : @"channel_types",
+    @"contactLabels" : @"contact_labels",
+    @"contactCustomFields" : @"contact_custom_fields",
+    @"settings" : @"settings",
+    @"serviceAddress" : @"service_address",
+    @"createdAt" : @"created_at",
+    @"updatedAt" : @"updated_at"
+  };
 }
 
-+ (NSValueTransformer *)accountJSONTransformer {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccount.class];
++ (NSValueTransformer*)accountJSONTransformer {
+  return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccount.class];
 }
 
-+ (NSValueTransformer *)planJSONTransformer {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccountPlan.class];
++ (NSValueTransformer*)planJSONTransformer {
+  return
+      [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccountPlan.class];
 }
 
-+ (NSValueTransformer *)channelsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannel.class];
++ (NSValueTransformer*)channelsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannel.class];
 }
 
-+ (NSValueTransformer *)channelTypesJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannelType.class];
++ (NSValueTransformer*)channelTypesJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannelType.class];
 }
 
-+ (NSValueTransformer *)contactLabelsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGLabel.class];
++ (NSValueTransformer*)contactLabelsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGLabel.class];
 }
 
-+ (NSValueTransformer *)contactCustomFieldsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGCustomField.class];
++ (NSValueTransformer*)contactCustomFieldsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGCustomField.class];
 }
 
-+ (NSValueTransformer *)settingsJSONTransformer {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGSetting.class];
++ (NSValueTransformer*)settingsJSONTransformer {
+  return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGSetting.class];
 }
 
-+ (NSValueTransformer *)serviceAddressJSONTransformer {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGServiceAddress.class];
++ (NSValueTransformer*)serviceAddressJSONTransformer {
+  return [MTLJSONAdapter
+      dictionaryTransformerWithModelClass:ZNGServiceAddress.class];
 }
 
-+ (NSValueTransformer *)createdAtJSONTransformer {
-    return [ZingleValueTransformers dateValueTransformer];
++ (NSValueTransformer*)createdAtJSONTransformer {
+  return [ZingleValueTransformers dateValueTransformer];
 }
 
-+ (NSValueTransformer *)updatedAtJSONTransformer {
-    return [ZingleValueTransformers dateValueTransformer];
++ (NSValueTransformer*)updatedAtJSONTransformer {
+  return [ZingleValueTransformers dateValueTransformer];
 }
 
-- (NSString *)resourceId {
-    return self.serviceId;
+- (NSString*)resourceId {
+  return self.serviceId;
 }
 
 @end

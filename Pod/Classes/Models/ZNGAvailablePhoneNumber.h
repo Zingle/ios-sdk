@@ -10,8 +10,8 @@
 
 @interface ZNGAvailablePhoneNumber : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *phoneNumber;
-@property (nonatomic, strong) NSString *formattedPhoneNumber;
-@property (nonatomic, strong) NSString *country;
+@property(nonatomic, strong) NSString* phoneNumber;
+@property(nonatomic, strong) NSString* formattedPhoneNumber;
+@property(nonatomic, strong) NSString* country;
 
 @end

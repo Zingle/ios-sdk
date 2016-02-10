@@ -10,12 +10,8 @@
 
 @implementation ZNGSender
 
-+(NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"senderId" : @"id",
-             @"channelValue" : @"channel_value"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{ @"senderId" : @"id", @"channelValue" : @"channel_value" };
 }
 
 @end

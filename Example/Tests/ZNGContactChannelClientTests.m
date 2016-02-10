@@ -17,11 +17,13 @@
 
 @implementation ZNGContactChannelClientTests
 
-- (void)setUp {
+- (void)setUp
+{
     [super setUp];
 }
 
-- (void)tearDown {
+- (void)tearDown
+{
     [super tearDown];
 }
 

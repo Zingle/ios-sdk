@@ -11,16 +11,12 @@
 
 @implementation ZNGCorrespondent
 
-+ (NSDictionary *)JSONKeyPathsByPropertyKey
-{
-    return @{
-             @"correspondentId" : @"id",
-             @"channel" : @"channel"
-             };
++ (NSDictionary*)JSONKeyPathsByPropertyKey {
+  return @{ @"correspondentId" : @"id", @"channel" : @"channel" };
 }
 
-+ (NSValueTransformer *)channelJSONTransformer {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGChannel.class];
++ (NSValueTransformer*)channelJSONTransformer {
+  return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGChannel.class];
 }
 
 @end

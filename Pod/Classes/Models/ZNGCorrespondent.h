@@ -11,7 +11,7 @@
 
 @interface ZNGCorrespondent : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *correspondentId;
-@property (nonatomic, strong) ZNGChannel *channel;
+@property(nonatomic, strong) NSString* correspondentId;
+@property(nonatomic, strong) ZNGChannel* channel;
 
 @end

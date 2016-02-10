@@ -175,7 +175,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     // Cancel a preexisting timer.
     [self.pollingTimer invalidate];
     
-    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:30
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:10
                                                       target:self selector:@selector(refresh)
                                                     userInfo:nil repeats:YES];
     self.pollingTimer = timer;

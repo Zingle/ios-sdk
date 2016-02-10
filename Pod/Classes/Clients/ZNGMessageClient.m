@@ -90,7 +90,7 @@
       [NSString stringWithFormat:@"services/%@/channels/%@/messages/%@",
                                  serviceId, channelId, messageId];
                                  
-  [self postWithModel:nil
+    [self postWithModel:@{@"read_at" : [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]}
                  path:path
         responseClass:[ZNGMessage class]
               success:success

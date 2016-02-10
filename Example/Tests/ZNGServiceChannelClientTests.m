@@ -56,7 +56,6 @@
         [ZNGServiceChannelClient saveServiceChannel:[self serviceChannelWithValue:number.phoneNumber] withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel) {
             
             XCTAssert(serviceChannel != nil, @"Created service channel is nil!");
-            [NSThread sleepForTimeInterval: 3.0];
             
             [ZNGServiceChannelClient deleteServiceChannelWithId:serviceChannel.serviceChannelId withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel) {
                 

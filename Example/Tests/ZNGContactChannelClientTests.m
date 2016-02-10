@@ -56,7 +56,6 @@
         [ZNGContactChannelClient saveContactChannel:[self contactChannelWithValue:number.phoneNumber] withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel) {
             
             XCTAssert(contactChannel != nil, @"Created contact channel is nil!");
-            [NSThread sleepForTimeInterval: 3.0];
             
             [ZNGContactChannelClient deleteContactChannelWithId:contactChannel.contactChannelId withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel) {
                 

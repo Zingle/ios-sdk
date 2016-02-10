@@ -2,17 +2,19 @@
 //  ZNGAppDelegate.m
 //  ZingleSDK
 //
-//  Created by Ryan Farley on 02/01/2016.
+//  Created by Ryan Farley on 01/31/2016.
 //  Copyright (c) 2016 Ryan Farley. All rights reserved.
 //
 
 #import "ZNGAppDelegate.h"
+#import "AFNetworkActivityLogger.h"
 
 @implementation ZNGAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     return YES;
 }
 

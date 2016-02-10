@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/Models/ZNGMessage/ZNGNewMessage.h

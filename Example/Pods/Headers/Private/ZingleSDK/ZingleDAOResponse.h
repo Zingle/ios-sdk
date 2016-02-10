@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/Models/Data Access/ZingleDAOResponse.h

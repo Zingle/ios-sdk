@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/Objects/ZNGMessage.h
+../../../../../Pod/Classes/Models/ZNGMessage/ZNGMessage.h

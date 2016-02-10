@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/Objects/ZNGAvailablePhoneNumber.h
+../../../../../Pod/Classes/Models/ZNGAvailablePhoneNumber.h

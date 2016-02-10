@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/Objects/ZNGContactChannel.h
+../../../../../Pod/Classes/Models/ZNGContactChannel/ZNGContactChannel.h

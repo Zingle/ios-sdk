@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/Objects/ZNGLabel.h
+../../../../../Pod/Classes/Models/ZNGLabel.h

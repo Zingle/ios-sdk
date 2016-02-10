@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/Objects/ZNGAccount.h
+../../../../../Pod/Classes/Models/ZNGAccount.h

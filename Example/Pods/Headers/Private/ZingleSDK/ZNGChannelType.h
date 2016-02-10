@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/Objects/ZNGChannelType.h
+../../../../../Pod/Classes/Models/ZNGChannelType.h

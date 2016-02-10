@@ -19,11 +19,20 @@
 		6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
-		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		94596CCC19F6050285204CC2 /* Pods_ZingleSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C27FBA18A8A1FDFC329F19EE /* Pods_ZingleSDK_Tests.framework */; };
-		C5F552BB11C008FBB8FAE05F /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576EF780C6D21ECDB6F0FB72 /* Pods_ZingleSDK_Example.framework */; };
-		DF916F301C60131D00E1EF59 /* ZNGQuickStart.m in Sources */ = {isa = PBXBuildFile; fileRef = DF916F2F1C60131D00E1EF59 /* ZNGQuickStart.m */; };
+		8FD63E0B4260EB8E5A2A2A78 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B064E9DEBE52465A548BB9E /* Pods_ZingleSDK_Example.framework */; };
+		DF5D861D1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5D861C1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m */; };
+		DF5D86231C6A977200CB84C4 /* ZNGMessageClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5D86221C6A977200CB84C4 /* ZNGMessageClientTests.m */; };
+		DFEDE4071C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFEDE4061C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m */; };
+		DFEDE41F1C69515A004ACAC4 /* ZNGContactClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFEDE41E1C69515A004ACAC4 /* ZNGContactClientTests.m */; };
+		DFFBF22F1C644C6700FF47B4 /* ZNGAccountClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF22E1C644C6700FF47B4 /* ZNGAccountClientTests.m */; };
+		DFFBF2331C645B3900FF47B4 /* ZNGAsyncSemaphor.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2321C645B3900FF47B4 /* ZNGAsyncSemaphor.m */; };
+		DFFBF2381C64816400FF47B4 /* ZNGBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2371C64816400FF47B4 /* ZNGBaseTests.m */; };
+		DFFBF23A1C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2391C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m */; };
+		DFFBF23C1C64862600FF47B4 /* ZNGServiceClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */; };
+		DFFBF2501C6538A000FF47B4 /* ZNGTimeZoneClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */; };
+		DFFBF2641C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */; };
+		F416B50C257FC5C1393D4546 /* Pods_ZingleSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AFED18FB44DDD29BD8F177 /* Pods_ZingleSDK_Tests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,12 +46,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		1429C17A7048933598EAF792 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
-		2E755434C7D5C1C2D1C71D39 /* ZingleSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ZingleSDK.podspec; path = ../ZingleSDK.podspec; sourceTree = "<group>"; };
-		3571D34454CD7FB0319B17F0 /* Pods-ZingleSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		412D04B4B8ED2105D1A2B04B /* Pods-ZingleSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		51F1F8EE2CA55B59289CDC50 /* Pods-ZingleSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		576EF780C6D21ECDB6F0FB72 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		00F151038FA60F28399F5FB1 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		0D8C3C6FC1A49FA41EBEAE08 /* ZingleSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ZingleSDK.podspec; path = ../ZingleSDK.podspec; sourceTree = "<group>"; };
+		596065D52608A70D727BB94C /* Pods-ZingleSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* ZingleSDK_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZingleSDK_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -60,14 +66,27 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		6003F5B7195388D20070C39A /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Tests-Info.plist"; sourceTree = "<group>"; };
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		80C356E92BF5A633FA5389A7 /* Pods-ZingleSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
-		95A74D59084452B25DE1ACF0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		999C52283F1D00602FB25670 /* Pods-ZingleSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
-		C27FBA18A8A1FDFC329F19EE /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		DF916F2E1C60131D00E1EF59 /* ZNGQuickStart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGQuickStart.h; sourceTree = "<group>"; };
-		DF916F2F1C60131D00E1EF59 /* ZNGQuickStart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGQuickStart.m; sourceTree = "<group>"; };
+		9B064E9DEBE52465A548BB9E /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A2AFED18FB44DDD29BD8F177 /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7E86016F2DF752BFD6B1D23 /* Pods-ZingleSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		DF5D861C1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannelClientTests.m; sourceTree = "<group>"; };
+		DF5D86221C6A977200CB84C4 /* ZNGMessageClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageClientTests.m; sourceTree = "<group>"; };
+		DFEDE4061C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceChannelClientTests.m; sourceTree = "<group>"; };
+		DFEDE41E1C69515A004ACAC4 /* ZNGContactClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactClientTests.m; sourceTree = "<group>"; };
+		DFFBF22E1C644C6700FF47B4 /* ZNGAccountClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountClientTests.m; sourceTree = "<group>"; };
+		DFFBF2311C645B3900FF47B4 /* ZNGAsyncSemaphor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGAsyncSemaphor.h; path = Async/ZNGAsyncSemaphor.h; sourceTree = "<group>"; };
+		DFFBF2321C645B3900FF47B4 /* ZNGAsyncSemaphor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGAsyncSemaphor.m; path = Async/ZNGAsyncSemaphor.m; sourceTree = "<group>"; };
+		DFFBF2361C64816400FF47B4 /* ZNGBaseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGBaseTests.h; sourceTree = "<group>"; };
+		DFFBF2371C64816400FF47B4 /* ZNGBaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGBaseTests.m; sourceTree = "<group>"; };
+		DFFBF2391C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlanClientTests.m; sourceTree = "<group>"; };
+		DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceClientTests.m; sourceTree = "<group>"; };
+		DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGTimeZoneClientTests.m; sourceTree = "<group>"; };
+		DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumberClientTests.m; sourceTree = "<group>"; };
+		E23016B636C0EB9C349A5BCE /* Pods-ZingleSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,7 +97,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				C5F552BB11C008FBB8FAE05F /* Pods_ZingleSDK_Example.framework in Frameworks */,
+				8FD63E0B4260EB8E5A2A2A78 /* Pods_ZingleSDK_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,7 +108,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				94596CCC19F6050285204CC2 /* Pods_ZingleSDK_Tests.framework in Frameworks */,
+				F416B50C257FC5C1393D4546 /* Pods_ZingleSDK_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -104,7 +123,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				64CA93E3FC8EC5409F4315E2 /* Pods */,
+				D94FBE914CB73AA4074ABC19 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -124,8 +143,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				576EF780C6D21ECDB6F0FB72 /* Pods_ZingleSDK_Example.framework */,
-				C27FBA18A8A1FDFC329F19EE /* Pods_ZingleSDK_Tests.framework */,
+				9B064E9DEBE52465A548BB9E /* Pods_ZingleSDK_Example.framework */,
+				A2AFED18FB44DDD29BD8F177 /* Pods_ZingleSDK_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -138,8 +157,6 @@
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
 				6003F5A5195388D20070C39A /* ZNGViewController.h */,
 				6003F5A6195388D20070C39A /* ZNGViewController.m */,
-				DF916F2E1C60131D00E1EF59 /* ZNGQuickStart.h */,
-				DF916F2F1C60131D00E1EF59 /* ZNGQuickStart.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -161,8 +178,19 @@
 		6003F5B5195388D20070C39A /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				6003F5BB195388D20070C39A /* Tests.m */,
+				DFFBF2301C645AFE00FF47B4 /* Async */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
+				DFFBF22E1C644C6700FF47B4 /* ZNGAccountClientTests.m */,
+				DFFBF2391C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m */,
+				DFFBF2361C64816400FF47B4 /* ZNGBaseTests.h */,
+				DFFBF2371C64816400FF47B4 /* ZNGBaseTests.m */,
+				DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */,
+				DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */,
+				DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */,
+				DFEDE4061C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m */,
+				DFEDE41E1C69515A004ACAC4 /* ZNGContactClientTests.m */,
+				DF5D861C1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m */,
+				DF5D86221C6A977200CB84C4 /* ZNGMessageClientTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -180,22 +208,31 @@
 		60FF7A9C1954A5C5007DD14C /* Podspec Metadata */ = {
 			isa = PBXGroup;
 			children = (
-				2E755434C7D5C1C2D1C71D39 /* ZingleSDK.podspec */,
-				95A74D59084452B25DE1ACF0 /* README.md */,
-				1429C17A7048933598EAF792 /* LICENSE */,
+				0D8C3C6FC1A49FA41EBEAE08 /* ZingleSDK.podspec */,
+				00F151038FA60F28399F5FB1 /* README.md */,
+				D13A1200A131472A6B4930EA /* LICENSE */,
 			);
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		64CA93E3FC8EC5409F4315E2 /* Pods */ = {
+		D94FBE914CB73AA4074ABC19 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				51F1F8EE2CA55B59289CDC50 /* Pods-ZingleSDK_Example.debug.xcconfig */,
-				999C52283F1D00602FB25670 /* Pods-ZingleSDK_Example.release.xcconfig */,
-				3571D34454CD7FB0319B17F0 /* Pods-ZingleSDK_Tests.debug.xcconfig */,
-				412D04B4B8ED2105D1A2B04B /* Pods-ZingleSDK_Tests.release.xcconfig */,
+				C7E86016F2DF752BFD6B1D23 /* Pods-ZingleSDK_Example.debug.xcconfig */,
+				80C356E92BF5A633FA5389A7 /* Pods-ZingleSDK_Example.release.xcconfig */,
+				E23016B636C0EB9C349A5BCE /* Pods-ZingleSDK_Tests.debug.xcconfig */,
+				596065D52608A70D727BB94C /* Pods-ZingleSDK_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		DFFBF2301C645AFE00FF47B4 /* Async */ = {
+			isa = PBXGroup;
+			children = (
+				DFFBF2311C645B3900FF47B4 /* ZNGAsyncSemaphor.h */,
+				DFFBF2321C645B3900FF47B4 /* ZNGAsyncSemaphor.m */,
+			);
+			name = Async;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -205,12 +242,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "ZingleSDK_Example" */;
 			buildPhases = (
-				3C74A00E2C614BC48C7DEBC5 /* Check Pods Manifest.lock */,
+				B3E91F8F1C84CD1D55AFEB97 /* Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				ECD1647D0AD2EAD943E22680 /* Embed Pods Frameworks */,
-				E5A29129B086EE8415BBC290 /* Copy Pods Resources */,
+				DFE3AD3B6D22962990166558 /* Embed Pods Frameworks */,
+				4CECBF182CD27239E474A445 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -225,12 +262,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "ZingleSDK_Tests" */;
 			buildPhases = (
-				99CEBFF23C3CE9154B00C165 /* Check Pods Manifest.lock */,
+				FE22BA7D1E9C18EAD64575C8 /* Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				1CE7D84804D4E64E06D2799F /* Embed Pods Frameworks */,
-				C283668C25A5D43C42448092 /* Copy Pods Resources */,
+				F78B969F48D948CFF9993360 /* Embed Pods Frameworks */,
+				3B03F0BD60E4013430D4C63C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -298,52 +335,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1CE7D84804D4E64E06D2799F /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		3C74A00E2C614BC48C7DEBC5 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		99CEBFF23C3CE9154B00C165 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		C283668C25A5D43C42448092 /* Copy Pods Resources */ = {
+		3B03F0BD60E4013430D4C63C /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -358,7 +350,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E5A29129B086EE8415BBC290 /* Copy Pods Resources */ = {
+		4CECBF182CD27239E474A445 /* Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -373,7 +365,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		ECD1647D0AD2EAD943E22680 /* Embed Pods Frameworks */ = {
+		B3E91F8F1C84CD1D55AFEB97 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		DFE3AD3B6D22962990166558 /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -388,6 +395,36 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F78B969F48D948CFF9993360 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FE22BA7D1E9C18EAD64575C8 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -397,7 +434,6 @@
 			files = (
 				6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* ZNGViewController.m in Sources */,
-				DF916F301C60131D00E1EF59 /* ZNGQuickStart.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -406,7 +442,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6003F5BC195388D20070C39A /* Tests.m in Sources */,
+				DF5D86231C6A977200CB84C4 /* ZNGMessageClientTests.m in Sources */,
+				DFFBF23C1C64862600FF47B4 /* ZNGServiceClientTests.m in Sources */,
+				DFFBF2641C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m in Sources */,
+				DFFBF22F1C644C6700FF47B4 /* ZNGAccountClientTests.m in Sources */,
+				DFFBF2331C645B3900FF47B4 /* ZNGAsyncSemaphor.m in Sources */,
+				DFEDE41F1C69515A004ACAC4 /* ZNGContactClientTests.m in Sources */,
+				DFEDE4071C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m in Sources */,
+				DFFBF23A1C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m in Sources */,
+				DF5D861D1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m in Sources */,
+				DFFBF2381C64816400FF47B4 /* ZNGBaseTests.m in Sources */,
+				DFFBF2501C6538A000FF47B4 /* ZNGTimeZoneClientTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -473,7 +519,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -506,7 +552,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -515,7 +561,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 51F1F8EE2CA55B59289CDC50 /* Pods-ZingleSDK_Example.debug.xcconfig */;
+			baseConfigurationReference = C7E86016F2DF752BFD6B1D23 /* Pods-ZingleSDK_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -532,7 +578,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 999C52283F1D00602FB25670 /* Pods-ZingleSDK_Example.release.xcconfig */;
+			baseConfigurationReference = 80C356E92BF5A633FA5389A7 /* Pods-ZingleSDK_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -549,7 +595,7 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3571D34454CD7FB0319B17F0 /* Pods-ZingleSDK_Tests.debug.xcconfig */;
+			baseConfigurationReference = E23016B636C0EB9C349A5BCE /* Pods-ZingleSDK_Tests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
@@ -573,7 +619,7 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 412D04B4B8ED2105D1A2B04B /* Pods-ZingleSDK_Tests.release.xcconfig */;
+			baseConfigurationReference = 596065D52608A70D727BB94C /* Pods-ZingleSDK_Tests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (

@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/ZingleSDK.h
+../../../../../Pod/Classes/ZingleSDK.h

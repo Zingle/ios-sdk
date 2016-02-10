@@ -2,7 +2,7 @@
 //  main.m
 //  ZingleSDK
 //
-//  Created by Ryan Farley on 02/01/2016.
+//  Created by Ryan Farley on 01/31/2016.
 //  Copyright (c) 2016 Ryan Farley. All rights reserved.
 //
 

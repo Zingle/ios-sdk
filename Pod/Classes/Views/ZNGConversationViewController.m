@@ -31,6 +31,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIColor *containerBackgroundColor;
 @property (nonatomic) BOOL wasAtBottom;
+@property (weak) NSTimer *pollingTimer;
 
 @end
 
@@ -167,6 +168,21 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTap)];
     tapGesture.numberOfTapsRequired = 2;
     [self.scrollView addGestureRecognizer:tapGesture];
+}
+
+#pragma mark - Timer Long Poll
+- (void)startPollingTimer{
+    // Cancel a preexisting timer.
+    [self.pollingTimer invalidate];
+    
+    NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:30
+                                                      target:self selector:@selector(refresh)
+                                                    userInfo:nil repeats:YES];
+    self.pollingTimer = timer;
+}
+- (void)stopPollingTimer{
+    [self.pollingTimer invalidate];
+    self.pollingTimer = nil;
 }
 
 - (void)didDoubleTap
@@ -313,6 +329,18 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     [self.view addSubview:self.scrollView];
     [self.view addSubview:self.responseView];
+    
+    // Wipe all CC data when app enters background
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(stopPollingTimer)
+                                                 name:UIApplicationWillResignActiveNotification
+                                               object:nil];
+    
+    // Wipe all CC data when app enters background
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(startPollingTimer)
+                                                 name:UIApplicationDidBecomeActiveNotification
+                                               object:nil];
 }
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor
@@ -329,12 +357,23 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [super viewDidAppear:animated];
 }
 
+- (void)viewDidDisappear:(BOOL)animated{
+    [super viewDidDisappear:animated];
+    [self stopPollingTimer];
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)refresh
 {
     if( self.conversation == nil ) {
         [NSException raise:@"Conversation View Controller requires initialization with a Conversation object." format:@"Missing Conversation Object"];
     }
     [self clear];
+    
+    [self startPollingTimer];
     
     NSArray *messages = [self.conversation messages];
     for( ZNGMessage *message in messages ) {

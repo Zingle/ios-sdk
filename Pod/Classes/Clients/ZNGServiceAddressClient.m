@@ -12,7 +12,8 @@
 
 #pragma mark - ZNGClientProtocol
 
-+ (Class)responseObject {
++ (Class)responseObject
+{
   return [ZNGServiceAddressClient class];
 }
 

@@ -68,7 +68,7 @@
     ZNGSender *sender = [[ZNGSender alloc] init];
     sender.senderId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
     sender.channelValue = @"+18582810205";
-
+    
     ZNGRecipient *recipient = [[ZNGRecipient alloc] init];
     recipient.channelValue = @"+12242171591";
     
@@ -84,7 +84,7 @@
         
         XCTAssert(message != nil, @"Created message is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testSendMessage"];
-    
+        
     } failure:^(ZNGError *error) {
         
         XCTFail(@"fail: \"%@\"", [error description]);

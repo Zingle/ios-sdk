@@ -15,4 +15,6 @@
 @property(nonatomic) int httpStatusCode;
 @property(nonatomic) int zingleErrorCode;
 
+- (id)initWithAPIError:(NSError *)error;
+
 @end

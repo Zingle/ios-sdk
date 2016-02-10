@@ -34,7 +34,7 @@
         
         XCTAssert(contacts != nil, @"Contacts are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactList"];
-
+        
     } failure:^(ZNGError *error) {
         
         XCTFail(@"fail: \"%@\"", error);
@@ -50,22 +50,19 @@
     [ZNGContactClient contactListWithServiceId:[self serviceId] parameters:nil success:^(NSArray *contacts) {
         
         ZNGContact *contact = [contacts firstObject];
-        ZNGCustomFieldValue *fieldValue = [contact.customFieldValues firstObject];
+        ZNGContactFieldValue *fieldValue = [contact.customFieldValues firstObject];
         fieldValue.value = @"Matthews";
         
-        [ZNGContactClient updateContactCustomFieldValue:fieldValue
-                                      withCustomFieldId:fieldValue.customField.customFieldId
-                                          withContactId:contact.contactId
-                                          withServiceId:[self serviceId]
-                                                success:^(ZNGContact *contact) {
-                                                    
-                                                    XCTAssert(contact != nil, @"Contact is nil!");
-                                                    [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactCustomFieldValue"];
-                                                } failure:^(ZNGError *error) {
-                                                    
-                                                    XCTFail(@"fail: \"%@\"", error);
-                                                    [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactCustomFieldValue"];
-                                                }];
+        [ZNGContactClient updateContactFieldValue:fieldValue withContactFieldId:fieldValue.customField.contactFieldId withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact) {
+            
+            XCTAssert(contact != nil, @"Contact is nil!");
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactCustomFieldValue"];
+            
+        } failure:^(ZNGError *error) {
+            
+            XCTFail(@"fail: \"%@\"", error);
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactCustomFieldValue"];
+        }];
         
     } failure:^(ZNGError *error) {
         
@@ -138,7 +135,7 @@
         ZNGContact *contact = [contacts firstObject];
         
         [ZNGContactClient removeLabelWithId:[self labelId] withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact) {
-  
+            
             XCTAssert(contact != nil, @"Contact is nil!");
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testRemoveLabelFromContact"];
             
@@ -159,7 +156,7 @@
 
 - (void)testContactClient
 {
-
+    
     [ZNGContactClient saveContact:[self contact] withServiceId:[self serviceId] success:^(ZNGContact *contact) {
         
         self.savedContactId = contact.contactId;
@@ -169,13 +166,9 @@
             
             XCTAssert(contact != nil, @"Contact is nil!");
             
-            [NSThread sleepForTimeInterval:3.0];
-            
             [ZNGContactClient updateContactWithId:self.savedContactId withServiceId:[self serviceId] withParameters:nil success:^(ZNGContact *contact) {
                 
                 XCTAssert(contact != nil, @"Contact is nil!");
-                
-                [NSThread sleepForTimeInterval:3.0];
                 
                 [ZNGContactClient deleteContactWithId:self.savedContactId withServiceId:[self serviceId] success:^{
                     
@@ -195,7 +188,7 @@
             XCTFail(@"fail: \"%@\"", error);
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactClient"];
         }];
-
+        
     } failure:^(ZNGError *error) {
         XCTFail(@"fail: \"%@\"", error);
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactClient"];

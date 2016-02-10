@@ -10,14 +10,15 @@
 
 @implementation ZNGServiceAddress
 
-+ (NSDictionary*)JSONKeyPathsByPropertyKey {
-  return @{
-    @"address" : @"address",
-    @"city" : @"city",
-    @"state" : @"state",
-    @"country" : @"country",
-    @"postalCode" : @"postal_code"
-  };
++ (NSDictionary*)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"address" : @"address",
+             @"city" : @"city",
+             @"state" : @"state",
+             @"country" : @"country",
+             @"postalCode" : @"postal_code"
+             };
 }
 
 @end

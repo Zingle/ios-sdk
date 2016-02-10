@@ -15,27 +15,28 @@
 + (void)accountPlanListWithAccountId:(NSString*)accountId
                       withParameters:(NSDictionary*)parameters
                              success:(void (^)(NSArray* plans))success
-                             failure:(void (^)(ZNGError* error))failure {
-  NSString* path = [NSString stringWithFormat:@"accounts/%@/plans", accountId];
-  
-  [self getListWithParameters:parameters
-                         path:path
-                responseClass:[ZNGAccountPlan class]
-                      success:success
-                      failure:failure];
+                             failure:(void (^)(ZNGError* error))failure
+{
+    NSString* path = [NSString stringWithFormat:@"accounts/%@/plans", accountId];
+    
+    [self getListWithParameters:parameters
+                           path:path
+                  responseClass:[ZNGAccountPlan class]
+                        success:success
+                        failure:failure];
 }
 
 + (void)accountPlanWithAccountId:(NSString*)accountId
                       withPlanId:(NSString*)planId
                          success:(void (^)(ZNGAccountPlan* plan))success
-                         failure:(void (^)(ZNGError* error))failure {
-  NSString* path =
-      [NSString stringWithFormat:@"accounts/%@/plans/%@", accountId, planId];
-      
-  [self getWithResourcePath:path
-              responseClass:[ZNGAccountPlan class]
-                    success:success
-                    failure:failure];
+                         failure:(void (^)(ZNGError* error))failure
+{
+    NSString* path = [NSString stringWithFormat:@"accounts/%@/plans/%@", accountId, planId];
+    
+    [self getWithResourcePath:path
+                responseClass:[ZNGAccountPlan class]
+                      success:success
+                      failure:failure];
 }
 
 @end

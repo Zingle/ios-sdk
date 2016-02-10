@@ -10,13 +10,14 @@
 
 @implementation ZNGFieldOption
 
-+ (NSDictionary*)JSONKeyPathsByPropertyKey {
-  return @{
-    @"optionId" : @"id",
-    @"displayName" : @"display_name",
-    @"value" : @"value",
-    @"sortOrder" : @"sort_order"
-  };
++ (NSDictionary*)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"optionId" : @"id",
+             @"displayName" : @"display_name",
+             @"value" : @"value",
+             @"sortOrder" : @"sort_order"
+             };
 }
 
 @end

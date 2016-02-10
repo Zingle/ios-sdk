@@ -35,7 +35,7 @@
         
         XCTAssert(contactChannel != nil, @"Contact channel is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactChannelById"];
-
+        
     } failure:^(ZNGError *error) {
         
         XCTFail(@"fail: \"%@\"", error);

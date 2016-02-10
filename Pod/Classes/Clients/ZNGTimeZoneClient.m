@@ -13,12 +13,13 @@
 #pragma mark - GET methods
 
 + (void)timeZoneListWithSuccess:(void (^)(NSArray* timeZones))success
-                        failure:(void (^)(ZNGError* error))failure {
-  [self getListWithParameters:nil
-                         path:@"time-zones"
-                responseClass:[NSString class]
-                      success:success
-                      failure:failure];
+                        failure:(void (^)(ZNGError* error))failure
+{
+    [self getListWithParameters:nil
+                           path:@"time-zones"
+                  responseClass:[NSString class]
+                        success:success
+                        failure:failure];
 }
 
 @end

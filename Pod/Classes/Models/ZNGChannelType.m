@@ -10,16 +10,17 @@
 
 @implementation ZNGChannelType
 
-+ (NSDictionary*)JSONKeyPathsByPropertyKey {
-  return @{
-    @"channelTypeId" : @"id",
-    @"typeClass" : @"channel_type",
-    @"displayName" : @"display_name",
-    @"inboundNotificationURL" : @"inbound_notification_url",
-    @"outboundNotificationURL" : @"outbound_notification_url",
-    @"allowCommunications" : @"allow_communications",
-    @"isGlobal" : @"is_global"
-  };
++ (NSDictionary*)JSONKeyPathsByPropertyKey
+{
+    return @{
+             @"channelTypeId" : @"id",
+             @"typeClass" : @"channel_type",
+             @"displayName" : @"display_name",
+             @"inboundNotificationURL" : @"inbound_notification_url",
+             @"outboundNotificationURL" : @"outbound_notification_url",
+             @"allowCommunications" : @"allow_communications",
+             @"isGlobal" : @"is_global"
+             };
 }
 
 @end

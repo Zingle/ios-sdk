@@ -15,9 +15,9 @@
 @property(nonatomic) BOOL isConfirmed;
 @property(nonatomic) BOOL isStarred;
 @property(nonatomic, strong) ZNGMessage* lastMessage;
-@property(nonatomic, strong) NSArray* channels;
-@property(nonatomic, strong) NSArray* customFieldValues;
-@property(nonatomic, strong) NSArray* labels;
+@property(nonatomic, strong) NSArray* channels; // Array of ZNGChannel
+@property(nonatomic, strong) NSArray* customFieldValues; // Array of ZNGContactFieldValue
+@property(nonatomic, strong) NSArray* labels; // Array of ZNGLabel
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
 

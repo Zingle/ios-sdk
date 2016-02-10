@@ -1,22 +1,23 @@
 //
-//  ZNGSetting.m
+//  ZNGContactField.m
 //  Pods
 //
-//  Created by Ryan Farley on 2/8/16.
+//  Created by Ryan Farley on 2/10/16.
 //
 //
 
-#import "ZNGSetting.h"
+#import "ZNGContactField.h"
 #import "ZNGFieldOption.h"
 
-@implementation ZNGSetting
+@implementation ZNGContactField
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"settingId" : @"id",
+             @"contactFieldId" : @"id",
              @"displayName" : @"display_name",
              @"dataType" : @"data_type",
+             @"isGlobal" : @"is_global",
              @"options" : @"options"
              };
 }
@@ -25,5 +26,6 @@
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGFieldOption.class];
 }
+
 
 @end

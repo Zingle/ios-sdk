@@ -26,7 +26,7 @@ PODS:
   - Mantle (2.0.6):
     - Mantle/extobjc (= 2.0.6)
   - Mantle/extobjc (2.0.6)
-  - ZingleSDK (0.1.0):
+  - ZingleSDK (0.1.5):
     - AFNetworkActivityLogger (~> 2.0)
     - AFNetworking (~> 2.6)
     - Mantle (~> 2.0)
@@ -42,6 +42,6 @@ SPEC CHECKSUMS:
   AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   Mantle: 299966b00759634931699f69cb6a30b9239b944d
-  ZingleSDK: 01c2938a1e324a124fb4dc8a757fa18a842d7fda
+  ZingleSDK: e779dadf4d196e99ffd3c004ca0ba2d3d0f826f4
 
 COCOAPODS: 0.39.0

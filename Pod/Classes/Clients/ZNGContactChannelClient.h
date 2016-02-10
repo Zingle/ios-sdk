@@ -16,10 +16,9 @@
 + (void)contactChannelWithId:(NSString*)contactChannelId
                withContactId:(NSString*)contactId
                withServiceId:(NSString*)serviceId
-                     success:
-                         (void (^)(ZNGContactChannel* contactChannel))success
+                     success:(void (^)(ZNGContactChannel* contactChannel))success
                      failure:(void (^)(ZNGError* error))failure;
-                     
+
 #pragma mark - POST methods
 
 + (void)saveContactChannel:(ZNGContactChannel*)contactChannel
@@ -27,17 +26,16 @@
              withServiceId:(NSString*)serviceId
                    success:(void (^)(ZNGContactChannel* contactChannel))success
                    failure:(void (^)(ZNGError* error))failure;
-                   
+
 #pragma mark - PUT methods
 
 + (void)updateContactChannelWithId:(NSString*)contactChannelId
                     withParameters:(NSDictionary*)parameters
                      withContactId:(NSString*)contactId
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGContactChannel* contactChannel))
-                                       success
+                           success:(void (^)(ZNGContactChannel* contactChannel))success
                            failure:(void (^)(ZNGError* error))failure;
-                           
+
 #pragma mark - DELETE methods
 
 + (void)deleteContactChannelWithId:(NSString*)contactChannelId
@@ -45,5 +43,5 @@
                      withServiceId:(NSString*)serviceId
                            success:(void (^)())success
                            failure:(void (^)(ZNGError* error))failure;
-                           
+
 @end

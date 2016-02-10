@@ -12,8 +12,7 @@
 @interface ZNGAvailablePhoneNumberClient : ZNGBaseClient
 
 + (void)availablePhoneNumberListForCountry:(NSString*)country
-                                   success:(void (^)(NSArray* availableNumbers))
-                                               success
+                                   success:(void (^)(NSArray* availableNumbers))success
                                    failure:(void (^)(ZNGError* error))failure;
-                                   
+
 @end

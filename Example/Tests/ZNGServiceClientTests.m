@@ -68,7 +68,7 @@
         
         XCTAssert(service != nil, @"Created service is nil!");
         [NSThread sleepForTimeInterval: 3.0];
-       
+        
         [ZNGServiceClient deleteServiceWithId:service.serviceId success:^(ZNGService *service) {
             
             XCTAssert(service != nil, @"Deleted service is nil!");
@@ -79,7 +79,7 @@
             XCTFail(@"fail: \"%@\"", [error description]);
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteService"];
         }];
-
+        
     } failure:^(ZNGError *error) {
         
         XCTFail(@"fail: \"%@\"", [error description]);

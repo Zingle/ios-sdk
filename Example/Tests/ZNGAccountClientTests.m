@@ -47,7 +47,7 @@
 - (void)testAccountById
 {
     [ZNGAccountClient accountWithId:[self accountId] success:^(ZNGAccount *account) {
-
+        
         XCTAssert(account != nil, @"Account is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testAccountById"];
         

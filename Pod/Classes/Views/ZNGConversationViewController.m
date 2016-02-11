@@ -31,6 +31,8 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 @property (nonatomic, retain) UIScrollView *scrollView;
 @property (nonatomic, retain) UIColor *containerBackgroundColor;
 @property (nonatomic) BOOL wasAtBottom;
+@property (nonatomic) CGSize contentSize;
+@property (nonatomic) CGPoint contentOffset;
 @property (weak) NSTimer *pollingTimer;
 
 @end
@@ -162,7 +164,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
     [center addObserver:self selector:@selector(keyboardOnScreen:) name:UIKeyboardWillShowNotification object:nil];
-    [center addObserver:self selector:@selector(keyboardClosed) name:UIKeyboardWillHideNotification object:nil];
+    [center addObserver:self selector:@selector(keyboardClosed:) name:UIKeyboardWillHideNotification object:nil];
     self.keyboardHeight = 0;
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(didDoubleTap)];
@@ -200,13 +202,36 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     CGRect rawFrame = [value CGRectValue];
     self.keyboardHeight = [self.view convertRect:rawFrame fromView:nil].size.height;
     
-    [self refreshDisplay];
+    UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         [UIView setAnimationCurve:curve];
+                         [self refreshDisplay];
+                     }
+                     completion:nil];
+    
+
 }
 
-- (void)keyboardClosed
+- (void)keyboardClosed:(NSNotification *)notification
 {
     self.keyboardHeight = 0;
-    [self refreshDisplay];
+    
+    UIViewAnimationCurve curve = [[notification.userInfo objectForKey:UIKeyboardAnimationCurveUserInfoKey] integerValue];
+    double duration = [[notification.userInfo objectForKey:UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    
+    [UIView animateWithDuration:duration
+                          delay:0
+                        options:UIViewAnimationOptionBeginFromCurrentState
+                     animations:^{
+                         [UIView setAnimationCurve:curve];
+                         [self refreshDisplay];
+                     }
+                     completion:nil];
 }
 
 - (void)sendButtonPressed:(UIButton *)sender
@@ -371,6 +396,11 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     if( self.conversation == nil ) {
         [NSException raise:@"Conversation View Controller requires initialization with a Conversation object." format:@"Missing Conversation Object"];
     }
+    
+    self.wasAtBottom = [self isScrolledToBottom];
+    self.contentSize = self.scrollView.contentSize;
+    self.contentOffset = self.scrollView.contentOffset;
+    
     [self clear];
     
     [self startPollingTimer];
@@ -381,9 +411,13 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         [self addMessage:message withDirection:[self.conversation messageDirectionFor:message]];
     }
     
-    self.view.backgroundColor = self.containerBackgroundColor;
+    [self scrollToLastOffest];
     
-    [self scrollToBottom:YES];
+    if (self.contentSize.height != self.scrollView.contentSize.height) {
+        [self scrollToBottom:YES];
+    }
+    
+    self.view.backgroundColor = self.containerBackgroundColor;
     
     self.responseText.editable = YES;
     self.replyButton.enabled = YES;
@@ -550,6 +584,13 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     if( self.wasAtBottom ) {
         [self scrollToBottom:NO];
+    }
+}
+
+- (void)scrollToLastOffest{
+    if( self.bottomY > self.scrollView.frame.size.height ) {
+        //        CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
+        [self.scrollView setContentOffset:self.contentOffset animated:NO];
     }
 }
 

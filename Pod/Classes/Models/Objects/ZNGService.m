@@ -254,7 +254,7 @@
     {
         if( ![channelType.displayName isEqualToString:displayName] )
         {
-            [discardedChannelTypes addObject:channelTypes];
+            [discardedChannelTypes addObject:channelType];
         }
     }
     

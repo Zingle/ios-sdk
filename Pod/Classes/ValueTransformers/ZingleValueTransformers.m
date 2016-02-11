@@ -19,7 +19,9 @@
         
     } reverseBlock:^id(NSDate* date, BOOL* success, NSError* __autoreleasing* error) {
         
-        return [NSNumber numberWithDouble:[date timeIntervalSince1970]];
+        NSTimeInterval interval = [date timeIntervalSince1970];
+        NSInteger time = interval;
+        return [NSNumber numberWithInteger:time];
     }];
 }
 

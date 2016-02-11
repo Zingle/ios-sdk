@@ -8,6 +8,7 @@
 
 #import "ZNGMessageClient.h"
 #import "ZNGConstants.h"
+#import "ZNGMessageRead.h"
 
 @implementation ZNGMessageClient
 
@@ -77,14 +78,16 @@
 }
 
 + (void)markMessageReadWithId:(NSString*)messageId
-                withChannelId:(NSString*)channelId
                 withServiceId:(NSString*)serviceId
                       success:(void (^)(ZNGMessage* message))success
                       failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/channels/%@/messages/%@", serviceId, channelId, messageId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", serviceId, messageId];
     
-    [self postWithModel:@{@"read_at" : [NSNumber numberWithDouble:[[NSDate date] timeIntervalSince1970]]}
+    ZNGMessageRead *messageRead = [[ZNGMessageRead alloc] init];
+    messageRead.readAt = [NSDate date];
+    
+    [self postWithModel:messageRead
                    path:path
           responseClass:[ZNGMessage class]
                 success:success

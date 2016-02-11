@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/Clients/ZNGAutomationClient.h

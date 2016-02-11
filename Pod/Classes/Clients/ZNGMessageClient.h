@@ -32,7 +32,6 @@
             failure:(void (^)(ZNGError* error))failure;
 
 + (void)markMessageReadWithId:(NSString*)messageId
-                withChannelId:(NSString*)channelId
                 withServiceId:(NSString*)serviceId
                       success:(void (^)(ZNGMessage* message))success
                       failure:(void (^)(ZNGError* error))failure;

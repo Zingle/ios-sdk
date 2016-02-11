@@ -96,7 +96,7 @@
 
 - (void)testMarkMessageRead
 {
-    [ZNGMessageClient markMessageReadWithId:@"d4d22b55-f828-4cd9-bba9-def32a78b04d" withChannelId:@"af7c17e4-ee9d-479b-bf3b-91e865d31339" withServiceId:[self serviceId] success:^(ZNGMessage *message) {
+    [ZNGMessageClient markMessageReadWithId:@"bb707200-7137-42f2-8933-a0b96270d5cc" withServiceId:[self serviceId] success:^(ZNGMessage *message) {
         
         XCTAssert(message != nil, @"Message is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessageRead"];

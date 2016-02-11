@@ -589,7 +589,6 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)scrollToLastOffest{
     if( self.bottomY > self.scrollView.frame.size.height ) {
-        //        CGPoint bottomOffset = CGPointMake(0, self.scrollView.contentSize.height - self.scrollView.bounds.size.height);
         [self.scrollView setContentOffset:self.contentOffset animated:NO];
     }
 }

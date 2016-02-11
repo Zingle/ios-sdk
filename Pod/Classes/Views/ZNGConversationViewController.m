@@ -101,7 +101,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     self.messages = [[NSMutableArray alloc] init];
     self.bottomY = 10;
     self.scrollView.backgroundColor = [UIColor clearColor];
-    self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeInteractive;
+    self.scrollView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     
     _containerBackgroundColor = [UIColor whiteColor];
     

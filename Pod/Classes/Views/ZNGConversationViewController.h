@@ -10,6 +10,7 @@
 @class ZNGMessageView;
 @class ZNGArrowView;
 @class ZNGConversation;
+@class ZNGContact;
 
 extern int const ZINGLE_ARROW_POSITION_BOTTOM;
 extern int const ZINGLE_ARROW_POSITION_SIDE;
@@ -27,6 +28,12 @@ extern int const ZINGLE_ARROW_POSITION_SIDE;
 
 - (id)initWithChannelTypeName:(NSString *)channelTypeName to:(NSString *)to;
 - (id)initWithChannelTypeName:(NSString *)channelTypeName from:(NSString *)from;
+
++ (void)conversationViewControllerWithContact:(ZNGContact *)contact
+                              withChannelName:(NSString *)channelName
+                             withChannelValue:(NSString *)channelValue
+                          withCompletionBlock:(void (^) (ZNGConversationViewController *viewController))completionBlock
+                                   errorBlock:(void (^) (NSError *error))errorBlock;
 
 - (void)setBackgroundColor:(UIColor *)backgroundColor;
 - (void)clear;

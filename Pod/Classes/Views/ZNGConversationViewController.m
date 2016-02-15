@@ -12,6 +12,8 @@
 #import "ZNGConversation.h"
 #import "ZNGService.h"
 #import "ZNGMessage.h"
+#import "ZNGContactChannel.h"
+#import "ZNGChannelType.h"
 #import "ZNGMessageCorrespondent.h"
 
 int const ZINGLE_ARROW_POSITION_BOTTOM = 0;
@@ -83,6 +85,42 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     return self;
 }
 
++ (void)conversationViewControllerWithContact:(ZNGContact *)contact
+                              withChannelName:(NSString *)channelName
+                             withChannelValue:(NSString *)channelValue
+                          withCompletionBlock:(void (^) (ZNGConversationViewController *viewController))completionBlock
+                                   errorBlock:(void (^) (NSError *error))errorBlock
+{
+    [contact setChannelValueTo:channelValue forChannelTypeWithName:channelName];
+    
+    [contact saveWithCompletionBlock:^{
+        
+        ZNGService *service = [ZingleSDK sharedSDK].currentService;
+        
+        [service refreshWithCompletionBlock:^{
+            
+            ZNGChannelType *channelType = [service firstChannelTypeWithClass:@"UserDefinedChannel" andDisplayName:channelName];
+            
+            if( channelType == nil ) {
+                [NSException raise:@"ZINGLE_SDK_INVALID_CHANNEL_TYPE" format:@"Channel type supplied does not exist for current Service."];
+            }
+            
+            ZNGMessageCorrespondent *correspondent = [[ZNGMessageCorrespondent alloc] init];
+            [correspondent setCorrespondentType:ZINGLE_CORRESPONDENT_TYPE_CONTACT];
+            [correspondent setCorrespondent:contact];
+            [correspondent setChannelType:channelType];
+            [correspondent setChannelValue:channelValue];
+            
+            ZNGConversation *conversation = [[ZingleSDK sharedSDK] conversationWithService:service from:correspondent usingChannelType:channelType];
+            
+            ZNGConversationViewController *vc = [[ZNGConversationViewController alloc] initWithConversation:conversation];
+            
+            completionBlock(vc);
+            
+        } errorBlock:errorBlock];
+        
+    } errorBlock:errorBlock];
+}
 
 - (id)initWithConversation:(ZNGConversation *)conversation
 {

@@ -43,6 +43,8 @@
 #import "ZNGServiceChannel.h"
 #import "ZNGSetting.h"
 #import "ZNGTemplate.h"
+#import "ZNGConversationViewController.h"
+#import "ZNGMessageEntryView.h"
 #import "ZingleValueTransformers.h"
 #import "ZingleSDK.h"
 #import "ZNGConstants.h"

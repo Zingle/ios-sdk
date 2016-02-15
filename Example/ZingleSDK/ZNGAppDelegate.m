@@ -8,6 +8,9 @@
 
 #import "ZNGAppDelegate.h"
 #import "AFNetworkActivityLogger.h"
+#import "ZingleSDK/ZingleSDK.h"
+
+#import "ZNGConversationViewController.h"
 
 @implementation ZNGAppDelegate
 
@@ -15,6 +18,18 @@
 {
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    [[ZingleSDK sharedSDK] setToken:@"rfarley@zingleme.com" andKey:@"WfM-uYS-CBV-n6J"];
+    
+    ZNGConversationViewController *mainViewController = [[ZNGConversationViewController alloc]
+                                                         initWithServiceId:@"e545a46e-bfcd-4db2-bfee-8e590fdcb33f"
+                                                         fromChannelValue:@"123456"];
+    
+    self.window.rootViewController = mainViewController;
+    
+    [self.window makeKeyAndVisible];
     
     return YES;
 }

@@ -10,6 +10,11 @@
 
 @interface ZNGConversationViewController : UIViewController
 
+- (id)initWithServiceId:(NSString *)seriveId
+    withChannelTypeName:(NSString *)channelTypeName
+       fromChannelValue:(NSString *)channelValue;
 
+- (id)initWithServiceId:(NSString *)seriveId
+       fromChannelValue:(NSString *)channelValue;
 
 @end

@@ -15,6 +15,7 @@
 {
     return @{
              @"messageId" : @"id",
+             @"body" : @"body",
              @"displayName" : @"display_name",
              @"communicationDirection" : @"communication_direction",
              @"bodyLanguageCode" : @"body_language_code",

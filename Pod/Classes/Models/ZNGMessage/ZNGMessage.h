@@ -12,6 +12,7 @@
 @interface ZNGMessage : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong) NSString* messageId;
+@property(nonatomic, strong) NSString* body;
 @property(nonatomic, strong) NSString* displayName;
 @property(nonatomic, strong) NSString* communicationDirection;
 @property(nonatomic, strong) NSString* bodyLanguageCode;

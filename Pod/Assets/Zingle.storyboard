@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9531" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="C1q-Tg-Xed">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
@@ -8,7 +8,7 @@
         <!--Conversation View Controller-->
         <scene sceneID="ogW-8J-PY9">
             <objects>
-                <viewController storyboardIdentifier="MessagingViewController" id="C1q-Tg-Xed" customClass="ZNGConversationViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="ZNGConversationViewController" id="C1q-Tg-Xed" customClass="ZNGConversationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tMR-Vb-582"/>
                         <viewControllerLayoutGuide type="bottom" id="2NM-lf-lAF"/>
@@ -104,11 +104,11 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" misplaced="YES" image="message_tail_whiteHighRight" translatesAutoresizingMaskIntoConstraints="NO" id="fde-7n-VVM">
-                                                    <rect key="frame" x="520" y="12" width="21" height="18"/>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" image="message_tail_whiteHighRight" translatesAutoresizingMaskIntoConstraints="NO" id="fde-7n-VVM">
+                                                    <rect key="frame" x="520" y="12" width="140" height="107"/>
                                                 </imageView>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAT-AK-ooK">
-                                                    <rect key="frame" x="16" y="12" width="512" height="98"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAT-AK-ooK">
+                                                    <rect key="frame" x="17.5" y="12" width="510.5" height="98"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -365,25 +365,23 @@
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
-                                <exclude reference="CVv-mN-B3o"/>
-                                <exclude reference="4WE-eY-8GQ"/>
                                 <exclude reference="R9b-Vl-tgf"/>
+                                <exclude reference="4WE-eY-8GQ"/>
+                                <exclude reference="CVv-mN-B3o"/>
+                                <exclude reference="2es-ad-bZs"/>
                                 <exclude reference="T6N-0Q-vVP"/>
                                 <exclude reference="b9K-vP-R6h"/>
-                                <exclude reference="2es-ad-bZs"/>
                                 <exclude reference="nf0-7h-4yJ"/>
-                                <exclude reference="jse-Xu-rGd"/>
+                                <exclude reference="8v0-sO-JuT"/>
                                 <exclude reference="PJn-CJ-E0i"/>
                                 <exclude reference="Yrc-gh-XOq"/>
-                                <exclude reference="8v0-sO-JuT"/>
+                                <exclude reference="jse-Xu-rGd"/>
                                 <exclude reference="vsI-lP-kOc"/>
                             </mask>
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="IQLayoutGuideConstraint" destination="Ih6-1c-2vs" id="gJ2-mQ-oEZ"/>
-                        <outlet property="oBottomLayoutGuideConstraint" destination="Ih6-1c-2vs" id="gHR-87-Br7"/>
-                        <outlet property="oErrorLabel" destination="HpQ-NU-ID3" id="n1X-WE-OMl"/>
+                        <outlet property="oErrorLabel" destination="HpQ-NU-ID3" id="Yr7-h2-IPo"/>
                         <outlet property="oInitialLoadActivityIndicator" destination="b1N-9F-dKl" id="7Zj-TC-ebA"/>
                         <outlet property="oMessageEntryHeight" destination="X85-4T-IjR" id="IX3-o3-w79"/>
                         <outlet property="oMessageEntryMaxHeight" destination="2Fh-ar-t4Y" id="xe1-9M-D6B"/>

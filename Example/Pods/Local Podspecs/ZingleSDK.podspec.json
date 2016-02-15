@@ -20,11 +20,9 @@
   },
   "requires_arc": true,
   "source_files": "Pod/Classes/**/*",
-  "resource_bundles": {
-    "ZingleSDK": [
-      "Pod/Assets/*.png"
-    ]
-  },
+  "resources": [
+    "Pod/Assets/**/*"
+  ],
   "dependencies": {
     "AFNetworking": [
       "~> 2.6"

@@ -102,6 +102,7 @@
         contact = (ZNGContact *)contactCorrespondent.correspondent;
     } else {
         contact = [self.service findOrCreateContactWithChannelTypeID:self.channelType.ID andChannelValue:channelValue error:nil];
+        contactCorrespondent.correspondent = contact;
     }
     
     for( ZNGContactChannel *channel in contact.channels ) {

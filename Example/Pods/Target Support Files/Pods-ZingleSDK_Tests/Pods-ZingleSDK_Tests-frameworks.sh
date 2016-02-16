@@ -84,8 +84,10 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "Pods-ZingleSDK_Tests/SDWebImage.framework"
   install_framework "Pods-ZingleSDK_Tests/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "Pods-ZingleSDK_Tests/SDWebImage.framework"
   install_framework "Pods-ZingleSDK_Tests/ZingleSDK.framework"
 fi

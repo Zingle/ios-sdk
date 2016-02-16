@@ -1,5 +1,9 @@
 PODS:
-  - ZingleSDK (0.1.10)
+  - SDWebImage (3.7.5):
+    - SDWebImage/Core (= 3.7.5)
+  - SDWebImage/Core (3.7.5)
+  - ZingleSDK (0.1.11):
+    - SDWebImage (~> 3.7)
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -9,6 +13,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  ZingleSDK: e2ee92c214e71a15248958142ba84e86a4d13557
+  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
+  ZingleSDK: fa9a2b8240123b746a26abffec621fde37a44bc3
 
 COCOAPODS: 0.39.0

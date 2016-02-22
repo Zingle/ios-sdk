@@ -14,30 +14,30 @@
 #pragma mark - GET methods
 
 + (void)serviceListWithParameters:(NSDictionary*)parameters
-                          success:(void (^)(NSArray* services))success
+                          success:(void (^)(NSArray* services, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 
 + (void)serviceWithId:(NSString*)serviceId
-              success:(void (^)(ZNGService* service))success
+              success:(void (^)(ZNGService* service, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
 + (void)saveService:(ZNGService*)service
-            success:(void (^)(ZNGService* service))success
+            success:(void (^)(ZNGService* service, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
 
 + (void)updateServiceWithId:(NSString*)serviceId
              withParameters:(NSDictionary*)parameters
-                    success:(void (^)(ZNGService* service))success
+                    success:(void (^)(ZNGService* service, ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods
 
 + (void)deleteServiceWithId:(NSString*)serviceId
-                    success:(void (^)())success
+                    success:(void (^)(ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure;
 
 @end

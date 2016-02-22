@@ -14,7 +14,7 @@
 {
     return @{
              @"channelTypeId" : @"id",
-             @"typeClass" : @"channel_type",
+             @"typeClass" : @"type_class",
              @"displayName" : @"display_name",
              @"inboundNotificationURL" : @"inbound_notification_url",
              @"outboundNotificationURL" : @"outbound_notification_url",

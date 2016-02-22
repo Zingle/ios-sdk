@@ -90,4 +90,15 @@
     return self.serviceId;
 }
 
+- (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName
+{
+    for (ZNGChannelType *channelType in self.channelTypes) {
+        if ([channelDisplayName isEqualToString:channelType.displayName]) {
+            return channelType;
+        }
+    }
+    return nil;
+}
+
+
 @end

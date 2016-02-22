@@ -12,7 +12,7 @@
 
 #pragma mark - GET methods
 
-+ (void)timeZoneListWithSuccess:(void (^)(NSArray* timeZones))success
++ (void)timeZoneListWithSuccess:(void (^)(NSArray* timeZones, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure;
 
 @end

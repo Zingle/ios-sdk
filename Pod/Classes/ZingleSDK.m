@@ -8,6 +8,11 @@
 
 #import "ZingleSDK.h"
 #import "ZNGConstants.h"
+#import "ZNGDataSet.h"
+#import "ZNGServiceClient.h"
+#import "ZNGContactClient.h"
+#import "ZNGConversation.h"
+#import "ZNGParticipant.h"
 
 @interface ZingleSDK ()
 
@@ -39,6 +44,62 @@
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
+}
+
+- (void)addConversationWithServiceId:(NSString *)serviceId
+                           contactId:(NSString *)contactId
+                 contactChannelValue:(NSString *)contactChannelValue
+                             success:(void (^)(ZNGConversation* conversation))success
+                             failure:(void (^)(ZNGError* error))failure
+{
+    [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus* status) {
+
+        [[ZNGDataSet sharedDataSet] addService:service];
+        
+        [ZNGContactClient contactWithId:contactId withServiceId:serviceId success:^(ZNGContact *contact, ZNGStatus* status) {
+            
+            [[ZNGDataSet sharedDataSet] addContact:contact];
+            
+            ZNGConversation *conversation = [[ZNGConversation alloc] init];
+            
+            NSString *allowedChannelTypeClass = @"UserDefinedChannel";
+            for (ZNGChannel *channel in contact.channels) {
+                
+                if ([channel.channelType.typeClass isEqualToString:allowedChannelTypeClass]) {
+                    conversation.channelTypeId = channel.channelType.channelTypeId;
+                }
+            }
+            if (conversation.channelTypeId == nil) {
+                NSLog(@"Service %@ (id=%@) does not support user defined channels.", service.displayName, service.serviceId);
+                return;
+            }
+            
+            ZNGParticipant *contactParticipant = [[ZNGParticipant alloc] init];
+            contactParticipant.type = ZNGParticipantTypeContact;
+            contactParticipant.participantId = contactId;
+            contactParticipant.channelValue = contactChannelValue;
+            
+            conversation.contact = contactParticipant;
+            
+            ZNGParticipant *serviceParticipant = [[ZNGParticipant alloc] init];
+            serviceParticipant.type = ZNGParticipantTypeService;
+            serviceParticipant.participantId = serviceId;
+            serviceParticipant.name = service.displayName;
+            
+            conversation.service = serviceParticipant;
+            
+            [[ZNGDataSet sharedDataSet] addConversation:conversation];
+            if (success) {
+                success(conversation);
+            }
+            
+        } failure:failure];
+    } failure:failure];
+}
+
+- (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation
+{
+    return [[ZNGConversationViewController alloc] initWithConversation:conversation];
 }
 
 - (AFHTTPSessionManager*)sharedSessionManager

@@ -15,19 +15,19 @@
 
 + (void)templateListWithParameters:(NSDictionary*)parameters
                      withServiceId:(NSString *)serviceId
-                           success:(void (^)(NSArray* templ))success
+                           success:(void (^)(NSArray* templ, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure;
 
 + (void)templateWithId:(NSString*)templateId
          withServiceId:(NSString *)serviceId
-               success:(void (^)(ZNGTemplate* templ))success
+               success:(void (^)(ZNGTemplate* templ, ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
 + (void)saveTemplate:(ZNGTemplate*)templ
        withServiceId:(NSString *)serviceId
-             success:(void (^)(ZNGTemplate* templ))success
+             success:(void (^)(ZNGTemplate* templ, ZNGStatus* status))success
              failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
@@ -35,14 +35,14 @@
 + (void)updateTemplateWithId:(NSString*)templateId
                withServiceId:(NSString *)serviceId
               withParameters:(NSDictionary*)parameters
-                     success:(void (^)(ZNGTemplate* templ))success
+                     success:(void (^)(ZNGTemplate* templ, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods
 
 + (void)deleteTemplateWithId:(NSString*)templateId
                withServiceId:(NSString *)serviceId
-                     success:(void (^)())success
+                     success:(void (^)(ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure;
 
 @end

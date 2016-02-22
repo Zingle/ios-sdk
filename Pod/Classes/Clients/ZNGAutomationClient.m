@@ -14,7 +14,7 @@
 
 + (void)automationListWithParameters:(NSDictionary*)parameters
                        withServiceId:(NSString *)serviceId
-                             success:(void (^)(NSArray* automations))success
+                             success:(void (^)(NSArray* automations, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/automations", serviceId];
@@ -28,7 +28,7 @@
 
 + (void)automationWithId:(NSString*)automationId
            withServiceId:(NSString *)serviceId
-                 success:(void (^)(ZNGAutomation* automation))success
+                 success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
                  failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", serviceId, automationId];
@@ -44,7 +44,7 @@
 + (void)updateAutomationWithId:(NSString*)automationId
                  withServiceId:(NSString *)serviceId
                 withParameters:(NSDictionary*)parameters
-                       success:(void (^)(ZNGAutomation* automation))success
+                       success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
                        failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", serviceId, automationId];

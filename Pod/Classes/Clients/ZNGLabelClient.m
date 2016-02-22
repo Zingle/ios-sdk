@@ -14,7 +14,7 @@
 
 + (void)labelListWithParameters:(NSDictionary*)parameters
                   withServiceId:(NSString *)serviceId
-                        success:(void (^)(NSArray* contactFields))success
+                        success:(void (^)(NSArray* contactFields, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", serviceId];
@@ -28,7 +28,7 @@
 
 + (void)labelWithId:(NSString*)labelId
       withServiceId:(NSString *)serviceId
-            success:(void (^)(ZNGLabel* label))success
+            success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", serviceId, labelId];
@@ -43,7 +43,7 @@
 
 + (void)saveLabel:(ZNGLabel*)label
     withServiceId:(NSString *)serviceId
-          success:(void (^)(ZNGLabel* label))success
+          success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
           failure:(void (^)(ZNGError* error))failure
 {
     if (label.displayName == nil) {
@@ -70,7 +70,7 @@
 + (void)updateLabelWithId:(NSString*)labelId
             withServiceId:(NSString *)serviceId
            withParameters:(NSDictionary*)parameters
-                  success:(void (^)(ZNGLabel* label))success
+                  success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", serviceId, labelId];
@@ -86,7 +86,7 @@
 
 + (void)deleteLabelWithId:(NSString*)labelId
             withServiceId:(NSString *)serviceId
-                  success:(void (^)())success
+                  success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", serviceId, labelId];

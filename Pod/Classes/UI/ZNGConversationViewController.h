@@ -7,14 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZNGContact.h"
+#import "ZNGError.h"
+#import "ZNGConversation.h"
 
-@interface ZNGConversationViewController : UIViewController
+@interface ZNGConversationViewController : UIViewController<ZNGConversationDelegate>
 
-- (id)initWithServiceId:(NSString *)seriveId
-    withChannelTypeName:(NSString *)channelTypeName
-       fromChannelValue:(NSString *)channelValue;
-
-- (id)initWithServiceId:(NSString *)seriveId
-       fromChannelValue:(NSString *)channelValue;
+- (id)initWithConversation:(ZNGConversation *)conversation;
 
 @end

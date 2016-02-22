@@ -14,11 +14,11 @@
 #pragma mark - GET methods
 
 + (void)accountListWithParameters:(NSDictionary*)parameters
-                          success:(void (^)(NSArray* accounts))success
+                          success:(void (^)(NSArray* accounts, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 
 + (void)accountWithId:(NSString*)accountId
-              success:(void (^)(ZNGAccount* account))success
+              success:(void (^)(ZNGAccount* account, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 
 @end

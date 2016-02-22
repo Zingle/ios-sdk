@@ -15,12 +15,12 @@
 
 + (void)accountPlanListWithAccountId:(NSString*)accountId
                       withParameters:(NSDictionary*)parameters
-                             success:(void (^)(NSArray* plans))success
+                             success:(void (^)(NSArray* plans, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure;
 
 + (void)accountPlanWithAccountId:(NSString*)accountId
                       withPlanId:(NSString*)planId
-                         success:(void (^)(ZNGAccountPlan* plan))success
+                         success:(void (^)(ZNGAccountPlan* plan, ZNGStatus* status))success
                          failure:(void (^)(ZNGError* error))failure;
 
 @end

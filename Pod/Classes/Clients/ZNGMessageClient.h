@@ -16,24 +16,24 @@
 
 + (void)messageListWithParameters:(NSDictionary*)parameters
                     withServiceId:(NSString*)serviceId
-                          success:(void (^)(NSArray* messages))success
+                          success:(void (^)(NSArray* messages, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 
 + (void)messageWithId:(NSString*)messageId
         withServiceId:(NSString*)serviceId
-              success:(void (^)(ZNGMessage* message))success
+              success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
 + (void)sendMessage:(ZNGNewMessage*)newMessage
       withServiceId:(NSString*)serviceId
-            success:(void (^)(ZNGMessage* message))success
+            success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
 + (void)markMessageReadWithId:(NSString*)messageId
                 withServiceId:(NSString*)serviceId
-                      success:(void (^)(ZNGMessage* message))success
+                      success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure;
 
 @end

@@ -7,12 +7,12 @@
 //
 
 #import <Mantle/Mantle.h>
-#import "ZNGSender.h"
+#import "ZNGParticipant.h"
 
 @interface ZNGNewMessage : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong) NSString* senderType;
-@property(nonatomic, strong) ZNGSender* sender;
+@property(nonatomic, strong) ZNGParticipant* sender;
 @property(nonatomic, strong) NSString* recipientType;
 @property(nonatomic, strong) NSArray* recipients; // Array of ZNGRecipient
 @property(nonatomic, strong) NSArray* channelTypeIds; // Array of NSString

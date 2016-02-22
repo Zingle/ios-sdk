@@ -10,6 +10,7 @@
 #import "ZNGAccount.h"
 #import "ZNGAccountPlan.h"
 #import "ZNGServiceAddress.h"
+#import "ZNGChannelType.h"
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -27,5 +28,7 @@
 @property(nonatomic, strong) ZNGServiceAddress* serviceAddress;
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
+
+- (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName;
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "ZNGContactChannelClient.h"
-#import "ZNGNewContactChannel.h"
+
 
 @implementation ZNGContactChannelClient
 
@@ -16,7 +16,7 @@
 + (void)contactChannelWithId:(NSString*)contactChannelId
                withContactId:(NSString*)contactId
                withServiceId:(NSString*)serviceId
-                     success:(void (^)(ZNGContactChannel* contactChannel))success
+                     success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", serviceId, contactId, contactChannelId];
@@ -29,13 +29,13 @@
 
 #pragma mark - POST methods
 
-+ (void)saveContactChannel:(ZNGContactChannel*)contactChannel
++ (void)saveContactChannel:(ZNGNewContactChannel*)contactChannel
              withContactId:(NSString*)contactId
              withServiceId:(NSString*)serviceId
-                   success:(void (^)(ZNGContactChannel* contactChannel))success
+                   success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure
 {
-    if (contactChannel.channelType.channelTypeId == nil) {
+    if (contactChannel.channelTypeId == nil) {
         [NSException raise:NSInvalidArgumentException format:@"Required argument: contactChannel.channelType.channelTypeId"];
     }
     
@@ -43,15 +43,9 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: contactChannel.value"];
     }
     
-    if (contactChannel.country == nil) {
-        [NSException raise:NSInvalidArgumentException format:@"Required argument: contactChannel.country"];
-    }
-    
-    ZNGNewContactChannel* newContactChannel = [[ZNGNewContactChannel alloc] initWithContactChannel:contactChannel];
-    
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels", serviceId, contactId];
     
-    [self postWithModel:newContactChannel
+    [self postWithModel:contactChannel
                    path:path
           responseClass:[ZNGContactChannel class]
                 success:success
@@ -64,7 +58,7 @@
                     withParameters:(NSDictionary*)parameters
                      withContactId:(NSString*)contactId
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGContactChannel* contactChannel))success
+                           success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", serviceId, contactId, contactChannelId];
@@ -81,7 +75,7 @@
 + (void)deleteContactChannelWithId:(NSString*)contactChannelId
                      withContactId:(NSString*)contactId
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)())success
+                           success:(void (^)(ZNGStatus* state))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", serviceId, contactId, contactChannelId];

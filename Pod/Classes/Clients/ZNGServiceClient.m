@@ -14,7 +14,7 @@
 #pragma mark - GET methods
 
 + (void)serviceListWithParameters:(NSDictionary*)parameters
-                          success:(void (^)(NSArray* services))success
+                          success:(void (^)(NSArray* services, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure
 {
     [self getListWithParameters:parameters
@@ -25,7 +25,7 @@
 }
 
 + (void)serviceWithId:(NSString*)serviceId
-              success:(void (^)(ZNGService* service))success
+              success:(void (^)(ZNGService* service, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@", serviceId];
@@ -39,7 +39,7 @@
 #pragma mark - POST methods
 
 + (void)saveService:(ZNGService*)service
-            success:(void (^)(ZNGService* service))success
+            success:(void (^)(ZNGService* service, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
     if (service.account == nil) {
@@ -75,7 +75,7 @@
 
 + (void)updateServiceWithId:(NSString*)serviceId
              withParameters:(NSDictionary*)parameters
-                    success:(void (^)(ZNGService* service))success
+                    success:(void (^)(ZNGService* service, ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@", serviceId];
@@ -90,7 +90,7 @@
 #pragma mark - DELETE methods
 
 + (void)deleteServiceWithId:(NSString*)serviceId
-                    success:(void (^)())success
+                    success:(void (^)(ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@", serviceId];

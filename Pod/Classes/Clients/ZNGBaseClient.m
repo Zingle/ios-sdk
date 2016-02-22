@@ -21,17 +21,23 @@
 + (NSURLSessionDataTask*)getListWithParameters:(NSDictionary*)parameters
                                           path:(NSString*)path
                                  responseClass:(Class)responseClass
-                                       success:(void (^)(id responseObject))success
+                                       success:(void (^)(id responseObject, ZNGStatus *status))success
                                        failure:(void (^)(ZNGError* error))failure
 {
     return [[self sessionManager] GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
+        NSError* error = nil;
+
+        NSDictionary* statusDict = responseObject[@"status"];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            success(responseObject[@"result"]);
+            if (success) {
+                success(responseObject[@"result"], status);
+            }
             return;
         }
         
-        NSError* error = nil;
         NSArray* result = responseObject[@"result"];
         NSArray* responseObj = [MTLJSONAdapter modelsOfClass:responseClass fromJSONArray:result error:&error];
         
@@ -43,7 +49,7 @@
             }
         } else {
             if (success) {
-                success(responseObj);
+                success(responseObj, status);
             }
         }
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
@@ -56,19 +62,24 @@
 
 + (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
                                responseClass:(Class)responseClass
-                                     success:(void (^)(id responseObject))success
+                                     success:(void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(void (^)(ZNGError* error))failure
 {
     return [[self sessionManager] GET:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[@"status"];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            success(responseObject[@"result"]);
+            if (success) {
+                success(responseObject[@"result"], status);
+            }
             return;
         }
         
-        NSError* error = nil;
         NSDictionary* result = responseObject[@"result"];
-        
         id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
         
         if (error) {
@@ -79,7 +90,7 @@
             }
         } else {
             if (success) {
-                success(responseObj);
+                success(responseObj, status);
             }
         }
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
@@ -95,7 +106,7 @@
 + (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
                                   path:(NSString*)path
                          responseClass:(Class)responseClass
-                               success:(void (^)(id responseObject))success
+                               success:(void (^)(id responseObject, ZNGStatus *status))success
                                failure:(void (^)(ZNGError* error))failure
 {
     NSDictionary* params;
@@ -114,14 +125,20 @@
     }
     
     return [[self sessionManager] POST:path parameters:params success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[@"status"];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            success(responseObject[@"result"]);
+            if (success) {
+                success(responseObject[@"result"], status);
+            }
             return;
         }
         
-        NSError* error = nil;
         NSDictionary* result = responseObject[@"result"];
-        
         id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
         
         if (error) {
@@ -132,7 +149,7 @@
             }
         } else {
             if (success) {
-                success(responseObj);
+                success(responseObj, status);
             }
         }
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
@@ -148,18 +165,24 @@
 + (NSURLSessionDataTask*)putWithPath:(NSString*)path
                           parameters:(NSDictionary*)parameters
                        responseClass:(Class)responseClass
-                             success:(void (^)(id responseObject))success
+                             success:(void (^)(id responseObject, ZNGStatus *status))success
                              failure:(void (^)(ZNGError* error))failure
 {
     return [[self sessionManager] PUT:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[@"status"];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            success(responseObject[@"result"]);
+            if (success) {
+                success(responseObject[@"result"], status);
+            }
             return;
         }
         
-        NSError* error = nil;
         NSDictionary* result = responseObject[@"result"];
-        
         id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
         
         if (error) {
@@ -170,7 +193,7 @@
             }
         } else {
             if (success) {
-                success(responseObj);
+                success(responseObj, status);
             }
         }
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
@@ -184,12 +207,18 @@
 #pragma mark - DELETE methods
 
 + (NSURLSessionDataTask*)deleteWithPath:(NSString*)path
-                                success:(void (^)())success
+                                success:(void (^)(ZNGStatus *status))success
                                 failure:(void (^)(ZNGError* error))failure
 {
     return [[self sessionManager] DELETE:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[@"status"];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
         if (success) {
-            success();
+            success(status);
         }
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
         if (failure) {

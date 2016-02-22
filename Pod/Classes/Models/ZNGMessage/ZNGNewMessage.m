@@ -8,7 +8,6 @@
 
 #import "ZNGNewMessage.h"
 #import "ZNGCorrespondent.h"
-#import "ZNGRecipient.h"
 
 @implementation ZNGNewMessage
 
@@ -27,12 +26,12 @@
 
 + (NSValueTransformer*)senderJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGSender.class];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGParticipant.class];
 }
 
 + (NSValueTransformer*)recipientsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGRecipient.class];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGParticipant.class];
 }
 
 @end

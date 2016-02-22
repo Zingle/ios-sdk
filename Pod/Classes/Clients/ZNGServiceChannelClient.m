@@ -15,7 +15,7 @@
 
 + (void)serviceChannelWithId:(NSString*)serviceChannelId
                withServiceId:(NSString*)serviceId
-                     success:(void (^)(ZNGServiceChannel* serviceChannel))success
+                     success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/channels/%@", serviceId, serviceChannelId];
@@ -30,7 +30,7 @@
 
 + (void)saveServiceChannel:(ZNGServiceChannel*)serviceChannel
              withServiceId:(NSString*)serviceId
-                   success:(void (^)(ZNGServiceChannel* serviceChannel))success
+                   success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure
 {
     if (serviceChannel.channelType.channelTypeId == nil) {
@@ -61,7 +61,7 @@
 + (void)updateServiceChannelWithId:(NSString*)serviceChannelId
                     withParameters:(NSDictionary*)parameters
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGServiceChannel* serviceChannel))success
+                           success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/channels/%@", serviceId, serviceChannelId];
@@ -77,7 +77,7 @@
 
 + (void)deleteServiceChannelWithId:(NSString*)serviceChannelId
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)())success
+                           success:(void (^)(ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/channels/%@", serviceId, serviceChannelId];

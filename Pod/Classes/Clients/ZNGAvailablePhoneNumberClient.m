@@ -11,7 +11,7 @@
 @implementation ZNGAvailablePhoneNumberClient
 
 + (void)availablePhoneNumberListForCountry:(NSString*)country
-                                   success:(void (^)(NSArray* availableNumbers))success
+                                   success:(void (^)(NSArray* availableNumbers, ZNGStatus* status))success
                                    failure:(void (^)(ZNGError* error))failure
 {
     [self getListWithParameters:@{ @"country" : country }

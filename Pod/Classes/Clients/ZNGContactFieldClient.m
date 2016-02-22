@@ -14,7 +14,7 @@
 
 + (void)contactFieldListWithParameters:(NSDictionary*)parameters
                          withServiceId:(NSString *)serviceId
-                               success:(void (^)(NSArray* contactFields))success
+                               success:(void (^)(NSArray* contactFields, ZNGStatus* status))success
                                failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-custom-fields", serviceId];
@@ -28,7 +28,7 @@
 
 + (void)contactFieldWithId:(NSString*)contactFieldId
              withServiceId:(NSString *)serviceId
-                   success:(void (^)(ZNGContactField* contactField))success
+                   success:(void (^)(ZNGContactField* contactField, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-custom-fields/%@", serviceId, contactFieldId];
@@ -43,7 +43,7 @@
 
 + (void)saveContactField:(ZNGContactField*)contactField
            withServiceId:(NSString *)serviceId
-                 success:(void (^)(ZNGContactField* contactField))success
+                 success:(void (^)(ZNGContactField* contactField, ZNGStatus* status))success
                  failure:(void (^)(ZNGError* error))failure
 {
     if (contactField.displayName == nil) {
@@ -64,7 +64,7 @@
 + (void)updateContactFieldWithId:(NSString*)contactFieldId
                    withServiceId:(NSString *)serviceId
                   withParameters:(NSDictionary*)parameters
-                         success:(void (^)(ZNGContactField* contactField))success
+                         success:(void (^)(ZNGContactField* contactField, ZNGStatus* status))success
                          failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-custom-fields/%@", serviceId, contactFieldId];
@@ -80,7 +80,7 @@
 
 + (void)deleteContactFieldWithId:(NSString*)contactFieldId
                    withServiceId:(NSString *)serviceId
-                         success:(void (^)())success
+                         success:(void (^)(ZNGStatus* status))success
                          failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/contact-custom-fields/%@", serviceId, contactFieldId];

@@ -8,8 +8,8 @@
 
 #import "ZNGAppDelegate.h"
 #import "AFNetworkActivityLogger.h"
-#import "ZingleSDK/ZingleSDK.h"
-
+#import <ZingleSDK/ZingleSDK.h>
+#import "ZNGContactClient.h"
 #import "ZNGConversationViewController.h"
 
 @implementation ZNGAppDelegate
@@ -20,18 +20,36 @@
     [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    [[ZingleSDK sharedSDK] setToken:@"rfarley@zingleme.com" andKey:@"WfM-uYS-CBV-n6J"];
-    
-    ZNGConversationViewController *mainViewController = [[ZNGConversationViewController alloc]
-                                                         initWithServiceId:@"e545a46e-bfcd-4db2-bfee-8e590fdcb33f"
-                                                         fromChannelValue:@"123456"];
-    
-    self.window.rootViewController = mainViewController;
-    
+
+    self.window.rootViewController = [[UIViewController alloc] init];
     [self.window makeKeyAndVisible];
     
+    [self loadConversation];
+    
     return YES;
+}
+
+- (void)loadConversation
+{
+    NSString *token = @"TOKEN";
+    NSString *key = @"KEY";
+    NSString *contactChannelValue = @"test.app";
+    NSString *contactId = @"CONTACT ID";
+    NSString *serviceId = @"SERVICE ID";
+    
+    // 1
+    [[ZingleSDK sharedSDK] setToken:token andKey:key];
+    
+    // 2
+    [[ZingleSDK sharedSDK] addConversationWithServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
+        
+        // 3
+        ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
+        [self.window.rootViewController presentViewController:conversationViewController animated:YES completion:nil];
+        
+    } failure:^(ZNGError *error) {
+        //
+    }];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class ZNGMessageEntryView;
-@protocol MessageEntryDelegate <NSObject>
+@protocol ZNGMessageEntryDelegate <NSObject>
 
 - (void)messageEntryTextDidChange:(ZNGMessageEntryView*)messageEntryView;
 
@@ -19,6 +19,6 @@
 
 @property (copy, nonatomic) NSString* text;
 @property (strong, nonatomic) UITextView* textView;
-@property (weak, nonatomic) id<MessageEntryDelegate> delegate;
+@property (weak, nonatomic) id<ZNGMessageEntryDelegate> delegate;
 
 @end

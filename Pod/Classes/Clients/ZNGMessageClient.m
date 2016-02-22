@@ -16,7 +16,7 @@
 
 + (void)messageListWithParameters:(NSDictionary*)parameters
                     withServiceId:(NSString*)serviceId
-                          success:(void (^)(NSArray* messages))success
+                          success:(void (^)(NSArray* messages, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/messages", serviceId];
@@ -30,7 +30,7 @@
 
 + (void)messageWithId:(NSString*)messageId
         withServiceId:(NSString*)serviceId
-              success:(void (^)(ZNGMessage* message))success
+              success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@", serviceId, messageId];
@@ -45,7 +45,7 @@
 
 + (void)sendMessage:(ZNGNewMessage*)newMessage
       withServiceId:(NSString*)serviceId
-            success:(void (^)(ZNGMessage* message))success
+            success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
     if (newMessage.senderType == nil) {
@@ -79,7 +79,7 @@
 
 + (void)markMessageReadWithId:(NSString*)messageId
                 withServiceId:(NSString*)serviceId
-                      success:(void (^)(ZNGMessage* message))success
+                      success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", serviceId, messageId];

@@ -14,7 +14,7 @@
 
 + (void)templateListWithParameters:(NSDictionary*)parameters
                      withServiceId:(NSString *)serviceId
-                           success:(void (^)(NSArray* templ))success
+                           success:(void (^)(NSArray* templ, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/templates", serviceId];
@@ -28,7 +28,7 @@
 
 + (void)templateWithId:(NSString*)templateId
          withServiceId:(NSString *)serviceId
-               success:(void (^)(ZNGTemplate* templ))success
+               success:(void (^)(ZNGTemplate* templ, ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/templates/%@", serviceId, templateId];
@@ -43,7 +43,7 @@
 
 + (void)saveTemplate:(ZNGTemplate*)templ
        withServiceId:(NSString *)serviceId
-             success:(void (^)(ZNGTemplate* templ))success
+             success:(void (^)(ZNGTemplate* templ, ZNGStatus* status))success
              failure:(void (^)(ZNGError* error))failure
 {
     if (templ.displayName == nil) {
@@ -70,7 +70,7 @@
 + (void)updateTemplateWithId:(NSString*)templateId
                withServiceId:(NSString *)serviceId
               withParameters:(NSDictionary*)parameters
-                     success:(void (^)(ZNGTemplate* templ))success
+                     success:(void (^)(ZNGTemplate* templ, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/templates/%@", serviceId, templateId];
@@ -86,7 +86,7 @@
 
 + (void)deleteTemplateWithId:(NSString*)templateId
                withServiceId:(NSString *)serviceId
-                     success:(void (^)())success
+                     success:(void (^)(ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/templates/%@", serviceId, templateId];

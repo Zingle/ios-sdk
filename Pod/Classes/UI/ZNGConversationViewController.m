@@ -283,26 +283,25 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [self.responseView bringSubviewToFront:self.sendActivity];
     self.replyButton.alpha = 0;
     
-//    [self.conversation sendMessageWithBody:self.responseText.text completionBlock:^{
-//        
-//        self.responseText.text = @"";
-//        
-//        [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
-//        
-//        
-//    } errorBlock:^(NSError *error) {
-//        
-//        self.responseText.text = @"";
-//        self.responseText.editable = YES;
-//        self.replyButton.enabled = YES;
-//        [self.sendActivity stopAnimating];
-//        self.sendActivity.alpha = 0;
-//        self.replyButton.alpha = 1;
-//        
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-//        
-//        [alert show];
-//    }];
+    [self.conversation sendMessageWithBody:self.responseText.text success:^(ZNGMessage *message, ZNGStatus *status) {
+        
+        self.responseText.text = @"";
+        
+        [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
+        
+    } failure:^(ZNGError *error) {
+        
+        self.responseText.text = @"";
+        self.responseText.editable = YES;
+        self.replyButton.enabled = YES;
+        [self.sendActivity stopAnimating];
+        self.sendActivity.alpha = 0;
+        self.replyButton.alpha = 1;
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+        
+        [alert show];
+    }];
 }
 
 - (void)cameraButtonPressed:(id)sender
@@ -353,28 +352,26 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         self.replyButton.enabled = NO;
         self.responseText.editable = NO;
         
-//        [self.conversation sendMessageWithImage:chosenImage completionBlock:^{
-//            
-//            self.responseText.editable = YES;
-//            
-//            [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
-//            
-//        } errorBlock:^(NSError *error) {
-//            
-//            self.responseText.editable = YES;
-//            self.responseText.editable = YES;
-//            self.replyButton.enabled = YES;
-//            [self.sendActivity stopAnimating];
-//            self.sendActivity.alpha = 0;
-//            self.replyButton.alpha = 1;
-//            
-//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
-//            
-//            [alert show];
-//        }];
-    }];
-    
-    
+        [self.conversation sendMessageWithImage:chosenImage success:^(ZNGMessage *message, ZNGStatus *status) {
+            
+            self.responseText.editable = YES;
+            
+            [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
+            
+        } failure:^(ZNGError *error) {
+            
+            self.responseText.editable = YES;
+            self.responseText.editable = YES;
+            self.replyButton.enabled = YES;
+            [self.sendActivity stopAnimating];
+            self.sendActivity.alpha = 0;
+            self.replyButton.alpha = 1;
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            
+            [alert show];
+        }];
+    }];   
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -446,7 +443,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     NSArray *messages = [self.conversation messages];
     for( ZNGMessage *message in messages ) {
         
-//        [self addMessage:message withDirection:[self.conversation messageDirectionFor:message]];
+        [self addMessage:message withDirection:message.communicationDirection];
     }
     
     [self scrollToLastOffest];

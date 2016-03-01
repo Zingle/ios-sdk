@@ -87,11 +87,13 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ZingleSDK_Example/AFNetworkActivityLogger.framework"
   install_framework "Pods-ZingleSDK_Example/AFNetworking.framework"
   install_framework "Pods-ZingleSDK_Example/Mantle.framework"
+  install_framework "Pods-ZingleSDK_Example/SDWebImage.framework"
   install_framework "Pods-ZingleSDK_Example/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ZingleSDK_Example/AFNetworkActivityLogger.framework"
   install_framework "Pods-ZingleSDK_Example/AFNetworking.framework"
   install_framework "Pods-ZingleSDK_Example/Mantle.framework"
+  install_framework "Pods-ZingleSDK_Example/SDWebImage.framework"
   install_framework "Pods-ZingleSDK_Example/ZingleSDK.framework"
 fi

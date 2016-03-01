@@ -9,7 +9,6 @@
 #import "ZNGConversationViewController.h"
 #import "ZNGArrowView.h"
 #import "ZNGMessage.h"
-//#import "ZNGMessageAttachment.h"
 #import <SDWebImage/UIImageView+WebCache.h>
 
 @interface ZNGMessageView()
@@ -67,20 +66,20 @@
     
     [self refresh];
     
-//    for( ZNGMessageAttachment *attachment in message.attachments ) {
-//        
-//        int bodyPadding = self.parentViewController.bodyPadding;
-//        
-//        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(bodyPadding, bodyPadding, self.bodyView.frame.size.width - (bodyPadding*2), self.bodyView.frame.size.height - (bodyPadding*2))];
-//        
-//        imageView.contentMode = UIViewContentModeScaleAspectFit;
-//        
-//        [imageView sd_setImageWithURL:[NSURL URLWithString:attachment.url] completed:nil];
-//        
-//        [self.bodyView addSubview:imageView];
-//        
-//        break;
-//    }
+    for( NSString *attachment in message.attachments ) {
+        
+        int bodyPadding = self.parentViewController.bodyPadding;
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(bodyPadding, bodyPadding, self.bodyView.frame.size.width - (bodyPadding*2), self.bodyView.frame.size.height - (bodyPadding*2))];
+        
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [imageView sd_setImageWithURL:[NSURL URLWithString:attachment] completed:nil];
+        
+        [self.bodyView addSubview:imageView];
+        
+        break;
+    }
 }
 
 - (NSString *)body

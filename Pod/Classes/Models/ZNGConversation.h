@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "ZNGParticipant.h"
+#import "ZNGStatus.h"
+#import "ZNGMessage.h"
 #import "ZNGError.h"
 
 @protocol ZNGConversationDelegate <NSObject>
@@ -25,5 +27,13 @@
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 - (void)updateMessages;
+
+- (void)sendMessageWithBody:(NSString *)body
+                    success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+                    failure:(void (^) (ZNGError *error))failure;
+
+- (void)sendMessageWithImage:(UIImage *)image
+                     success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+                     failure:(void (^) (ZNGError *error))failure;
 
 @end

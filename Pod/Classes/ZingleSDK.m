@@ -13,6 +13,7 @@
 #import "ZNGContactClient.h"
 #import "ZNGConversation.h"
 #import "ZNGParticipant.h"
+#import "ZNGContactChannelClient.h"
 
 @interface ZingleSDK ()
 
@@ -40,7 +41,7 @@
         [NSException raise:NSInvalidArgumentException format:@"ZingleSDK must be initialized with a token and key."];
     }
     
-    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kLiveBaseURL]];
+    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kQABaseURL]];
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
@@ -62,18 +63,6 @@
             
             ZNGConversation *conversation = [[ZNGConversation alloc] init];
             
-            NSString *allowedChannelTypeClass = @"UserDefinedChannel";
-            for (ZNGChannel *channel in contact.channels) {
-                
-                if ([channel.channelType.typeClass isEqualToString:allowedChannelTypeClass]) {
-                    conversation.channelTypeId = channel.channelType.channelTypeId;
-                }
-            }
-            if (conversation.channelTypeId == nil) {
-                NSLog(@"Service %@ (id=%@) does not support user defined channels.", service.displayName, service.serviceId);
-                return;
-            }
-            
             ZNGParticipant *contactParticipant = [[ZNGParticipant alloc] init];
             contactParticipant.type = ZNGParticipantTypeContact;
             contactParticipant.participantId = contactId;
@@ -88,11 +77,43 @@
             
             conversation.service = serviceParticipant;
             
-            [[ZNGDataSet sharedDataSet] addConversation:conversation];
-            if (success) {
-                success(conversation);
+            NSString *allowedChannelTypeClass = @"UserDefinedChannel";
+            for (ZNGChannel *channel in contact.channels) {
+                
+                if ([channel.channelType.typeClass isEqualToString:allowedChannelTypeClass]) {
+                    conversation.channelTypeId = channel.channelType.channelTypeId;
+                }
             }
             
+            if (conversation.channelTypeId == nil) {
+                for (ZNGChannelType *channelType in service.channelTypes) {
+                    
+                    if ([channelType.typeClass isEqualToString:allowedChannelTypeClass]) {
+                        conversation.channelTypeId = channelType.channelTypeId;
+                    }
+                }
+                if (conversation.channelTypeId == nil) {
+                    NSLog(@"Service %@ (id=%@) does not support user defined channels.", service.displayName, service.serviceId);
+                    return;
+                }
+                
+                ZNGNewContactChannel *newChannel = [[ZNGNewContactChannel alloc] init];
+                newChannel.channelTypeId = conversation.channelTypeId;
+                newChannel.value = contactChannelValue;
+                
+                [ZNGContactChannelClient saveContactChannel:newChannel withContactId:contact.contactId withServiceId:serviceId success:^(ZNGContactChannel *contactChannel, ZNGStatus *status) {
+                    [[ZNGDataSet sharedDataSet] addConversation:conversation];
+                    if (success) {
+                        success(conversation);
+                    }
+                } failure:failure];
+            
+            } else {
+                [[ZNGDataSet sharedDataSet] addConversation:conversation];
+                if (success) {
+                    success(conversation);
+                }
+            }
         } failure:failure];
     } failure:failure];
 }

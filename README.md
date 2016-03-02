@@ -45,11 +45,37 @@ In addition to the standard API conveniences, the iOS SDK also provides an easy 
 UI Examples
 
 ```obj-c
-[[ZingleSDK sharedSDK] setToken:@"YOUR TOKEN HERE" andKey:@"YOUR KEY HERE"];
-[[ZingleSDK sharedSDK] useServiceWithID:@"YOUR SERVICE ID HERE" error:nil];
-ZNGConversationViewController *chatViewController = [[ZNGConversationViewController alloc] initWithChannelTypeName:@"Contact ID" from:@"123456"];
+
+// Initialize basic auth for connecting to API. Does not verify login and password are correct.
+[[ZingleSDK sharedSDK] setToken:token andKey:key];
+
+// Registers a new conversation in ZingleSDK. This will return a chat interface from a contact to a service. On success,
+// system will receive all messages for specified contact and service IDs. It will then be possible to create the UI for
+// this conversation with conversationViewControllerForService:serviceId. Can be called as many times as needed to add all 
+// conversations.
+[[ZingleSDK sharedSDK] addConversationFromContactId:contactId toServiceId:serviceId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
+    
+    // Returns a new conversation view controller for the specified conversation that can be presented and/or added to a navigation stack.
+    ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
+    [self presentViewController:conversationViewController animated:YES completion:nil];
+
+} failure:^(ZNGError *error) {
+    // handle failure
+}];
+
+// Same as above method but creates a conversation from a service to a contact.
+[[ZingleSDK sharedSDK] addConversationFromServiceId:serviceId toContactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
+    
+    // Returns a new conversation view controller for the specified conversation that can be presented and/or added to a navigation stack.
+    ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
+    [self presentViewController:conversationViewController animated:YES completion:nil];
+} failure:^(ZNGError *error) {
+    // handle failure
+}];
 
 // OPTIONAL UI SETTINGS
+ZNGConversationViewController *chatViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
+
 chatViewController.inboundBackgroundColor = [UIColor colorWithRed:225.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1.0f];
 chatViewController.outboundBackgroundColor = [UIColor colorWithRed:229.0f/255.0f green:245.0f/255.0f blue:252.0f/255.0f alpha:1.0f];
 chatViewController.inboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
@@ -91,8 +117,8 @@ ZNGConversation | Model responsible for maintaining the state of a conversation 
 ZNGConversationViewController | UI that manages the conversation between a Contact and a Service.
 ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#automation)
 
-### QuickStarts
+### Examples
 
-#### Asynchronous
+#### Creating a list of conversations
 
-To view Quick Start using asynchronous examples, please see: [ZNGQuickStart.m](Example/ZingleSDK/ZNGQuickStart.m)
+The example app loads the same conversation from the perspective of the contact and the service respectively.

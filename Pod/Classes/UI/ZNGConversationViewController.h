@@ -26,15 +26,6 @@ extern int const ZINGLE_ARROW_POSITION_SIDE;
 
 - (id)initWithConversation:(ZNGConversation *)conversation;
 
-- (id)initWithChannelTypeName:(NSString *)channelTypeName to:(NSString *)to;
-- (id)initWithChannelTypeName:(NSString *)channelTypeName from:(NSString *)from;
-
-+ (void)conversationViewControllerWithContact:(ZNGContact *)contact
-                              withChannelName:(NSString *)channelName
-                             withChannelValue:(NSString *)channelValue
-                          withCompletionBlock:(void (^) (ZNGConversationViewController *viewController))completionBlock
-                                   errorBlock:(void (^) (NSError *error))errorBlock;
-
 - (void)setBackgroundColor:(UIColor *)backgroundColor;
 - (void)clear;
 

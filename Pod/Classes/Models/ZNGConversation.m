@@ -50,14 +50,8 @@
                     success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
 {
-    ZNGNewMessage *newMessage = [[ZNGNewMessage alloc] init];
-    newMessage.senderType = @"service";
-    newMessage.sender = self.service;
-    newMessage.recipientType = @"contact";
-    newMessage.recipients = @[self.contact];
-    newMessage.channelTypeIds = @[self.channelTypeId];
+    ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
     newMessage.body = body;
-    
     [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:success failure:failure];
 }
 
@@ -65,12 +59,7 @@
                      success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure
 {
-    ZNGNewMessage *newMessage = [[ZNGNewMessage alloc] init];
-    newMessage.senderType = @"service";
-    newMessage.sender = self.service;
-    newMessage.recipientType = @"contact";
-    newMessage.recipients = @[self.contact];
-    newMessage.channelTypeIds = @[self.channelTypeId];
+    ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
     
     NSData *base64Data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:0];
     NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
@@ -81,6 +70,37 @@
                                 }];
     
     [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:success failure:failure];
+}
+
+- (ZNGNewMessage *)newMessageToService:(BOOL)toService
+{
+    ZNGNewMessage *newMessage = [[ZNGNewMessage alloc] init];
+    
+    if (toService) {
+        newMessage.senderType = @"contact";
+        newMessage.sender = self.contact;
+        newMessage.recipientType = @"service";
+        newMessage.recipients = @[self.service];
+    } else {
+        newMessage.senderType = @"service";
+        newMessage.sender = self.service;
+        newMessage.recipientType = @"contact";
+        newMessage.recipients = @[self.contact];
+    }
+    
+    newMessage.channelTypeIds = @[self.channelTypeId];
+    
+    return newMessage;
+}
+
+- (NSString *)messageDirectionFor:(ZNGMessage *)message
+{
+    NSString *direction = message.communicationDirection;
+    if( self.toService ) {
+        direction = ([direction isEqualToString:@"outbound"]) ? @"inbound" : @"outbound";
+    }
+    
+    return direction;
 }
 
 @end

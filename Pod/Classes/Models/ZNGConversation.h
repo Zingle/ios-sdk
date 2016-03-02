@@ -23,6 +23,7 @@
 @property (nonatomic, strong) NSString *channelTypeId;
 @property (nonatomic, strong) ZNGParticipant *contact;
 @property (nonatomic, strong) ZNGParticipant *service;
+@property (nonatomic) BOOL toService;
 @property (nonatomic, strong) NSArray *messages;
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
@@ -35,5 +36,7 @@
 - (void)sendMessageWithImage:(UIImage *)image
                      success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure;
+
+- (NSString *)messageDirectionFor:(ZNGMessage *)message;
 
 @end

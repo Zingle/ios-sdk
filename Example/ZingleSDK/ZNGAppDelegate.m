@@ -12,6 +12,13 @@
 #import "ZNGContactClient.h"
 #import "ZNGConversationViewController.h"
 
+@interface ZNGAppDelegate () <UITableViewDataSource, UITableViewDelegate>
+
+@property (strong, nonatomic) UITableViewController *tableVC;
+@property (strong, nonatomic) NSMutableArray *conversations;
+
+@end
+
 @implementation ZNGAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -19,17 +26,23 @@
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [[AFNetworkActivityLogger sharedLogger] setLevel:AFLoggerLevelDebug];
     
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.conversations = [[NSMutableArray alloc] init];
 
-    self.window.rootViewController = [[UIViewController alloc] init];
+    self.tableVC = [[UITableViewController alloc] init];
+    self.tableVC.title = @"Zingle SDK";
+    self.tableVC.tableView.delegate = self;
+    self.tableVC.tableView.dataSource = self;
+    
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: self.tableVC];
     [self.window makeKeyAndVisible];
     
-    [self loadConversation];
+    [self loadConversations];
     
     return YES;
 }
 
-- (void)loadConversation
+- (void)loadConversations
 {
     NSString *token = @"rfarley@zingleme.com";
     NSString *key = @"13oolvler";
@@ -41,42 +54,44 @@
     [[ZingleSDK sharedSDK] setToken:token andKey:key];
     
     // 2
-    [[ZingleSDK sharedSDK] addConversationWithServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
+    [[ZingleSDK sharedSDK] addConversationFromContactId:contactId toServiceId:serviceId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
         
-        // 3
-        ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-        [self.window.rootViewController presentViewController:conversationViewController animated:YES completion:nil];
-        
-    } failure:^(ZNGError *error) {
-        //
-    }];
+        [self.conversations addObject:conversation];
+        [self.tableVC.tableView reloadData];
+    } failure:nil];
+    
+    [[ZingleSDK sharedSDK] addConversationFromServiceId:serviceId toContactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
+        [self.conversations addObject:conversation];
+        [self.tableVC.tableView reloadData];
+    } failure:nil];
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
+#pragma mark - UITableViewDataSource
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+    return [self.conversations count];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    ZNGConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
+    NSString *from = conversation.toService ? @"contact" : @"service";
+    
+    UITableViewCell *cell = [[UITableViewCell alloc] init];
+    cell.textLabel.text = [NSString stringWithFormat:@"Conversation from %@", from];
+    return cell;
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application
-{
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
-}
+#pragma mark - UITableViewDelegate
 
-- (void)applicationDidBecomeActive:(UIApplication *)application
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application
-{
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    ZNGConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
+    
+    ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
+    
+    [(UINavigationController *)self.window.rootViewController pushViewController:conversationViewController animated:YES];
 }
 
 @end

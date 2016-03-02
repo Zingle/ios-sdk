@@ -127,6 +127,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     if( self = [super init]) {
 
         self.conversation = conversation;
+        self.conversation.delegate = self;
         [self initializeUI];
     }
     return self;
@@ -216,7 +217,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [self.pollingTimer invalidate];
     
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:10
-                                                      target:self selector:@selector(refresh)
+                                                      target:self selector:@selector(refreshConversation)
                                                     userInfo:nil repeats:YES];
     self.pollingTimer = timer;
 }
@@ -227,7 +228,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)didDoubleTap
 {
-    [self refresh];
+    [self refreshConversation];
 }
 
 - (void)keyboardOnScreen:(NSNotification *)notification
@@ -287,7 +288,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         
         self.responseText.text = @"";
         
-        [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
+        [self performSelector:@selector(refreshConversation) withObject:nil afterDelay:1];
         
     } failure:^(ZNGError *error) {
         
@@ -356,7 +357,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
             
             self.responseText.editable = YES;
             
-            [self performSelector:@selector(refresh) withObject:nil afterDelay:1];
+            [self performSelector:@selector(refreshConversation) withObject:nil afterDelay:1];
             
         } failure:^(ZNGError *error) {
             
@@ -413,7 +414,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    [self refresh];
+    [self refreshConversation];
     [super viewDidAppear:animated];
 }
 
@@ -426,7 +427,18 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)refresh
+- (void)refreshConversation
+{
+    [self.conversation updateMessages];
+}
+
+#pragma mark - #ZNGConversationDelegate
+- (void)messagesUpdated
+{
+    [self refreshUI];
+}
+
+- (void)refreshUI
 {
     if( self.conversation == nil ) {
         [NSException raise:@"Conversation View Controller requires initialization with a Conversation object." format:@"Missing Conversation Object"];
@@ -440,10 +452,9 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     
     [self startPollingTimer];
     
-    NSArray *messages = [self.conversation messages];
-    for( ZNGMessage *message in messages ) {
+    for( ZNGMessage *message in self.conversation.messages ) {
         
-        [self addMessage:message withDirection:message.communicationDirection];
+        [self addMessage:message withDirection:[self.conversation messageDirectionFor:message]];
     }
     
     [self scrollToLastOffest];
@@ -683,15 +694,5 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

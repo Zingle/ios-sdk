@@ -6,16 +6,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZNGConversation.h"
 
 @class ZNGMessageView;
 @class ZNGArrowView;
-@class ZNGConversation;
 @class ZNGContact;
 
 extern int const ZINGLE_ARROW_POSITION_BOTTOM;
 extern int const ZINGLE_ARROW_POSITION_SIDE;
 
-@interface ZNGConversationViewController : UIViewController <UITextViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ZNGConversationViewController : UIViewController <UITextViewDelegate, UIActionSheetDelegate, UIAlertViewDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGConversationDelegate>
 
 @property (nonatomic, retain) UIColor *inboundBackgroundColor, *outboundBackgroundColor, *inboundTextColor, *outboundTextColor, *eventBackgroundColor, *eventTextColor, *authorTextColor;
 @property (nonatomic) int bodyPadding, messageHorziontalMargin, messageVerticalMargin, messageIndentAmount, cornerRadius, arrowOffset, arrowPosition, arrowBias;

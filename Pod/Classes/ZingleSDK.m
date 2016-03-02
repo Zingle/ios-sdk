@@ -47,11 +47,30 @@
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
 }
 
-- (void)addConversationWithServiceId:(NSString *)serviceId
-                           contactId:(NSString *)contactId
+- (void)addConversationFromContactId:(NSString *)contactId
+                         toServiceId:(NSString *)serviceId
                  contactChannelValue:(NSString *)contactChannelValue
                              success:(void (^)(ZNGConversation* conversation))success
                              failure:(void (^)(ZNGError* error))failure
+{
+    [self addConversationToService:YES withServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue success:success failure:failure];
+}
+
+- (void)addConversationFromServiceId:(NSString *)serviceId
+                         toContactId:(NSString *)contactId
+                 contactChannelValue:(NSString *)contactChannelValue
+                             success:(void (^)(ZNGConversation* conversation))success
+                             failure:(void (^)(ZNGError* error))failure
+{
+    [self addConversationToService:NO withServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue success:success failure:failure];
+}
+
+- (void)addConversationToService:(BOOL)toService
+                   withServiceId:(NSString *)serviceId
+                       contactId:(NSString *)contactId
+             contactChannelValue:(NSString *)contactChannelValue
+                         success:(void (^)(ZNGConversation* conversation))success
+                         failure:(void (^)(ZNGError* error))failure
 {
     [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus* status) {
 
@@ -62,6 +81,7 @@
             [[ZNGDataSet sharedDataSet] addContact:contact];
             
             ZNGConversation *conversation = [[ZNGConversation alloc] init];
+            conversation.toService = toService;
             
             ZNGParticipant *contactParticipant = [[ZNGParticipant alloc] init];
             contactParticipant.type = ZNGParticipantTypeContact;

@@ -35,7 +35,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         self.messages = messages;
         
-        int pageNumbers = status.totalPages;
+        NSInteger pageNumbers = status.totalPages;
         
         [self.delegate messagesUpdated];
         

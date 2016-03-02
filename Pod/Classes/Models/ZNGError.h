@@ -12,8 +12,8 @@
 
 @property(nonatomic, strong) NSString* errorText;
 @property(nonatomic, strong) NSString* errorDescription;
-@property(nonatomic) int httpStatusCode;
-@property(nonatomic) int zingleErrorCode;
+@property(nonatomic) NSInteger httpStatusCode;
+@property(nonatomic) NSInteger zingleErrorCode;
 
 - (id)initWithAPIError:(NSError *)error;
 

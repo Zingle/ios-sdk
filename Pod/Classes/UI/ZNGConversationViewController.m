@@ -43,7 +43,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 NSString *const kConversationFromName = @"Me";
 NSString *const kConversationToName = @"Received";
-NSString *const kConversationSend = @"send";
+NSString *const kConversationSend = @"Send";
 NSString *const kConversationOkay = @"Okay";
 NSString *const kConversationErrorTitle = @"Error";
 NSString *const kConversationErrorMessage = @"There was an error sending your message, please try again later.";

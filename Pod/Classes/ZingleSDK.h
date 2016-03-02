@@ -63,9 +63,6 @@
  *
  * @param conversation object which contains the messages to display
  */
-
 - (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation;
-
-- (AFHTTPSessionManager*)sharedSessionManager;
 
 @end

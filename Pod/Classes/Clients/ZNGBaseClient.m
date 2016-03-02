@@ -9,6 +9,12 @@
 #import "ZNGBaseClient.h"
 #import "ZNGConstants.h"
 
+@interface ZingleSDK ()
+
+- (AFHTTPSessionManager*)sharedSessionManager;
+
+@end
+
 @implementation ZNGBaseClient
 
 + (AFHTTPSessionManager*)sessionManager

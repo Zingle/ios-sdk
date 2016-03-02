@@ -112,10 +112,11 @@ ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Z
 #### Creating a list of conversations
 
 The example app loads the same conversation from the perspective of the contact and the service respectively. You will need to supply your own values for the following variables in [ZNGAppDelegate.m](Example/ZingleSDK/ZNGAppDelegate.m):
+```obj-c
 NSString *token = @“TOKEN”;
 NSString *key = @“KEY”;
 NSString *contactChannelValue = @“test.app”;
 NSString *contactId = @“CONTACT ID”;
 NSString *serviceId = @“SERVICE ID”;
-
+```
 Please direct any inquiries about the SDK and examples to rfarley@zingleme.com or your account manager.

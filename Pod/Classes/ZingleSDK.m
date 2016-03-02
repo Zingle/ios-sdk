@@ -8,7 +8,6 @@
 
 #import "ZingleSDK.h"
 #import <AFNetworking/AFNetworking.h>
-#import "ZNGConstants.h"
 #import "ZNGDataSet.h"
 #import "ZNGServiceClient.h"
 #import "ZNGContactClient.h"
@@ -23,6 +22,9 @@
 @end
 
 @implementation ZingleSDK
+
+NSString* const kLiveBaseURL = @"https://api.zingle.me/v1/";
+NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 + (ZingleSDK*)sharedSDK
 {
@@ -42,7 +44,7 @@
         [NSException raise:NSInvalidArgumentException format:@"ZingleSDK must be initialized with a token and key."];
     }
     
-    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kQABaseURL]];
+    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kLiveBaseURL]];
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
@@ -98,7 +100,7 @@
             
             conversation.service = serviceParticipant;
             
-            NSString *allowedChannelTypeClass = @"UserDefinedChannel";
+            NSString *allowedChannelTypeClass = kAllowedChannelTypeClass;
             for (ZNGChannel *channel in contact.channels) {
                 
                 if ([channel.channelType.typeClass isEqualToString:allowedChannelTypeClass]) {

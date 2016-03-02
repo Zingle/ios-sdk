@@ -8,7 +8,6 @@
 
 #import <AFNetworking/AFNetworking.h>
 #import "ZNGBaseClient.h"
-#import "ZNGConstants.h"
 
 @interface ZingleSDK ()
 
@@ -17,6 +16,10 @@
 @end
 
 @implementation ZNGBaseClient
+
+NSString *const kBaseClientStatus = @"status";
+NSString *const kBaseClientResult = @"result";
+NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 
 + (AFHTTPSessionManager*)sessionManager
 {
@@ -35,17 +38,17 @@
         
         NSError* error = nil;
 
-        NSDictionary* statusDict = responseObject[@"status"];
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
             if (success) {
-                success(responseObject[@"result"], status);
+                success(responseObject[kBaseClientResult], status);
             }
             return;
         }
         
-        NSArray* result = responseObject[@"result"];
+        NSArray* result = responseObject[kBaseClientResult];
         NSArray* responseObj = [MTLJSONAdapter modelsOfClass:responseClass fromJSONArray:result error:&error];
         
         if (error) {
@@ -76,17 +79,17 @@
         
         NSError* error = nil;
         
-        NSDictionary* statusDict = responseObject[@"status"];
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
             if (success) {
-                success(responseObject[@"result"], status);
+                success(responseObject[kBaseClientResult], status);
             }
             return;
         }
         
-        NSDictionary* result = responseObject[@"result"];
+        NSDictionary* result = responseObject[kBaseClientResult];
         id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
         
         if (error) {
@@ -135,17 +138,17 @@
         
         NSError* error = nil;
         
-        NSDictionary* statusDict = responseObject[@"status"];
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
             if (success) {
-                success(responseObject[@"result"], status);
+                success(responseObject[kBaseClientResult], status);
             }
             return;
         }
         
-        NSDictionary* result = responseObject[@"result"];
+        NSDictionary* result = responseObject[kBaseClientResult];
         id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
         
         if (error) {
@@ -179,17 +182,17 @@
         
         NSError* error = nil;
         
-        NSDictionary* statusDict = responseObject[@"status"];
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
             if (success) {
-                success(responseObject[@"result"], status);
+                success(responseObject[kBaseClientResult], status);
             }
             return;
         }
         
-        NSDictionary* result = responseObject[@"result"];
+        NSDictionary* result = responseObject[kBaseClientResult];
         id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
         
         if (error) {
@@ -221,7 +224,7 @@
         
         NSError* error = nil;
         
-        NSDictionary* statusDict = responseObject[@"status"];
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
         if (success) {

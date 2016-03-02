@@ -41,6 +41,17 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 
 @implementation ZNGConversationViewController
 
+NSString *const kConversationFromName = @"Me";
+NSString *const kConversationToName = @"Received";
+NSString *const kConversationSend = @"send";
+NSString *const kConversationOkay = @"Okay";
+NSString *const kConversationErrorTitle = @"Error";
+NSString *const kConversationErrorMessage = @"There was an error sending your message, please try again later.";
+NSString *const kConversationSendPicture = @"Send Picture";
+NSString *const kConversationCancel = @"Cancel";
+NSString *const kConversationTakePicture = @"Take a Picture";
+NSString *const kConversationChoosePicture = @"Choose a Picture";
+
 - (id)initWithConversation:(ZNGConversation *)conversation
 {
     if( self = [super init]) {
@@ -80,8 +91,8 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     _arrowOffset = 10;
     _arrowSize = CGSizeMake(20, 10);
     
-    _fromName = @"Me";
-    _toName = @"Received";
+    _fromName = kConversationFromName;
+    _toName = kConversationToName;
     
     self.responseView = [[UIView alloc] init];
     self.responseView.backgroundColor = [UIColor colorWithRed:0.95 green:0.95 blue:0.95 alpha:0.75];
@@ -93,7 +104,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
     [self.responseView addSubview:self.sendActivity];
     
     self.replyButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.replyButton setTitle:@"Send" forState:UIControlStateNormal];
+    [self.replyButton setTitle:kConversationSend forState:UIControlStateNormal];
     self.replyButton.frame = CGRectMake(0, 0, 50, 30);
     [self.replyButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
     //        self.cameraButton.
@@ -218,7 +229,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
         self.sendActivity.alpha = 0;
         self.replyButton.alpha = 1;
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kConversationErrorTitle message:kConversationErrorMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:kConversationOkay, nil];
         
         [alert show];
     }];
@@ -228,7 +239,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
 {
     [self.responseView resignFirstResponder];
     
-    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:@"Send Picture" delegate:self cancelButtonTitle:@"Cancel" destructiveButtonTitle:nil otherButtonTitles:@"Take a Picture", @"Choose a Picture", nil];
+    UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:kConversationSendPicture delegate:self cancelButtonTitle:kConversationCancel destructiveButtonTitle:nil otherButtonTitles:kConversationTakePicture, kConversationChoosePicture, nil];
 
     [actionSheet showInView:self.view];
 }
@@ -287,7 +298,7 @@ int const ZINGLE_ARROW_POSITION_SIDE = 1;
             self.sendActivity.alpha = 0;
             self.replyButton.alpha = 1;
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"There was an error sending your message, please try again later." delegate:nil cancelButtonTitle:nil otherButtonTitles:@"Okay", nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:kConversationErrorTitle message:kConversationErrorMessage delegate:nil cancelButtonTitle:nil otherButtonTitles:kConversationOkay, nil];
             
             [alert show];
         }];

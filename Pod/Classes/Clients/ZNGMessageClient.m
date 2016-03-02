@@ -7,7 +7,6 @@
 //
 
 #import "ZNGMessageClient.h"
-#import "ZNGConstants.h"
 #import "ZNGMessageRead.h"
 
 @implementation ZNGMessageClient

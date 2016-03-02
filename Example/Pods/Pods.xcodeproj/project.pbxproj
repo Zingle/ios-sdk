@@ -7,149 +7,156 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00E5EEAF2DC6065FF9F1157A83B392DD /* ZNGDataSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 525BC7C2DE315081E6F623350C9DB26D /* ZNGDataSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0126C7FC006A8AEB11388F4FBDB40AD8 /* UIRefreshControl+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 206D48E370C0A7214D258CA69FE2980C /* UIRefreshControl+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		016DBFC5196AACBA9645EBC9E9E6CB42 /* Mantle.h in Headers */ = {isa = PBXBuildFile; fileRef = B5DC53CA642A5F17B638444F580F2433 /* Mantle.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		024E020D224E05937EAE949DDEBA29CF /* ZNGDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA57AAF2B847B7FE07DB2E244C6A7CA /* ZNGDataSet.m */; };
-		0467E2AA96F39D67DCE4FB790767CABC /* ZNGMessageRead.h in Headers */ = {isa = PBXBuildFile; fileRef = B0F585CB2586DD979588951119091286 /* ZNGMessageRead.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		068AAFC2A860B0A7F94984BF247899A1 /* ZNGNewServiceChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 7648B9450B7DAAFD4C70062BCD8C37EA /* ZNGNewServiceChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		08906C2C09AC569B6FB401558D3D4BF5 /* ZNGNewMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = DDAEDD277A39CCFD77A1239C098B4F5C /* ZNGNewMessage.m */; };
+		026FEEBD8D0FDA36DC0DB8A73EA05E59 /* ZNGTemplateClient.h in Headers */ = {isa = PBXBuildFile; fileRef = CDEE4DB6CB0DABF1C548DDADCC62E7D3 /* ZNGTemplateClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		042653CFDABDEC355C9B552CEC542608 /* ZNGAccountPlanClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3EA5995BBF59372C7B87E460D9333E6F /* ZNGAccountPlanClient.m */; };
+		08613864E4B4B7C3D019AFF061AE16E1 /* ZNGNewContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F1D1CC7E699AF622247A298932B6DEE /* ZNGNewContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0ACA9B584E68969E523A18112BC36866 /* AFNetworkReachabilityManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F77D4F279BAB999547C56BE7CA668F5 /* AFNetworkReachabilityManager.m */; };
 		0AE7AD1068E4706C589C3F7D7392CD98 /* SDWebImageDecoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7528AFD396C05560F411F009C4BA9FD7 /* SDWebImageDecoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0B1512A379CAC3456769DFC3C5EA11AF /* EXTScope.h in Headers */ = {isa = PBXBuildFile; fileRef = 850DC0E8B555A865ABEAA2D2B7632A59 /* EXTScope.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		0B7E8952C0C98FAE0F4EC35D35ECA201 /* ZNGNewMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 9A1C46588D46B16487AA58212790B501 /* ZNGNewMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0D0E931C6C84B4CE0123B0D9EBDBBD55 /* ZNGConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = F412C9B92EB4500684946FDB7A42B2CB /* ZNGConversation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0BD7F7314DF99F53383F560B7487B706 /* ZNGAvailablePhoneNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 47391A45BDBA1BC1A194C44A702F4F27 /* ZNGAvailablePhoneNumber.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0C3F6C309095FE64F20DBB30B5FF5F89 /* ZNGNewServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B0FA45F60CEC19D2424CCA4809CEB5 /* ZNGNewServiceChannel.m */; };
 		0E15F927D5D991F1A1ECCB84BA6AEAC3 /* NSError+MTLModelException.m in Sources */ = {isa = PBXBuildFile; fileRef = 107434AD7112269B4CA6466BDD91EF7A /* NSError+MTLModelException.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		0E89928116A6BDB523100BCAAFAEB83E /* ZNGAccountPlan.h in Headers */ = {isa = PBXBuildFile; fileRef = 884AC5E58569F12875F87EF8C6E9F02E /* ZNGAccountPlan.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		11CBCB240E68B91E6DCC55444CABB4CB /* ZNGContactChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F737243181CF8E3FC7F125AE0846DF6 /* ZNGContactChannelClient.m */; };
+		0E613CEEA8369E8495E829FFA892083D /* ZNGAccountPlanClient.h in Headers */ = {isa = PBXBuildFile; fileRef = FA9E62E68BDEA3AB3589C17DDA2817F8 /* ZNGAccountPlanClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0EE0A68B648FFE0C2A8F2246A4BBC498 /* ZNGService.h in Headers */ = {isa = PBXBuildFile; fileRef = 85FC77913E0CB327DCC3CCA2AD8D31A9 /* ZNGService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		0FEBDA701517DAB710F8D6B3EC7E7992 /* ZNGServiceChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D48FB41675FE867EA34652D8A5CF432 /* ZNGServiceChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		130B976114E64E678D9C7622F1BC084F /* AFNetworkActivityLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = C646F5531B8328C1989636F8F8B206D8 /* AFNetworkActivityLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		15F657B72E1C5442E0787EA71D9036F2 /* ZNGStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C4B547CF0170256C24A9B594ED8EE5D /* ZNGStatus.m */; };
+		136D29A91E7E91A4BFDD859F49E2AADD /* ZNGCorrespondent.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DEC32A6CC47A0B1AA09C56521F8D0F3 /* ZNGCorrespondent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		13DE8A8D584E5704F42547885C7585A2 /* ZNGMessageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 26369E6B5069203E03BF54A180B757BE /* ZNGMessageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		168387A67301B29037CC1779AAE81ADC /* NSDictionary+MTLMappingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FC8C101FFB992BF44B15235AC516C58 /* NSDictionary+MTLMappingAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		172DC9DB0C967F1A882D856767CB21E1 /* ZNGNewContactChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CED1C92B4EFD1B43EE7E410E3D316D4 /* ZNGNewContactChannel.m */; };
-		17D66FD91613FF8EC1C8C98AF4AA0E12 /* ZNGContactChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 275BEE7984FBB1D81C8BB1B2A8553245 /* ZNGContactChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1801BB4183997F4A90429E12C0E58DA0 /* ZNGNewContactChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 23A9280A7D72F2E63817BB20288EE70E /* ZNGNewContactChannel.m */; };
+		1862817A470EAB2A4303D03B0DB08A75 /* ZNGStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 325426A679D1BB9E2C559D008677971D /* ZNGStatus.m */; };
 		18EBCD476A6814DD0B9926E7E02519D0 /* SDImageCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 39FEDFD5BE689B02BE2B7922EF5BA3B6 /* SDImageCache.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		19C5350AF935BBF4E3B469160B732109 /* ZNGAccount.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B535F69770C4D5ABE82D8E531A6A53C /* ZNGAccount.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1A8357AB3694D1FB186C687EE23A212F /* UIImage+MultiFormat.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FEBA2416A89AD961C33D66F47F4774D /* UIImage+MultiFormat.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		1AB85CE8C8EA0D55F5817D5B6AED3809 /* ZNGError.h in Headers */ = {isa = PBXBuildFile; fileRef = 6F7C8D7597B877310031FAF7DA53CC56 /* ZNGError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1B1F43B93EE18EDB61D9F64511F9C3FA /* ZNGAutomation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4F35F603DC72D327B37CE9B92B28F633 /* ZNGAutomation.m */; };
 		1CE659081EAFEC2E83BF9EE076C57F66 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CE3DE32B5EC9D831FD123CEB82438521 /* CoreGraphics.framework */; };
+		1DA4352CD8BB3763F6E3D73F0794D574 /* ZNGServiceChannelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 60ACF9359E603D6B8AA66CFD5E449016 /* ZNGServiceChannelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1E56D93033C917DABE653604BC98DE69 /* MTLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2F50E6E65A653E07182A87FF7F46B523 /* MTLModel.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		1F66E72F8927B37B6D6E2F720045FE32 /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DD239424272DD76ED8CF527030C7983 /* UIButton+AFNetworking.m */; };
 		1FF7D105E994B6A61896279C58B368F5 /* NSDictionary+MTLManipulationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B03E05A169691A53C22B94CA58DB5F9 /* NSDictionary+MTLManipulationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		211C1B689329AAA4FA43F8B370CC4353 /* SDWebImageManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F2C90275EB9D693CA75032DDC6AA65F9 /* SDWebImageManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		21D2F0F309E3F04E66D7760E31972766 /* ZNGArrowView.h in Headers */ = {isa = PBXBuildFile; fileRef = 714A988435AD2DCA489208739B8B149B /* ZNGArrowView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2185007EF6A3EAFE692031185B17918E /* ZNGFieldOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 7A7F2133438CA10C2839E79621E1F27B /* ZNGFieldOption.m */; };
+		21C58322084F1356C3D7C8FC6DF10645 /* ZNGServiceClient.h in Headers */ = {isa = PBXBuildFile; fileRef = A9D550E0279A84865F0124AFC44D3551 /* ZNGServiceClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21F5C2166DE2EA7D86CF628DEF4F0778 /* AFHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 450A67CBDF28FBCC120AEB48B46A62F8 /* AFHTTPRequestOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		226FA33C6EBB91F67F6BC159D381FE39 /* ZNGTimeZoneClient.m in Sources */ = {isa = PBXBuildFile; fileRef = B1252848814386275639DF0EA0E61736 /* ZNGTimeZoneClient.m */; };
-		22A0FCD390208F203BA3E404D321066B /* ZNGLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D9FB4F2802408D9B74DF1FB6E0D6BAD /* ZNGLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		23594FA1F7F730D0B3935E5A8D715160 /* SDWebImageCompat.h in Headers */ = {isa = PBXBuildFile; fileRef = 58E5628118CAAC18654BDA3E0851A9E9 /* SDWebImageCompat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		246DDD776CBC5972A6E8AA733CFB33F9 /* MTLReflection.h in Headers */ = {isa = PBXBuildFile; fileRef = 8415DB27EE5CFDB37A5A3D16B0A86EBC /* MTLReflection.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2481DE1B348140F29AB8D91899BB4BF9 /* ZNGMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 2A8F0343A123EAB83614F022A8362402 /* ZNGMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2530E93C027A8F15113F9A24BE7F7AEC /* AFNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 793539F7A451B1689F1B83512B17F235 /* AFNetworkReachabilityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		261038B36F5FC9DDB7D2696C8763BE0F /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 817B27100FA782BC304CB0C972EB7480 /* AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		26F7047C28AC8FF8E5D55966BF461710 /* ZNGArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 14AAEA09D9D8099642E4F1577CCB1F73 /* ZNGArrowView.m */; };
 		2794C30C60771142D4B97965630DF201 /* NSObject+MTLComparisonAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A37738CBAD8385858507A1A076C45A /* NSObject+MTLComparisonAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		2AC2C03550F47FAD315425CDF7ABE645 /* ZNGDataSet.h in Headers */ = {isa = PBXBuildFile; fileRef = B38CBDF87C99A27F174A524CD5755C47 /* ZNGDataSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		28F9265C406B8AD60A13060949108012 /* ZNGMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 364A58AADD7EDBE4D7C97798FCC3FE24 /* ZNGMessage.m */; };
+		29341700D00BFB6831B94B411BB902EE /* ZNGNewServiceChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = E1747E683F81F2E42CECC7FF944B6EF2 /* ZNGNewServiceChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		2982E010AE4C32504A37F382D7330A5A /* ZNGAutomationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FCA6AD9D10C04BF0CC3BE481FE2F09C2 /* ZNGAutomationClient.m */; };
 		2B48EBC0EC1C202698FAF405FD900C32 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F1E28F8FE1BD3AA2088854F4BFD142A /* SDWebImagePrefetcher.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		2C6546E390E4A929201634993897E0A5 /* ZNGArrowView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D48875C633B1EAD2F9112C030B19C9A /* ZNGArrowView.m */; };
 		2CC0A6DC4EE998AF326113C8C11BD5FD /* SDWebImageDownloaderOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 053078EE133975A550C745B3E01E6530 /* SDWebImageDownloaderOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		2D14FDE91DA85B338BE40F1C09921189 /* ZNGMessageClient.h in Headers */ = {isa = PBXBuildFile; fileRef = FC380F2EBBC4FDF93181A47913EC6B5A /* ZNGMessageClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2D375BE80B2942AA540C74741DE19EEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
+		2D5D9C57238F7E315E0D54E952ADC4D3 /* ZNGContactFieldClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA72F9CDA417BBC8364B77495168DD0 /* ZNGContactFieldClient.m */; };
+		2F55BFCE8984E8C318F3CB43A6A52829 /* ZNGError.m in Sources */ = {isa = PBXBuildFile; fileRef = EF45C1B0392A0AD593E44C0271CA5C5B /* ZNGError.m */; };
 		2F749C49AEBF36949CBE4779DCED4CE0 /* NSValueTransformer+MTLInversionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = A4F3CEA3730CEB06D5E3E3D42E0DAAD2 /* NSValueTransformer+MTLInversionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3106CDBE435A32B566A942E7DCAB48BD /* ZNGServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA4844B9605996CC0B51F0723827370 /* ZNGServiceChannel.m */; };
 		31DD51C42587F54EA59AAB7B6E54827F /* AFNetworking-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 626E5E84C6C880B68D92F8B021C4B085 /* AFNetworking-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		321F3F8FCA6F3F012C6A94483829EB46 /* ZNGChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D0F8D102414F74C9DC5013BFDE7B14E /* ZNGChannel.m */; };
 		328B47E07872FA89BA6B15A792DA2B50 /* NSValueTransformer+MTLInversionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = DE40D12B9DED0DF379D310F8CB73B1BA /* NSValueTransformer+MTLInversionAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		34FF9609BC6B164759C965050EA44928 /* ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = E50B919A35D0D5AD2C175438E1321E73 /* ZingleSDK.m */; };
 		362E482BDFDA95984027D80A1C93ED04 /* UIView+WebCacheOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = B2DB584B79C30B00C9429ED6352045B3 /* UIView+WebCacheOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		398DC18BED8C9D0FC5FF0173E2FC19BC /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DD9EEEBC3C38E52D0C92698A593445 /* AFNetworkActivityLogger.m */; };
-		3A50457CE773B065B2E3FF1A3CFFBFD9 /* ZNGServiceAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = EFB008D9F2B6EF35EE02C3F54BD74449 /* ZNGServiceAddress.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A3160316C3F951B723F895861269289 /* ZNGContactField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5EEE245B8D4B671F24E53D1F1AF44071 /* ZNGContactField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A55345E42CC4DE473FF45AD7CE2CFC0 /* UIWebView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = FFC24A4F35D3476952532B12874F76DF /* UIWebView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3FFB4157E495BACF871927BD9A8FF046 /* ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 0FA3F4AB654A9D86BB9F81DF7D5148DA /* ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4038D4C09FBB593162FAD6BD1945608A /* ZNGContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 363C40EED9C1A7DBE37A3B6AC7C0033C /* ZNGContact.m */; };
-		40E63D8C4226A40DBF09EA9E2FE5C519 /* ZNGChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 6E132C7CE3EFE1F9C600954C89E07049 /* ZNGChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		428E813288B8102F78FC4314E75FC1BF /* ZNGParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = B8610F09C32D1C64F4974E90903F4F24 /* ZNGParticipant.m */; };
+		3B35F58BD72E0DF85237AA5CC82BB41D /* ZNGLabelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 7A879C4922106B6D3AB9E597CCE3B491 /* ZNGLabelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3B9E1165A72F01FA907F204B271C4CE2 /* ZNGAccountClient.h in Headers */ = {isa = PBXBuildFile; fileRef = BBD939BD322A172C8FC4A4DFCA320E94 /* ZNGAccountClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3C02A9465A254B29214380BB1B61FBDB /* ZNGServiceChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 081CCC90172E936F588F08046370DDFB /* ZNGServiceChannelClient.m */; };
+		3CD02FCC5E346EA44C89D906681BB6D0 /* ZNGContactClient.h in Headers */ = {isa = PBXBuildFile; fileRef = F39DA46500DC45F6AAB286937733BADA /* ZNGContactClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3F2E45BE340A9FFFDDF204F0F1BCB8E1 /* ZNGServiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B07D2DF863A986A5E8141E017A2E713 /* ZNGServiceAddress.m */; };
+		4070BD7EF58382F0195CEBA095AC2E60 /* ZNGAccountPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = D83390A798108063E9627CECBA780D58 /* ZNGAccountPlan.m */; };
 		42B2810617208AD14FEFC4B938BA5632 /* NSDictionary+MTLMappingAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 86605B62E2389BB5676B2B0A1581BDB1 /* NSDictionary+MTLMappingAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		42C60522F5EA4B34BA0CC9001B05A7DE /* ZNGConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EC0BCA8B6BC7A9ADC7F33EF4F906762 /* ZNGConstants.m */; };
 		42E514F6BAEF1AF728F335F2FE83DFC2 /* AFURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 23549D251B82DF402E4C683DD4B226AA /* AFURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43F1B2637D7C61CDB393C7BCE091D4D6 /* ZNGAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 0AC5CADB4C1B7DDE77FC3847CB593B55 /* ZNGAccount.m */; };
-		449431889DEABA44E41DE33ED5A27356 /* ZNGBaseClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 0F727CA0C6BECF1CAF6AE122B0FDBD3F /* ZNGBaseClient.m */; };
-		45C6B7D60CAFEF267918F806672EC947 /* ZNGAccountPlan.m in Sources */ = {isa = PBXBuildFile; fileRef = 948E223E5242A17B2312C65FE174A7E0 /* ZNGAccountPlan.m */; };
 		46467A17208FFC104D52ADAB9D0F2320 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F607577C177C028C0D71303FEE87D4B /* AFNetworkActivityIndicatorManager.m */; };
 		46AEAA8105CB04076148AC574CADBBC4 /* NSObject+MTLComparisonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D529180686997258E0CB3CD22A0CC6CC /* NSObject+MTLComparisonAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		46BE9823AC42A389BE10C58B3C9FCE71 /* Pods-ZingleSDK_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FE77BAE7224B3EDA91D3B0D3DDC06229 /* Pods-ZingleSDK_Example-dummy.m */; };
-		474C8275CAE957D8B3484BAB093FF77F /* ZNGAccountClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 0376770BBFC287946C8BB497AB585B71 /* ZNGAccountClient.m */; };
 		47AC2A9EF349061DA8CC4A5DFDEEA627 /* SDWebImage-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 443A8625C342BD64F20DFD3BE4FC5077 /* SDWebImage-dummy.m */; };
+		47D8419D59FAE9604AD72850E9A16D25 /* ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 331F27601777B7F39F3DAE7DD46B144B /* ZingleSDK.m */; };
 		4822DCC2A1C4326DBCC09108F1DCD1BD /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
-		4878B18F69509D2140164ED6A6CC554E /* ZNGServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D79E0C2996AE1C0F2E305316968B7646 /* ZNGServiceClient.m */; };
-		4951BA18BC480953B63A430A71C1610B /* ZNGMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = AED750DA62191AC3C1CB107D07ADA51C /* ZNGMessageView.m */; };
 		4A92077BC1E3A57155C476F83B47E4B9 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA3806FD2C3E847737A464F360D5FE /* UIImage+GIF.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		4D0C5621B77C379C07BF2CAC97B2C22F /* Pods-ZingleSDK_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3640BD08EA894A6860E95AE2304CC3B8 /* Pods-ZingleSDK_Tests-dummy.m */; };
+		4EFEDB842279DE8B754BA1A95FF2F360 /* ZNGSetting.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BA74AE6C5FDCCBDA086E0CC2B1C973 /* ZNGSetting.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4FC3EEBDEBE85614821E14B47561D4A9 /* Zingle.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F56D7AB5AACC4E38A77745F9616784 /* Zingle.storyboard */; };
 		5030B583A1CDE7890CDAB71029ECC3BE /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1082A27C9B4BFC0263EAD4A74CEBBB /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		505ED6C8C1FFCBBCB5FC032F283A7F84 /* ZNGContactField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E24AC5169196DF0DC503E145CF82DE2 /* ZNGContactField.m */; };
 		5061C48B88CF3B2C5A5D9C6E0D1959A9 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 3159A2A2039E1D40691110F9E81902EB /* AFURLRequestSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		518129777667545A1BBDCFF14EC047BC /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = E5A0D82BB7EE0B1F8E0F43F8BA73A841 /* SDWebImageDecoder.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		518149D251536A1DC6DAED0F0FD61D16 /* MTLModel+NSCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = F64266050974E035A34EAAE631A9C21B /* MTLModel+NSCoding.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		5215C2DDCFF6579F2A600362AFED56BB /* ZNGConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F1CF40BD7A75F3802E9E9A1888FE313 /* ZNGConversation.m */; };
 		521E8DE57697E009888E289A2FBD941C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
 		5234493918A20ACFD528D782D3AB6BC7 /* SDWebImageDownloader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3268B5EF515385569EFEFFDA70EE1D8D /* SDWebImageDownloader.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		52CDF76D926E7E04DCD63F5E2B692E91 /* ZNGService.h in Headers */ = {isa = PBXBuildFile; fileRef = D9EF697DA1547C1F0A069D42CB5289F1 /* ZNGService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		52F9399110FA69B8B51C5276B908931C /* ZNGBaseClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 72E4C08893B2EE3240235C1EBDAEBF0C /* ZNGBaseClient.m */; };
+		54E4370F12B7F6E5EA6991580595D94B /* ZNGAvailablePhoneNumberClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BAA8F9668DF6986F22393FB04D3E14 /* ZNGAvailablePhoneNumberClient.m */; };
 		54FFC90800B93FCE07309DB20F1C791D /* UIImageView+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 698CC50231D149ED2DC3596980928E85 /* UIImageView+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5584132B54B8103728C2205FDAAFA3AC /* AFNetworking-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6827E1C0D4879BA61C384FB7BC46953B /* AFNetworking-dummy.m */; };
-		5630B791F5520B4BEF40426C0FA6BFD5 /* ZNGContactClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E67325E6BE9041B80A9811F2F23376 /* ZNGContactClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		57704D433D15AC970EE2F13DD14CEA4C /* UIImage+GIF.h in Headers */ = {isa = PBXBuildFile; fileRef = 2DC007D4EB027648CC1ACA069A8733DB /* UIImage+GIF.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		579D27EF12F847A70E85440956A483A0 /* ZNGNewContact.m in Sources */ = {isa = PBXBuildFile; fileRef = AA5C4AD80EF6721AC54F8D5B57FA10ED /* ZNGNewContact.m */; };
 		59847BBE17F6A501B037CAECB2D46C35 /* AFNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = A3B77FC63004B5A0D02A547845CDFACD /* AFNetworkActivityIndicatorManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		59E6715A58AE6B25DE977DE90E9C9B00 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BE3E32203499D2046E2EFC1838BE4A5 /* metamacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		5A0166FD9DA5F8C4F894D77EF41A1DD7 /* ZNGAutomationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F074042BEA836F73E1204BE8A677F12 /* ZNGAutomationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5A3ED3104A6F168272BDCDB057E7B1D0 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = A557138377FBE9DFB69F90511EBBFDB1 /* UIView+WebCacheOperation.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		5BAD8B0285090AC4BEB43F04461446F3 /* ZNGNewService.h in Headers */ = {isa = PBXBuildFile; fileRef = 59212FD649303A5F97162E3848569A6B /* ZNGNewService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D56F6ADCA696F7BCBEFF2FB33A19660 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 127A3B2F6447B04231501236C1270E95 /* MobileCoreServices.framework */; };
 		5DB79298EA3712C9A24AC01E978F5040 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8D081F93C9CA1EFBD0111B4821A59B04 /* SystemConfiguration.framework */; };
+		5E23CFEA15F6D5AA50F8D4C634CF3BD9 /* ZNGContactChannelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 74E60014D5B04CA8178F9E75E9F3F1B5 /* ZNGContactChannelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E6279075462267415D445D872E4B7E3 /* MTLModel.h in Headers */ = {isa = PBXBuildFile; fileRef = B22CDE8912583BD8EDFA2B121523CECA /* MTLModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5EE1CEF143AE07175B9520FAB6756C10 /* AFURLResponseSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 23E99603E13C78E7B1176FF596A6D6C0 /* AFURLResponseSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5FCDB980D0BC5BCC244C9E001778C0DA /* ZNGCorrespondent.h in Headers */ = {isa = PBXBuildFile; fileRef = DEB4F7655ADF963DA1BB48405FFF167D /* ZNGCorrespondent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6006ED3DC35600100CEAC157A0F001D9 /* NSArray+MTLManipulationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 1734C42F5E654ED250E5B1542DBC8E4E /* NSArray+MTLManipulationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		60350C41778FEC8C0A8771B500DFE812 /* MTLTransformerErrorHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 66D27BBCEEADA6C795B6EDB6C4184A2C /* MTLTransformerErrorHandling.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		60CF1F77B4B81F3646976B51633CE4E0 /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC8DF1E08515A1E51E1E71E061B771BE /* ZNGConversationViewController.m */; };
+		6209E49C3E0EE9E02F16D8D1E14F6341 /* ZingleSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CD200E90904431A8D6628C436934757 /* ZingleSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		65F778869480001A53320308A9606BB7 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = DD1B560B63CE1BA51C6064E406D1BCE4 /* EXTRuntimeExtensions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		6609A2599DB4D6B9E756FAE6B1CE5569 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 677DD31A3909F1CF89358C5E3A48D2B6 /* AFNetworking.framework */; };
 		66787865F7D64A722BFAE5D606C1255C /* SDWebImagePrefetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = FE8C34C7721844ECADC4FD45A8B60114 /* SDWebImagePrefetcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		679EF837CA34E74696D54BF31449CE94 /* ZingleSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D3601061A3E38607F2DE34835BF44E52 /* ZingleSDK-dummy.m */; };
-		696726D95949E283E9716C9E3E98A001 /* ZNGAccount.h in Headers */ = {isa = PBXBuildFile; fileRef = 59770B4864B06E962CCA5F6F8DDE7112 /* ZNGAccount.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6A6832D3ABD44B01F6A7F2D943D4AEF0 /* ZNGContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 9435462603DAE24E6661983FABC4F1C6 /* ZNGContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		67AA421743EA8BED91B644D985DA7F86 /* ZNGAutomation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0191C6922EF152A2F72F78D30866800E /* ZNGAutomation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		68443049697E292EA2D390126A06059F /* ZNGConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = AA8556A03F7AF81711910F915F17450A /* ZNGConversation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6A947CCA71FF2063B181B25FEBC0727C /* ZNGContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B86465764DE48B5F046963285BB5B59 /* ZNGContact.m */; };
+		6AF57709DA09DAE1964966FF9F282F20 /* ZNGMessageClient.h in Headers */ = {isa = PBXBuildFile; fileRef = ECC202A7CEFCC8F0625D918071A219F8 /* ZNGMessageClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6B07EF3E354DDEBEB16954021AF085E7 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C62D76F5799F122621AE073D09A03A /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		6B94AD3001E7CC6CF5A00917C2483503 /* UIWebView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = AAA66DDE8EDC3070821DB1D71821195A /* UIWebView+AFNetworking.m */; };
 		6C35417E457644E5E39736E35432E5DA /* UIButton+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 511B5E81F260918056EB582480BE1071 /* UIButton+WebCache.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		6C6658728AECE280276ED5FB5666549A /* ZNGTimeZoneClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 03D329696A057ECF582E19BA813FE386 /* ZNGTimeZoneClient.m */; };
 		6D4F3EBCC79AA5C7AE0A324BD3DE6ACC /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 3D87BF86300794301C43A4FD2E756318 /* AFHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6DA89FBBB8CEE5D14CF6A95831E881B1 /* UIProgressView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = B83EC3D4662C6B7BBDE035B934DCDC6A /* UIProgressView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6F39594F57BD2585A85395ADC31887DA /* ZNGTimeZoneClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C1CA8A52D0430CA63E4DD20ACF731E /* ZNGTimeZoneClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6FF330D71796CD56C34D2E4859F2F5AF /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = D9B092E32187A58905991A849AB1A6F9 /* AFSecurityPolicy.m */; };
+		70DB6E28031ADD44D4129F0C22E8141A /* ZNGAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB42AED34B7FD987BF6AC8E47239978 /* ZNGAccount.m */; };
 		70E56463F5835DCB18F8C46B52AB199E /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8472813DF2DA0061F99464F6A48085 /* UIImageView+WebCache.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		70F425E0A097EED2506B3E615B089B74 /* ZNGContactFieldClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DFE3A918B936C562F13FF4FA05AF81B4 /* ZNGContactFieldClient.m */; };
-		71684FA8B3403BB42A45CF4B45950250 /* ZNGContactChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F8137208407742AC8553DB1C2BCEA5 /* ZNGContactChannel.m */; };
+		71D6E7D0D0760E6DB6334EAF78A26FDE /* ZNGFieldOption.h in Headers */ = {isa = PBXBuildFile; fileRef = E22846B308725C11B340C473DAB0BEB1 /* ZNGFieldOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72B61C6571F78A4F56E0322CC9703F3E /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C79E8372DE7BF525499693780DF1591C /* AFHTTPSessionManager.m */; };
+		735BACE79E8F381E3727C523D3124574 /* ZNGAccountClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 45CA1AADCCBA15B852CE7C9C038D26AF /* ZNGAccountClient.m */; };
+		7369EACFA4965D57D79CA8D944F2494E /* ZNGMessageClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D477E63CCA3FE8FC6ED6B8F77E66242 /* ZNGMessageClient.m */; };
 		7373261AAA727D28C48C58C8AFB16B6B /* MTLValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = B4CE59B53CB81532E465976CB4D13273 /* MTLValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		799F7E6B96C748430D582AA61B5E6936 /* ZNGAccountPlanClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C62E8EF65965318F52DF56D5DF37A2 /* ZNGAccountPlanClient.m */; };
-		7A52DE36E2BF085B2061BC1096C62052 /* ZNGBaseClient.h in Headers */ = {isa = PBXBuildFile; fileRef = AAD826AD2BA05B417B45050ECAB6C21A /* ZNGBaseClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		73CBEFB4DEF7E57AA7B5561BD490BC1C /* ZNGContactField.m in Sources */ = {isa = PBXBuildFile; fileRef = EC8261D30AA52F0433FE9A513CB5868F /* ZNGContactField.m */; };
+		75E6702A55627534CFCE83A347376684 /* ZingleValueTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = ABF012545E9E54D06661A5CFB3210097 /* ZingleValueTransformers.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		774FBC45D953BFE92F61AB4597AF0C86 /* ZNGMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = AC3B1FE74D2142E75004C6740F7D038F /* ZNGMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		79ECF1A57956B92C30C93B1371FBB059 /* ZNGMessageRead.h in Headers */ = {isa = PBXBuildFile; fileRef = B6B22EE5D34A112F3F9AFBFD83A035B7 /* ZNGMessageRead.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7A893C81BAA34000D4EBE9DC9B28D00E /* UIImageView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = CCF0B37D77B290A3CB443C387B506F87 /* UIImageView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D904CDD53589B45AF2D70B8040C8AD3 /* UIImageView+HighlightedWebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D90EFF150F4F4C59724AD599163CAA /* UIImageView+HighlightedWebCache.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		7DC6194592ED0DF08C36547FB0A08E65 /* ZNGFieldOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F8FA5E91BFDFF8EDFF20FC208D6CFD3 /* ZNGFieldOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7E71BD5D1106EE4530A718B42E034E73 /* ZNGAutomation.m in Sources */ = {isa = PBXBuildFile; fileRef = 224E5FE1787429577BA873EEBCCAE41A /* ZNGAutomation.m */; };
-		7E79CFE732FB7DD3CC1F8E55237688DD /* ZNGServiceAddressClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 001A6DF7B6E6E1A32B6E64B2531651A6 /* ZNGServiceAddressClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7D96707CB49A98425CFD9DBC513B9762 /* ZNGLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 89B949FACE834132D5E3B32FAEB0E433 /* ZNGLabel.m */; };
+		7ECA6739A723776DB3F2EFE1EC797CC7 /* ZNGContact.h in Headers */ = {isa = PBXBuildFile; fileRef = C1DD62AAD932DD849B2F54A18CCAE451 /* ZNGContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7F1DA9B27F33BA06F8E7205A6DB5A912 /* AFHTTPRequestOperationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D7A5E1D1F757EF24DDAC474F01819440 /* AFHTTPRequestOperationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7F3EC1E489AD2093D63653AC3C6AE601 /* AFNetworkActivityLogger-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F8A742597D60B9991E290D4259E40261 /* AFNetworkActivityLogger-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		81839E486C74C3BF3AD893D616020C93 /* SDWebImage-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = EB168F3D2785FE8A9572D1B1FEF62718 /* SDWebImage-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8257FC66CD9ABA19A0646A4623114A6F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
-		82CA26014F3CA5FA769E0F6C35859B92 /* ZNGNewServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 82973E99FBF930E4C28342E7E36D55CB /* ZNGNewServiceChannel.m */; };
-		82CCA2F2729E4C4D3047A622CA63378B /* ZNGTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 251A02D710604DED1D8AC4F40CC28DE1 /* ZNGTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		83690E4F84274152EC66C8A2B20B5CEB /* AFNetworkActivityLogger-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ACD0E672C6982831977A8820C9E9D7A /* AFNetworkActivityLogger-dummy.m */; };
 		849900719B089E6119C4ACCB6533D0F1 /* UIProgressView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = ECBE80EAC7E5DD4CF3A3E9F6EB789E29 /* UIProgressView+AFNetworking.m */; };
-		85D312DD78E01059A6F192EE4749655B /* ZNGFieldOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 11DFE2C72079E9D98E90E91E18F32185 /* ZNGFieldOption.m */; };
+		8628192C6DE20583B138D9BEC5D9C79B /* ZNGContactFieldValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D85B01994DCAF2A4ABFD110C28C7E7E /* ZNGContactFieldValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		879466FC7545D91848B63AF4C6D93DA1 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A95C91485ED234EE16CA22815D78BC3 /* AFURLRequestSerialization.m */; };
+		87C05E1D4E79D351817B4590B24BB049 /* ZNGCorrespondent.m in Sources */ = {isa = PBXBuildFile; fileRef = 61530BE49AAEF6C3F8DDF1552E33D907 /* ZNGCorrespondent.m */; };
 		884231AE263D21F2312E040FE6C9EED1 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 462DBEC3FBB4A590CF9F98B4F68045DC /* Mantle.framework */; };
-		893935B42C972593F6919E5E76383373 /* ZNGContactFieldValue.m in Sources */ = {isa = PBXBuildFile; fileRef = F801F1852B93C1ADF544F2116132D15B /* ZNGContactFieldValue.m */; };
-		8A90FC7AA8D1AF0D12A57FDC56DFD062 /* ZNGCorrespondent.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFE2A0E91E8886DFDFF56278CF22B11 /* ZNGCorrespondent.m */; };
+		8BF67277E13ECA6A7CFBEE0115D7CD56 /* ZNGAvailablePhoneNumberClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 4DC9F075C65AEBCC0AA87A17F46B829B /* ZNGAvailablePhoneNumberClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8CE1FA30384FA7855779D6F9646B9040 /* ZNGChannelType.h in Headers */ = {isa = PBXBuildFile; fileRef = 84B71E5E9CECAB4B1F0A0FE8BA07422B /* ZNGChannelType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8D6057A0965A6CB1AD542C98B6EA2475 /* ZNGStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = B4C8A23960526EB09F36C67C7EB5E3EB /* ZNGStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9012783F05F990D52A40793F3D8A280F /* ZNGContactFieldClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 31FC93B054875E8AB5CC34268FC2E434 /* ZNGContactFieldClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9069E0E9770D4E26C9AE90C4D20385B1 /* UIKit+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 64DF5FBB176905070AC75D3C69676653 /* UIKit+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		920C1404085AA03E2E2C77F05B73A267 /* UIAlertView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = DD3780513753270EFCEDE5CE57F4E03D /* UIAlertView+AFNetworking.m */; };
-		92D4915E854B31F7C951AF8EDCCEB2C4 /* ZNGContactFieldClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 65889DEC67B12FF3D09502D99D5828B0 /* ZNGContactFieldClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		93AB81D59E2BDF0BFB9CF37E416F4BEC /* ZNGAccountClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 54D11D9978F0C9B63F5156EC5F64B64E /* ZNGAccountClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		94D827837F9236E862682E6DF0B09CB8 /* ZingleValueTransformers.h in Headers */ = {isa = PBXBuildFile; fileRef = D23907EAF749604A69DE72DA2874E0B5 /* ZingleValueTransformers.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		921A5DFE73BFC7A4D4F2BFBA83571432 /* ZNGMessageRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 4348A8F9E7A04355BF309687CB492F4A /* ZNGMessageRead.m */; };
 		953479179AEA5EFCB29DAC68C23C12AC /* MTLTransformerErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = 59922108DC20869CC246E8A2EE9F6A71 /* MTLTransformerErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		95440722E40B50DDA49B11207C64EA19 /* ZNGParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = A8B9BD7908FC879F178232C60A502BBD /* ZNGParticipant.m */; };
 		95CEB3623337B9B26A73F0E0FBE0BC65 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EE7A0BB76E623C7061CA4ACEB94526E /* AFURLConnectionOperation.m */; };
-		96466F50868B145D4BDE27AF0C988750 /* ZNGContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E39F16D40BCFC088E3124E49DBA93BF6 /* ZNGContactClient.m */; };
-		96EACE172668630D7CB166D7A7448103 /* ZNGLabelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 947FFAF87A4CB4EDD69B5F9689B39C9A /* ZNGLabelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		98FA26299F7E2EEDE39BEA65648D6C24 /* ZNGContactFieldValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 1F21FDEB85D2725B972B390190A5D3FF /* ZNGContactFieldValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		99171F21802A7EED2CE2DD318A12A8F3 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC50368C58DD6A4F8020CEE75C1C2B15 /* SDWebImage.framework */; };
 		9A35E31E4354230CA0113F876051F277 /* UIActivityIndicatorView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 354E47028786446AE10486E405CB158F /* UIActivityIndicatorView+AFNetworking.m */; };
 		9A5C2330EC73E4D5A1359FF693F8373F /* MTLModel+NSCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = E07E2DDB89E93D7BDCC17045A6434D91 /* MTLModel+NSCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -157,90 +164,81 @@
 		9C0BF47DF9B85E770D21FC111753D8DF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
 		9C1AFFAD3250E969B028E36B4E1F44C9 /* SDWebImageOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 882F6746899127968271F654F7AEE004 /* SDWebImageOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9F54C4B16C034CF0C548770FF7B327AA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43DC3ED4569C1C3FCFAE21F0B2E6A10E /* Security.framework */; };
-		A0A2367F1443F907A417F7500A1D0921 /* ZNGMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 59EC5D707BB3D328E74D20A7D9F5FA95 /* ZNGMessage.m */; };
+		A05218CB6ACCBD41B4736CE47AF2CD15 /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CA40F71F9F41BAB52BABAA53DB8E628 /* ZNGConversationViewController.m */; };
 		A10775EF7B1680B2EB28C9E4F656B9E4 /* AFNetworkActivityLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A627C2788C7BD60038F230EFAF396584 /* AFNetworkActivityLogger.framework */; };
+		A119B521A2D19D8969075D46DFAA5208 /* ZNGServiceAddressClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DFE4CE97FCA7524C1075125B993A084 /* ZNGServiceAddressClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		A176DCB4DB9887789981CB50E76FBD91 /* ZNGContactChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E5749E43FAEB14F7760AF1777BA1630A /* ZNGContactChannelClient.m */; };
+		A45FED7E53E0B4E02CF49734E2592110 /* ZNGNewMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = D515C8C86FB0E4588FE1D9308F910E50 /* ZNGNewMessage.m */; };
 		A4B281E847BB7FABF1FF53D388224E12 /* AFURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 27300E0823FA61A2C74B48D6D6523365 /* AFURLConnectionOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A4CDAE25DD2D2D272835AA5A870C84A7 /* ZNGNewService.m in Sources */ = {isa = PBXBuildFile; fileRef = 470074D3D1871922D298654F24CD215B /* ZNGNewService.m */; };
 		A55F3F8533C7F4C4B8E755EB75747685 /* Mantle-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 222BB20AA4310A18D55FFEC5981139E5 /* Mantle-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A891A138ECF191F58876F5599F92C4F9 /* ZNGServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = D1DCDC94D985A39138F42CE506148CE8 /* ZNGServiceChannel.m */; };
-		A8EA4A840AF6E04394DA4D86E5366263 /* ZNGChannelType.m in Sources */ = {isa = PBXBuildFile; fileRef = 727DC30260EACDF923CC6AA1BB43CD63 /* ZNGChannelType.m */; };
+		A5627F09929D5806EAE46A4FFAC79DFC /* ZNGNewContact.m in Sources */ = {isa = PBXBuildFile; fileRef = BC5E66DE7F34C992FA6D97A9BA7985B9 /* ZNGNewContact.m */; };
+		A6950DD014B86574A4121D2E2434D906 /* ZNGAutomationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = CEE97771AC405B6977102BD02A64AB02 /* ZNGAutomationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9F967B37C2391F35BF29EED871C3CFE /* NSDictionary+MTLJSONKeyPath.h in Headers */ = {isa = PBXBuildFile; fileRef = E30E5EB41A9B4BC51BC584619F2B41CC /* NSDictionary+MTLJSONKeyPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AA1CAB565136AEE4ED6A9C7FB0352BBB /* ZNGStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 88A912EEACF883946234FA82516C6403 /* ZNGStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		AAFE42108A0EE0012C1C8A1D6602C9C8 /* ZNGChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = A3EABA221427412356275D725D0BC951 /* ZNGChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ADA59B10F5D3BD7B4477C87E6C652DB7 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = F42940091CA618011B6EDC37CCAEB9F2 /* UIImageView+AFNetworking.m */; };
-		B00B84A5E0DDC300EA41050F74172CA8 /* ZNGNewContactChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = B7A657337A36DB01B3D5C6B84AEA4DA0 /* ZNGNewContactChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B040180E462F857D6A43FACEF9BAEBEE /* ZNGChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 39C00410C0D3B80107BD85AEC574AD64 /* ZNGChannel.m */; };
-		B0EC7613542176051FAC18BD4F9972ED /* ZNGMessageClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4457D911B2FACDB3CB5A84DF0058E8DD /* ZNGMessageClient.m */; };
+		AE84B9964A034DCAC0F0100C100F0230 /* ZNGContactChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = CA304B9B24528D924EF432D9A0267A66 /* ZNGContactChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B1D84D6E7F3734C3574913C4F3FA85CB /* ZNGDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 5DEC2F9F1BB5076B4BA3A764D66ED021 /* ZNGDataSet.m */; };
+		B20D102D50A45A3496C6C824BC4B7DE1 /* ZNGContactFieldValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2C1F850753E107D64F21065902E2E426 /* ZNGContactFieldValue.m */; };
 		B26F17DF3A782FA7143F7A54C5D059DB /* AFURLSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D89CF19C5C98583CEEED918D198F34A2 /* AFURLSessionManager.m */; };
-		B32FF48EA4CE3D3BD1A62B4E27CBE523 /* ZNGParticipant.h in Headers */ = {isa = PBXBuildFile; fileRef = 3E456D99F0CCE25D5392C69251AAFE2F /* ZNGParticipant.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B28DA242AAE2F5A564403E9F6792FC36 /* ZNGServiceAddressClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 290DAAB7B0BAB7AD5C64B2866CBB5494 /* ZNGServiceAddressClient.m */; };
 		B3AAFF0FA2BE834831ABCC0C7455C355 /* SDImageCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 2E4ED6432F79426D9857265285CF2A4A /* SDImageCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B49E2D20ADE902AFA6F144F448E820BA /* ZNGAvailablePhoneNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B1F97D4ADAE9482C6E4242F864629BE /* ZNGAvailablePhoneNumber.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68150ED50CA4976B45A5543D402006C /* UIImage+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = EC8ACFCFB88A9E306998FBD44CD4C74F /* UIImage+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69121889F59BB1CADCDE3CFFF07F3CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
 		B6DDF486EF106AFE13FFA6097620AFC5 /* NSData+ImageContentType.m in Sources */ = {isa = PBXBuildFile; fileRef = A2633F9AF0BC0BDAD3D688D0559A1DAF /* NSData+ImageContentType.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		B8686B4B942B6D0C0212A1C0C50EAA58 /* ZNGLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 086AE83E6D6FFE0CC0C2DDC087F10F1B /* ZNGLabel.m */; };
-		BA14DDC934D187ED16C33AF00A1E499D /* ZNGAvailablePhoneNumberClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B43B2C8D383F15BB275D52F1368FF31 /* ZNGAvailablePhoneNumberClient.m */; };
+		B701995A76795164468B3E50EF269CFE /* ZingleValueTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = A3C43ECF3FE70C304410AFC6E0D394AC /* ZingleValueTransformers.m */; };
+		B9D977550A07BC22E6CFCEC278F04FE3 /* ZNGChannelType.m in Sources */ = {isa = PBXBuildFile; fileRef = 127CC29A6649BFB2F4BE5E7F097DEDEF /* ZNGChannelType.m */; };
 		BAD96E2016E6A4B5E5ACAD386CDB65A3 /* EXTRuntimeExtensions.h in Headers */ = {isa = PBXBuildFile; fileRef = F0E71A7B83D198AFDC1F15BD5A69DE68 /* EXTRuntimeExtensions.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		BC215D444BD15CED16631E98D4675E57 /* ZNGSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 40C0AA0BD54697597D6DB2CDA0C33E0B /* ZNGSetting.m */; };
+		BB14567DF6F55E2BB88A8DAD7CD00899 /* ZNGBaseClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 03060A9BDAD719574104A746675C6F6A /* ZNGBaseClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BC61C0266F58E2FF51DCDA369F89A7BB /* NSError+MTLModelException.h in Headers */ = {isa = PBXBuildFile; fileRef = 39DD5C04BD88028B7CB8410F485A67AE /* NSError+MTLModelException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BC6923971C0D8E24E10911B74B3D0C80 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = A5BB1CF68DB47FC52CE4390FABC45733 /* AFURLResponseSerialization.m */; };
-		BEA44BB09F59AB2E3CE6E53ADD46DAB3 /* ZNGAccountPlanClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D6B895180734FC75697C527FF2D72E2A /* ZNGAccountPlanClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C1692B6C7DBF63A36382A5250BCF1F0F /* ZNGAvailablePhoneNumberClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 6D82CC0D510972D6B92D8B426011D755 /* ZNGAvailablePhoneNumberClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BDD2720FF7BD6BAC36E365B234731D1E /* ZNGAccountPlan.h in Headers */ = {isa = PBXBuildFile; fileRef = 19953EAEFDEFB472A1DE6E822DCABF5E /* ZNGAccountPlan.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C19FF51B6E11AA180486CEFB5F3FC219 /* MTLJSONAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = FD09327396409F82F2A119AC8F87B109 /* MTLJSONAdapter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C2334FA65FE838C1AEA97188A84EA792 /* MTLJSONAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 84E4FEEC3FF0D7FBBA739D6EC0D371C3 /* MTLJSONAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C300063C20CB65927A44607A9F5B17D4 /* ZNGConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F7727B9B815C8D15BCDC5D1B87E238F /* ZNGConversationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C4CD6530EA3BD3A74975EABB9F906CBF /* SDWebImageManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EDFD322BA17AF3E7741BC91924E7E9E0 /* SDWebImageManager.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		C5255F3A5A785244AE134FA268CD3B91 /* ZNGService.m in Sources */ = {isa = PBXBuildFile; fileRef = F5E7C888AB71E7CFEAF8DF249A1B65A7 /* ZNGService.m */; };
+		C64473E1CEF21B4DCF2915FDB5316FBC /* ZNGContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DD435ECCE89FB8A4C5FF580F0633C3A /* ZNGContactClient.m */; };
 		C69677D2EAE937AE95C5785ADEA51745 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = B9AA63A0D6960A196C48CBA3AEF1B91D /* EXTScope.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		C77EDBFDB0A63BCAAE9D59CA75ECCBA4 /* ZNGAutomationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = C000021A57DA01ABDE0C0803CA38CAE3 /* ZNGAutomationClient.m */; };
-		C9306FC8F28B74B7220437AB9EF3EBA5 /* ZingleValueTransformers.m in Sources */ = {isa = PBXBuildFile; fileRef = 30C175E69F310B949D6EDF39F70F072D /* ZingleValueTransformers.m */; };
+		C850BD35176AB2F02E565D143D246F28 /* ZNGContactChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = FAE04AD5071D119E84BC15ABA1C26F84 /* ZNGContactChannel.m */; };
 		C95C80F77EAEFFBD5C91E86C9E7CCDB4 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A2292AE0D0A588C867767EC1D6363D0 /* SDWebImageDownloaderOperation.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		CA0B59B8C21FDED07C3159AA31533187 /* ZNGMessageRead.m in Sources */ = {isa = PBXBuildFile; fileRef = 2EA14B1D6F6C5F32BB84282A0CD2786B /* ZNGMessageRead.m */; };
-		CA1B4F035B9FD3817827FC99445F3C42 /* ZNGServiceChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 417E24D5095B2BC7225123BCF8F7B853 /* ZNGServiceChannelClient.m */; };
 		CBB142224D904864BB5868C8C89D9157 /* UIAlertView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = D5D31796905BD6DDC3DA71B4323875B8 /* UIAlertView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		CC13A9BBBD2BC8F34F14210182F62941 /* ZNGMessageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 96BCEFBFDCFDDFE0EC6BC50A5586492F /* ZNGMessageView.m */; };
 		CC1EFB67BD1B4D9B18694E82C13AF476 /* Mantle-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AFCEE4A1988F76EC6D53CB98FEA0AA7D /* Mantle-dummy.m */; };
-		CF9A875B12A2BF9A1EE9341B2FEC0E77 /* ZNGConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E70C2CEA358DB4B124713E8B4F0B735 /* ZNGConversation.m */; };
+		CF04066ADCD73835BD38DC473DE3E86D /* ZNGNewContactChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 4766330EF5B2BD78889D0CB8636EC971 /* ZNGNewContactChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D100B7D57C507170BF56CFB1EAA531BF /* Pods-ZingleSDK_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B1516896065698B77622E2A49B5ED12F /* Pods-ZingleSDK_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D21B0528F60E7BD1AA53E9D47535CB85 /* ZNGError.m in Sources */ = {isa = PBXBuildFile; fileRef = 71B8BC5B7E587A9D2D2A86A5D0BC9064 /* ZNGError.m */; };
-		D242B1901164BE8102EDE9D9FDD57B02 /* ZNGServiceChannelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 226043C1D9869B82D75CF276264DD8E3 /* ZNGServiceChannelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D27CB6866AE71BCCF8BF0119FF55BE66 /* ZNGAutomation.h in Headers */ = {isa = PBXBuildFile; fileRef = 81402C1F8D08184FEEC5E3AEE4AB716E /* ZNGAutomation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D2ECD156ABADE70A2547CF7EB5C66DDD /* NSDictionary+MTLJSONKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 5ED4C7F2C44E73AE456688288D3B346D /* NSDictionary+MTLJSONKeyPath.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		D483FAFF8514AD72E6B713083ABB6DD5 /* ZNGAvailablePhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = F4AA81B28F5EF5D5C4A8FE9AD2FE4BB3 /* ZNGAvailablePhoneNumber.m */; };
 		D4D662F0B214F70E29E8ACA92BA9F241 /* SDWebImageDownloader.h in Headers */ = {isa = PBXBuildFile; fileRef = A65D88064D0DA9FC3EFE457CB008D1A8 /* SDWebImageDownloader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D52201619CF61B2727950EFFA27C616E /* UIActivityIndicatorView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = C165E893231A00A333D404B8BA400E95 /* UIActivityIndicatorView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D54903294E59EDD4EC36FA2C41EC3A9F /* ZingleSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CD200E90904431A8D6628C436934757 /* ZingleSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DA3E244D493EEEF1541F7B67F4011EA7 /* ZNGConstants.h in Headers */ = {isa = PBXBuildFile; fileRef = E43F29EB598F89BA7E2970622DF54698 /* ZNGConstants.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D7884F30CF208E0B596B6CDAD5B8875F /* ZNGSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 945FB0984D444045616302B8980FF626 /* ZNGSetting.m */; };
+		D9D398416E40430E7914F43B16B1F5B0 /* ZNGNewService.m in Sources */ = {isa = PBXBuildFile; fileRef = A9F088B05F0703F9FAEBDEAD0774777E /* ZNGNewService.m */; };
+		DA58A82E791AABB7C5F7F4EDF6B0F5C0 /* ZNGTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 08630C022AA747894B1301B62E80D3AC /* ZNGTemplate.m */; };
+		DACE71ED5564248945E1848013E3D3B4 /* ZNGNewMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 99F021525F624A85C03F802E34B8B387 /* ZNGNewMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DB052D30DC29CF0643E99C07D8C016F1 /* ZNGServiceAddress.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AB7EF6BB6217EADF98AF554E9FB26D6 /* ZNGServiceAddress.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DBBD886B6A0F041A13816DA8A3AFA517 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D25BEB43C20BAD5FCE6B2D3A9EDB9C96 /* ImageIO.framework */; };
 		DBD13CBC9F44D93A68797F5CA43DEDE4 /* MTLValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = AF61696587085E84E681D851DA80741E /* MTLValueTransformer.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		DD45A840A06C58881B70CC582CA13548 /* ZNGService.m in Sources */ = {isa = PBXBuildFile; fileRef = 60357694ECEC848DC8312BAF6595E1B1 /* ZNGService.m */; };
+		DCA37C80F173AF29A3632DA3AADEA47A /* ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = C9E1EF0FE3EE3C9AD6785459A8307D07 /* ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DD5F20BB2BF8BE11509C4851E5F03827 /* UIImageView+HighlightedWebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 5FC1C237EDB65AD57C3E1B1C9F8AB631 /* UIImageView+HighlightedWebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DDCE48565EE5E2015A3EA7614CFACCB7 /* ZNGServiceAddressClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BFEE9D296A06EE246A7C8EB4B1F2103 /* ZNGServiceAddressClient.m */; };
-		DE0D99749360ACB05E9764EEB34A9C9B /* ZNGLabelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = EB4577FB95D2678C4499B461271D7CB0 /* ZNGLabelClient.m */; };
-		DF5AF3841EE0A4F5540F4FC7E9FF7B52 /* ZNGTimeZoneClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 5210062CD0C6BD0AADC32ECB4E744197 /* ZNGTimeZoneClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DFED8C99C890AB5ACCE21335089CFFE8 /* ZNGTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 98E56FB57E1BC1C5B3EE97B392C21187 /* ZNGTemplate.m */; };
+		E080F238CAAC29F616684BB70EBD06DE /* ZNGArrowView.h in Headers */ = {isa = PBXBuildFile; fileRef = B301754C79FF8BDEE0D507D49DBD4DAE /* ZNGArrowView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E363AE8C54A999E3FC38C8F4E6EB99E2 /* SDWebImageCompat.m in Sources */ = {isa = PBXBuildFile; fileRef = C1976DF9DF1B7AA3746405B25BD328D6 /* SDWebImageCompat.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		E4DC04AF5E5C70DF6A0C5046AB1B0CBA /* ZNGSetting.h in Headers */ = {isa = PBXBuildFile; fileRef = 094207992A38CAF8C660F27F3080BEA9 /* ZNGSetting.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E5C55C0B8C7FFE4A4611702FE03E82AC /* ZNGServiceClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 349511824FC35EB82E4D428D3D587264 /* ZNGServiceClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E42504E0132DE147AA67F415D7FEC31F /* ZNGLabelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = C4010EE696E1978EB1F22CA7F6A99DED /* ZNGLabelClient.m */; };
+		E554FC4D4123E54C0D7DD8C3B0A02149 /* ZNGParticipant.h in Headers */ = {isa = PBXBuildFile; fileRef = 35AE9638A7CC28F7ABD8FC115DF71555 /* ZNGParticipant.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E6369B93EFD18BB50BCE895DB55E7877 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 4D3F958141D58ED69AEA21C9648216CA /* UIRefreshControl+AFNetworking.m */; };
 		E660D527565B755215FA4915DBFCB75B /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 677DD31A3909F1CF89358C5E3A48D2B6 /* AFNetworking.framework */; };
 		E6A95E44436D2183CF0A2C9FD5B546AA /* UIImage+MultiFormat.h in Headers */ = {isa = PBXBuildFile; fileRef = 305CB56161395D51EBAF2F570570E5F5 /* UIImage+MultiFormat.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E6D07191ECDFC2BCA8ECFDA9EDD2F7AD /* ZNGNewContact.h in Headers */ = {isa = PBXBuildFile; fileRef = A34B1722A5752945C1F3C187C8444E61 /* ZNGNewContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E7CAC9AC1FF5CA7565CFD873F6E8C1F2 /* ZNGServiceAddress.m in Sources */ = {isa = PBXBuildFile; fileRef = 876096AD5B95892C5A463F9EB2339392 /* ZNGServiceAddress.m */; };
 		E8277E4BCA5607AB976AB03F89CA2473 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
 		E9618CAFEEBBEF383D4460D28F2FB4BB /* NSValueTransformer+MTLPredefinedTransformerAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 23D697B03342EB09C18DA72EF3E2012F /* NSValueTransformer+MTLPredefinedTransformerAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EB5ED9ADCED766F06C342D5164200E4E /* ZNGServiceChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 45E501FDADADCFA2382A7C9B70370231 /* ZNGServiceChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EC31C874E0EAB3CAE59B51A8B72C9BE0 /* ZNGChannelType.h in Headers */ = {isa = PBXBuildFile; fileRef = FB7120FCB48D0A7424A2B5DFA5538C4F /* ZNGChannelType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EABFBBD6CD21C80A629607EFAEA70BAA /* ZNGServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 458F28870422D9158C1D6FE6FC4413E9 /* ZNGServiceClient.m */; };
+		EB70BF2BA1680A64CE34566FFDD6CD85 /* ZNGTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = 026AAD90AADDFAD4B4C79BA3CD19A2C7 /* ZNGTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ED952C2DC4568E52AA07A686A715EC6C /* Pods-ZingleSDK_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 400B5E1B7ED2E510B40C67B8F78F4BAF /* Pods-ZingleSDK_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EE497C3EE087C97A9B0DE94C0FFB17C8 /* ZNGError.h in Headers */ = {isa = PBXBuildFile; fileRef = 032250234544958788C0BE57EA6BF009 /* ZNGError.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EE7F453AEE486B5ECFBDD316BD91D84F /* ZNGTemplateClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1E2CF3EF903C832426E55B7884B06843 /* ZNGTemplateClient.m */; };
 		EF677EC05C40B131998F119109EAFBF7 /* NSArray+MTLManipulationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 10C257A66CFF1A2C97C3B4CDF7D3FBCA /* NSArray+MTLManipulationAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		F29DDDD65693BD577215E5E145E4D88F /* ZNGContactChannelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 6201CD71E92D8A3D50326C6944A800AD /* ZNGContactChannelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F3DE8034EC3FD5FABA9C76596B5CF89B /* ZNGAvailablePhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = E5F03CB605758ABF1F3FF52F8829B610 /* ZNGAvailablePhoneNumber.m */; };
+		F004EEC9500B2F543BD86DD1D6EF3710 /* ZNGTemplateClient.m in Sources */ = {isa = PBXBuildFile; fileRef = DF70C3385B21E9CEF71533BA83FFBD7E /* ZNGTemplateClient.m */; };
+		F113786CA39CBC433BDF040E55CCB830 /* ZNGLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = C40B122769F1555BAAF97D6D2ABD2DB4 /* ZNGLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F49CC9B0B02C824AEA01E78EA5E0CFBE /* ZNGConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A1A9E105DA90E637BBD2F2BC51593900 /* ZNGConversationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4EB0D8C34259E3C233ED55DB4FBCBF6 /* NSData+ImageContentType.h in Headers */ = {isa = PBXBuildFile; fileRef = 73B1C4FC75E12217C9651E2E4C244C51 /* NSData+ImageContentType.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F5A234CC98129C3E559C72789629651F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ECC708A46860A299257444651B3693 /* AFHTTPRequestOperation.m */; };
 		F6004744ECC9F12DB6C5635472233AD8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 584490E18B0846385B420A44315E85A9 /* AFHTTPRequestOperationManager.m */; };
-		F666C6C4FA7D9764815EC521D7F16CAC /* ZNGContactField.h in Headers */ = {isa = PBXBuildFile; fileRef = F4447BEFDE0AF9AB184B5E537D76E7E4 /* ZNGContactField.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F886864CD786A579FAA0E493F1B74B03 /* ZNGTemplateClient.h in Headers */ = {isa = PBXBuildFile; fileRef = AF739390B8F5C2CB9C8180E0C8B75DF1 /* ZNGTemplateClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FA1ACC6AE1186106B025F4007F2BD799 /* ZNGMessageView.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F0723659F42555E7605F5A2775E157F /* ZNGMessageView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FA30F0C927CA52CAC6499D06634B6981 /* UIButton+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AAECAF831DDD88DDE273B0BD2CC8E14 /* UIButton+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FA675FA59F5423C4F2B71CF2BC15A682 /* ZNGNewService.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CCBB96C7C0363C354D02C587F6A60ED /* ZNGNewService.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FD2850508A814F9679E54ED5DBC8B1AF /* ZingleSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D3601061A3E38607F2DE34835BF44E52 /* ZingleSDK-dummy.m */; };
 		FE05FA7F48E54369520013821E8678A3 /* UIButton+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = C2AF6F3202E1E6DBFCF6EB03E22A12BA /* UIButton+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FE9105E8D35D1BC5A3215ADD5F44E1A4 /* NSDictionary+MTLManipulationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FC2F3FF08326EF2D8C16672C640C0A3 /* NSDictionary+MTLManipulationAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		FF2849D1CC2E5A3AB8341A39B089F5C6 /* AFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = D95A099623C03C047DA97EB55F437BD7 /* AFSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -355,114 +353,114 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		001A6DF7B6E6E1A32B6E64B2531651A6 /* ZNGServiceAddressClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceAddressClient.h; sourceTree = "<group>"; };
-		032250234544958788C0BE57EA6BF009 /* ZNGError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGError.h; sourceTree = "<group>"; };
-		0376770BBFC287946C8BB497AB585B71 /* ZNGAccountClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountClient.m; sourceTree = "<group>"; };
+		0191C6922EF152A2F72F78D30866800E /* ZNGAutomation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAutomation.h; sourceTree = "<group>"; };
+		026AAD90AADDFAD4B4C79BA3CD19A2C7 /* ZNGTemplate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTemplate.h; sourceTree = "<group>"; };
+		03060A9BDAD719574104A746675C6F6A /* ZNGBaseClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBaseClient.h; sourceTree = "<group>"; };
+		03D329696A057ECF582E19BA813FE386 /* ZNGTimeZoneClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTimeZoneClient.m; sourceTree = "<group>"; };
 		047C7DF93935B3FD482CAEE7D0C5A308 /* Pods-ZingleSDK_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ZingleSDK_Example.modulemap"; sourceTree = "<group>"; };
 		053078EE133975A550C745B3E01E6530 /* SDWebImageDownloaderOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloaderOperation.h; path = SDWebImage/SDWebImageDownloaderOperation.h; sourceTree = "<group>"; };
 		05A06022CDCDCA23D7B830E193F0E1D0 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		05BA74AE6C5FDCCBDA086E0CC2B1C973 /* ZNGSetting.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGSetting.h; sourceTree = "<group>"; };
+		081CCC90172E936F588F08046370DDFB /* ZNGServiceChannelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceChannelClient.m; sourceTree = "<group>"; };
 		084F999409EEEE36B66E45FF203EB718 /* Pods-ZingleSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		086AE83E6D6FFE0CC0C2DDC087F10F1B /* ZNGLabel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabel.m; sourceTree = "<group>"; };
-		094207992A38CAF8C660F27F3080BEA9 /* ZNGSetting.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGSetting.h; sourceTree = "<group>"; };
+		08630C022AA747894B1301B62E80D3AC /* ZNGTemplate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTemplate.m; sourceTree = "<group>"; };
 		09FF85BFE872DDEB411B5FD884B92F81 /* ZingleSDK.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ZingleSDK.xcconfig; sourceTree = "<group>"; };
-		0AC5CADB4C1B7DDE77FC3847CB593B55 /* ZNGAccount.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccount.m; sourceTree = "<group>"; };
 		0ACC9ABDB50CDB9EE21A132E417DF031 /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D48875C633B1EAD2F9112C030B19C9A /* ZNGArrowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGArrowView.m; sourceTree = "<group>"; };
 		0EE7A0BB76E623C7061CA4ACEB94526E /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLConnectionOperation.m; path = AFNetworking/AFURLConnectionOperation.m; sourceTree = "<group>"; };
-		0F074042BEA836F73E1204BE8A677F12 /* ZNGAutomationClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAutomationClient.h; sourceTree = "<group>"; };
 		0F374AADBE6943B3774CDA49112D2F69 /* Pods-ZingleSDK_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Tests-resources.sh"; sourceTree = "<group>"; };
-		0F727CA0C6BECF1CAF6AE122B0FDBD3F /* ZNGBaseClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBaseClient.m; sourceTree = "<group>"; };
-		0FA3F4AB654A9D86BB9F81DF7D5148DA /* ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZingleSDK.h; sourceTree = "<group>"; };
 		107434AD7112269B4CA6466BDD91EF7A /* NSError+MTLModelException.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSError+MTLModelException.m"; path = "Mantle/NSError+MTLModelException.m"; sourceTree = "<group>"; };
 		10C257A66CFF1A2C97C3B4CDF7D3FBCA /* NSArray+MTLManipulationAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSArray+MTLManipulationAdditions.m"; path = "Mantle/NSArray+MTLManipulationAdditions.m"; sourceTree = "<group>"; };
-		11DFE2C72079E9D98E90E91E18F32185 /* ZNGFieldOption.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGFieldOption.m; sourceTree = "<group>"; };
 		127A3B2F6447B04231501236C1270E95 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/MobileCoreServices.framework; sourceTree = DEVELOPER_DIR; };
-		14AAEA09D9D8099642E4F1577CCB1F73 /* ZNGArrowView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGArrowView.m; sourceTree = "<group>"; };
+		127CC29A6649BFB2F4BE5E7F097DEDEF /* ZNGChannelType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGChannelType.m; sourceTree = "<group>"; };
 		1734C42F5E654ED250E5B1542DBC8E4E /* NSArray+MTLManipulationAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+MTLManipulationAdditions.h"; path = "Mantle/NSArray+MTLManipulationAdditions.h"; sourceTree = "<group>"; };
 		17FA3806FD2C3E847737A464F360D5FE /* UIImage+GIF.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+GIF.m"; path = "SDWebImage/UIImage+GIF.m"; sourceTree = "<group>"; };
-		1D9FB4F2802408D9B74DF1FB6E0D6BAD /* ZNGLabel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabel.h; sourceTree = "<group>"; };
-		1E2CF3EF903C832426E55B7884B06843 /* ZNGTemplateClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTemplateClient.m; sourceTree = "<group>"; };
-		1F21FDEB85D2725B972B390190A5D3FF /* ZNGContactFieldValue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactFieldValue.h; sourceTree = "<group>"; };
+		19953EAEFDEFB472A1DE6E822DCABF5E /* ZNGAccountPlan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountPlan.h; sourceTree = "<group>"; };
+		1BB42AED34B7FD987BF6AC8E47239978 /* ZNGAccount.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccount.m; sourceTree = "<group>"; };
+		1D0F8D102414F74C9DC5013BFDE7B14E /* ZNGChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGChannel.m; sourceTree = "<group>"; };
+		1D477E63CCA3FE8FC6ED6B8F77E66242 /* ZNGMessageClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageClient.m; sourceTree = "<group>"; };
 		1F34892E98A8863DF5555EF6D07ABEE0 /* Pods-ZingleSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		206D48E370C0A7214D258CA69FE2980C /* UIRefreshControl+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIRefreshControl+AFNetworking.h"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.h"; sourceTree = "<group>"; };
 		213882AAC88CB5C59BB616D3F1F9DE75 /* ZingleSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZingleSDK-prefix.pch"; sourceTree = "<group>"; };
 		222BB20AA4310A18D55FFEC5981139E5 /* Mantle-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Mantle-umbrella.h"; sourceTree = "<group>"; };
-		224E5FE1787429577BA873EEBCCAE41A /* ZNGAutomation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAutomation.m; sourceTree = "<group>"; };
-		226043C1D9869B82D75CF276264DD8E3 /* ZNGServiceChannelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceChannelClient.h; sourceTree = "<group>"; };
 		23549D251B82DF402E4C683DD4B226AA /* AFURLSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLSessionManager.h; path = AFNetworking/AFURLSessionManager.h; sourceTree = "<group>"; };
+		23A9280A7D72F2E63817BB20288EE70E /* ZNGNewContactChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewContactChannel.m; sourceTree = "<group>"; };
 		23D697B03342EB09C18DA72EF3E2012F /* NSValueTransformer+MTLPredefinedTransformerAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValueTransformer+MTLPredefinedTransformerAdditions.h"; path = "Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h"; sourceTree = "<group>"; };
 		23E99603E13C78E7B1176FF596A6D6C0 /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = AFNetworking/AFURLResponseSerialization.h; sourceTree = "<group>"; };
-		24C62E8EF65965318F52DF56D5DF37A2 /* ZNGAccountPlanClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlanClient.m; sourceTree = "<group>"; };
 		24D90EFF150F4F4C59724AD599163CAA /* UIImageView+HighlightedWebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+HighlightedWebCache.m"; path = "SDWebImage/UIImageView+HighlightedWebCache.m"; sourceTree = "<group>"; };
-		251A02D710604DED1D8AC4F40CC28DE1 /* ZNGTemplate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTemplate.h; sourceTree = "<group>"; };
+		26369E6B5069203E03BF54A180B757BE /* ZNGMessageView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageView.h; sourceTree = "<group>"; };
 		27300E0823FA61A2C74B48D6D6523365 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLConnectionOperation.h; path = AFNetworking/AFURLConnectionOperation.h; sourceTree = "<group>"; };
-		275BEE7984FBB1D81C8BB1B2A8553245 /* ZNGContactChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactChannel.h; sourceTree = "<group>"; };
-		2A8F0343A123EAB83614F022A8362402 /* ZNGMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessage.h; sourceTree = "<group>"; };
-		2B1F97D4ADAE9482C6E4242F864629BE /* ZNGAvailablePhoneNumber.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvailablePhoneNumber.h; sourceTree = "<group>"; };
-		2B43B2C8D383F15BB275D52F1368FF31 /* ZNGAvailablePhoneNumberClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumberClient.m; sourceTree = "<group>"; };
+		290DAAB7B0BAB7AD5C64B2866CBB5494 /* ZNGServiceAddressClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceAddressClient.m; sourceTree = "<group>"; };
 		2C04FE558842DF9290B53F3352EE3B80 /* Pods-ZingleSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
+		2C1F850753E107D64F21065902E2E426 /* ZNGContactFieldValue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldValue.m; sourceTree = "<group>"; };
+		2CA4844B9605996CC0B51F0723827370 /* ZNGServiceChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceChannel.m; sourceTree = "<group>"; };
 		2D48173E556848DA9D58778A99AFF8E6 /* Pods-ZingleSDK_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-ZingleSDK_Tests.modulemap"; sourceTree = "<group>"; };
 		2DC007D4EB027648CC1ACA069A8733DB /* UIImage+GIF.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+GIF.h"; path = "SDWebImage/UIImage+GIF.h"; sourceTree = "<group>"; };
 		2E4ED6432F79426D9857265285CF2A4A /* SDImageCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageCache.h; path = SDWebImage/SDImageCache.h; sourceTree = "<group>"; };
-		2EA14B1D6F6C5F32BB84282A0CD2786B /* ZNGMessageRead.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageRead.m; sourceTree = "<group>"; };
 		2F50E6E65A653E07182A87FF7F46B523 /* MTLModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLModel.m; path = Mantle/MTLModel.m; sourceTree = "<group>"; };
-		2F737243181CF8E3FC7F125AE0846DF6 /* ZNGContactChannelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannelClient.m; sourceTree = "<group>"; };
-		2F8FA5E91BFDFF8EDFF20FC208D6CFD3 /* ZNGFieldOption.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGFieldOption.h; sourceTree = "<group>"; };
 		3026E3FA469692E76E87E140D3DE760D /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		305CB56161395D51EBAF2F570570E5F5 /* UIImage+MultiFormat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+MultiFormat.h"; path = "SDWebImage/UIImage+MultiFormat.h"; sourceTree = "<group>"; };
-		30C175E69F310B949D6EDF39F70F072D /* ZingleValueTransformers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZingleValueTransformers.m; sourceTree = "<group>"; };
 		3159A2A2039E1D40691110F9E81902EB /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLRequestSerialization.h; path = AFNetworking/AFURLRequestSerialization.h; sourceTree = "<group>"; };
+		31FC93B054875E8AB5CC34268FC2E434 /* ZNGContactFieldClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactFieldClient.h; sourceTree = "<group>"; };
+		325426A679D1BB9E2C559D008677971D /* ZNGStatus.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGStatus.m; sourceTree = "<group>"; };
 		3268B5EF515385569EFEFFDA70EE1D8D /* SDWebImageDownloader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloader.m; path = SDWebImage/SDWebImageDownloader.m; sourceTree = "<group>"; };
-		349511824FC35EB82E4D428D3D587264 /* ZNGServiceClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceClient.h; sourceTree = "<group>"; };
+		331F27601777B7F39F3DAE7DD46B144B /* ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZingleSDK.m; sourceTree = "<group>"; };
 		354E47028786446AE10486E405CB158F /* UIActivityIndicatorView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+AFNetworking.m"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.m"; sourceTree = "<group>"; };
-		363C40EED9C1A7DBE37A3B6AC7C0033C /* ZNGContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContact.m; sourceTree = "<group>"; };
+		35AE9638A7CC28F7ABD8FC115DF71555 /* ZNGParticipant.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGParticipant.h; sourceTree = "<group>"; };
 		3640BD08EA894A6860E95AE2304CC3B8 /* Pods-ZingleSDK_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZingleSDK_Tests-dummy.m"; sourceTree = "<group>"; };
+		364A58AADD7EDBE4D7C97798FCC3FE24 /* ZNGMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessage.m; sourceTree = "<group>"; };
 		3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		39C00410C0D3B80107BD85AEC574AD64 /* ZNGChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGChannel.m; sourceTree = "<group>"; };
 		39DD5C04BD88028B7CB8410F485A67AE /* NSError+MTLModelException.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSError+MTLModelException.h"; path = "Mantle/NSError+MTLModelException.h"; sourceTree = "<group>"; };
 		39FEDFD5BE689B02BE2B7922EF5BA3B6 /* SDImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCache.m; path = SDWebImage/SDImageCache.m; sourceTree = "<group>"; };
 		3AAECAF831DDD88DDE273B0BD2CC8E14 /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+AFNetworking.h"; path = "UIKit+AFNetworking/UIButton+AFNetworking.h"; sourceTree = "<group>"; };
-		3BFEE9D296A06EE246A7C8EB4B1F2103 /* ZNGServiceAddressClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceAddressClient.m; sourceTree = "<group>"; };
 		3CD200E90904431A8D6628C436934757 /* ZingleSDK-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZingleSDK-umbrella.h"; sourceTree = "<group>"; };
 		3CE5DA40C7C67E9A5D8227396F04C0FE /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3D48FB41675FE867EA34652D8A5CF432 /* ZNGServiceChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceChannel.h; sourceTree = "<group>"; };
 		3D87BF86300794301C43A4FD2E756318 /* AFHTTPSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPSessionManager.h; path = AFNetworking/AFHTTPSessionManager.h; sourceTree = "<group>"; };
-		3E456D99F0CCE25D5392C69251AAFE2F /* ZNGParticipant.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGParticipant.h; sourceTree = "<group>"; };
+		3EA5995BBF59372C7B87E460D9333E6F /* ZNGAccountPlanClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlanClient.m; sourceTree = "<group>"; };
 		3F77D4F279BAB999547C56BE7CA668F5 /* AFNetworkReachabilityManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkReachabilityManager.m; path = AFNetworking/AFNetworkReachabilityManager.m; sourceTree = "<group>"; };
 		400B5E1B7ED2E510B40C67B8F78F4BAF /* Pods-ZingleSDK_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ZingleSDK_Tests-umbrella.h"; sourceTree = "<group>"; };
-		40C0AA0BD54697597D6DB2CDA0C33E0B /* ZNGSetting.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGSetting.m; sourceTree = "<group>"; };
-		417E24D5095B2BC7225123BCF8F7B853 /* ZNGServiceChannelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceChannelClient.m; sourceTree = "<group>"; };
+		4348A8F9E7A04355BF309687CB492F4A /* ZNGMessageRead.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageRead.m; sourceTree = "<group>"; };
+		43C1CA8A52D0430CA63E4DD20ACF731E /* ZNGTimeZoneClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTimeZoneClient.h; sourceTree = "<group>"; };
 		43DC3ED4569C1C3FCFAE21F0B2E6A10E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		443A8625C342BD64F20DFD3BE4FC5077 /* SDWebImage-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SDWebImage-dummy.m"; sourceTree = "<group>"; };
-		4457D911B2FACDB3CB5A84DF0058E8DD /* ZNGMessageClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageClient.m; sourceTree = "<group>"; };
 		450A67CBDF28FBCC120AEB48B46A62F8 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = AFNetworking/AFHTTPRequestOperation.h; sourceTree = "<group>"; };
-		45E501FDADADCFA2382A7C9B70370231 /* ZNGServiceChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceChannel.h; sourceTree = "<group>"; };
+		458F28870422D9158C1D6FE6FC4413E9 /* ZNGServiceClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceClient.m; sourceTree = "<group>"; };
+		45CA1AADCCBA15B852CE7C9C038D26AF /* ZNGAccountClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountClient.m; sourceTree = "<group>"; };
 		462DBEC3FBB4A590CF9F98B4F68045DC /* Mantle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mantle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		470074D3D1871922D298654F24CD215B /* ZNGNewService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewService.m; sourceTree = "<group>"; };
+		47391A45BDBA1BC1A194C44A702F4F27 /* ZNGAvailablePhoneNumber.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvailablePhoneNumber.h; sourceTree = "<group>"; };
+		4766330EF5B2BD78889D0CB8636EC971 /* ZNGNewContactChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewContactChannel.h; sourceTree = "<group>"; };
 		47D8BAE5D4DC43A01CCB0EA2FE9E8677 /* Pods-ZingleSDK_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Example-frameworks.sh"; sourceTree = "<group>"; };
 		4A3A80589DDECED6FF0C8B012CD2E296 /* Pods-ZingleSDK_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZingleSDK_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		4A95C91485ED234EE16CA22815D78BC3 /* AFURLRequestSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLRequestSerialization.m; path = AFNetworking/AFURLRequestSerialization.m; sourceTree = "<group>"; };
 		4CBCC8DD763AB3DDF59768895D35FCF3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D3F958141D58ED69AEA21C9648216CA /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIRefreshControl+AFNetworking.m"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
-		4E70C2CEA358DB4B124713E8B4F0B735 /* ZNGConversation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversation.m; sourceTree = "<group>"; };
+		4D85B01994DCAF2A4ABFD110C28C7E7E /* ZNGContactFieldValue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactFieldValue.h; sourceTree = "<group>"; };
+		4DC9F075C65AEBCC0AA87A17F46B829B /* ZNGAvailablePhoneNumberClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvailablePhoneNumberClient.h; sourceTree = "<group>"; };
+		4DEC32A6CC47A0B1AA09C56521F8D0F3 /* ZNGCorrespondent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCorrespondent.h; sourceTree = "<group>"; };
+		4F35F603DC72D327B37CE9B92B28F633 /* ZNGAutomation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAutomation.m; sourceTree = "<group>"; };
 		511B5E81F260918056EB582480BE1071 /* UIButton+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIButton+WebCache.m"; path = "SDWebImage/UIButton+WebCache.m"; sourceTree = "<group>"; };
 		51BE2199FADF23692720053FBCFF844A /* Pods-ZingleSDK_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Example-resources.sh"; sourceTree = "<group>"; };
-		5210062CD0C6BD0AADC32ECB4E744197 /* ZNGTimeZoneClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTimeZoneClient.h; sourceTree = "<group>"; };
+		525BC7C2DE315081E6F623350C9DB26D /* ZNGDataSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGDataSet.h; sourceTree = "<group>"; };
 		530D90525FD32C465B0636F096C8F799 /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		54D11D9978F0C9B63F5156EC5F64B64E /* ZNGAccountClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountClient.h; sourceTree = "<group>"; };
 		554B5667476AB8B3DF748EB69CAB4F33 /* SDWebImage.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = SDWebImage.modulemap; sourceTree = "<group>"; };
 		584490E18B0846385B420A44315E85A9 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperationManager.m; path = AFNetworking/AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
 		58E5628118CAAC18654BDA3E0851A9E9 /* SDWebImageCompat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageCompat.h; path = SDWebImage/SDWebImageCompat.h; sourceTree = "<group>"; };
-		59770B4864B06E962CCA5F6F8DDE7112 /* ZNGAccount.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccount.h; sourceTree = "<group>"; };
+		59212FD649303A5F97162E3848569A6B /* ZNGNewService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewService.h; sourceTree = "<group>"; };
 		59922108DC20869CC246E8A2EE9F6A71 /* MTLTransformerErrorHandling.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLTransformerErrorHandling.h; path = Mantle/MTLTransformerErrorHandling.h; sourceTree = "<group>"; };
-		59EC5D707BB3D328E74D20A7D9F5FA95 /* ZNGMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessage.m; sourceTree = "<group>"; };
+		5AB7EF6BB6217EADF98AF554E9FB26D6 /* ZNGServiceAddress.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceAddress.h; sourceTree = "<group>"; };
+		5B07D2DF863A986A5E8141E017A2E713 /* ZNGServiceAddress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceAddress.m; sourceTree = "<group>"; };
+		5DEC2F9F1BB5076B4BA3A764D66ED021 /* ZNGDataSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGDataSet.m; sourceTree = "<group>"; };
 		5ED4C7F2C44E73AE456688288D3B346D /* NSDictionary+MTLJSONKeyPath.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MTLJSONKeyPath.m"; path = "Mantle/NSDictionary+MTLJSONKeyPath.m"; sourceTree = "<group>"; };
+		5EEE245B8D4B671F24E53D1F1AF44071 /* ZNGContactField.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactField.h; sourceTree = "<group>"; };
 		5FC1C237EDB65AD57C3E1B1C9F8AB631 /* UIImageView+HighlightedWebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+HighlightedWebCache.h"; path = "SDWebImage/UIImageView+HighlightedWebCache.h"; sourceTree = "<group>"; };
-		60357694ECEC848DC8312BAF6595E1B1 /* ZNGService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGService.m; sourceTree = "<group>"; };
+		60ACF9359E603D6B8AA66CFD5E449016 /* ZNGServiceChannelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceChannelClient.h; sourceTree = "<group>"; };
 		60ED157BA7E379131114ECC201FEF911 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6201CD71E92D8A3D50326C6944A800AD /* ZNGContactChannelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactChannelClient.h; sourceTree = "<group>"; };
+		61530BE49AAEF6C3F8DDF1552E33D907 /* ZNGCorrespondent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCorrespondent.m; sourceTree = "<group>"; };
 		626E5E84C6C880B68D92F8B021C4B085 /* AFNetworking-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-umbrella.h"; sourceTree = "<group>"; };
+		63B0FA45F60CEC19D2424CCA4809CEB5 /* ZNGNewServiceChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewServiceChannel.m; sourceTree = "<group>"; };
 		64BB32B5C6CA0BA00F65CDBAD0781B7E /* Pods-ZingleSDK_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZingleSDK_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		64DF5FBB176905070AC75D3C69676653 /* UIKit+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIKit+AFNetworking.h"; path = "UIKit+AFNetworking/UIKit+AFNetworking.h"; sourceTree = "<group>"; };
-		65889DEC67B12FF3D09502D99D5828B0 /* ZNGContactFieldClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactFieldClient.h; sourceTree = "<group>"; };
 		66D27BBCEEADA6C795B6EDB6C4184A2C /* MTLTransformerErrorHandling.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLTransformerErrorHandling.m; path = Mantle/MTLTransformerErrorHandling.m; sourceTree = "<group>"; };
 		67372ACE32477DD94E12FDA640119782 /* ZingleSDK.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = ZingleSDK.modulemap; sourceTree = "<group>"; };
 		676BA02F0FE7D5BD2922BF7B318C8597 /* AFNetworkActivityLogger-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworkActivityLogger-prefix.pch"; sourceTree = "<group>"; };
@@ -473,158 +471,156 @@
 		69B2B77C95CF88A370B0C257BE960DCC /* Mantle-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Mantle-prefix.pch"; sourceTree = "<group>"; };
 		6A2292AE0D0A588C867767EC1D6363D0 /* SDWebImageDownloaderOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloaderOperation.m; path = SDWebImage/SDWebImageDownloaderOperation.m; sourceTree = "<group>"; };
 		6B03E05A169691A53C22B94CA58DB5F9 /* NSDictionary+MTLManipulationAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MTLManipulationAdditions.h"; path = "Mantle/NSDictionary+MTLManipulationAdditions.h"; sourceTree = "<group>"; };
+		6B86465764DE48B5F046963285BB5B59 /* ZNGContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContact.m; sourceTree = "<group>"; };
 		6C8472813DF2DA0061F99464F6A48085 /* UIImageView+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+WebCache.m"; path = "SDWebImage/UIImageView+WebCache.m"; sourceTree = "<group>"; };
-		6D82CC0D510972D6B92D8B426011D755 /* ZNGAvailablePhoneNumberClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvailablePhoneNumberClient.h; sourceTree = "<group>"; };
+		6DA72F9CDA417BBC8364B77495168DD0 /* ZNGContactFieldClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldClient.m; sourceTree = "<group>"; };
 		6DD239424272DD76ED8CF527030C7983 /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIButton+AFNetworking.m"; path = "UIKit+AFNetworking/UIButton+AFNetworking.m"; sourceTree = "<group>"; };
 		6E1082A27C9B4BFC0263EAD4A74CEBBB /* MTLReflection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLReflection.m; path = Mantle/MTLReflection.m; sourceTree = "<group>"; };
-		6E132C7CE3EFE1F9C600954C89E07049 /* ZNGChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannel.h; sourceTree = "<group>"; };
+		6F7C8D7597B877310031FAF7DA53CC56 /* ZNGError.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGError.h; sourceTree = "<group>"; };
 		6FC2F3FF08326EF2D8C16672C640C0A3 /* NSDictionary+MTLManipulationAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MTLManipulationAdditions.m"; path = "Mantle/NSDictionary+MTLManipulationAdditions.m"; sourceTree = "<group>"; };
-		714A988435AD2DCA489208739B8B149B /* ZNGArrowView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGArrowView.h; sourceTree = "<group>"; };
-		71B8BC5B7E587A9D2D2A86A5D0BC9064 /* ZNGError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGError.m; sourceTree = "<group>"; };
-		727DC30260EACDF923CC6AA1BB43CD63 /* ZNGChannelType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGChannelType.m; sourceTree = "<group>"; };
+		72E4C08893B2EE3240235C1EBDAEBF0C /* ZNGBaseClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBaseClient.m; sourceTree = "<group>"; };
 		73B1C4FC75E12217C9651E2E4C244C51 /* NSData+ImageContentType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+ImageContentType.h"; path = "SDWebImage/NSData+ImageContentType.h"; sourceTree = "<group>"; };
+		74E60014D5B04CA8178F9E75E9F3F1B5 /* ZNGContactChannelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactChannelClient.h; sourceTree = "<group>"; };
 		7528AFD396C05560F411F009C4BA9FD7 /* SDWebImageDecoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDecoder.h; path = SDWebImage/SDWebImageDecoder.h; sourceTree = "<group>"; };
-		7648B9450B7DAAFD4C70062BCD8C37EA /* ZNGNewServiceChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewServiceChannel.h; sourceTree = "<group>"; };
 		786518A9B0A50DEC4A4E426213932248 /* AFNetworking.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.xcconfig; sourceTree = "<group>"; };
 		793539F7A451B1689F1B83512B17F235 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkReachabilityManager.h; path = AFNetworking/AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
-		7C4B547CF0170256C24A9B594ED8EE5D /* ZNGStatus.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGStatus.m; sourceTree = "<group>"; };
-		7E24AC5169196DF0DC503E145CF82DE2 /* ZNGContactField.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactField.m; sourceTree = "<group>"; };
-		7F7727B9B815C8D15BCDC5D1B87E238F /* ZNGConversationViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversationViewController.h; sourceTree = "<group>"; };
-		81402C1F8D08184FEEC5E3AEE4AB716E /* ZNGAutomation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAutomation.h; sourceTree = "<group>"; };
+		7A7F2133438CA10C2839E79621E1F27B /* ZNGFieldOption.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGFieldOption.m; sourceTree = "<group>"; };
+		7A879C4922106B6D3AB9E597CCE3B491 /* ZNGLabelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabelClient.h; sourceTree = "<group>"; };
+		7DFE4CE97FCA7524C1075125B993A084 /* ZNGServiceAddressClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceAddressClient.h; sourceTree = "<group>"; };
+		7F1CF40BD7A75F3802E9E9A1888FE313 /* ZNGConversation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversation.m; sourceTree = "<group>"; };
 		817B27100FA782BC304CB0C972EB7480 /* AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworking.h; path = AFNetworking/AFNetworking.h; sourceTree = "<group>"; };
-		82973E99FBF930E4C28342E7E36D55CB /* ZNGNewServiceChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewServiceChannel.m; sourceTree = "<group>"; };
 		8415DB27EE5CFDB37A5A3D16B0A86EBC /* MTLReflection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLReflection.h; path = Mantle/MTLReflection.h; sourceTree = "<group>"; };
 		84A2FDFE773F9E62624F6EF5FE051CE1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		84B71E5E9CECAB4B1F0A0FE8BA07422B /* ZNGChannelType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannelType.h; sourceTree = "<group>"; };
 		84E4FEEC3FF0D7FBBA739D6EC0D371C3 /* MTLJSONAdapter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLJSONAdapter.h; path = Mantle/MTLJSONAdapter.h; sourceTree = "<group>"; };
 		850DC0E8B555A865ABEAA2D2B7632A59 /* EXTScope.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTScope.h; path = Mantle/extobjc/EXTScope.h; sourceTree = "<group>"; };
+		85FC77913E0CB327DCC3CCA2AD8D31A9 /* ZNGService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGService.h; sourceTree = "<group>"; };
 		86605B62E2389BB5676B2B0A1581BDB1 /* NSDictionary+MTLMappingAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MTLMappingAdditions.h"; path = "Mantle/NSDictionary+MTLMappingAdditions.h"; sourceTree = "<group>"; };
 		86ECC708A46860A299257444651B3693 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperation.m; path = AFNetworking/AFHTTPRequestOperation.m; sourceTree = "<group>"; };
-		876096AD5B95892C5A463F9EB2339392 /* ZNGServiceAddress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceAddress.m; sourceTree = "<group>"; };
 		87BD89C0BFF0DF31DD20C5E5022C5AF9 /* Mantle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mantle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		882F6746899127968271F654F7AEE004 /* SDWebImageOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageOperation.h; path = SDWebImage/SDWebImageOperation.h; sourceTree = "<group>"; };
-		884AC5E58569F12875F87EF8C6E9F02E /* ZNGAccountPlan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountPlan.h; sourceTree = "<group>"; };
-		88A912EEACF883946234FA82516C6403 /* ZNGStatus.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGStatus.h; sourceTree = "<group>"; };
+		89B949FACE834132D5E3B32FAEB0E433 /* ZNGLabel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabel.m; sourceTree = "<group>"; };
 		8ACD0E672C6982831977A8820C9E9D7A /* AFNetworkActivityLogger-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworkActivityLogger-dummy.m"; sourceTree = "<group>"; };
 		8B1EE4DA37EA0E1E80A34EBEA8C4736D /* SDWebImage-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDWebImage-prefix.pch"; sourceTree = "<group>"; };
 		8BE3E32203499D2046E2EFC1838BE4A5 /* metamacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = metamacros.h; path = Mantle/extobjc/metamacros.h; sourceTree = "<group>"; };
-		8CCBB96C7C0363C354D02C587F6A60ED /* ZNGNewService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewService.h; sourceTree = "<group>"; };
-		8CED1C92B4EFD1B43EE7E410E3D316D4 /* ZNGNewContactChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewContactChannel.m; sourceTree = "<group>"; };
 		8CF45A81519CC8B4F8D18D98EE47EB55 /* Pods-ZingleSDK_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Tests-frameworks.sh"; sourceTree = "<group>"; };
 		8D081F93C9CA1EFBD0111B4821A59B04 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/SystemConfiguration.framework; sourceTree = DEVELOPER_DIR; };
-		8FA57AAF2B847B7FE07DB2E244C6A7CA /* ZNGDataSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGDataSet.m; sourceTree = "<group>"; };
+		8DD435ECCE89FB8A4C5FF580F0633C3A /* ZNGContactClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactClient.m; sourceTree = "<group>"; };
 		8FC8CD15375F97A46883021CE679212E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8FEBA2416A89AD961C33D66F47F4774D /* UIImage+MultiFormat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+MultiFormat.m"; path = "SDWebImage/UIImage+MultiFormat.m"; sourceTree = "<group>"; };
-		8FFE2A0E91E8886DFDFF56278CF22B11 /* ZNGCorrespondent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCorrespondent.m; sourceTree = "<group>"; };
-		9435462603DAE24E6661983FABC4F1C6 /* ZNGContact.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContact.h; sourceTree = "<group>"; };
-		947FFAF87A4CB4EDD69B5F9689B39C9A /* ZNGLabelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabelClient.h; sourceTree = "<group>"; };
-		948E223E5242A17B2312C65FE174A7E0 /* ZNGAccountPlan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlan.m; sourceTree = "<group>"; };
+		945FB0984D444045616302B8980FF626 /* ZNGSetting.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGSetting.m; sourceTree = "<group>"; };
+		96BAA8F9668DF6986F22393FB04D3E14 /* ZNGAvailablePhoneNumberClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumberClient.m; sourceTree = "<group>"; };
+		96BCEFBFDCFDDFE0EC6BC50A5586492F /* ZNGMessageView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageView.m; sourceTree = "<group>"; };
 		980A8DE0824DC9499DC4FB97BB848F32 /* SDWebImage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SDWebImage.xcconfig; sourceTree = "<group>"; };
-		98E56FB57E1BC1C5B3EE97B392C21187 /* ZNGTemplate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTemplate.m; sourceTree = "<group>"; };
-		9A1C46588D46B16487AA58212790B501 /* ZNGNewMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewMessage.h; sourceTree = "<group>"; };
-		9EC0BCA8B6BC7A9ADC7F33EF4F906762 /* ZNGConstants.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConstants.m; sourceTree = "<group>"; };
-		9F0723659F42555E7605F5A2775E157F /* ZNGMessageView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageView.h; sourceTree = "<group>"; };
+		99F021525F624A85C03F802E34B8B387 /* ZNGNewMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewMessage.h; sourceTree = "<group>"; };
+		9B535F69770C4D5ABE82D8E531A6A53C /* ZNGAccount.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccount.h; sourceTree = "<group>"; };
+		9CA40F71F9F41BAB52BABAA53DB8E628 /* ZNGConversationViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationViewController.m; sourceTree = "<group>"; };
+		9F1D1CC7E699AF622247A298932B6DEE /* ZNGNewContact.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewContact.h; sourceTree = "<group>"; };
 		9F1E28F8FE1BD3AA2088854F4BFD142A /* SDWebImagePrefetcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImagePrefetcher.m; path = SDWebImage/SDWebImagePrefetcher.m; sourceTree = "<group>"; };
 		9F607577C177C028C0D71303FEE87D4B /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.m"; sourceTree = "<group>"; };
 		9FC8C101FFB992BF44B15235AC516C58 /* NSDictionary+MTLMappingAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MTLMappingAdditions.m"; path = "Mantle/NSDictionary+MTLMappingAdditions.m"; sourceTree = "<group>"; };
 		A154804C01CC1C3E092C43060551A9B3 /* AFNetworkActivityLogger.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = AFNetworkActivityLogger.modulemap; sourceTree = "<group>"; };
+		A1A9E105DA90E637BBD2F2BC51593900 /* ZNGConversationViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversationViewController.h; sourceTree = "<group>"; };
 		A2633F9AF0BC0BDAD3D688D0559A1DAF /* NSData+ImageContentType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSData+ImageContentType.m"; path = "SDWebImage/NSData+ImageContentType.m"; sourceTree = "<group>"; };
-		A34B1722A5752945C1F3C187C8444E61 /* ZNGNewContact.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewContact.h; sourceTree = "<group>"; };
 		A3B77FC63004B5A0D02A547845CDFACD /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityIndicatorManager.h; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.h"; sourceTree = "<group>"; };
+		A3C43ECF3FE70C304410AFC6E0D394AC /* ZingleValueTransformers.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZingleValueTransformers.m; sourceTree = "<group>"; };
 		A3D72C57906A8B20C281E80238C122E9 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A3EABA221427412356275D725D0BC951 /* ZNGChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannel.h; sourceTree = "<group>"; };
 		A409EB8C6AECDE31C0DF2BC936422D81 /* Mantle.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Mantle.modulemap; sourceTree = "<group>"; };
 		A4F3CEA3730CEB06D5E3E3D42E0DAAD2 /* NSValueTransformer+MTLInversionAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValueTransformer+MTLInversionAdditions.h"; path = "Mantle/NSValueTransformer+MTLInversionAdditions.h"; sourceTree = "<group>"; };
 		A557138377FBE9DFB69F90511EBBFDB1 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+WebCacheOperation.m"; path = "SDWebImage/UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		A5BB1CF68DB47FC52CE4390FABC45733 /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = AFNetworking/AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		A627C2788C7BD60038F230EFAF396584 /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A65D88064D0DA9FC3EFE457CB008D1A8 /* SDWebImageDownloader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloader.h; path = SDWebImage/SDWebImageDownloader.h; sourceTree = "<group>"; };
-		AA5C4AD80EF6721AC54F8D5B57FA10ED /* ZNGNewContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewContact.m; sourceTree = "<group>"; };
+		A8B9BD7908FC879F178232C60A502BBD /* ZNGParticipant.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGParticipant.m; sourceTree = "<group>"; };
+		A9D550E0279A84865F0124AFC44D3551 /* ZNGServiceClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceClient.h; sourceTree = "<group>"; };
+		A9F088B05F0703F9FAEBDEAD0774777E /* ZNGNewService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewService.m; sourceTree = "<group>"; };
+		AA8556A03F7AF81711910F915F17450A /* ZNGConversation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversation.h; sourceTree = "<group>"; };
 		AAA66DDE8EDC3070821DB1D71821195A /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIWebView+AFNetworking.m"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
-		AAD826AD2BA05B417B45050ECAB6C21A /* ZNGBaseClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBaseClient.h; sourceTree = "<group>"; };
+		ABF012545E9E54D06661A5CFB3210097 /* ZingleValueTransformers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZingleValueTransformers.h; sourceTree = "<group>"; };
+		AC3B1FE74D2142E75004C6740F7D038F /* ZNGMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessage.h; sourceTree = "<group>"; };
 		AC50368C58DD6A4F8020CEE75C1C2B15 /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AC8DF1E08515A1E51E1E71E061B771BE /* ZNGConversationViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationViewController.m; sourceTree = "<group>"; };
 		AC9C887A9B5E1403A9D6FCFE245279CE /* Mantle.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Mantle.xcconfig; sourceTree = "<group>"; };
-		AED750DA62191AC3C1CB107D07ADA51C /* ZNGMessageView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageView.m; sourceTree = "<group>"; };
 		AF61696587085E84E681D851DA80741E /* MTLValueTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLValueTransformer.m; path = Mantle/MTLValueTransformer.m; sourceTree = "<group>"; };
-		AF739390B8F5C2CB9C8180E0C8B75DF1 /* ZNGTemplateClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTemplateClient.h; sourceTree = "<group>"; };
 		AFCEE4A1988F76EC6D53CB98FEA0AA7D /* Mantle-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Mantle-dummy.m"; sourceTree = "<group>"; };
-		B0F585CB2586DD979588951119091286 /* ZNGMessageRead.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageRead.h; sourceTree = "<group>"; };
-		B1252848814386275639DF0EA0E61736 /* ZNGTimeZoneClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTimeZoneClient.m; sourceTree = "<group>"; };
 		B1516896065698B77622E2A49B5ED12F /* Pods-ZingleSDK_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ZingleSDK_Example-umbrella.h"; sourceTree = "<group>"; };
 		B22CDE8912583BD8EDFA2B121523CECA /* MTLModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLModel.h; path = Mantle/MTLModel.h; sourceTree = "<group>"; };
 		B2DB584B79C30B00C9429ED6352045B3 /* UIView+WebCacheOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+WebCacheOperation.h"; path = "SDWebImage/UIView+WebCacheOperation.h"; sourceTree = "<group>"; };
-		B38CBDF87C99A27F174A524CD5755C47 /* ZNGDataSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGDataSet.h; sourceTree = "<group>"; };
+		B301754C79FF8BDEE0D507D49DBD4DAE /* ZNGArrowView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGArrowView.h; sourceTree = "<group>"; };
 		B3A9B7C0D39B124C1F2120DF5511DA98 /* ZingleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZingleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B4C8A23960526EB09F36C67C7EB5E3EB /* ZNGStatus.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGStatus.h; sourceTree = "<group>"; };
 		B4CE59B53CB81532E465976CB4D13273 /* MTLValueTransformer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLValueTransformer.h; path = Mantle/MTLValueTransformer.h; sourceTree = "<group>"; };
 		B5A37738CBAD8385858507A1A076C45A /* NSObject+MTLComparisonAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+MTLComparisonAdditions.m"; path = "Mantle/NSObject+MTLComparisonAdditions.m"; sourceTree = "<group>"; };
 		B5DC53CA642A5F17B638444F580F2433 /* Mantle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Mantle.h; path = Mantle/Mantle.h; sourceTree = "<group>"; };
-		B7A657337A36DB01B3D5C6B84AEA4DA0 /* ZNGNewContactChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewContactChannel.h; sourceTree = "<group>"; };
+		B6B22EE5D34A112F3F9AFBFD83A035B7 /* ZNGMessageRead.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageRead.h; sourceTree = "<group>"; };
 		B83EC3D4662C6B7BBDE035B934DCDC6A /* UIProgressView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIProgressView+AFNetworking.h"; path = "UIKit+AFNetworking/UIProgressView+AFNetworking.h"; sourceTree = "<group>"; };
-		B8610F09C32D1C64F4974E90903F4F24 /* ZNGParticipant.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGParticipant.m; sourceTree = "<group>"; };
 		B9AA63A0D6960A196C48CBA3AEF1B91D /* EXTScope.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EXTScope.m; path = Mantle/extobjc/EXTScope.m; sourceTree = "<group>"; };
 		BA6428E9F66FD5A23C0A2E06ED26CD2F /* Podfile */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		C000021A57DA01ABDE0C0803CA38CAE3 /* ZNGAutomationClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAutomationClient.m; sourceTree = "<group>"; };
+		BBD939BD322A172C8FC4A4DFCA320E94 /* ZNGAccountClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountClient.h; sourceTree = "<group>"; };
+		BC5E66DE7F34C992FA6D97A9BA7985B9 /* ZNGNewContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewContact.m; sourceTree = "<group>"; };
 		C165E893231A00A333D404B8BA400E95 /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
 		C1976DF9DF1B7AA3746405B25BD328D6 /* SDWebImageCompat.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageCompat.m; path = SDWebImage/SDWebImageCompat.m; sourceTree = "<group>"; };
+		C1DD62AAD932DD849B2F54A18CCAE451 /* ZNGContact.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContact.h; sourceTree = "<group>"; };
 		C2948E42E36D9057DDD366BF20B9E951 /* Pods-ZingleSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		C2AF6F3202E1E6DBFCF6EB03E22A12BA /* UIButton+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+WebCache.h"; path = "SDWebImage/UIButton+WebCache.h"; sourceTree = "<group>"; };
+		C4010EE696E1978EB1F22CA7F6A99DED /* ZNGLabelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelClient.m; sourceTree = "<group>"; };
+		C40B122769F1555BAAF97D6D2ABD2DB4 /* ZNGLabel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabel.h; sourceTree = "<group>"; };
 		C646F5531B8328C1989636F8F8B206D8 /* AFNetworkActivityLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityLogger.h; path = AFNetworkActivityLogger/AFNetworkActivityLogger.h; sourceTree = "<group>"; };
 		C6C62D76F5799F122621AE073D09A03A /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+MTLPredefinedTransformerAdditions.m"; path = "Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.m"; sourceTree = "<group>"; };
 		C79E8372DE7BF525499693780DF1591C /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPSessionManager.m; path = AFNetworking/AFHTTPSessionManager.m; sourceTree = "<group>"; };
+		C9E1EF0FE3EE3C9AD6785459A8307D07 /* ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZingleSDK.h; sourceTree = "<group>"; };
+		CA304B9B24528D924EF432D9A0267A66 /* ZNGContactChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactChannel.h; sourceTree = "<group>"; };
 		CCF0B37D77B290A3CB443C387B506F87 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
+		CDEE4DB6CB0DABF1C548DDADCC62E7D3 /* ZNGTemplateClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTemplateClient.h; sourceTree = "<group>"; };
 		CE3DE32B5EC9D831FD123CEB82438521 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
-		D1DCDC94D985A39138F42CE506148CE8 /* ZNGServiceChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceChannel.m; sourceTree = "<group>"; };
-		D23907EAF749604A69DE72DA2874E0B5 /* ZingleValueTransformers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZingleValueTransformers.h; sourceTree = "<group>"; };
+		CEE97771AC405B6977102BD02A64AB02 /* ZNGAutomationClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAutomationClient.h; sourceTree = "<group>"; };
 		D25BEB43C20BAD5FCE6B2D3A9EDB9C96 /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
-		D2F8137208407742AC8553DB1C2BCEA5 /* ZNGContactChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannel.m; sourceTree = "<group>"; };
 		D3601061A3E38607F2DE34835BF44E52 /* ZingleSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ZingleSDK-dummy.m"; sourceTree = "<group>"; };
-		D4E67325E6BE9041B80A9811F2F23376 /* ZNGContactClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactClient.h; sourceTree = "<group>"; };
+		D515C8C86FB0E4588FE1D9308F910E50 /* ZNGNewMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewMessage.m; sourceTree = "<group>"; };
 		D529180686997258E0CB3CD22A0CC6CC /* NSObject+MTLComparisonAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+MTLComparisonAdditions.h"; path = "Mantle/NSObject+MTLComparisonAdditions.h"; sourceTree = "<group>"; };
 		D5D31796905BD6DDC3DA71B4323875B8 /* UIAlertView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+AFNetworking.h"; path = "UIKit+AFNetworking/UIAlertView+AFNetworking.h"; sourceTree = "<group>"; };
-		D6B895180734FC75697C527FF2D72E2A /* ZNGAccountPlanClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountPlanClient.h; sourceTree = "<group>"; };
-		D79E0C2996AE1C0F2E305316968B7646 /* ZNGServiceClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceClient.m; sourceTree = "<group>"; };
 		D7A5E1D1F757EF24DDAC474F01819440 /* AFHTTPRequestOperationManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperationManager.h; path = AFNetworking/AFHTTPRequestOperationManager.h; sourceTree = "<group>"; };
 		D7CF3CC732B80F3841EF540700F68948 /* Pods-ZingleSDK_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZingleSDK_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
+		D83390A798108063E9627CECBA780D58 /* ZNGAccountPlan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlan.m; sourceTree = "<group>"; };
 		D89CF19C5C98583CEEED918D198F34A2 /* AFURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = AFNetworking/AFURLSessionManager.m; sourceTree = "<group>"; };
 		D95A099623C03C047DA97EB55F437BD7 /* AFSecurityPolicy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFSecurityPolicy.h; path = AFNetworking/AFSecurityPolicy.h; sourceTree = "<group>"; };
 		D9B092E32187A58905991A849AB1A6F9 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = AFNetworking/AFSecurityPolicy.m; sourceTree = "<group>"; };
-		D9EF697DA1547C1F0A069D42CB5289F1 /* ZNGService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGService.h; sourceTree = "<group>"; };
 		DD1B560B63CE1BA51C6064E406D1BCE4 /* EXTRuntimeExtensions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = EXTRuntimeExtensions.m; path = Mantle/extobjc/EXTRuntimeExtensions.m; sourceTree = "<group>"; };
 		DD3780513753270EFCEDE5CE57F4E03D /* UIAlertView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+AFNetworking.m"; path = "UIKit+AFNetworking/UIAlertView+AFNetworking.m"; sourceTree = "<group>"; };
-		DDAEDD277A39CCFD77A1239C098B4F5C /* ZNGNewMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewMessage.m; sourceTree = "<group>"; };
 		DE40D12B9DED0DF379D310F8CB73B1BA /* NSValueTransformer+MTLInversionAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+MTLInversionAdditions.m"; path = "Mantle/NSValueTransformer+MTLInversionAdditions.m"; sourceTree = "<group>"; };
-		DEB4F7655ADF963DA1BB48405FFF167D /* ZNGCorrespondent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCorrespondent.h; sourceTree = "<group>"; };
-		DFE3A918B936C562F13FF4FA05AF81B4 /* ZNGContactFieldClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldClient.m; sourceTree = "<group>"; };
+		DF70C3385B21E9CEF71533BA83FFBD7E /* ZNGTemplateClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTemplateClient.m; sourceTree = "<group>"; };
 		E07E2DDB89E93D7BDCC17045A6434D91 /* MTLModel+NSCoding.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MTLModel+NSCoding.h"; path = "Mantle/MTLModel+NSCoding.h"; sourceTree = "<group>"; };
+		E1747E683F81F2E42CECC7FF944B6EF2 /* ZNGNewServiceChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewServiceChannel.h; sourceTree = "<group>"; };
 		E1F470B562B6D12572ED4D50FE40D7DC /* AFNetworking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-prefix.pch"; sourceTree = "<group>"; };
+		E22846B308725C11B340C473DAB0BEB1 /* ZNGFieldOption.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGFieldOption.h; sourceTree = "<group>"; };
 		E30E5EB41A9B4BC51BC584619F2B41CC /* NSDictionary+MTLJSONKeyPath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MTLJSONKeyPath.h"; path = "Mantle/NSDictionary+MTLJSONKeyPath.h"; sourceTree = "<group>"; };
-		E39F16D40BCFC088E3124E49DBA93BF6 /* ZNGContactClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactClient.m; sourceTree = "<group>"; };
-		E43F29EB598F89BA7E2970622DF54698 /* ZNGConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConstants.h; sourceTree = "<group>"; };
-		E50B919A35D0D5AD2C175438E1321E73 /* ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZingleSDK.m; sourceTree = "<group>"; };
+		E5749E43FAEB14F7760AF1777BA1630A /* ZNGContactChannelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannelClient.m; sourceTree = "<group>"; };
 		E5A0D82BB7EE0B1F8E0F43F8BA73A841 /* SDWebImageDecoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDecoder.m; path = SDWebImage/SDWebImageDecoder.m; sourceTree = "<group>"; };
-		E5F03CB605758ABF1F3FF52F8829B610 /* ZNGAvailablePhoneNumber.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumber.m; sourceTree = "<group>"; };
 		E81420B1C3DDE8D8D2C300AC9AE96086 /* Pods-ZingleSDK_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZingleSDK_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		EB168F3D2785FE8A9572D1B1FEF62718 /* SDWebImage-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SDWebImage-umbrella.h"; sourceTree = "<group>"; };
-		EB4577FB95D2678C4499B461271D7CB0 /* ZNGLabelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelClient.m; sourceTree = "<group>"; };
+		EC8261D30AA52F0433FE9A513CB5868F /* ZNGContactField.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactField.m; sourceTree = "<group>"; };
 		EC8ACFCFB88A9E306998FBD44CD4C74F /* UIImage+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+AFNetworking.h"; path = "UIKit+AFNetworking/UIImage+AFNetworking.h"; sourceTree = "<group>"; };
 		ECBE80EAC7E5DD4CF3A3E9F6EB789E29 /* UIProgressView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIProgressView+AFNetworking.m"; path = "UIKit+AFNetworking/UIProgressView+AFNetworking.m"; sourceTree = "<group>"; };
+		ECC202A7CEFCC8F0625D918071A219F8 /* ZNGMessageClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageClient.h; sourceTree = "<group>"; };
 		EDFD322BA17AF3E7741BC91924E7E9E0 /* SDWebImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageManager.m; path = SDWebImage/SDWebImageManager.m; sourceTree = "<group>"; };
-		EFB008D9F2B6EF35EE02C3F54BD74449 /* ZNGServiceAddress.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceAddress.h; sourceTree = "<group>"; };
+		EF45C1B0392A0AD593E44C0271CA5C5B /* ZNGError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGError.m; sourceTree = "<group>"; };
 		F09F66FD7F95285878B0D1A7A36EE7FB /* AFNetworking.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = AFNetworking.modulemap; sourceTree = "<group>"; };
 		F0CA6A4945D83551993F65E3520F3788 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F0E71A7B83D198AFDC1F15BD5A69DE68 /* EXTRuntimeExtensions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTRuntimeExtensions.h; path = Mantle/extobjc/EXTRuntimeExtensions.h; sourceTree = "<group>"; };
 		F2C90275EB9D693CA75032DDC6AA65F9 /* SDWebImageManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageManager.h; path = SDWebImage/SDWebImageManager.h; sourceTree = "<group>"; };
-		F412C9B92EB4500684946FDB7A42B2CB /* ZNGConversation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversation.h; sourceTree = "<group>"; };
+		F39DA46500DC45F6AAB286937733BADA /* ZNGContactClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactClient.h; sourceTree = "<group>"; };
 		F42940091CA618011B6EDC37CCAEB9F2 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
-		F4447BEFDE0AF9AB184B5E537D76E7E4 /* ZNGContactField.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactField.h; sourceTree = "<group>"; };
+		F4AA81B28F5EF5D5C4A8FE9AD2FE4BB3 /* ZNGAvailablePhoneNumber.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumber.m; sourceTree = "<group>"; };
+		F5E7C888AB71E7CFEAF8DF249A1B65A7 /* ZNGService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGService.m; sourceTree = "<group>"; };
 		F5F41BFBBCA1F7B39A99AA68FC4B68F7 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F5F56D7AB5AACC4E38A77745F9616784 /* Zingle.storyboard */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.storyboard; path = Zingle.storyboard; sourceTree = "<group>"; };
 		F64266050974E035A34EAAE631A9C21B /* MTLModel+NSCoding.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "MTLModel+NSCoding.m"; path = "Mantle/MTLModel+NSCoding.m"; sourceTree = "<group>"; };
-		F801F1852B93C1ADF544F2116132D15B /* ZNGContactFieldValue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldValue.m; sourceTree = "<group>"; };
 		F8A742597D60B9991E290D4259E40261 /* AFNetworkActivityLogger-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworkActivityLogger-umbrella.h"; sourceTree = "<group>"; };
-		FB7120FCB48D0A7424A2B5DFA5538C4F /* ZNGChannelType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannelType.h; sourceTree = "<group>"; };
+		FA9E62E68BDEA3AB3589C17DDA2817F8 /* ZNGAccountPlanClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountPlanClient.h; sourceTree = "<group>"; };
+		FAE04AD5071D119E84BC15ABA1C26F84 /* ZNGContactChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannel.m; sourceTree = "<group>"; };
 		FB95BC9A1632B6F0783E2A5E2CBE8E06 /* AFNetworkActivityLogger.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworkActivityLogger.xcconfig; sourceTree = "<group>"; };
 		FBFBCFF5EDBFAA92A2684B7F7DA24652 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTKeyPathCoding.h; path = Mantle/extobjc/EXTKeyPathCoding.h; sourceTree = "<group>"; };
-		FC380F2EBBC4FDF93181A47913EC6B5A /* ZNGMessageClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageClient.h; sourceTree = "<group>"; };
+		FCA6AD9D10C04BF0CC3BE481FE2F09C2 /* ZNGAutomationClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAutomationClient.m; sourceTree = "<group>"; };
 		FD09327396409F82F2A119AC8F87B109 /* MTLJSONAdapter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLJSONAdapter.m; path = Mantle/MTLJSONAdapter.m; sourceTree = "<group>"; };
 		FE77BAE7224B3EDA91D3B0D3DDC06229 /* Pods-ZingleSDK_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZingleSDK_Example-dummy.m"; sourceTree = "<group>"; };
 		FE8C34C7721844ECADC4FD45A8B60114 /* SDWebImagePrefetcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImagePrefetcher.h; path = SDWebImage/SDWebImagePrefetcher.h; sourceTree = "<group>"; };
@@ -709,28 +705,6 @@
 			path = Pod;
 			sourceTree = "<group>";
 		};
-		089FC365491047DD50817A8FFDB52DB6 /* ZNGServiceChannel */ = {
-			isa = PBXGroup;
-			children = (
-				7648B9450B7DAAFD4C70062BCD8C37EA /* ZNGNewServiceChannel.h */,
-				82973E99FBF930E4C28342E7E36D55CB /* ZNGNewServiceChannel.m */,
-				45E501FDADADCFA2382A7C9B70370231 /* ZNGServiceChannel.h */,
-				D1DCDC94D985A39138F42CE506148CE8 /* ZNGServiceChannel.m */,
-			);
-			path = ZNGServiceChannel;
-			sourceTree = "<group>";
-		};
-		16BA47D0B1EE0C185C682DD30B90CE39 /* ZNGContactChannel */ = {
-			isa = PBXGroup;
-			children = (
-				275BEE7984FBB1D81C8BB1B2A8553245 /* ZNGContactChannel.h */,
-				D2F8137208407742AC8553DB1C2BCEA5 /* ZNGContactChannel.m */,
-				B7A657337A36DB01B3D5C6B84AEA4DA0 /* ZNGNewContactChannel.h */,
-				8CED1C92B4EFD1B43EE7E410E3D316D4 /* ZNGNewContactChannel.m */,
-			);
-			path = ZNGContactChannel;
-			sourceTree = "<group>";
-		};
 		2820C9D0FB7A1AFD2B5D18017F17E794 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -743,20 +717,6 @@
 				B3A9B7C0D39B124C1F2120DF5511DA98 /* ZingleSDK.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		2D9F9ED10CFAB43887A76E62E99099D5 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				0FA3F4AB654A9D86BB9F81DF7D5148DA /* ZingleSDK.h */,
-				E50B919A35D0D5AD2C175438E1321E73 /* ZingleSDK.m */,
-				9F4858846FC5BDABFB29A71385B7C09A /* Clients */,
-				B6BACB9DD3376265548D56A0498E462F /* Misc */,
-				B3CCE07789DA52295B6BF8404CAC5A44 /* Models */,
-				B4EE6EBBFC4B9253601CD639BE5F5AFF /* UI */,
-				7C4267E0CA45CA962491FCBDE0B916FE /* ValueTransformers */,
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 		4A396013FDAD2683F8F7AED0C5666F88 /* extobjc */ = {
@@ -810,13 +770,13 @@
 			path = "../Target Support Files/AFNetworkActivityLogger";
 			sourceTree = "<group>";
 		};
-		5D577230ADCE6F6564C6CD9B7C520CD5 /* ZNGContact */ = {
+		62491FE35A8ADB599FB3A8A56D956ACB /* ZNGContact */ = {
 			isa = PBXGroup;
 			children = (
-				9435462603DAE24E6661983FABC4F1C6 /* ZNGContact.h */,
-				363C40EED9C1A7DBE37A3B6AC7C0033C /* ZNGContact.m */,
-				A34B1722A5752945C1F3C187C8444E61 /* ZNGNewContact.h */,
-				AA5C4AD80EF6721AC54F8D5B57FA10ED /* ZNGNewContact.m */,
+				C1DD62AAD932DD849B2F54A18CCAE451 /* ZNGContact.h */,
+				6B86465764DE48B5F046963285BB5B59 /* ZNGContact.m */,
+				9F1D1CC7E699AF622247A298932B6DEE /* ZNGNewContact.h */,
+				BC5E66DE7F34C992FA6D97A9BA7985B9 /* ZNGNewContact.m */,
 			);
 			path = ZNGContact;
 			sourceTree = "<group>";
@@ -833,14 +793,6 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/SDWebImage";
-			sourceTree = "<group>";
-		};
-		6E363FD88CB54925C905C98B35CB0F46 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				2D9F9ED10CFAB43887A76E62E99099D5 /* Classes */,
-			);
-			path = Pod;
 			sourceTree = "<group>";
 		};
 		6FBD6A745169088B0E5EDCBB318D3409 /* Pods-ZingleSDK_Tests */ = {
@@ -878,6 +830,30 @@
 			name = Security;
 			sourceTree = "<group>";
 		};
+		766917536CE80FE4069FE1180BAEC5D2 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				C9E1EF0FE3EE3C9AD6785459A8307D07 /* ZingleSDK.h */,
+				331F27601777B7F39F3DAE7DD46B144B /* ZingleSDK.m */,
+				8389C3278B74606307643B8B0D343C70 /* Clients */,
+				E61399E7A23724A9AD937A68F6AA1F3A /* Models */,
+				E7567CEC3D7008E9C5B4216AB78885A0 /* UI */,
+				C372990A697825F7C7E3824657796440 /* ValueTransformers */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		7724BC39FF85204FA426659B7FF0F686 /* ZNGContactChannel */ = {
+			isa = PBXGroup;
+			children = (
+				CA304B9B24528D924EF432D9A0267A66 /* ZNGContactChannel.h */,
+				FAE04AD5071D119E84BC15ABA1C26F84 /* ZNGContactChannel.m */,
+				4766330EF5B2BD78889D0CB8636EC971 /* ZNGNewContactChannel.h */,
+				23A9280A7D72F2E63817BB20288EE70E /* ZNGNewContactChannel.m */,
+			);
+			path = ZNGContactChannel;
+			sourceTree = "<group>";
+		};
 		797AE012E8B92519EB1B3B5920310E49 /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -889,15 +865,6 @@
 				8D081F93C9CA1EFBD0111B4821A59B04 /* SystemConfiguration.framework */,
 			);
 			name = iOS;
-			sourceTree = "<group>";
-		};
-		7C4267E0CA45CA962491FCBDE0B916FE /* ValueTransformers */ = {
-			isa = PBXGroup;
-			children = (
-				D23907EAF749604A69DE72DA2874E0B5 /* ZingleValueTransformers.h */,
-				30C175E69F310B949D6EDF39F70F072D /* ZingleValueTransformers.m */,
-			);
-			path = ValueTransformers;
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -937,15 +904,41 @@
 			name = UIKit;
 			sourceTree = "<group>";
 		};
-		87CA30DFC0EB1D3209965FAE56C55D8B /* ZNGService */ = {
+		8389C3278B74606307643B8B0D343C70 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
-				8CCBB96C7C0363C354D02C587F6A60ED /* ZNGNewService.h */,
-				470074D3D1871922D298654F24CD215B /* ZNGNewService.m */,
-				D9EF697DA1547C1F0A069D42CB5289F1 /* ZNGService.h */,
-				60357694ECEC848DC8312BAF6595E1B1 /* ZNGService.m */,
+				BBD939BD322A172C8FC4A4DFCA320E94 /* ZNGAccountClient.h */,
+				45CA1AADCCBA15B852CE7C9C038D26AF /* ZNGAccountClient.m */,
+				FA9E62E68BDEA3AB3589C17DDA2817F8 /* ZNGAccountPlanClient.h */,
+				3EA5995BBF59372C7B87E460D9333E6F /* ZNGAccountPlanClient.m */,
+				CEE97771AC405B6977102BD02A64AB02 /* ZNGAutomationClient.h */,
+				FCA6AD9D10C04BF0CC3BE481FE2F09C2 /* ZNGAutomationClient.m */,
+				4DC9F075C65AEBCC0AA87A17F46B829B /* ZNGAvailablePhoneNumberClient.h */,
+				96BAA8F9668DF6986F22393FB04D3E14 /* ZNGAvailablePhoneNumberClient.m */,
+				03060A9BDAD719574104A746675C6F6A /* ZNGBaseClient.h */,
+				72E4C08893B2EE3240235C1EBDAEBF0C /* ZNGBaseClient.m */,
+				74E60014D5B04CA8178F9E75E9F3F1B5 /* ZNGContactChannelClient.h */,
+				E5749E43FAEB14F7760AF1777BA1630A /* ZNGContactChannelClient.m */,
+				F39DA46500DC45F6AAB286937733BADA /* ZNGContactClient.h */,
+				8DD435ECCE89FB8A4C5FF580F0633C3A /* ZNGContactClient.m */,
+				31FC93B054875E8AB5CC34268FC2E434 /* ZNGContactFieldClient.h */,
+				6DA72F9CDA417BBC8364B77495168DD0 /* ZNGContactFieldClient.m */,
+				7A879C4922106B6D3AB9E597CCE3B491 /* ZNGLabelClient.h */,
+				C4010EE696E1978EB1F22CA7F6A99DED /* ZNGLabelClient.m */,
+				ECC202A7CEFCC8F0625D918071A219F8 /* ZNGMessageClient.h */,
+				1D477E63CCA3FE8FC6ED6B8F77E66242 /* ZNGMessageClient.m */,
+				7DFE4CE97FCA7524C1075125B993A084 /* ZNGServiceAddressClient.h */,
+				290DAAB7B0BAB7AD5C64B2866CBB5494 /* ZNGServiceAddressClient.m */,
+				60ACF9359E603D6B8AA66CFD5E449016 /* ZNGServiceChannelClient.h */,
+				081CCC90172E936F588F08046370DDFB /* ZNGServiceChannelClient.m */,
+				A9D550E0279A84865F0124AFC44D3551 /* ZNGServiceClient.h */,
+				458F28870422D9158C1D6FE6FC4413E9 /* ZNGServiceClient.m */,
+				CDEE4DB6CB0DABF1C548DDADCC62E7D3 /* ZNGTemplateClient.h */,
+				DF70C3385B21E9CEF71533BA83FFBD7E /* ZNGTemplateClient.m */,
+				43C1CA8A52D0430CA63E4DD20ACF731E /* ZNGTimeZoneClient.h */,
+				03D329696A057ECF582E19BA813FE386 /* ZNGTimeZoneClient.m */,
 			);
-			path = ZNGService;
+			path = Clients;
 			sourceTree = "<group>";
 		};
 		87D8F40DFE7324AA7200078DFD54DC11 /* Support Files */ = {
@@ -960,6 +953,28 @@
 			);
 			name = "Support Files";
 			path = "Example/Pods/Target Support Files/ZingleSDK";
+			sourceTree = "<group>";
+		};
+		88A4942BA75521A01C5D234BA8A87BC2 /* ZNGMessage */ = {
+			isa = PBXGroup;
+			children = (
+				AC3B1FE74D2142E75004C6740F7D038F /* ZNGMessage.h */,
+				364A58AADD7EDBE4D7C97798FCC3FE24 /* ZNGMessage.m */,
+				99F021525F624A85C03F802E34B8B387 /* ZNGNewMessage.h */,
+				D515C8C86FB0E4588FE1D9308F910E50 /* ZNGNewMessage.m */,
+			);
+			path = ZNGMessage;
+			sourceTree = "<group>";
+		};
+		88A6B845308A1AA8B219ECEA105CAE2D /* ZNGServiceChannel */ = {
+			isa = PBXGroup;
+			children = (
+				E1747E683F81F2E42CECC7FF944B6EF2 /* ZNGNewServiceChannel.h */,
+				63B0FA45F60CEC19D2424CCA4809CEB5 /* ZNGNewServiceChannel.m */,
+				3D48FB41675FE867EA34652D8A5CF432 /* ZNGServiceChannel.h */,
+				2CA4844B9605996CC0B51F0723827370 /* ZNGServiceChannel.m */,
+			);
+			path = ZNGServiceChannel;
 			sourceTree = "<group>";
 		};
 		8BFCC6A182E9AAC6D871F67BFC910431 /* Pods-ZingleSDK_Example */ = {
@@ -989,6 +1004,14 @@
 			path = SDWebImage;
 			sourceTree = "<group>";
 		};
+		8F07F97EBEB323BC43D0138A5C92C54A /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				766917536CE80FE4069FE1180BAEC5D2 /* Classes */,
+			);
+			path = Pod;
+			sourceTree = "<group>";
+		};
 		90BB29FB25A2E531381172BD8370C6F1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -1009,41 +1032,15 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		9F4858846FC5BDABFB29A71385B7C09A /* Clients */ = {
+		921EB5607CB537364F74051709817661 /* ZNGService */ = {
 			isa = PBXGroup;
 			children = (
-				54D11D9978F0C9B63F5156EC5F64B64E /* ZNGAccountClient.h */,
-				0376770BBFC287946C8BB497AB585B71 /* ZNGAccountClient.m */,
-				D6B895180734FC75697C527FF2D72E2A /* ZNGAccountPlanClient.h */,
-				24C62E8EF65965318F52DF56D5DF37A2 /* ZNGAccountPlanClient.m */,
-				0F074042BEA836F73E1204BE8A677F12 /* ZNGAutomationClient.h */,
-				C000021A57DA01ABDE0C0803CA38CAE3 /* ZNGAutomationClient.m */,
-				6D82CC0D510972D6B92D8B426011D755 /* ZNGAvailablePhoneNumberClient.h */,
-				2B43B2C8D383F15BB275D52F1368FF31 /* ZNGAvailablePhoneNumberClient.m */,
-				AAD826AD2BA05B417B45050ECAB6C21A /* ZNGBaseClient.h */,
-				0F727CA0C6BECF1CAF6AE122B0FDBD3F /* ZNGBaseClient.m */,
-				6201CD71E92D8A3D50326C6944A800AD /* ZNGContactChannelClient.h */,
-				2F737243181CF8E3FC7F125AE0846DF6 /* ZNGContactChannelClient.m */,
-				D4E67325E6BE9041B80A9811F2F23376 /* ZNGContactClient.h */,
-				E39F16D40BCFC088E3124E49DBA93BF6 /* ZNGContactClient.m */,
-				65889DEC67B12FF3D09502D99D5828B0 /* ZNGContactFieldClient.h */,
-				DFE3A918B936C562F13FF4FA05AF81B4 /* ZNGContactFieldClient.m */,
-				947FFAF87A4CB4EDD69B5F9689B39C9A /* ZNGLabelClient.h */,
-				EB4577FB95D2678C4499B461271D7CB0 /* ZNGLabelClient.m */,
-				FC380F2EBBC4FDF93181A47913EC6B5A /* ZNGMessageClient.h */,
-				4457D911B2FACDB3CB5A84DF0058E8DD /* ZNGMessageClient.m */,
-				001A6DF7B6E6E1A32B6E64B2531651A6 /* ZNGServiceAddressClient.h */,
-				3BFEE9D296A06EE246A7C8EB4B1F2103 /* ZNGServiceAddressClient.m */,
-				226043C1D9869B82D75CF276264DD8E3 /* ZNGServiceChannelClient.h */,
-				417E24D5095B2BC7225123BCF8F7B853 /* ZNGServiceChannelClient.m */,
-				349511824FC35EB82E4D428D3D587264 /* ZNGServiceClient.h */,
-				D79E0C2996AE1C0F2E305316968B7646 /* ZNGServiceClient.m */,
-				AF739390B8F5C2CB9C8180E0C8B75DF1 /* ZNGTemplateClient.h */,
-				1E2CF3EF903C832426E55B7884B06843 /* ZNGTemplateClient.m */,
-				5210062CD0C6BD0AADC32ECB4E744197 /* ZNGTimeZoneClient.h */,
-				B1252848814386275639DF0EA0E61736 /* ZNGTimeZoneClient.m */,
+				59212FD649303A5F97162E3848569A6B /* ZNGNewService.h */,
+				A9F088B05F0703F9FAEBDEAD0774777E /* ZNGNewService.m */,
+				85FC77913E0CB327DCC3CCA2AD8D31A9 /* ZNGService.h */,
+				F5E7C888AB71E7CFEAF8DF249A1B65A7 /* ZNGService.m */,
 			);
-			path = Clients;
+			path = ZNGService;
 			sourceTree = "<group>";
 		};
 		A3FF4CF807F1E769D432FBB1934DF497 /* Support Files */ = {
@@ -1084,80 +1081,6 @@
 			name = NSURLConnection;
 			sourceTree = "<group>";
 		};
-		B3CCE07789DA52295B6BF8404CAC5A44 /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				59770B4864B06E962CCA5F6F8DDE7112 /* ZNGAccount.h */,
-				0AC5CADB4C1B7DDE77FC3847CB593B55 /* ZNGAccount.m */,
-				884AC5E58569F12875F87EF8C6E9F02E /* ZNGAccountPlan.h */,
-				948E223E5242A17B2312C65FE174A7E0 /* ZNGAccountPlan.m */,
-				81402C1F8D08184FEEC5E3AEE4AB716E /* ZNGAutomation.h */,
-				224E5FE1787429577BA873EEBCCAE41A /* ZNGAutomation.m */,
-				2B1F97D4ADAE9482C6E4242F864629BE /* ZNGAvailablePhoneNumber.h */,
-				E5F03CB605758ABF1F3FF52F8829B610 /* ZNGAvailablePhoneNumber.m */,
-				6E132C7CE3EFE1F9C600954C89E07049 /* ZNGChannel.h */,
-				39C00410C0D3B80107BD85AEC574AD64 /* ZNGChannel.m */,
-				FB7120FCB48D0A7424A2B5DFA5538C4F /* ZNGChannelType.h */,
-				727DC30260EACDF923CC6AA1BB43CD63 /* ZNGChannelType.m */,
-				F4447BEFDE0AF9AB184B5E537D76E7E4 /* ZNGContactField.h */,
-				7E24AC5169196DF0DC503E145CF82DE2 /* ZNGContactField.m */,
-				1F21FDEB85D2725B972B390190A5D3FF /* ZNGContactFieldValue.h */,
-				F801F1852B93C1ADF544F2116132D15B /* ZNGContactFieldValue.m */,
-				F412C9B92EB4500684946FDB7A42B2CB /* ZNGConversation.h */,
-				4E70C2CEA358DB4B124713E8B4F0B735 /* ZNGConversation.m */,
-				DEB4F7655ADF963DA1BB48405FFF167D /* ZNGCorrespondent.h */,
-				8FFE2A0E91E8886DFDFF56278CF22B11 /* ZNGCorrespondent.m */,
-				B38CBDF87C99A27F174A524CD5755C47 /* ZNGDataSet.h */,
-				8FA57AAF2B847B7FE07DB2E244C6A7CA /* ZNGDataSet.m */,
-				032250234544958788C0BE57EA6BF009 /* ZNGError.h */,
-				71B8BC5B7E587A9D2D2A86A5D0BC9064 /* ZNGError.m */,
-				2F8FA5E91BFDFF8EDFF20FC208D6CFD3 /* ZNGFieldOption.h */,
-				11DFE2C72079E9D98E90E91E18F32185 /* ZNGFieldOption.m */,
-				1D9FB4F2802408D9B74DF1FB6E0D6BAD /* ZNGLabel.h */,
-				086AE83E6D6FFE0CC0C2DDC087F10F1B /* ZNGLabel.m */,
-				B0F585CB2586DD979588951119091286 /* ZNGMessageRead.h */,
-				2EA14B1D6F6C5F32BB84282A0CD2786B /* ZNGMessageRead.m */,
-				3E456D99F0CCE25D5392C69251AAFE2F /* ZNGParticipant.h */,
-				B8610F09C32D1C64F4974E90903F4F24 /* ZNGParticipant.m */,
-				EFB008D9F2B6EF35EE02C3F54BD74449 /* ZNGServiceAddress.h */,
-				876096AD5B95892C5A463F9EB2339392 /* ZNGServiceAddress.m */,
-				094207992A38CAF8C660F27F3080BEA9 /* ZNGSetting.h */,
-				40C0AA0BD54697597D6DB2CDA0C33E0B /* ZNGSetting.m */,
-				88A912EEACF883946234FA82516C6403 /* ZNGStatus.h */,
-				7C4B547CF0170256C24A9B594ED8EE5D /* ZNGStatus.m */,
-				251A02D710604DED1D8AC4F40CC28DE1 /* ZNGTemplate.h */,
-				98E56FB57E1BC1C5B3EE97B392C21187 /* ZNGTemplate.m */,
-				5D577230ADCE6F6564C6CD9B7C520CD5 /* ZNGContact */,
-				16BA47D0B1EE0C185C682DD30B90CE39 /* ZNGContactChannel */,
-				F021D28E6B6783266DCCCD8A08671C11 /* ZNGMessage */,
-				87CA30DFC0EB1D3209965FAE56C55D8B /* ZNGService */,
-				089FC365491047DD50817A8FFDB52DB6 /* ZNGServiceChannel */,
-			);
-			path = Models;
-			sourceTree = "<group>";
-		};
-		B4EE6EBBFC4B9253601CD639BE5F5AFF /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				714A988435AD2DCA489208739B8B149B /* ZNGArrowView.h */,
-				14AAEA09D9D8099642E4F1577CCB1F73 /* ZNGArrowView.m */,
-				7F7727B9B815C8D15BCDC5D1B87E238F /* ZNGConversationViewController.h */,
-				AC8DF1E08515A1E51E1E71E061B771BE /* ZNGConversationViewController.m */,
-				9F0723659F42555E7605F5A2775E157F /* ZNGMessageView.h */,
-				AED750DA62191AC3C1CB107D07ADA51C /* ZNGMessageView.m */,
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
-		B6BACB9DD3376265548D56A0498E462F /* Misc */ = {
-			isa = PBXGroup;
-			children = (
-				E43F29EB598F89BA7E2970622DF54698 /* ZNGConstants.h */,
-				9EC0BCA8B6BC7A9ADC7F33EF4F906762 /* ZNGConstants.m */,
-			);
-			path = Misc;
-			sourceTree = "<group>";
-		};
 		BB7516D82C605908606897AD80BAC561 /* NSURLSession */ = {
 			isa = PBXGroup;
 			children = (
@@ -1167,6 +1090,15 @@
 				D89CF19C5C98583CEEED918D198F34A2 /* AFURLSessionManager.m */,
 			);
 			name = NSURLSession;
+			sourceTree = "<group>";
+		};
+		C372990A697825F7C7E3824657796440 /* ValueTransformers */ = {
+			isa = PBXGroup;
+			children = (
+				ABF012545E9E54D06661A5CFB3210097 /* ZingleValueTransformers.h */,
+				A3C43ECF3FE70C304410AFC6E0D394AC /* ZingleValueTransformers.m */,
+			);
+			path = ValueTransformers;
 			sourceTree = "<group>";
 		};
 		D38AB4124F665AC07286BEB2459E402D /* Mantle */ = {
@@ -1270,12 +1202,64 @@
 		E0D7DBE57709FA41D65F5C6848ED6505 /* ZingleSDK */ = {
 			isa = PBXGroup;
 			children = (
-				6E363FD88CB54925C905C98B35CB0F46 /* Pod */,
+				8F07F97EBEB323BC43D0138A5C92C54A /* Pod */,
 				FB0040DB459C3844B816CF53FD43FFE9 /* Resources */,
 				87D8F40DFE7324AA7200078DFD54DC11 /* Support Files */,
 			);
 			name = ZingleSDK;
 			path = ../..;
+			sourceTree = "<group>";
+		};
+		E61399E7A23724A9AD937A68F6AA1F3A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9B535F69770C4D5ABE82D8E531A6A53C /* ZNGAccount.h */,
+				1BB42AED34B7FD987BF6AC8E47239978 /* ZNGAccount.m */,
+				19953EAEFDEFB472A1DE6E822DCABF5E /* ZNGAccountPlan.h */,
+				D83390A798108063E9627CECBA780D58 /* ZNGAccountPlan.m */,
+				0191C6922EF152A2F72F78D30866800E /* ZNGAutomation.h */,
+				4F35F603DC72D327B37CE9B92B28F633 /* ZNGAutomation.m */,
+				47391A45BDBA1BC1A194C44A702F4F27 /* ZNGAvailablePhoneNumber.h */,
+				F4AA81B28F5EF5D5C4A8FE9AD2FE4BB3 /* ZNGAvailablePhoneNumber.m */,
+				A3EABA221427412356275D725D0BC951 /* ZNGChannel.h */,
+				1D0F8D102414F74C9DC5013BFDE7B14E /* ZNGChannel.m */,
+				84B71E5E9CECAB4B1F0A0FE8BA07422B /* ZNGChannelType.h */,
+				127CC29A6649BFB2F4BE5E7F097DEDEF /* ZNGChannelType.m */,
+				5EEE245B8D4B671F24E53D1F1AF44071 /* ZNGContactField.h */,
+				EC8261D30AA52F0433FE9A513CB5868F /* ZNGContactField.m */,
+				4D85B01994DCAF2A4ABFD110C28C7E7E /* ZNGContactFieldValue.h */,
+				2C1F850753E107D64F21065902E2E426 /* ZNGContactFieldValue.m */,
+				AA8556A03F7AF81711910F915F17450A /* ZNGConversation.h */,
+				7F1CF40BD7A75F3802E9E9A1888FE313 /* ZNGConversation.m */,
+				4DEC32A6CC47A0B1AA09C56521F8D0F3 /* ZNGCorrespondent.h */,
+				61530BE49AAEF6C3F8DDF1552E33D907 /* ZNGCorrespondent.m */,
+				525BC7C2DE315081E6F623350C9DB26D /* ZNGDataSet.h */,
+				5DEC2F9F1BB5076B4BA3A764D66ED021 /* ZNGDataSet.m */,
+				6F7C8D7597B877310031FAF7DA53CC56 /* ZNGError.h */,
+				EF45C1B0392A0AD593E44C0271CA5C5B /* ZNGError.m */,
+				E22846B308725C11B340C473DAB0BEB1 /* ZNGFieldOption.h */,
+				7A7F2133438CA10C2839E79621E1F27B /* ZNGFieldOption.m */,
+				C40B122769F1555BAAF97D6D2ABD2DB4 /* ZNGLabel.h */,
+				89B949FACE834132D5E3B32FAEB0E433 /* ZNGLabel.m */,
+				B6B22EE5D34A112F3F9AFBFD83A035B7 /* ZNGMessageRead.h */,
+				4348A8F9E7A04355BF309687CB492F4A /* ZNGMessageRead.m */,
+				35AE9638A7CC28F7ABD8FC115DF71555 /* ZNGParticipant.h */,
+				A8B9BD7908FC879F178232C60A502BBD /* ZNGParticipant.m */,
+				5AB7EF6BB6217EADF98AF554E9FB26D6 /* ZNGServiceAddress.h */,
+				5B07D2DF863A986A5E8141E017A2E713 /* ZNGServiceAddress.m */,
+				05BA74AE6C5FDCCBDA086E0CC2B1C973 /* ZNGSetting.h */,
+				945FB0984D444045616302B8980FF626 /* ZNGSetting.m */,
+				B4C8A23960526EB09F36C67C7EB5E3EB /* ZNGStatus.h */,
+				325426A679D1BB9E2C559D008677971D /* ZNGStatus.m */,
+				026AAD90AADDFAD4B4C79BA3CD19A2C7 /* ZNGTemplate.h */,
+				08630C022AA747894B1301B62E80D3AC /* ZNGTemplate.m */,
+				62491FE35A8ADB599FB3A8A56D956ACB /* ZNGContact */,
+				7724BC39FF85204FA426659B7FF0F686 /* ZNGContactChannel */,
+				88A4942BA75521A01C5D234BA8A87BC2 /* ZNGMessage */,
+				921EB5607CB537364F74051709817661 /* ZNGService */,
+				88A6B845308A1AA8B219ECEA105CAE2D /* ZNGServiceChannel */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		E64579836628A0FCA1A2AAB807F299B3 /* Frameworks */ = {
@@ -1290,23 +1274,25 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E7567CEC3D7008E9C5B4216AB78885A0 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				B301754C79FF8BDEE0D507D49DBD4DAE /* ZNGArrowView.h */,
+				0D48875C633B1EAD2F9112C030B19C9A /* ZNGArrowView.m */,
+				A1A9E105DA90E637BBD2F2BC51593900 /* ZNGConversationViewController.h */,
+				9CA40F71F9F41BAB52BABAA53DB8E628 /* ZNGConversationViewController.m */,
+				26369E6B5069203E03BF54A180B757BE /* ZNGMessageView.h */,
+				96BCEFBFDCFDDFE0EC6BC50A5586492F /* ZNGMessageView.m */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		EF6ADE5CB2E7240C42EEBBACF3A45559 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
 				F5F56D7AB5AACC4E38A77745F9616784 /* Zingle.storyboard */,
 			);
 			path = Assets;
-			sourceTree = "<group>";
-		};
-		F021D28E6B6783266DCCCD8A08671C11 /* ZNGMessage */ = {
-			isa = PBXGroup;
-			children = (
-				2A8F0343A123EAB83614F022A8362402 /* ZNGMessage.h */,
-				59EC5D707BB3D328E74D20A7D9F5FA95 /* ZNGMessage.m */,
-				9A1C46588D46B16487AA58212790B501 /* ZNGNewMessage.h */,
-				DDAEDD277A39CCFD77A1239C098B4F5C /* ZNGNewMessage.m */,
-			);
-			path = ZNGMessage;
 			sourceTree = "<group>";
 		};
 		FB0040DB459C3844B816CF53FD43FFE9 /* Resources */ = {
@@ -1343,6 +1329,64 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		3735B569B2B3327E3A50B9B99387480F /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6209E49C3E0EE9E02F16D8D1E14F6341 /* ZingleSDK-umbrella.h in Headers */,
+				DCA37C80F173AF29A3632DA3AADEA47A /* ZingleSDK.h in Headers */,
+				75E6702A55627534CFCE83A347376684 /* ZingleValueTransformers.h in Headers */,
+				19C5350AF935BBF4E3B469160B732109 /* ZNGAccount.h in Headers */,
+				3B9E1165A72F01FA907F204B271C4CE2 /* ZNGAccountClient.h in Headers */,
+				BDD2720FF7BD6BAC36E365B234731D1E /* ZNGAccountPlan.h in Headers */,
+				0E613CEEA8369E8495E829FFA892083D /* ZNGAccountPlanClient.h in Headers */,
+				E080F238CAAC29F616684BB70EBD06DE /* ZNGArrowView.h in Headers */,
+				67AA421743EA8BED91B644D985DA7F86 /* ZNGAutomation.h in Headers */,
+				A6950DD014B86574A4121D2E2434D906 /* ZNGAutomationClient.h in Headers */,
+				0BD7F7314DF99F53383F560B7487B706 /* ZNGAvailablePhoneNumber.h in Headers */,
+				8BF67277E13ECA6A7CFBEE0115D7CD56 /* ZNGAvailablePhoneNumberClient.h in Headers */,
+				BB14567DF6F55E2BB88A8DAD7CD00899 /* ZNGBaseClient.h in Headers */,
+				AAFE42108A0EE0012C1C8A1D6602C9C8 /* ZNGChannel.h in Headers */,
+				8CE1FA30384FA7855779D6F9646B9040 /* ZNGChannelType.h in Headers */,
+				7ECA6739A723776DB3F2EFE1EC797CC7 /* ZNGContact.h in Headers */,
+				AE84B9964A034DCAC0F0100C100F0230 /* ZNGContactChannel.h in Headers */,
+				5E23CFEA15F6D5AA50F8D4C634CF3BD9 /* ZNGContactChannelClient.h in Headers */,
+				3CD02FCC5E346EA44C89D906681BB6D0 /* ZNGContactClient.h in Headers */,
+				3A3160316C3F951B723F895861269289 /* ZNGContactField.h in Headers */,
+				9012783F05F990D52A40793F3D8A280F /* ZNGContactFieldClient.h in Headers */,
+				8628192C6DE20583B138D9BEC5D9C79B /* ZNGContactFieldValue.h in Headers */,
+				68443049697E292EA2D390126A06059F /* ZNGConversation.h in Headers */,
+				F49CC9B0B02C824AEA01E78EA5E0CFBE /* ZNGConversationViewController.h in Headers */,
+				136D29A91E7E91A4BFDD859F49E2AADD /* ZNGCorrespondent.h in Headers */,
+				00E5EEAF2DC6065FF9F1157A83B392DD /* ZNGDataSet.h in Headers */,
+				1AB85CE8C8EA0D55F5817D5B6AED3809 /* ZNGError.h in Headers */,
+				71D6E7D0D0760E6DB6334EAF78A26FDE /* ZNGFieldOption.h in Headers */,
+				F113786CA39CBC433BDF040E55CCB830 /* ZNGLabel.h in Headers */,
+				3B35F58BD72E0DF85237AA5CC82BB41D /* ZNGLabelClient.h in Headers */,
+				774FBC45D953BFE92F61AB4597AF0C86 /* ZNGMessage.h in Headers */,
+				6AF57709DA09DAE1964966FF9F282F20 /* ZNGMessageClient.h in Headers */,
+				79ECF1A57956B92C30C93B1371FBB059 /* ZNGMessageRead.h in Headers */,
+				13DE8A8D584E5704F42547885C7585A2 /* ZNGMessageView.h in Headers */,
+				08613864E4B4B7C3D019AFF061AE16E1 /* ZNGNewContact.h in Headers */,
+				CF04066ADCD73835BD38DC473DE3E86D /* ZNGNewContactChannel.h in Headers */,
+				DACE71ED5564248945E1848013E3D3B4 /* ZNGNewMessage.h in Headers */,
+				5BAD8B0285090AC4BEB43F04461446F3 /* ZNGNewService.h in Headers */,
+				29341700D00BFB6831B94B411BB902EE /* ZNGNewServiceChannel.h in Headers */,
+				E554FC4D4123E54C0D7DD8C3B0A02149 /* ZNGParticipant.h in Headers */,
+				0EE0A68B648FFE0C2A8F2246A4BBC498 /* ZNGService.h in Headers */,
+				DB052D30DC29CF0643E99C07D8C016F1 /* ZNGServiceAddress.h in Headers */,
+				A119B521A2D19D8969075D46DFAA5208 /* ZNGServiceAddressClient.h in Headers */,
+				0FEBDA701517DAB710F8D6B3EC7E7992 /* ZNGServiceChannel.h in Headers */,
+				1DA4352CD8BB3763F6E3D73F0794D574 /* ZNGServiceChannelClient.h in Headers */,
+				21C58322084F1356C3D7C8FC6DF10645 /* ZNGServiceClient.h in Headers */,
+				4EFEDB842279DE8B754BA1A95FF2F360 /* ZNGSetting.h in Headers */,
+				8D6057A0965A6CB1AD542C98B6EA2475 /* ZNGStatus.h in Headers */,
+				EB70BF2BA1680A64CE34566FFDD6CD85 /* ZNGTemplate.h in Headers */,
+				026FEEBD8D0FDA36DC0DB8A73EA05E59 /* ZNGTemplateClient.h in Headers */,
+				6F39594F57BD2585A85395ADC31887DA /* ZNGTimeZoneClient.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		80112F45E2E1657B17A547A306CD1FA9 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1375,65 +1419,6 @@
 				46AEAA8105CB04076148AC574CADBBC4 /* NSObject+MTLComparisonAdditions.h in Headers */,
 				2F749C49AEBF36949CBE4779DCED4CE0 /* NSValueTransformer+MTLInversionAdditions.h in Headers */,
 				E9618CAFEEBBEF383D4460D28F2FB4BB /* NSValueTransformer+MTLPredefinedTransformerAdditions.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A0E9B940C2DADF52968DD1D009AD165D /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D54903294E59EDD4EC36FA2C41EC3A9F /* ZingleSDK-umbrella.h in Headers */,
-				3FFB4157E495BACF871927BD9A8FF046 /* ZingleSDK.h in Headers */,
-				94D827837F9236E862682E6DF0B09CB8 /* ZingleValueTransformers.h in Headers */,
-				696726D95949E283E9716C9E3E98A001 /* ZNGAccount.h in Headers */,
-				93AB81D59E2BDF0BFB9CF37E416F4BEC /* ZNGAccountClient.h in Headers */,
-				0E89928116A6BDB523100BCAAFAEB83E /* ZNGAccountPlan.h in Headers */,
-				BEA44BB09F59AB2E3CE6E53ADD46DAB3 /* ZNGAccountPlanClient.h in Headers */,
-				21D2F0F309E3F04E66D7760E31972766 /* ZNGArrowView.h in Headers */,
-				D27CB6866AE71BCCF8BF0119FF55BE66 /* ZNGAutomation.h in Headers */,
-				5A0166FD9DA5F8C4F894D77EF41A1DD7 /* ZNGAutomationClient.h in Headers */,
-				B49E2D20ADE902AFA6F144F448E820BA /* ZNGAvailablePhoneNumber.h in Headers */,
-				C1692B6C7DBF63A36382A5250BCF1F0F /* ZNGAvailablePhoneNumberClient.h in Headers */,
-				7A52DE36E2BF085B2061BC1096C62052 /* ZNGBaseClient.h in Headers */,
-				40E63D8C4226A40DBF09EA9E2FE5C519 /* ZNGChannel.h in Headers */,
-				EC31C874E0EAB3CAE59B51A8B72C9BE0 /* ZNGChannelType.h in Headers */,
-				DA3E244D493EEEF1541F7B67F4011EA7 /* ZNGConstants.h in Headers */,
-				6A6832D3ABD44B01F6A7F2D943D4AEF0 /* ZNGContact.h in Headers */,
-				17D66FD91613FF8EC1C8C98AF4AA0E12 /* ZNGContactChannel.h in Headers */,
-				F29DDDD65693BD577215E5E145E4D88F /* ZNGContactChannelClient.h in Headers */,
-				5630B791F5520B4BEF40426C0FA6BFD5 /* ZNGContactClient.h in Headers */,
-				F666C6C4FA7D9764815EC521D7F16CAC /* ZNGContactField.h in Headers */,
-				92D4915E854B31F7C951AF8EDCCEB2C4 /* ZNGContactFieldClient.h in Headers */,
-				98FA26299F7E2EEDE39BEA65648D6C24 /* ZNGContactFieldValue.h in Headers */,
-				0D0E931C6C84B4CE0123B0D9EBDBBD55 /* ZNGConversation.h in Headers */,
-				C300063C20CB65927A44607A9F5B17D4 /* ZNGConversationViewController.h in Headers */,
-				5FCDB980D0BC5BCC244C9E001778C0DA /* ZNGCorrespondent.h in Headers */,
-				2AC2C03550F47FAD315425CDF7ABE645 /* ZNGDataSet.h in Headers */,
-				EE497C3EE087C97A9B0DE94C0FFB17C8 /* ZNGError.h in Headers */,
-				7DC6194592ED0DF08C36547FB0A08E65 /* ZNGFieldOption.h in Headers */,
-				22A0FCD390208F203BA3E404D321066B /* ZNGLabel.h in Headers */,
-				96EACE172668630D7CB166D7A7448103 /* ZNGLabelClient.h in Headers */,
-				2481DE1B348140F29AB8D91899BB4BF9 /* ZNGMessage.h in Headers */,
-				2D14FDE91DA85B338BE40F1C09921189 /* ZNGMessageClient.h in Headers */,
-				0467E2AA96F39D67DCE4FB790767CABC /* ZNGMessageRead.h in Headers */,
-				FA1ACC6AE1186106B025F4007F2BD799 /* ZNGMessageView.h in Headers */,
-				E6D07191ECDFC2BCA8ECFDA9EDD2F7AD /* ZNGNewContact.h in Headers */,
-				B00B84A5E0DDC300EA41050F74172CA8 /* ZNGNewContactChannel.h in Headers */,
-				0B7E8952C0C98FAE0F4EC35D35ECA201 /* ZNGNewMessage.h in Headers */,
-				FA675FA59F5423C4F2B71CF2BC15A682 /* ZNGNewService.h in Headers */,
-				068AAFC2A860B0A7F94984BF247899A1 /* ZNGNewServiceChannel.h in Headers */,
-				B32FF48EA4CE3D3BD1A62B4E27CBE523 /* ZNGParticipant.h in Headers */,
-				52CDF76D926E7E04DCD63F5E2B692E91 /* ZNGService.h in Headers */,
-				3A50457CE773B065B2E3FF1A3CFFBFD9 /* ZNGServiceAddress.h in Headers */,
-				7E79CFE732FB7DD3CC1F8E55237688DD /* ZNGServiceAddressClient.h in Headers */,
-				EB5ED9ADCED766F06C342D5164200E4E /* ZNGServiceChannel.h in Headers */,
-				D242B1901164BE8102EDE9D9FDD57B02 /* ZNGServiceChannelClient.h in Headers */,
-				E5C55C0B8C7FFE4A4611702FE03E82AC /* ZNGServiceClient.h in Headers */,
-				E4DC04AF5E5C70DF6A0C5046AB1B0CBA /* ZNGSetting.h in Headers */,
-				AA1CAB565136AEE4ED6A9C7FB0352BBB /* ZNGStatus.h in Headers */,
-				82CCA2F2729E4C4D3047A622CA63378B /* ZNGTemplate.h in Headers */,
-				F886864CD786A579FAA0E493F1B74B03 /* ZNGTemplateClient.h in Headers */,
-				DF5AF3841EE0A4F5540F4FC7E9FF7B52 /* ZNGTimeZoneClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1489,9 +1474,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7956584F727B3CC131E87E6AD7A735DB /* Build configuration list for PBXNativeTarget "ZingleSDK" */;
 			buildPhases = (
-				3D2D7D9D28FB8C1A9A35A8E3D28DF19C /* Sources */,
+				92B28E1D4730CB4B2311246F80A32BAB /* Sources */,
 				12A17336E386968275F3740BBED2ADD8 /* Frameworks */,
-				A0E9B940C2DADF52968DD1D009AD165D /* Headers */,
+				3735B569B2B3327E3A50B9B99387480F /* Headers */,
 				F1B0138EBB757C9208B0FD09BD5FDEEA /* Resources */,
 			);
 			buildRules = (
@@ -1710,65 +1695,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3D2D7D9D28FB8C1A9A35A8E3D28DF19C /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				679EF837CA34E74696D54BF31449CE94 /* ZingleSDK-dummy.m in Sources */,
-				34FF9609BC6B164759C965050EA44928 /* ZingleSDK.m in Sources */,
-				C9306FC8F28B74B7220437AB9EF3EBA5 /* ZingleValueTransformers.m in Sources */,
-				43F1B2637D7C61CDB393C7BCE091D4D6 /* ZNGAccount.m in Sources */,
-				474C8275CAE957D8B3484BAB093FF77F /* ZNGAccountClient.m in Sources */,
-				45C6B7D60CAFEF267918F806672EC947 /* ZNGAccountPlan.m in Sources */,
-				799F7E6B96C748430D582AA61B5E6936 /* ZNGAccountPlanClient.m in Sources */,
-				26F7047C28AC8FF8E5D55966BF461710 /* ZNGArrowView.m in Sources */,
-				7E71BD5D1106EE4530A718B42E034E73 /* ZNGAutomation.m in Sources */,
-				C77EDBFDB0A63BCAAE9D59CA75ECCBA4 /* ZNGAutomationClient.m in Sources */,
-				F3DE8034EC3FD5FABA9C76596B5CF89B /* ZNGAvailablePhoneNumber.m in Sources */,
-				BA14DDC934D187ED16C33AF00A1E499D /* ZNGAvailablePhoneNumberClient.m in Sources */,
-				449431889DEABA44E41DE33ED5A27356 /* ZNGBaseClient.m in Sources */,
-				B040180E462F857D6A43FACEF9BAEBEE /* ZNGChannel.m in Sources */,
-				A8EA4A840AF6E04394DA4D86E5366263 /* ZNGChannelType.m in Sources */,
-				42C60522F5EA4B34BA0CC9001B05A7DE /* ZNGConstants.m in Sources */,
-				4038D4C09FBB593162FAD6BD1945608A /* ZNGContact.m in Sources */,
-				71684FA8B3403BB42A45CF4B45950250 /* ZNGContactChannel.m in Sources */,
-				11CBCB240E68B91E6DCC55444CABB4CB /* ZNGContactChannelClient.m in Sources */,
-				96466F50868B145D4BDE27AF0C988750 /* ZNGContactClient.m in Sources */,
-				505ED6C8C1FFCBBCB5FC032F283A7F84 /* ZNGContactField.m in Sources */,
-				70F425E0A097EED2506B3E615B089B74 /* ZNGContactFieldClient.m in Sources */,
-				893935B42C972593F6919E5E76383373 /* ZNGContactFieldValue.m in Sources */,
-				CF9A875B12A2BF9A1EE9341B2FEC0E77 /* ZNGConversation.m in Sources */,
-				60CF1F77B4B81F3646976B51633CE4E0 /* ZNGConversationViewController.m in Sources */,
-				8A90FC7AA8D1AF0D12A57FDC56DFD062 /* ZNGCorrespondent.m in Sources */,
-				024E020D224E05937EAE949DDEBA29CF /* ZNGDataSet.m in Sources */,
-				D21B0528F60E7BD1AA53E9D47535CB85 /* ZNGError.m in Sources */,
-				85D312DD78E01059A6F192EE4749655B /* ZNGFieldOption.m in Sources */,
-				B8686B4B942B6D0C0212A1C0C50EAA58 /* ZNGLabel.m in Sources */,
-				DE0D99749360ACB05E9764EEB34A9C9B /* ZNGLabelClient.m in Sources */,
-				A0A2367F1443F907A417F7500A1D0921 /* ZNGMessage.m in Sources */,
-				B0EC7613542176051FAC18BD4F9972ED /* ZNGMessageClient.m in Sources */,
-				CA0B59B8C21FDED07C3159AA31533187 /* ZNGMessageRead.m in Sources */,
-				4951BA18BC480953B63A430A71C1610B /* ZNGMessageView.m in Sources */,
-				579D27EF12F847A70E85440956A483A0 /* ZNGNewContact.m in Sources */,
-				172DC9DB0C967F1A882D856767CB21E1 /* ZNGNewContactChannel.m in Sources */,
-				08906C2C09AC569B6FB401558D3D4BF5 /* ZNGNewMessage.m in Sources */,
-				A4CDAE25DD2D2D272835AA5A870C84A7 /* ZNGNewService.m in Sources */,
-				82CA26014F3CA5FA769E0F6C35859B92 /* ZNGNewServiceChannel.m in Sources */,
-				428E813288B8102F78FC4314E75FC1BF /* ZNGParticipant.m in Sources */,
-				DD45A840A06C58881B70CC582CA13548 /* ZNGService.m in Sources */,
-				E7CAC9AC1FF5CA7565CFD873F6E8C1F2 /* ZNGServiceAddress.m in Sources */,
-				DDCE48565EE5E2015A3EA7614CFACCB7 /* ZNGServiceAddressClient.m in Sources */,
-				A891A138ECF191F58876F5599F92C4F9 /* ZNGServiceChannel.m in Sources */,
-				CA1B4F035B9FD3817827FC99445F3C42 /* ZNGServiceChannelClient.m in Sources */,
-				4878B18F69509D2140164ED6A6CC554E /* ZNGServiceClient.m in Sources */,
-				BC215D444BD15CED16631E98D4675E57 /* ZNGSetting.m in Sources */,
-				15F657B72E1C5442E0787EA71D9036F2 /* ZNGStatus.m in Sources */,
-				DFED8C99C890AB5ACCE21335089CFFE8 /* ZNGTemplate.m in Sources */,
-				EE7F453AEE486B5ECFBDD316BD91D84F /* ZNGTemplateClient.m in Sources */,
-				226FA33C6EBB91F67F6BC159D381FE39 /* ZNGTimeZoneClient.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		7F799C19FA49AADBACB4E6EBE9372521 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1791,6 +1717,64 @@
 				849900719B089E6119C4ACCB6533D0F1 /* UIProgressView+AFNetworking.m in Sources */,
 				E6369B93EFD18BB50BCE895DB55E7877 /* UIRefreshControl+AFNetworking.m in Sources */,
 				6B94AD3001E7CC6CF5A00917C2483503 /* UIWebView+AFNetworking.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		92B28E1D4730CB4B2311246F80A32BAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FD2850508A814F9679E54ED5DBC8B1AF /* ZingleSDK-dummy.m in Sources */,
+				47D8419D59FAE9604AD72850E9A16D25 /* ZingleSDK.m in Sources */,
+				B701995A76795164468B3E50EF269CFE /* ZingleValueTransformers.m in Sources */,
+				70DB6E28031ADD44D4129F0C22E8141A /* ZNGAccount.m in Sources */,
+				735BACE79E8F381E3727C523D3124574 /* ZNGAccountClient.m in Sources */,
+				4070BD7EF58382F0195CEBA095AC2E60 /* ZNGAccountPlan.m in Sources */,
+				042653CFDABDEC355C9B552CEC542608 /* ZNGAccountPlanClient.m in Sources */,
+				2C6546E390E4A929201634993897E0A5 /* ZNGArrowView.m in Sources */,
+				1B1F43B93EE18EDB61D9F64511F9C3FA /* ZNGAutomation.m in Sources */,
+				2982E010AE4C32504A37F382D7330A5A /* ZNGAutomationClient.m in Sources */,
+				D483FAFF8514AD72E6B713083ABB6DD5 /* ZNGAvailablePhoneNumber.m in Sources */,
+				54E4370F12B7F6E5EA6991580595D94B /* ZNGAvailablePhoneNumberClient.m in Sources */,
+				52F9399110FA69B8B51C5276B908931C /* ZNGBaseClient.m in Sources */,
+				321F3F8FCA6F3F012C6A94483829EB46 /* ZNGChannel.m in Sources */,
+				B9D977550A07BC22E6CFCEC278F04FE3 /* ZNGChannelType.m in Sources */,
+				6A947CCA71FF2063B181B25FEBC0727C /* ZNGContact.m in Sources */,
+				C850BD35176AB2F02E565D143D246F28 /* ZNGContactChannel.m in Sources */,
+				A176DCB4DB9887789981CB50E76FBD91 /* ZNGContactChannelClient.m in Sources */,
+				C64473E1CEF21B4DCF2915FDB5316FBC /* ZNGContactClient.m in Sources */,
+				73CBEFB4DEF7E57AA7B5561BD490BC1C /* ZNGContactField.m in Sources */,
+				2D5D9C57238F7E315E0D54E952ADC4D3 /* ZNGContactFieldClient.m in Sources */,
+				B20D102D50A45A3496C6C824BC4B7DE1 /* ZNGContactFieldValue.m in Sources */,
+				5215C2DDCFF6579F2A600362AFED56BB /* ZNGConversation.m in Sources */,
+				A05218CB6ACCBD41B4736CE47AF2CD15 /* ZNGConversationViewController.m in Sources */,
+				87C05E1D4E79D351817B4590B24BB049 /* ZNGCorrespondent.m in Sources */,
+				B1D84D6E7F3734C3574913C4F3FA85CB /* ZNGDataSet.m in Sources */,
+				2F55BFCE8984E8C318F3CB43A6A52829 /* ZNGError.m in Sources */,
+				2185007EF6A3EAFE692031185B17918E /* ZNGFieldOption.m in Sources */,
+				7D96707CB49A98425CFD9DBC513B9762 /* ZNGLabel.m in Sources */,
+				E42504E0132DE147AA67F415D7FEC31F /* ZNGLabelClient.m in Sources */,
+				28F9265C406B8AD60A13060949108012 /* ZNGMessage.m in Sources */,
+				7369EACFA4965D57D79CA8D944F2494E /* ZNGMessageClient.m in Sources */,
+				921A5DFE73BFC7A4D4F2BFBA83571432 /* ZNGMessageRead.m in Sources */,
+				CC13A9BBBD2BC8F34F14210182F62941 /* ZNGMessageView.m in Sources */,
+				A5627F09929D5806EAE46A4FFAC79DFC /* ZNGNewContact.m in Sources */,
+				1801BB4183997F4A90429E12C0E58DA0 /* ZNGNewContactChannel.m in Sources */,
+				A45FED7E53E0B4E02CF49734E2592110 /* ZNGNewMessage.m in Sources */,
+				D9D398416E40430E7914F43B16B1F5B0 /* ZNGNewService.m in Sources */,
+				0C3F6C309095FE64F20DBB30B5FF5F89 /* ZNGNewServiceChannel.m in Sources */,
+				95440722E40B50DDA49B11207C64EA19 /* ZNGParticipant.m in Sources */,
+				C5255F3A5A785244AE134FA268CD3B91 /* ZNGService.m in Sources */,
+				3F2E45BE340A9FFFDDF204F0F1BCB8E1 /* ZNGServiceAddress.m in Sources */,
+				B28DA242AAE2F5A564403E9F6792FC36 /* ZNGServiceAddressClient.m in Sources */,
+				3106CDBE435A32B566A942E7DCAB48BD /* ZNGServiceChannel.m in Sources */,
+				3C02A9465A254B29214380BB1B61FBDB /* ZNGServiceChannelClient.m in Sources */,
+				EABFBBD6CD21C80A629607EFAEA70BAA /* ZNGServiceClient.m in Sources */,
+				D7884F30CF208E0B596B6CDAD5B8875F /* ZNGSetting.m in Sources */,
+				1862817A470EAB2A4303D03B0DB08A75 /* ZNGStatus.m in Sources */,
+				DA58A82E791AABB7C5F7F4EDF6B0F5C0 /* ZNGTemplate.m in Sources */,
+				F004EEC9500B2F543BD86DD1D6EF3710 /* ZNGTemplateClient.m in Sources */,
+				6C6658728AECE280276ED5FB5666549A /* ZNGTimeZoneClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

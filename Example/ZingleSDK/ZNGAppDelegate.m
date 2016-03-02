@@ -44,11 +44,11 @@
 
 - (void)loadConversations
 {
-    NSString *token = @“TOKEN”;
-    NSString *key = @“KEY”;
-    NSString *contactChannelValue = @“test.app”;
-    NSString *contactId = @“CONTACT ID”;
-    NSString *serviceId = @“SERVICE ID”;
+    NSString *token = @"TOKEN";
+    NSString *key = @"KEY";
+    NSString *contactChannelValue = @"test.app";
+    NSString *contactId = @"CONTACT ID";
+    NSString *serviceId = @"SERVICE ID";
     
     // 1
     [[ZingleSDK sharedSDK] setToken:token andKey:key];

@@ -25,6 +25,13 @@
 
 @implementation ZNGMessageView
 
+NSString *const kMessageViewFontHelveticaNeue = @"Helvetica Neue";
+NSString *const kMessageViewNewLine = @"\n";
+NSString *const kMessageViewDirectionInbound = @"inbound";
+NSString *const kMessageViewDirectionOutbound = @"outbound";
+NSString *const kMessageViewArrowDirectionLeft = @"left";
+NSString *const kMessageViewArrowDirectionRight = @"right";
+
 - (id)initWithViewController:(ZNGConversationViewController *)parentViewController
 {
     if( self = [super init] ) {
@@ -52,7 +59,7 @@
         [self.arrowView addSubview:self.arrow];
         
         self.authorLabel = [[UILabel alloc] init];
-        self.authorLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
+        self.authorLabel.font = [UIFont fontWithName:kMessageViewFontHelveticaNeue size:12];
         self.authorLabel.textColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
         [self addSubview:self.authorLabel];
     }
@@ -85,9 +92,9 @@
 - (NSString *)body
 {
     NSString *body = self.message.body;
-    body = [body stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
-    body = [body stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
-    body = [body stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
+    body = [body stringByReplacingOccurrencesOfString:@"<br/>" withString:kMessageViewNewLine];
+    body = [body stringByReplacingOccurrencesOfString:@"<br>" withString:kMessageViewNewLine];
+    body = [body stringByReplacingOccurrencesOfString:@"<br />" withString:kMessageViewNewLine];
     
     return body;
 }
@@ -101,13 +108,13 @@
     }
     
     NSString *author;
-    if( [self.direction isEqualToString:@"inbound"] )
+    if( [self.direction isEqualToString:kMessageViewDirectionInbound] )
     {
         author = self.parentViewController.toName;
         self.bodyView.backgroundColor = self.parentViewController.inboundBackgroundColor;
         self.messageTextView.textColor = self.parentViewController.inboundTextColor;
     }
-    else if( [self.direction isEqualToString:@"outbound"] )
+    else if( [self.direction isEqualToString:kMessageViewDirectionOutbound] )
     {
         author = self.parentViewController.fromName;
         self.bodyView.backgroundColor = self.parentViewController.outboundBackgroundColor;
@@ -124,11 +131,11 @@
     int messageVerticalMargin = self.parentViewController.messageVerticalMargin;
     int bodyPadding = self.parentViewController.bodyPadding;
     
-    if( [self.direction isEqualToString:@"outbound"] )
+    if( [self.direction isEqualToString:kMessageViewDirectionOutbound] )
     {
         leftIndent = self.parentViewController.messageIndentAmount;
     }
-    else if( [self.direction isEqualToString:@"inbound"] )
+    else if( [self.direction isEqualToString:kMessageViewDirectionInbound] )
     {
         rightIndent = self.parentViewController.messageIndentAmount;
     }
@@ -137,12 +144,12 @@
     int bodyX     = messageHorizontalMargin + leftIndent;
     
     if( self.parentViewController.arrowPosition == ZINGLE_ARROW_POSITION_SIDE &&
-       ([self.direction isEqualToString:@"outbound"] ||
-        [self.direction isEqualToString:@"inbound"]) )
+       ([self.direction isEqualToString:kMessageViewDirectionOutbound] ||
+        [self.direction isEqualToString:kMessageViewDirectionInbound]) )
     {
         bodyWidth -= self.parentViewController.arrowSize.width;
         
-        if( [self.direction isEqualToString:@"inbound"] ) {
+        if( [self.direction isEqualToString:kMessageViewDirectionInbound] ) {
             bodyX += self.parentViewController.arrowSize.width;
         }
     }
@@ -175,8 +182,8 @@
     CGRect arrowFrame = CGRectMake(0, 0, 0, 0);
     int arrowBottomHeight = 0;
     int arrowBias = -self.parentViewController.arrowBias;
-    if( [self.direction isEqualToString:@"outbound"] ||
-        [self.direction isEqualToString:@"inbound"])
+    if( [self.direction isEqualToString:kMessageViewDirectionOutbound] ||
+        [self.direction isEqualToString:kMessageViewDirectionInbound])
     {
         if( self.parentViewController.arrowPosition == ZINGLE_ARROW_POSITION_BOTTOM ) {
             arrowFrame = CGRectMake(self.bodyView.frame.origin.x + self.parentViewController.cornerRadius,
@@ -185,7 +192,7 @@
                                 self.parentViewController.arrowSize.height);
         
             int arrowX = self.parentViewController.arrowOffset;
-            if( [self.direction isEqualToString:@"outbound"] ) {
+            if( [self.direction isEqualToString:kMessageViewDirectionOutbound] ) {
                 arrowX = arrowFrame.size.width - self.parentViewController.arrowSize.width - self.parentViewController.arrowOffset;
             }
         
@@ -193,10 +200,10 @@
             arrowBottomHeight = self.parentViewController.arrowSize.height;
         } else {
             int arrowFrameX = self.bodyView.frame.origin.x - self.parentViewController.arrowSize.width;
-            NSString *arrowDirection = @"left";
-            if( [self.direction isEqualToString:@"outbound"] ) {
+            NSString *arrowDirection = kMessageViewArrowDirectionLeft;
+            if( [self.direction isEqualToString:kMessageViewDirectionOutbound] ) {
                 arrowFrameX = self.bodyView.frame.origin.x + self.bodyView.frame.size.width;
-                arrowDirection = @"right";
+                arrowDirection = kMessageViewArrowDirectionRight;
             }
             
             arrowFrame = CGRectMake(arrowFrameX, self.bodyView.frame.origin.y + self.parentViewController.cornerRadius, self.parentViewController.arrowSize.width, self.bodyView.frame.size.height - (self.parentViewController.cornerRadius * 2) );
@@ -207,7 +214,7 @@
     }
     
     
-    if( [self.direction isEqualToString:@"outbound"] ) {
+    if( [self.direction isEqualToString:kMessageViewDirectionOutbound] ) {
         arrowBias = -arrowBias;
     }
     

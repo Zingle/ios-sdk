@@ -15,6 +15,7 @@
 #import "ZNGServiceClient.h"
 #import "ZNGTemplateClient.h"
 #import "ZNGTimeZoneClient.h"
+#import "ZNGConstants.h"
 #import "ZNGAccount.h"
 #import "ZNGAccountPlan.h"
 #import "ZNGAutomation.h"
@@ -50,7 +51,6 @@
 #import "ZNGMessageView.h"
 #import "ZingleValueTransformers.h"
 #import "ZingleSDK.h"
-#import "ZNGConstants.h"
 
 FOUNDATION_EXPORT double ZingleSDKVersionNumber;
 FOUNDATION_EXPORT const unsigned char ZingleSDKVersionString[];

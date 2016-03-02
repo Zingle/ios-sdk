@@ -6,6 +6,7 @@
 //
 //
 
+#import <AFNetworking/AFNetworking.h>
 #import "ZNGBaseClient.h"
 #import "ZNGConstants.h"
 

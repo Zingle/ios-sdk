@@ -7,6 +7,7 @@
 //
 
 #import "ZingleSDK.h"
+#import <AFNetworking/AFNetworking.h>
 #import "ZNGConstants.h"
 #import "ZNGDataSet.h"
 #import "ZNGServiceClient.h"

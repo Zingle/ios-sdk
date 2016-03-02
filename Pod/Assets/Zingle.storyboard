@@ -8,7 +8,6 @@
         <!--Conversation View Controller-->
         <scene sceneID="ogW-8J-PY9">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EZC-ri-cTV" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController storyboardIdentifier="ZNGConversationViewController" id="C1q-Tg-Xed" customClass="ZNGConversationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="tMR-Vb-582"/>
@@ -30,7 +29,7 @@
                                             <constraint firstAttribute="width" constant="40" id="bUv-hG-IUD"/>
                                             <constraint firstAttribute="height" constant="40" id="edV-8l-rpo"/>
                                         </constraints>
-                                        <state key="normal" image="25476A43-FBC1-4EF1-920E-7CD42BB24B02">
+                                        <state key="normal" image="0F8BF649-B2E2-41ED-BBA4-D9289C957DBE">
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <connections>
@@ -88,11 +87,11 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" image="520C49CC-76E3-45B5-8AF2-C26028CF4D2D" translatesAutoresizingMaskIntoConstraints="NO" id="fde-7n-VVM">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" image="54C8F0D3-150F-4A4B-866B-4A189381286B" translatesAutoresizingMaskIntoConstraints="NO" id="fde-7n-VVM">
                                                     <rect key="frame" x="520" y="12" width="140" height="107"/>
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YAT-AK-ooK">
-                                                    <rect key="frame" x="17" y="12" width="510.5" height="98"/>
+                                                    <rect key="frame" x="17" y="12" width="511" height="98"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -237,11 +236,11 @@
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="120A4C50-F322-4EB3-BFD1-D85A7F3F79FD" translatesAutoresizingMaskIntoConstraints="NO" id="hoh-A1-M0r">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="3BEBA670-0037-48B1-8F29-39437AA76C6C" translatesAutoresizingMaskIntoConstraints="NO" id="hoh-A1-M0r">
                                                     <rect key="frame" x="-60" y="12" width="140" height="107"/>
                                                 </imageView>
                                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="750" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lB6-W8-Y6N">
-                                                    <rect key="frame" x="72" y="12" width="510.5" height="98"/>
+                                                    <rect key="frame" x="72" y="12" width="511" height="98"/>
                                                     <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                     <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <constraints>
@@ -320,12 +319,13 @@
                         <outlet property="oTableView" destination="WH0-7e-0Yn" id="G6Y-TW-lFU"/>
                     </connections>
                 </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="EZC-ri-cTV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="401" y="315"/>
         </scene>
     </scenes>
     <resources>
-        <image name="120A4C50-F322-4EB3-BFD1-D85A7F3F79FD" width="140" height="107">
+        <image name="0F8BF649-B2E2-41ED-BBA4-D9289C957DBE" width="140" height="107">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBMU
 GR4fJSYsLzU4VSRudWxs1QkKCwwNDg8QERJWTlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBz
@@ -341,7 +341,7 @@ AZkBoAGoAbUBugG8Ab4BwwHLAc4B0wHbAd4B8AHzAfgAAAAAAAACAQAAAAAAAAA/AAAAAAAAAAAAAAAA
 AAAB+g
 </mutableData>
         </image>
-        <image name="25476A43-FBC1-4EF1-920E-7CD42BB24B02" width="140" height="107">
+        <image name="3BEBA670-0037-48B1-8F29-39437AA76C6C" width="140" height="107">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBMU
 GR4fJSYsLzU4VSRudWxs1QkKCwwNDg8QERJWTlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBz
@@ -357,7 +357,7 @@ AZkBoAGoAbUBugG8Ab4BwwHLAc4B0wHbAd4B8AHzAfgAAAAAAAACAQAAAAAAAAA/AAAAAAAAAAAAAAAA
 AAAB+g
 </mutableData>
         </image>
-        <image name="520C49CC-76E3-45B5-8AF2-C26028CF4D2D" width="140" height="107">
+        <image name="54C8F0D3-150F-4A4B-866B-4A189381286B" width="140" height="107">
             <mutableData key="keyedArchiveRepresentation">
 YnBsaXN0MDDUAQIDBAUGOzxYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3ASAAGGoK0HCBMU
 GR4fJSYsLzU4VSRudWxs1QkKCwwNDg8QERJWTlNTaXplViRjbGFzc1xOU0ltYWdlRmxhZ3NWTlNSZXBz

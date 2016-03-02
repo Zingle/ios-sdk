@@ -56,6 +56,7 @@
 		2D375BE80B2942AA540C74741DE19EEC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */; };
 		2D5D9C57238F7E315E0D54E952ADC4D3 /* ZNGContactFieldClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6DA72F9CDA417BBC8364B77495168DD0 /* ZNGContactFieldClient.m */; };
 		2F55BFCE8984E8C318F3CB43A6A52829 /* ZNGError.m in Sources */ = {isa = PBXBuildFile; fileRef = EF45C1B0392A0AD593E44C0271CA5C5B /* ZNGError.m */; };
+		2F57179898668557559171F7371ADA52 /* Zingle.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3853B4BEC600367A9B4FF96D35CE2232 /* Zingle.storyboard */; };
 		2F749C49AEBF36949CBE4779DCED4CE0 /* NSValueTransformer+MTLInversionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = A4F3CEA3730CEB06D5E3E3D42E0DAAD2 /* NSValueTransformer+MTLInversionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3106CDBE435A32B566A942E7DCAB48BD /* ZNGServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CA4844B9605996CC0B51F0723827370 /* ZNGServiceChannel.m */; };
 		31DD51C42587F54EA59AAB7B6E54827F /* AFNetworking-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 626E5E84C6C880B68D92F8B021C4B085 /* AFNetworking-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -82,7 +83,6 @@
 		4A92077BC1E3A57155C476F83B47E4B9 /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = 17FA3806FD2C3E847737A464F360D5FE /* UIImage+GIF.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		4D0C5621B77C379C07BF2CAC97B2C22F /* Pods-ZingleSDK_Tests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 3640BD08EA894A6860E95AE2304CC3B8 /* Pods-ZingleSDK_Tests-dummy.m */; };
 		4EFEDB842279DE8B754BA1A95FF2F360 /* ZNGSetting.h in Headers */ = {isa = PBXBuildFile; fileRef = 05BA74AE6C5FDCCBDA086E0CC2B1C973 /* ZNGSetting.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4FC3EEBDEBE85614821E14B47561D4A9 /* Zingle.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F5F56D7AB5AACC4E38A77745F9616784 /* Zingle.storyboard */; };
 		5030B583A1CDE7890CDAB71029ECC3BE /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E1082A27C9B4BFC0263EAD4A74CEBBB /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		5061C48B88CF3B2C5A5D9C6E0D1959A9 /* AFURLRequestSerialization.h in Headers */ = {isa = PBXBuildFile; fileRef = 3159A2A2039E1D40691110F9E81902EB /* AFURLRequestSerialization.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		518129777667545A1BBDCFF14EC047BC /* SDWebImageDecoder.m in Sources */ = {isa = PBXBuildFile; fileRef = E5A0D82BB7EE0B1F8E0F43F8BA73A841 /* SDWebImageDecoder.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -124,6 +124,7 @@
 		6FF330D71796CD56C34D2E4859F2F5AF /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = D9B092E32187A58905991A849AB1A6F9 /* AFSecurityPolicy.m */; };
 		70DB6E28031ADD44D4129F0C22E8141A /* ZNGAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BB42AED34B7FD987BF6AC8E47239978 /* ZNGAccount.m */; };
 		70E56463F5835DCB18F8C46B52AB199E /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C8472813DF2DA0061F99464F6A48085 /* UIImageView+WebCache.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		716F60E2631ACF30DE880FDFC7002D9C /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = EE3FC43C121F774EC55896D59ED0D6D3 /* camera.png */; };
 		71D6E7D0D0760E6DB6334EAF78A26FDE /* ZNGFieldOption.h in Headers */ = {isa = PBXBuildFile; fileRef = E22846B308725C11B340C473DAB0BEB1 /* ZNGFieldOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72B61C6571F78A4F56E0322CC9703F3E /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C79E8372DE7BF525499693780DF1591C /* AFHTTPSessionManager.m */; };
 		735BACE79E8F381E3727C523D3124574 /* ZNGAccountClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 45CA1AADCCBA15B852CE7C9C038D26AF /* ZNGAccountClient.m */; };
@@ -410,6 +411,7 @@
 		3640BD08EA894A6860E95AE2304CC3B8 /* Pods-ZingleSDK_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZingleSDK_Tests-dummy.m"; sourceTree = "<group>"; };
 		364A58AADD7EDBE4D7C97798FCC3FE24 /* ZNGMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessage.m; sourceTree = "<group>"; };
 		3795F4C58FAF76D3CFB556DFEC94F8F5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		3853B4BEC600367A9B4FF96D35CE2232 /* Zingle.storyboard */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.storyboard; path = Zingle.storyboard; sourceTree = "<group>"; };
 		39DD5C04BD88028B7CB8410F485A67AE /* NSError+MTLModelException.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSError+MTLModelException.h"; path = "Mantle/NSError+MTLModelException.h"; sourceTree = "<group>"; };
 		39FEDFD5BE689B02BE2B7922EF5BA3B6 /* SDImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCache.m; path = SDWebImage/SDImageCache.m; sourceTree = "<group>"; };
 		3AAECAF831DDD88DDE273B0BD2CC8E14 /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+AFNetworking.h"; path = "UIKit+AFNetworking/UIButton+AFNetworking.h"; sourceTree = "<group>"; };
@@ -603,6 +605,7 @@
 		ECBE80EAC7E5DD4CF3A3E9F6EB789E29 /* UIProgressView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIProgressView+AFNetworking.m"; path = "UIKit+AFNetworking/UIProgressView+AFNetworking.m"; sourceTree = "<group>"; };
 		ECC202A7CEFCC8F0625D918071A219F8 /* ZNGMessageClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageClient.h; sourceTree = "<group>"; };
 		EDFD322BA17AF3E7741BC91924E7E9E0 /* SDWebImageManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageManager.m; path = SDWebImage/SDWebImageManager.m; sourceTree = "<group>"; };
+		EE3FC43C121F774EC55896D59ED0D6D3 /* camera.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		EF45C1B0392A0AD593E44C0271CA5C5B /* ZNGError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGError.m; sourceTree = "<group>"; };
 		F09F66FD7F95285878B0D1A7A36EE7FB /* AFNetworking.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = AFNetworking.modulemap; sourceTree = "<group>"; };
 		F0CA6A4945D83551993F65E3520F3788 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -613,7 +616,6 @@
 		F4AA81B28F5EF5D5C4A8FE9AD2FE4BB3 /* ZNGAvailablePhoneNumber.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumber.m; sourceTree = "<group>"; };
 		F5E7C888AB71E7CFEAF8DF249A1B65A7 /* ZNGService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGService.m; sourceTree = "<group>"; };
 		F5F41BFBBCA1F7B39A99AA68FC4B68F7 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F5F56D7AB5AACC4E38A77745F9616784 /* Zingle.storyboard */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.storyboard; path = Zingle.storyboard; sourceTree = "<group>"; };
 		F64266050974E035A34EAAE631A9C21B /* MTLModel+NSCoding.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "MTLModel+NSCoding.m"; path = "Mantle/MTLModel+NSCoding.m"; sourceTree = "<group>"; };
 		F8A742597D60B9991E290D4259E40261 /* AFNetworkActivityLogger-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworkActivityLogger-umbrella.h"; sourceTree = "<group>"; };
 		FA9E62E68BDEA3AB3589C17DDA2817F8 /* ZNGAccountPlanClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountPlanClient.h; sourceTree = "<group>"; };
@@ -697,14 +699,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		07BEE708F733F1AE2F76214C7960D12A /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				EF6ADE5CB2E7240C42EEBBACF3A45559 /* Assets */,
-			);
-			path = Pod;
-			sourceTree = "<group>";
-		};
 		2820C9D0FB7A1AFD2B5D18017F17E794 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -739,6 +733,14 @@
 				3F77D4F279BAB999547C56BE7CA668F5 /* AFNetworkReachabilityManager.m */,
 			);
 			name = Reachability;
+			sourceTree = "<group>";
+		};
+		4E7A64260295042D58DFAD79CBC0776C /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				B84753DF93D4186C9F4F9E4A0FE809AA /* Assets */,
+			);
+			path = Pod;
 			sourceTree = "<group>";
 		};
 		5684CAECA285726C0FBC54E58C0556C6 /* AFNetworking */ = {
@@ -1081,6 +1083,15 @@
 			name = NSURLConnection;
 			sourceTree = "<group>";
 		};
+		B84753DF93D4186C9F4F9E4A0FE809AA /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				EE3FC43C121F774EC55896D59ED0D6D3 /* camera.png */,
+				3853B4BEC600367A9B4FF96D35CE2232 /* Zingle.storyboard */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		BB7516D82C605908606897AD80BAC561 /* NSURLSession */ = {
 			isa = PBXGroup;
 			children = (
@@ -1287,18 +1298,10 @@
 			path = UI;
 			sourceTree = "<group>";
 		};
-		EF6ADE5CB2E7240C42EEBBACF3A45559 /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				F5F56D7AB5AACC4E38A77745F9616784 /* Zingle.storyboard */,
-			);
-			path = Assets;
-			sourceTree = "<group>";
-		};
 		FB0040DB459C3844B816CF53FD43FFE9 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				07BEE708F733F1AE2F76214C7960D12A /* Pod */,
+				4E7A64260295042D58DFAD79CBC0776C /* Pod */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1477,7 +1480,7 @@
 				92B28E1D4730CB4B2311246F80A32BAB /* Sources */,
 				12A17336E386968275F3740BBED2ADD8 /* Frameworks */,
 				3735B569B2B3327E3A50B9B99387480F /* Headers */,
-				F1B0138EBB757C9208B0FD09BD5FDEEA /* Resources */,
+				25881EEDD310B68452A5DF1BCC991A0F /* Resources */,
 			);
 			buildRules = (
 			);
@@ -1638,11 +1641,12 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		F1B0138EBB757C9208B0FD09BD5FDEEA /* Resources */ = {
+		25881EEDD310B68452A5DF1BCC991A0F /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4FC3EEBDEBE85614821E14B47561D4A9 /* Zingle.storyboard in Resources */,
+				716F60E2631ACF30DE880FDFC7002D9C /* camera.png in Resources */,
+				2F57179898668557559171F7371ADA52 /* Zingle.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

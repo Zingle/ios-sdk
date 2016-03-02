@@ -60,16 +60,6 @@ UI Examples
     // handle failure
 }];
 
-// Same as above method but creates a conversation from a service to a contact.
-[[ZingleSDK sharedSDK] addConversationFromServiceId:serviceId toContactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
-    
-    // Returns a new conversation view controller for the specified conversation.
-    ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-    [self presentViewController:conversationViewController animated:YES completion:nil];
-} failure:^(ZNGError *error) {
-    // handle failure
-}];
-
 // OPTIONAL UI SETTINGS
 ZNGConversationViewController *chatViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
 

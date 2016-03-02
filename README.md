@@ -46,16 +46,13 @@ UI Examples
 
 ```obj-c
 
-// Initialize basic auth for connecting to API. Does not verify login and password are correct.
+// Initialize basic auth for connecting to API.
 [[ZingleSDK sharedSDK] setToken:token andKey:key];
 
-// Registers a new conversation in ZingleSDK. This will return a chat interface from a contact to a service. On success,
-// system will receive all messages for specified contact and service IDs. It will then be possible to create the UI for
-// this conversation with conversationViewControllerForService:serviceId. Can be called as many times as needed to add all 
-// conversations.
+// Registers a new conversation in ZingleSDK.
 [[ZingleSDK sharedSDK] addConversationFromContactId:contactId toServiceId:serviceId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
     
-    // Returns a new conversation view controller for the specified conversation that can be presented and/or added to a navigation stack.
+    // Returns a new conversation view controller for the specified conversation.
     ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
     [self presentViewController:conversationViewController animated:YES completion:nil];
 
@@ -66,7 +63,7 @@ UI Examples
 // Same as above method but creates a conversation from a service to a contact.
 [[ZingleSDK sharedSDK] addConversationFromServiceId:serviceId toContactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
     
-    // Returns a new conversation view controller for the specified conversation that can be presented and/or added to a navigation stack.
+    // Returns a new conversation view controller for the specified conversation.
     ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
     [self presentViewController:conversationViewController animated:YES completion:nil];
 } failure:^(ZNGError *error) {

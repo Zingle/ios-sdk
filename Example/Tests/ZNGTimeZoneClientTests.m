@@ -30,8 +30,8 @@
 
 - (void)testTimeZoneList
 {
-    [ZNGTimeZoneClient timeZoneListWithSuccess:^(NSArray *timeZones) {
-        
+    [ZNGTimeZoneClient timeZoneListWithSuccess:^(NSArray *timeZones, ZNGStatus *status) {
+                
         XCTAssert(timeZones != nil, @"Time zones are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testTimeZonesList"];
         

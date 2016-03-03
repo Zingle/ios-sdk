@@ -31,7 +31,7 @@
 
 - (void)testContactChannelById
 {
-    [ZNGContactChannelClient contactChannelWithId:[self contactChannelId] withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel) {
+    [ZNGContactChannelClient contactChannelWithId:[self contactChannelId] withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel, ZNGStatus *status) {
         
         XCTAssert(contactChannel != nil, @"Contact channel is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactChannelById"];
@@ -49,15 +49,15 @@
 
 - (void)testCreateAndDeleteContactChannel
 {
-    [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers) {
+    [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers, ZNGStatus *status) {
         
         ZNGAvailablePhoneNumber *number = [availableNumbers lastObject];
         
-        [ZNGContactChannelClient saveContactChannel:[self contactChannelWithValue:number.phoneNumber] withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel) {
+        [ZNGContactChannelClient saveContactChannel:[self contactChannelWithValue:number.phoneNumber] withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel, ZNGStatus *status) {
             
             XCTAssert(contactChannel != nil, @"Created contact channel is nil!");
             
-            [ZNGContactChannelClient deleteContactChannelWithId:contactChannel.contactChannelId withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel) {
+            [ZNGContactChannelClient deleteContactChannelWithId:contactChannel.contactChannelId withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGStatus *status) {
                 
                 XCTAssert(contactChannel != nil, @"Deleted contact channel is nil!");
                 [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteContactChannel"];
@@ -89,7 +89,7 @@
     NSDictionary *updateParams = @{
                                    @"display_name" : @"BUSINESS"
                                    };
-    [ZNGContactChannelClient updateContactChannelWithId:[self contactChannelId] withParameters:updateParams withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel) {
+    [ZNGContactChannelClient updateContactChannelWithId:[self contactChannelId] withParameters:updateParams withContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGContactChannel *contactChannel, ZNGStatus *status) {
         
         XCTAssert(contactChannel != nil, @"Updated contact channel is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactChannel"];

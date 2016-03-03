@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "ZNGConversationViewController.h"
+#import "ZNGNewConvoViewController.h"
 #import "ZNGConversation.h"
 
 @interface ZingleSDK : NSObject
@@ -63,5 +64,7 @@
  * @param conversation object which contains the messages to display
  */
 - (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation;
+
+- (ZNGNewConvoViewController *)newConversationViewControllerForConversation:(ZNGConversation *)conversation;
 
 @end

@@ -28,9 +28,9 @@
 
 - (void)testTemplateList
 {
-    [ZNGTemplateClient templateListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *templates) {
+    [ZNGTemplateClient templateListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *templ, ZNGStatus *status) {
         
-        XCTAssert(templates != nil, @"Templates are nil!");
+        XCTAssert(templ != nil, @"Templates are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testTemplateList"];
         
     } failure:^(ZNGError *error) {
@@ -44,9 +44,9 @@
 
 - (void)testTemplateById
 {
-    [ZNGTemplateClient templateWithId:@"f505dfc5-9314-41c6-b36a-de77f2c8f72b" withServiceId:[self serviceId] success:^(ZNGTemplate *template) {
+    [ZNGTemplateClient templateWithId:@"f505dfc5-9314-41c6-b36a-de77f2c8f72b" withServiceId:[self serviceId] success:^(ZNGTemplate *templ, ZNGStatus *status) {
         
-        XCTAssert(template != nil, @"Template is nil!");
+        XCTAssert(templ != nil, @"Template is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testTemplateById"];
         
     } failure:^(ZNGError *error) {
@@ -67,11 +67,11 @@
     template.body = @"iOS Test Template";
     template.displayName = @"iOS Test Template";
     
-    [ZNGTemplateClient saveTemplate:template withServiceId:[self serviceId] success:^(ZNGTemplate *template) {
+    [ZNGTemplateClient saveTemplate:template withServiceId:[self serviceId] success:^(ZNGTemplate *templ, ZNGStatus *status) {
         
         XCTAssert(template != nil, @"Label is nil!");
         
-        [ZNGTemplateClient deleteTemplateWithId:template.templateId withServiceId:[self serviceId] success:^{
+        [ZNGTemplateClient deleteTemplateWithId:template.templateId withServiceId:[self serviceId] success:^(ZNGStatus *status) {
             
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteTemplate"];
             
@@ -95,9 +95,9 @@
 - (void)testUpdateTemplate
 {
     NSDictionary *params = @{ @"body" : @"This is a test body." };
-    [ZNGTemplateClient updateTemplateWithId:@"f505dfc5-9314-41c6-b36a-de77f2c8f72b" withServiceId:[self serviceId] withParameters:params success:^(ZNGTemplate *template) {
+    [ZNGTemplateClient updateTemplateWithId:@"f505dfc5-9314-41c6-b36a-de77f2c8f72b" withServiceId:[self serviceId] withParameters:params success:^(ZNGTemplate *templ, ZNGStatus *status) {
         
-        XCTAssert(template != nil, @"Updated template is nil!");
+        XCTAssert(templ != nil, @"Updated template is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateTemplate"];
         
     } failure:^(ZNGError *error) {

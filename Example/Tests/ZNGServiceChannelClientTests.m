@@ -31,7 +31,7 @@
 
 - (void)testServiceChannelById
 {
-    [ZNGServiceChannelClient serviceChannelWithId:[self serviceChannelId] withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel) {
+    [ZNGServiceChannelClient serviceChannelWithId:[self serviceChannelId] withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel, ZNGStatus *status) {
         
         XCTAssert(serviceChannel != nil, @"Service channel is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testServiceChannelById"];
@@ -49,15 +49,15 @@
 
 - (void)testCreateAndDeleteServiceChannel
 {
-    [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers) {
+    [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers, ZNGStatus *status) {
         
         ZNGAvailablePhoneNumber *number = [availableNumbers lastObject];
         
-        [ZNGServiceChannelClient saveServiceChannel:[self serviceChannelWithValue:number.phoneNumber] withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel) {
+        [ZNGServiceChannelClient saveServiceChannel:[self serviceChannelWithValue:number.phoneNumber] withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel, ZNGStatus *status) {
             
             XCTAssert(serviceChannel != nil, @"Created service channel is nil!");
             
-            [ZNGServiceChannelClient deleteServiceChannelWithId:serviceChannel.serviceChannelId withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel) {
+            [ZNGServiceChannelClient deleteServiceChannelWithId:serviceChannel.serviceChannelId withServiceId:[self serviceId] success:^(ZNGStatus *status) {
                 
                 XCTAssert(serviceChannel != nil, @"Deleted service channel is nil!");
                 [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteServiceChannel"];
@@ -86,8 +86,8 @@
 
 - (void)testUpdateServiceChannel
 {
-    [ZNGServiceChannelClient updateServiceChannelWithId:[self serviceChannelId] withParameters:nil withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel) {
-        
+    [ZNGServiceChannelClient updateServiceChannelWithId:[self serviceChannelId] withParameters:nil withServiceId:[self serviceId] success:^(ZNGServiceChannel *serviceChannel, ZNGStatus *status) {
+                
         XCTAssert(serviceChannel != nil, @"Updated service channel is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateServiceChannel"];
         

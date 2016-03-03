@@ -146,6 +146,11 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     return [[ZNGConversationViewController alloc] initWithConversation:conversation];
 }
 
+- (ZNGNewConvoViewController *)newConversationViewControllerForConversation:(ZNGConversation *)conversation
+{
+    return [[ZNGNewConvoViewController alloc] initWithConversation:conversation];
+}
+
 - (AFHTTPSessionManager*)sharedSessionManager
 {
     if (!self.sessionManager) {

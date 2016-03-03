@@ -6,7 +6,6 @@
 //
 //
 
-#import <ZingleSDK/ZingleSDK.h>
 #import <Mantle/Mantle.h>
 #import "ZNGContactChannel.h"
 

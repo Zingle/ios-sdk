@@ -30,7 +30,7 @@
 
 - (void)testServiceList
 {
-    [ZNGServiceClient serviceListWithParameters:nil success:^(NSArray *services) {
+    [ZNGServiceClient serviceListWithParameters:nil success:^(NSArray *services, ZNGStatus *status) {
         
         XCTAssert(services != nil, @"Services are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testServicesList"];
@@ -46,7 +46,7 @@
 
 - (void)testServiceById
 {
-    [ZNGServiceClient serviceWithId:[self serviceId] success:^(ZNGService *service) {
+    [ZNGServiceClient serviceWithId:[self serviceId] success:^(ZNGService *service, ZNGStatus *status) {
         
         XCTAssert(service != nil, @"Service is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testServiceById"];
@@ -64,11 +64,11 @@
 
 - (void)testCreateAndDeleteService
 {
-    [ZNGServiceClient saveService:[self service] success:^(ZNGService *service) {
+    [ZNGServiceClient saveService:[self service] success:^(ZNGService *service, ZNGStatus *status) {
         
         XCTAssert(service != nil, @"Created service is nil!");
         
-        [ZNGServiceClient deleteServiceWithId:service.serviceId success:^(ZNGService *service) {
+        [ZNGServiceClient deleteServiceWithId:service.serviceId success:^(ZNGStatus *status) {
             
             XCTAssert(service != nil, @"Deleted service is nil!");
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteService"];
@@ -92,8 +92,8 @@
 
 - (void)testUpdateService
 {
-    [ZNGServiceClient updateServiceWithId:[self serviceId] withParameters:nil success:^(ZNGService *service) {
-        
+    [ZNGServiceClient updateServiceWithId:[self serviceId] withParameters:nil success:^(ZNGService *service, ZNGStatus *status) {
+                
         XCTAssert(service != nil, @"Updated service is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateService"];
         

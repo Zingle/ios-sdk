@@ -48,6 +48,7 @@
 #import "ZNGArrowView.h"
 #import "ZNGConversationViewController.h"
 #import "ZNGMessageView.h"
+#import "ZNGNewConvoViewController.h"
 #import "ZingleValueTransformers.h"
 #import "ZingleSDK.h"
 

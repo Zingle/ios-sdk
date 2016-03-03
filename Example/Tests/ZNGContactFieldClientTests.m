@@ -28,7 +28,7 @@
 
 - (void)testContactFieldList
 {
-    [ZNGContactFieldClient contactFieldListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *contactFields) {
+    [ZNGContactFieldClient contactFieldListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *contactFields, ZNGStatus *status) {
         
         XCTAssert(contactFields != nil, @"ContactFields are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactFieldList"];
@@ -44,7 +44,7 @@
 
 - (void)testContactFieldById
 {
-    [ZNGContactFieldClient contactFieldWithId:@"d1a15384-9ba2-41b4-a02e-331a8a080e38" withServiceId:[self serviceId] success:^(ZNGContactField *contactField) {
+    [ZNGContactFieldClient contactFieldWithId:@"d1a15384-9ba2-41b4-a02e-331a8a080e38" withServiceId:[self serviceId] success:^(ZNGContactField *contactField, ZNGStatus *status) {
         
         XCTAssert(contactField != nil, @"ContactField is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testContactFieldById"];
@@ -65,11 +65,11 @@
     ZNGContactField *contactField = [[ZNGContactField alloc] init];
     contactField.displayName = @"iOS Test Contact Field";
     
-    [ZNGContactFieldClient saveContactField:contactField withServiceId:[self serviceId] success:^(ZNGContactField *contactField) {
+    [ZNGContactFieldClient saveContactField:contactField withServiceId:[self serviceId] success:^(ZNGContactField *contactField, ZNGStatus *status) {
         
         XCTAssert(contactField != nil, @"ContactField service is nil!");
         
-        [ZNGContactFieldClient deleteContactFieldWithId:contactField.contactFieldId withServiceId:[self serviceId] success:^{
+        [ZNGContactFieldClient deleteContactFieldWithId:contactField.contactFieldId withServiceId:[self serviceId] success:^(ZNGStatus *status) {
             
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteContactField"];
             
@@ -92,7 +92,7 @@
 
 - (void)testUpdateContactField
 {
-    [ZNGContactFieldClient updateContactFieldWithId:@"d1a15384-9ba2-41b4-a02e-331a8a080e38" withServiceId:[self serviceId] withParameters:nil success:^(ZNGContactField *contactField) {
+    [ZNGContactFieldClient updateContactFieldWithId:@"d1a15384-9ba2-41b4-a02e-331a8a080e38" withServiceId:[self serviceId] withParameters:nil success:^(ZNGContactField *contactField, ZNGStatus *status) {
         
         XCTAssert(contactField != nil, @"Updated contactField is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactField"];

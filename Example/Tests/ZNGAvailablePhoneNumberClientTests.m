@@ -30,8 +30,8 @@
 
 - (void)testAvailablePhoneNumberList
 {
-    [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers) {
-        
+    [ZNGAvailablePhoneNumberClient availablePhoneNumberListForCountry:@"US" success:^(NSArray *availableNumbers, ZNGStatus *status) {
+                
         XCTAssert(availableNumbers != nil, @"Available numbers are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testAvailableNumbersList"];
         

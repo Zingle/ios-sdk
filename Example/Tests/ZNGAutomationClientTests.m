@@ -28,7 +28,7 @@
 
 - (void)testAutomationList
 {
-    [ZNGAutomationClient automationListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *automations) {
+    [ZNGAutomationClient automationListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *automations, ZNGStatus *status) {
         
         XCTAssert(automations != nil, @"Automations are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testAutomationsList"];
@@ -44,7 +44,7 @@
 
 - (void)testAutomationById
 {
-    [ZNGAutomationClient automationWithId:@"3a2a029d-c67a-4c14-a679-e29eaab5616b" withServiceId:[self serviceId] success:^(ZNGAutomation *automation) {
+    [ZNGAutomationClient automationWithId:@"3a2a029d-c67a-4c14-a679-e29eaab5616b" withServiceId:[self serviceId] success:^(ZNGAutomation *automation, ZNGStatus *status) {
         
         XCTAssert(automation != nil, @"Automation is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testAutomationById"];
@@ -63,8 +63,8 @@
 - (void)testUpdateAutomation
 {
     NSDictionary *params = @{ @"status" : @"active" };
-    [ZNGAutomationClient updateAutomationWithId:@"3a2a029d-c67a-4c14-a679-e29eaab5616b" withServiceId:[self serviceId] withParameters:params success:^(ZNGAutomation *automation) {
-        
+    [ZNGAutomationClient updateAutomationWithId:@"3a2a029d-c67a-4c14-a679-e29eaab5616b" withServiceId:[self serviceId] withParameters:params success:^(ZNGAutomation *automation, ZNGStatus *status) {
+                
         XCTAssert(automation != nil, @"Updated automation is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateAutomation"];
         

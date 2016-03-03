@@ -30,7 +30,7 @@
 
 - (void)testPlanList
 {
-    [ZNGAccountPlanClient accountPlanListWithAccountId:[self accountId] withParameters:nil success:^(NSArray *plans) {
+    [ZNGAccountPlanClient accountPlanListWithAccountId:[self accountId] withParameters:nil success:^(NSArray *plans, ZNGStatus *status) {
         
         XCTAssert(plans != nil, @"Plans are nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testPlanList"];
@@ -46,8 +46,8 @@
 
 - (void)testPlanById
 {
-    [ZNGAccountPlanClient accountPlanWithAccountId:[self accountId] withPlanId:[self planId] success:^(ZNGAccountPlan *plan) {
-        
+    [ZNGAccountPlanClient accountPlanWithAccountId:[self accountId] withPlanId:[self planId] success:^(ZNGAccountPlan *plan, ZNGStatus *status) {
+                
         XCTAssert(plan != nil, @"Plan is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testPlanById"];
         

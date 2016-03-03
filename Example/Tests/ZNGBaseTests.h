@@ -12,6 +12,7 @@
 #import "ZNGServiceChannel.h"
 #import "ZNGContactChannel.h"
 #import "ZNGContact.h"
+#import "ZNGNewContactChannel.h"
 
 @interface ZNGBaseTests : XCTestCase
 
@@ -25,7 +26,7 @@
 - (ZNGAccount *)account;
 - (NSString *)serviceChannelId;
 - (ZNGServiceChannel *)serviceChannelWithValue:(NSString *)value;
-- (ZNGContactChannel *)contactChannelWithValue:(NSString *)value;
+- (ZNGNewContactChannel *)contactChannelWithValue:(NSString *)value;
 - (ZNGContact *)contact;
 - (NSString *)automationId;
 - (NSString *)labelId;

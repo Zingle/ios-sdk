@@ -114,7 +114,7 @@
     return serviceChannel;
 }
 
-- (ZNGContactChannel *)contactChannelWithValue:(NSString *)value
+- (ZNGNewContactChannel *)contactChannelWithValue:(NSString *)value
 {
     ZNGContactChannel *contactChannel = [[ZNGContactChannel alloc] init];
     contactChannel.displayName = @"MOBILE";
@@ -123,7 +123,9 @@
     contactChannel.country = @"US";
     contactChannel.isDefaultForType = false;
     
-    return contactChannel;
+    ZNGNewContactChannel *newChannel = [[ZNGNewContactChannel alloc] initWithContactChannel:contactChannel];
+    
+    return newChannel;
 }
 
 - (ZNGContact *)contact

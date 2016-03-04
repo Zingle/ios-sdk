@@ -1,18 +1,18 @@
 //
-//  ZNGNewConvoViewController.h
+//  ZNGMessageViewModel.h
 //  Pods
 //
-//  Created by Ryan Farley on 3/2/16.
+//  Created by Ryan Farley on 3/3/16.
 //
 //
 
-#import <UIKit/UIKit.h>
-#import "ZNGConversation.h"
+#import <Foundation/Foundation.h>
 #import "ZNGMessageTableViewCell.h"
+#import "ZNGMessage.h"
 
-@interface ZNGNewConvoViewController : UIViewController <ZNGConversationDelegate, UITableViewDataSource, UITableViewDelegate>
+@interface ZNGMessageViewModel : NSObject
 
-@property (nonatomic, retain) ZNGConversation *conversation;
+@property (nonatomic, strong) ZNGMessage *message;
 
 @property (nonatomic, strong) UIColor *inboundBackgroundColor;
 @property (nonatomic, strong) UIColor *outboundBackgroundColor;
@@ -37,6 +37,6 @@
 @property (nonatomic, strong) NSString *toName;
 @property (nonatomic) ZNGArrowPosition arrowPosition;
 
-- (id)initWithConversation:(ZNGConversation *)conversation;
+- (id)initWithMessage:(ZNGMessage *)message;
 
 @end

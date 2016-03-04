@@ -93,10 +93,26 @@
 {
     ZNGConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
     
-//    ZNGConversationViewController *conversationViewController = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-    ZNGNewConvoViewController *conversationViewController = [[ZingleSDK sharedSDK] newConversationViewControllerForConversation:conversation];
+    ZNGNewConvoViewController *chatViewController = [[ZingleSDK sharedSDK] newConversationViewControllerForConversation:conversation];
     
-    [(UINavigationController *)self.window.rootViewController pushViewController:conversationViewController animated:YES];
+    chatViewController.inboundBackgroundColor = [UIColor colorWithRed:225.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1.0f];
+    chatViewController.outboundBackgroundColor = [UIColor colorWithRed:229.0f/255.0f green:245.0f/255.0f blue:252.0f/255.0f alpha:1.0f];
+    chatViewController.inboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    chatViewController.outboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    chatViewController.authorTextColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
+    chatViewController.messageHorziontalMargin = @25;
+    chatViewController.messageVerticalMargin = @8;
+    chatViewController.messageIndentAmount = @40;
+    chatViewController.bodyPadding = @14;
+    chatViewController.cornerRadius = @10;
+    chatViewController.arrowOffset = @10;
+    chatViewController.arrowWidth = @20;
+    chatViewController.arrowHeight = @10;
+    chatViewController.arrowPosition = ZNGArrowPositionBottom;
+    chatViewController.fromName = @"Me";
+    chatViewController.toName = @"Received";
+    
+    [(UINavigationController *)self.window.rootViewController pushViewController:chatViewController animated:YES];
 }
 
 @end

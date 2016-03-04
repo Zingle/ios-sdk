@@ -9,8 +9,15 @@
 
 @interface ZNGArrowView : UIView
 
+typedef NS_ENUM(NSInteger, ZNGArrowDirection) {
+    ZNGArrowDirectionUp,
+    ZNGArrowDirectionDown,
+    ZNGArrowDirectionLeft,
+    ZNGArrowDirectionRight
+};
+
 @property (nonatomic, retain) UIColor *color;
-@property (nonatomic, retain) NSString *direction;
+@property (nonatomic) ZNGArrowDirection direction;
 @property (nonatomic) int bias;
 
 @end

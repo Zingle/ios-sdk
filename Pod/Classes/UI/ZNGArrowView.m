@@ -9,17 +9,22 @@
 
 @implementation ZNGArrowView
 
-NSString *const kArrowDirectionUp = @"up";
-NSString *const kArrowDirectionDown = @"down";
-NSString *const kArrowDirectionLeft = @"left";
-NSString *const kArrowDirectionRight = @"right";
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    if( self = [super initWithCoder:aDecoder] ) {
+        self.backgroundColor = [UIColor clearColor];
+        self.color = [UIColor grayColor];
+        self.direction = ZNGArrowDirectionDown;
+    }
+    return self;
+}
 
 - (id)initWithFrame:(CGRect)frame
 {
     if( self = [super initWithFrame:frame] ) {
         self.backgroundColor = [UIColor clearColor];
         self.color = [UIColor grayColor];
-        self.direction = kArrowDirectionDown;
+        self.direction = ZNGArrowDirectionDown;
     }
     return self;
 }
@@ -30,7 +35,7 @@ NSString *const kArrowDirectionRight = @"right";
     [self setNeedsDisplay];
 }
 
-- (void)setDirection:(NSString *)direction
+- (void)setDirection:(ZNGArrowDirection)direction
 {
     _direction = direction;
     [self setNeedsDisplay];
@@ -52,19 +57,19 @@ NSString *const kArrowDirectionRight = @"right";
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, self.color.CGColor);
     
-    if( [self.direction isEqualToString:kArrowDirectionLeft] ) {
+    if( self.direction == ZNGArrowDirectionLeft ) {
         CGContextMoveToPoint(context, 0, [self verticalMiddleApex]);
         CGContextAddLineToPoint(context, self.frame.size.width, 0);
         CGContextAddLineToPoint(context, self.frame.size.width, self.frame.size.height);
-    } else if( [self.direction isEqualToString:kArrowDirectionRight] ) {
+    } else if( self.direction == ZNGArrowDirectionRight ) {
         CGContextMoveToPoint(context, 0, 0);
         CGContextAddLineToPoint(context, self.frame.size.width, [self verticalMiddleApex]);
         CGContextAddLineToPoint(context, 0, self.frame.size.height);
-    } else if( [self.direction isEqualToString:kArrowDirectionDown] ) {
+    } else if( self.direction == ZNGArrowDirectionDown ) {
         CGContextMoveToPoint(context, 0, 0);
         CGContextAddLineToPoint(context, self.frame.size.width, 0);
         CGContextAddLineToPoint(context, [self horizontalCenterApex], self.frame.size.height);
-    } else if( [self.direction isEqualToString:kArrowDirectionUp] ) {
+    } else if( self.direction == ZNGArrowDirectionUp ) {
         CGContextMoveToPoint(context, 0, self.frame.size.height);
         CGContextAddLineToPoint(context, [self horizontalCenterApex], 0);
         CGContextAddLineToPoint(context, self.frame.size.width, self.frame.size.height);
@@ -75,7 +80,7 @@ NSString *const kArrowDirectionRight = @"right";
 
 - (int)horizontalCenterApex
 {
-    int bias = ( [self.direction isEqualToString:kArrowDirectionRight] || [self.direction isEqualToString:kArrowDirectionUp] ) ? -self.bias : self.bias;
+    int bias = ( self.direction == ZNGArrowDirectionRight || self.direction == ZNGArrowDirectionUp ) ? -self.bias : self.bias;
     
     int baseApex = (self.frame.size.width / 2);
     int biasAmount = baseApex * (bias * .01);
@@ -84,7 +89,7 @@ NSString *const kArrowDirectionRight = @"right";
 
 - (int)verticalMiddleApex
 {
-    int bias = ( [self.direction isEqualToString:kArrowDirectionRight] || [self.direction isEqualToString:kArrowDirectionUp] ) ? -self.bias : self.bias;
+    int bias = ( self.direction == ZNGArrowDirectionRight || self.direction == ZNGArrowDirectionUp ) ? -self.bias : self.bias;
     
     int baseApex = (self.frame.size.height / 2);
     int biasAmount = baseApex * (bias * .01);

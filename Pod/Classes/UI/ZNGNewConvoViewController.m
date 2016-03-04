@@ -8,6 +8,7 @@
 
 #import "ZNGNewConvoViewController.h"
 #import <ZingleSDK/ZingleSDK.h>
+#import "ZNGMessageViewModel.h"
 
 @interface ZNGNewConvoViewController ()
 
@@ -35,20 +36,17 @@
 
     self.conversation.delegate = self;
     
-    self.tableView.delegate = self;
-    self.tableView.dataSource = self;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    self.tableView.rowHeight = UITableViewAutomaticDimension;
+    self.tableView.estimatedRowHeight = 160.0;
+    
+    UINib *messageCell = [UINib nibWithNibName:NSStringFromClass([ZNGMessageTableViewCell class]) bundle:[NSBundle bundleForClass:[self class]]];
+    [self.tableView registerNib:messageCell forCellReuseIdentifier:[ZNGMessageTableViewCell reuseIdentifier]];
 }
 
 #pragma mark - ZNGConversationDelegate
 - (void)messagesUpdated
 {
-    
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDatasource
@@ -60,13 +58,36 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessage *message = [self.conversation.messages objectAtIndex:indexPath.row];
-    
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ZNGMessageCell"];
-    cell.textLabel.text = message.body;
+    ZNGMessageViewModel *messageViewModel = [self messageViewModelWithMessage:[self.conversation.messages objectAtIndex:indexPath.row]];
+    ZNGMessageTableViewCell *cell = (ZNGMessageTableViewCell *)[tableView dequeueReusableCellWithIdentifier:[ZNGMessageTableViewCell reuseIdentifier]];
+    [cell configureCellForMessage:messageViewModel withDirection:[self.conversation messageDirectionFor:messageViewModel.message]];
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
+- (ZNGMessageViewModel *)messageViewModelWithMessage:(ZNGMessage *)message
+{
+    ZNGMessageViewModel *messageViewModel = [[ZNGMessageViewModel alloc] initWithMessage:message];
+    if (self.inboundBackgroundColor) messageViewModel.inboundBackgroundColor = self.inboundBackgroundColor;
+    if (self.outboundBackgroundColor) messageViewModel.outboundBackgroundColor = self.outboundBackgroundColor;
+    if (self.inboundTextColor) messageViewModel.inboundTextColor = self.inboundTextColor;
+    if (self.outboundTextColor) messageViewModel.outboundTextColor = self.outboundTextColor;
+    if (self.eventBackgroundColor) messageViewModel.eventBackgroundColor = self.eventBackgroundColor;
+    if (self.eventTextColor) messageViewModel.eventTextColor = self.eventTextColor;
+    if (self.authorTextColor) messageViewModel.authorTextColor = self.authorTextColor;
+    if (self.bodyPadding) messageViewModel.bodyPadding = self.bodyPadding;
+    if (self.messageVerticalMargin) messageViewModel.messageVerticalMargin = self.messageVerticalMargin;
+    if (self.messageHorziontalMargin) messageViewModel.messageHorziontalMargin = self.messageHorziontalMargin;
+    if (self.messageIndentAmount) messageViewModel.messageIndentAmount = self.messageIndentAmount;
+    if (self.cornerRadius) messageViewModel.cornerRadius = self.cornerRadius;
+    if (self.arrowOffset) messageViewModel.arrowOffset = self.arrowOffset;
+    if (self.arrowBias) messageViewModel.arrowBias = self.arrowBias;
+    if (self.arrowWidth) messageViewModel.arrowWidth = self.arrowWidth;
+    if (self.arrowHeight) messageViewModel.arrowHeight = self.arrowHeight;
+    if (self.messageFont) messageViewModel.messageFont = self.messageFont;
+    if (self.fromName) messageViewModel.fromName = self.fromName;
+    if (self.toName) messageViewModel.toName = self.toName;
+    if (self.arrowPosition != ZNGArrowPositionUnset) messageViewModel.arrowPosition = self.arrowPosition;
+    return messageViewModel;
+}
 
 @end

@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Test Results | xcpretty</title>
+    <style type="text/css">
+      body { font-family:Avenir Next, Helvetica Neue, sans-serif; color: #4A4A4A; background-color: #F0F3FB; margin:0;}
+      h1 { font-weight: normal; font-size: 24px; margin: 10px 0 0 0;}
+      h3 { font-weight: normal; margin: 2px; font-size: 1.1em;}
+      header { position: fixed;width: 100%;background: rgba(249, 254, 255, 0.9);margin: 0;padding: 10px;}
+      header:before, header:after { content:""; display:table;}
+      header:after { clear:both;}
+      a:link { color: #A1D761;}
+      footer { clear: both;position: relative;z-index: 10;height: 40px;margin-top: -10px; margin-left:30px; font-size:12px;}
+      table { width:100%; border-collapse: collapse;}
+      tr td:first-child { width:7%}
+      .left { float: left; margin-left:30px;}
+      .right { float: right; margin-right: 40px; margin-top: 0; margin-bottom:0;}
+      .test-suite { margin: 0 0 30px 0;}
+      .test-suite > .heading { font-family:Menlo, Monaco, monospace; font-weight: bold; border-color: #A1D761; background-color: #B8E986; border-width: 1px;}
+      .test-suite.failing > .heading { border-color: #C84F5E; background-color: #E58591;}
+      .test-suite > .heading > .title { margin-top: 4px; margin-left: 10px;}
+      .tests { overflow: scroll;margin: 0 30px 0 60px;}
+      .test, .test-suite > .heading { height: 30px; overflow: hidden; margin: 0 30px;}
+      .test, .test-suite > .heading { border-width: 1px; border-collapse: collapse; border-style: solid; }
+      .test { margin-left: 30px; border-top:none;}
+      .test.failing { border-color: #C84F5E; background-color: #F4DDE0;}
+      .test.passing { border-color: #A1D761;}
+      .test.failing { background-color: #E7A1AA;}
+      .test.passing { background-color: #CAF59F;}
+      .test.failing.odd { background-color: #EEC7CC;}
+      .test.passing.odd { background-color: #E5FBCF;}
+      .details { background-color: #F4DDE0; border: 1px solid #C84F5E;}
+      .test .test-detail:last-child { padding-bottom: 8px;}
+      .test .title { float: left; font-size: 0.9em; margin-top: 8px; font-family: Menlo, Monaco, monospace;}
+      .test .time { float: left;margin: 4px 10px 0 20px;}
+      .test-detail { font-family:Menlo, Monaco, monospace; font-size: 0.9em; margin: 5px 0 5px 0px;}
+      .screenshots { height: auto; overflow: hidden; padding: 4px 4px 0 4px; background-color: #B8E986; border: #A1D761; border-width: 0 1px; border-style: solid; }
+      .screenshots.failing { border-color: #C84F5E; background-color: #E58591; }
+      .screenshot { max-height: 60px; float: left; transition: max-height 0.2s; margin: 0 4px 4px 0 }
+      .screenshot.selected { max-height: 568px; }
+      #test-suites { display: inline-block; width: 100%;margin-top:100px;}
+      #segment-bar { margin-top: 10px;margin-left: 14px;float:right;}
+      #segment-bar a:first-child { border-radius: 9px 0 0 9px; border-right: none;}
+      #segment-bar a:last-child { border-radius: 0 9px 9px 0; border-left: none;}
+      #segment-bar > a { color: #565656; border: 2px solid  #7B7B7B; width: 80px; font-weight: bold; display:inline-block;text-align:center; font-weight: normal;}
+      #segment-bar > a.selected { background-color: #979797; color: #F0F3FB;}
+      #counters { float: left;margin: 10px;text-align: right;}
+      #counters h2 { font-size: 16px; font-family: Avenir, sans-serif; font-weight: lighter; display:inline;}
+      #counters .number { font-size: 20px;}
+      #fail-count { color: #D0021B; margin-left:10px;}
+      @media (max-width: 640px) {
+        h1, #counters, #segment-bar { margin: 5px auto; text-align:center;}
+        header, #segment-bar { width: 100%; position: relative; background:none;}
+        .left, .right { float:none; margin:0;}
+        #test-suites { margin-top: 0;}
+        #counters { float:none;}
+      }
+    </style>
+    <script type="text/javascript">
+      var hide = function(element) { element.style.display = 'none';}
+      var show = function(element) { element.style.display = '';}
+      var isHidden = function(element) { return element.style.display == 'none';}
+      var isSelected = function(element) { return element.classList.contains("selected");}
+      var deselect = function(element) { return element.classList.remove("selected");}
+      var select = function(element) { return element.classList.add("selected");}
+      var toggle = function(element) { isHidden(element) ? show(element) : hide(element);};
+      var toggleTests = function(heading) { toggle(heading.parentNode.children[1]);};
+      var toggleDetails = function(detailClass) {
+        var details = document.querySelectorAll('.' + detailClass);
+        for (var i = details.length - 1; i >= 0; i--) { toggle(details[i]);};
+      };
+      var hideAll = function(collection) {
+        for (var i = collection.length - 1; i >= 0; i--) { hide(collection[i]); };
+      }
+      var showAll = function(collection) {
+        for (var i = collection.length - 1; i >= 0; i--) { show(collection[i]); };
+      }
+      var selectSegment = function(segment) {
+        if (isSelected(segment)) return;
+        var segments = document.querySelectorAll('#segment-bar > a');
+        for (var i = segments.length - 1; i >= 0; i--) { deselect(segments[i]);};
+        select(segment);
+        if (segment.id == "all-segment") {
+          showAll(document.querySelectorAll('.test-suite'));
+          showAll(document.querySelectorAll('.test'));
+        } else if (segment.id == "failing-segment") {
+          hideAll(document.querySelectorAll('.test.passing'));
+          showAll(document.querySelectorAll('.test.failing'));
+          hideAll(document.querySelectorAll('.test-suite.passing'));
+          showAll(document.querySelectorAll('.test-suite.failing'));
+        } else if (segment.id == "passing-segment") {
+          hideAll(document.querySelectorAll('.test.failing'));
+          showAll(document.querySelectorAll('.test.passing'));
+          hideAll(document.querySelectorAll('.test-suite.failing'));
+          showAll(document.querySelectorAll('.test-suite.passing'));
+        }
+      }
+      var toggleScreenshot = function(suiteName, index) {
+        var screenshot = document.getElementById("screenshot-" + suiteName + "-" + index);
+        isSelected(screenshot) ? deselect(screenshot) : select(screenshot);
+      }
+    </script>
+  </head>
+  <body>
+    <header>
+      <section class="left">
+        <h1>Test Results</h1>
+      </section>
+      <section class="right">
+        <section id="counters">
+          <h2 id="test-count"><span class="number">39</span> tests</h2>
+          
+            <h2 id="fail-count"><span class="number">6</span> failures</h2>
+          
+        </section>
+        <section id="segment-bar">
+          <a id="all-segment" onclick="selectSegment(this);" class="selected">All</a><a id="failing-segment" onclick="selectSegment(this);">Failing</a><a id="passing-segment" onclick="selectSegment(this);">Passing</a>
+        </section>
+      </section>
+    </header>
+    <section id="test-suites">
+      
+        
+        <section class="test-suite passing" id="ZNGAccountClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGAccountClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAccountById');">
+                <td>
+                  
+                    <h3 class="time">0.370s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAccountById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAccountList');">
+                <td>
+                  
+                    <h3 class="time">0.384s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAccountList</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGAccountPlanClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGAccountPlanClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testPlanById');">
+                <td>
+                  
+                    <h3 class="time">0.838s</h3>
+                  
+                </td>
+                <td><h3 class="title">testPlanById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testPlanList');">
+                <td>
+                  
+                    <h3 class="time">0.820s</h3>
+                  
+                </td>
+                <td><h3 class="title">testPlanList</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGAutomationClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGAutomationClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAutomationById');">
+                <td>
+                  
+                    <h3 class="time">0.427s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAutomationById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testAutomationList');">
+                <td>
+                  
+                    <h3 class="time">0.902s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAutomationList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testUpdateAutomation');">
+                <td>
+                  
+                    <h3 class="time">0.511s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateAutomation</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGAvailablePhoneNumberClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGAvailablePhoneNumberClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAvailablePhoneNumberList');">
+                <td>
+                  
+                    <h3 class="time">0.884s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAvailablePhoneNumberList</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGContactChannelClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGContactChannelClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateAndDeleteContactChannel');">
+                <td>
+                  
+                    <h3 class="time">2.592s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateAndDeleteContactChannel</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite failing" id="ZNGContactClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGContactClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testAddLabelToContact');">
+                <td>
+                  
+                    <h3 class="time">2.221s</h3>
+                  
+                </td>
+                <td><h3 class="title">testAddLabelToContact</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test failing odd"  onclick="toggleDetails('testContactClient');">
+                <td>
+                  
+                </td>
+                <td><h3 class="title">testContactClient</h3></td>
+              </tr>
+              
+                <tr class="details testContactClient">
+                  <td></td>
+                  <td>
+                    
+                      <section class="test-detail reason">failed - fail: "Error Domain=ZINGLE ERROR Code=0 "(null)""</section>
+                    
+                    
+                      <section class="test-detail snippet">[38;5;230m                    
+[38;5;230m                    [39m[38;5;230mXCTFail[39m[38;5;87m([39m[38;5;229;01m@"fail: [39;00m[38;5;87;01m\"[39;00m[38;5;229;01m%@[39;00m[38;5;87;01m\"[39;00m[38;5;229;01m"[39;00m[38;5;87m,[39m[38;5;230m [39m[38;5;230merror[39m[38;5;87m);[39m[38;5;230m
+[38;5;230m                    [39m[38;5;87m[[[39m[38;5;230mZNGAsyncSemaphor[39m[38;5;230m [39m[38;5;153msharedInstance[39m[38;5;87m][39m[38;5;230m [39m[38;5;153mlift[39m[38;5;87m:[39m[38;5;229;01m@"testContactClient"[39;00m[38;5;87m];[39m[38;5;230m
+[38;5;230m[39m</section>
+                      <section class="test-detail">/Users/ryanfarley/Developer/ios-sdk/Example/Tests/ZNGContactClientTests.m:178</section>
+                    
+                  </td>
+                </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContactList');">
+                <td>
+                  
+                    <h3 class="time">1.363s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContactList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testRemoveLabelFromContact');">
+                <td>
+                  
+                    <h3 class="time">2.527s</h3>
+                  
+                </td>
+                <td><h3 class="title">testRemoveLabelFromContact</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test failing "  onclick="toggleDetails('testTriggerAutomation');">
+                <td>
+                  
+                </td>
+                <td><h3 class="title">testTriggerAutomation</h3></td>
+              </tr>
+              
+                <tr class="details testTriggerAutomation">
+                  <td></td>
+                  <td>
+                    
+                      <section class="test-detail reason">failed - fail: "Error Domain=ZINGLE ERROR Code=3005 "(null)" UserInfo={error_code=3005, status_code=400, description=Only 'survey' and 'custom' automations may be triggered manually, text=Bad Request}"</section>
+                    
+                    
+                      <section class="test-detail snippet">[38;5;230m            
+[38;5;230m            [39m[38;5;230mXCTFail[39m[38;5;87m([39m[38;5;229;01m@"fail: [39;00m[38;5;87;01m\"[39;00m[38;5;229;01m%@[39;00m[38;5;87;01m\"[39;00m[38;5;229;01m"[39;00m[38;5;87m,[39m[38;5;230m [39m[38;5;230merror[39m[38;5;87m);[39m[38;5;230m
+[38;5;230m            [39m[38;5;87m[[[39m[38;5;230mZNGAsyncSemaphor[39m[38;5;230m [39m[38;5;153msharedInstance[39m[38;5;87m][39m[38;5;230m [39m[38;5;153mlift[39m[38;5;87m:[39m[38;5;229;01m@"testTriggerAutomation"[39;00m[38;5;87m];[39m[38;5;230m
+[38;5;230m[39m</section>
+                      <section class="test-detail">/Users/ryanfarley/Developer/ios-sdk/Example/Tests/ZNGContactClientTests.m:90</section>
+                    
+                  </td>
+                </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUpdateContactCustomFieldValue');">
+                <td>
+                  
+                    <h3 class="time">2.395s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateContactCustomFieldValue</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite failing" id="ZNGContactFieldClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGContactFieldClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testContactFieldById');">
+                <td>
+                  
+                    <h3 class="time">0.366s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContactFieldById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testContactFieldList');">
+                <td>
+                  
+                    <h3 class="time">0.538s</h3>
+                  
+                </td>
+                <td><h3 class="title">testContactFieldList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test failing "  onclick="toggleDetails('testCreateAndDeleteContactField');">
+                <td>
+                  
+                </td>
+                <td><h3 class="title">testCreateAndDeleteContactField</h3></td>
+              </tr>
+              
+                <tr class="details testCreateAndDeleteContactField">
+                  <td></td>
+                  <td>
+                    
+                      <section class="test-detail reason">failed - fail: "Error Domain=ZINGLE ERROR Code=3202 "(null)" UserInfo={error_code=3202, status_code=400, description=Custom field display name already in use, text=Bad Request}"</section>
+                    
+                    
+                      <section class="test-detail snippet">[38;5;230m        
+[38;5;230m        [39m[38;5;230mXCTFail[39m[38;5;87m([39m[38;5;229;01m@"fail: [39;00m[38;5;87;01m\"[39;00m[38;5;229;01m%@[39;00m[38;5;87;01m\"[39;00m[38;5;229;01m"[39;00m[38;5;87m,[39m[38;5;230m [39m[38;5;87m[[39m[38;5;230merror[39m[38;5;230m [39m[38;5;153mdescription[39m[38;5;87m]);[39m[38;5;230m
+[38;5;230m        [39m[38;5;87m[[[39m[38;5;230mZNGAsyncSemaphor[39m[38;5;230m [39m[38;5;153msharedInstance[39m[38;5;87m][39m[38;5;230m [39m[38;5;153mlift[39m[38;5;87m:[39m[38;5;229;01m@"testCreateAndDeleteContactField"[39;00m[38;5;87m];[39m[38;5;230m
+[38;5;230m[39m</section>
+                      <section class="test-detail">/Users/ryanfarley/Developer/ios-sdk/Example/Tests/ZNGContactFieldClientTests.m:84</section>
+                    
+                  </td>
+                </tr>
+              
+            
+              
+              <tr class="test failing odd"  onclick="toggleDetails('testUpdateContactField');">
+                <td>
+                  
+                </td>
+                <td><h3 class="title">testUpdateContactField</h3></td>
+              </tr>
+              
+                <tr class="details testUpdateContactField">
+                  <td></td>
+                  <td>
+                    
+                      <section class="test-detail reason">failed - fail: "Error Domain=ZINGLE ERROR Code=3201 "(null)" UserInfo={error_code=3201, status_code=400, description=Unable to modify global custom field, text=Bad Request}"</section>
+                    
+                    
+                      <section class="test-detail snippet">[38;5;230m        
+[38;5;230m        [39m[38;5;230mXCTFail[39m[38;5;87m([39m[38;5;229;01m@"fail: [39;00m[38;5;87;01m\"[39;00m[38;5;229;01m%@[39;00m[38;5;87;01m\"[39;00m[38;5;229;01m"[39;00m[38;5;87m,[39m[38;5;230m [39m[38;5;87m[[39m[38;5;230merror[39m[38;5;230m [39m[38;5;153mdescription[39m[38;5;87m]);[39m[38;5;230m
+[38;5;230m        [39m[38;5;87m[[[39m[38;5;230mZNGAsyncSemaphor[39m[38;5;230m [39m[38;5;153msharedInstance[39m[38;5;87m][39m[38;5;230m [39m[38;5;153mlift[39m[38;5;87m:[39m[38;5;229;01m@"testUpdateContactField"[39;00m[38;5;87m];[39m[38;5;230m
+[38;5;230m[39m</section>
+                      <section class="test-detail">/Users/ryanfarley/Developer/ios-sdk/Example/Tests/ZNGContactFieldClientTests.m:102</section>
+                    
+                  </td>
+                </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite failing" id="ZNGLabelClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGLabelClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test failing "  onclick="toggleDetails('testCreateAndDeleteLabel');">
+                <td>
+                  
+                </td>
+                <td><h3 class="title">testCreateAndDeleteLabel</h3></td>
+              </tr>
+              
+                <tr class="details testCreateAndDeleteLabel">
+                  <td></td>
+                  <td>
+                    
+                      <section class="test-detail reason">failed - fail: "Error Domain=ZINGLE ERROR Code=3402 "(null)" UserInfo={error_code=3402, status_code=400, description=Label display name is already in use, text=Bad Request}"</section>
+                    
+                    
+                      <section class="test-detail snippet">[38;5;230m        
+[38;5;230m        [39m[38;5;230mXCTFail[39m[38;5;87m([39m[38;5;229;01m@"fail: [39;00m[38;5;87;01m\"[39;00m[38;5;229;01m%@[39;00m[38;5;87;01m\"[39;00m[38;5;229;01m"[39;00m[38;5;87m,[39m[38;5;230m [39m[38;5;87m[[39m[38;5;230merror[39m[38;5;230m [39m[38;5;153mdescription[39m[38;5;87m]);[39m[38;5;230m
+[38;5;230m        [39m[38;5;87m[[[39m[38;5;230mZNGAsyncSemaphor[39m[38;5;230m [39m[38;5;153msharedInstance[39m[38;5;87m][39m[38;5;230m [39m[38;5;153mlift[39m[38;5;87m:[39m[38;5;229;01m@"testCreateAndDeleteLabel"[39;00m[38;5;87m];[39m[38;5;230m
+[38;5;230m[39m</section>
+                      <section class="test-detail">/Users/ryanfarley/Developer/ios-sdk/Example/Tests/ZNGLabelClientTests.m:86</section>
+                    
+                  </td>
+                </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testLabelById');">
+                <td>
+                  
+                    <h3 class="time">0.435s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLabelById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testLabelList');">
+                <td>
+                  
+                    <h3 class="time">0.405s</h3>
+                  
+                </td>
+                <td><h3 class="title">testLabelList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUpdateLabel');">
+                <td>
+                  
+                    <h3 class="time">0.758s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateLabel</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGMessageClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGMessageClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testMarkMessageRead');">
+                <td>
+                  
+                    <h3 class="time">1.357s</h3>
+                  
+                </td>
+                <td><h3 class="title">testMarkMessageRead</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testMessageById');">
+                <td>
+                  
+                    <h3 class="time">0.921s</h3>
+                  
+                </td>
+                <td><h3 class="title">testMessageById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testMessageList');">
+                <td>
+                  
+                    <h3 class="time">1.131s</h3>
+                  
+                </td>
+                <td><h3 class="title">testMessageList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testSendMessage');">
+                <td>
+                  
+                    <h3 class="time">2.145s</h3>
+                  
+                </td>
+                <td><h3 class="title">testSendMessage</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGServiceChannelClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGServiceChannelClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateAndDeleteServiceChannel');">
+                <td>
+                  
+                    <h3 class="time">4.085s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateAndDeleteServiceChannel</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testServiceChannelById');">
+                <td>
+                  
+                    <h3 class="time">0.376s</h3>
+                  
+                </td>
+                <td><h3 class="title">testServiceChannelById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testUpdateServiceChannel');">
+                <td>
+                  
+                    <h3 class="time">1.372s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateServiceChannel</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGServiceClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGServiceClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testCreateAndDeleteService');">
+                <td>
+                  
+                    <h3 class="time">3.377s</h3>
+                  
+                </td>
+                <td><h3 class="title">testCreateAndDeleteService</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testServiceById');">
+                <td>
+                  
+                    <h3 class="time">0.459s</h3>
+                  
+                </td>
+                <td><h3 class="title">testServiceById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testServiceList');">
+                <td>
+                  
+                    <h3 class="time">2.371s</h3>
+                  
+                </td>
+                <td><h3 class="title">testServiceList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUpdateService');">
+                <td>
+                  
+                    <h3 class="time">0.550s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateService</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite failing" id="ZNGTemplateClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGTemplateClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test failing "  onclick="toggleDetails('testCreateAndDeleteTemplate');">
+                <td>
+                  
+                </td>
+                <td><h3 class="title">testCreateAndDeleteTemplate</h3></td>
+              </tr>
+              
+                <tr class="details testCreateAndDeleteTemplate">
+                  <td></td>
+                  <td>
+                    
+                      <section class="test-detail reason">failed - fail: "Error Domain=ZINGLE ERROR Code=3303 "(null)" UserInfo={error_code=3303, status_code=400, description=Template display name is already in use, text=Bad Request}"</section>
+                    
+                    
+                      <section class="test-detail snippet">[38;5;230m        
+[38;5;230m        [39m[38;5;230mXCTFail[39m[38;5;87m([39m[38;5;229;01m@"fail: [39;00m[38;5;87;01m\"[39;00m[38;5;229;01m%@[39;00m[38;5;87;01m\"[39;00m[38;5;229;01m"[39;00m[38;5;87m,[39m[38;5;230m [39m[38;5;87m[[39m[38;5;230merror[39m[38;5;230m [39m[38;5;153mdescription[39m[38;5;87m]);[39m[38;5;230m
+[38;5;230m        [39m[38;5;87m[[[39m[38;5;230mZNGAsyncSemaphor[39m[38;5;230m [39m[38;5;153msharedInstance[39m[38;5;87m][39m[38;5;230m [39m[38;5;153mlift[39m[38;5;87m:[39m[38;5;229;01m@"testCreateAndDeleteTemplate"[39;00m[38;5;87m];[39m[38;5;230m
+[38;5;230m[39m</section>
+                      <section class="test-detail">/Users/ryanfarley/Developer/ios-sdk/Example/Tests/ZNGTemplateClientTests.m:86</section>
+                    
+                  </td>
+                </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testTemplateById');">
+                <td>
+                  
+                    <h3 class="time">0.356s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTemplateById</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testTemplateList');">
+                <td>
+                  
+                    <h3 class="time">0.735s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTemplateList</h3></td>
+              </tr>
+              
+            
+              
+              <tr class="test passing odd"  onclick="toggleDetails('testUpdateTemplate');">
+                <td>
+                  
+                    <h3 class="time">0.715s</h3>
+                  
+                </td>
+                <td><h3 class="title">testUpdateTemplate</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+        
+        <section class="test-suite passing" id="ZNGTimeZoneClientTests">
+          <section class="heading" onclick="toggleTests(this);">
+            <h3 class="title">ZNGTimeZoneClientTests</h3>
+          </section>
+          <section class="tests">
+            
+            <table>
+            
+              
+              <tr class="test passing "  onclick="toggleDetails('testTimeZoneList');">
+                <td>
+                  
+                    <h3 class="time">0.613s</h3>
+                  
+                </td>
+                <td><h3 class="title">testTimeZoneList</h3></td>
+              </tr>
+              
+            
+            </table>
+          </section>
+        </section>
+      
+    </section>
+    <footer>Report generated with <a href="https://github.com/supermarin/xcpretty">xcpretty</a></footer>
+  </body>
+</html>

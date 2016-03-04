@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites tests='39' failures='6'>
+  <testsuite name='ZNGAccountClientTests' tests='2' failures='0'>
+    <testcase classname='ZNGAccountClientTests' name='testAccountById' time='0.370'/>
+    <testcase classname='ZNGAccountClientTests' name='testAccountList' time='0.384'/>
+  </testsuite>
+  <testsuite name='ZNGAccountPlanClientTests' tests='2' failures='0'>
+    <testcase classname='ZNGAccountPlanClientTests' name='testPlanById' time='0.838'/>
+    <testcase classname='ZNGAccountPlanClientTests' name='testPlanList' time='0.820'/>
+  </testsuite>
+  <testsuite name='ZNGAutomationClientTests' tests='3' failures='0'>
+    <testcase classname='ZNGAutomationClientTests' name='testAutomationById' time='0.427'/>
+    <testcase classname='ZNGAutomationClientTests' name='testAutomationList' time='0.902'/>
+    <testcase classname='ZNGAutomationClientTests' name='testUpdateAutomation' time='0.511'/>
+  </testsuite>
+  <testsuite name='ZNGAvailablePhoneNumberClientTests' tests='1' failures='0'>
+    <testcase classname='ZNGAvailablePhoneNumberClientTests' name='testAvailablePhoneNumberList' time='0.884'/>
+  </testsuite>
+  <testsuite name='ZNGContactChannelClientTests' tests='1' failures='0'>
+    <testcase classname='ZNGContactChannelClientTests' name='testCreateAndDeleteContactChannel' time='2.592'/>
+  </testsuite>
+  <testsuite name='ZNGContactClientTests' tests='6' failures='2'>
+    <testcase classname='ZNGContactClientTests' name='testAddLabelToContact' time='2.221'/>
+    <testcase classname='ZNGContactClientTests' name='testContactClient'>
+      <failure message='failed - fail: &quot;Error Domain=ZINGLE ERROR Code=0 &quot;(null)&quot;&quot;'>Tests/ZNGContactClientTests.m:178</failure>
+    </testcase>
+    <testcase classname='ZNGContactClientTests' name='testContactList' time='1.363'/>
+    <testcase classname='ZNGContactClientTests' name='testRemoveLabelFromContact' time='2.527'/>
+    <testcase classname='ZNGContactClientTests' name='testTriggerAutomation'>
+      <failure message='failed - fail: &quot;Error Domain=ZINGLE ERROR Code=3005 &quot;(null)&quot; UserInfo={error_code=3005, status_code=400, description=Only &apos;survey&apos; and &apos;custom&apos; automations may be triggered manually, text=Bad Request}&quot;'>Tests/ZNGContactClientTests.m:90</failure>
+    </testcase>
+    <testcase classname='ZNGContactClientTests' name='testUpdateContactCustomFieldValue' time='2.395'/>
+  </testsuite>
+  <testsuite name='ZNGContactFieldClientTests' tests='4' failures='2'>
+    <testcase classname='ZNGContactFieldClientTests' name='testContactFieldById' time='0.366'/>
+    <testcase classname='ZNGContactFieldClientTests' name='testContactFieldList' time='0.538'/>
+    <testcase classname='ZNGContactFieldClientTests' name='testCreateAndDeleteContactField'>
+      <failure message='failed - fail: &quot;Error Domain=ZINGLE ERROR Code=3202 &quot;(null)&quot; UserInfo={error_code=3202, status_code=400, description=Custom field display name already in use, text=Bad Request}&quot;'>Tests/ZNGContactFieldClientTests.m:84</failure>
+    </testcase>
+    <testcase classname='ZNGContactFieldClientTests' name='testUpdateContactField'>
+      <failure message='failed - fail: &quot;Error Domain=ZINGLE ERROR Code=3201 &quot;(null)&quot; UserInfo={error_code=3201, status_code=400, description=Unable to modify global custom field, text=Bad Request}&quot;'>Tests/ZNGContactFieldClientTests.m:102</failure>
+    </testcase>
+  </testsuite>
+  <testsuite name='ZNGLabelClientTests' tests='4' failures='1'>
+    <testcase classname='ZNGLabelClientTests' name='testCreateAndDeleteLabel'>
+      <failure message='failed - fail: &quot;Error Domain=ZINGLE ERROR Code=3402 &quot;(null)&quot; UserInfo={error_code=3402, status_code=400, description=Label display name is already in use, text=Bad Request}&quot;'>Tests/ZNGLabelClientTests.m:86</failure>
+    </testcase>
+    <testcase classname='ZNGLabelClientTests' name='testLabelById' time='0.435'/>
+    <testcase classname='ZNGLabelClientTests' name='testLabelList' time='0.405'/>
+    <testcase classname='ZNGLabelClientTests' name='testUpdateLabel' time='0.758'/>
+  </testsuite>
+  <testsuite name='ZNGMessageClientTests' tests='4' failures='0'>
+    <testcase classname='ZNGMessageClientTests' name='testMarkMessageRead' time='1.357'/>
+    <testcase classname='ZNGMessageClientTests' name='testMessageById' time='0.921'/>
+    <testcase classname='ZNGMessageClientTests' name='testMessageList' time='1.131'/>
+    <testcase classname='ZNGMessageClientTests' name='testSendMessage' time='2.145'/>
+  </testsuite>
+  <testsuite name='ZNGServiceChannelClientTests' tests='3' failures='0'>
+    <testcase classname='ZNGServiceChannelClientTests' name='testCreateAndDeleteServiceChannel' time='4.085'/>
+    <testcase classname='ZNGServiceChannelClientTests' name='testServiceChannelById' time='0.376'/>
+    <testcase classname='ZNGServiceChannelClientTests' name='testUpdateServiceChannel' time='1.372'/>
+  </testsuite>
+  <testsuite name='ZNGServiceClientTests' tests='4' failures='0'>
+    <testcase classname='ZNGServiceClientTests' name='testCreateAndDeleteService' time='3.377'/>
+    <testcase classname='ZNGServiceClientTests' name='testServiceById' time='0.459'/>
+    <testcase classname='ZNGServiceClientTests' name='testServiceList' time='2.371'/>
+    <testcase classname='ZNGServiceClientTests' name='testUpdateService' time='0.550'/>
+  </testsuite>
+  <testsuite name='ZNGTemplateClientTests' tests='4' failures='1'>
+    <testcase classname='ZNGTemplateClientTests' name='testCreateAndDeleteTemplate'>
+      <failure message='failed - fail: &quot;Error Domain=ZINGLE ERROR Code=3303 &quot;(null)&quot; UserInfo={error_code=3303, status_code=400, description=Template display name is already in use, text=Bad Request}&quot;'>Tests/ZNGTemplateClientTests.m:86</failure>
+    </testcase>
+    <testcase classname='ZNGTemplateClientTests' name='testTemplateById' time='0.356'/>
+    <testcase classname='ZNGTemplateClientTests' name='testTemplateList' time='0.735'/>
+    <testcase classname='ZNGTemplateClientTests' name='testUpdateTemplate' time='0.715'/>
+  </testsuite>
+  <testsuite name='ZNGTimeZoneClientTests' tests='1' failures='0'>
+    <testcase classname='ZNGTimeZoneClientTests' name='testTimeZoneList' time='0.613'/>
+  </testsuite>
+</testsuites>

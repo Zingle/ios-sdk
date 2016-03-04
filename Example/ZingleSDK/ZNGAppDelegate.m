@@ -108,7 +108,7 @@
     chatViewController.arrowOffset = @10;
     chatViewController.arrowWidth = @20;
     chatViewController.arrowHeight = @10;
-    chatViewController.arrowPosition = ZNGArrowPositionSide;
+    chatViewController.arrowPosition = ZNGArrowPositionBottom;
     chatViewController.fromName = @"Me";
     chatViewController.toName = @"Received";
     

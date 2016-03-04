@@ -9,12 +9,16 @@
 #import "ZNGMessageTableViewCell.h"
 #import "ZNGArrowView.h"
 #import "ZNGMessageViewModel.h"
+#import <SDWebImage/UIImageView+WebCache.h>
 
 @interface ZNGMessageTableViewCell()
 
 @property (weak, nonatomic) IBOutlet UIView *bodyView;
 @property (weak, nonatomic) IBOutlet UILabel *authorLabel;
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
+@property (weak, nonatomic) IBOutlet UIView *attachmentsView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *attachmentsViewHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *attachmentsViewTop;
 
 @property (weak, nonatomic) IBOutlet ZNGArrowView *inboundTopArrow;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundTopArrowWidth;
@@ -89,8 +93,41 @@
 
 - (void) configureCellForMessage:(ZNGMessageViewModel *)messageViewModel withDirection:(NSString *)direction;
 {
-    self.messageTextView.text = messageViewModel.message.body;
+    NSString *body = messageViewModel.message.body;
+    body = [body stringByReplacingOccurrencesOfString:@"<br/>" withString:@"\n"];
+    body = [body stringByReplacingOccurrencesOfString:@"<br>" withString:@"\n"];
+    body = [body stringByReplacingOccurrencesOfString:@"<br />" withString:@"\n"];
+    self.messageTextView.text = body;
+    
+    if([self.messageTextView.text length] > 0) {
+        self.attachmentsViewTop.constant = 0;
+    } else {
+        self.attachmentsViewTop.constant = -30;
+    }
+
+    self.attachmentsViewHeight.constant = 0;
+    [[self.attachmentsView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    
+    for( NSString *attachment in messageViewModel.message.attachments ) {
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame: CGRectMake(0, 0, 100, 100)];
+        
+        imageView.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [imageView sd_setImageWithURL:[NSURL URLWithString:attachment] completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, NSURL *imageURL) {
+            CGSize imageViewSize = [self imageSize:image scaledToWidth:self.attachmentsView.frame.size.width];
+            imageView.frame = CGRectMake(0, 0, imageViewSize.width, imageViewSize.height);
+        }];
+        
+        [self.attachmentsView addSubview:imageView];
+        self.attachmentsViewHeight.constant = imageView.frame.size.height;
+        
+        break;
+    }
+    
     self.authorLabel.textColor = messageViewModel.authorTextColor;
+    self.authorLabel.font = [UIFont fontWithName:@"Helvetica Neue" size:12];
+    
     self.bodyPaddingTop.constant = self.bodyPaddingBottom.constant = self.bodyPaddingLeft.constant = self.bodyPaddingRight.constant = [messageViewModel.bodyPadding floatValue];
     self.bodyView.layer.cornerRadius = [messageViewModel.cornerRadius floatValue];
     
@@ -182,6 +219,17 @@
     }
     
     [self setNeedsDisplay];
+}
+
+-(CGSize)imageSize: (UIImage*) sourceImage scaledToWidth: (float) i_width
+{
+    float oldWidth = sourceImage.size.width;
+    float scaleFactor = i_width / oldWidth;
+    
+    float newHeight = sourceImage.size.height * scaleFactor;
+    float newWidth = oldWidth * scaleFactor;
+    
+    return CGSizeMake(newWidth, newHeight);
 }
 
 @end

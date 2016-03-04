@@ -35,14 +35,32 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES" calendarEvent="YES"/>
                             </textView>
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="utZ-6R-kpv">
+                                <rect key="frame" x="8" y="359" width="346" height="0.0"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" id="c0L-sf-PoZ"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="3nY-Z8-FQo" firstAttribute="leading" secondItem="y4v-9P-Izw" secondAttribute="leading" constant="8" id="2GI-fF-lBM"/>
                             <constraint firstItem="3nY-Z8-FQo" firstAttribute="top" secondItem="y4v-9P-Izw" secondAttribute="top" constant="8" id="Jg5-6V-4Bn"/>
                             <constraint firstAttribute="trailing" secondItem="3nY-Z8-FQo" secondAttribute="trailing" constant="8" id="L2g-2f-rOv"/>
-                            <constraint firstAttribute="bottom" secondItem="3nY-Z8-FQo" secondAttribute="bottom" constant="8" id="Vcd-Mc-LyR"/>
+                            <constraint firstItem="utZ-6R-kpv" firstAttribute="top" secondItem="3nY-Z8-FQo" secondAttribute="bottom" id="RkN-Xq-XUm"/>
+                            <constraint firstItem="utZ-6R-kpv" firstAttribute="leading" secondItem="y4v-9P-Izw" secondAttribute="leading" constant="8" id="TjV-om-3IS"/>
+                            <constraint firstAttribute="trailing" secondItem="utZ-6R-kpv" secondAttribute="trailing" constant="8" id="ekE-Pj-uLt"/>
+                            <constraint firstItem="utZ-6R-kpv" firstAttribute="leading" secondItem="3nY-Z8-FQo" secondAttribute="leading" id="gIM-Qq-Ege"/>
+                            <constraint firstItem="utZ-6R-kpv" firstAttribute="trailing" secondItem="3nY-Z8-FQo" secondAttribute="trailing" id="iI6-RL-OAV"/>
+                            <constraint firstAttribute="bottom" secondItem="utZ-6R-kpv" secondAttribute="bottom" constant="8" id="wVg-gz-FM0"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="TjV-om-3IS"/>
+                                <exclude reference="ekE-Pj-uLt"/>
+                            </mask>
+                        </variation>
                     </view>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IVB-eP-rzf" customClass="ZNGArrowView">
                         <rect key="frame" x="18" y="33" width="0.0" height="0.0"/>
@@ -118,8 +136,11 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
+                <outlet property="attachmentsView" destination="utZ-6R-kpv" id="lvf-Rk-vQU"/>
+                <outlet property="attachmentsViewHeight" destination="c0L-sf-PoZ" id="kBY-DP-2GM"/>
+                <outlet property="attachmentsViewTop" destination="RkN-Xq-XUm" id="VZn-H0-77m"/>
                 <outlet property="authorLabel" destination="zD3-RZ-HtJ" id="bzx-rp-6bK"/>
-                <outlet property="bodyPaddingBottom" destination="Vcd-Mc-LyR" id="SBy-ab-BbN"/>
+                <outlet property="bodyPaddingBottom" destination="wVg-gz-FM0" id="hoW-hs-P6P"/>
                 <outlet property="bodyPaddingLeft" destination="2GI-fF-lBM" id="z8U-qv-Mp6"/>
                 <outlet property="bodyPaddingRight" destination="L2g-2f-rOv" id="yPH-04-sqe"/>
                 <outlet property="bodyPaddingTop" destination="Jg5-6V-4Bn" id="xM1-SV-Dis"/>
@@ -153,7 +174,7 @@
                 <outlet property="rightHorizontalMargin" destination="rSF-3x-Z3P" id="4V8-7J-BUJ"/>
                 <outlet property="verticalMargin" destination="xXA-xy-qzS" id="TCE-5s-LgV"/>
             </connections>
-            <point key="canvasLocation" x="725" y="435"/>
+            <point key="canvasLocation" x="594" y="572"/>
         </tableViewCell>
     </objects>
 </document>

@@ -16,15 +16,25 @@
 @property (weak, nonatomic) IBOutlet UILabel *authorLabel;
 @property (weak, nonatomic) IBOutlet UITextView *messageTextView;
 
-@property (weak, nonatomic) IBOutlet ZNGArrowView *upArrow;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *upArrowHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *upArrowWidth;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *upArrowOffset;
+@property (weak, nonatomic) IBOutlet ZNGArrowView *inboundTopArrow;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundTopArrowWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundTopArrowHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundTopArrowOffset;
 
-@property (weak, nonatomic) IBOutlet ZNGArrowView *downArrow;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *downArrowHeight;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *downArrowWidth;
-@property (weak, nonatomic) IBOutlet NSLayoutConstraint *downArrowOffset;
+@property (weak, nonatomic) IBOutlet ZNGArrowView *outboundTopArrow;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *outboundTopArrowWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *outboundTopArrowHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *outboundTopArrowOffset;
+
+@property (weak, nonatomic) IBOutlet ZNGArrowView *inboundDownArrow;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundDownArrowHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundDownArrowWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *inboundDownArrowOffset;
+
+@property (weak, nonatomic) IBOutlet ZNGArrowView *outboundDownArrow;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *outboundDownArrowHeight;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *outboundDownArrowWidth;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *outboundDownArrowOffset;
 
 @property (weak, nonatomic) IBOutlet ZNGArrowView *leftArrow;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *leftArrowHeight;
@@ -58,11 +68,17 @@
 {
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.upArrow.color = self.bodyView.backgroundColor;
-    self.upArrow.direction = ZNGArrowDirectionUp;
+    self.inboundTopArrow.color = self.bodyView.backgroundColor;
+    self.inboundTopArrow.direction = ZNGArrowDirectionUp;
     
-    self.downArrow.color = self.bodyView.backgroundColor;
-    self.downArrow.direction = ZNGArrowDirectionDown;
+    self.outboundTopArrow.color = self.bodyView.backgroundColor;
+    self.outboundTopArrow.direction = ZNGArrowDirectionUp;
+    
+    self.inboundDownArrow.color = self.bodyView.backgroundColor;
+    self.inboundDownArrow.direction = ZNGArrowDirectionDown;
+    
+    self.outboundDownArrow.color = self.bodyView.backgroundColor;
+    self.outboundDownArrow.direction = ZNGArrowDirectionDown;
     
     self.leftArrow.color = self.bodyView.backgroundColor;
     self.leftArrow.direction = ZNGArrowDirectionLeft;
@@ -73,7 +89,7 @@
 
 - (void) configureCellForMessage:(ZNGMessageViewModel *)messageViewModel withDirection:(NSString *)direction;
 {
-//    self.messageTextView.text = messageViewModel.message.body;
+    self.messageTextView.text = messageViewModel.message.body;
     self.authorLabel.textColor = messageViewModel.authorTextColor;
     self.bodyPaddingTop.constant = self.bodyPaddingBottom.constant = self.bodyPaddingLeft.constant = self.bodyPaddingRight.constant = [messageViewModel.bodyPadding floatValue];
     self.bodyView.layer.cornerRadius = [messageViewModel.cornerRadius floatValue];
@@ -96,30 +112,46 @@
     
     switch (messageViewModel.arrowPosition) {
         case ZNGArrowPositionTop:
-            self.upArrowHeight.constant = [messageViewModel.arrowHeight floatValue];
-            self.upArrowWidth.constant = [messageViewModel.arrowWidth floatValue];
-            
             if ([direction isEqualToString:@"inbound"]) {
-                self.upArrow.color = messageViewModel.inboundBackgroundColor;
-                self.upArrowOffset.constant = [messageViewModel.arrowOffset floatValue];
+                self.inboundTopArrow.color = messageViewModel.inboundBackgroundColor;
+                self.inboundTopArrowHeight.constant = [messageViewModel.arrowHeight floatValue];
+                self.inboundTopArrowWidth.constant = [messageViewModel.arrowWidth floatValue];
+                self.outboundTopArrowHeight.constant = 0;
+                self.outboundTopArrowWidth.constant = 0;
+                self.inboundTopArrowOffset.constant = [messageViewModel.arrowOffset floatValue];
             } else {
-                self.upArrow.color = messageViewModel.outboundBackgroundColor;
-                self.upArrowOffset.constant = self.frame.size.width - [messageViewModel.arrowOffset floatValue] - [messageViewModel.arrowWidth floatValue] - 16;
+                self.outboundTopArrow.color = messageViewModel.outboundBackgroundColor;
+                self.outboundTopArrowHeight.constant = [messageViewModel.arrowHeight floatValue];
+                self.outboundTopArrowWidth.constant = [messageViewModel.arrowWidth floatValue];
+                self.inboundTopArrowHeight.constant = 0;
+                self.inboundTopArrowWidth.constant = 0;
+                self.outboundTopArrowOffset.constant = -[messageViewModel.arrowOffset floatValue];
             }
+            
+            [self.inboundTopArrow setNeedsUpdateConstraints];
+            [self.outboundTopArrow setNeedsUpdateConstraints];
             
             break;
             
         case ZNGArrowPositionBottom:
-            self.downArrowHeight.constant = [messageViewModel.arrowHeight floatValue];
-            self.downArrowWidth.constant = [messageViewModel.arrowWidth floatValue];
-            
             if ([direction isEqualToString:@"inbound"]) {
-                self.downArrow.color = messageViewModel.inboundBackgroundColor;
-                self.downArrowOffset.constant = -self.frame.size.width + [messageViewModel.arrowOffset floatValue] + [messageViewModel.arrowWidth floatValue] + 16;
+                self.inboundDownArrow.color = messageViewModel.inboundBackgroundColor;
+                self.inboundDownArrowHeight.constant = [messageViewModel.arrowHeight floatValue];
+                self.inboundDownArrowWidth.constant = [messageViewModel.arrowWidth floatValue];
+                self.outboundDownArrowHeight.constant = 0;
+                self.outboundDownArrowWidth.constant = 0;
+                self.inboundDownArrowOffset.constant = [messageViewModel.arrowOffset floatValue];
             } else {
-                self.downArrow.color = messageViewModel.outboundBackgroundColor;
-                self.downArrowOffset.constant = -[messageViewModel.arrowOffset floatValue];
+                self.outboundDownArrow.color = messageViewModel.outboundBackgroundColor;
+                self.outboundDownArrowHeight.constant = [messageViewModel.arrowHeight floatValue];
+                self.outboundDownArrowWidth.constant = [messageViewModel.arrowWidth floatValue];
+                self.inboundDownArrowHeight.constant = 0;
+                self.inboundDownArrowWidth.constant = 0;
+                self.outboundDownArrowOffset.constant = -[messageViewModel.arrowOffset floatValue];
             }
+            
+            [self.inboundDownArrow setNeedsUpdateConstraints];
+            [self.outboundDownArrow setNeedsUpdateConstraints];
             
             break;
             
@@ -139,6 +171,9 @@
                 self.leftArrowWidth.constant = 0;
                 self.rightArrowOffset.constant = -[messageViewModel.arrowOffset floatValue];
             }
+            
+            [self.leftArrow setNeedsUpdateConstraints];
+            [self.rightArrow setNeedsUpdateConstraints];
 
             break;
             

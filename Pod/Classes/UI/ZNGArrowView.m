@@ -29,53 +29,56 @@
     return self;
 }
 
-- (void)setColor:(UIColor *)color
+- (void)drawRect:(CGRect)rect
 {
-    _color = color;
-    [self setNeedsDisplay];
-}
-
-- (void)setDirection:(ZNGArrowDirection)direction
-{
-    _direction = direction;
-    [self setNeedsDisplay];
-}
-
-- (void)setBias:(int)bias
-{
-    _bias = bias;
-    [self setNeedsDisplay];
-}
-
-- (void)setFrame:(CGRect)frame
-{
-    [super setFrame:frame];
-    [self setNeedsDisplay];
-}
-
-- (void)drawRect:(CGRect)rect {
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, self.color.CGColor);
+    [super drawRect:rect];
     
-    if( self.direction == ZNGArrowDirectionLeft ) {
-        CGContextMoveToPoint(context, 0, [self verticalMiddleApex]);
-        CGContextAddLineToPoint(context, self.frame.size.width, 0);
-        CGContextAddLineToPoint(context, self.frame.size.width, self.frame.size.height);
-    } else if( self.direction == ZNGArrowDirectionRight ) {
-        CGContextMoveToPoint(context, 0, 0);
-        CGContextAddLineToPoint(context, self.frame.size.width, [self verticalMiddleApex]);
-        CGContextAddLineToPoint(context, 0, self.frame.size.height);
-    } else if( self.direction == ZNGArrowDirectionDown ) {
-        CGContextMoveToPoint(context, 0, 0);
-        CGContextAddLineToPoint(context, self.frame.size.width, 0);
-        CGContextAddLineToPoint(context, [self horizontalCenterApex], self.frame.size.height);
-    } else if( self.direction == ZNGArrowDirectionUp ) {
-        CGContextMoveToPoint(context, 0, self.frame.size.height);
-        CGContextAddLineToPoint(context, [self horizontalCenterApex], 0);
-        CGContextAddLineToPoint(context, self.frame.size.width, self.frame.size.height);
+    CGFloat layerHeight = self.layer.frame.size.height;
+    CGFloat layerWidth = self.layer.frame.size.width;
+    
+    UIBezierPath *bezierPath = [UIBezierPath bezierPath];
+    
+    switch (self.direction) {
+        case ZNGArrowDirectionLeft:
+            [bezierPath moveToPoint:CGPointMake(layerWidth, 0)];
+            [bezierPath addLineToPoint:CGPointMake(layerWidth, layerHeight)];
+            [bezierPath addLineToPoint:CGPointMake(0, [self verticalMiddleApex])];
+            [bezierPath addLineToPoint:CGPointMake(layerWidth, 0)];
+            break;
+            
+        case ZNGArrowDirectionRight:
+            [bezierPath moveToPoint:CGPointMake(0, 0)];
+            [bezierPath addLineToPoint:CGPointMake(0, layerHeight)];
+            [bezierPath addLineToPoint:CGPointMake(layerWidth, [self verticalMiddleApex])];
+            [bezierPath addLineToPoint:CGPointMake(0, 0)];
+            break;
+            
+        case ZNGArrowDirectionDown:
+            [bezierPath moveToPoint:CGPointMake(0, 0)];
+            [bezierPath addLineToPoint:CGPointMake(layerWidth, 0)];
+            [bezierPath addLineToPoint:CGPointMake([self horizontalCenterApex], layerHeight)];
+            [bezierPath addLineToPoint:CGPointMake(0, 0)];
+            break;
+            
+        case ZNGArrowDirectionUp:
+            [bezierPath moveToPoint:CGPointMake(0, layerHeight)];
+            [bezierPath addLineToPoint:CGPointMake(layerWidth, layerHeight)];
+            [bezierPath addLineToPoint:CGPointMake([self horizontalCenterApex], 0)];
+            [bezierPath addLineToPoint:CGPointMake(0, layerHeight)];
+            break;
+            
+        default:
+            break;
     }
+
+    [bezierPath closePath];
     
-    CGContextFillPath(context);
+    [self.color setFill];
+    [bezierPath fill];
+    
+    CAShapeLayer *shapeLayer = [CAShapeLayer layer];
+    [shapeLayer setPath:[bezierPath CGPath]];
+    self.layer.mask = shapeLayer;
 }
 
 - (int)horizontalCenterApex

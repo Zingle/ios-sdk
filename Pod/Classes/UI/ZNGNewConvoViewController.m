@@ -43,6 +43,12 @@
     [self.tableView registerNib:messageCell forCellReuseIdentifier:[ZNGMessageTableViewCell reuseIdentifier]];
 }
 
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self.tableView reloadData];
+}
+
 #pragma mark - ZNGConversationDelegate
 - (void)messagesUpdated
 {

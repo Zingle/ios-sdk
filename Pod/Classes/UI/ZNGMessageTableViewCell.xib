@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="378" height="408"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="378" height="408"/>
+                <rect key="frame" x="0.0" y="0.0" width="378" height="407.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Author Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zD3-RZ-HtJ">
@@ -44,20 +44,36 @@
                             <constraint firstAttribute="bottom" secondItem="3nY-Z8-FQo" secondAttribute="bottom" constant="8" id="Vcd-Mc-LyR"/>
                         </constraints>
                     </view>
-                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oGI-FW-Kfd" customClass="ZNGArrowView">
-                        <rect key="frame" x="360" y="400" width="0.0" height="0.0"/>
-                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="height" id="Xvd-8J-9ws"/>
-                            <constraint firstAttribute="width" id="jeo-Nh-ARH"/>
-                        </constraints>
-                    </view>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="IVB-eP-rzf" customClass="ZNGArrowView">
                         <rect key="frame" x="18" y="33" width="0.0" height="0.0"/>
                         <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="width" id="T7P-XR-aqv"/>
                             <constraint firstAttribute="height" id="YSN-cc-TTq"/>
+                        </constraints>
+                    </view>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Gic-B9-gc5" customClass="ZNGArrowView">
+                        <rect key="frame" x="360" y="33" width="0.0" height="0.0"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" id="JV3-Vc-59l"/>
+                            <constraint firstAttribute="width" id="buT-HW-3dt"/>
+                        </constraints>
+                    </view>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3e7-uc-vd5" customClass="ZNGArrowView">
+                        <rect key="frame" x="18" y="400" width="0.0" height="0.0"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="width" id="ltS-Nk-QEm"/>
+                            <constraint firstAttribute="height" id="qfs-sR-EKt"/>
+                        </constraints>
+                    </view>
+                    <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oGI-FW-Kfd" customClass="ZNGArrowView">
+                        <rect key="frame" x="360" y="400" width="0.0" height="0.0"/>
+                        <color key="backgroundColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" id="Xvd-8J-9ws"/>
+                            <constraint firstAttribute="width" id="jeo-Nh-ARH"/>
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vc4-Hf-bhR" customClass="ZNGArrowView">
@@ -79,37 +95,27 @@
                 </subviews>
                 <constraints>
                     <constraint firstItem="hOa-p0-4mE" firstAttribute="bottom" secondItem="y4v-9P-Izw" secondAttribute="bottom" constant="-10" id="06l-9C-xN5"/>
+                    <constraint firstItem="y4v-9P-Izw" firstAttribute="top" secondItem="Gic-B9-gc5" secondAttribute="bottom" id="0P4-NQ-OSo"/>
                     <constraint firstItem="hOa-p0-4mE" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="8m7-Sp-GUp"/>
                     <constraint firstAttribute="trailingMargin" secondItem="zD3-RZ-HtJ" secondAttribute="trailing" id="AU3-4M-IYv"/>
                     <constraint firstItem="y4v-9P-Izw" firstAttribute="leading" secondItem="hOa-p0-4mE" secondAttribute="trailing" id="Exi-5c-cut"/>
                     <constraint firstItem="y4v-9P-Izw" firstAttribute="top" secondItem="IVB-eP-rzf" secondAttribute="bottom" id="JMw-cN-Cgg"/>
-                    <constraint firstItem="y4v-9P-Izw" firstAttribute="trailing" secondItem="zD3-RZ-HtJ" secondAttribute="trailing" id="LQ7-X7-VL2"/>
+                    <constraint firstItem="3e7-uc-vd5" firstAttribute="leading" secondItem="y4v-9P-Izw" secondAttribute="leading" constant="10" id="RtH-YG-27J"/>
                     <constraint firstItem="zD3-RZ-HtJ" firstAttribute="leading" secondItem="y4v-9P-Izw" secondAttribute="leading" id="URw-6N-ad0"/>
+                    <constraint firstItem="Gic-B9-gc5" firstAttribute="top" secondItem="zD3-RZ-HtJ" secondAttribute="bottom" priority="500" constant="8" id="YnG-MI-Uwj"/>
                     <constraint firstItem="IVB-eP-rzf" firstAttribute="leading" secondItem="y4v-9P-Izw" secondAttribute="leading" constant="10" id="c8E-AB-eNP"/>
                     <constraint firstItem="oGI-FW-Kfd" firstAttribute="top" secondItem="y4v-9P-Izw" secondAttribute="bottom" id="cfD-eM-ZQD"/>
-                    <constraint firstAttribute="leadingMargin" secondItem="zD3-RZ-HtJ" secondAttribute="leading" id="f1S-tj-mT3"/>
                     <constraint firstItem="vc4-Hf-bhR" firstAttribute="leading" secondItem="y4v-9P-Izw" secondAttribute="trailing" id="f86-sn-EGn"/>
-                    <constraint firstItem="y4v-9P-Izw" firstAttribute="leading" secondItem="zD3-RZ-HtJ" secondAttribute="leading" id="fzc-a1-xPN"/>
-                    <constraint firstItem="hOa-p0-4mE" firstAttribute="top" secondItem="y4v-9P-Izw" secondAttribute="top" constant="10" id="gos-XH-E3g"/>
+                    <constraint firstItem="Gic-B9-gc5" firstAttribute="trailing" secondItem="y4v-9P-Izw" secondAttribute="trailing" constant="-10" id="fZk-qi-RIS"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="3e7-uc-vd5" secondAttribute="bottom" priority="500" id="hHt-wV-fyS"/>
                     <constraint firstItem="oGI-FW-Kfd" firstAttribute="trailing" secondItem="y4v-9P-Izw" secondAttribute="trailing" constant="-10" id="leV-RC-hSk"/>
                     <constraint firstAttribute="topMargin" secondItem="zD3-RZ-HtJ" secondAttribute="top" id="oCL-ok-Jbg"/>
                     <constraint firstItem="vc4-Hf-bhR" firstAttribute="bottom" secondItem="y4v-9P-Izw" secondAttribute="bottom" constant="-10" id="pxz-O5-RW4"/>
-                    <constraint firstItem="IVB-eP-rzf" firstAttribute="top" secondItem="zD3-RZ-HtJ" secondAttribute="bottom" constant="8" id="q7d-2j-FaS"/>
-                    <constraint firstItem="IVB-eP-rzf" firstAttribute="trailing" secondItem="y4v-9P-Izw" secondAttribute="trailing" constant="-10" id="qa0-Ek-2jJ"/>
-                    <constraint firstItem="y4v-9P-Izw" firstAttribute="top" secondItem="zD3-RZ-HtJ" secondAttribute="bottom" constant="8" id="r9H-fU-Ldb"/>
+                    <constraint firstItem="IVB-eP-rzf" firstAttribute="top" secondItem="zD3-RZ-HtJ" secondAttribute="bottom" priority="500" constant="8" id="q7d-2j-FaS"/>
                     <constraint firstAttribute="trailingMargin" secondItem="vc4-Hf-bhR" secondAttribute="trailing" id="rSF-3x-Z3P"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="oGI-FW-Kfd" secondAttribute="bottom" id="xXA-xy-qzS"/>
+                    <constraint firstItem="3e7-uc-vd5" firstAttribute="top" secondItem="y4v-9P-Izw" secondAttribute="bottom" id="vMi-Ys-TmI"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="oGI-FW-Kfd" secondAttribute="bottom" priority="500" id="xXA-xy-qzS"/>
                 </constraints>
-                <variation key="default">
-                    <mask key="constraints">
-                        <exclude reference="f1S-tj-mT3"/>
-                        <exclude reference="LQ7-X7-VL2"/>
-                        <exclude reference="fzc-a1-xPN"/>
-                        <exclude reference="r9H-fU-Ldb"/>
-                        <exclude reference="qa0-Ek-2jJ"/>
-                        <exclude reference="gos-XH-E3g"/>
-                    </mask>
-                </variation>
             </tableViewCellContentView>
             <connections>
                 <outlet property="authorLabel" destination="zD3-RZ-HtJ" id="bzx-rp-6bK"/>
@@ -118,25 +124,33 @@
                 <outlet property="bodyPaddingRight" destination="L2g-2f-rOv" id="yPH-04-sqe"/>
                 <outlet property="bodyPaddingTop" destination="Jg5-6V-4Bn" id="xM1-SV-Dis"/>
                 <outlet property="bodyView" destination="y4v-9P-Izw" id="6ar-kq-LLB"/>
-                <outlet property="downArrow" destination="oGI-FW-Kfd" id="VWl-M9-vtN"/>
-                <outlet property="downArrowHeight" destination="Xvd-8J-9ws" id="h1h-CR-eFm"/>
-                <outlet property="downArrowOffset" destination="leV-RC-hSk" id="HQQ-dW-rEx"/>
-                <outlet property="downArrowWidth" destination="jeo-Nh-ARH" id="STd-Eo-Kc7"/>
+                <outlet property="inboundDownArrow" destination="3e7-uc-vd5" id="wfz-8B-Y63"/>
+                <outlet property="inboundDownArrowHeight" destination="qfs-sR-EKt" id="3wv-D1-gzA"/>
+                <outlet property="inboundDownArrowOffset" destination="RtH-YG-27J" id="cbd-ue-Exe"/>
+                <outlet property="inboundDownArrowWidth" destination="ltS-Nk-QEm" id="ON5-qK-AqF"/>
+                <outlet property="inboundTopArrow" destination="IVB-eP-rzf" id="8dT-H7-owd"/>
+                <outlet property="inboundTopArrowHeight" destination="YSN-cc-TTq" id="6d1-C5-Djt"/>
+                <outlet property="inboundTopArrowOffset" destination="c8E-AB-eNP" id="H6n-o3-IED"/>
+                <outlet property="inboundTopArrowWidth" destination="T7P-XR-aqv" id="iPg-l8-rgn"/>
                 <outlet property="leftArrow" destination="hOa-p0-4mE" id="V7b-gv-gzi"/>
                 <outlet property="leftArrowHeight" destination="aOr-9V-h2s" id="0TR-XX-hXU"/>
                 <outlet property="leftArrowOffset" destination="06l-9C-xN5" id="aXa-rc-oJm"/>
                 <outlet property="leftArrowWidth" destination="5A1-OF-FD9" id="nn5-OJ-cDE"/>
                 <outlet property="leftHorizontalMargin" destination="8m7-Sp-GUp" id="MrQ-hF-fE3"/>
                 <outlet property="messageTextView" destination="3nY-Z8-FQo" id="Vuj-Oz-Cjt"/>
+                <outlet property="outboundDownArrow" destination="oGI-FW-Kfd" id="tPn-W2-Pld"/>
+                <outlet property="outboundDownArrowHeight" destination="Xvd-8J-9ws" id="stZ-zC-v1Y"/>
+                <outlet property="outboundDownArrowOffset" destination="leV-RC-hSk" id="jUU-hm-1N2"/>
+                <outlet property="outboundDownArrowWidth" destination="jeo-Nh-ARH" id="WF0-HN-JNj"/>
+                <outlet property="outboundTopArrow" destination="Gic-B9-gc5" id="Qhe-Rz-gSj"/>
+                <outlet property="outboundTopArrowHeight" destination="JV3-Vc-59l" id="rnb-bQ-jWd"/>
+                <outlet property="outboundTopArrowOffset" destination="fZk-qi-RIS" id="1D6-2x-SNi"/>
+                <outlet property="outboundTopArrowWidth" destination="buT-HW-3dt" id="5Ou-Vi-3Av"/>
                 <outlet property="rightArrow" destination="vc4-Hf-bhR" id="2LZ-IW-lXU"/>
                 <outlet property="rightArrowHeight" destination="BW2-06-RfK" id="ZqT-Ck-LMr"/>
                 <outlet property="rightArrowOffset" destination="pxz-O5-RW4" id="qg2-mG-eON"/>
                 <outlet property="rightArrowWidth" destination="fH7-9m-BMa" id="7ph-pz-V9D"/>
                 <outlet property="rightHorizontalMargin" destination="rSF-3x-Z3P" id="4V8-7J-BUJ"/>
-                <outlet property="upArrow" destination="IVB-eP-rzf" id="KEN-DG-WV2"/>
-                <outlet property="upArrowHeight" destination="YSN-cc-TTq" id="m4g-Kj-3tu"/>
-                <outlet property="upArrowOffset" destination="c8E-AB-eNP" id="Njw-2R-Vp4"/>
-                <outlet property="upArrowWidth" destination="T7P-XR-aqv" id="Tan-e5-1aM"/>
                 <outlet property="verticalMargin" destination="xXA-xy-qzS" id="TCE-5s-LgV"/>
             </connections>
             <point key="canvasLocation" x="725" y="435"/>

@@ -9,10 +9,12 @@
 #import "ZNGNewConvoViewController.h"
 #import <ZingleSDK/ZingleSDK.h>
 #import "ZNGMessageViewModel.h"
+#import "ZNGKeyboardBar.h"
 
 @interface ZNGNewConvoViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, readwrite, retain) UIView *inputAccessoryView;
 
 @end
 
@@ -30,10 +32,29 @@
     return self;
 }
 
+- (UIView *)inputAccessoryView {
+    if(!_inputAccessoryView) {
+        _inputAccessoryView = [[ZNGKeyboardBar alloc] init];
+    }
+    return _inputAccessoryView;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillShow:)
+                                                 name:UIKeyboardWillShowNotification
+                                               object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    
+    UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(didTouchView)];
+    [self.view addGestureRecognizer:recognizer];
+    
     self.conversation.delegate = self;
     
     self.tableView.rowHeight = UITableViewAutomaticDimension;
@@ -43,10 +64,46 @@
     [self.tableView registerNib:messageCell forCellReuseIdentifier:[ZNGMessageTableViewCell reuseIdentifier]];
 }
 
+- (void)didTouchView {
+    [self.view becomeFirstResponder];
+}
+
+- (bool) canBecomeFirstResponder {
+    return true;
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [self.tableView reloadData];
+}
+
+- (void)keyboardWillShow:(NSNotification *)notification
+{
+    CGSize keyboardSize = [[[notification userInfo] objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    
+    UIEdgeInsets contentInsets;
+    if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.height), 0.0);
+    } else {
+        contentInsets = UIEdgeInsetsMake(0.0, 0.0, (keyboardSize.width), 0.0);
+    }
+    
+    self.tableView.contentInset = contentInsets;
+    self.tableView.scrollIndicatorInsets = contentInsets;
+    
+//    [self.tableView scrollToRowAtIndexPath:self.editingIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+}
+
+- (void)keyboardWillHide:(NSNotification *)notification
+{
+    self.tableView.contentInset = UIEdgeInsetsZero;
+    self.tableView.scrollIndicatorInsets = UIEdgeInsetsZero;
 }
 
 #pragma mark - ZNGConversationDelegate

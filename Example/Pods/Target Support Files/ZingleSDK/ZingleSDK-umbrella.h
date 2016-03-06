@@ -49,6 +49,7 @@
 #import "ZNGConversationViewController.h"
 #import "ZNGMessageTableViewCell.h"
 #import "ZNGMessageView.h"
+#import "ZNGMessageViewModel.h"
 #import "ZNGNewConvoViewController.h"
 #import "ZingleValueTransformers.h"
 #import "ZingleSDK.h"

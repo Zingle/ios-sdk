@@ -44,11 +44,11 @@
 
 - (void)loadConversations
 {
-    NSString *token = @"viacheslav.marusyk@cyberhull.com";
-    NSString *key = @"123qweasd";
-    NSString *contactChannelValue = @"viacheslav.marusyk";
-    NSString *contactId = @"b248a5d0-8f01-49eb-bda0-8cf2d13f4700";
-    NSString *serviceId = @"e84bec95-b788-45ea-9d64-01db3d8742ac";
+    NSString *token = @"rfarley@zingleme.com";
+    NSString *key = @"13oolvler";
+    NSString *contactChannelValue = @"ryans.testapp";
+    NSString *contactId = @"5cdeccca-c63c-4f23-8b1e-926d61773872";
+    NSString *serviceId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
     
     // 1
     [[ZingleSDK sharedSDK] setToken:token andKey:key];

@@ -30,10 +30,16 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="Yvc-LN-9qR" secondAttribute="trailing" id="L96-1Z-C0g"/>
+                            <constraint firstItem="IQb-id-Ne7" firstAttribute="top" secondItem="Yvc-LN-9qR" secondAttribute="bottom" id="M2a-Hq-fb5"/>
                             <constraint firstAttribute="topMargin" secondItem="Yvc-LN-9qR" secondAttribute="top" id="Rcm-62-d9v"/>
                             <constraint firstItem="Yvc-LN-9qR" firstAttribute="leading" secondItem="VRj-qe-xxt" secondAttribute="leading" id="yPG-Ui-Fwc"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Yvc-LN-9qR" secondAttribute="bottom" id="zB2-xb-tBP"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="zB2-xb-tBP"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="tableView" destination="Yvc-LN-9qR" id="hEs-Lz-6Ti"/>
@@ -41,7 +47,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IL8-6Q-hnh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="373" y="369"/>
+            <point key="canvasLocation" x="388" y="277"/>
         </scene>
     </scenes>
 </document>

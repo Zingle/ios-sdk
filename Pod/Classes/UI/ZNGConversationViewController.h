@@ -19,7 +19,7 @@
 
 @end
 
-@interface ZNGConversationViewController : ZNGBaseViewController <UIActionSheetDelegate, ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ZNGConversationViewController : ZNGBaseViewController <UIActionSheetDelegate, ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
 @property (weak, nonatomic) id<ZNGConversationViewControllerDelegate> delegateModal;
 

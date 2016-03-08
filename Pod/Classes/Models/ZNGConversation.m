@@ -143,8 +143,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 {
     float actualHeight = image.size.height;
     float actualWidth = image.size.width;
-    float maxHeight = 300.0;
-    float maxWidth = 400.0;
+    float maxHeight = 800.0;
+    float maxWidth = 800.0;
     float imgRatio = actualWidth/actualHeight;
     float maxRatio = maxWidth/maxHeight;
     float compressionQuality = 0.5;//50 percent compression

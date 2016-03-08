@@ -7,6 +7,7 @@
 //
 
 #import "ZNGConversationViewController.h"
+#import "ZNGImageViewerController.h"
 #import "SDWebImageManager.h"
 
 @interface ZNGConversationViewController () 
@@ -53,7 +54,7 @@
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
-    self.showLoadEarlierMessagesHeader = YES;
+    self.showLoadEarlierMessagesHeader = NO;
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage zng_defaultTypingIndicatorImage]
                                                                               style:UIBarButtonItemStylePlain
@@ -139,6 +140,7 @@
     }
     
     if (message.image) {
+        NSLog(@"IMAGE WIDTH:%f \n IMAGE HEIGHT: %f \n\n", message.image.size.width, message.image.size.height);
         ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:message.image];
         item.appliesMediaViewMaskAsOutgoing = [message.sender.correspondentId isEqualToString:self.senderId];
         return [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
@@ -243,7 +245,7 @@
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     }
     
-    [self presentViewController:picker animated:YES completion:NULL];
+    [self presentViewController:picker animated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -442,6 +444,15 @@
 
 - (void)collectionView:(ZNGCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGMessage *message = [self.conversation.messages objectAtIndex:indexPath.item];
+    
+    if (message.image) {
+        ZNGImageViewerController *imageViewer = [ZNGImageViewerController imageViewerController];
+        
+        [self presentViewController:imageViewer animated:YES completion:^{
+            imageViewer.imageView.image = message.image;
+        }];
+    }
     NSLog(@"Tapped message bubble!");
 }
 
@@ -450,20 +461,39 @@
     NSLog(@"Tapped cell at %@!", NSStringFromCGPoint(touchLocation));
 }
 
-#pragma mark - ZNGComposerTextViewPasteDelegate methods
+#pragma mark - UIAlertViewDelegate methods
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (buttonIndex == 0) {
+        [self scrollToBottomAnimated:YES];
+        return;
+    }
+    
+    [self scrollToBottomAnimated:YES];
+    // If there's an image in the pasteboard, `send` it.
+    [self.conversation sendMessageWithImage:[UIPasteboard generalPasteboard].image success:^(ZNGMessage *message, ZNGStatus *status) {
+        
+        [self.conversation.messages addObject:message];
+        [self finishSendingMessageAnimated:YES];
+        
+    } failure:^(ZNGError *error) {
+        //
+    }];
+}
+
+#pragma mark - ZNGComposerTextViewPasteDelegate methods
 
 - (BOOL)composerTextView:(ZNGComposerTextView *)textView shouldPasteWithSender:(id)sender
 {
     if ([UIPasteboard generalPasteboard].image) {
-        // If there's an image in the pasteboard, construct a media item with that image and `send` it.
-        ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];
-        ZNGMessageViewModel *message = [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
-                                                 senderDisplayName:self.senderDisplayName
-                                                              date:[NSDate date]
-                                                             media:item];
-        [self.conversation.messages addObject:message];
-        [self finishSendingMessage];
+        
+        [[[UIAlertView alloc] initWithTitle:@"Send image in clipboard?"
+                                    message:nil
+                                   delegate:self
+                          cancelButtonTitle:@"Cancel"
+                          otherButtonTitles:@"Send", nil] show];
+        
         return NO;
     }
     return YES;

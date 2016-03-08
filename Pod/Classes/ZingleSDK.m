@@ -23,7 +23,7 @@
 
 @implementation ZingleSDK
 
-NSString* const kLiveBaseURL = @"https://qa-api.zingle.me/v1/";
+NSString* const kLiveBaseURL = @"https://api.zingle.me/v1/";
 NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 + (ZingleSDK*)sharedSDK

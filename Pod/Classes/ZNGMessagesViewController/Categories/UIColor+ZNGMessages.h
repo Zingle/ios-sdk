@@ -13,22 +13,22 @@
 #pragma mark - Message bubble colors
 
 /**
- *  @return A color object containing HSB values similar to the iOS 7 messages app green bubble color.
+ *  @return A color object containing HSB values similar to the iOS messages app green bubble color.
  */
 + (UIColor *)zng_messageBubbleGreenColor;
 
 /**
- *  @return A color object containing HSB values similar to the iOS 7 messages app blue bubble color.
+ *  @return A color object containing HSB values similar to the Zingle dashboard blue bubble color.
  */
 + (UIColor *)zng_messageBubbleBlueColor;
 
 /**
- *  @return A color object containing HSB values similar to the iOS 7 red color.
+ *  @return A color object containing HSB values similar to the iOS red color.
  */
 + (UIColor *)zng_messageBubbleRedColor;
 
 /**
- *  @return A color object containing HSB values similar to the iOS 7 messages app light gray bubble color.
+ *  @return A color object containing HSB values similar to the Zingle dashboard light gray bubble color.
  */
 + (UIColor *)zng_messageBubbleLightGrayColor;
 

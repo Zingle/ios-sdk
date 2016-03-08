@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesLabel.h"
 
 

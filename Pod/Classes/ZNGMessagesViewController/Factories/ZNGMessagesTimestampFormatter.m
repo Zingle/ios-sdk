@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesTimestampFormatter.h"
 
 @interface ZNGMessagesTimestampFormatter ()

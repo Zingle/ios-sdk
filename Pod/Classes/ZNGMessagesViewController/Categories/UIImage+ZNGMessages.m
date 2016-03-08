@@ -1,5 +1,4 @@
 
-//
 
 #import "UIImage+ZNGMessages.h"
 #import "ZingleSDK.h"

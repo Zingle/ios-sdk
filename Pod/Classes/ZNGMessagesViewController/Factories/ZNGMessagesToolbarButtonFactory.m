@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesToolbarButtonFactory.h"
 
 #import "UIColor+ZNGMessages.h"

@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesCollectionViewCell.h"
 
 #import "ZNGMessagesCollectionViewCellIncoming.h"

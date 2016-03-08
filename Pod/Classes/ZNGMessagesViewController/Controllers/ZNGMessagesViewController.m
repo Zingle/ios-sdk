@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesViewController.h"
 
 #import "ZNGMessagesCollectionViewFlowLayoutInvalidationContext.h"

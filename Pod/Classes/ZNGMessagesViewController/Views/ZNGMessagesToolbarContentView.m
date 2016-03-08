@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesToolbarContentView.h"
 
 #import "UIView+ZNGMessages.h"

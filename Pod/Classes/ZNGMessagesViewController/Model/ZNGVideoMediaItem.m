@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGVideoMediaItem.h"
 
 #import "ZNGMessagesMediaPlaceholderView.h"

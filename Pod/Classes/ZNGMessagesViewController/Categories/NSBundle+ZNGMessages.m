@@ -1,6 +1,4 @@
 
-//
-
 #import "NSBundle+ZNGMessages.h"
 
 #import "ZNGMessagesViewController.h"

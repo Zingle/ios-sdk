@@ -1,11 +1,4 @@
 
-//
-//
-//  Ideas for springy collection view layout taken from Ash Furrow
-//  ASHSpringyCollectionView
-//  https://github.com/AshFurrow/ASHSpringyCollectionView
-//
-
 #import "ZNGMessagesCollectionViewFlowLayout.h"
 
 #import "ZNGMessageData.h"

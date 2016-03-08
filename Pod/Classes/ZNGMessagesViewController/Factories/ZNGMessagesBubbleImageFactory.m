@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesBubbleImageFactory.h"
 
 #import "UIImage+ZNGMessages.h"

@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGLocationMediaItem.h"
 
 #import "ZNGMessagesMediaPlaceholderView.h"

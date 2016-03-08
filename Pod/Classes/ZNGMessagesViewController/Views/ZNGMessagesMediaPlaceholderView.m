@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesMediaPlaceholderView.h"
 
 #import "UIColor+ZNGMessages.h"

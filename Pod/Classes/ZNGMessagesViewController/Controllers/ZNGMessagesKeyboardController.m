@@ -1,11 +1,4 @@
 
-//
-//
-//  Ideas for keyboard controller taken from Daniel Amitay
-//  DAKeyboardControl
-//  https://github.com/danielamitay/DAKeyboardControl
-//
-
 #import "ZNGMessagesKeyboardController.h"
 
 #import "UIDevice+ZNGMessages.h"

@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesTypingIndicatorFooterView.h"
 
 #import "ZNGMessagesBubbleImageFactory.h"

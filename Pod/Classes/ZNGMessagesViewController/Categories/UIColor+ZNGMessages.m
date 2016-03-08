@@ -1,6 +1,4 @@
 
-//
-
 #import "UIColor+ZNGMessages.h"
 
 @implementation UIColor (ZNGMessages)

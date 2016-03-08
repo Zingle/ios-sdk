@@ -1,6 +1,4 @@
 
-//
-
 #ifndef ZNGMessages_ZNGMessages_h
 #define ZNGMessages_ZNGMessages_h
 

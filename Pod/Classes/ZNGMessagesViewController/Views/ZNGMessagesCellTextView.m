@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesCellTextView.h"
 
 @implementation ZNGMessagesCellTextView

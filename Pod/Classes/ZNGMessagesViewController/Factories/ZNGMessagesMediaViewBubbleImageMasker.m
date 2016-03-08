@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesMediaViewBubbleImageMasker.h"
 
 #import "ZNGMessagesBubbleImageFactory.h"

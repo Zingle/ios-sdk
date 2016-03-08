@@ -1,6 +1,4 @@
 
-//
-
 #import "UIDevice+ZNGMessages.h"
 
 @implementation UIDevice (ZNGMessages)

@@ -1,6 +1,4 @@
 
-//
-
 #import "ZNGMessagesAvatarImageFactory.h"
 
 #import "UIColor+ZNGMessages.h"

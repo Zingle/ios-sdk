@@ -76,7 +76,7 @@
  *
  *  @discussion This method does not attempt to detect or correct incompatible parameters. 
  *  That is to say, you are responsible for providing a font size and diameter that make sense.
- *  For example, a font size of `14.0f` and a diameter of `34.0f` will result in an avatar similar to Messages in iOS 7. 
+ *  For example, a font size of `14.0f` and a diameter of `34.0f` will result in an avatar similar to Messages in iOS. 
  *  However, a font size `30.0f` and diameter of `10.0f` will not produce a desirable image.
  *  Further, this method does not check the length of userInitials. It is recommended that you pass a string of length `2` or `3`.
  */

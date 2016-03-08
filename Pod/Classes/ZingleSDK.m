@@ -141,15 +141,15 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     } failure:failure];
 }
 
-- (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation
-{
-    return [[ZNGConversationViewController alloc] initWithConversation:conversation];
-}
-
-- (ZNGNewConvoViewController *)newConversationViewControllerForConversation:(ZNGConversation *)conversation
-{
-    return [[ZNGNewConvoViewController alloc] initWithConversation:conversation];
-}
+//- (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation
+//{
+//    return [[ZNGConversationViewController alloc] initWithConversation:conversation];
+//}
+//
+//- (ZNGNewConvoViewController *)newConversationViewControllerForConversation:(ZNGConversation *)conversation
+//{
+//    return [[ZNGNewConvoViewController alloc] initWithConversation:conversation];
+//}
 
 - (AFHTTPSessionManager*)sharedSessionManager
 {

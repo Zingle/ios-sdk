@@ -33,7 +33,10 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     [ZNGMessageClient messageListWithParameters:params withServiceId:self.service.participantId success:^(NSArray *messages, ZNGStatus* status) {
         
-        self.messages = messages;
+        if ([messages count] == [self.messages count]) {
+            return;
+        }
+        self.messages = [messages mutableCopy];
         
         NSInteger pageNumbers = status.totalPages;
         
@@ -65,7 +68,16 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 {
     ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
     newMessage.body = body;
-    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:success failure:failure];
+    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:^(ZNGMessage *message, ZNGStatus *status) {
+        if (success) {
+            message.body = newMessage.body;
+            ZNGCorrespondent *sender = [[ZNGCorrespondent alloc] init];
+            sender.correspondentId = newMessage.sender.participantId;
+            message.sender = sender;
+            message.createdAt = [NSDate date];
+            success(message, status);
+        }
+    } failure:failure];
 }
 
 - (void)sendMessageWithImage:(UIImage *)image
@@ -74,7 +86,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 {
     ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
     
-    NSData *base64Data = [UIImagePNGRepresentation(image) base64EncodedDataWithOptions:0];
+    UIImage *imageForUpload = [self resizeImage:image];
+    
+    NSData *base64Data = [UIImagePNGRepresentation(imageForUpload) base64EncodedDataWithOptions:0];
     NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
     
     newMessage.attachments = @[@{
@@ -82,7 +96,16 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                    kAttachementBase64 : encodedString
                                 }];
     
-    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:success failure:failure];
+    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:^(ZNGMessage *message, ZNGStatus *status) {
+        if (success) {
+            message.image = imageForUpload;
+            ZNGCorrespondent *sender = [[ZNGCorrespondent alloc] init];
+            sender.correspondentId = newMessage.sender.participantId;
+            message.sender = sender;
+            message.createdAt = [NSDate date];
+            success(message, status);
+        }
+    } failure:failure];
 }
 
 - (ZNGNewMessage *)newMessageToService:(BOOL)toService
@@ -114,6 +137,50 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
     
     return direction;
+}
+
+-(UIImage *)resizeImage:(UIImage *)image
+{
+    float actualHeight = image.size.height;
+    float actualWidth = image.size.width;
+    float maxHeight = 300.0;
+    float maxWidth = 400.0;
+    float imgRatio = actualWidth/actualHeight;
+    float maxRatio = maxWidth/maxHeight;
+    float compressionQuality = 0.5;//50 percent compression
+    
+    if (actualHeight > maxHeight || actualWidth > maxWidth)
+    {
+        if(imgRatio < maxRatio)
+        {
+            //adjust width according to maxHeight
+            imgRatio = maxHeight / actualHeight;
+            actualWidth = imgRatio * actualWidth;
+            actualHeight = maxHeight;
+        }
+        else if(imgRatio > maxRatio)
+        {
+            //adjust height according to maxWidth
+            imgRatio = maxWidth / actualWidth;
+            actualHeight = imgRatio * actualHeight;
+            actualWidth = maxWidth;
+        }
+        else
+        {
+            actualHeight = maxHeight;
+            actualWidth = maxWidth;
+        }
+    }
+    
+    CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
+    UIGraphicsBeginImageContext(rect.size);
+    [image drawInRect:rect];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    NSData *imageData = UIImageJPEGRepresentation(img, compressionQuality);
+    UIGraphicsEndImageContext();
+    
+    return [UIImage imageWithData:imageData];
+    
 }
 
 @end

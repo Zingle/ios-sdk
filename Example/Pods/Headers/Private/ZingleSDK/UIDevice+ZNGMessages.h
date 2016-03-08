@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/ZNGMessagesViewController/Categories/UIDevice+ZNGMessages.h

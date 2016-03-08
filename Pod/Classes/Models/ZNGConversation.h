@@ -24,7 +24,7 @@
 @property (nonatomic, strong) ZNGParticipant *contact;
 @property (nonatomic, strong) ZNGParticipant *service;
 @property (nonatomic) BOOL toService;
-@property (nonatomic, strong) NSArray *messages;
+@property (nonatomic, strong) NSMutableArray *messages;
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 - (void)updateMessages;

@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/ZNGMessagesViewController/Categories/NSString+ZNGMessages.h

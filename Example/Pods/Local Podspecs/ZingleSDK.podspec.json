@@ -21,7 +21,8 @@
   "requires_arc": true,
   "source_files": "Pod/Classes/**/*",
   "resources": [
-    "Pod/Assets/**/*"
+    "Pod/Assets/**/*",
+    "Pod/Classes/ZNGMessagesViewController/**/*.{xib}"
   ],
   "dependencies": {
     "AFNetworking": [

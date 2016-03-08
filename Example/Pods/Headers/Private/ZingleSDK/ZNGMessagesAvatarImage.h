@@ -1,0 +1,1 @@
+../../../../../Pod/Classes/ZNGMessagesViewController/Model/ZNGMessagesAvatarImage.h

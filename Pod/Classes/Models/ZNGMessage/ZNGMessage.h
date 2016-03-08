@@ -28,4 +28,6 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
 
+@property(nonatomic, strong) UIImage* image;
+
 @end

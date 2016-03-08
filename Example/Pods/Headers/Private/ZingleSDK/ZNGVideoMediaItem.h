@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/ZNGMessagesViewController/Model/ZNGVideoMediaItem.h
+../../../../../Pod/Classes/UI/Model/ZNGVideoMediaItem.h

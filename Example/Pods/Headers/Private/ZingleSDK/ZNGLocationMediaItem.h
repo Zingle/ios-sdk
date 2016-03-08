@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/ZNGMessagesViewController/Model/ZNGLocationMediaItem.h
+../../../../../Pod/Classes/UI/Model/ZNGLocationMediaItem.h

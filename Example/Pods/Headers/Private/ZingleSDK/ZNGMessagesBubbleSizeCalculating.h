@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/ZNGMessagesViewController/Layout/ZNGMessagesBubbleSizeCalculating.h

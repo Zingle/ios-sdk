@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/ZNGMessagesViewController/Model/ZNGMessageBubbleImageDataSource.h
+../../../../../Pod/Classes/UI/Model/ZNGMessageBubbleImageDataSource.h

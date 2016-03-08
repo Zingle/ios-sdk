@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/ZNGMessagesViewController/Model/ZNGMessageMediaData.h
+../../../../../Pod/Classes/UI/Model/ZNGMessageMediaData.h

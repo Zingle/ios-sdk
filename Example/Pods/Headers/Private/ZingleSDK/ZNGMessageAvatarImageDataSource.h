@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/ZNGMessagesViewController/Model/ZNGMessageAvatarImageDataSource.h
+../../../../../Pod/Classes/UI/Model/ZNGMessageAvatarImageDataSource.h

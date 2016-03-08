@@ -99,6 +99,7 @@
     [super viewDidAppear:animated];
     [self startPollingTimer];
     self.collectionView.collectionViewLayout.springinessEnabled = NO;
+    self.automaticallyScrollsToMostRecentMessage = YES;
 }
 
 - (void)viewDidDisappear:(BOOL)animated{
@@ -140,7 +141,6 @@
     }
     
     if (message.image) {
-        NSLog(@"IMAGE WIDTH:%f \n IMAGE HEIGHT: %f \n\n", message.image.size.width, message.image.size.height);
         ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:message.image];
         item.appliesMediaViewMaskAsOutgoing = [message.sender.correspondentId isEqualToString:self.senderId];
         return [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
@@ -448,7 +448,7 @@
     
     if (message.image) {
         ZNGImageViewerController *imageViewer = [ZNGImageViewerController imageViewerController];
-        
+        self.automaticallyScrollsToMostRecentMessage = NO;
         [self presentViewController:imageViewer animated:YES completion:^{
             imageViewer.imageView.image = message.image;
         }];

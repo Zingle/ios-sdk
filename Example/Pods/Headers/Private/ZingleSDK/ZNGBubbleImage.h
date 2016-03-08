@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/UI/Model/ZNGBubbleImage.h
+../../../../../Pod/Classes/UI/ViewModels/ZNGBubbleImage.h

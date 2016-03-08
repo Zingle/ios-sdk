@@ -449,6 +449,7 @@
     if (message.image) {
         ZNGImageViewerController *imageViewer = [ZNGImageViewerController imageViewerController];
         self.automaticallyScrollsToMostRecentMessage = NO;
+        imageViewer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
         [self presentViewController:imageViewer animated:YES completion:^{
             imageViewer.imageView.image = message.image;
         }];

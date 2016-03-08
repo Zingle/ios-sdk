@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/UI/Model/ZNGCollectionViewDelegateFlowLayout.h
+../../../../../Pod/Classes/UI/ViewModels/ZNGCollectionViewDelegateFlowLayout.h

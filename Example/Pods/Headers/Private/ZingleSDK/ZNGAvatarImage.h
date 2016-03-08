@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/UI/Model/ZNGAvatarImage.h
+../../../../../Pod/Classes/UI/ViewModels/ZNGAvatarImage.h

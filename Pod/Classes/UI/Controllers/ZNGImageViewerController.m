@@ -48,6 +48,13 @@
     }
 }
 
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
+    if (self.scrollView.zoomScale == self.scrollView.minimumZoomScale) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
 - (IBAction)handleSingleTap:(UIButton *)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];

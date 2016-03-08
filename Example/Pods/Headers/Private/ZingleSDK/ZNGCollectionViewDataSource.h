@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/UI/Model/ZNGCollectionViewDataSource.h
+../../../../../Pod/Classes/UI/ViewModels/ZNGCollectionViewDataSource.h

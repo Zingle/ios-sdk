@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/UI/Model/ZNGMediaItem.h
+../../../../../Pod/Classes/UI/ViewModels/ZNGMediaItem.h

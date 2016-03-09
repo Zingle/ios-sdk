@@ -25,7 +25,7 @@
 
 //  Model
 #import "ZNGMessageViewModel.h"
-
+#import "ZNGConversation.h"
 #import "ZNGMediaItem.h"
 #import "ZNGPhotoMediaItem.h"
 #import "ZNGLocationMediaItem.h"

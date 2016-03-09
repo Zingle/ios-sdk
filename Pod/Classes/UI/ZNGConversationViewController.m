@@ -10,7 +10,9 @@
 #import "ZNGImageViewerController.h"
 #import "SDWebImageManager.h"
 
-@interface ZNGConversationViewController () 
+@interface ZNGConversationViewController ()
+
+@property (nonatomic, strong) ZNGConversation *conversation;
 
 @property (strong, nonatomic) ZNGBubbleImage *outgoingBubbleImageData;
 
@@ -21,7 +23,6 @@
 @end
 
 @implementation ZNGConversationViewController
-
 
 + (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation
 {
@@ -34,10 +35,60 @@
     return demoVC;
 }
 
-- (void)viewDidLoad {
+#pragma mark - Properties
+
+-(UIColor *)outgoingBubbleColor
+{
+    if (_outgoingBubbleColor == nil) {
+        _outgoingBubbleColor = [UIColor zng_messageBubbleBlueColor];
+    }
+    return _outgoingBubbleColor;
+}
+
+-(UIColor *)incomingBubbleColor
+{
+    if (_incomingBubbleColor == nil) {
+        _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
+    }
+    return _incomingBubbleColor;
+}
+- (UIColor *)incomingTextColor
+{
+    if (_incomingTextColor == nil) {
+        _incomingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    }
+    return _incomingTextColor;
+}
+
+-(UIColor *)outgoingTextColor
+{
+    if (_outgoingTextColor == nil) {
+        _outgoingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    }
+    return _outgoingTextColor;
+}
+
+-(UIColor *)authorTextColor
+{
+    if (_authorTextColor == nil) {
+        _authorTextColor = [UIColor lightGrayColor];
+    }
+    return _authorTextColor;
+}
+
+-(NSString *)receiverName
+{
+    if (_receiverName == nil) {
+        _receiverName = @"Received";
+    }
+    return _receiverName;
+}
+
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    self.title = @"ZingleSDK";
+    self.title = @"Chat";
     
     self.conversation.delegate = self;
     
@@ -47,7 +98,7 @@
         self.senderId = self.conversation.service.participantId;
     }
     
-    self.senderDisplayName = @"Me";
+    self.senderDisplayName = self.senderName ?: @"Me";
     
     self.inputToolbar.contentView.textView.pasteDelegate = self;
 
@@ -56,21 +107,10 @@
     
     self.showLoadEarlierMessagesHeader = NO;
     
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage zng_defaultTypingIndicatorImage]
-                                                                              style:UIBarButtonItemStylePlain
-                                                                             target:self
-                                                                             action:@selector(detailsPressed:)];
-    
-    [ZNGCollectionViewCell registerMenuAction:@selector(customAction:)];
-    [UIMenuController sharedMenuController].menuItems = @[ [[UIMenuItem alloc] initWithTitle:@"Custom Action"
-                                                                                      action:@selector(customAction:)] ];
-    
-    [ZNGCollectionViewCell registerMenuAction:@selector(delete:)];
-    
     ZNGBubbleImageFactory *bubbleFactory = [[ZNGBubbleImageFactory alloc] init];
     
-    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor zng_messageBubbleBlueColor]];
-    self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor zng_messageBubbleLightGrayColor]];
+    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
+    self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(stopPollingTimer)
@@ -113,7 +153,8 @@
 }
 
 #pragma mark - Timer Long Poll
-- (void)startPollingTimer{
+- (void)startPollingTimer
+{
     // Cancel a preexisting timer.
     [self.pollingTimer invalidate];
     
@@ -122,7 +163,9 @@
                                                     userInfo:nil repeats:YES];
     self.pollingTimer = timer;
 }
-- (void)stopPollingTimer{
+
+- (void)stopPollingTimer
+{
     [self.pollingTimer invalidate];
     self.pollingTimer = nil;
 }
@@ -137,7 +180,7 @@
     if ([message.sender.correspondentId isEqualToString:self.senderId]) {
         senderDisplayName = self.senderDisplayName;
     } else {
-        senderDisplayName = @"Received";
+        senderDisplayName = self.receiverName;
     }
     
     if (message.image) {
@@ -187,11 +230,6 @@
 }
 
 #pragma mark - Actions
-
-- (void)detailsPressed:(UIBarButtonItem *)sender
-{
-    NSLog(@"Details button pressed!");
-}
 
 - (void)closePressed:(UIBarButtonItem *)sender
 {
@@ -273,11 +311,6 @@
     return [self viewModelForIndex:indexPath.item];
 }
 
-- (void)collectionView:(ZNGCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath
-{
-    [self.conversation.messages removeObjectAtIndex:indexPath.item];
-}
-
 - (id<ZNGMessageBubbleImageDataSource>)collectionView:(ZNGCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGMessageViewModel *message = [self viewModelForIndex:indexPath.item];
@@ -308,7 +341,7 @@
 {
     ZNGMessageViewModel *message = [self viewModelForIndex:indexPath.item];
     
-    if ([message.senderId isEqualToString:self.senderId]) {
+    if ([message.senderId isEqualToString:self.senderId] && (self.senderName == nil)) {
         return nil;
     }
     
@@ -343,52 +376,19 @@
     if (!msg.isMediaMessage) {
         
         if ([msg.senderId isEqualToString:self.senderId]) {
-            cell.textView.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+            cell.textView.textColor = self.outgoingTextColor;
         }
         else {
-            cell.textView.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+            cell.textView.textColor = self.incomingTextColor;
         }
         
         cell.textView.linkTextAttributes = @{ NSForegroundColorAttributeName : cell.textView.textColor,
                                               NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid) };
+        
+        cell.messageBubbleTopLabel.textColor = self.authorTextColor;
     }
     
     return cell;
-}
-
-#pragma mark - UICollectionView Delegate
-
-#pragma mark - Custom menu items
-
-- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if (action == @selector(customAction:)) {
-        return YES;
-    }
-    
-    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
-}
-
-- (void)collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if (action == @selector(customAction:)) {
-        [self customAction:sender];
-        return;
-    }
-    
-    [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
-}
-
-- (void)customAction:(id)sender
-{
-    NSLog(@"Custom action received! Sender: %@", sender);
-    
-    [[[UIAlertView alloc] initWithTitle:@"Custom Action"
-                                message:nil
-                               delegate:nil
-                      cancelButtonTitle:@"OK"
-                      otherButtonTitles:nil]
-     show];
 }
 
 #pragma mark - ZingleSDK collection view flow layout delegate
@@ -409,7 +409,7 @@
                    layout:(ZNGCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGMessageViewModel *currentMessage = [self viewModelForIndex:indexPath.item];
-    if ([[currentMessage senderId] isEqualToString:self.senderId]) {
+    if ([[currentMessage senderId] isEqualToString:self.senderId] && (self.senderName == nil)) {
         return 0.0f;
     }
     

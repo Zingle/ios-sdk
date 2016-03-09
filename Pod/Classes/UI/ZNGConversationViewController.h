@@ -7,8 +7,6 @@
 //
 
 #import "ZNGBaseViewController.h"
-#import "ZNGConversation.h"
-
 #import "ZNGHeaders.h"
 
 @class ZNGConversationViewController;
@@ -21,13 +19,19 @@
 
 @interface ZNGConversationViewController : ZNGBaseViewController <UIActionSheetDelegate, ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
-@property (weak, nonatomic) id<ZNGConversationViewControllerDelegate> delegateModal;
-
-@property (nonatomic, retain) ZNGConversation *conversation;
 
 + (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation;
 
-- (void)detailsPressed:(UIBarButtonItem *)sender;
+@property (weak, nonatomic) id<ZNGConversationViewControllerDelegate> delegateModal;
+
+//OPTIONAL UI SETTINGS
+@property (nonatomic, strong) UIColor *incomingBubbleColor;
+@property (nonatomic, strong) UIColor *outgoingBubbleColor;
+@property (nonatomic, strong) UIColor *incomingTextColor;
+@property (nonatomic ,strong) UIColor *outgoingTextColor;
+@property (nonatomic, strong) UIColor *authorTextColor;
+@property (nonatomic, copy) NSString *senderName;
+@property (nonatomic, copy) NSString *receiverName;
 
 - (void)closePressed:(UIBarButtonItem *)sender;
 

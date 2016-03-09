@@ -66,20 +66,13 @@ UI Examples
 // OPTIONAL UI SETTINGS
 ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
 
-vc.inboundBackgroundColor = [UIColor colorWithRed:225.0f/255.0f green:225.0f/255.0f blue:225.0f/255.0f alpha:1.0f];
-vc.outboundBackgroundColor = [UIColor colorWithRed:229.0f/255.0f green:245.0f/255.0f blue:252.0f/255.0f alpha:1.0f];
-vc.inboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-vc.outboundTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-vc.authorTextColor = [UIColor colorWithRed:0.4 green:0.4 blue:0.4 alpha:1.0];
-vc.messageHorziontalMargin = 25;
-vc.messageVerticalMargin = 8;
-vc.messageIndentAmount = 40;
-vc.bodyPadding = 14;
-vc.cornerRadius = 10;
-vc.arrowOffset = 10;
-vc.arrowSize = CGSizeMake(20, 10);
-vc.fromName = @"Me";
-vc.toName = @"Received";
+vc.incomingBubbleColor = [UIColor orangeColor];
+vc.outgoingBubbleColor = [UIColor blueColor];
+vc.incomingTextColor = [UIColor blackColor];
+vc.outgoingTextColor = [UIColor whiteColor];
+vc.authorTextColor = [UIColor blackColor];
+vc.senderName = @"Sender name";
+vc.receiverName = @"Receiver name";
 
 [self presentViewController:vc animated:YES completion:nil];
 ```

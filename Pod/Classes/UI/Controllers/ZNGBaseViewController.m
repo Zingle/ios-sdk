@@ -102,6 +102,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
 - (void)zng_configureMessagesViewController
 {
+    //should be overridden
     self.view.backgroundColor = [UIColor whiteColor];
 
     self.zng_isObserving = NO;

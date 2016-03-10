@@ -63,7 +63,8 @@
 - (void)testCreateAndDeleteContactField
 {
     ZNGContactField *contactField = [[ZNGContactField alloc] init];
-    contactField.displayName = @"iOS Test Contact Field";
+    NSUInteger rand = arc4random_uniform(16);
+    contactField.displayName = [NSString stringWithFormat:@"iOS Test Contact Field - %lu", (unsigned long)rand];
     
     [ZNGContactFieldClient saveContactField:contactField withServiceId:[self serviceId] success:^(ZNGContactField *contactField, ZNGStatus *status) {
         
@@ -92,7 +93,7 @@
 
 - (void)testUpdateContactField
 {
-    [ZNGContactFieldClient updateContactFieldWithId:@"d1a15384-9ba2-41b4-a02e-331a8a080e38" withServiceId:[self serviceId] withParameters:nil success:^(ZNGContactField *contactField, ZNGStatus *status) {
+    [ZNGContactFieldClient updateContactFieldWithId:@"c0454244-445f-4b2f-87f3-e06ad62ce9c7" withServiceId:[self serviceId] withParameters:nil success:^(ZNGContactField *contactField, ZNGStatus *status) {
         
         XCTAssert(contactField != nil, @"Updated contactField is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactField"];

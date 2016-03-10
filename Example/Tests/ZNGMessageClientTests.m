@@ -65,7 +65,7 @@
 - (void)testSendMessage
 {
     ZNGParticipant *sender = [[ZNGParticipant alloc] init];
-    sender.participantId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
+    sender.participantId = [self serviceId];
     sender.channelValue = @"+18582810205";
     
     ZNGParticipant *recipient = [[ZNGParticipant alloc] init];

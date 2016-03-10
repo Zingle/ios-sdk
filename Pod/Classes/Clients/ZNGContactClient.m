@@ -97,7 +97,7 @@
 + (void)triggerAutomationWithId:(NSString*)automationId
                   withContactId:(NSString*)contactId
                   withServiceId:(NSString*)serviceId
-                        success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                        success:(void (^)(ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/automations/%@", serviceId, contactId, automationId];
@@ -105,8 +105,9 @@
     [self postWithModel:nil
                    path:path
           responseClass:nil
-                success:success
-                failure:failure];
+                success:^(id responseObject, ZNGStatus *status) {
+                    success(status);
+                } failure:failure];
 }
 
 + (void)addLabelWithId:(NSString*)labelId

@@ -63,15 +63,16 @@
 - (void)testCreateAndDeleteTemplate
 {
     ZNGTemplate *template = [[ZNGTemplate alloc] init];
+    NSUInteger rand = arc4random_uniform(16);
     template.type = @"general";
     template.body = @"iOS Test Template";
-    template.displayName = @"iOS Test Template";
+    template.displayName = [NSString stringWithFormat:@"iOS Test Template - %lu", (unsigned long)rand];
     
     [ZNGTemplateClient saveTemplate:template withServiceId:[self serviceId] success:^(ZNGTemplate *templ, ZNGStatus *status) {
         
         XCTAssert(template != nil, @"Label is nil!");
         
-        [ZNGTemplateClient deleteTemplateWithId:template.templateId withServiceId:[self serviceId] success:^(ZNGStatus *status) {
+        [ZNGTemplateClient deleteTemplateWithId:templ.templateId withServiceId:[self serviceId] success:^(ZNGStatus *status) {
             
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testCreateAndDeleteTemplate"];
             

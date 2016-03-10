@@ -138,7 +138,7 @@
 
 - (NSString *)automationId
 {
-    return @"3a2a029d-c67a-4c14-a679-e29eaab5616b";
+    return @"e1784f52-fef3-4107-b4cd-7b1077f930a1";
 }
 
 - (NSString *)labelId
@@ -153,7 +153,7 @@
 
 - (NSString *)contactChannelId
 {
-    return @"09009d79-3205-415a-845f-2f6e650ac9b9";
+    return @"c8b8f36c-f1c3-47e2-8664-b96d54b2a978";
 }
 
 - (NSString *)messageId

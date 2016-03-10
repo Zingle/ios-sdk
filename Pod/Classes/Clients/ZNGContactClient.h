@@ -47,7 +47,7 @@
 + (void)triggerAutomationWithId:(NSString*)automationId
                   withContactId:(NSString*)contactId
                   withServiceId:(NSString*)serviceId
-                        success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                        success:(void (^)(ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure;
 
 + (void)addLabelWithId:(NSString*)labelId

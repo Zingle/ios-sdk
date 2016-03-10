@@ -27,6 +27,9 @@
     "AFNetworking": [
       "~> 2.6"
     ],
+    "AFNetworkActivityLogger": [
+      "~> 2.0"
+    ],
     "Mantle": [
       "~> 2.0"
     ]

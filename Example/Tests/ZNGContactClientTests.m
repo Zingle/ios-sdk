@@ -80,9 +80,9 @@
         
         ZNGContact *contact = [contacts firstObject];
         
-        [ZNGContactClient triggerAutomationWithId:[self automationId] withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact, ZNGStatus *status) {
+        [ZNGContactClient triggerAutomationWithId:[self automationId] withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGStatus *status) {
             
-            XCTAssert(contact != nil, @"Contact is nil!");
+            XCTAssert(status.statusCode == 200);
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testTriggerAutomation"];
             
         } failure:^(ZNGError *error) {

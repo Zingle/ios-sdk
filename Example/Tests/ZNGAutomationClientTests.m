@@ -62,8 +62,8 @@
 
 - (void)testUpdateAutomation
 {
-    NSDictionary *params = @{ @"status" : @"active" };
-    [ZNGAutomationClient updateAutomationWithId:@"3a2a029d-c67a-4c14-a679-e29eaab5616b" withServiceId:[self serviceId] withParameters:params success:^(ZNGAutomation *automation, ZNGStatus *status) {
+    NSDictionary *params = @{ @"status" : @"active"};
+    [ZNGAutomationClient updateAutomationWithId:[self automationId] withServiceId:[self serviceId] withParameters:params success:^(ZNGAutomation *automation, ZNGStatus *status) {
                 
         XCTAssert(automation != nil, @"Updated automation is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateAutomation"];

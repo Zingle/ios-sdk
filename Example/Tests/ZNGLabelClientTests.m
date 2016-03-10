@@ -62,8 +62,9 @@
 
 - (void)testCreateAndDeleteLabel
 {
+    NSUInteger rand = arc4random_uniform(16);
     ZNGLabel *label = [[ZNGLabel alloc] init];
-    label.displayName = @"iOS Test Label";
+    label.displayName = [NSString stringWithFormat:@"iOS Test Label - %lu", (unsigned long)rand];
     label.backgroundColor = @"#ff0000";
     label.textColor = @"#ffffff";
     

@@ -21,6 +21,7 @@
 		8FD63E0B4260EB8E5A2A2A78 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9B064E9DEBE52465A548BB9E /* Pods_ZingleSDK_Example.framework */; };
 		DF5D861D1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5D861C1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m */; };
 		DF5D86231C6A977200CB84C4 /* ZNGMessageClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF5D86221C6A977200CB84C4 /* ZNGMessageClientTests.m */; };
+		DF6232721C91F16C0013F8A5 /* ZNGTestingAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DF6232701C91EC720013F8A5 /* ZNGTestingAppDelegate.m */; };
 		DF756FE21C6C3ACF00732BE2 /* ZNGContactFieldClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF756FE11C6C3ACF00732BE2 /* ZNGContactFieldClientTests.m */; };
 		DF756FE81C6C545000732BE2 /* ZNGLabelClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF756FE71C6C545000732BE2 /* ZNGLabelClientTests.m */; };
 		DF756FF21C6C59F900732BE2 /* ZNGTemplateClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DF756FF11C6C59F900732BE2 /* ZNGTemplateClientTests.m */; };
@@ -75,6 +76,8 @@
 		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		DF5D861C1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannelClientTests.m; sourceTree = "<group>"; };
 		DF5D86221C6A977200CB84C4 /* ZNGMessageClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageClientTests.m; sourceTree = "<group>"; };
+		DF62326F1C91EC720013F8A5 /* ZNGTestingAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGTestingAppDelegate.h; sourceTree = "<group>"; };
+		DF6232701C91EC720013F8A5 /* ZNGTestingAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGTestingAppDelegate.m; sourceTree = "<group>"; };
 		DF756FE11C6C3ACF00732BE2 /* ZNGContactFieldClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldClientTests.m; sourceTree = "<group>"; };
 		DF756FE71C6C545000732BE2 /* ZNGLabelClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelClientTests.m; sourceTree = "<group>"; };
 		DF756FF11C6C59F900732BE2 /* ZNGTemplateClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGTemplateClientTests.m; sourceTree = "<group>"; };
@@ -198,6 +201,8 @@
 				DF756FE71C6C545000732BE2 /* ZNGLabelClientTests.m */,
 				DF756FF11C6C59F900732BE2 /* ZNGTemplateClientTests.m */,
 				DF756FFB1C6C5EE200732BE2 /* ZNGAutomationClientTests.m */,
+				DF62326F1C91EC720013F8A5 /* ZNGTestingAppDelegate.h */,
+				DF6232701C91EC720013F8A5 /* ZNGTestingAppDelegate.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -439,6 +444,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DF6232721C91F16C0013F8A5 /* ZNGTestingAppDelegate.m in Sources */,
 				6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);

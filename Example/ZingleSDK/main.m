@@ -8,10 +8,13 @@
 
 @import UIKit;
 #import "ZNGAppDelegate.h"
+#import "ZNGTestingAppDelegate.h"
 
 int main(int argc, char *argv[])
 {
     @autoreleasepool {
-        return UIApplicationMain(argc, argv, nil, NSStringFromClass([ZNGAppDelegate class]));
+        BOOL isTesting = NSClassFromString(@"XCTestCase") != Nil;
+        Class appDelegateClass = isTesting ? [ZNGTestingAppDelegate class] : [ZNGAppDelegate class];
+        return UIApplicationMain(argc, argv, nil, NSStringFromClass(appDelegateClass));
     }
 }

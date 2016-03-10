@@ -75,6 +75,7 @@
 #import "ZNGMessageData.h"
 #import "ZNGMessageMediaData.h"
 #import "ZNGMessageViewModel.h"
+#import "ZNGNetworkPhotoMediaItem.h"
 #import "ZNGPhotoMediaItem.h"
 #import "ZNGVideoMediaItem.h"
 #import "ZNGCellLabel.h"

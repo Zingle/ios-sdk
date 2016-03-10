@@ -2,7 +2,6 @@
 
 #import "ZNGMessageViewModel.h"
 #import "ZNGPhotoMediaItem.h"
-#import "SDWebImageManager.h"
 
 @interface ZNGMessageViewModel ()
 
@@ -18,33 +17,6 @@
 @implementation ZNGMessageViewModel
 
 #pragma mark - Initialization
-
-+ (instancetype)withZNGMessage:(ZNGMessage *)message
-             senderDisplayName:(NSString *)displayName
-                      outgoing:(BOOL)outgoing
-{
-    if ([message.attachments count] > 0) {
-        
-        ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] init];
-        item.appliesMediaViewMaskAsOutgoing = outgoing;
-        
-        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:[message.attachments firstObject]]
-                                                        options:0
-                                                       progress:nil
-                                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-                                                          item.image = image;
-                                                      }];
-        
-        return [[self alloc] initWithSenderId:message.sender.correspondentId
-                            senderDisplayName:displayName
-                                         date:message.createdAt
-                                        media:item];
-    }
-    return [[self alloc] initWithSenderId:message.sender.correspondentId
-                        senderDisplayName:displayName
-                                     date:message.createdAt
-                                     text:message.body];
-}
 
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName

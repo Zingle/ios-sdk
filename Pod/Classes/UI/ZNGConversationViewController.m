@@ -8,11 +8,12 @@
 
 #import "ZNGConversationViewController.h"
 #import "ZNGImageViewerController.h"
-#import "SDWebImageManager.h"
 
 @interface ZNGConversationViewController ()
 
 @property (nonatomic, strong) ZNGConversation *conversation;
+
+@property (nonatomic, strong) NSMutableArray *viewModels;
 
 @property (strong, nonatomic) ZNGBubbleImage *outgoingBubbleImageData;
 
@@ -121,6 +122,7 @@
                                              selector:@selector(startPollingTimer)
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
+    [self refreshViewModels];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -173,51 +175,48 @@
 
 #pragma mark - Helper methods
 
-- (ZNGMessageViewModel *)viewModelForIndex:(NSInteger)index
+- (void)refreshViewModels
 {
-    ZNGMessage *message = [self.conversation.messages objectAtIndex:index];
-    NSString *senderDisplayName;
-    if ([message.sender.correspondentId isEqualToString:self.senderId]) {
-        senderDisplayName = self.senderDisplayName;
-    } else {
-        senderDisplayName = self.receiverName;
+    NSMutableArray *tempArray = [[NSMutableArray alloc] init];
+    
+    for (ZNGMessage *message in self.conversation.messages) {
+        NSString *senderDisplayName;
+        if ([message.sender.correspondentId isEqualToString:self.senderId])
+        {
+            senderDisplayName = self.senderDisplayName;
+        } else
+        {
+            senderDisplayName = self.receiverName;
+        }
+        if ([message.attachments count] > 0)
+        {
+            ZNGNetworkPhotoMediaItem *item = [[ZNGNetworkPhotoMediaItem alloc] initWithURL:message.attachments[0]];
+            item.appliesMediaViewMaskAsOutgoing = [message.sender.correspondentId isEqualToString:self.senderId];
+            ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
+                                               senderDisplayName:senderDisplayName
+                                                            date:message.createdAt
+                                                           media:item];
+            [tempArray addObject:viewModel];
+        } else {
+            ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
+                                                                           senderDisplayName:senderDisplayName
+                                                                                        date:message.createdAt
+                                                                                        text:message.body];
+            [tempArray addObject:viewModel];
+        }
     }
     
-    if (message.image) {
-        ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:message.image];
-        item.appliesMediaViewMaskAsOutgoing = [message.sender.correspondentId isEqualToString:self.senderId];
-        return [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
-                                       senderDisplayName:senderDisplayName
-                                                    date:message.createdAt
-                                                   media:item];
-    }
-    
-    if ([message.attachments count] > 0) {
-        
-        ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] init];
-        item.appliesMediaViewMaskAsOutgoing = [message.sender.correspondentId isEqualToString:self.senderId];
-        __weak typeof(self) weakSelf = self;
-        [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:[message.attachments firstObject]]
-                                                        options:0
-                                                       progress:nil
-                                                      completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
-                                                          
-                                                          dispatch_async(dispatch_get_main_queue(), ^{
-                                                              message.image = image;
-                                                              item.image = image;
-                                                              [weakSelf.collectionView reloadData];
-                                                          });
-                                                      }];
+    self.viewModels = tempArray;
+    [self.collectionView reloadData];
+}
 
-        return [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
-                            senderDisplayName:senderDisplayName
-                                         date:message.createdAt
-                                        media:item];
-    }
-    return [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
-                        senderDisplayName:senderDisplayName
-                                     date:message.createdAt
-                                     text:message.body];
+- (void)showErrorSendingMessage
+{
+    [[[UIAlertView alloc] initWithTitle:@"There was a problem sending your message. Please try again later."
+                                message:nil
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
 }
 
 #pragma mark - ZNGConversationDelegate
@@ -225,6 +224,8 @@
 - (void)messagesUpdated
 {
     [self startPollingTimer];
+    
+    [self refreshViewModels];
     
     [self finishReceivingMessage];
 }
@@ -244,11 +245,15 @@
          senderDisplayName:(NSString *)senderDisplayName
                       date:(NSDate *)date
 {
-    [self.conversation sendMessageWithBody:text success:^(ZNGMessage *message, ZNGStatus *status) {
-        [self.conversation.messages addObject:message];
+    [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
+        ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:senderId
+                                                                       senderDisplayName:senderDisplayName
+                                                                                    date:[NSDate date]
+                                                                                    text:text];
+        [self.viewModels addObject:viewModel];
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
-        //
+        [self showErrorSendingMessage];
     }];
 }
 
@@ -293,13 +298,18 @@
     
     [picker dismissViewControllerAnimated:YES completion:^{
         
-        [self.conversation sendMessageWithImage:chosenImage success:^(ZNGMessage *message, ZNGStatus *status) {
-            
-            [self.conversation.messages addObject:message];
+        [self.conversation sendMessageWithImage:chosenImage success:^(ZNGStatus *status) {
+            ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:chosenImage];
+            item.appliesMediaViewMaskAsOutgoing = YES;
+            ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
+                                                                           senderDisplayName:self.senderDisplayName
+                                                                                        date:[NSDate date]
+                                                                                       media:item];
+            [self.viewModels addObject:viewModel];
             [self finishSendingMessageAnimated:YES];
 
         } failure:^(ZNGError *error) {
-            //
+            [self showErrorSendingMessage];
         }];
     }];
 }
@@ -308,12 +318,12 @@
 
 - (id<ZNGMessageData>)collectionView:(ZNGCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self viewModelForIndex:indexPath.item];
+    return [self.viewModels objectAtIndex:indexPath.item];
 }
 
 - (id<ZNGMessageBubbleImageDataSource>)collectionView:(ZNGCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessageViewModel *message = [self viewModelForIndex:indexPath.item];
+    ZNGMessageViewModel *message = [self.viewModels objectAtIndex:indexPath.item];
     
     if ([message.senderId isEqualToString:self.senderId]) {
         return self.outgoingBubbleImageData;
@@ -330,7 +340,7 @@
 - (NSAttributedString *)collectionView:(ZNGCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.item % 3 == 0) {
-        ZNGMessageViewModel *message = [self viewModelForIndex:indexPath.item];
+        ZNGMessageViewModel *message = [self.viewModels objectAtIndex:indexPath.item];
         return [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:message.date];
     }
     
@@ -339,14 +349,14 @@
 
 - (NSAttributedString *)collectionView:(ZNGCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessageViewModel *message = [self viewModelForIndex:indexPath.item];
+    ZNGMessageViewModel *message = [self.viewModels objectAtIndex:indexPath.item];
     
     if ([message.senderId isEqualToString:self.senderId] && (self.senderName == nil)) {
         return nil;
     }
     
     if (indexPath.item - 1 > 0) {
-        ZNGMessageViewModel *previousMessage = [self viewModelForIndex:indexPath.item - 1];
+        ZNGMessageViewModel *previousMessage = [self.viewModels objectAtIndex:indexPath.item - 1];
         if ([[previousMessage senderId] isEqualToString:message.senderId]) {
             return nil;
         }
@@ -364,14 +374,14 @@
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self.conversation.messages count];
+    return [self.viewModels count];
 }
 
 - (UICollectionViewCell *)collectionView:(ZNGCollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGCollectionViewCell *cell = (ZNGCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
-    ZNGMessageViewModel *msg = [self viewModelForIndex:indexPath.item];
+    ZNGMessageViewModel *msg = [self.viewModels objectAtIndex:indexPath.item];
     
     if (!msg.isMediaMessage) {
         
@@ -408,13 +418,13 @@
 - (CGFloat)collectionView:(ZNGCollectionView *)collectionView
                    layout:(ZNGCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessageViewModel *currentMessage = [self viewModelForIndex:indexPath.item];
+    ZNGMessageViewModel *currentMessage = [self.viewModels objectAtIndex:indexPath.item];
     if ([[currentMessage senderId] isEqualToString:self.senderId] && (self.senderName == nil)) {
         return 0.0f;
     }
     
     if (indexPath.item - 1 > 0) {
-        ZNGMessageViewModel *previousMessage = [self viewModelForIndex:indexPath.item - 1];
+        ZNGMessageViewModel *previousMessage = [self.viewModels objectAtIndex:indexPath.item - 1];
         if ([[previousMessage senderId] isEqualToString:[currentMessage senderId]]) {
             return 0.0f;
         }
@@ -444,15 +454,19 @@
 
 - (void)collectionView:(ZNGCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessage *message = [self.conversation.messages objectAtIndex:indexPath.item];
-    
-    if (message.image) {
-        ZNGImageViewerController *imageViewer = [ZNGImageViewerController imageViewerController];
-        self.automaticallyScrollsToMostRecentMessage = NO;
-        imageViewer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
-        [self presentViewController:imageViewer animated:YES completion:^{
-            imageViewer.imageView.image = message.image;
-        }];
+    ZNGMessageViewModel *viewModel = [self.viewModels objectAtIndex:indexPath.item];
+    if (viewModel.isMediaMessage) {
+        if ([viewModel.media isKindOfClass:[ZNGNetworkPhotoMediaItem class]]) {
+            UIImage *image = ((UIImageView *)viewModel.media).image;
+            if (image) {
+                ZNGImageViewerController *imageViewer = [ZNGImageViewerController imageViewerController];
+                self.automaticallyScrollsToMostRecentMessage = NO;
+                imageViewer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+                [self presentViewController:imageViewer animated:YES completion:^{
+                    imageViewer.imageView.image = image;
+                }];
+            }
+        }
     }
     NSLog(@"Tapped message bubble!");
 }
@@ -473,13 +487,19 @@
     
     [self scrollToBottomAnimated:YES];
     // If there's an image in the pasteboard, `send` it.
-    [self.conversation sendMessageWithImage:[UIPasteboard generalPasteboard].image success:^(ZNGMessage *message, ZNGStatus *status) {
+    [self.conversation sendMessageWithImage:[UIPasteboard generalPasteboard].image success:^(ZNGStatus *status) {
         
-        [self.conversation.messages addObject:message];
+        ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];
+        item.appliesMediaViewMaskAsOutgoing = YES;
+        ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
+                                                                       senderDisplayName:self.senderDisplayName
+                                                                                    date:[NSDate date]
+                                                                                   media:item];
+        [self.viewModels addObject:viewModel];
         [self finishSendingMessageAnimated:YES];
         
     } failure:^(ZNGError *error) {
-        //
+        [self showErrorSendingMessage];
     }];
 }
 

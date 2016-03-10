@@ -63,25 +63,20 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 }
 
 - (void)sendMessageWithBody:(NSString *)body
-                    success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+                    success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
 {
     ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
     newMessage.body = body;
     [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:^(ZNGMessage *message, ZNGStatus *status) {
         if (success) {
-            message.body = newMessage.body;
-            ZNGCorrespondent *sender = [[ZNGCorrespondent alloc] init];
-            sender.correspondentId = newMessage.sender.participantId;
-            message.sender = sender;
-            message.createdAt = [NSDate date];
-            success(message, status);
+            success(status);
         }
     } failure:failure];
 }
 
 - (void)sendMessageWithImage:(UIImage *)image
-                     success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+                     success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure
 {
     ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
@@ -98,12 +93,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:^(ZNGMessage *message, ZNGStatus *status) {
         if (success) {
-            message.image = imageForUpload;
-            ZNGCorrespondent *sender = [[ZNGCorrespondent alloc] init];
-            sender.correspondentId = newMessage.sender.participantId;
-            message.sender = sender;
-            message.createdAt = [NSDate date];
-            success(message, status);
+            success(status);
         }
     } failure:failure];
 }

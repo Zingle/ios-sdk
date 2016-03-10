@@ -30,11 +30,11 @@
 - (void)updateMessages;
 
 - (void)sendMessageWithBody:(NSString *)body
-                    success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+                    success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure;
 
 - (void)sendMessageWithImage:(UIImage *)image
-                     success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+                     success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure;
 
 - (NSString *)messageDirectionFor:(ZNGMessage *)message;

@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ZingleSDK"
-  s.version          = "0.1.12"
+  s.version          = "0.2.0"
   s.summary          = "Zingle iOS SDK"
 
   s.description      = <<-DESC
@@ -24,10 +24,9 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*'
-  s.resources = ['Pod/Assets/**/*', 'Pod/Classes/ZNGViewController/**/*.{xib}']
+  s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib}']
 
   s.dependency 'AFNetworking', '~> 2.6'
-  s.dependency 'AFNetworkActivityLogger', '~> 2.0'
+  #s.dependency 'AFNetworkActivityLogger', '~> 2.0'
   s.dependency 'Mantle', '~> 2.0'
-  s.dependency 'SDWebImage', '~> 3.7'
 end

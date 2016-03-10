@@ -57,10 +57,6 @@
 
 #pragma mark - Initialization
 
-+ (instancetype)withZNGMessage:(ZNGMessage *)message
-             senderDisplayName:(NSString *)displayName
-                      outgoing:(BOOL)outgoing;
-
 /**
  *  Initializes and returns a message object having the given senderId, displayName, text,
  *  and current system date.

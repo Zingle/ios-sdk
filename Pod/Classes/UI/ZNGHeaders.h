@@ -28,6 +28,7 @@
 #import "ZNGConversation.h"
 #import "ZNGMediaItem.h"
 #import "ZNGPhotoMediaItem.h"
+#import "ZNGNetworkPhotoMediaItem.h"
 #import "ZNGLocationMediaItem.h"
 #import "ZNGVideoMediaItem.h"
 

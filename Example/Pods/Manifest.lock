@@ -1,7 +1,4 @@
 PODS:
-  - AFNetworkActivityLogger (2.0.4):
-    - AFNetworking/NSURLConnection (~> 2.0)
-    - AFNetworking/NSURLSession (~> 2.0)
   - AFNetworking (2.6.3):
     - AFNetworking/NSURLConnection (= 2.6.3)
     - AFNetworking/NSURLSession (= 2.6.3)
@@ -26,14 +23,9 @@ PODS:
   - Mantle (2.0.6):
     - Mantle/extobjc (= 2.0.6)
   - Mantle/extobjc (2.0.6)
-  - SDWebImage (3.7.5):
-    - SDWebImage/Core (= 3.7.5)
-  - SDWebImage/Core (3.7.5)
-  - ZingleSDK (0.1.12):
-    - AFNetworkActivityLogger (~> 2.0)
+  - ZingleSDK (0.2.0):
     - AFNetworking (~> 2.6)
     - Mantle (~> 2.0)
-    - SDWebImage (~> 3.7)
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -43,10 +35,8 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   Mantle: 299966b00759634931699f69cb6a30b9239b944d
-  SDWebImage: 69c6303e3348fba97e03f65d65d4fbc26740f461
-  ZingleSDK: fe02c778f7891041381e41722739481d665bee33
+  ZingleSDK: fb273b30902e45ae5348e463842085d52dc7f48f
 
 COCOAPODS: 0.39.0

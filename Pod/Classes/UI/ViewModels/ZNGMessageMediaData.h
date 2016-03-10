@@ -17,9 +17,10 @@
  *
  *  This library provides a few concrete classes that conform to this protocol. You may use them as-is,
  *  but they will likely require some modifications or extensions to conform to your particular data models.
- *  These concrete media items are: `ZNGPhotoMediaItem`, `ZNGLocationMediaItem`, `ZNGVideoMediaItem`.
+ *  These concrete media items are: `ZNGPhotoMediaItem`, `ZNGNetworkPhotoMediaItem`, `ZNGLocationMediaItem`, `ZNGVideoMediaItem`.
  *
  *  @see ZNGPhotoMediaItem.
+ *  @see ZNGNetworkPhotoMediaItem.
  *  @see ZNGLocationMediaItem.
  *  @see ZNGVideoMediaItem.
  */

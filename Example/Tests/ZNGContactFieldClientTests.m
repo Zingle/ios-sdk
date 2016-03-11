@@ -63,7 +63,7 @@
 - (void)testCreateAndDeleteContactField
 {
     ZNGContactField *contactField = [[ZNGContactField alloc] init];
-    NSUInteger rand = arc4random_uniform(16);
+    NSUInteger rand = arc4random_uniform(1000000);
     contactField.displayName = [NSString stringWithFormat:@"iOS Test Contact Field - %lu", (unsigned long)rand];
     
     [ZNGContactFieldClient saveContactField:contactField withServiceId:[self serviceId] success:^(ZNGContactField *contactField, ZNGStatus *status) {

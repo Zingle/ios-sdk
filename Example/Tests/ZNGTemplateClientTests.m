@@ -63,7 +63,7 @@
 - (void)testCreateAndDeleteTemplate
 {
     ZNGTemplate *template = [[ZNGTemplate alloc] init];
-    NSUInteger rand = arc4random_uniform(16);
+    NSUInteger rand = arc4random_uniform(1000000);
     template.type = @"general";
     template.body = @"iOS Test Template";
     template.displayName = [NSString stringWithFormat:@"iOS Test Template - %lu", (unsigned long)rand];

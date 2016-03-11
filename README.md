@@ -1,5 +1,5 @@
 # Zingle iOS SDK
-
+[![Build Status](https://www.bitrise.io/app/6a6bfbbee7abf3f2.svg?token=lQNKTWPV2_fOj5NVc6pFPA&branch=master)](https://www.bitrise.io/app/6a6bfbbee7abf3f2)
 ## Overview
 
 Zingle is a multi-channel communications platform that allows the sending, receiving and automating of conversations between a Business and a Customer.  Zingle is typically interacted with by Businesses via a web browser to manage these conversations with their customers.  The Zingle API provides functionality to developers to act on behalf of either the Business or the Customer.  The Zingle iOS SDK provides mobile application developers an easy-to-use layer on top of the Zingle API.

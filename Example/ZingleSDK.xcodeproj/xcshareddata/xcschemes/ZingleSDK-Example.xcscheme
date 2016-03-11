@@ -71,6 +71,43 @@
             ReferencedContainer = "container:ZingleSDK.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "TEST_TOKEN"
+            value = "rfarley@zingleme.com"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "BUILD_TOKEN"
+            value = "rfarley@zingleme.com"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "BUILD_KEY"
+            value = "WfM-uYS-CBV-n6J"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "BUILD_CONTACT_ID"
+            value = "e07aa3e3-20b4-4e6d-90b0-6606f0d14f64"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "BUILD_CHANNEL_VALUE"
+            value = "ryans.testapp"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "BUILD_SERVICE_ID"
+            value = "e545a46e-bfcd-4db2-bfee-8e590fdcb33f"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "TEST_KEY"
+            value = "WfM-uYS-CBV-n6J"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>

@@ -197,7 +197,7 @@
                                                             date:message.createdAt
                                                            media:item];
             [tempArray addObject:viewModel];
-        } else {
+        } else if (message.body) {
             ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
                                                                            senderDisplayName:senderDisplayName
                                                                                         date:message.createdAt

@@ -14,8 +14,11 @@
 - (void)setUp
 {
     [super setUp];
+    NSString *key = [[[NSProcessInfo processInfo] environment] objectForKey:@"TEST_KEY"];
+    NSString *token = [[[NSProcessInfo processInfo] environment] objectForKey:@"TEST_TOKEN"];
+    
     ZingleSDK *sdk = [ZingleSDK sharedSDK];
-    [sdk setToken:@"rfarley@zingleme.com" andKey:@"WfM-uYS-CBV-n6J"];
+    [sdk setToken:token andKey:key];
 }
 
 - (NSString *)accountId

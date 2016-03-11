@@ -40,12 +40,14 @@
 
 - (void)loadConversations
 {
-    NSString *token = @"viacheslav.marusyk@cyberhull.com";
-    NSString *key = @"123qweasd";
-    NSString *contactChannelValue = @"viacheslav.marusyk";
-    NSString *contactId = @"b248a5d0-8f01-49eb-bda0-8cf2d13f4700";
-    NSString *serviceId = @"e84bec95-b788-45ea-9d64-01db3d8742ac";
+    NSDictionary *environment = [[NSProcessInfo processInfo] environment];
     
+    NSString *token = environment[@"BUILD_TOKEN"] ?: @"YOUR ZINGLE USERNAME";
+    NSString *key = environment[@"BUILD_KEY"] ?: @"YOUR ZINGLE PASSWORD";
+    NSString *contactChannelValue = environment[@"BUILD_CHANNEL_VALUE"] ?: @"YOUR APP'S CHANNEL TYPE VALUE";
+    NSString *contactId = environment[@"BUILD_CONTACT_ID"] ?: @"THE ZINGLE CONTACT ID";
+    NSString *serviceId = environment[@"BUILD_SERVICE_ID"] ?: @"THE ZINGLE SERVICE ID";
+
     // 1
     [[ZingleSDK sharedSDK] setToken:token andKey:key];
     

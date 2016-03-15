@@ -21,4 +21,9 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
 
+-(NSString *)title;
+-(NSString *)firstName;
+-(NSString *)lastName;
+-(NSString *)phoneNumber;
+
 @end

@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/UI/ZNGConversationViewController.h
+../../../../../Pod/Classes/UI/Controllers/ZNGConversationViewController.h

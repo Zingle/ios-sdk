@@ -27,13 +27,13 @@
 
 + (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation
 {
-    ZNGConversationViewController *demoVC = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
+    ZNGConversationViewController *vc = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
     
-    if (demoVC) {
-        demoVC.conversation = conversation;
+    if (vc) {
+        vc.conversation = conversation;
     }
     
-    return demoVC;
+    return vc;
 }
 
 #pragma mark - Properties

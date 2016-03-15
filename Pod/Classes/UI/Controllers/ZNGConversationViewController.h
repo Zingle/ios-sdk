@@ -27,6 +27,8 @@
  */
 + (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation;
 
+
+
 /**
  *  If ZNGConversationViewController is presented modally the delegateModel should
  *  should be set to handle dismissing the modal.

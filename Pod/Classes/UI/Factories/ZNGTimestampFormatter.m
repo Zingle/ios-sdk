@@ -64,7 +64,7 @@
         return nil;
     }
     
-    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     return [self.dateFormatter stringFromDate:date];
 }

@@ -32,6 +32,15 @@
  */
 + (UIColor *)zng_messageBubbleLightGrayColor;
 
+/**
+ *  Creates and returns a new color object from a hex color value.
+ *
+ *  @param value A string hex value example: #D4D4D4
+ *
+ *  @return A new color object matching a the RGB hex value.
+ */
++ (UIColor *)colorFromHexString:(NSString *)hexString;
+
 #pragma mark - Utilities
 
 /**

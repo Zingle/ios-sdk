@@ -8,6 +8,7 @@
 
 #import "ZNGBaseViewController.h"
 #import "ZNGHeaders.h"
+#import "ZNGContact.h"
 
 @class ZNGConversationViewController;
 
@@ -27,7 +28,11 @@
  */
 + (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation;
 
-
++ (ZNGConversationViewController *)withServiceId:(NSString *)serviceId
+                                         contact:(ZNGContact *)contact
+                             contactChannelValue:(NSString *)contactChannelValue
+                                      senderName:(NSString *)senderName
+                                    receiverName:(NSString *)receiverName;
 
 /**
  *  If ZNGConversationViewController is presented modally the delegateModel should

@@ -26,4 +26,6 @@
 -(NSString *)lastName;
 -(NSString *)phoneNumber;
 
+- (NSString *)fullName;
+
 @end

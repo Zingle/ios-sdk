@@ -7,7 +7,7 @@
 //
 
 #import "ZNGLabelCollectionViewCell.h"
-
+#import "UIFont+OpenSans.h"
 
 @interface ZNGLabelCollectionViewCell ()
 
@@ -32,6 +32,7 @@
     self.backgroundColor = [label backgroundUIColor];
     self.label.textColor = [label textUIColor];
     self.label.text = [label.displayName uppercaseString];
+    self.label.font = [UIFont openSansSemiboldFontOfSize:11.0f];
     self.layer.cornerRadius = 3;
     self.clipsToBounds = YES;
 }

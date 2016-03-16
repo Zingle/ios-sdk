@@ -32,6 +32,12 @@
     ],
     "Mantle": [
       "~> 2.0"
+    ],
+    "DGActivityIndicatorView": [
+
+    ],
+    "GoogleFontsiOS/OpenSans": [
+
     ]
   }
 }

@@ -66,4 +66,34 @@
  */
 + (UIImage *)zng_defaultPlayImage;
 
+/**
+ *  @return The star icon.
+ */
++ (UIImage *)zng_starredImage;
+
+/**
+ *  @return The unfilled star icon.
+ */
++ (UIImage *)zng_unstarredImage;
+
+/**
+ *  @return The large star icon.
+ */
++ (UIImage *)zng_lrg_starredImage;
+
+/**
+ *  @return The large unfilled star icon.
+ */
++ (UIImage *)zng_lrg_unstarredImage;
+
+/**
+ *  @return The confirmed icon.
+ */
++ (UIImage *)zng_confirmedImage;
+
+/**
+ *  @return The unconfirmed star icon.
+ */
++ (UIImage *)zng_unconfirmedImage;
+
 @end

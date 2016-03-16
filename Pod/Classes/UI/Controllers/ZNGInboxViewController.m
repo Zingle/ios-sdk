@@ -10,11 +10,15 @@
 #import "ZNGContact.h"
 #import "ZNGContactClient.h"
 #import "ZNGTableViewCell.h"
+#import "DGActivityIndicatorView.h"
 
 @interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray *contacts;
+@property (strong, nonatomic) NSString *serviceId;
+
+@property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
 
 @end
 
@@ -34,12 +38,12 @@
                                           bundle:[NSBundle bundleForClass:[ZNGInboxViewController class]]];
 }
 
-+ (instancetype)withContacts:(NSArray *)contacts
++ (instancetype)withServiceId:(NSString *)serviceId
 {
     ZNGInboxViewController *vc = (ZNGInboxViewController *)[ZNGInboxViewController inboxViewController];
     
     if (vc) {
-        vc.contacts = contacts;
+        vc.serviceId = serviceId;
     }
     
     return vc;
@@ -47,22 +51,47 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.tableView.hidden = YES;
+    
+    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    [self.tableView addSubview:refreshControl];
+    
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
+    ;
+    self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
+    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+    
+    self.title = @"Inbox";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.estimatedRowHeight = 118.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerNib:[ZNGTableViewCell nib] forCellReuseIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
-    
-    NSString *serviceId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
-    
-    [ZNGContactClient contactListWithServiceId:serviceId parameters:nil success:^(NSArray *contacts, ZNGStatus *status) {
+}
+
+- (void)refresh:(UIRefreshControl *)refreshControl {
+    [ZNGContactClient contactListWithServiceId:self.serviceId parameters:nil success:^(NSArray *contacts, ZNGStatus *status) {
         
         self.contacts = contacts;
+        self.tableView.hidden = NO;
+        [self.activityIndicator removeFromSuperview];
+        [self.activityIndicator stopAnimating];
         [self.tableView reloadData];
-        
+        [refreshControl endRefreshing];
     } failure:^(ZNGError *error) {
-        
+        [refreshControl endRefreshing];
     }];
+    
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+    [self refresh:nil];
 }
 
 #pragma mark - UITableViewDataSource
@@ -76,7 +105,7 @@
 {
     ZNGContact *contact = [self.contacts objectAtIndex:indexPath.row];
     ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
-    [cell configureCellWithContact:contact];
+    [cell configureCellWithContact:contact withServiceId:self.serviceId];
     [cell.labelCollectionView reloadData];
     return cell;
 }
@@ -90,15 +119,8 @@
     NSString *serviceId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
     NSString *contactChannelValue = @"ryans.testapp";
     
-    [[ZingleSDK sharedSDK] addConversationFromContactId:contact.contactId toServiceId:serviceId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
-        
-        ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-        [self.navigationController pushViewController:vc animated:YES];
-
-        
-    } failure:^(ZNGError *error) {
-        // handle failure
-    }];
+    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerWithServiceId:serviceId contact:contact contactChannelValue:contactChannelValue senderName:@"Me" receiverName:[contact fullName]];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 @end

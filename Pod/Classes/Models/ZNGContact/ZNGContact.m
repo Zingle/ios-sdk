@@ -98,4 +98,39 @@
     return nil;
 }
 
+- (NSString *)fullName
+{
+    NSString *title = [self title];
+    NSString *firstName = [self firstName];
+    NSString *lastName = [self lastName];
+    
+    if(firstName.length < 1 && lastName.length < 1)
+    {
+        NSString *phoneNumber = [self phoneNumber];
+        if (phoneNumber) {
+            return phoneNumber;
+        } else {
+            return @"Anonymous User";
+        }
+    }
+    else
+    {
+        NSString *name = @"";
+        
+        if(title.length > 0)
+        {
+            name = [name stringByAppendingString:[NSString stringWithFormat:@"%@ ", title]];
+        }
+        if(firstName.length > 0)
+        {
+            name = [name stringByAppendingString:[NSString stringWithFormat:@"%@ ", firstName]];
+        }
+        if(lastName.length > 0)
+        {
+            name = [name stringByAppendingString:lastName];
+        }
+        return name;
+    }
+}
+
 @end

@@ -12,6 +12,6 @@
 
 + (instancetype)inboxViewController;
 
-+ (instancetype)withContacts:(NSArray *)contacts;
++ (instancetype)withServiceId:(NSString *)serviceId;
 
 @end

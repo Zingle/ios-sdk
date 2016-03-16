@@ -27,6 +27,7 @@
         sharedDataSet = [[ZNGDataSet alloc] init];
         sharedDataSet.services = [[NSMutableDictionary alloc] init];
         sharedDataSet.contacts = [[NSMutableDictionary alloc] init];
+        sharedDataSet.conversations = [[NSMutableDictionary alloc] init];
     });
     
     return sharedDataSet;
@@ -42,15 +43,26 @@
     [self.contacts setObject:contact forKey:contact.contactId];
 }
 
-- (void)addConversation:(ZNGConversation *)conversation
+- (void)addConversation:(ZNGConversation *)conversation toServiceId:(NSString *)serviceId
 {
-    [self.conversations setObject:conversation forKey:conversation.service.participantId];
+    [self.conversations setObject:conversation forKey:serviceId];
     [conversation updateMessages];
 }
 
-- (ZNGConversation *)getConversationWithServiceId:(NSString *)serviceId
+- (void)addConversation:(ZNGConversation *)conversation toContactId:(NSString *)contactId
+{
+    [self.conversations setObject:conversation forKey:contactId];
+    [conversation updateMessages];
+}
+
+- (ZNGConversation *)getConversationToServiceId:(NSString *)serviceId
 {
     return [self.conversations objectForKey:serviceId];
+}
+
+- (ZNGConversation *)getConversationToContactId:(NSString *)contactId
+{
+    return [self.conversations objectForKey:contactId];
 }
 
 @end

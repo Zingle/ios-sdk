@@ -23,12 +23,18 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - DGActivityIndicatorView (2.0)
+  - GoogleFontsiOS/Core (0.1.1)
+  - GoogleFontsiOS/OpenSans (0.1.1):
+    - GoogleFontsiOS/Core
   - Mantle (2.0.6):
     - Mantle/extobjc (= 2.0.6)
   - Mantle/extobjc (2.0.6)
   - ZingleSDK (0.2.1):
     - AFNetworkActivityLogger (~> 2.0)
     - AFNetworking (~> 2.6)
+    - DGActivityIndicatorView
+    - GoogleFontsiOS/OpenSans
     - Mantle (~> 2.0)
 
 DEPENDENCIES:
@@ -41,7 +47,9 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
+  GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
   Mantle: 299966b00759634931699f69cb6a30b9239b944d
-  ZingleSDK: b04a31b9e617c4253ed90152e44d338bc3336199
+  ZingleSDK: 4e94b1868823e34078e7a0d3c4924dc7d214e73e
 
 COCOAPODS: 0.39.0

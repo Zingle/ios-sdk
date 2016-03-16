@@ -29,13 +29,23 @@
 - (void)addContact:(ZNGContact *)contact;
 
 /**
- * Add conversation object to shared data set.
+ * Add conversation object to a service to shared data set.
  */
-- (void)addConversation:(ZNGConversation *)conversation;
+- (void)addConversation:(ZNGConversation *)conversation toServiceId:(NSString *)serviceId;
 
 /**
- * Get conversation object from shared data set with id of service.
+ * Add conversation object to a contact to shared data set.
  */
-- (ZNGConversation *)getConversationWithServiceId:(NSString *)serviceId;
+- (void)addConversation:(ZNGConversation *)conversation toContactId:(NSString *)contactId;
+
+/**
+ * Get conversation object to a service from shared data set with id of service.
+ */
+- (ZNGConversation *)getConversationToServiceId:(NSString *)serviceId;
+
+/**
+ * Get conversation object to a contact from shared data set with id of service.
+ */
+- (ZNGConversation *)getConversationToContactId:(NSString *)contactId;
 
 @end

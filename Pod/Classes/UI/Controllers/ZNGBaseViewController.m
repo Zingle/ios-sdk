@@ -37,6 +37,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarBottomLayoutGuide;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleViewLabelTopConstraint;
 
 @property (weak, nonatomic) UIView *snapshotView;
 
@@ -212,6 +213,11 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
     [self zng_configureMessagesViewController];
     [self zng_registerForNotifications:YES];
+    
+    NSLog(@"Status bar height: %f",[[UIApplication sharedApplication] statusBarFrame].size.height);
+    if ([[UIApplication sharedApplication] statusBarFrame].size.height < 1) {
+        self.titleViewLabelTopConstraint.constant = 44;
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -728,6 +734,14 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 {
     if (self.keyboardController.keyboardIsVisible) {
         [self zng_setToolbarBottomLayoutGuideConstant:CGRectGetHeight(self.keyboardController.currentKeyboardFrame)];
+    }
+    NSValue* rectValue = [[notification userInfo] valueForKey:UIApplicationStatusBarFrameUserInfoKey];
+    CGRect oldFrame;
+    [rectValue getValue:&oldFrame];
+    if (oldFrame.size.height > 0) {
+        self.titleViewLabelTopConstraint.constant = 44;
+    } else {
+        self.titleViewLabelTopConstraint.constant = 64;
     }
 }
 

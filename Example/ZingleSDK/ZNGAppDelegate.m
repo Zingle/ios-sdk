@@ -31,8 +31,8 @@
     
     // 1
     [[ZingleSDK sharedSDK] setToken:token andKey:key];
-    
-    ZNGInboxViewController *vc = [ZNGInboxViewController inboxViewController];
+    NSString *serviceId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
+    ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:serviceId];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];

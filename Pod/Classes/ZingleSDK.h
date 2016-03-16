@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "ZNGConversationViewController.h"
 #import "ZNGConversation.h"
+#import "ZNGContact.h"
+#import "ZNGService.h"
 
 @interface ZingleSDK : NSObject
 
@@ -38,7 +40,7 @@
 - (void)addConversationFromContactId:(NSString *)contactId
                          toServiceId:(NSString *)serviceId
                  contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation))success
+                             success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
                              failure:(void (^)(ZNGError* error))failure;
 
 /**
@@ -54,8 +56,12 @@
 - (void)addConversationFromServiceId:(NSString *)serviceId
                          toContactId:(NSString *)contactId
                  contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation))success
+                             success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
                              failure:(void (^)(ZNGError* error))failure;
+
+
+- (ZNGConversation *)conversationToService:(NSString *)serviceId;
+- (ZNGConversation *)conversationToContact:(NSString *)contactId;
 
 /**
  * Returns a new conversation view controller for the specified conversation that can be presented and/or added to a navigation stack.
@@ -63,5 +69,11 @@
  * @param conversation object which contains the messages to display
  */
 - (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation;
+
+- (ZNGConversationViewController *)conversationViewControllerWithServiceId:(NSString *)serviceId
+                                                                   contact:(ZNGContact *)contact
+                                                       contactChannelValue:(NSString *)contactChannelValue
+                                                                senderName:(NSString *)senderName
+                                                              receiverName:(NSString *)receiverName;
 
 @end

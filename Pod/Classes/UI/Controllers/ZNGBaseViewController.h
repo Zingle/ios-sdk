@@ -22,6 +22,10 @@
 @interface ZNGBaseViewController : UIViewController <ZNGCollectionViewDataSource,
                                                          ZNGCollectionViewDelegateFlowLayout,
                                                          UITextViewDelegate>
+/**
+ *  The sub header title lable.
+ */
+@property (weak, nonatomic) IBOutlet UILabel *titleViewLabel;
 
 /**
  *  Returns the collection view object managed by this view controller.

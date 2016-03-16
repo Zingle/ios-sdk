@@ -10,10 +10,8 @@
 		0083CD159C0CD01A561A217470FDFC9B /* ZNGServiceChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F965EAF1310676263A1C226750390F0 /* ZNGServiceChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0126C7FC006A8AEB11388F4FBDB40AD8 /* UIRefreshControl+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = F21F7E717928C2C98D07D80AB6553D84 /* UIRefreshControl+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		016DBFC5196AACBA9645EBC9E9E6CB42 /* Mantle.h in Headers */ = {isa = PBXBuildFile; fileRef = 7747A71C9AD4BB35034C0613861A2676 /* Mantle.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		01E8985FFE0124EFE02FD8D0590ADA86 /* bubble_stroked_tailless@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7D8A93EDC4209BD44E7DAF39CEA1AC99 /* bubble_stroked_tailless@3x.png */; };
 		02400D80741BF87FD3E882CF49160422 /* ZNGHeaders.h in Headers */ = {isa = PBXBuildFile; fileRef = FF1FBABB968742E7B7FD0FF6EDDE4312 /* ZNGHeaders.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		0658F253171FE331BC99076C67EA9C50 /* starred.pdf in Resources */ = {isa = PBXBuildFile; fileRef = BC2B91371EBB46D0B402F9C937687B9B /* starred.pdf */; };
-		06B605D986A250760150AA18E74D30E0 /* bubble_min.png in Resources */ = {isa = PBXBuildFile; fileRef = F3DAF6F3AC1B4B019C3D98877F7B3448 /* bubble_min.png */; };
+		060C6ADBA723056D018096B71BBC8364 /* ZNGTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF4353EC905E945BE0BE754730FF9315 /* ZNGTypingIndicatorFooterView.xib */; };
 		07419E1049326B35BC6EEE2FDBB67FAA /* ZNGService.h in Headers */ = {isa = PBXBuildFile; fileRef = 76A5727F819B130DC0A7691F5C66451C /* ZNGService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		07561F0200CAD92CCDE9E27D69B51032 /* DGActivityIndicatorBallGridPulseAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7D491604C6104A0F6C1098AB34D46237 /* DGActivityIndicatorBallGridPulseAnimation.m */; };
 		082F036845BB936DD277F386BF34DCA2 /* ZNGPhotoMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C268E018D5FD7015F862C229F173C5A /* ZNGPhotoMediaItem.m */; };
@@ -29,12 +27,14 @@
 		0D9C8AB81CCB70AFA3EA097F0E9D41CD /* ZNGChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E028FC287033EDFF5E989CAE83C74D8 /* ZNGChannel.m */; };
 		0DCF22DCE4E2706A955317A135A9B786 /* ZNGInboxViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 682E9919021BB14705E169CBC1C23F02 /* ZNGInboxViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0E15F927D5D991F1A1ECCB84BA6AEAC3 /* NSError+MTLModelException.m in Sources */ = {isa = PBXBuildFile; fileRef = E44CEEEA2906D256AEFB8F3C2EFB601A /* NSError+MTLModelException.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		0E5A93BBDEAE6F21F2CF03F3BB95FC5C /* clip.png in Resources */ = {isa = PBXBuildFile; fileRef = 40188E53847A36557A5FA1B331C13EF4 /* clip.png */; };
 		0EF192AAAFA36EE1201CE2A0DF55CB48 /* UIColor+ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = E86FED4D34C906CC7BFA9A9D341D734C /* UIColor+ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0F6BE370A1E5A6FE10DA085438383E52 /* ZNGLabelCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A312B78048BFDE89BA17375337BB0F0 /* ZNGLabelCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1233168F14476BDAD75A477022A9B711 /* ZNGLoadEarlierHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8431DF4EC6EFA4EEBC5171A0B068B16C /* ZNGLoadEarlierHeaderView.xib */; };
+		12881A6A817BAC210E9D99536CF61098 /* unconfirmed.pdf in Resources */ = {isa = PBXBuildFile; fileRef = C148076E0D756036E456F1E4D899AB91 /* unconfirmed.pdf */; };
 		130B976114E64E678D9C7622F1BC084F /* AFNetworkActivityLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 783A049393F3CD781B162970C8A3A981 /* AFNetworkActivityLogger.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		13198F6C75AAFB524FC126BA3D8A7E73 /* ZNGAutomationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CF3C51309448E6F27C241D425328E3A /* ZNGAutomationClient.m */; };
 		138CCD7347B729B02677038FE4BE1F9A /* Pods-ZingleSDK_Tests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 400B5E1B7ED2E510B40C67B8F78F4BAF /* Pods-ZingleSDK_Tests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		13F425E527857B6718201297AF4DF48D /* lrg_unstarred.imageset in Resources */ = {isa = PBXBuildFile; fileRef = 1512C8D8286E2761F9DB2CD7EF86A020 /* lrg_unstarred.imageset */; };
 		15F4CD739A0EDE86912D1530E917B57A /* DGActivityIndicatorBallClipRotateMultipleAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E7150AAD8ACC79AF0F11DA49294F73E /* DGActivityIndicatorBallClipRotateMultipleAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1656BC975B7C178B25E23E7039856AFA /* ZNGAvatarImageFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 708CA0696F5E579B55206AC78E2C5DF3 /* ZNGAvatarImageFactory.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		168387A67301B29037CC1779AAE81ADC /* NSDictionary+MTLMappingAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 8374DB23DA7587D6FEF6DC89D04EAE15 /* NSDictionary+MTLMappingAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -45,23 +45,23 @@
 		17D050BF5DFB50F7B7A7F68B00E1458A /* ZNGNewMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = 93050FBE134214F854BA28DA6BF76CC4 /* ZNGNewMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		17D18ECCC07E5598886456B73C630F94 /* DGActivityIndicatorDoubleBounceAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 11897F540376799C983394EC13AEFFF2 /* DGActivityIndicatorDoubleBounceAnimation.m */; };
 		18CFBF89D8C27176A23E6E80F32B66D7 /* ZNGTypingIndicatorFooterView.h in Headers */ = {isa = PBXBuildFile; fileRef = 0F2FD214E413BD196BA64B5657963C15 /* ZNGTypingIndicatorFooterView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1A81C29918A855DEBB287E6CE6ADAEF2 /* ZNGBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E181152D2613C21611C8044701568A94 /* ZNGBaseViewController.xib */; };
 		1AB5058C0B562ECF9AB105FD43010686 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 14C8673E03AAD1D4F932C27A12E5C318 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		1AFC33656DED183BCBA2FCBC862315B5 /* ZNGTypingIndicatorFooterView.xib in Resources */ = {isa = PBXBuildFile; fileRef = EF4353EC905E945BE0BE754730FF9315 /* ZNGTypingIndicatorFooterView.xib */; };
-		1B304D1FE786CE385FBF22FF04450F56 /* bubble_stroked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 2949538CE7664B24FE20820788202B8D /* bubble_stroked@3x.png */; };
+		1B307BE7B466C70F977326E2E0F08F66 /* bubble_regular.png in Resources */ = {isa = PBXBuildFile; fileRef = E5AD1A03087EF6A067E3DC60FDE6B290 /* bubble_regular.png */; };
+		1BAC10A110FAAE20B5AC168A2FCA741B /* bubble_min@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6C7D0F58734F427343A5E6EA416F1DDF /* bubble_min@2x.png */; };
 		1CE659081EAFEC2E83BF9EE076C57F66 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5787315E5E7C0527E3707327ABD9A9C /* CoreGraphics.framework */; };
 		1D8C90329F3CBE5B292E0CB7326C2AF9 /* GFIFontLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = A22FBFC20DE87E28A28B617822221870 /* GFIFontLoader.m */; };
 		1E56D93033C917DABE653604BC98DE69 /* MTLModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9050B4291F4490A431C9620E79335B96 /* MTLModel.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		1F40416F5609BAC987F6636A2F9EF143 /* clip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 13157E6C3063371E10AD5DD1935EC988 /* clip@2x.png */; };
 		1F66E72F8927B37B6D6E2F720045FE32 /* UIButton+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 38A980CE9CAB6C553CACAC6533946747 /* UIButton+AFNetworking.m */; };
 		1F9BEB9B8BE5906E0BE6309A7DA20E8F /* DGActivityIndicatorLineScalePartyAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F48CEBE18958FBAFBC902C8169D33DB /* DGActivityIndicatorLineScalePartyAnimation.m */; };
 		1FF7D105E994B6A61896279C58B368F5 /* NSDictionary+MTLManipulationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 0B62EE616EEE711C9B5F6E46C68D51B6 /* NSDictionary+MTLManipulationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		201D43C795DB219A03229DEA9E33433A /* ZNGMessageBubbleImageDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = B0F5469AE6E19546AEEBBE84073F772E /* ZNGMessageBubbleImageDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		208778388233AA8B778A12EA15435F1C /* play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 221A2F06931E61524029B79281A295BA /* play@3x.png */; };
 		21A3AE2AC15359BC441B482FB2841227 /* ZNGChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = FDA1589FA1655C997A886358B7221D17 /* ZNGChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		21F5C2166DE2EA7D86CF628DEF4F0778 /* AFHTTPRequestOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = C25B8E69AC265CDDB753A5F53D64B955 /* AFHTTPRequestOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		246DDD776CBC5972A6E8AA733CFB33F9 /* MTLReflection.h in Headers */ = {isa = PBXBuildFile; fileRef = A9824C0903D854542504C62C45F2AFA5 /* MTLReflection.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2530E93C027A8F15113F9A24BE7F7AEC /* AFNetworkReachabilityManager.h in Headers */ = {isa = PBXBuildFile; fileRef = ABC0A8A01BC28FE5B220EA4A6C6DE899 /* AFNetworkReachabilityManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2588E099270DE43A2EE4CB5B8B125C33 /* ZNGCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 0EDDB97B733F6916090003C612139A07 /* ZNGCollectionViewCell.m */; };
+		25E594C713E4D0A26DF9EE39F2623353 /* bubble_stroked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FB052693E0C20E7E00EA309485AF03A6 /* bubble_stroked@2x.png */; };
 		261038B36F5FC9DDB7D2696C8763BE0F /* AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 43446D12CC51492B61463983B6FD5091 /* AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2632FE6F1673B993497D9FBC149200A6 /* OpenSans.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CE9431FB380EC3344910B483B25E39E1 /* OpenSans.bundle */; };
 		277099B810F5AEE5A70FB78A016F9036 /* ZNGBaseViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F834EA285648E395DF8D6D5A699D5CC /* ZNGBaseViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -70,7 +70,6 @@
 		286A4E46615CA8DCC04C757516880FE8 /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F70D0767952A62FE5A11CF20C418927F /* ZNGConversationViewController.m */; };
 		2881D058AB1B60D87CA597609BC3E225 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8670E21143BB47148A915861D5DFD685 /* AFNetworking.framework */; };
 		2B3DAF752F3FC83102664F11497B36ED /* ZNGService.m in Sources */ = {isa = PBXBuildFile; fileRef = 6C532B7121781C3AE033072BD5DD17B9 /* ZNGService.m */; };
-		2BAC754A32E11198F4597BBAC3FBB44E /* bubble_min@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AC7459041F41EA5C75623EA3EF4E070 /* bubble_min@3x.png */; };
 		2DA140470AD85B2CCFB7213E92E08D71 /* DGActivityIndicatorBallGridPulseAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 49D9D0AE55129AEEC861B758C47D7DC6 /* DGActivityIndicatorBallGridPulseAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E17210766F697F9AD9103CAFBD8BBE6 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1B44A8F33E541ECD9004AB650AC8E967 /* DGActivityIndicatorLineScalePulseOutRapidAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2E53250BC4C430BC1ADB1FAEFEBC17E1 /* ZNGTemplate.h in Headers */ = {isa = PBXBuildFile; fileRef = C096C1442222D0E59C069E24E8250523 /* ZNGTemplate.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -78,26 +77,28 @@
 		2F749C49AEBF36949CBE4779DCED4CE0 /* NSValueTransformer+MTLInversionAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 820381FF16EAC2F1D513830C1F07536D /* NSValueTransformer+MTLInversionAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2FD1C4FE86D0E7F726DF4B257B7FAF4E /* ZNGContactChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = BDAE43EA1180D1055479DB84156BC1E3 /* ZNGContactChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3172B83647ECB68754D95036683F599E /* DGActivityIndicatorNineDotsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 2EF2BEF53F3CF3107810FC26E825B23B /* DGActivityIndicatorNineDotsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		318FE85F3FD9C7B5BCB54F9669DAD07F /* bubble_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8F4783B266B53F03B7A8F35B62AF1813 /* bubble_tailless@2x.png */; };
 		31AA8257A10B12C52FDEC2E61C47D94F /* ZNGTemplateClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 45604686C149380759D310FBA5EFF05E /* ZNGTemplateClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		31BCE71DD41D9B408054A722E9F287F1 /* DGActivityIndicatorView-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = C4339FE44FBBCE83977C7A7192B00F2E /* DGActivityIndicatorView-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		31DD51C42587F54EA59AAB7B6E54827F /* AFNetworking-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 9B1B18E6D45F7C925F5E9873430FAF1B /* AFNetworking-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		325C7302FD248A77A9CB661B91C36E3A /* ZNGServiceAddressClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E4828002FDC68EA12CD945B5D4FB3CAC /* ZNGServiceAddressClient.m */; };
 		328B47E07872FA89BA6B15A792DA2B50 /* NSValueTransformer+MTLInversionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 41EA00A1D609CA5C2B40B1F673C84218 /* NSValueTransformer+MTLInversionAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		32C8D8A4A8DD367F7A1C318684BEF768 /* ZNGNewMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 9FFF637739C43A545A2765E4E0F1832A /* ZNGNewMessage.m */; };
+		32E2AD56DD5C8513246EB05A05BC670F /* ZNGToolbarContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22C0673FEF2F3AE153907E3B12D99F8D /* ZNGToolbarContentView.xib */; };
 		33331F50BCD2DD67D4C3F1748B164A00 /* DGActivityIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = C84C43B92807CD617235BB261A536134 /* DGActivityIndicatorView.m */; };
 		3390E95631D685160E14E80D489174E0 /* ZNGKeyboardController.h in Headers */ = {isa = PBXBuildFile; fileRef = 27673B9D12D393329E89C756137A319B /* ZNGKeyboardController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		339AEBC2751E2087EF52320A1BF958C5 /* AFNetworkActivityLogger.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C288BD7FFC84224D34291E2E197CCA0 /* AFNetworkActivityLogger.framework */; };
 		370C235D4E25EE97B99C676BBBEF41D6 /* DGActivityIndicatorLineScalePulseOutAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = B8856A07B5AB789487CE904A5A5A0F26 /* DGActivityIndicatorLineScalePulseOutAnimation.m */; };
 		37E611964F928B4551E07420751C464D /* ZNGComposerTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BB2FF770162384E56921EAAD84B8D62 /* ZNGComposerTextView.m */; };
 		38451C426B6EFF7A2C108D93D362E4FE /* DGActivityIndicatorRotatingSquaresAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = ADB0B0C173C208C9BC0C5532B8C98E05 /* DGActivityIndicatorRotatingSquaresAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		39707E35C2186BDAF89A66771073029E /* clip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0C195237CD42392749A9BC53E5977C00 /* clip@3x.png */; };
 		3985E5F6B7873E0CBA808FEF3FCBB2EB /* OpenSans-ExtraBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B4FD482A199815E4A47C40EF8FDE83A5 /* OpenSans-ExtraBoldItalic.ttf */; };
 		398DC18BED8C9D0FC5FF0173E2FC19BC /* AFNetworkActivityLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = 20F073B3E01B945D8C4B1AB2E13E8555 /* AFNetworkActivityLogger.m */; };
 		3A01AC40F8E4A961254903F22EE85C7E /* ZNGInputToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = 82914756D8E5BEC415BF56A766460C1D /* ZNGInputToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A296D151BCD4D2C4077CAAA448A3F6F /* DGActivityIndicatorAnimationProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = 94CD92B66B340AF6F220E90DC506D5BB /* DGActivityIndicatorAnimationProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A55345E42CC4DE473FF45AD7CE2CFC0 /* UIWebView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = C7448BC06E28219A21D3A45D30F8C648 /* UIWebView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3BC4EC334F5237FC0FA5893B2FF4C87A /* bubble_min_tailless@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = B2A953EB20DA49224D1D2275567674F5 /* bubble_min_tailless@3x.png */; };
 		3C4A1DE373FCDC759EA030EB8310DB8E /* ZNGContactField.h in Headers */ = {isa = PBXBuildFile; fileRef = 20F9E990D921C4558880762D7309843B /* ZNGContactField.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3E5A67B988578C3D82A4F385DE9ADBBF /* ZNGInboxViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8794C4C34D37A0EF485F37FC1C15DF43 /* ZNGInboxViewController.xib */; };
+		3D144341FBF886632E642BF555E7A557 /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = E8AA67A69B952977E094334D49BE684A /* play.png */; };
 		3EFBC8F3D8BD05E16AD215BC471C96D5 /* ZNGConversation.h in Headers */ = {isa = PBXBuildFile; fileRef = 888A21C06519C30E879D3107BFC9CDAC /* ZNGConversation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F1B5AFA415F8CBFA0671C96E04DBAB1 /* ZNGComposerTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = D8E7E07B0D924626CBABA59BE1EB7732 /* ZNGComposerTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3F48DDFF3544F0040B0DA7AC904F22E6 /* ZNGContactChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = C534F6CF8CCD4A9D86003EAFA773EFAA /* ZNGContactChannelClient.m */; };
@@ -105,28 +106,27 @@
 		405F9453FF787B0923B2ABADDE65E366 /* NSString+ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = F70FB6B084A5D25387B13110197BFD60 /* NSString+ZingleSDK.m */; };
 		40E7DB8E56DCBD89F9AB91C05733EB0F /* ZNGServiceChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = F360CA62F53D6B3A8DF6DA01C6535BF2 /* ZNGServiceChannelClient.m */; };
 		417E0C86DD86C8EA0A73FD4304717032 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
-		41E6963707D95C9B7798E8C4F655E10C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 64B2F85BA04516213AC57ACC3BFA2616 /* Images.xcassets */; };
 		41EEA8AE357A62231C6551DB784B62DE /* ZNGLabelCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3BDC1A17279EA26D84BDD0D2889EF345 /* ZNGLabelCollectionViewCell.m */; };
 		429E89ED7A5B270514FE3E28DDC5D728 /* ZNGMessageViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 1C5CB87484E40078E5554A9329274DF7 /* ZNGMessageViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42B2810617208AD14FEFC4B938BA5632 /* NSDictionary+MTLMappingAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = C4F362BBF5F30B03D3B4FDCECEBDCE59 /* NSDictionary+MTLMappingAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		42E514F6BAEF1AF728F335F2FE83DFC2 /* AFURLSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D4E5A553BBE1604B39EAACB7CEE4AE2C /* AFURLSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4329493CA8FDD8A209A8A651878E8EE6 /* ZNGContactClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F099CA4688D6A909A5AA2696669BE8C /* ZNGContactClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		43CAE225BF09A06CBDBF7E4CDE0BECC8 /* DGActivityIndicatorLineScalePartyAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3061316FC0C2CD9614FDDBD85211315D /* DGActivityIndicatorLineScalePartyAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		43EE57691F9E3853568BA1E249DF1F01 /* starred.imageset in Resources */ = {isa = PBXBuildFile; fileRef = 8EED997A40C53DD02D94AF1982469467 /* starred.imageset */; };
+		44B3FEE708F2770779C77FE7BB1D744F /* confirmed.imageset in Resources */ = {isa = PBXBuildFile; fileRef = BC824AD3B5210528E7D35F0206E29574 /* confirmed.imageset */; };
 		450717BD98782E33EDFE491FBC3AC1D4 /* ZNGDataSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 87ECA3C265A417605A4B02A87B457AEE /* ZNGDataSet.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		45AE7F0A4DAB79CB299F3CEE65BCBC44 /* ZNGTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 1D1D39B4DE8ED4A38F57129744C7266B /* ZNGTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		45F0766E856916F372847A86F427A974 /* typing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 889A3FE7622F7382ECC9B6BE119EB218 /* typing@3x.png */; };
 		46467A17208FFC104D52ADAB9D0F2320 /* AFNetworkActivityIndicatorManager.m in Sources */ = {isa = PBXBuildFile; fileRef = E6652E64C642EB2A2D25B791805B6776 /* AFNetworkActivityIndicatorManager.m */; };
 		46AEAA8105CB04076148AC574CADBBC4 /* NSObject+MTLComparisonAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 58D71C2894592B9EE9400B65A5EEC976 /* NSObject+MTLComparisonAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47AC2A5CDEC2394CCB16723E0A7EB5FB /* ZNGLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D082132D8DAD64D310E4803359E1C0A /* ZNGLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		47FDA3B84B3C5B8CEB1311D2BC81BE6C /* ZNGCollectionViewFlowLayoutInvalidationContext.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F8103EAE4F5571C1B00A4110572961D /* ZNGCollectionViewFlowLayoutInvalidationContext.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		48A98628CDA77939E38C197F5FBB1908 /* lrg_starred.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 7ECB115054AAA48CBF2053ECD854C095 /* lrg_starred.pdf */; };
 		4980117A03B0E96A110B3CB37CC79395 /* DGActivityIndicatorBallSpinFadeLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DAA720918784CF98C27E6CB530100BA /* DGActivityIndicatorBallSpinFadeLoader.m */; };
+		4A7BB804C7156A06C50C0B3119407C1A /* bubble_tailless@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FD929396D6E2698AF9E4703F9D3F667D /* bubble_tailless@3x.png */; };
 		4A963BAA0DB63AD44596C7E2FD758223 /* ZNGLabelCollectionViewFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 1EF76519FE832AAD3924BADFC90EA0C8 /* ZNGLabelCollectionViewFlowLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2E40E85BFB3BA3CF69037E0C07636D /* ZNGContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 934622E556BA5870D4D431B9CAC9F277 /* ZNGContactClient.m */; };
 		4C3BA80544887488AF9D3CF5A7B447F2 /* ZNGBaseClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6E84EDEA80A6193FEA84F70F21146B65 /* ZNGBaseClient.m */; };
 		4DC56CEF51728F1FFFF87226D4B19E96 /* ZNGAvailablePhoneNumberClient.h in Headers */ = {isa = PBXBuildFile; fileRef = ACEF23E64354BCB14B68FF80E6699954 /* ZNGAvailablePhoneNumberClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4EBC5098491E4A72C65DE823F45233E1 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B85E6B4365B4FBD12CC2FEE3DDDBA97 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.m */; };
-		4EE076EC1419F8F464DCDAB141929C06 /* clip@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8ABFDCF60BA2A4BA645E9BE61B7D04D7 /* clip@2x.png */; };
 		4EEAC46B9E55382F2A57CC663AACAB5B /* ZNGCollectionViewFlowLayoutInvalidationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = 16C2142512BC566B970CF68B04973A2E /* ZNGCollectionViewFlowLayoutInvalidationContext.m */; };
 		4F3F87E6BBF8AE5DC7194DAC3874E50C /* DGActivityIndicatorBallScaleAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 40ED4E4B4CB6E477F1968A7B054BAAF9 /* DGActivityIndicatorBallScaleAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5030B583A1CDE7890CDAB71029ECC3BE /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = C8EE887998DA324612E594078474E1BE /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -138,6 +138,7 @@
 		5494F7A3741F608401A290632D202DD7 /* ZNGMessageClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D362CDE6FD269F9710081DF22AE75325 /* ZNGMessageClient.m */; };
 		5584132B54B8103728C2205FDAAFA3AC /* AFNetworking-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E17D9E3FD1EE417D2A8E50DC40DBED5C /* AFNetworking-dummy.m */; };
 		566AF443F088918A28E180ABA45168A1 /* ZNGAvatarImage.h in Headers */ = {isa = PBXBuildFile; fileRef = EDD29F6F7A38BD60BF207EE808C17C54 /* ZNGAvatarImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		581A13524D245FE5802C16295CBB16AA /* unstarred.imageset in Resources */ = {isa = PBXBuildFile; fileRef = 312C4A5DABF6B999093D776B5FF4308F /* unstarred.imageset */; };
 		593F06155CDE7ACBBA7476D7AB82F8FB /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1472EA8153C1C67CD217DBFFE693BC7F /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m */; };
 		59847BBE17F6A501B037CAECB2D46C35 /* AFNetworkActivityIndicatorManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 553986190C1B56B76E951D125C647280 /* AFNetworkActivityIndicatorManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		59E6715A58AE6B25DE977DE90E9C9B00 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AC4D34E75149EE9C1C539E1A50453FE /* metamacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -145,6 +146,7 @@
 		5C866369B263D4AB05CD2D32ED28B3F8 /* ZNGContactFieldClient.h in Headers */ = {isa = PBXBuildFile; fileRef = DAC50A9E7670C52E47D10D47005B616E /* ZNGContactFieldClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D56F6ADCA696F7BCBEFF2FB33A19660 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DD84083E49B17F75A186ABD16F209F29 /* MobileCoreServices.framework */; };
 		5DB79298EA3712C9A24AC01E978F5040 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B93935C3C836DD3B4BD157712791A712 /* SystemConfiguration.framework */; };
+		5DE9A15F0CCA81A02B8F1156CF0A0ACD /* confirmed.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 81C394BA4075BBA7280668E23F3C62FB /* confirmed.pdf */; };
 		5E3DA7CF59177A3AC0A0137857896B0D /* ZNGContactChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 48F106878D2306C7C867018E419C32FC /* ZNGContactChannel.m */; };
 		5E6279075462267415D445D872E4B7E3 /* MTLModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 783720BE1B3B3934E5014FEF93742F34 /* MTLModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5E715CC772DA5E271C8EAEA60FAF81B1 /* GoogleFontsiOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9053277FB69EE9FF287B14F426C5F84 /* GoogleFontsiOS.framework */; };
@@ -154,22 +156,23 @@
 		6006ED3DC35600100CEAC157A0F001D9 /* NSArray+MTLManipulationAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 260B84EE8F9834817D89ACCE3378F7D2 /* NSArray+MTLManipulationAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		60350C41778FEC8C0A8771B500DFE812 /* MTLTransformerErrorHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 69CCA68ED44A13B11B5FBAEEE24A68C7 /* MTLTransformerErrorHandling.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		603B3B442E9265D167D3A2A6B141CA03 /* ZNGMessageData.h in Headers */ = {isa = PBXBuildFile; fileRef = B1DB8CF305B1D0840653B23FA1A6E30A /* ZNGMessageData.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		613C0C7F3F88300F04B1C423EEFC2F4C /* ZNGLabelCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD7E8FD8230CE9B69109B8A30E3C2A42 /* ZNGLabelCollectionViewCell.xib */; };
 		615910FF77FF24FD6AA425289D7CA928 /* ZNGCollectionViewCellIncoming.h in Headers */ = {isa = PBXBuildFile; fileRef = B4F80558C41857FD29D06FF362B9C9F4 /* ZNGCollectionViewCellIncoming.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		61DA68EF8D9844AFC5D95AAB3C5BCF5A /* ZNGCollectionViewCellOutgoing.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B652986FBC2A48BCA55CAC4424F4CF5 /* ZNGCollectionViewCellOutgoing.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		62CED6FC310C828B17E4F3AC9C59A06B /* ZNGMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F9D851CAE037396BA9AD81CBEC2F70C0 /* ZNGMessage.m */; };
 		631FBFF8AFB80D76B7CF9AEE6E3D6352 /* ZNGNetworkPhotoMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 44137B5464B33557DE9475C74E0A7C4E /* ZNGNetworkPhotoMediaItem.m */; };
 		63824AB90301BF4FB0AF39159218BA59 /* DGActivityIndicatorThreeDotsAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2CE18179C6F306E395305A657D700C05 /* DGActivityIndicatorThreeDotsAnimation.m */; };
+		64174C53E387A03A0C4C10BFE04D51A8 /* lrg_unstarred.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6CB62F562CED0AE0AD365467819081FC /* lrg_unstarred.pdf */; };
 		64E5D002DAE93C6276AAFBED35254259 /* ZNGCollectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 247D6BA08D32A6C709FE77889431D65C /* ZNGCollectionView.m */; };
 		64F6F3C1B134955DA697F55D42330A31 /* GoogleFontsiOS-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B4225E21E3EE568D4D8D7AA55EDB8839 /* GoogleFontsiOS-dummy.m */; };
 		65EBA93AE1B6D9D26A1FD82C5B5867AC /* ZNGAvatarImageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F1D5804F6B7E7F0AA76EAF9CC1A23A49 /* ZNGAvatarImageFactory.m */; };
 		65F778869480001A53320308A9606BB7 /* EXTRuntimeExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = A015552CBED33D1D68BC243E43057180 /* EXTRuntimeExtensions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		66A4DF1E7C4A6639121C8E21B5DB158E /* ZNGCollectionViewFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = E32AD20A68895B700A1A073C13F772AF /* ZNGCollectionViewFlowLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		66D18A2F135E0B662BEF5AB1D5447201 /* ZNGParticipant.h in Headers */ = {isa = PBXBuildFile; fileRef = 7906884D90A1A3B0FB4ED83698CE08AC /* ZNGParticipant.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		66D85D3628C4C80C1F5BA0A763F19D4D /* bubble_min@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FB13E2EE864F1800321A481170F81082 /* bubble_min@2x.png */; };
 		66ECD830B63CBE162C967824B4FC0EDB /* ZNGToolbarContentView.h in Headers */ = {isa = PBXBuildFile; fileRef = AC6E80EE7E5ED42C35DD65BAF323A8EC /* ZNGToolbarContentView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		67B8C3BC21B691BB133F4133AB4CC249 /* bubble_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = CCC39223E6F09B7F4777AA0038A8E29D /* bubble_tailless.png */; };
 		67EB26FFF88E5C42B5E3FFE535B962D6 /* ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 034D311B9207257C510F48CF598E889E /* ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6850450E57AC4796A55FE4DC36619439 /* DGActivityIndicatorBallPulseSyncAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 028F64C5C69268436E5B3F91125937EB /* DGActivityIndicatorBallPulseSyncAnimation.m */; };
+		68728D7F827366E19B54E64FBD0FBDC3 /* bubble_stroked@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = CD4608B56488A44BD0B9E27A0BE3B994 /* bubble_stroked@3x.png */; };
 		6935FE32662ADC4A55762D41948985DD /* ZNGContactChannelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 97A21C5CB927E1BE3A3DE91CBA9D1636 /* ZNGContactChannelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6A302FDB728DF885A60EE6700126DF77 /* ZNGInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = F846F88E65DACAF78D34680DB04CA834 /* ZNGInputToolbar.m */; };
 		6A52028A42CC4DF7615602D7220F10EC /* DGActivityIndicatorBallBeatAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 513FC86251B8755E57E3EF7EC308BADF /* DGActivityIndicatorBallBeatAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -185,10 +188,11 @@
 		6EB08960ED847D4742E20C2B22305D27 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BD991D372833EC9572DBE09674619BC9 /* OpenSans-LightItalic.ttf */; };
 		6EFEEDE7EA98270F17BD86A954E2BCB0 /* ZNGNetworkPhotoMediaItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4E75E05821F2B81450BB99AFB983BADC /* ZNGNetworkPhotoMediaItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6F1505E0A2E72178585A5A1915B264A2 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1F52C8616690E0F79F7947F0D4A385EF /* OpenSans-Bold.ttf */; };
+		6F99A45F10545E60C1186077EB93F9C0 /* ZNGBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E181152D2613C21611C8044701568A94 /* ZNGBaseViewController.xib */; };
 		6FF330D71796CD56C34D2E4859F2F5AF /* AFSecurityPolicy.m in Sources */ = {isa = PBXBuildFile; fileRef = 0C2387893DEAFB5EEE26F9CE64202B76 /* AFSecurityPolicy.m */; };
 		70099B1F067DD059B7A388D5A7D82F17 /* ZNGDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = E2F014E999C2C2E3789635C735E4FDF6 /* ZNGDataSet.m */; };
-		70256B0096410F8C9C49F0ADFC5B04BB /* ZingleSDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3AD2A02B67E29EFDB25BEE7C247659A8 /* ZingleSDK.strings */; };
 		702573B4B747660E66FE7CCED6C669D1 /* DGActivityIndicatorRotatingSandglassAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = CA7053914A795A5BE5777107B9826B72 /* DGActivityIndicatorRotatingSandglassAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		704BC6E552959D9B45C08EEBA244BA51 /* bubble_stroked_tailless@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 768AF1CE0A76FDE50416A242B4026199 /* bubble_stroked_tailless@3x.png */; };
 		70AC140498D3DEBD1A67589D8D512D2E /* UIFont+OpenSans.h in Headers */ = {isa = PBXBuildFile; fileRef = 308D0BBC132CCEB904D1FCC2145151CC /* UIFont+OpenSans.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		70CCE71D9C707719CFE89C7FB88CB4E1 /* DGActivityIndicatorBallScaleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 817B5FF7A1D10C14F49FC33A708CF028 /* DGActivityIndicatorBallScaleAnimation.m */; };
 		71308E9AE0A52CFB65B949D1D5179F8A /* ZNGAccount.h in Headers */ = {isa = PBXBuildFile; fileRef = B4DE4FE8A8F651EAB02365A002794764 /* ZNGAccount.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -198,7 +202,8 @@
 		72B61C6571F78A4F56E0322CC9703F3E /* AFHTTPSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D4B2949F05324A737FF99C0BEF3413D /* AFHTTPSessionManager.m */; };
 		732416C03249A780B7E20331CA1632DB /* ZNGServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 1165C1771A819794A8E92239051A751C /* ZNGServiceClient.m */; };
 		7373261AAA727D28C48C58C8AFB16B6B /* MTLValueTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = 895990B475B4686379A19E6B534513A4 /* MTLValueTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		73D32FD295ED616E30DDA7D9C2E4C248 /* bubble_min_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D80DD59AB35352DBA64C315B35AC15F3 /* bubble_min_tailless@2x.png */; };
+		73764DB86E4636EA95420D5BA6C6560D /* ZNGImageViewerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1C670DED63818165BD3F0C765A71EB /* ZNGImageViewerController.xib */; };
+		74A3641BEFD87AC19F4FB224512A655F /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15822195D3A5EAAC9F3E38723B06C1ED /* play@2x.png */; };
 		752B95249D2D57EE00E0747E72ED56CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E57E122BB6201E7D0C465B75F0D428 /* UIKit.framework */; };
 		787A4692C347DEF9D0FFA07D215A0C70 /* ZNGServiceChannelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D39A71D4F28979F4F39F2B983726E1D6 /* ZNGServiceChannelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		78AB27588A0498FBBD085B0F342A8849 /* DGActivityIndicatorRotatingTrigonAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = AAC54F88246F97673D56BB269E524A12 /* DGActivityIndicatorRotatingTrigonAnimation.m */; };
@@ -208,18 +213,20 @@
 		7AC2D9BCDD07D1BC7CDA38E319AC7F2F /* ZNGBubbleImageFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = CAECC1E2957A707C0704A13A259447CA /* ZNGBubbleImageFactory.m */; };
 		7AE95CC56C650A3EBE9BFF795A6A7C64 /* ZNGStatus.h in Headers */ = {isa = PBXBuildFile; fileRef = 20256295F588EC79B84DEB846C9D3880 /* ZNGStatus.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AECD8B9AC6CDB284030ECB5BF637566 /* ZNGTypingIndicatorFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = 213B555F81061D30067C59BE8AEA6350 /* ZNGTypingIndicatorFooterView.m */; };
+		7B4CC6ED2E99A0948A975F0678DAFE61 /* starred.imageset in Resources */ = {isa = PBXBuildFile; fileRef = 1017179C1443F35071420E35E04E3320 /* starred.imageset */; };
 		7B640D996BF669823BE68F54B257A5E2 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5C4C5A761F607127D840B6F1CA331C7E /* OpenSans-Regular.ttf */; };
 		7B95A5748C7BA6F77B9AE06C673BEABD /* DGActivityIndicatorRotatingTrigonAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6903D90FF663D0BF02DD0D31CFBDAE4C /* DGActivityIndicatorRotatingTrigonAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7C85DF65D2AD0695803E463C81C10FDD /* ZNGBubbleImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 558C2AB32BA01981940AC44D78B1397B /* ZNGBubbleImage.m */; };
 		7C9342EF9E7B5E6EFE58536CE51D83E4 /* ZNGChannelType.h in Headers */ = {isa = PBXBuildFile; fileRef = 13E75BFC29552FB91FA9238ECDED476E /* ZNGChannelType.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7D2382305D50311F7431FB1F5E2233FE /* ZNGInboxViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8794C4C34D37A0EF485F37FC1C15DF43 /* ZNGInboxViewController.xib */; };
 		7D9AF3EF5F280F29EAB684701AD5880C /* DGActivityIndicatorBallClipRotateMultipleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 9387F6857AF64FFC2463D6D10EA2D1BD /* DGActivityIndicatorBallClipRotateMultipleAnimation.m */; };
 		7DA49190498C084817EDBC72C07A7275 /* DGActivityIndicatorBallBeatAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = F2AE2130745FB05F9D34A4980FBAF9BE /* DGActivityIndicatorBallBeatAnimation.m */; };
-		7E0645C504DFACF550C1ACAD3516B0DE /* bubble_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C1BCCD87666B8BDBF75E0F291E410000 /* bubble_tailless@2x.png */; };
 		7F1DA9B27F33BA06F8E7205A6DB5A912 /* AFHTTPRequestOperationManager.h in Headers */ = {isa = PBXBuildFile; fileRef = F04054EC012BDE4CE6A7538DB2599293 /* AFHTTPRequestOperationManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7F3EC1E489AD2093D63653AC3C6AE601 /* AFNetworkActivityLogger-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 076A1A008E5B609BC64C6840B7AC2CCB /* AFNetworkActivityLogger-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8021F2D961C7999A9D28E319F50A7043 /* ZNGLocationMediaItem.h in Headers */ = {isa = PBXBuildFile; fileRef = E913114E334AEFA7E9F800B0DAE1E6B9 /* ZNGLocationMediaItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		81C03B62588C3CD53C101D7395FB8BF7 /* DGActivityIndicatorBallZigZagAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 47F5A0D65633511A8F8326B45B5128E2 /* DGActivityIndicatorBallZigZagAnimation.m */; };
 		8241B4EA81FCC812E6EE5C4422C25E44 /* ZNGBaseViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D84284A5FF5B81011EEB8BEC11E93E9E /* ZNGBaseViewController.m */; };
+		82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 434619341FB92836BC6EE4258A0A5383 /* Contents.json */; };
 		83690E4F84274152EC66C8A2B20B5CEB /* AFNetworkActivityLogger-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = CDB01C8EC4B681DD4F1DA7D573AA8233 /* AFNetworkActivityLogger-dummy.m */; };
 		83F3731CBDF573CA268E325A4CEFB9E1 /* UIImage+ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 801A23EEC278D71C99B5DD5DDBC9EC23 /* UIImage+ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		841BF882E13A4C7058425948A9F66661 /* ZNGCorrespondent.h in Headers */ = {isa = PBXBuildFile; fileRef = 3BEC5884AFD6377B1118D7287D45EACD /* ZNGCorrespondent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -228,9 +235,9 @@
 		86A1FAE0D330134C24BEB6FFDE928DDD /* ZNGCellLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3564B23C4ADDEF7AA9A17AF8FA861293 /* ZNGCellLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		879466FC7545D91848B63AF4C6D93DA1 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 678B383AB8187733A103BFEA56117AF0 /* AFURLRequestSerialization.m */; };
 		88009544EDCD424A0008F2D8530A6467 /* DGActivityIndicatorBallScaleMultipleAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 14BB9F0061E69E3782D5BA7FA4FD6EA8 /* DGActivityIndicatorBallScaleMultipleAnimation.m */; };
+		8806F2F8BEB331EE5C6C8C450F47B086 /* ZNGLoadEarlierHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8431DF4EC6EFA4EEBC5171A0B068B16C /* ZNGLoadEarlierHeaderView.xib */; };
 		883438908E72EDB6864A50F2D8A1E640 /* DGActivityIndicatorBallClipRotatePulseAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 136C4E78ECBBD15F5C530439D5406043 /* DGActivityIndicatorBallClipRotatePulseAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		88CE8596ED93177A40B4E14EB954B6FE /* ZNGNewContactChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = FD74677ED070A04D54CFE77733AC0111 /* ZNGNewContactChannel.m */; };
-		890933F03CBC8C2B83DE80D0988547BE /* ZNGImageViewerController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4B1C670DED63818165BD3F0C765A71EB /* ZNGImageViewerController.xib */; };
 		89E8E78D90723B67684CC169C1B8BA10 /* DGActivityIndicatorView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 496C0C1F26319A918BD739A08F421810 /* DGActivityIndicatorView.framework */; };
 		8A36321C3C36740E6A5C8CBB08EA52D7 /* ZNGAutomation.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A7BF96A1497448B128955E16858CE37 /* ZNGAutomation.m */; };
 		8A45630674D1B21D9F08C4253A97FDE3 /* DGActivityIndicatorThreeDotsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F870B3D8DA9075C5C986B483EF95FA /* DGActivityIndicatorThreeDotsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -245,23 +252,25 @@
 		91B4BE919A718A3A2838D90CA867C2DA /* ZNGCollectionViewLayoutAttributes.h in Headers */ = {isa = PBXBuildFile; fileRef = C5DA2D8A011EE897378BD27080532D0A /* ZNGCollectionViewLayoutAttributes.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		920C1404085AA03E2E2C77F05B73A267 /* UIAlertView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = FCD20451821EB23F74B01A4E48A5614F /* UIAlertView+AFNetworking.m */; };
 		92178A5C2F1F265011392BD7B6EA7B6E /* UIColor+ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = FBA7827E84D48B5CB910291B282FF8E8 /* UIColor+ZingleSDK.m */; };
-		921A45FE54C3463E8421BC8F18D61287 /* bubble_stroked.png in Resources */ = {isa = PBXBuildFile; fileRef = 378B2CB13F96783D9E61AABFD63D2D34 /* bubble_stroked.png */; };
 		927EFCBCD5E7761861934945DEEA26BA /* ZNGLoadEarlierHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5627120A7A81E95F1C451A9ADE26EA79 /* ZNGLoadEarlierHeaderView.m */; };
 		9437679252130CDEADB6CD01B24610DB /* ZNGParticipant.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B4352B25094FFE13FB72C75F95B0802 /* ZNGParticipant.m */; };
+		94ABDEBEA3B583605B603DCBA37BC802 /* bubble_min_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = F83D27DFE2E7194476DE6F1872E62E25 /* bubble_min_tailless.png */; };
 		953479179AEA5EFCB29DAC68C23C12AC /* MTLTransformerErrorHandling.h in Headers */ = {isa = PBXBuildFile; fileRef = F24BF29A8D5AF179F4C5727A9C552976 /* MTLTransformerErrorHandling.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		956FF6DDB92AC8D3BDC7CD2514F93FDE /* ZNGContact.m in Sources */ = {isa = PBXBuildFile; fileRef = FE8CBA0F9B5F413A26A5473442DA8A7C /* ZNGContact.m */; };
 		95C391E3845A9AA6C04FD59B988E21E2 /* UIFont+OpenSans.m in Sources */ = {isa = PBXBuildFile; fileRef = 0A206C5C26BA41A1773B8FA3D80F01C2 /* UIFont+OpenSans.m */; };
 		95CEB3623337B9B26A73F0E0FBE0BC65 /* AFURLConnectionOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 16A5FBF66EA1F80AEC0748E7B90BDA46 /* AFURLConnectionOperation.m */; };
 		9641130343E9CA0611C6A93848D8A850 /* ZNGCollectionViewDelegateFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 89C0AE2647C4D29062568B7A5CADBD2F /* ZNGCollectionViewDelegateFlowLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		966FAA217BA98F940ECA00B59DADD8B5 /* bubble_stroked_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = BD865DA7915AC0FE1B12BCDAAFB00FBB /* bubble_stroked_tailless.png */; };
 		96FDA426B485E626FCDE1506455540D0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
-		974462EED782793D73F90E27C306DC67 /* bubble_regular@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D8D247A8258C265A4F8CB858299BCFF7 /* bubble_regular@2x.png */; };
 		9830E40BE41AE6469FAADDACFF9C55CA /* ZNGAvailablePhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B27B1BEA8952A95E24F536B61F0CD72 /* ZNGAvailablePhoneNumber.m */; };
+		9873722ED1A523694FBD1398D0F4340B /* starred.pdf in Resources */ = {isa = PBXBuildFile; fileRef = E7A7E2BB98965226120B6C37A9F6FFE2 /* starred.pdf */; };
 		98DA0A94478530E73B6B074DFDB5279D /* ZNGLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = FBD9E7854B1EB30710518F050A6B2FA5 /* ZNGLabel.m */; };
 		994280E49B1AA45DBEC5AEF3C2E8D9C4 /* ZNGMediaViewBubbleImageMasker.m in Sources */ = {isa = PBXBuildFile; fileRef = C4039158F4DEEC26731B33A970489EBB /* ZNGMediaViewBubbleImageMasker.m */; };
 		99B03DFAA06EABF462F947D66449997E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
 		99FA387F351E05B19E84C8FE1933D03F /* DGActivityIndicatorTripleRingsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 18D3A7B04679595DA74BAF6C5B534656 /* DGActivityIndicatorTripleRingsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A35E31E4354230CA0113F876051F277 /* UIActivityIndicatorView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = BB2691436CC283AF0310260D3710CCEA /* UIActivityIndicatorView+AFNetworking.m */; };
 		9A388C9AD29318111DA4BD9B0E904507 /* DGActivityIndicatorBallRotateAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 6355BBF6B30C1871AD3101EEA0C291F4 /* DGActivityIndicatorBallRotateAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		9A4FE661725BE8CECB49F68D8AD2AD14 /* bubble_min.png in Resources */ = {isa = PBXBuildFile; fileRef = 74AE911EA792BAA8C4E4B66A2B2A605A /* bubble_min.png */; };
 		9A5C2330EC73E4D5A1359FF693F8373F /* MTLModel+NSCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 88C09009B41CA16DF14D6C7CAB4022A4 /* MTLModel+NSCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9A7EC672396A59E69FECD2247C0CEB4A /* DGActivityIndicatorBallPulseAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = AA5A57D3F97AE40FFE1DD6FEB81E90C0 /* DGActivityIndicatorBallPulseAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9AD91E0E176F282BEF1BAD8CF8F92798 /* ZNGToolbarContentView.m in Sources */ = {isa = PBXBuildFile; fileRef = C734C5480FB9E5BA53F8DE1822CF91EB /* ZNGToolbarContentView.m */; };
@@ -274,35 +283,30 @@
 		9D8A6C0BF07B9E099302883A354DF179 /* ZNGNewContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C410AF082C0F81BC57EE17394CC8970 /* ZNGNewContact.m */; };
 		9DA03B5D943AA164B9A53740B736D9A1 /* ZNGCellTextView.h in Headers */ = {isa = PBXBuildFile; fileRef = D6A678239D75A872C3FDE9B43D2FBE69 /* ZNGCellTextView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9E1F342441D188704603AC465F24D4CE /* ZingleSDK-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3CD200E90904431A8D6628C436934757 /* ZingleSDK-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		9E4E6EC7D3A812370F938D8A6C892A8C /* unstarred.imageset in Resources */ = {isa = PBXBuildFile; fileRef = C0837670B2334292C18A5647114DF1BB /* unstarred.imageset */; };
 		9F54C4B16C034CF0C548770FF7B327AA /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7EB6F93654E4D5F7917A0AEC24A9956 /* Security.framework */; };
 		9F8B0B292DF7731375D7D21F6095A637 /* DGActivityIndicatorBallPulseAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 53D7AA296E8DB3C0103568952928C348 /* DGActivityIndicatorBallPulseAnimation.m */; };
 		9FADF1F146FD2456A5ECB86DAA713C51 /* ZNGNewServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = BB23DAFA56F7DC1FD46BF59B41BAC81F /* ZNGNewServiceChannel.m */; };
 		A0C2BE362A5B1320C66BD6DAC76C2FD6 /* UIDevice+ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ADC29D72E06E75C869B452F83AB9AF4 /* UIDevice+ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A1913033CF024597E40D153F256B34E7 /* NSBundle+ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CB7D7D72161061D51912D2E418793D9 /* NSBundle+ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A2172E6DFB3A6E0BA7AEC69A15843954 /* ZNGMessageAvatarImageDataSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 78E585D3ACB32478148EE51B3EEB18BD /* ZNGMessageAvatarImageDataSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A2B8803F362CDCD38C0F797428EBF538 /* typing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F789576CCD2CF127BD15F07D0DBC2C65 /* typing@2x.png */; };
-		A30D98B2EFD187E039B80D90CF941FCA /* typing.png in Resources */ = {isa = PBXBuildFile; fileRef = 151B5F2697885FFD425E93499A16463B /* typing.png */; };
+		A33EF5F5F55F9379268FDB2EC4819AFB /* play@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 543BC8FDFDD66ED3CBCC3E911D80E7E6 /* play@3x.png */; };
 		A3632E67846BD90780CD756CDE154B7F /* ZNGLabelCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 75AB38FF6C63E198ACE514D8C2EEF251 /* ZNGLabelCollectionViewFlowLayout.m */; };
 		A3A639720C97770DF84C414A007CAAE7 /* ZNGMessageViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8DDE24D8228FFE7C85673C40B73C5839 /* ZNGMessageViewModel.m */; };
 		A3D9A805A7AA1362CB12E8F7A2652F17 /* ZNGConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = CE6E05E959F3C6873266DF7BDD5DBC61 /* ZNGConversation.m */; };
 		A438B2871686CAAED02363480615D175 /* ZNGLabelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 392D858398E1399BB9BE33B2E1552F6B /* ZNGLabelClient.m */; };
 		A4B281E847BB7FABF1FF53D388224E12 /* AFURLConnectionOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 480F064A686FD9382813EDFDC3F819DF /* AFURLConnectionOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A55F3F8533C7F4C4B8E755EB75747685 /* Mantle-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = FB3B884BCF45B2DC4AFCDAA5F89D7BE2 /* Mantle-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		A741AA499968A52226E40361FCF8F2B9 /* Contents.json in Resources */ = {isa = PBXBuildFile; fileRef = 308CFFE859C939EB19BB2B167EC8E33A /* Contents.json */; };
-		A77B2DFFB074954D3FAB95823CBBA124 /* bubble_min_tailless@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = E20C3B68E57DAE23413C63EFEED6E537 /* bubble_min_tailless@3x.png */; };
+		A6C842ABFAAE2A66D9B11A7C0B1BF10C /* bubble_stroked_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D468F8070DC4860867389E9D28532B3A /* bubble_stroked_tailless@2x.png */; };
+		A6F6AAF86A4877E88FBD69EA80F42E77 /* clip@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 495786D265F959899DDB500C7C8D1B51 /* clip@3x.png */; };
 		A790555C96D46915FA1DEF15B23E03D0 /* ZNGMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C947ED631867F8C22ADD898E91AF191D /* ZNGMediaItem.m */; };
 		A7C6F2D27CF79F9CBA50498667D86D35 /* ZNGTimeZoneClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C023E1B4064D9E71061781F1D3581E5 /* ZNGTimeZoneClient.m */; };
-		A8F9F7E2F793215F49832DBA7E642430 /* bubble_stroked_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = 6180EEB58A7B2BE0B232CAF0CCD23EF3 /* bubble_stroked_tailless.png */; };
 		A92E2CB3A5148D50311F886C351BBF77 /* ZNGBubblesSizeCalculator.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F063C9FE6C6538DF9CF9A42CD9DEA8D /* ZNGBubblesSizeCalculator.m */; };
-		A9A3517D22F7BACEC61E38625F8CE295 /* clip.png in Resources */ = {isa = PBXBuildFile; fileRef = 4C2B4C09C4F560BF20FD451B1FA82E1C /* clip.png */; };
 		A9F967B37C2391F35BF29EED871C3CFE /* NSDictionary+MTLJSONKeyPath.h in Headers */ = {isa = PBXBuildFile; fileRef = CFB03155DD5C05A3C733EB8DB4BD40A1 /* NSDictionary+MTLJSONKeyPath.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AB8B19DFC68C46BA609EC9467715054E /* DGActivityIndicatorBallScaleMultipleAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = A3DFC2F722827B6D892A8B004D71364F /* DGActivityIndicatorBallScaleMultipleAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		ABD4DAE54B18EEA7AAC2A116A466F3A2 /* Pods-ZingleSDK_Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B1516896065698B77622E2A49B5ED12F /* Pods-ZingleSDK_Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AC6974DD425530377E0CA386F570C5FE /* bubble_min_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = A749CC905CF4C71133384EDB35CD1C6D /* bubble_min_tailless.png */; };
+		AC31F96BA0EBF3F6EE2069C8C5458395 /* ZNGImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 553B3187CF6631147DA7CFC3662EA4DE /* ZNGImages.xcassets */; };
 		ADA59B10F5D3BD7B4477C87E6C652DB7 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 5756768DE354001CEB4208736C1FC493 /* UIImageView+AFNetworking.m */; };
 		AE778F55594942E975886DD255CF1462 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CB9C32BE31DB06CCE940835043B3802 /* CoreText.framework */; };
-		B0C02711A8836C3FE04E80D661F44D8F /* unstarred.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 81B0CF8AB84A67B22181C1231AC4679D /* unstarred.pdf */; };
 		B14F635E504FBCC9C7FB53491C5F43CF /* DGActivityIndicatorBallGridBeatAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B0E5A76BA8151B5E6A43B954FC1CD7E /* DGActivityIndicatorBallGridBeatAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B183F072731F8C7381CC421FAB4767E8 /* ZingleSDK-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D3601061A3E38607F2DE34835BF44E52 /* ZingleSDK-dummy.m */; };
 		B1ACCEDA54A3FB9A5FE0A0D6A75E8134 /* ZNGLoadEarlierHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = D09FFA81F0F031FFD7902A21CA9A8635 /* ZNGLoadEarlierHeaderView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -312,11 +316,12 @@
 		B430582BF4ECDE5DA729E32D7801AC46 /* DGActivityIndicatorBallClipRotateAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 187276C55BA6B49D9B1362A5FBA1F2A8 /* DGActivityIndicatorBallClipRotateAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B58968BFFC721DAA65923DF518EB0FC4 /* ZNGServiceAddressClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CCF7C32577E8556FD814C6CB9283956 /* ZNGServiceAddressClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B630F28EAA126CCC9BAE21CD3232F559 /* DGActivityIndicatorTripleRingsAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = CB6C600AD04CDC9C8D1B308389DBD393 /* DGActivityIndicatorTripleRingsAnimation.m */; };
+		B648FA73EAD7A573E84678090A6D4FF8 /* typing@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 716AB5F79CADDCBB86081B01A6B61C48 /* typing@2x.png */; };
 		B68150ED50CA4976B45A5543D402006C /* UIImage+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = C75B600CCCA71B04DD9210043AE1B954 /* UIImage+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69121889F59BB1CADCDE3CFFF07F3CF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
+		B7A230041B5FEE8EB480A258ADDFDA96 /* ZNGCollectionViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = B924C230466E058DB4F2246D3BA66A3A /* ZNGCollectionViewCellIncoming.xib */; };
 		B8A60706E92F65A0A13DDD946D639620 /* ZNGChannelType.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D22D21043D27D1E433111BC88BB65C /* ZNGChannelType.m */; };
 		B909D0701BB7BBA2D562C54C213DF746 /* ZNGKeyboardController.m in Sources */ = {isa = PBXBuildFile; fileRef = D72E1255713774432D21C603F4547F09 /* ZNGKeyboardController.m */; };
-		B94CDF99809A2A3E70403119FD80DC6C /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 70DCF1F8206512F89BE6E6F567A2AFDB /* camera.png */; };
 		B9D2EBD232506CC912B630F6D26D8097 /* ZNGTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 44898D7490EADF0576EC71C3B457AC0F /* ZNGTemplate.m */; };
 		B9E66BFCBCE3F60A331D3E985C2206E1 /* DGActivityIndicatorBallZigZagDeflectAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = E416890C086DFAFB4905660D7C972BD6 /* DGActivityIndicatorBallZigZagDeflectAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B9ED1073289F74BE6238F2D4CEEAC8CA /* OpenSans-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 55A691972C1C7622EB0388467FB99CC8 /* OpenSans-BoldItalic.ttf */; };
@@ -329,20 +334,23 @@
 		BB9F3C679F0D948D111B2713F1CA5F6A /* DGActivityIndicatorBallTrianglePathAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BFC90AF7D8CDC974A41BDD86AC868B3 /* DGActivityIndicatorBallTrianglePathAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BBBEE5CB90CA89347E4F4B4ACE2006DD /* OpenSans-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F629026C3727ACEF748D4F9FB169FD7A /* OpenSans-Italic.ttf */; };
 		BBCA0A1AACF7BAB7864FCD0719B78C85 /* DGActivityIndicatorFiveDotsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ADA9D22E7FBA39DDA29607E0337A1D3 /* DGActivityIndicatorFiveDotsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		BBDEF05C39FB96ECDF8FBB39476902FD /* ZNGCollectionViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8D9B30ED74C08B7E5617B6DABDB51F /* ZNGCollectionViewCellOutgoing.xib */; };
+		BC44597D10E30F5AF164C38417772237 /* typing@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = F9B95DDE0B5211180C2FFD79D4574585 /* typing@3x.png */; };
 		BC61C0266F58E2FF51DCDA369F89A7BB /* NSError+MTLModelException.h in Headers */ = {isa = PBXBuildFile; fileRef = 6795D652A07AF9ABD315645F6D942D05 /* NSError+MTLModelException.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BC6923971C0D8E24E10911B74B3D0C80 /* AFURLResponseSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = EADB853C61467CCC4230AAA8187BCDFA /* AFURLResponseSerialization.m */; };
 		BDF16C637D4496B00AF2B1C3698B16D1 /* ZNGMessageClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 60F8817C2D95157ACF181140E3D4127A /* ZNGMessageClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		BE18EE323728C68CB2E235595F8109D2 /* typing.png in Resources */ = {isa = PBXBuildFile; fileRef = CED954CE6165112CE096791705A23F7C /* typing.png */; };
 		BE4DF5D4CBD65197D04F2BB369CE1AC0 /* ZNGAvailablePhoneNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 3246A3D2F438192F950D0356F12FC21F /* ZNGAvailablePhoneNumber.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BE59AB45DE4508C51D426454D9FBC358 /* ZNGCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = C7621E95E75B31CD25DE845A35CBC947 /* ZNGCollectionViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C03F01FFEE84862419D0CD6F7903D14D /* UIView+ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 8BF315F7F0BFE1A6BBB0F79A623E7FF0 /* UIView+ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C054D6E72B61DACDE9935F0EF7131033 /* DGActivityIndicatorTwoDotsAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 504E8D8E1986B6BA7F8C1859D3EE3126 /* DGActivityIndicatorTwoDotsAnimation.m */; };
+		C07B60E49FCD2822B3CCAFDBD2A5214D /* bubble_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = 734548AEE49CDEE51C22D0B1CAE6C7DC /* bubble_tailless.png */; };
 		C09F9278C8A2DAA963E68D594A50AB2E /* ZNGNewService.m in Sources */ = {isa = PBXBuildFile; fileRef = 251FB88571B6EA720D6EE83EDDBF9F2B /* ZNGNewService.m */; };
 		C0A7EC2858ECDDFBF2AD61A8D7280627 /* ZNGAccountClient.m in Sources */ = {isa = PBXBuildFile; fileRef = FD6F32D7871427B2BC7447CA492A28D5 /* ZNGAccountClient.m */; };
 		C19FF51B6E11AA180486CEFB5F3FC219 /* MTLJSONAdapter.m in Sources */ = {isa = PBXBuildFile; fileRef = 74BC6662EE3A0950EFFE11EDADF5A638 /* MTLJSONAdapter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		C1C48A7A70344B51E2495ECCDDBDFE45 /* ZNGAvatarImage.m in Sources */ = {isa = PBXBuildFile; fileRef = E1272BCA966B618109A132D7161F918A /* ZNGAvatarImage.m */; };
 		C22E62436E298FDD2FDDC547CEE0D003 /* Pods-ZingleSDK_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = FE77BAE7224B3EDA91D3B0D3DDC06229 /* Pods-ZingleSDK_Example-dummy.m */; };
 		C2334FA65FE838C1AEA97188A84EA792 /* MTLJSONAdapter.h in Headers */ = {isa = PBXBuildFile; fileRef = 2BD1BCDB122B8E58961041EB17A263D0 /* MTLJSONAdapter.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C52C552B5B899CEAB7F3FD180DBD22A2 /* unconfirmed.imageset in Resources */ = {isa = PBXBuildFile; fileRef = 84A47A7756E82F069CE08CAAA69ACDA7 /* unconfirmed.imageset */; };
 		C553267220A931F0D7AE30E71B9FAA2E /* ZNGToolbarButtonFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B33344ED6FD2D6F3F3DE989E3C85C17 /* ZNGToolbarButtonFactory.m */; };
 		C59E90365BA25EA483F0446C268FDB4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
 		C69677D2EAE937AE95C5785ADEA51745 /* EXTScope.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D643E128E5CDD086CC1A7F4784DAFD6 /* EXTScope.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -350,22 +358,24 @@
 		C722786F50C6B9C10D5CF16228D7BE3A /* ZNGConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = A47EC950DBCBECA2358BE43466B285AF /* ZNGConversationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7C933D994287C2D15057B068D6F49F0 /* ZNGAccountPlan.h in Headers */ = {isa = PBXBuildFile; fileRef = 2889F5929A295941CAAF517FAA6F9478 /* ZNGAccountPlan.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C88AC66D44949F77E6D5A59F4933571F /* DGActivityIndicatorView-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E17460E9166A1C58B0B6462AF9131F13 /* DGActivityIndicatorView-dummy.m */; };
+		C96FCB38CFE39CCE243271FD2A0877AE /* lrg_starred.imageset in Resources */ = {isa = PBXBuildFile; fileRef = 60D8547BEEC000B47C4C0F2E8E2D4B7D /* lrg_starred.imageset */; };
+		C9A4028BE5317D38478C51B940E12F51 /* unstarred.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 0A8863E08D19F7F078E870B71108F6DD /* unstarred.pdf */; };
 		CA32A5038372E6E251B90B3E6BCF52AC /* ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = CFF1560DE6AC33113CCCE4C769F719F7 /* ZingleSDK.m */; };
 		CA467BEC9C15AE9D853F00BF42168B6E /* ZNGVideoMediaItem.h in Headers */ = {isa = PBXBuildFile; fileRef = D1CBBC570C329AB031703DCAF0CFF768 /* ZNGVideoMediaItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		CA48D0A1B5C164A7ED14A705B550249F /* bubble_stroked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AB1A3BB679EFAC2E7E9359F6F6E63F26 /* bubble_stroked@2x.png */; };
 		CB13A851913814EEE6A164233BF15074 /* DGActivityIndicatorView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8DB291B292C6C8DF4430A563A4DCCAD7 /* DGActivityIndicatorView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CBB142224D904864BB5868C8C89D9157 /* UIAlertView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 12C777D33AF9638B8EB80CDB855E9134 /* UIAlertView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC1EFB67BD1B4D9B18694E82C13AF476 /* Mantle-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = AC2D874EFA839F615872573A18EC84E2 /* Mantle-dummy.m */; };
 		CC236E22BAEDECC707E992348C79B014 /* ZNGCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = D744BDB294ECF37D6A544C77C7E258A3 /* ZNGCollectionViewFlowLayout.m */; };
-		CF16EB07C50FA614B3F6DCF7B5B34A2A /* play@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9B7F039BF7760A53B1DE060AF46D178B /* play@2x.png */; };
+		CCCEC5842C9BED084B7515B622E797ED /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B6F08EEC42196AF99D50E98D58FA5E /* camera.png */; };
+		CE51CD13773D381CD794D96A3051D541 /* ZNGCollectionViewCellOutgoing.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1F8D9B30ED74C08B7E5617B6DABDB51F /* ZNGCollectionViewCellOutgoing.xib */; };
 		CF17D6524AB27CE9B8A88E83DB51006A /* ZNGCellTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 306EE4FA5DA006919FBF3405DD14CD0F /* ZNGCellTextView.m */; };
 		D087C9CFBF8359F8BE6E8EC885158912 /* DGActivityIndicatorTriangleSkewSpinAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 64DAEE52133F2E760693244BA164533B /* DGActivityIndicatorTriangleSkewSpinAnimation.m */; };
 		D1BD618C36AE9D50EF864F9AC9986557 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B5A3DE09C52839160D71FA29F440855F /* Mantle.framework */; };
+		D227713FB6796ECD3C781E12099BADB6 /* bubble_stroked.png in Resources */ = {isa = PBXBuildFile; fileRef = C7338A399F9A1E640BF18D82801A8826 /* bubble_stroked.png */; };
 		D2ECD156ABADE70A2547CF7EB5C66DDD /* NSDictionary+MTLJSONKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E61B10F855E6CD53A8A922FA13FDB8 /* NSDictionary+MTLJSONKeyPath.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		D476765FB9052B100AA37A138C74D0D1 /* ZNGPhotoMediaItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 4D116B755A92DAA7E8C3661FD09456DC /* ZNGPhotoMediaItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D52201619CF61B2727950EFFA27C616E /* UIActivityIndicatorView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = D0BB0C13ACCC93147E5BCFAFCA4D61A5 /* UIActivityIndicatorView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D57EE053A502E26C9D9542900DF51746 /* DGActivityIndicatorRotatingSquaresAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = EC929EBD45919508DBEC96D84715BD13 /* DGActivityIndicatorRotatingSquaresAnimation.m */; };
-		D5ACE0892B9ACE1348A76D0144027301 /* bubble_regular.png in Resources */ = {isa = PBXBuildFile; fileRef = 2736C8B06A2BD681B9A0818F41700537 /* bubble_regular.png */; };
 		D5B9B1E1671E3D5A58480F0EAB3A6D9F /* ZNGServiceChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = DDF93599C289377AC9895E2EF6112278 /* ZNGServiceChannel.m */; };
 		D6490D7F2AC64BF4DC85AB99995CC35F /* NSString+ZingleSDK.h in Headers */ = {isa = PBXBuildFile; fileRef = 157F306B8188F9DDF5807767C122CCE5 /* NSString+ZingleSDK.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D6A2C3BA2DDC1D61F5CB8AD4B533DD2D /* ZNGBubblesSizeCalculator.h in Headers */ = {isa = PBXBuildFile; fileRef = FB68E8C37AF16194ADBAC1D8DC585730 /* ZNGBubblesSizeCalculator.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -375,9 +385,7 @@
 		D8B42C1EA64E1D76AF054C8325A8B8EF /* ZNGServiceClient.h in Headers */ = {isa = PBXBuildFile; fileRef = 278FC5978FD5C7869EF0A77DC9733810 /* ZNGServiceClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D99620947CE6D1327F94DB70EF6A2723 /* ZNGAutomation.h in Headers */ = {isa = PBXBuildFile; fileRef = C4FE04C2FCCC6AA8C2F53B1DA3BEBF4B /* ZNGAutomation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DA4EF59BFF5BA26A028D9426F2880B6D /* ZNGNewContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 3FA86E086D34BB15956FE0A3F5A5EBD9 /* ZNGNewContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DB01271242EBD1B4F11BAB7FDE1CA2A1 /* ZNGTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C7A50EF471D65F6DF95B98DFDAA5442 /* ZNGTableViewCell.xib */; };
 		DB5EC4F85C56320F1DC446CA62A7F150 /* ZNGInboxViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 75093F4BB202BBFDAE9445B6B6AAA3DC /* ZNGInboxViewController.m */; };
-		DB6706F19DACB5E99F224CCAABE1C4BB /* play.png in Resources */ = {isa = PBXBuildFile; fileRef = 121DA2C6A317A28D9570CFC8B6150503 /* play.png */; };
 		DBD13CBC9F44D93A68797F5CA43DEDE4 /* MTLValueTransformer.m in Sources */ = {isa = PBXBuildFile; fileRef = AF07A960E80B46555AE8924FA537A7EA /* MTLValueTransformer.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		DC483C5D12E9C596A2C9D2F84D617393 /* ZNGContactFieldValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B4E8BF934E9872481977C38871E6B /* ZNGContactFieldValue.m */; };
 		DC73F3984FCBFDA4A732C328D5081DFE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05E57E122BB6201E7D0C465B75F0D428 /* UIKit.framework */; };
@@ -385,13 +393,13 @@
 		DD254E9F4E9BF0440BDB2572FBDA66A9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
 		DE5158499A7116BF2B6DF560FD21A88A /* DGActivityIndicatorBallClipRotateAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 10CE59D5CF2DE90EFE6F128719B299A7 /* DGActivityIndicatorBallClipRotateAnimation.m */; };
 		E0275124AD98A16F926014B006C9051C /* ZNGLocationMediaItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 1B07D1F54FAF6BD590781B4527C3E628 /* ZNGLocationMediaItem.m */; };
-		E295E7BA4E27983D8573981B79A62A4D /* bubble_stroked_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 47F31F3E2F507002D64979C25E60320A /* bubble_stroked_tailless@2x.png */; };
+		E2B7CC13FDC7EC6010B00706F11F2070 /* bubble_min_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 708693E27BF3DDD919A5D0B120651CE5 /* bubble_min_tailless@2x.png */; };
 		E2BEA93256B26EA7D1C8F402B3786C40 /* DGActivityIndicatorBallSpinFadeLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CC790A4DCB324DA73B683AAD1291092 /* DGActivityIndicatorBallSpinFadeLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E2C1C99E7E62890EE49B0299B9DDFDAB /* bubble_regular@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5132224693902995D34F1B92F18B0F23 /* bubble_regular@3x.png */; };
 		E4D2414595D5EB2CC4AC8878DF31FD72 /* DGActivityIndicatorBallTrianglePathAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C779ADEB2D52B225271E7EDC8AEBD9 /* DGActivityIndicatorBallTrianglePathAnimation.m */; };
 		E6369B93EFD18BB50BCE895DB55E7877 /* UIRefreshControl+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B48C48FE53FB3BF26C668D948413364 /* UIRefreshControl+AFNetworking.m */; };
 		E660D527565B755215FA4915DBFCB75B /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8670E21143BB47148A915861D5DFD685 /* AFNetworking.framework */; };
 		E6A32D8F3FF68B13CB523B065AC84A35 /* ZNGSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B36FC426F03200E1862749644E634F /* ZNGSetting.m */; };
-		E74D22851895630343200243947EC8F6 /* bubble_tailless@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = ADD120A7F2E2A7495B301027604753BF /* bubble_tailless@3x.png */; };
 		E8277E4BCA5607AB976AB03F89CA2473 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 03B273B2AAD1FE0BAA8E0650861AE9BB /* Foundation.framework */; };
 		E85CE6AA1EDDAD75E9F61E36D64C8F36 /* OpenSans-SemiboldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84EDB7CB7C6BEE1D8BE90CC5846638A1 /* OpenSans-SemiboldItalic.ttf */; };
 		E8CED2E6A24FFDE5F4312EE385E14C3E /* ZNGAutomationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = BD2965637D53A1AAFE25A26BCCCC5FDE /* ZNGAutomationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -402,7 +410,6 @@
 		EB558F24E98088A58198A92FCEF68C1E /* ZNGContactFieldClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D1E97E3FF21820598D11AB37B1E1283 /* ZNGContactFieldClient.m */; };
 		EC59C2C21BCD851350E073E83BA6A2B2 /* ZNGAvailablePhoneNumberClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 3711B71BF3A3046EE480E67F313A7281 /* ZNGAvailablePhoneNumberClient.m */; };
 		ECC69572D9FD21B6A6EFD74C9C1B27F2 /* UIImage+ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = A4D3C29BCD85DA13E081A1BE42F4F811 /* UIImage+ZingleSDK.m */; };
-		ED5C5CEAE44864D6DDA4844720AD0A33 /* ZNGCollectionViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = B924C230466E058DB4F2246D3BA66A3A /* ZNGCollectionViewCellIncoming.xib */; };
 		EDD370686C1D9D70C5389A3CB8D9CDE9 /* ZNGCollectionView.h in Headers */ = {isa = PBXBuildFile; fileRef = 8ACD06DAACE35F70DAC5D2D67608C444 /* ZNGCollectionView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE05D88EE39D574FA7776A6D88CFFBC4 /* ZNGContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 6A7BD36BEDA9C7741DA791D2B3C159AE /* ZNGContact.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EE0ECB2B50E28E65B96CB77A8AD03331 /* ZNGCollectionViewCellOutgoing.m in Sources */ = {isa = PBXBuildFile; fileRef = 39CB7F5E2372C37E77DDD3550DE41160 /* ZNGCollectionViewCellOutgoing.m */; };
@@ -410,13 +417,16 @@
 		EF52EF06C45874F68AA055D1383E19B9 /* ZNGFieldOption.m in Sources */ = {isa = PBXBuildFile; fileRef = 51371E3870903393AFCA2B5F255C69B3 /* ZNGFieldOption.m */; };
 		EF677EC05C40B131998F119109EAFBF7 /* NSArray+MTLManipulationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = A9B9412BCD15EC8CF7A98E3F06CB5D41 /* NSArray+MTLManipulationAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		EFE86628D18E2B04E700DB5768301708 /* ZNGContactFieldValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C9854A2383BE4983BB32BF0574223C2 /* ZNGContactFieldValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		F0C95444988F185A8FD00574F8383100 /* ZNGToolbarContentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 22C0673FEF2F3AE153907E3B12D99F8D /* ZNGToolbarContentView.xib */; };
 		F0CE03977684669B84FF2A8BC82400A8 /* ZNGBubbleSizeCalculating.h in Headers */ = {isa = PBXBuildFile; fileRef = A9C312D09070DF90132395A26D874F89 /* ZNGBubbleSizeCalculating.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F0D4E6A7320CFF1FC46C3BA3B65598DF /* ZNGLabelClient.h in Headers */ = {isa = PBXBuildFile; fileRef = FE83FAD884FC19BD6B5303049AB65EA0 /* ZNGLabelClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F14505F5BEA6F6BA3AE04762A83C64DF /* bubble_regular@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D0BB5F73AECF7EA3E8EC5E6E2F81F02B /* bubble_regular@2x.png */; };
+		F3A2933A552DCABCC84994F862B8ECD2 /* ZingleSDK.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3719202A091F0282AFD4A03AE3EBB88B /* ZingleSDK.strings */; };
 		F41A0B573990A41CAE9055C60DE64671 /* ZNGError.h in Headers */ = {isa = PBXBuildFile; fileRef = 1BE5B5E16D6F11456A2FFC867D3C07A4 /* ZNGError.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F42439896F2FAF4B52F01F30905DCC95 /* ZNGTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C7A50EF471D65F6DF95B98DFDAA5442 /* ZNGTableViewCell.xib */; };
 		F46030CE704666228CCCD89A59586A99 /* DGActivityIndicatorBallClipRotatePulseAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AADF740BE0BD3B7A9E88B98C09A8E23 /* DGActivityIndicatorBallClipRotatePulseAnimation.m */; };
 		F4CC2F4C8CFB7E81842DEDB308A1E128 /* ZNGMediaViewBubbleImageMasker.h in Headers */ = {isa = PBXBuildFile; fileRef = 588A3E1097F2A84AAE621555F601A0FD /* ZNGMediaViewBubbleImageMasker.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F4F5E16103061A6B35FB8DAC0204ECB2 /* ZNGBubbleImage.h in Headers */ = {isa = PBXBuildFile; fileRef = C91D4C008A937713ACC8AFD24F55EC5E /* ZNGBubbleImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		F57A4C24D012F9F6BAB6DAEE82C3D3FB /* bubble_min@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1DFB51CBA5CC6C1A12B5757506646E62 /* bubble_min@3x.png */; };
 		F5A234CC98129C3E559C72789629651F /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB49ABFE6DD8E9E187508403FC116B3 /* AFHTTPRequestOperation.m */; };
 		F6004744ECC9F12DB6C5635472233AD8 /* AFHTTPRequestOperationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = DA51F14714FB4CE9F75C38567E4D7C05 /* AFHTTPRequestOperationManager.m */; };
 		F708EA5BCF76945F780EEEACB215968D /* DGActivityIndicatorFiveDotsAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 6730229BAACDA538DB92F0C739EABF0B /* DGActivityIndicatorFiveDotsAnimation.m */; };
@@ -427,11 +437,9 @@
 		F827541D56D5F4EFB385B5D4B94B47C9 /* DGActivityIndicatorDoubleBounceAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = CE026CE254107072BBF5AE57BEC89D66 /* DGActivityIndicatorDoubleBounceAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F829446E4D6BA30AB151A03970AFB2D8 /* DGActivityIndicatorBallRotateAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = BCDAE776CE677A31613247F7CC8DBF78 /* DGActivityIndicatorBallRotateAnimation.m */; };
 		F8B5E5D06DEC674D21EAE9A7AE6ED5E3 /* ZNGCollectionViewCellIncoming.m in Sources */ = {isa = PBXBuildFile; fileRef = 70B53DA6D14313C2EBB6F266D2808DBF /* ZNGCollectionViewCellIncoming.m */; };
-		F9AF561F6B4FBC3CB3AADB7C196AF9C5 /* bubble_regular@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9145A7111FE81F69DF1441C64FC35B5C /* bubble_regular@3x.png */; };
 		FA30F0C927CA52CAC6499D06634B6981 /* UIButton+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = ADF5315FF60FDBD3A000904698C128E1 /* UIButton+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FA538AB69B24F23BAD0822FBC8854194 /* DGActivityIndicatorLineScaleAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 95FB38C79C63C3530C05FB50D591872E /* DGActivityIndicatorLineScaleAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FB2580B7533DE9BFF6AC0C0C74C3722A /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D5CFE85063F4BAC6CB65B97C09EFB09C /* OpenSans-Semibold.ttf */; };
-		FC6F87B44ACDD31E077C8BF3578EA68B /* ZNGLabelCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CD7E8FD8230CE9B69109B8A30E3C2A42 /* ZNGLabelCollectionViewCell.xib */; };
 		FCB9CDF649A9C4E3F49C207DFE52C9B7 /* ZNGFieldOption.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B57176956CF5E4A81DDCE3D1CE7E38 /* ZNGFieldOption.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FE9105E8D35D1BC5A3215ADD5F44E1A4 /* NSDictionary+MTLManipulationAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 5293198850AB669FE854EC1AA0DD234C /* NSDictionary+MTLManipulationAdditions.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		FF2849D1CC2E5A3AB8341A39B089F5C6 /* AFSecurityPolicy.h in Headers */ = {isa = PBXBuildFile; fileRef = 8D521E6CAD25C1C861681883A36F22DA /* AFSecurityPolicy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -588,11 +596,11 @@
 		084F999409EEEE36B66E45FF203EB718 /* Pods-ZingleSDK_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		09FF85BFE872DDEB411B5FD884B92F81 /* ZingleSDK.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ZingleSDK.xcconfig; sourceTree = "<group>"; };
 		0A206C5C26BA41A1773B8FA3D80F01C2 /* UIFont+OpenSans.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIFont+OpenSans.m"; path = "Pod/Classes/opensans/UIFont+OpenSans.m"; sourceTree = "<group>"; };
+		0A8863E08D19F7F078E870B71108F6DD /* unstarred.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = unstarred.pdf; sourceTree = "<group>"; };
 		0B27B1BEA8952A95E24F536B61F0CD72 /* ZNGAvailablePhoneNumber.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumber.m; sourceTree = "<group>"; };
 		0B62EE616EEE711C9B5F6E46C68D51B6 /* NSDictionary+MTLManipulationAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MTLManipulationAdditions.h"; path = "Mantle/NSDictionary+MTLManipulationAdditions.h"; sourceTree = "<group>"; };
 		0B85E6B4365B4FBD12CC2FEE3DDDBA97 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallScaleRippleMultipleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleRippleMultipleAnimation.m; sourceTree = "<group>"; };
 		0BFC90AF7D8CDC974A41BDD86AC868B3 /* DGActivityIndicatorBallTrianglePathAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallTrianglePathAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallTrianglePathAnimation.h; sourceTree = "<group>"; };
-		0C195237CD42392749A9BC53E5977C00 /* clip@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "clip@3x.png"; sourceTree = "<group>"; };
 		0C2387893DEAFB5EEE26F9CE64202B76 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = AFNetworking/AFSecurityPolicy.m; sourceTree = "<group>"; };
 		0C268E018D5FD7015F862C229F173C5A /* ZNGPhotoMediaItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGPhotoMediaItem.m; sourceTree = "<group>"; };
 		0CC790A4DCB324DA73B683AAD1291092 /* DGActivityIndicatorBallSpinFadeLoader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallSpinFadeLoader.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallSpinFadeLoader.h; sourceTree = "<group>"; };
@@ -606,14 +614,15 @@
 		0F374AADBE6943B3774CDA49112D2F69 /* Pods-ZingleSDK_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Tests-resources.sh"; sourceTree = "<group>"; };
 		0F965EAF1310676263A1C226750390F0 /* ZNGServiceChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceChannel.h; sourceTree = "<group>"; };
 		1000446FFBE1AF74A9A48F838E913899 /* DGActivityIndicatorCookieTerminatorAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorCookieTerminatorAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorCookieTerminatorAnimation.m; sourceTree = "<group>"; };
+		1017179C1443F35071420E35E04E3320 /* starred.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = starred.imageset; sourceTree = "<group>"; };
 		1062151C243A182FAB28E76734DC305B /* ZNGMediaItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMediaItem.h; sourceTree = "<group>"; };
 		10760041718E6DBD444A57E92F48EEA9 /* AFURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = AFNetworking/AFURLSessionManager.m; sourceTree = "<group>"; };
 		10CE59D5CF2DE90EFE6F128719B299A7 /* DGActivityIndicatorBallClipRotateAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallClipRotateAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallClipRotateAnimation.m; sourceTree = "<group>"; };
 		1165C1771A819794A8E92239051A751C /* ZNGServiceClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceClient.m; sourceTree = "<group>"; };
 		11897F540376799C983394EC13AEFFF2 /* DGActivityIndicatorDoubleBounceAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorDoubleBounceAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorDoubleBounceAnimation.m; sourceTree = "<group>"; };
-		121DA2C6A317A28D9570CFC8B6150503 /* play.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		12305A8E86971D7CA3F2B376B8BADEF7 /* AFNetworkActivityLogger.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = AFNetworkActivityLogger.modulemap; sourceTree = "<group>"; };
 		12C777D33AF9638B8EB80CDB855E9134 /* UIAlertView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+AFNetworking.h"; path = "UIKit+AFNetworking/UIAlertView+AFNetworking.h"; sourceTree = "<group>"; };
+		13157E6C3063371E10AD5DD1935EC988 /* clip@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "clip@2x.png"; sourceTree = "<group>"; };
 		136C4E78ECBBD15F5C530439D5406043 /* DGActivityIndicatorBallClipRotatePulseAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallClipRotatePulseAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallClipRotatePulseAnimation.h; sourceTree = "<group>"; };
 		1380136FC4E63525EBEDC8B9FCA27D2E /* ZNGContactField.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactField.m; sourceTree = "<group>"; };
 		13E75BFC29552FB91FA9238ECDED476E /* ZNGChannelType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannelType.h; sourceTree = "<group>"; };
@@ -621,8 +630,9 @@
 		1472EA8153C1C67CD217DBFFE693BC7F /* DGActivityIndicatorLineScalePulseOutRapidAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorLineScalePulseOutRapidAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorLineScalePulseOutRapidAnimation.m; sourceTree = "<group>"; };
 		14BB9F0061E69E3782D5BA7FA4FD6EA8 /* DGActivityIndicatorBallScaleMultipleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallScaleMultipleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleMultipleAnimation.m; sourceTree = "<group>"; };
 		14C8673E03AAD1D4F932C27A12E5C318 /* DGActivityIndicatorBallScaleRippleMultipleAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallScaleRippleMultipleAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleRippleMultipleAnimation.h; sourceTree = "<group>"; };
-		151B5F2697885FFD425E93499A16463B /* typing.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = typing.png; sourceTree = "<group>"; };
+		1512C8D8286E2761F9DB2CD7EF86A020 /* lrg_unstarred.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = lrg_unstarred.imageset; sourceTree = "<group>"; };
 		157F306B8188F9DDF5807767C122CCE5 /* NSString+ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSString+ZingleSDK.h"; sourceTree = "<group>"; };
+		15822195D3A5EAAC9F3E38723B06C1ED /* play@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		16098FE530305416F5E482E51F1428BB /* AFURLRequestSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLRequestSerialization.h; path = AFNetworking/AFURLRequestSerialization.h; sourceTree = "<group>"; };
 		16A5FBF66EA1F80AEC0748E7B90BDA46 /* AFURLConnectionOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLConnectionOperation.m; path = AFNetworking/AFURLConnectionOperation.m; sourceTree = "<group>"; };
 		16C2142512BC566B970CF68B04973A2E /* ZNGCollectionViewFlowLayoutInvalidationContext.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCollectionViewFlowLayoutInvalidationContext.m; sourceTree = "<group>"; };
@@ -637,6 +647,7 @@
 		1C230BA3F500E8037A0D82C3E43ABE45 /* GoogleFontsiOS-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GoogleFontsiOS-prefix.pch"; sourceTree = "<group>"; };
 		1C5CB87484E40078E5554A9329274DF7 /* ZNGMessageViewModel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageViewModel.h; sourceTree = "<group>"; };
 		1D1D39B4DE8ED4A38F57129744C7266B /* ZNGTableViewCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTableViewCell.h; sourceTree = "<group>"; };
+		1DFB51CBA5CC6C1A12B5757506646E62 /* bubble_min@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@3x.png"; sourceTree = "<group>"; };
 		1EF76519FE832AAD3924BADFC90EA0C8 /* ZNGLabelCollectionViewFlowLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabelCollectionViewFlowLayout.h; sourceTree = "<group>"; };
 		1F34892E98A8863DF5555EF6D07ABEE0 /* Pods-ZingleSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		1F52C8616690E0F79F7947F0D4A385EF /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-Bold.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
@@ -649,17 +660,15 @@
 		213882AAC88CB5C59BB616D3F1F9DE75 /* ZingleSDK-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ZingleSDK-prefix.pch"; sourceTree = "<group>"; };
 		213B555F81061D30067C59BE8AEA6350 /* ZNGTypingIndicatorFooterView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTypingIndicatorFooterView.m; sourceTree = "<group>"; };
 		2158161E9EEE6DB142D46E00A53FCFEC /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		221A2F06931E61524029B79281A295BA /* play@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "play@3x.png"; sourceTree = "<group>"; };
+		223D88BE81C52A3CA74BBBDD39D4272C /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		22C0673FEF2F3AE153907E3B12D99F8D /* ZNGToolbarContentView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGToolbarContentView.xib; sourceTree = "<group>"; };
 		247D6BA08D32A6C709FE77889431D65C /* ZNGCollectionView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCollectionView.m; sourceTree = "<group>"; };
 		24F870B3D8DA9075C5C986B483EF95FA /* DGActivityIndicatorThreeDotsAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorThreeDotsAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorThreeDotsAnimation.h; sourceTree = "<group>"; };
 		251FB88571B6EA720D6EE83EDDBF9F2B /* ZNGNewService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewService.m; sourceTree = "<group>"; };
 		260B84EE8F9834817D89ACCE3378F7D2 /* NSArray+MTLManipulationAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSArray+MTLManipulationAdditions.h"; path = "Mantle/NSArray+MTLManipulationAdditions.h"; sourceTree = "<group>"; };
-		2736C8B06A2BD681B9A0818F41700537 /* bubble_regular.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_regular.png; sourceTree = "<group>"; };
 		27673B9D12D393329E89C756137A319B /* ZNGKeyboardController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGKeyboardController.h; sourceTree = "<group>"; };
 		278FC5978FD5C7869EF0A77DC9733810 /* ZNGServiceClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceClient.h; sourceTree = "<group>"; };
 		2889F5929A295941CAAF517FAA6F9478 /* ZNGAccountPlan.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountPlan.h; sourceTree = "<group>"; };
-		2949538CE7664B24FE20820788202B8D /* bubble_stroked@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked@3x.png"; sourceTree = "<group>"; };
 		2A7BF96A1497448B128955E16858CE37 /* ZNGAutomation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAutomation.m; sourceTree = "<group>"; };
 		2B33344ED6FD2D6F3F3DE989E3C85C17 /* ZNGToolbarButtonFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGToolbarButtonFactory.m; sourceTree = "<group>"; };
 		2B48C48FE53FB3BF26C668D948413364 /* UIRefreshControl+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIRefreshControl+AFNetworking.m"; path = "UIKit+AFNetworking/UIRefreshControl+AFNetworking.m"; sourceTree = "<group>"; };
@@ -672,8 +681,9 @@
 		3007AE0B48971BB3891C1F3C9E4410C7 /* DGActivityIndicatorTwoDotsAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorTwoDotsAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTwoDotsAnimation.h; sourceTree = "<group>"; };
 		3061316FC0C2CD9614FDDBD85211315D /* DGActivityIndicatorLineScalePartyAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorLineScalePartyAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorLineScalePartyAnimation.h; sourceTree = "<group>"; };
 		306EE4FA5DA006919FBF3405DD14CD0F /* ZNGCellTextView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCellTextView.m; sourceTree = "<group>"; };
-		308CFFE859C939EB19BB2B167EC8E33A /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
+		307E21231BF2BDD76FD74BC760ADF01C /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		308D0BBC132CCEB904D1FCC2145151CC /* UIFont+OpenSans.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIFont+OpenSans.h"; path = "Pod/Classes/opensans/UIFont+OpenSans.h"; sourceTree = "<group>"; };
+		312C4A5DABF6B999093D776B5FF4308F /* unstarred.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = unstarred.imageset; sourceTree = "<group>"; };
 		31C93640F67BAE7616005B2FA7D699D3 /* GoogleFontsiOS.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = GoogleFontsiOS.modulemap; sourceTree = "<group>"; };
 		3246A3D2F438192F950D0356F12FC21F /* ZNGAvailablePhoneNumber.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvailablePhoneNumber.h; sourceTree = "<group>"; };
 		32C00A3B72E855B8339E05CA9339DE73 /* GoogleFontsiOS-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GoogleFontsiOS-umbrella.h"; sourceTree = "<group>"; };
@@ -682,12 +692,11 @@
 		359AD7DF8A10DAE021058FA1BE741959 /* DGActivityIndicatorBallZigZagDeflectAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallZigZagDeflectAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallZigZagDeflectAnimation.m; sourceTree = "<group>"; };
 		3640BD08EA894A6860E95AE2304CC3B8 /* Pods-ZingleSDK_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZingleSDK_Tests-dummy.m"; sourceTree = "<group>"; };
 		3711B71BF3A3046EE480E67F313A7281 /* ZNGAvailablePhoneNumberClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumberClient.m; sourceTree = "<group>"; };
-		378B2CB13F96783D9E61AABFD63D2D34 /* bubble_stroked.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_stroked.png; sourceTree = "<group>"; };
+		3719202A091F0282AFD4A03AE3EBB88B /* ZingleSDK.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; path = ZingleSDK.strings; sourceTree = "<group>"; };
 		38A980CE9CAB6C553CACAC6533946747 /* UIButton+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIButton+AFNetworking.m"; path = "UIKit+AFNetworking/UIButton+AFNetworking.m"; sourceTree = "<group>"; };
 		392D858398E1399BB9BE33B2E1552F6B /* ZNGLabelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelClient.m; sourceTree = "<group>"; };
 		399CAB0D8E44CE614F12AA825A265F67 /* DGActivityIndicatorBallZigZagAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallZigZagAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallZigZagAnimation.h; sourceTree = "<group>"; };
 		39CB7F5E2372C37E77DDD3550DE41160 /* ZNGCollectionViewCellOutgoing.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCollectionViewCellOutgoing.m; sourceTree = "<group>"; };
-		3AD2A02B67E29EFDB25BEE7C247659A8 /* ZingleSDK.strings */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.strings; path = ZingleSDK.strings; sourceTree = "<group>"; };
 		3AE6B81FDD40993CB023E0E802F0DBF1 /* ZNGServiceAddress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceAddress.m; sourceTree = "<group>"; };
 		3BDC1A17279EA26D84BDD0D2889EF345 /* ZNGLabelCollectionViewCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelCollectionViewCell.m; sourceTree = "<group>"; };
 		3BEC5884AFD6377B1118D7287D45EACD /* ZNGCorrespondent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCorrespondent.h; sourceTree = "<group>"; };
@@ -698,11 +707,13 @@
 		3F8103EAE4F5571C1B00A4110572961D /* ZNGCollectionViewFlowLayoutInvalidationContext.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewFlowLayoutInvalidationContext.h; sourceTree = "<group>"; };
 		3FA86E086D34BB15956FE0A3F5A5EBD9 /* ZNGNewContact.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewContact.h; sourceTree = "<group>"; };
 		400B5E1B7ED2E510B40C67B8F78F4BAF /* Pods-ZingleSDK_Tests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ZingleSDK_Tests-umbrella.h"; sourceTree = "<group>"; };
+		40188E53847A36557A5FA1B331C13EF4 /* clip.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = clip.png; sourceTree = "<group>"; };
 		407891B02139CE1DA5EAE6E84A85253A /* ZNGMediaPlaceholderView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMediaPlaceholderView.h; sourceTree = "<group>"; };
 		40ED4E4B4CB6E477F1968A7B054BAAF9 /* DGActivityIndicatorBallScaleAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallScaleAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleAnimation.h; sourceTree = "<group>"; };
 		41EA00A1D609CA5C2B40B1F673C84218 /* NSValueTransformer+MTLInversionAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+MTLInversionAdditions.m"; path = "Mantle/NSValueTransformer+MTLInversionAdditions.m"; sourceTree = "<group>"; };
 		42B36FC426F03200E1862749644E634F /* ZNGSetting.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGSetting.m; sourceTree = "<group>"; };
 		43446D12CC51492B61463983B6FD5091 /* AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworking.h; path = AFNetworking/AFNetworking.h; sourceTree = "<group>"; };
+		434619341FB92836BC6EE4258A0A5383 /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		43C9661C2456047432B17CF4E7C4715A /* OpenSans-ExtraBold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-ExtraBold.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-ExtraBold.ttf"; sourceTree = "<group>"; };
 		43D2140F9421655D59C86D40EEC389CA /* ZNGTemplateClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTemplateClient.m; sourceTree = "<group>"; };
 		43E61B10F855E6CD53A8A922FA13FDB8 /* NSDictionary+MTLJSONKeyPath.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MTLJSONKeyPath.m"; path = "Mantle/NSDictionary+MTLJSONKeyPath.m"; sourceTree = "<group>"; };
@@ -713,32 +724,35 @@
 		46C779ADEB2D52B225271E7EDC8AEBD9 /* DGActivityIndicatorBallTrianglePathAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallTrianglePathAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallTrianglePathAnimation.m; sourceTree = "<group>"; };
 		472BAB9B6136FAF7DD29C837D4130691 /* DGActivityIndicatorTriangleSkewSpinAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorTriangleSkewSpinAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTriangleSkewSpinAnimation.h; sourceTree = "<group>"; };
 		47D8BAE5D4DC43A01CCB0EA2FE9E8677 /* Pods-ZingleSDK_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Example-frameworks.sh"; sourceTree = "<group>"; };
-		47F31F3E2F507002D64979C25E60320A /* bubble_stroked_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked_tailless@2x.png"; sourceTree = "<group>"; };
 		47F5A0D65633511A8F8326B45B5128E2 /* DGActivityIndicatorBallZigZagAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallZigZagAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallZigZagAnimation.m; sourceTree = "<group>"; };
 		480F064A686FD9382813EDFDC3F819DF /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLConnectionOperation.h; path = AFNetworking/AFURLConnectionOperation.h; sourceTree = "<group>"; };
 		48F106878D2306C7C867018E419C32FC /* ZNGContactChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannel.m; sourceTree = "<group>"; };
+		495786D265F959899DDB500C7C8D1B51 /* clip@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "clip@3x.png"; sourceTree = "<group>"; };
 		496C0C1F26319A918BD739A08F421810 /* DGActivityIndicatorView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DGActivityIndicatorView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49AE98FF77128C2E836EBEB589948CFB /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49D9D0AE55129AEEC861B758C47D7DC6 /* DGActivityIndicatorBallGridPulseAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallGridPulseAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallGridPulseAnimation.h; sourceTree = "<group>"; };
 		4A3A80589DDECED6FF0C8B012CD2E296 /* Pods-ZingleSDK_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZingleSDK_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		4B0E5A76BA8151B5E6A43B954FC1CD7E /* DGActivityIndicatorBallGridBeatAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallGridBeatAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallGridBeatAnimation.h; sourceTree = "<group>"; };
 		4B1C670DED63818165BD3F0C765A71EB /* ZNGImageViewerController.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGImageViewerController.xib; sourceTree = "<group>"; };
-		4C2B4C09C4F560BF20FD451B1FA82E1C /* clip.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = clip.png; sourceTree = "<group>"; };
 		4CB9C32BE31DB06CCE940835043B3802 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		4CBCC8DD763AB3DDF59768895D35FCF3 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4D116B755A92DAA7E8C3661FD09456DC /* ZNGPhotoMediaItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGPhotoMediaItem.h; sourceTree = "<group>"; };
 		4E75E05821F2B81450BB99AFB983BADC /* ZNGNetworkPhotoMediaItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNetworkPhotoMediaItem.h; sourceTree = "<group>"; };
 		504E8D8E1986B6BA7F8C1859D3EE3126 /* DGActivityIndicatorTwoDotsAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorTwoDotsAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTwoDotsAnimation.m; sourceTree = "<group>"; };
+		5132224693902995D34F1B92F18B0F23 /* bubble_regular@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_regular@3x.png"; sourceTree = "<group>"; };
 		51371E3870903393AFCA2B5F255C69B3 /* ZNGFieldOption.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGFieldOption.m; sourceTree = "<group>"; };
 		513FC86251B8755E57E3EF7EC308BADF /* DGActivityIndicatorBallBeatAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallBeatAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallBeatAnimation.h; sourceTree = "<group>"; };
 		51BE2199FADF23692720053FBCFF844A /* Pods-ZingleSDK_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ZingleSDK_Example-resources.sh"; sourceTree = "<group>"; };
 		5293198850AB669FE854EC1AA0DD234C /* NSDictionary+MTLManipulationAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MTLManipulationAdditions.m"; path = "Mantle/NSDictionary+MTLManipulationAdditions.m"; sourceTree = "<group>"; };
 		53D7AA296E8DB3C0103568952928C348 /* DGActivityIndicatorBallPulseAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallPulseAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallPulseAnimation.m; sourceTree = "<group>"; };
+		543BC8FDFDD66ED3CBCC3E911D80E7E6 /* play@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "play@3x.png"; sourceTree = "<group>"; };
 		5499712A7D7F2BFD2395C5F4B98B0863 /* DGActivityIndicatorBallGridBeatAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallGridBeatAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallGridBeatAnimation.m; sourceTree = "<group>"; };
 		553986190C1B56B76E951D125C647280 /* AFNetworkActivityIndicatorManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkActivityIndicatorManager.h; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.h"; sourceTree = "<group>"; };
+		553B3187CF6631147DA7CFC3662EA4DE /* ZNGImages.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = ZNGImages.xcassets; sourceTree = "<group>"; };
 		558C2AB32BA01981940AC44D78B1397B /* ZNGBubbleImage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBubbleImage.m; sourceTree = "<group>"; };
 		55A691972C1C7622EB0388467FB99CC8 /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		5627120A7A81E95F1C451A9ADE26EA79 /* ZNGLoadEarlierHeaderView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLoadEarlierHeaderView.m; sourceTree = "<group>"; };
+		56CC2DCE0D3C18881EA3D980F29E6903 /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		5756768DE354001CEB4208736C1FC493 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImageView+AFNetworking.m"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		575F414AC5585700E87817A270613494 /* DGActivityIndicatorBallScaleRippleAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallScaleRippleAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleRippleAnimation.h; sourceTree = "<group>"; };
 		586F34EB2E4F3C01A629909E1568953C /* DGActivityIndicatorCookieTerminatorAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorCookieTerminatorAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorCookieTerminatorAnimation.h; sourceTree = "<group>"; };
@@ -746,7 +760,6 @@
 		58D71C2894592B9EE9400B65A5EEC976 /* NSObject+MTLComparisonAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSObject+MTLComparisonAdditions.h"; path = "Mantle/NSObject+MTLComparisonAdditions.h"; sourceTree = "<group>"; };
 		59DB7BF81DDC3B7DB32793A16158DC70 /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AADF740BE0BD3B7A9E88B98C09A8E23 /* DGActivityIndicatorBallClipRotatePulseAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallClipRotatePulseAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallClipRotatePulseAnimation.m; sourceTree = "<group>"; };
-		5AC7459041F41EA5C75623EA3EF4E070 /* bubble_min@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@3x.png"; sourceTree = "<group>"; };
 		5B4352B25094FFE13FB72C75F95B0802 /* ZNGParticipant.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGParticipant.m; sourceTree = "<group>"; };
 		5C023E1B4064D9E71061781F1D3581E5 /* ZNGTimeZoneClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTimeZoneClient.m; sourceTree = "<group>"; };
 		5C4C5A761F607127D840B6F1CA331C7E /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-Regular.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-Regular.ttf"; sourceTree = "<group>"; };
@@ -755,12 +768,11 @@
 		5E9BB38EE70A6735639DAB1540CF91D6 /* ZNGCorrespondent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCorrespondent.m; sourceTree = "<group>"; };
 		5F6F8D9A0C980F56B2C7B7A7990ED44A /* NSObject+MTLComparisonAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSObject+MTLComparisonAdditions.m"; path = "Mantle/NSObject+MTLComparisonAdditions.m"; sourceTree = "<group>"; };
 		5F834EA285648E395DF8D6D5A699D5CC /* ZNGBaseViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBaseViewController.h; sourceTree = "<group>"; };
+		60D8547BEEC000B47C4C0F2E8E2D4B7D /* lrg_starred.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = lrg_starred.imageset; sourceTree = "<group>"; };
 		60ED157BA7E379131114ECC201FEF911 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		60F8817C2D95157ACF181140E3D4127A /* ZNGMessageClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageClient.h; sourceTree = "<group>"; };
-		6180EEB58A7B2BE0B232CAF0CCD23EF3 /* bubble_stroked_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_stroked_tailless.png; sourceTree = "<group>"; };
 		61B57176956CF5E4A81DDCE3D1CE7E38 /* ZNGFieldOption.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGFieldOption.h; sourceTree = "<group>"; };
 		6355BBF6B30C1871AD3101EEA0C291F4 /* DGActivityIndicatorBallRotateAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallRotateAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallRotateAnimation.h; sourceTree = "<group>"; };
-		64B2F85BA04516213AC57ACC3BFA2616 /* Images.xcassets */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		64BB32B5C6CA0BA00F65CDBAD0781B7E /* Pods-ZingleSDK_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ZingleSDK_Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		64DAEE52133F2E760693244BA164533B /* DGActivityIndicatorTriangleSkewSpinAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorTriangleSkewSpinAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTriangleSkewSpinAnimation.m; sourceTree = "<group>"; };
 		6695B6A5A125DCD4CF909482E9CD8090 /* GoogleFontsiOS.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleFontsiOS.xcconfig; sourceTree = "<group>"; };
@@ -771,7 +783,6 @@
 		6795D652A07AF9ABD315645F6D942D05 /* NSError+MTLModelException.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSError+MTLModelException.h"; path = "Mantle/NSError+MTLModelException.h"; sourceTree = "<group>"; };
 		682E9919021BB14705E169CBC1C23F02 /* ZNGInboxViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGInboxViewController.h; sourceTree = "<group>"; };
 		68B7D7CD83EBDC7AE419F8C18059152A /* ZNGMessageRead.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageRead.m; sourceTree = "<group>"; };
-		68EB15FE06885E0BBA0B6CFBBC8E7C0B /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		6903D90FF663D0BF02DD0D31CFBDAE4C /* DGActivityIndicatorRotatingTrigonAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorRotatingTrigonAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorRotatingTrigonAnimation.h; sourceTree = "<group>"; };
 		69CCA68ED44A13B11B5FBAEEE24A68C7 /* MTLTransformerErrorHandling.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLTransformerErrorHandling.m; path = Mantle/MTLTransformerErrorHandling.m; sourceTree = "<group>"; };
 		6A2F613B0E3AE80EAA5764B3E73C88E8 /* DGActivityIndicatorView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DGActivityIndicatorView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -780,20 +791,26 @@
 		6B652986FBC2A48BCA55CAC4424F4CF5 /* ZNGCollectionViewCellOutgoing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewCellOutgoing.h; sourceTree = "<group>"; };
 		6C532B7121781C3AE033072BD5DD17B9 /* ZNGService.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGService.m; sourceTree = "<group>"; };
 		6C7A50EF471D65F6DF95B98DFDAA5442 /* ZNGTableViewCell.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGTableViewCell.xib; sourceTree = "<group>"; };
+		6C7D0F58734F427343A5E6EA416F1DDF /* bubble_min@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@2x.png"; sourceTree = "<group>"; };
 		6C9854A2383BE4983BB32BF0574223C2 /* ZNGContactFieldValue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactFieldValue.h; sourceTree = "<group>"; };
+		6CB62F562CED0AE0AD365467819081FC /* lrg_unstarred.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = lrg_unstarred.pdf; sourceTree = "<group>"; };
 		6D1E97E3FF21820598D11AB37B1E1283 /* ZNGContactFieldClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldClient.m; sourceTree = "<group>"; };
 		6D4B2949F05324A737FF99C0BEF3413D /* AFHTTPSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPSessionManager.m; path = AFNetworking/AFHTTPSessionManager.m; sourceTree = "<group>"; };
 		6E84EDEA80A6193FEA84F70F21146B65 /* ZNGBaseClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBaseClient.m; sourceTree = "<group>"; };
+		708693E27BF3DDD919A5D0B120651CE5 /* bubble_min_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min_tailless@2x.png"; sourceTree = "<group>"; };
 		708CA0696F5E579B55206AC78E2C5DF3 /* ZNGAvatarImageFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvatarImageFactory.h; sourceTree = "<group>"; };
 		70B53DA6D14313C2EBB6F266D2808DBF /* ZNGCollectionViewCellIncoming.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCollectionViewCellIncoming.m; sourceTree = "<group>"; };
-		70DCF1F8206512F89BE6E6F567A2AFDB /* camera.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		716AB5F79CADDCBB86081B01A6B61C48 /* typing@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "typing@2x.png"; sourceTree = "<group>"; };
 		720502153BB581D1751273F929EABDF2 /* ZNGAccountPlan.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlan.m; sourceTree = "<group>"; };
 		733EB9C83EF9B54BA4CC237D6BD657C2 /* ZNGToolbarButtonFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGToolbarButtonFactory.h; sourceTree = "<group>"; };
+		734548AEE49CDEE51C22D0B1CAE6C7DC /* bubble_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_tailless.png; sourceTree = "<group>"; };
+		74AE911EA792BAA8C4E4B66A2B2A605A /* bubble_min.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_min.png; sourceTree = "<group>"; };
 		74BC6662EE3A0950EFFE11EDADF5A638 /* MTLJSONAdapter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLJSONAdapter.m; path = Mantle/MTLJSONAdapter.m; sourceTree = "<group>"; };
 		75093F4BB202BBFDAE9445B6B6AAA3DC /* ZNGInboxViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGInboxViewController.m; sourceTree = "<group>"; };
 		75AB38FF6C63E198ACE514D8C2EEF251 /* ZNGLabelCollectionViewFlowLayout.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		75D85AE18E6347751E9AC568B2F54175 /* GoogleFontsiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GoogleFontsiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		762D56C5FAEBFF23F51F7366B0EB0D28 /* ZNGMessageRead.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageRead.h; sourceTree = "<group>"; };
+		768AF1CE0A76FDE50416A242B4026199 /* bubble_stroked_tailless@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked_tailless@3x.png"; sourceTree = "<group>"; };
 		76A5727F819B130DC0A7691F5C66451C /* ZNGService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGService.h; sourceTree = "<group>"; };
 		7747A71C9AD4BB35034C0613861A2676 /* Mantle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Mantle.h; path = Mantle/Mantle.h; sourceTree = "<group>"; };
 		776B4E8BF934E9872481977C38871E6B /* ZNGContactFieldValue.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactFieldValue.m; sourceTree = "<group>"; };
@@ -804,19 +821,20 @@
 		7906884D90A1A3B0FB4ED83698CE08AC /* ZNGParticipant.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGParticipant.h; sourceTree = "<group>"; };
 		7C93187BED22AFBDCA5ECC89326A7481 /* DGActivityIndicatorTriplePulseAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorTriplePulseAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTriplePulseAnimation.m; sourceTree = "<group>"; };
 		7D491604C6104A0F6C1098AB34D46237 /* DGActivityIndicatorBallGridPulseAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallGridPulseAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallGridPulseAnimation.m; sourceTree = "<group>"; };
-		7D8A93EDC4209BD44E7DAF39CEA1AC99 /* bubble_stroked_tailless@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked_tailless@3x.png"; sourceTree = "<group>"; };
+		7ECB115054AAA48CBF2053ECD854C095 /* lrg_starred.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = lrg_starred.pdf; sourceTree = "<group>"; };
 		7F063C9FE6C6538DF9CF9A42CD9DEA8D /* ZNGBubblesSizeCalculator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBubblesSizeCalculator.m; sourceTree = "<group>"; };
 		7F48CEBE18958FBAFBC902C8169D33DB /* DGActivityIndicatorLineScalePartyAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorLineScalePartyAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorLineScalePartyAnimation.m; sourceTree = "<group>"; };
 		801A23EEC278D71C99B5DD5DDBC9EC23 /* UIImage+ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIImage+ZingleSDK.h"; sourceTree = "<group>"; };
 		8123A35572A79740292C4F525F5B4ACA /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		817B5FF7A1D10C14F49FC33A708CF028 /* DGActivityIndicatorBallScaleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallScaleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleAnimation.m; sourceTree = "<group>"; };
-		81B0CF8AB84A67B22181C1231AC4679D /* unstarred.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = unstarred.pdf; sourceTree = "<group>"; };
+		81C394BA4075BBA7280668E23F3C62FB /* confirmed.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = confirmed.pdf; sourceTree = "<group>"; };
 		820381FF16EAC2F1D513830C1F07536D /* NSValueTransformer+MTLInversionAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValueTransformer+MTLInversionAdditions.h"; path = "Mantle/NSValueTransformer+MTLInversionAdditions.h"; sourceTree = "<group>"; };
-		82581343BA63F8FCF7C861F0307D9B75 /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
+		824781B928F7EEEF0E4503FFDC6E07A1 /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		8277A16DAFBCA784010F9E9488B5542B /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		82914756D8E5BEC415BF56A766460C1D /* ZNGInputToolbar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGInputToolbar.h; sourceTree = "<group>"; };
 		8374DB23DA7587D6FEF6DC89D04EAE15 /* NSDictionary+MTLMappingAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSDictionary+MTLMappingAdditions.m"; path = "Mantle/NSDictionary+MTLMappingAdditions.m"; sourceTree = "<group>"; };
 		8431DF4EC6EFA4EEBC5171A0B068B16C /* ZNGLoadEarlierHeaderView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGLoadEarlierHeaderView.xib; sourceTree = "<group>"; };
+		84A47A7756E82F069CE08CAAA69ACDA7 /* unconfirmed.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = unconfirmed.imageset; sourceTree = "<group>"; };
 		84D13E79607CDC3B2236A11F87D2F909 /* ZNGNewServiceChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewServiceChannel.h; sourceTree = "<group>"; };
 		84EDB7CB7C6BEE1D8BE90CC5846638A1 /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-SemiboldItalic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
 		864A0A4A224961B235119CBBA9532053 /* ZingleValueTransformers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZingleValueTransformers.h; sourceTree = "<group>"; };
@@ -824,14 +842,12 @@
 		8794C4C34D37A0EF485F37FC1C15DF43 /* ZNGInboxViewController.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGInboxViewController.xib; sourceTree = "<group>"; };
 		87ECA3C265A417605A4B02A87B457AEE /* ZNGDataSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGDataSet.h; sourceTree = "<group>"; };
 		888A21C06519C30E879D3107BFC9CDAC /* ZNGConversation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversation.h; sourceTree = "<group>"; };
-		889A3FE7622F7382ECC9B6BE119EB218 /* typing@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "typing@3x.png"; sourceTree = "<group>"; };
 		88C09009B41CA16DF14D6C7CAB4022A4 /* MTLModel+NSCoding.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "MTLModel+NSCoding.h"; path = "Mantle/MTLModel+NSCoding.h"; sourceTree = "<group>"; };
 		894C1C6B3751DD6D8E63B0C514D371C0 /* EXTKeyPathCoding.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTKeyPathCoding.h; path = Mantle/extobjc/EXTKeyPathCoding.h; sourceTree = "<group>"; };
 		895990B475B4686379A19E6B534513A4 /* MTLValueTransformer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLValueTransformer.h; path = Mantle/MTLValueTransformer.h; sourceTree = "<group>"; };
 		89C0AE2647C4D29062568B7A5CADBD2F /* ZNGCollectionViewDelegateFlowLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewDelegateFlowLayout.h; sourceTree = "<group>"; };
 		8A312B78048BFDE89BA17375337BB0F0 /* ZNGLabelCollectionViewCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabelCollectionViewCell.h; sourceTree = "<group>"; };
 		8A90C86112AF7B19277D2E4B8FC92CDC /* DGActivityIndicatorLineScaleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorLineScaleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorLineScaleAnimation.m; sourceTree = "<group>"; };
-		8ABFDCF60BA2A4BA645E9BE61B7D04D7 /* clip@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "clip@2x.png"; sourceTree = "<group>"; };
 		8ACD06DAACE35F70DAC5D2D67608C444 /* ZNGCollectionView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionView.h; sourceTree = "<group>"; };
 		8ADA9D22E7FBA39DDA29607E0337A1D3 /* DGActivityIndicatorFiveDotsAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorFiveDotsAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorFiveDotsAnimation.h; sourceTree = "<group>"; };
 		8ADC29D72E06E75C869B452F83AB9AF4 /* UIDevice+ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIDevice+ZingleSDK.h"; sourceTree = "<group>"; };
@@ -844,10 +860,9 @@
 		8DB291B292C6C8DF4430A563A4DCCAD7 /* DGActivityIndicatorView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorView.h; path = DGActivityIndicatorView/DGActivityIndicatorView.h; sourceTree = "<group>"; };
 		8DDE24D8228FFE7C85673C40B73C5839 /* ZNGMessageViewModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageViewModel.m; sourceTree = "<group>"; };
 		8E7150AAD8ACC79AF0F11DA49294F73E /* DGActivityIndicatorBallClipRotateMultipleAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallClipRotateMultipleAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallClipRotateMultipleAnimation.h; sourceTree = "<group>"; };
-		8EED997A40C53DD02D94AF1982469467 /* starred.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = starred.imageset; sourceTree = "<group>"; };
+		8F4783B266B53F03B7A8F35B62AF1813 /* bubble_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_tailless@2x.png"; sourceTree = "<group>"; };
 		8FC8CD15375F97A46883021CE679212E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9050B4291F4490A431C9620E79335B96 /* MTLModel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLModel.m; path = Mantle/MTLModel.m; sourceTree = "<group>"; };
-		9145A7111FE81F69DF1441C64FC35B5C /* bubble_regular@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_regular@3x.png"; sourceTree = "<group>"; };
 		93050FBE134214F854BA28DA6BF76CC4 /* ZNGNewMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewMessage.h; sourceTree = "<group>"; };
 		934622E556BA5870D4D431B9CAC9F277 /* ZNGContactClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactClient.m; sourceTree = "<group>"; };
 		9387F6857AF64FFC2463D6D10EA2D1BD /* DGActivityIndicatorBallClipRotateMultipleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallClipRotateMultipleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallClipRotateMultipleAnimation.m; sourceTree = "<group>"; };
@@ -861,7 +876,6 @@
 		99E2E611D86EDB3EE01FDC9CCEFBE2C8 /* AFNetworkActivityLogger-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworkActivityLogger-prefix.pch"; sourceTree = "<group>"; };
 		9AACB4CC92EECCDD54170DDF12468062 /* NSBundle+ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+ZingleSDK.m"; sourceTree = "<group>"; };
 		9B1B18E6D45F7C925F5E9873430FAF1B /* AFNetworking-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-umbrella.h"; sourceTree = "<group>"; };
-		9B7F039BF7760A53B1DE060AF46D178B /* play@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "play@2x.png"; sourceTree = "<group>"; };
 		9DC2E753B63F4D2B40E279C111BFE03A /* OpenSans-Light.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-Light.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-Light.ttf"; sourceTree = "<group>"; };
 		9F099CA4688D6A909A5AA2696669BE8C /* ZNGContactClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactClient.h; sourceTree = "<group>"; };
 		9FE586C097CD3057338D04A8ACF91481 /* ZNGTableViewCell.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTableViewCell.m; sourceTree = "<group>"; };
@@ -874,7 +888,6 @@
 		A47EC950DBCBECA2358BE43466B285AF /* ZNGConversationViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversationViewController.h; sourceTree = "<group>"; };
 		A4D3C29BCD85DA13E081A1BE42F4F811 /* UIImage+ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZingleSDK.m"; sourceTree = "<group>"; };
 		A6E756EB69AA70186492D1992FF54D1B /* AFNetworking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-prefix.pch"; sourceTree = "<group>"; };
-		A749CC905CF4C71133384EDB35CD1C6D /* bubble_min_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_min_tailless.png; sourceTree = "<group>"; };
 		A7EB6F93654E4D5F7917A0AEC24A9956 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		A8DB75BA317C85D22E71EBDC1B7BFD30 /* ZNGStatus.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGStatus.m; sourceTree = "<group>"; };
 		A9824C0903D854542504C62C45F2AFA5 /* MTLReflection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLReflection.h; path = Mantle/MTLReflection.h; sourceTree = "<group>"; };
@@ -882,7 +895,6 @@
 		A9C312D09070DF90132395A26D874F89 /* ZNGBubbleSizeCalculating.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBubbleSizeCalculating.h; sourceTree = "<group>"; };
 		AA5A57D3F97AE40FFE1DD6FEB81E90C0 /* DGActivityIndicatorBallPulseAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallPulseAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallPulseAnimation.h; sourceTree = "<group>"; };
 		AAC54F88246F97673D56BB269E524A12 /* DGActivityIndicatorRotatingTrigonAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorRotatingTrigonAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorRotatingTrigonAnimation.m; sourceTree = "<group>"; };
-		AB1A3BB679EFAC2E7E9359F6F6E63F26 /* bubble_stroked@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked@2x.png"; sourceTree = "<group>"; };
 		AB7178666DC1EF58BB1B8BA4C1A86D9F /* ZNGNewContactChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGNewContactChannel.h; sourceTree = "<group>"; };
 		ABC0A8A01BC28FE5B220EA4A6C6DE899 /* AFNetworkReachabilityManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFNetworkReachabilityManager.h; path = AFNetworking/AFNetworkReachabilityManager.h; sourceTree = "<group>"; };
 		ABD8801B0ED98EBB03C95AEF89C47296 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -891,7 +903,6 @@
 		ACEF23E64354BCB14B68FF80E6699954 /* ZNGAvailablePhoneNumberClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvailablePhoneNumberClient.h; sourceTree = "<group>"; };
 		AD062BB349589173AF14C675FADCBF97 /* ZNGMediaPlaceholderView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMediaPlaceholderView.m; sourceTree = "<group>"; };
 		ADB0B0C173C208C9BC0C5532B8C98E05 /* DGActivityIndicatorRotatingSquaresAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorRotatingSquaresAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorRotatingSquaresAnimation.h; sourceTree = "<group>"; };
-		ADD120A7F2E2A7495B301027604753BF /* bubble_tailless@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_tailless@3x.png"; sourceTree = "<group>"; };
 		ADF5315FF60FDBD3A000904698C128E1 /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+AFNetworking.h"; path = "UIKit+AFNetworking/UIButton+AFNetworking.h"; sourceTree = "<group>"; };
 		AE56208452C3354DDF27519901B9898D /* GFIFontLoader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GFIFontLoader.h; path = Pod/Classes/GFIFontLoader.h; sourceTree = "<group>"; };
 		AF07A960E80B46555AE8924FA537A7EA /* MTLValueTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = MTLValueTransformer.m; path = Mantle/MTLValueTransformer.m; sourceTree = "<group>"; };
@@ -902,6 +913,7 @@
 		B1DB8CF305B1D0840653B23FA1A6E30A /* ZNGMessageData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageData.h; sourceTree = "<group>"; };
 		B1DC1C7258DE02A57FD8A5FBF96C9798 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImageView+AFNetworking.h"; path = "UIKit+AFNetworking/UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		B21D1BBC2E79921BA78F05F89E34DA6B /* ZNGImageViewerController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGImageViewerController.h; sourceTree = "<group>"; };
+		B2A953EB20DA49224D1D2275567674F5 /* bubble_min_tailless@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min_tailless@3x.png"; sourceTree = "<group>"; };
 		B4225E21E3EE568D4D8D7AA55EDB8839 /* GoogleFontsiOS-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "GoogleFontsiOS-dummy.m"; sourceTree = "<group>"; };
 		B4DE4FE8A8F651EAB02365A002794764 /* ZNGAccount.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccount.h; sourceTree = "<group>"; };
 		B4F80558C41857FD29D06FF362B9C9F4 /* ZNGCollectionViewCellIncoming.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewCellIncoming.h; sourceTree = "<group>"; };
@@ -915,17 +927,17 @@
 		BB23DAFA56F7DC1FD46BF59B41BAC81F /* ZNGNewServiceChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewServiceChannel.m; sourceTree = "<group>"; };
 		BB2691436CC283AF0310260D3710CCEA /* UIActivityIndicatorView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIActivityIndicatorView+AFNetworking.m"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.m"; sourceTree = "<group>"; };
 		BBDE74BD6CC8494EB01906BFBF491039 /* Mantle.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Mantle.xcconfig; sourceTree = "<group>"; };
-		BC2B91371EBB46D0B402F9C937687B9B /* starred.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = starred.pdf; sourceTree = "<group>"; };
+		BC824AD3B5210528E7D35F0206E29574 /* confirmed.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = confirmed.imageset; sourceTree = "<group>"; };
 		BCDAE776CE677A31613247F7CC8DBF78 /* DGActivityIndicatorBallRotateAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallRotateAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallRotateAnimation.m; sourceTree = "<group>"; };
 		BD04303E2DED7BA899A1BE74A6BB99CB /* UIWebView+AFNetworking.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIWebView+AFNetworking.m"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.m"; sourceTree = "<group>"; };
 		BD1C2661C880D60FBDC6B02AA0B7A367 /* NSValueTransformer+MTLPredefinedTransformerAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValueTransformer+MTLPredefinedTransformerAdditions.h"; path = "Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.h"; sourceTree = "<group>"; };
 		BD2965637D53A1AAFE25A26BCCCC5FDE /* ZNGAutomationClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAutomationClient.h; sourceTree = "<group>"; };
+		BD865DA7915AC0FE1B12BCDAAFB00FBB /* bubble_stroked_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_stroked_tailless.png; sourceTree = "<group>"; };
 		BD991D372833EC9572DBE09674619BC9 /* OpenSans-LightItalic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-LightItalic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-LightItalic.ttf"; sourceTree = "<group>"; };
 		BDAE43EA1180D1055479DB84156BC1E3 /* ZNGContactChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactChannel.h; sourceTree = "<group>"; };
 		BDB49ABFE6DD8E9E187508403FC116B3 /* AFHTTPRequestOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperation.m; path = AFNetworking/AFHTTPRequestOperation.m; sourceTree = "<group>"; };
-		C0837670B2334292C18A5647114DF1BB /* unstarred.imageset */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = folder; path = unstarred.imageset; sourceTree = "<group>"; };
 		C096C1442222D0E59C069E24E8250523 /* ZNGTemplate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGTemplate.h; sourceTree = "<group>"; };
-		C1BCCD87666B8BDBF75E0F291E410000 /* bubble_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_tailless@2x.png"; sourceTree = "<group>"; };
+		C148076E0D756036E456F1E4D899AB91 /* unconfirmed.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = unconfirmed.pdf; sourceTree = "<group>"; };
 		C25B8E69AC265CDDB753A5F53D64B955 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFHTTPRequestOperation.h; path = AFNetworking/AFHTTPRequestOperation.h; sourceTree = "<group>"; };
 		C2948E42E36D9057DDD366BF20B9E951 /* Pods-ZingleSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ZingleSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		C4039158F4DEEC26731B33A970489EBB /* ZNGMediaViewBubbleImageMasker.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMediaViewBubbleImageMasker.m; sourceTree = "<group>"; };
@@ -935,6 +947,9 @@
 		C534F6CF8CCD4A9D86003EAFA773EFAA /* ZNGContactChannelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactChannelClient.m; sourceTree = "<group>"; };
 		C5787315E5E7C0527E3707327ABD9A9C /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.0.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		C5DA2D8A011EE897378BD27080532D0A /* ZNGCollectionViewLayoutAttributes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewLayoutAttributes.h; sourceTree = "<group>"; };
+		C67C7C2F72C6ED4C7C9776D57AF98F23 /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
+		C6B6F08EEC42196AF99D50E98D58FA5E /* camera.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		C7338A399F9A1E640BF18D82801A8826 /* bubble_stroked.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_stroked.png; sourceTree = "<group>"; };
 		C734C5480FB9E5BA53F8DE1822CF91EB /* ZNGToolbarContentView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGToolbarContentView.m; sourceTree = "<group>"; };
 		C7448BC06E28219A21D3A45D30F8C648 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIWebView+AFNetworking.h"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		C75B600CCCA71B04DD9210043AE1B954 /* UIImage+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+AFNetworking.h"; path = "UIKit+AFNetworking/UIImage+AFNetworking.h"; sourceTree = "<group>"; };
@@ -947,23 +962,26 @@
 		CAECC1E2957A707C0704A13A259447CA /* ZNGBubbleImageFactory.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBubbleImageFactory.m; sourceTree = "<group>"; };
 		CB6C600AD04CDC9C8D1B308389DBD393 /* DGActivityIndicatorTripleRingsAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorTripleRingsAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTripleRingsAnimation.m; sourceTree = "<group>"; };
 		CB9846A40AAE77C5AD789C9A0EB25D7A /* AFURLResponseSerialization.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLResponseSerialization.h; path = AFNetworking/AFURLResponseSerialization.h; sourceTree = "<group>"; };
-		CCC39223E6F09B7F4777AA0038A8E29D /* bubble_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_tailless.png; sourceTree = "<group>"; };
 		CCFA782E0747C7AE70D5CE7FC97C6073 /* ZNGAccountClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAccountClient.h; sourceTree = "<group>"; };
+		CD4608B56488A44BD0B9E27A0BE3B994 /* bubble_stroked@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked@3x.png"; sourceTree = "<group>"; };
 		CD7E8FD8230CE9B69109B8A30E3C2A42 /* ZNGLabelCollectionViewCell.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGLabelCollectionViewCell.xib; sourceTree = "<group>"; };
 		CDB01C8EC4B681DD4F1DA7D573AA8233 /* AFNetworkActivityLogger-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworkActivityLogger-dummy.m"; sourceTree = "<group>"; };
 		CE026CE254107072BBF5AE57BEC89D66 /* DGActivityIndicatorDoubleBounceAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorDoubleBounceAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorDoubleBounceAnimation.h; sourceTree = "<group>"; };
 		CE6E05E959F3C6873266DF7BDD5DBC61 /* ZNGConversation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversation.m; sourceTree = "<group>"; };
 		CE9431FB380EC3344910B483B25E39E1 /* OpenSans.bundle */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OpenSans.bundle; sourceTree = BUILT_PRODUCTS_DIR; };
+		CED954CE6165112CE096791705A23F7C /* typing.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = typing.png; sourceTree = "<group>"; };
 		CFB03155DD5C05A3C733EB8DB4BD40A1 /* NSDictionary+MTLJSONKeyPath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSDictionary+MTLJSONKeyPath.h"; path = "Mantle/NSDictionary+MTLJSONKeyPath.h"; sourceTree = "<group>"; };
 		CFF1560DE6AC33113CCCE4C769F719F7 /* ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZingleSDK.m; sourceTree = "<group>"; };
 		D08F46018F7D726DBC43E9B676745099 /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D09FFA81F0F031FFD7902A21CA9A8635 /* ZNGLoadEarlierHeaderView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLoadEarlierHeaderView.h; sourceTree = "<group>"; };
 		D0BB0C13ACCC93147E5BCFAFCA4D61A5 /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
+		D0BB5F73AECF7EA3E8EC5E6E2F81F02B /* bubble_regular@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_regular@2x.png"; sourceTree = "<group>"; };
 		D1CBBC570C329AB031703DCAF0CFF768 /* ZNGVideoMediaItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGVideoMediaItem.h; sourceTree = "<group>"; };
 		D3601061A3E38607F2DE34835BF44E52 /* ZingleSDK-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "ZingleSDK-dummy.m"; sourceTree = "<group>"; };
 		D362CDE6FD269F9710081DF22AE75325 /* ZNGMessageClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageClient.m; sourceTree = "<group>"; };
 		D38C95DBDCCDAE8F210F4E7934A782CB /* ZNGCollectionViewDataSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewDataSource.h; sourceTree = "<group>"; };
 		D39A71D4F28979F4F39F2B983726E1D6 /* ZNGServiceChannelClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGServiceChannelClient.h; sourceTree = "<group>"; };
+		D468F8070DC4860867389E9D28532B3A /* bubble_stroked_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked_tailless@2x.png"; sourceTree = "<group>"; };
 		D4E5A553BBE1604B39EAACB7CEE4AE2C /* AFURLSessionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLSessionManager.h; path = AFNetworking/AFURLSessionManager.h; sourceTree = "<group>"; };
 		D5CFE85063F4BAC6CB65B97C09EFB09C /* OpenSans-Semibold.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-Semibold.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-Semibold.ttf"; sourceTree = "<group>"; };
 		D61EC3CF1AA853D55DDC912541EAD1B9 /* EXTScope.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTScope.h; path = Mantle/extobjc/EXTScope.h; sourceTree = "<group>"; };
@@ -973,10 +991,8 @@
 		D74824134D3B20BE7E4945AD98B7539A /* ZingleSDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ZingleSDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7CF3CC732B80F3841EF540700F68948 /* Pods-ZingleSDK_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZingleSDK_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		D8040E0FC22017126118BC2A641ED597 /* DGActivityIndicatorView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DGActivityIndicatorView-prefix.pch"; sourceTree = "<group>"; };
-		D80DD59AB35352DBA64C315B35AC15F3 /* bubble_min_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min_tailless@2x.png"; sourceTree = "<group>"; };
 		D84284A5FF5B81011EEB8BEC11E93E9E /* ZNGBaseViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGBaseViewController.m; sourceTree = "<group>"; };
 		D8713C91237684F8ED9824491E984CF4 /* DGActivityIndicatorBallScaleRippleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallScaleRippleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleRippleAnimation.m; sourceTree = "<group>"; };
-		D8D247A8258C265A4F8CB858299BCFF7 /* bubble_regular@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_regular@2x.png"; sourceTree = "<group>"; };
 		D8E7E07B0D924626CBABA59BE1EB7732 /* ZNGComposerTextView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGComposerTextView.h; sourceTree = "<group>"; };
 		D9053277FB69EE9FF287B14F426C5F84 /* GoogleFontsiOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = GoogleFontsiOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DA51F14714FB4CE9F75C38567E4D7C05 /* AFHTTPRequestOperationManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFHTTPRequestOperationManager.m; path = AFNetworking/AFHTTPRequestOperationManager.m; sourceTree = "<group>"; };
@@ -989,7 +1005,6 @@
 		E17460E9166A1C58B0B6462AF9131F13 /* DGActivityIndicatorView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DGActivityIndicatorView-dummy.m"; sourceTree = "<group>"; };
 		E17D9E3FD1EE417D2A8E50DC40DBED5C /* AFNetworking-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworking-dummy.m"; sourceTree = "<group>"; };
 		E181152D2613C21611C8044701568A94 /* ZNGBaseViewController.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGBaseViewController.xib; sourceTree = "<group>"; };
-		E20C3B68E57DAE23413C63EFEED6E537 /* bubble_min_tailless@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min_tailless@3x.png"; sourceTree = "<group>"; };
 		E2F014E999C2C2E3789635C735E4FDF6 /* ZNGDataSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGDataSet.m; sourceTree = "<group>"; };
 		E308C5212AEA3610320AC9E2E3243C2E /* ZNGMessageMediaData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessageMediaData.h; sourceTree = "<group>"; };
 		E32AD20A68895B700A1A073C13F772AF /* ZNGCollectionViewFlowLayout.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewFlowLayout.h; sourceTree = "<group>"; };
@@ -999,15 +1014,19 @@
 		E4828002FDC68EA12CD945B5D4FB3CAC /* ZNGServiceAddressClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceAddressClient.m; sourceTree = "<group>"; };
 		E55AAAC023E291F526450AC59DDD2382 /* Mantle.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Mantle.modulemap; sourceTree = "<group>"; };
 		E5892A3B5C4EF6BC732DA2E3B971A15A /* ZNGBubbleImageFactory.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBubbleImageFactory.h; sourceTree = "<group>"; };
+		E5AD1A03087EF6A067E3DC60FDE6B290 /* bubble_regular.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_regular.png; sourceTree = "<group>"; };
 		E6652E64C642EB2A2D25B791805B6776 /* AFNetworkActivityIndicatorManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFNetworkActivityIndicatorManager.m; path = "UIKit+AFNetworking/AFNetworkActivityIndicatorManager.m"; sourceTree = "<group>"; };
 		E6F7731DB834439C4A69377C41CAF18E /* AFNetworkActivityLogger.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworkActivityLogger.xcconfig; sourceTree = "<group>"; };
 		E70195D4A84AB4D8CEE0268AECC118B2 /* EXTRuntimeExtensions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXTRuntimeExtensions.h; path = Mantle/extobjc/EXTRuntimeExtensions.h; sourceTree = "<group>"; };
+		E7A7E2BB98965226120B6C37A9F6FFE2 /* starred.pdf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.pdf; path = starred.pdf; sourceTree = "<group>"; };
 		E81420B1C3DDE8D8D2C300AC9AE96086 /* Pods-ZingleSDK_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ZingleSDK_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		E86FED4D34C906CC7BFA9A9D341D734C /* UIColor+ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIColor+ZingleSDK.h"; sourceTree = "<group>"; };
+		E8AA67A69B952977E094334D49BE684A /* play.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		E9064D5AC02A578B7F4A861ABE214049 /* ZNGCellLabel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGCellLabel.m; sourceTree = "<group>"; };
 		E913114E334AEFA7E9F800B0DAE1E6B9 /* ZNGLocationMediaItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLocationMediaItem.h; sourceTree = "<group>"; };
 		EADB853C61467CCC4230AAA8187BCDFA /* AFURLResponseSerialization.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLResponseSerialization.m; path = AFNetworking/AFURLResponseSerialization.m; sourceTree = "<group>"; };
 		EAEA01826BABDCFE774D8FAFE38C97ED /* UIKit+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIKit+AFNetworking.h"; path = "UIKit+AFNetworking/UIKit+AFNetworking.h"; sourceTree = "<group>"; };
+		EB180BBBB01FD9DC43555C2C35BC2FDE /* Contents.json */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.json; path = Contents.json; sourceTree = "<group>"; };
 		EC929EBD45919508DBEC96D84715BD13 /* DGActivityIndicatorRotatingSquaresAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorRotatingSquaresAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorRotatingSquaresAnimation.m; sourceTree = "<group>"; };
 		EDD29F6F7A38BD60BF207EE808C17C54 /* ZNGAvatarImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvatarImage.h; sourceTree = "<group>"; };
 		EF4353EC905E945BE0BE754730FF9315 /* ZNGTypingIndicatorFooterView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGTypingIndicatorFooterView.xib; sourceTree = "<group>"; };
@@ -1018,18 +1037,18 @@
 		F2AE2130745FB05F9D34A4980FBAF9BE /* DGActivityIndicatorBallBeatAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallBeatAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallBeatAnimation.m; sourceTree = "<group>"; };
 		F2D22D21043D27D1E433111BC88BB65C /* ZNGChannelType.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGChannelType.m; sourceTree = "<group>"; };
 		F360CA62F53D6B3A8DF6DA01C6535BF2 /* ZNGServiceChannelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceChannelClient.m; sourceTree = "<group>"; };
-		F3DAF6F3AC1B4B019C3D98877F7B3448 /* bubble_min.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_min.png; sourceTree = "<group>"; };
 		F4518C9BE2A123FB92F3FBC019419781 /* DGActivityIndicatorBallPulseSyncAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallPulseSyncAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallPulseSyncAnimation.h; sourceTree = "<group>"; };
 		F629026C3727ACEF748D4F9FB169FD7A /* OpenSans-Italic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-Italic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-Italic.ttf"; sourceTree = "<group>"; };
 		F677060966B676D5D938DFBE22BDAC10 /* AFNetworking.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.xcconfig; sourceTree = "<group>"; };
 		F6D1CF3AFC88E26B71037866E122E7B7 /* ZNGMessage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGMessage.h; sourceTree = "<group>"; };
 		F70D0767952A62FE5A11CF20C418927F /* ZNGConversationViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationViewController.m; sourceTree = "<group>"; };
 		F70FB6B084A5D25387B13110197BFD60 /* NSString+ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "NSString+ZingleSDK.m"; sourceTree = "<group>"; };
-		F789576CCD2CF127BD15F07D0DBC2C65 /* typing@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "typing@2x.png"; sourceTree = "<group>"; };
+		F83D27DFE2E7194476DE6F1872E62E25 /* bubble_min_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_min_tailless.png; sourceTree = "<group>"; };
 		F846F88E65DACAF78D34680DB04CA834 /* ZNGInputToolbar.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGInputToolbar.m; sourceTree = "<group>"; };
 		F8895EA3BC60BEB8F8C533C9A580919D /* ZNGTimestampFormatter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGTimestampFormatter.m; sourceTree = "<group>"; };
+		F9B95DDE0B5211180C2FFD79D4574585 /* typing@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "typing@3x.png"; sourceTree = "<group>"; };
 		F9D851CAE037396BA9AD81CBEC2F70C0 /* ZNGMessage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessage.m; sourceTree = "<group>"; };
-		FB13E2EE864F1800321A481170F81082 /* bubble_min@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@2x.png"; sourceTree = "<group>"; };
+		FB052693E0C20E7E00EA309485AF03A6 /* bubble_stroked@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked@2x.png"; sourceTree = "<group>"; };
 		FB3B884BCF45B2DC4AFCDAA5F89D7BE2 /* Mantle-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Mantle-umbrella.h"; sourceTree = "<group>"; };
 		FB68E8C37AF16194ADBAC1D8DC585730 /* ZNGBubblesSizeCalculator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBubblesSizeCalculator.h; sourceTree = "<group>"; };
 		FBA7827E84D48B5CB910291B282FF8E8 /* UIColor+ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIColor+ZingleSDK.m"; sourceTree = "<group>"; };
@@ -1038,6 +1057,7 @@
 		FD0A3146924A96679A0669EE94EDDF5A /* ZNGError.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGError.m; sourceTree = "<group>"; };
 		FD6F32D7871427B2BC7447CA492A28D5 /* ZNGAccountClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountClient.m; sourceTree = "<group>"; };
 		FD74677ED070A04D54CFE77733AC0111 /* ZNGNewContactChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewContactChannel.m; sourceTree = "<group>"; };
+		FD929396D6E2698AF9E4703F9D3F667D /* bubble_tailless@3x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_tailless@3x.png"; sourceTree = "<group>"; };
 		FDA1589FA1655C997A886358B7221D17 /* ZNGChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGChannel.h; sourceTree = "<group>"; };
 		FDA97AED3F38EC0FA60B40BBBEF2EDE9 /* DGActivityIndicatorTriplePulseAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorTriplePulseAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTriplePulseAnimation.h; sourceTree = "<group>"; };
 		FE77BAE7224B3EDA91D3B0D3DDC06229 /* Pods-ZingleSDK_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ZingleSDK_Example-dummy.m"; sourceTree = "<group>"; };
@@ -1227,13 +1247,13 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
-		2335DB50E9FDDF80C2F15C2D7288E265 /* starred.imageset */ = {
+		2C1CE19F1E6371A78D6689D1B34E0990 /* unstarred.imageset */ = {
 			isa = PBXGroup;
 			children = (
-				68EB15FE06885E0BBA0B6CFBBC8E7C0B /* Contents.json */,
-				BC2B91371EBB46D0B402F9C937687B9B /* starred.pdf */,
+				434619341FB92836BC6EE4258A0A5383 /* Contents.json */,
+				0A8863E08D19F7F078E870B71108F6DD /* unstarred.pdf */,
 			);
-			path = starred.imageset;
+			path = unstarred.imageset;
 			sourceTree = "<group>";
 		};
 		2C88748BA9F854C1090259F44AE5B73A /* ZNGContact */ = {
@@ -1245,6 +1265,15 @@
 				3C410AF082C0F81BC57EE17394CC8970 /* ZNGNewContact.m */,
 			);
 			path = ZNGContact;
+			sourceTree = "<group>";
+		};
+		2D42184C9D9ACF5DDE8796BF793C31FB /* lrg_starred.imageset */ = {
+			isa = PBXGroup;
+			children = (
+				EB180BBBB01FD9DC43555C2C35BC2FDE /* Contents.json */,
+				7ECB115054AAA48CBF2053ECD854C095 /* lrg_starred.pdf */,
+			);
+			path = lrg_starred.imageset;
 			sourceTree = "<group>";
 		};
 		32CF21925473B82E117E0A33398C3E17 /* Products */ = {
@@ -1261,18 +1290,6 @@
 				D74824134D3B20BE7E4945AD98B7539A /* ZingleSDK.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		33EFB25C518230A4DA03F5BC9E01A126 /* Images.xcassets */ = {
-			isa = PBXGroup;
-			children = (
-				82581343BA63F8FCF7C861F0307D9B75 /* Contents.json */,
-				8EED997A40C53DD02D94AF1982469467 /* starred.imageset */,
-				C0837670B2334292C18A5647114DF1BB /* unstarred.imageset */,
-				2335DB50E9FDDF80C2F15C2D7288E265 /* starred.imageset */,
-				B9770C21B7E24EACF6C589B6BFC2EE15 /* unstarred.imageset */,
-			);
-			path = Images.xcassets;
 			sourceTree = "<group>";
 		};
 		3AFD17EE0DD4BC5B734E732DA4D23174 /* Support Files */ = {
@@ -1386,6 +1403,15 @@
 			path = "Target Support Files/Pods-ZingleSDK_Tests";
 			sourceTree = "<group>";
 		};
+		7108653727AB0CC247BE9938FF0A6177 /* lrg_unstarred.imageset */ = {
+			isa = PBXGroup;
+			children = (
+				824781B928F7EEEF0E4503FFDC6E07A1 /* Contents.json */,
+				6CB62F562CED0AE0AD365467819081FC /* lrg_unstarred.pdf */,
+			);
+			path = lrg_unstarred.imageset;
+			sourceTree = "<group>";
+		};
 		7118DBEB208B60FA224B31AF0A13BDC0 /* DGActivityIndicatorView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1488,51 +1514,22 @@
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
+		73EFD13F37EFDC00BF853A923D71E5C9 /* confirmed.imageset */ = {
+			isa = PBXGroup;
+			children = (
+				81C394BA4075BBA7280668E23F3C62FB /* confirmed.pdf */,
+				307E21231BF2BDD76FD74BC760ADF01C /* Contents.json */,
+			);
+			path = confirmed.imageset;
+			sourceTree = "<group>";
+		};
 		7718886F3DDF741B7E29F0D90D29C7D5 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
-				795F0288353DD80F99B01555B7C51BFE /* Assets */,
+				E733B24B68ACA944231E9ACE68404234 /* Assets */,
 				4E0F539DDF97BD4A5C3B732243544AC7 /* Classes */,
 			);
 			path = Pod;
-			sourceTree = "<group>";
-		};
-		795F0288353DD80F99B01555B7C51BFE /* Assets */ = {
-			isa = PBXGroup;
-			children = (
-				F3DAF6F3AC1B4B019C3D98877F7B3448 /* bubble_min.png */,
-				FB13E2EE864F1800321A481170F81082 /* bubble_min@2x.png */,
-				5AC7459041F41EA5C75623EA3EF4E070 /* bubble_min@3x.png */,
-				A749CC905CF4C71133384EDB35CD1C6D /* bubble_min_tailless.png */,
-				D80DD59AB35352DBA64C315B35AC15F3 /* bubble_min_tailless@2x.png */,
-				E20C3B68E57DAE23413C63EFEED6E537 /* bubble_min_tailless@3x.png */,
-				2736C8B06A2BD681B9A0818F41700537 /* bubble_regular.png */,
-				D8D247A8258C265A4F8CB858299BCFF7 /* bubble_regular@2x.png */,
-				9145A7111FE81F69DF1441C64FC35B5C /* bubble_regular@3x.png */,
-				378B2CB13F96783D9E61AABFD63D2D34 /* bubble_stroked.png */,
-				AB1A3BB679EFAC2E7E9359F6F6E63F26 /* bubble_stroked@2x.png */,
-				2949538CE7664B24FE20820788202B8D /* bubble_stroked@3x.png */,
-				6180EEB58A7B2BE0B232CAF0CCD23EF3 /* bubble_stroked_tailless.png */,
-				47F31F3E2F507002D64979C25E60320A /* bubble_stroked_tailless@2x.png */,
-				7D8A93EDC4209BD44E7DAF39CEA1AC99 /* bubble_stroked_tailless@3x.png */,
-				CCC39223E6F09B7F4777AA0038A8E29D /* bubble_tailless.png */,
-				C1BCCD87666B8BDBF75E0F291E410000 /* bubble_tailless@2x.png */,
-				ADD120A7F2E2A7495B301027604753BF /* bubble_tailless@3x.png */,
-				70DCF1F8206512F89BE6E6F567A2AFDB /* camera.png */,
-				4C2B4C09C4F560BF20FD451B1FA82E1C /* clip.png */,
-				8ABFDCF60BA2A4BA645E9BE61B7D04D7 /* clip@2x.png */,
-				0C195237CD42392749A9BC53E5977C00 /* clip@3x.png */,
-				64B2F85BA04516213AC57ACC3BFA2616 /* Images.xcassets */,
-				121DA2C6A317A28D9570CFC8B6150503 /* play.png */,
-				9B7F039BF7760A53B1DE060AF46D178B /* play@2x.png */,
-				221A2F06931E61524029B79281A295BA /* play@3x.png */,
-				151B5F2697885FFD425E93499A16463B /* typing.png */,
-				F789576CCD2CF127BD15F07D0DBC2C65 /* typing@2x.png */,
-				889A3FE7622F7382ECC9B6BE119EB218 /* typing@3x.png */,
-				3AD2A02B67E29EFDB25BEE7C247659A8 /* ZingleSDK.strings */,
-				33EFB25C518230A4DA03F5BC9E01A126 /* Images.xcassets */,
-			);
-			path = Assets;
 			sourceTree = "<group>";
 		};
 		7BEAD9F12F23B3E43C2B086C390D2F43 /* Support Files */ = {
@@ -1635,6 +1632,15 @@
 			);
 			name = "Support Files";
 			path = "Example/Pods/Target Support Files/ZingleSDK";
+			sourceTree = "<group>";
+		};
+		882C8CD385CBDD974130B92CC2C8BD55 /* unconfirmed.imageset */ = {
+			isa = PBXGroup;
+			children = (
+				C67C7C2F72C6ED4C7C9776D57AF98F23 /* Contents.json */,
+				C148076E0D756036E456F1E4D899AB91 /* unconfirmed.pdf */,
+			);
+			path = unconfirmed.imageset;
 			sourceTree = "<group>";
 		};
 		892B67098ACEE4872D163070939423E7 /* AFNetworkActivityLogger */ = {
@@ -1870,13 +1876,24 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		B9770C21B7E24EACF6C589B6BFC2EE15 /* unstarred.imageset */ = {
+		C04FCB8F8E7246275FB7171079CF0BEC /* ZNGImages.xcassets */ = {
 			isa = PBXGroup;
 			children = (
-				308CFFE859C939EB19BB2B167EC8E33A /* Contents.json */,
-				81B0CF8AB84A67B22181C1231AC4679D /* unstarred.pdf */,
+				BC824AD3B5210528E7D35F0206E29574 /* confirmed.imageset */,
+				223D88BE81C52A3CA74BBBDD39D4272C /* Contents.json */,
+				60D8547BEEC000B47C4C0F2E8E2D4B7D /* lrg_starred.imageset */,
+				1512C8D8286E2761F9DB2CD7EF86A020 /* lrg_unstarred.imageset */,
+				1017179C1443F35071420E35E04E3320 /* starred.imageset */,
+				84A47A7756E82F069CE08CAAA69ACDA7 /* unconfirmed.imageset */,
+				312C4A5DABF6B999093D776B5FF4308F /* unstarred.imageset */,
+				73EFD13F37EFDC00BF853A923D71E5C9 /* confirmed.imageset */,
+				2D42184C9D9ACF5DDE8796BF793C31FB /* lrg_starred.imageset */,
+				7108653727AB0CC247BE9938FF0A6177 /* lrg_unstarred.imageset */,
+				FD58952DB466923E7B4996D3A5B2A10A /* starred.imageset */,
+				882C8CD385CBDD974130B92CC2C8BD55 /* unconfirmed.imageset */,
+				2C1CE19F1E6371A78D6689D1B34E0990 /* unstarred.imageset */,
 			);
-			path = unstarred.imageset;
+			path = ZNGImages.xcassets;
 			sourceTree = "<group>";
 		};
 		CE62FD06780F8E4B270E292064C3CC64 /* OpenSans */ = {
@@ -2015,6 +2032,44 @@
 			path = "../Target Support Files/AFNetworkActivityLogger";
 			sourceTree = "<group>";
 		};
+		E733B24B68ACA944231E9ACE68404234 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				74AE911EA792BAA8C4E4B66A2B2A605A /* bubble_min.png */,
+				6C7D0F58734F427343A5E6EA416F1DDF /* bubble_min@2x.png */,
+				1DFB51CBA5CC6C1A12B5757506646E62 /* bubble_min@3x.png */,
+				F83D27DFE2E7194476DE6F1872E62E25 /* bubble_min_tailless.png */,
+				708693E27BF3DDD919A5D0B120651CE5 /* bubble_min_tailless@2x.png */,
+				B2A953EB20DA49224D1D2275567674F5 /* bubble_min_tailless@3x.png */,
+				E5AD1A03087EF6A067E3DC60FDE6B290 /* bubble_regular.png */,
+				D0BB5F73AECF7EA3E8EC5E6E2F81F02B /* bubble_regular@2x.png */,
+				5132224693902995D34F1B92F18B0F23 /* bubble_regular@3x.png */,
+				C7338A399F9A1E640BF18D82801A8826 /* bubble_stroked.png */,
+				FB052693E0C20E7E00EA309485AF03A6 /* bubble_stroked@2x.png */,
+				CD4608B56488A44BD0B9E27A0BE3B994 /* bubble_stroked@3x.png */,
+				BD865DA7915AC0FE1B12BCDAAFB00FBB /* bubble_stroked_tailless.png */,
+				D468F8070DC4860867389E9D28532B3A /* bubble_stroked_tailless@2x.png */,
+				768AF1CE0A76FDE50416A242B4026199 /* bubble_stroked_tailless@3x.png */,
+				734548AEE49CDEE51C22D0B1CAE6C7DC /* bubble_tailless.png */,
+				8F4783B266B53F03B7A8F35B62AF1813 /* bubble_tailless@2x.png */,
+				FD929396D6E2698AF9E4703F9D3F667D /* bubble_tailless@3x.png */,
+				C6B6F08EEC42196AF99D50E98D58FA5E /* camera.png */,
+				40188E53847A36557A5FA1B331C13EF4 /* clip.png */,
+				13157E6C3063371E10AD5DD1935EC988 /* clip@2x.png */,
+				495786D265F959899DDB500C7C8D1B51 /* clip@3x.png */,
+				E8AA67A69B952977E094334D49BE684A /* play.png */,
+				15822195D3A5EAAC9F3E38723B06C1ED /* play@2x.png */,
+				543BC8FDFDD66ED3CBCC3E911D80E7E6 /* play@3x.png */,
+				CED954CE6165112CE096791705A23F7C /* typing.png */,
+				716AB5F79CADDCBB86081B01A6B61C48 /* typing@2x.png */,
+				F9B95DDE0B5211180C2FFD79D4574585 /* typing@3x.png */,
+				3719202A091F0282AFD4A03AE3EBB88B /* ZingleSDK.strings */,
+				553B3187CF6631147DA7CFC3662EA4DE /* ZNGImages.xcassets */,
+				C04FCB8F8E7246275FB7171079CF0BEC /* ZNGImages.xcassets */,
+			);
+			path = Assets;
+			sourceTree = "<group>";
+		};
 		EAD92F5E521EBCF088A11A54D90BFACE /* iOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -2073,6 +2128,15 @@
 				6AC4D34E75149EE9C1C539E1A50453FE /* metamacros.h */,
 			);
 			name = extobjc;
+			sourceTree = "<group>";
+		};
+		FD58952DB466923E7B4996D3A5B2A10A /* starred.imageset */ = {
+			isa = PBXGroup;
+			children = (
+				56CC2DCE0D3C18881EA3D980F29E6903 /* Contents.json */,
+				E7A7E2BB98965226120B6C37A9F6FFE2 /* starred.pdf */,
+			);
+			path = starred.imageset;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -2442,7 +2506,7 @@
 				905EBF7F86E4F3EC47CA0E28DA44F8F1 /* Sources */,
 				2796E0E3B31CB5A2E26F8EED12B0090F /* Frameworks */,
 				6492FE29D6E66A4D3829827E606911BE /* Headers */,
-				935AB8F5011BAC58A2311B42B349106B /* Resources */,
+				885108CF2FABD09475426D6C071AB448 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -2537,57 +2601,69 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		935AB8F5011BAC58A2311B42B349106B /* Resources */ = {
+		885108CF2FABD09475426D6C071AB448 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				06B605D986A250760150AA18E74D30E0 /* bubble_min.png in Resources */,
-				66D85D3628C4C80C1F5BA0A763F19D4D /* bubble_min@2x.png in Resources */,
-				2BAC754A32E11198F4597BBAC3FBB44E /* bubble_min@3x.png in Resources */,
-				AC6974DD425530377E0CA386F570C5FE /* bubble_min_tailless.png in Resources */,
-				73D32FD295ED616E30DDA7D9C2E4C248 /* bubble_min_tailless@2x.png in Resources */,
-				A77B2DFFB074954D3FAB95823CBBA124 /* bubble_min_tailless@3x.png in Resources */,
-				D5ACE0892B9ACE1348A76D0144027301 /* bubble_regular.png in Resources */,
-				974462EED782793D73F90E27C306DC67 /* bubble_regular@2x.png in Resources */,
-				F9AF561F6B4FBC3CB3AADB7C196AF9C5 /* bubble_regular@3x.png in Resources */,
-				921A45FE54C3463E8421BC8F18D61287 /* bubble_stroked.png in Resources */,
-				CA48D0A1B5C164A7ED14A705B550249F /* bubble_stroked@2x.png in Resources */,
-				1B304D1FE786CE385FBF22FF04450F56 /* bubble_stroked@3x.png in Resources */,
-				A8F9F7E2F793215F49832DBA7E642430 /* bubble_stroked_tailless.png in Resources */,
-				E295E7BA4E27983D8573981B79A62A4D /* bubble_stroked_tailless@2x.png in Resources */,
-				01E8985FFE0124EFE02FD8D0590ADA86 /* bubble_stroked_tailless@3x.png in Resources */,
-				67B8C3BC21B691BB133F4133AB4CC249 /* bubble_tailless.png in Resources */,
-				7E0645C504DFACF550C1ACAD3516B0DE /* bubble_tailless@2x.png in Resources */,
-				E74D22851895630343200243947EC8F6 /* bubble_tailless@3x.png in Resources */,
-				B94CDF99809A2A3E70403119FD80DC6C /* camera.png in Resources */,
-				A9A3517D22F7BACEC61E38625F8CE295 /* clip.png in Resources */,
-				4EE076EC1419F8F464DCDAB141929C06 /* clip@2x.png in Resources */,
-				39707E35C2186BDAF89A66771073029E /* clip@3x.png in Resources */,
-				A741AA499968A52226E40361FCF8F2B9 /* Contents.json in Resources */,
-				A741AA499968A52226E40361FCF8F2B9 /* Contents.json in Resources */,
-				A741AA499968A52226E40361FCF8F2B9 /* Contents.json in Resources */,
-				41E6963707D95C9B7798E8C4F655E10C /* Images.xcassets in Resources */,
-				DB6706F19DACB5E99F224CCAABE1C4BB /* play.png in Resources */,
-				CF16EB07C50FA614B3F6DCF7B5B34A2A /* play@2x.png in Resources */,
-				208778388233AA8B778A12EA15435F1C /* play@3x.png in Resources */,
-				43EE57691F9E3853568BA1E249DF1F01 /* starred.imageset in Resources */,
-				0658F253171FE331BC99076C67EA9C50 /* starred.pdf in Resources */,
-				A30D98B2EFD187E039B80D90CF941FCA /* typing.png in Resources */,
-				A2B8803F362CDCD38C0F797428EBF538 /* typing@2x.png in Resources */,
-				45F0766E856916F372847A86F427A974 /* typing@3x.png in Resources */,
-				9E4E6EC7D3A812370F938D8A6C892A8C /* unstarred.imageset in Resources */,
-				B0C02711A8836C3FE04E80D661F44D8F /* unstarred.pdf in Resources */,
-				70256B0096410F8C9C49F0ADFC5B04BB /* ZingleSDK.strings in Resources */,
-				1A81C29918A855DEBB287E6CE6ADAEF2 /* ZNGBaseViewController.xib in Resources */,
-				ED5C5CEAE44864D6DDA4844720AD0A33 /* ZNGCollectionViewCellIncoming.xib in Resources */,
-				BBDEF05C39FB96ECDF8FBB39476902FD /* ZNGCollectionViewCellOutgoing.xib in Resources */,
-				890933F03CBC8C2B83DE80D0988547BE /* ZNGImageViewerController.xib in Resources */,
-				3E5A67B988578C3D82A4F385DE9ADBBF /* ZNGInboxViewController.xib in Resources */,
-				FC6F87B44ACDD31E077C8BF3578EA68B /* ZNGLabelCollectionViewCell.xib in Resources */,
-				1233168F14476BDAD75A477022A9B711 /* ZNGLoadEarlierHeaderView.xib in Resources */,
-				DB01271242EBD1B4F11BAB7FDE1CA2A1 /* ZNGTableViewCell.xib in Resources */,
-				F0C95444988F185A8FD00574F8383100 /* ZNGToolbarContentView.xib in Resources */,
-				1AFC33656DED183BCBA2FCBC862315B5 /* ZNGTypingIndicatorFooterView.xib in Resources */,
+				9A4FE661725BE8CECB49F68D8AD2AD14 /* bubble_min.png in Resources */,
+				1BAC10A110FAAE20B5AC168A2FCA741B /* bubble_min@2x.png in Resources */,
+				F57A4C24D012F9F6BAB6DAEE82C3D3FB /* bubble_min@3x.png in Resources */,
+				94ABDEBEA3B583605B603DCBA37BC802 /* bubble_min_tailless.png in Resources */,
+				E2B7CC13FDC7EC6010B00706F11F2070 /* bubble_min_tailless@2x.png in Resources */,
+				3BC4EC334F5237FC0FA5893B2FF4C87A /* bubble_min_tailless@3x.png in Resources */,
+				1B307BE7B466C70F977326E2E0F08F66 /* bubble_regular.png in Resources */,
+				F14505F5BEA6F6BA3AE04762A83C64DF /* bubble_regular@2x.png in Resources */,
+				E2C1C99E7E62890EE49B0299B9DDFDAB /* bubble_regular@3x.png in Resources */,
+				D227713FB6796ECD3C781E12099BADB6 /* bubble_stroked.png in Resources */,
+				25E594C713E4D0A26DF9EE39F2623353 /* bubble_stroked@2x.png in Resources */,
+				68728D7F827366E19B54E64FBD0FBDC3 /* bubble_stroked@3x.png in Resources */,
+				966FAA217BA98F940ECA00B59DADD8B5 /* bubble_stroked_tailless.png in Resources */,
+				A6C842ABFAAE2A66D9B11A7C0B1BF10C /* bubble_stroked_tailless@2x.png in Resources */,
+				704BC6E552959D9B45C08EEBA244BA51 /* bubble_stroked_tailless@3x.png in Resources */,
+				C07B60E49FCD2822B3CCAFDBD2A5214D /* bubble_tailless.png in Resources */,
+				318FE85F3FD9C7B5BCB54F9669DAD07F /* bubble_tailless@2x.png in Resources */,
+				4A7BB804C7156A06C50C0B3119407C1A /* bubble_tailless@3x.png in Resources */,
+				CCCEC5842C9BED084B7515B622E797ED /* camera.png in Resources */,
+				0E5A93BBDEAE6F21F2CF03F3BB95FC5C /* clip.png in Resources */,
+				1F40416F5609BAC987F6636A2F9EF143 /* clip@2x.png in Resources */,
+				A6F6AAF86A4877E88FBD69EA80F42E77 /* clip@3x.png in Resources */,
+				44B3FEE708F2770779C77FE7BB1D744F /* confirmed.imageset in Resources */,
+				5DE9A15F0CCA81A02B8F1156CF0A0ACD /* confirmed.pdf in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				82901240E9606FA1129F6494D3D09E3F /* Contents.json in Resources */,
+				C96FCB38CFE39CCE243271FD2A0877AE /* lrg_starred.imageset in Resources */,
+				48A98628CDA77939E38C197F5FBB1908 /* lrg_starred.pdf in Resources */,
+				13F425E527857B6718201297AF4DF48D /* lrg_unstarred.imageset in Resources */,
+				64174C53E387A03A0C4C10BFE04D51A8 /* lrg_unstarred.pdf in Resources */,
+				3D144341FBF886632E642BF555E7A557 /* play.png in Resources */,
+				74A3641BEFD87AC19F4FB224512A655F /* play@2x.png in Resources */,
+				A33EF5F5F55F9379268FDB2EC4819AFB /* play@3x.png in Resources */,
+				7B4CC6ED2E99A0948A975F0678DAFE61 /* starred.imageset in Resources */,
+				9873722ED1A523694FBD1398D0F4340B /* starred.pdf in Resources */,
+				BE18EE323728C68CB2E235595F8109D2 /* typing.png in Resources */,
+				B648FA73EAD7A573E84678090A6D4FF8 /* typing@2x.png in Resources */,
+				BC44597D10E30F5AF164C38417772237 /* typing@3x.png in Resources */,
+				C52C552B5B899CEAB7F3FD180DBD22A2 /* unconfirmed.imageset in Resources */,
+				12881A6A817BAC210E9D99536CF61098 /* unconfirmed.pdf in Resources */,
+				581A13524D245FE5802C16295CBB16AA /* unstarred.imageset in Resources */,
+				C9A4028BE5317D38478C51B940E12F51 /* unstarred.pdf in Resources */,
+				F3A2933A552DCABCC84994F862B8ECD2 /* ZingleSDK.strings in Resources */,
+				6F99A45F10545E60C1186077EB93F9C0 /* ZNGBaseViewController.xib in Resources */,
+				B7A230041B5FEE8EB480A258ADDFDA96 /* ZNGCollectionViewCellIncoming.xib in Resources */,
+				CE51CD13773D381CD794D96A3051D541 /* ZNGCollectionViewCellOutgoing.xib in Resources */,
+				AC31F96BA0EBF3F6EE2069C8C5458395 /* ZNGImages.xcassets in Resources */,
+				73764DB86E4636EA95420D5BA6C6560D /* ZNGImageViewerController.xib in Resources */,
+				7D2382305D50311F7431FB1F5E2233FE /* ZNGInboxViewController.xib in Resources */,
+				613C0C7F3F88300F04B1C423EEFC2F4C /* ZNGLabelCollectionViewCell.xib in Resources */,
+				8806F2F8BEB331EE5C6C8C450F47B086 /* ZNGLoadEarlierHeaderView.xib in Resources */,
+				F42439896F2FAF4B52F01F30905DCC95 /* ZNGTableViewCell.xib in Resources */,
+				32E2AD56DD5C8513246EB05A05BC670F /* ZNGToolbarContentView.xib in Resources */,
+				060C6ADBA723056D018096B71BBC8364 /* ZNGTypingIndicatorFooterView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

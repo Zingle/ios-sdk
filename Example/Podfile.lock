@@ -30,7 +30,7 @@ PODS:
   - Mantle (2.0.6):
     - Mantle/extobjc (= 2.0.6)
   - Mantle/extobjc (2.0.6)
-  - ZingleSDK (0.2.1):
+  - ZingleSDK (0.2.2):
     - AFNetworkActivityLogger (~> 2.0)
     - AFNetworking (~> 2.6)
     - DGActivityIndicatorView
@@ -50,6 +50,6 @@ SPEC CHECKSUMS:
   DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
   GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
   Mantle: 299966b00759634931699f69cb6a30b9239b944d
-  ZingleSDK: 4e94b1868823e34078e7a0d3c4924dc7d214e73e
+  ZingleSDK: 04440a1ac5435ce2d0757e145d72086d3bf9f1cc
 
 COCOAPODS: 0.39.0

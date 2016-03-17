@@ -27,17 +27,15 @@
     [[AFNetworkActivityLogger sharedLogger] startLogging];
         
     NSString *token = @"rfarley@zingleme.com";
-    NSString *key = @"WfM-uYS-CBV-n6J";
+    NSString *key = @"13oolvler";
     
     // 1
     [[ZingleSDK sharedSDK] setToken:token andKey:key];
-    NSString *serviceId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
-    ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:serviceId];
+    ZNGInboxViewController *vc = [ZNGInboxViewController inboxViewController];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
     [self.window makeKeyAndVisible];
-    
     
     return YES;
 }

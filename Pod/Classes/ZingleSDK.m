@@ -23,7 +23,7 @@
 
 @implementation ZingleSDK
 
-NSString* const kLiveBaseURL = @"https://api.zingle.me/v1/";
+NSString* const kLiveBaseURL = @"https://qa-api.zingle.me/v1/";
 NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 + (ZingleSDK*)sharedSDK
@@ -48,12 +48,13 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
+    [self.sessionManager.requestSerializer setValue:@"iOS_SDK" forHTTPHeaderField:@"Zingle_Agent"];
 }
 
 - (void)addConversationFromContactId:(NSString *)contactId
                          toServiceId:(NSString *)serviceId
                  contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
+                             success:(void (^)(ZNGConversation* conversation))success
                              failure:(void (^)(ZNGError* error))failure
 {
     [self addConversationToService:YES withServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue success:success failure:failure];
@@ -62,7 +63,7 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 - (void)addConversationFromServiceId:(NSString *)serviceId
                          toContactId:(NSString *)contactId
                  contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
+                             success:(void (^)(ZNGConversation* conversation))success
                              failure:(void (^)(ZNGError* error))failure
 {
     [self addConversationToService:NO withServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue success:success failure:failure];
@@ -72,7 +73,7 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
                    withServiceId:(NSString *)serviceId
                        contactId:(NSString *)contactId
              contactChannelValue:(NSString *)contactChannelValue
-                         success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
+                         success:(void (^)(ZNGConversation* conversation))success
                          failure:(void (^)(ZNGError* error))failure
 {
     [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus* status) {
@@ -85,20 +86,9 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
             
             ZNGConversation *conversation = [[ZNGConversation alloc] init];
             conversation.toService = toService;
-            
-            ZNGParticipant *contactParticipant = [[ZNGParticipant alloc] init];
-            contactParticipant.type = ZNGParticipantTypeContact;
-            contactParticipant.participantId = contactId;
-            contactParticipant.channelValue = contactChannelValue;
-            
-            conversation.contact = contactParticipant;
-            
-            ZNGParticipant *serviceParticipant = [[ZNGParticipant alloc] init];
-            serviceParticipant.type = ZNGParticipantTypeService;
-            serviceParticipant.participantId = serviceId;
-            serviceParticipant.name = service.displayName;
-            
-            conversation.service = serviceParticipant;
+            conversation.contact = contact;
+            conversation.service = service;
+            conversation.contactChannelValue = contactChannelValue;
             
             NSString *allowedChannelTypeClass = kAllowedChannelTypeClass;
             for (ZNGChannel *channel in contact.channels) {
@@ -131,7 +121,7 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
                         [[ZNGDataSet sharedDataSet] addConversation:conversation toServiceId:contactId];
                     }
                     if (success) {
-                        success(conversation, contact, service);
+                        success(conversation);
                     }
                 } failure:failure];
             
@@ -142,7 +132,7 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
                     [[ZNGDataSet sharedDataSet] addConversation:conversation toServiceId:contactId];
                 }
                 if (success) {
-                    success(conversation, contact, service);
+                    success(conversation);
                 }
             }
         } failure:failure];
@@ -166,12 +156,12 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 
 - (ZNGConversationViewController *)conversationViewControllerWithServiceId:(NSString *)serviceId
-                                                                   contact:(ZNGContact *)contact
+                                                                 contactId:(NSString *)contactId
                                                        contactChannelValue:(NSString *)contactChannelValue
                                                                 senderName:(NSString *)senderName
                                                               receiverName:(NSString *)receiverName
 {
-    return [ZNGConversationViewController withServiceId:serviceId contact:contact contactChannelValue:contactChannelValue senderName:senderName receiverName:receiverName];
+    return [ZNGConversationViewController withServiceId:serviceId contactId:contactId contactChannelValue:contactChannelValue senderName:senderName receiverName:receiverName];
 }
 
 

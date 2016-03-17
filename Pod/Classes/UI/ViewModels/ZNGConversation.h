@@ -7,10 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ZNGParticipant.h"
 #import "ZNGStatus.h"
 #import "ZNGMessage.h"
 #import "ZNGError.h"
+#import "ZNGContact.h"
+#import "ZNGService.h"
 
 @protocol ZNGConversationDelegate <NSObject>
 
@@ -21,8 +22,9 @@
 @interface ZNGConversation : NSObject
 
 @property (nonatomic, strong) NSString *channelTypeId;
-@property (nonatomic, strong) ZNGParticipant *contact;
-@property (nonatomic, strong) ZNGParticipant *service;
+@property (nonatomic, strong) NSString *contactChannelValue;
+@property (nonatomic, strong) ZNGContact *contact;
+@property (nonatomic, strong) ZNGService *service;
 @property (nonatomic) BOOL toService;
 @property (nonatomic, strong) NSMutableArray *messages;
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;

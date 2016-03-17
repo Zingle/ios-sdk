@@ -13,6 +13,17 @@
 
 #pragma mark - GET methods
 
++ (void)contactListWithParameters:(NSDictionary *)parameters
+                          success:(void (^)(NSArray* contacts, ZNGStatus* status))success
+                          failure:(void (^)(ZNGError* error))failure
+{
+    [self getListWithParameters:parameters
+                           path:@"contacts"
+                  responseClass:[ZNGContact class]
+                        success:success
+                        failure:failure];
+}
+
 + (void)contactListWithServiceId:(NSString*)serviceId
                       parameters:(NSDictionary*)parameters
                          success:(void (^)(NSArray* contacts, ZNGStatus* status))success

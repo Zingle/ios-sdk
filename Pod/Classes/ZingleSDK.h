@@ -40,7 +40,7 @@
 - (void)addConversationFromContactId:(NSString *)contactId
                          toServiceId:(NSString *)serviceId
                  contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
+                             success:(void (^)(ZNGConversation* conversation))success
                              failure:(void (^)(ZNGError* error))failure;
 
 /**
@@ -56,7 +56,7 @@
 - (void)addConversationFromServiceId:(NSString *)serviceId
                          toContactId:(NSString *)contactId
                  contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation, ZNGContact *contact, ZNGService *service))success
+                             success:(void (^)(ZNGConversation* conversation))success
                              failure:(void (^)(ZNGError* error))failure;
 
 
@@ -71,7 +71,7 @@
 - (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation;
 
 - (ZNGConversationViewController *)conversationViewControllerWithServiceId:(NSString *)serviceId
-                                                                   contact:(ZNGContact *)contact
+                                                                 contactId:(NSString *)contactId
                                                        contactChannelValue:(NSString *)contactChannelValue
                                                                 senderName:(NSString *)senderName
                                                               receiverName:(NSString *)receiverName;

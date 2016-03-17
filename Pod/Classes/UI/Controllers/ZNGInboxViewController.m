@@ -73,18 +73,31 @@
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
-    [ZNGContactClient contactListWithServiceId:self.serviceId parameters:nil success:^(NSArray *contacts, ZNGStatus *status) {
-        
-        self.contacts = contacts;
-        self.tableView.hidden = NO;
-        [self.activityIndicator removeFromSuperview];
-        [self.activityIndicator stopAnimating];
-        [self.tableView reloadData];
-        [refreshControl endRefreshing];
-    } failure:^(ZNGError *error) {
-        [refreshControl endRefreshing];
-    }];
-    
+    if (self.serviceId) {
+        [ZNGContactClient contactListWithServiceId:self.serviceId parameters:nil success:^(NSArray *contacts, ZNGStatus *status) {
+            
+            self.contacts = contacts;
+            self.tableView.hidden = NO;
+            [self.activityIndicator removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+            [self.tableView reloadData];
+            [refreshControl endRefreshing];
+        } failure:^(ZNGError *error) {
+            [refreshControl endRefreshing];
+        }];
+    } else {
+        [ZNGContactClient contactListWithParameters:nil success:^(NSArray *contacts, ZNGStatus *status) {
+  
+            self.contacts = contacts;
+            self.tableView.hidden = NO;
+            [self.activityIndicator removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+            [self.tableView reloadData];
+            [refreshControl endRefreshing];
+        } failure:^(ZNGError *error) {
+            [refreshControl endRefreshing];
+        }];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -119,7 +132,7 @@
     NSString *serviceId = @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
     NSString *contactChannelValue = @"ryans.testapp";
     
-    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerWithServiceId:serviceId contact:contact contactChannelValue:contactChannelValue senderName:@"Me" receiverName:[contact fullName]];
+    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerWithServiceId:serviceId contactId:contact.contactId contactChannelValue:contactChannelValue senderName:@"Me" receiverName:[contact fullName]];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

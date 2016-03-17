@@ -29,7 +29,7 @@
 + (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation;
 
 + (ZNGConversationViewController *)withServiceId:(NSString *)serviceId
-                                         contact:(ZNGContact *)contact
+                                       contactId:(NSString *)contactId
                              contactChannelValue:(NSString *)contactChannelValue
                                       senderName:(NSString *)senderName
                                     receiverName:(NSString *)receiverName;

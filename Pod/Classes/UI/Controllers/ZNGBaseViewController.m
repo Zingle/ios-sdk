@@ -214,7 +214,6 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     [self zng_configureMessagesViewController];
     [self zng_registerForNotifications:YES];
     
-    NSLog(@"Status bar height: %f",[[UIApplication sharedApplication] statusBarFrame].size.height);
     if ([[UIApplication sharedApplication] statusBarFrame].size.height < 1) {
         self.titleViewLabelTopConstraint.constant = 44;
     }

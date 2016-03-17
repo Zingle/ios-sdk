@@ -12,18 +12,13 @@
 #import "DGActivityIndicatorView.h"
 #import "ZNGContactClient.h"
 #import "UIFont+OpenSans.h"
+#import "ZNGContactViewController.h"
 
 @interface ZNGConversationViewController ()
 
-@property (nonatomic, strong) ZNGContact *contact;
-
 @property (nonatomic, strong) NSString *serviceId;
-@property (nonatomic, strong) ZNGService *service;
-
+@property (nonatomic, strong) NSString *contactId;
 @property (nonatomic, strong) NSString *contactChannelValue;
-
-
-
 
 @property (nonatomic, strong) ZNGConversation *conversation;
 
@@ -64,7 +59,7 @@
 }
 
 + (ZNGConversationViewController *)withServiceId:(NSString *)serviceId
-                                         contact:(ZNGContact *)contact
+                                       contactId:(NSString *)contactId
                              contactChannelValue:(NSString *)contactChannelValue
                                       senderName:(NSString *)senderName
                                     receiverName:(NSString *)receiverName
@@ -73,10 +68,10 @@
     
     if (vc) {
         vc.serviceId = serviceId;
-        vc.contact = contact;
+        vc.contactId = contactId;
+        vc.contactChannelValue = contactChannelValue;
         vc.senderName = senderName;
         vc.receiverName = receiverName;
-        vc.contactChannelValue = contactChannelValue;
     }
     
     return vc;
@@ -167,7 +162,7 @@
     self.unstarredImage = [UIImage zng_lrg_unstarredImage];
     self.starredImage = [UIImage zng_lrg_starredImage];
     
-    if (self.contact.isStarred) {
+    if (self.conversation.contact.isStarred) {
         self.starBarButton = [[UIBarButtonItem alloc] initWithImage: self.starredImage
                                                            style:UIBarButtonItemStylePlain
                                                           target:self
@@ -188,7 +183,7 @@
     [self.confirmButton addTarget:self action:@selector(confirmedButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     self.confirmBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.confirmButton];
 
-    if (self.contact.isConfirmed) {
+    if (self.conversation.contact.isConfirmed) {
         self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#00a0de"];
         [self.confirmButton setTitle:@" Confirmed " forState:UIControlStateNormal];
         [self.confirmButton sizeToFit];
@@ -221,7 +216,7 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
-    ZNGConversation *conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
+    ZNGConversation *conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contactId];
     if (conversation) {
         self.conversation = conversation;
     }
@@ -229,9 +224,9 @@
     if (self.conversation) {
         self.conversation.delegate = self;
         if (self.conversation.toService) {
-            self.senderId = self.conversation.contact.participantId;
+            self.senderId = self.conversation.contact.contactId;
         } else {
-            self.senderId = self.conversation.service.participantId;
+            self.senderId = self.conversation.service.serviceId;
         }
         [self refreshViewModels];
     } else {
@@ -242,23 +237,23 @@
 
 - (void)confirmedButtonPressed:(UIBarButtonItem *)sender
 {
-    NSNumber *confirmedParam = self.contact.isConfirmed ? @NO : @YES;
-    if (self.contact.isConfirmed) {
-        self.contact.isConfirmed = NO;
+    NSNumber *confirmedParam = self.conversation.contact.isConfirmed ? @NO : @YES;
+    if (self.conversation.contact.isConfirmed) {
+        self.conversation.contact.isConfirmed = NO;
         self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
         [self.confirmButton setTitle:@" Unconfirmed " forState:UIControlStateNormal];
         self.confirmButton.enabled = NO;
         [self.confirmButton sizeToFit];
     } else {
-        self.contact.isConfirmed = YES;
+        self.conversation.contact.isConfirmed = YES;
         self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#00a0de"];
         [self.confirmButton setTitle:@" Confirmed " forState:UIControlStateNormal];
         self.confirmButton.enabled = NO;
         [self.confirmButton sizeToFit];
     }
     NSDictionary *params = @{@"is_confirmed" : confirmedParam };
-    [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        self.contact = contact;
+    [ZNGContactClient updateContactWithId:self.conversation.contact.contactId withServiceId:self.conversation.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+        self.conversation.contact = contact;
         self.confirmButton.enabled = YES;
     } failure:^(ZNGError *error) {
         self.confirmButton.enabled = YES;
@@ -269,22 +264,22 @@
 
 - (void)starButtonPressed:(UIBarButtonItem *)sender
 {
-    NSNumber *starParam = self.contact.isStarred ? @NO : @YES;
-    if (self.contact.isStarred) {
-        self.contact.isStarred = NO;
+    NSNumber *starParam = self.conversation.contact.isStarred ? @NO : @YES;
+    if (self.conversation.contact.isStarred) {
+        self.conversation.contact.isStarred = NO;
         self.starBarButton.image = self.unstarredImage;
         self.starBarButton.tintColor = [UIColor colorFromHexString:@"#B6B8BA"];
         self.starBarButton.enabled = NO;
         
     } else {
-        self.contact.isStarred = YES;
+        self.conversation.contact.isStarred = YES;
         self.starBarButton.image = self.starredImage;
         self.starBarButton.tintColor = [UIColor colorFromHexString:@"#FFCF3A"];
         self.starBarButton.enabled = NO;
     }
     NSDictionary *params = @{@"is_starred" : starParam };
-    [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        self.contact = contact;
+    [ZNGContactClient updateContactWithId:self.conversation.contact.contactId withServiceId:self.conversation.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+        self.conversation.contact = contact;
         self.starBarButton.enabled = YES;
     } failure:^(ZNGError *error) {
         self.starBarButton.enabled = YES;
@@ -294,19 +289,18 @@
 
 - (void)detailsButtonPressed:(UIBarButtonItem *)sender
 {
-    
+    ZNGContactViewController *vc = [ZNGContactViewController withContact:self.conversation.contact withService:self.conversation.service];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)loadConversation
 {
-    [[ZingleSDK sharedSDK] addConversationFromServiceId:self.serviceId toContactId:self.contact.contactId contactChannelValue:self.contactChannelValue success:^(ZNGConversation *conversation, ZNGContact *contact, ZNGService *service) {
+    [[ZingleSDK sharedSDK] addConversationFromServiceId:self.serviceId toContactId:self.contactId contactChannelValue:self.contactChannelValue success:^(ZNGConversation *conversation) {
         
-        self.contact = contact;
-        self.service = service;
         self.conversation = conversation;
         self.conversation.delegate = self;
         
-        if (self.contact.isStarred) {
+        if (self.conversation.contact.isStarred) {
             self.starBarButton.image = self.starredImage;
             self.starBarButton.tintColor = [UIColor colorFromHexString:@"#FFCF3A"];
         } else {
@@ -314,7 +308,7 @@
             self.starBarButton.tintColor = [UIColor colorFromHexString:@"#B6B8BA"];
         }
         
-        if (self.contact.isConfirmed) {
+        if (self.conversation.contact.isConfirmed) {
             self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#00a0de"];
             [self.confirmButton setTitle:@" Confirmed " forState:UIControlStateNormal];
             [self.confirmButton sizeToFit];

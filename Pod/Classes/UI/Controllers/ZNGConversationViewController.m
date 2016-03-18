@@ -16,10 +16,6 @@
 
 @interface ZNGConversationViewController ()
 
-@property (nonatomic, strong) ZNGService *service;
-@property (nonatomic, strong) ZNGContact *contact;
-@property (nonatomic, strong) NSString *contactChannelValue;
-
 @property (nonatomic, strong) ZNGConversation *conversation;
 
 @property (nonatomic, strong) NSMutableArray *viewModels;

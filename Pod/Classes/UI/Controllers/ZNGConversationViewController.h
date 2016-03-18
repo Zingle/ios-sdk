@@ -32,6 +32,10 @@
                                     senderName:(NSString *)senderName
                                   receiverName:(NSString *)receiverName;
 
+@property (nonatomic, strong) ZNGService *service;
+@property (nonatomic, strong) ZNGContact *contact;
+@property (nonatomic, strong) NSString *contactChannelValue;
+
 /**
  *  If ZNGConversationViewController is presented modally the delegateModel should
  *  should be set to handle dismissing the modal.

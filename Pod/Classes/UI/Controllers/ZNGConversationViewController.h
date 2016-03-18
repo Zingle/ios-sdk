@@ -26,13 +26,11 @@
  *  @param conversation Object containing participants in a conversation and the 
  *  conversation messages. Controller must be created with conversation.
  */
-+ (ZNGConversationViewController *)withConversation:(ZNGConversation *)conversation;
-
-+ (ZNGConversationViewController *)withServiceId:(NSString *)serviceId
-                                       contactId:(NSString *)contactId
-                             contactChannelValue:(NSString *)contactChannelValue
-                                      senderName:(NSString *)senderName
-                                    receiverName:(NSString *)receiverName;
++ (ZNGConversationViewController *)withService:(ZNGService *)service
+                                       contact:(ZNGContact *)contact
+                           contactChannelValue:(NSString *)contactChannelValue
+                                    senderName:(NSString *)senderName
+                                  receiverName:(NSString *)receiverName;
 
 /**
  *  If ZNGConversationViewController is presented modally the delegateModel should

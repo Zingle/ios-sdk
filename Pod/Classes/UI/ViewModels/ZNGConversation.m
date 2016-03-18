@@ -27,11 +27,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void)updateMessages
 {
     NSDictionary *params = @{kConversationPageSize : @100,
-                             kConversationContactId : self.contact.contactId,
+                             kConversationContactId : self.contactId,
                              kConversationPage : @1,
                              kConversationSortField : kConversationCreatedAt};
     
-    [ZNGMessageClient messageListWithParameters:params withServiceId:self.service.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+    [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
         
         if ([messages count] == [self.messages count]) {
             return;
@@ -44,11 +44,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         for (int i = 2; i <= pageNumbers; i++) {
             NSDictionary *params = @{kConversationPageSize : @100,
-                                     kConversationContactId : self.contact.contactId,
+                                     kConversationContactId : self.contactId,
                                      kConversationPage : @(i),
                                      kConversationSortField : kConversationCreatedAt};
 
-            [ZNGMessageClient messageListWithParameters:params withServiceId:self.service.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+            [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
                 
                 NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
                 [temp addObjectsFromArray:messages];
@@ -68,7 +68,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 {
     ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
     newMessage.body = body;
-    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+    [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
         if (success) {
             success(status);
         }
@@ -91,7 +91,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                    kAttachementBase64 : encodedString
                                 }];
     
-    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+    [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
         if (success) {
             success(status);
         }
@@ -104,14 +104,14 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     if (toService) {
         newMessage.senderType = kConversationContact;
-        newMessage.sender = [ZNGParticipant participantForContact:self.contact withContactChannelValue:self.contactChannelValue];
+        newMessage.sender = [ZNGParticipant participantForContactId:self.contactId withContactChannelValue:self.contactChannelValue];
         newMessage.recipientType = kConversationService;
-        newMessage.recipients = @[[ZNGParticipant participantForService:self.service]];
+        newMessage.recipients = @[[ZNGParticipant participantForServiceId:self.serviceId]];
     } else {
         newMessage.senderType = kConversationService;
-        newMessage.sender = [ZNGParticipant participantForService:self.service];
+        newMessage.sender = [ZNGParticipant participantForServiceId:self.serviceId];
         newMessage.recipientType = kConversationContact;
-        newMessage.recipients = @[[ZNGParticipant participantForContact:self.contact withContactChannelValue:self.contactChannelValue]];
+        newMessage.recipients = @[[ZNGParticipant participantForContactId:self.contactId withContactChannelValue:self.contactChannelValue]];
     }
     
     newMessage.channelTypeIds = @[self.channelTypeId];

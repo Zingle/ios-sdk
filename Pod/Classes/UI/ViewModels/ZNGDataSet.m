@@ -33,16 +33,6 @@
     return sharedDataSet;
 }
 
-- (void)addService:(ZNGService *)service
-{
-    [self.services setObject:service forKey:service.serviceId];
-}
-
-- (void)addContact:(ZNGContact *)contact
-{
-    [self.contacts setObject:contact forKey:contact.contactId];
-}
-
 - (void)addConversation:(ZNGConversation *)conversation toServiceId:(NSString *)serviceId
 {
     [self.conversations setObject:conversation forKey:serviceId];

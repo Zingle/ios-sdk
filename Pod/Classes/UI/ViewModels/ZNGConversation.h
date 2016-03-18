@@ -23,8 +23,9 @@
 
 @property (nonatomic, strong) NSString *channelTypeId;
 @property (nonatomic, strong) NSString *contactChannelValue;
-@property (nonatomic, strong) ZNGContact *contact;
-@property (nonatomic, strong) ZNGService *service;
+@property (nonatomic, strong) NSString *serviceId;
+@property (nonatomic, strong) NSString *contactId;
+
 @property (nonatomic) BOOL toService;
 @property (nonatomic, strong) NSMutableArray *messages;
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;

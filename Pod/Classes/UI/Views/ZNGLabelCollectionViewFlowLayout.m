@@ -10,23 +10,23 @@
 
 @implementation ZNGLabelCollectionViewFlowLayout
 
-//- (NSArray *) layoutAttributesForElementsInRect:(CGRect)rect {
-//    NSArray * original   = [super layoutAttributesForElementsInRect:rect];
-//    NSArray * attributes = [[NSArray alloc] initWithArray:original copyItems:YES];
-//    
-//    for(int i = 1; i < [attributes count]; ++i) {
-//        UICollectionViewLayoutAttributes *currentLayoutAttributes = attributes[i];
-//        UICollectionViewLayoutAttributes *prevLayoutAttributes = attributes[i - 1];
-//        NSInteger maximumSpacing = 4;
-//        NSInteger origin = CGRectGetMaxX(prevLayoutAttributes.frame);
-//        
-//        if(origin + maximumSpacing + currentLayoutAttributes.frame.size.width < self.collectionViewContentSize.width) {
-//            CGRect frame = currentLayoutAttributes.frame;
-//            frame.origin.x = origin + maximumSpacing;
-//            currentLayoutAttributes.frame = frame;
-//        }
-//    }
-//    return attributes;
-//}
+- (NSArray *) layoutAttributesForElementsInRect:(CGRect)rect {
+    NSArray * original   = [super layoutAttributesForElementsInRect:rect];
+    NSArray * attributes = [[NSArray alloc] initWithArray:original copyItems:YES];
+    
+    for(int i = 1; i < [attributes count]; ++i) {
+        UICollectionViewLayoutAttributes *currentLayoutAttributes = attributes[i];
+        UICollectionViewLayoutAttributes *prevLayoutAttributes = attributes[i - 1];
+        NSInteger maximumSpacing = 4;
+        NSInteger origin = CGRectGetMaxX(prevLayoutAttributes.frame);
+        
+        if(origin + maximumSpacing + currentLayoutAttributes.frame.size.width < self.collectionViewContentSize.width) {
+            CGRect frame = currentLayoutAttributes.frame;
+            frame.origin.x = origin + maximumSpacing;
+            currentLayoutAttributes.frame = frame;
+        }
+    }
+    return attributes;
+}
 
 @end

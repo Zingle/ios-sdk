@@ -23,7 +23,7 @@ typedef NS_ENUM(NSInteger, ZNGParticipantType) {
 @property(nonatomic, strong) NSString* channelValue;
 @property(nonatomic, strong) NSString* name;
 
-+ (ZNGParticipant *)participantForService:(ZNGService *)service;
-+ (ZNGParticipant *)participantForContact:(ZNGContact *)contact withContactChannelValue:(NSString *)contactChannelValue;
++ (ZNGParticipant *)participantForServiceId:(NSString *)serviceId;
++ (ZNGParticipant *)participantForContactId:(NSString *)contactId withContactChannelValue:(NSString *)contactChannelValue;
 
 @end

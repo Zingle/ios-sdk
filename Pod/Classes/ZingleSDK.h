@@ -33,15 +33,15 @@
  * this conversation with conversationViewControllerForService:serviceId. Can be called as many times as needed to add all 
  * conversations.
  *
- * @param serviceId ID of service, which participates in conversation
- * @param contactId ID of contact, which participates in conversation
+ * @param service which participates in conversation
+ * @param contact which participates in conversation
  * @param contactChannelValue contact channel value for sending messages to service
  */
-- (void)addConversationFromContactId:(NSString *)contactId
-                         toServiceId:(NSString *)serviceId
-                 contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation))success
-                             failure:(void (^)(ZNGError* error))failure;
+- (void)addConversationFromContact:(ZNGContact *)contact
+                         toService:(ZNGService *)service
+               contactChannelValue:(NSString *)contactChannelValue
+                           success:(void (^)(ZNGConversation* conversation))success
+                           failure:(void (^)(ZNGError* error))failure;
 
 /**
  * Registers a new conversation in ZingleSDK. This will return a chat interface from a service to a contact. On success,
@@ -49,15 +49,15 @@
  * this conversation with conversationViewControllerForService:serviceId. Can be called as many times as needed to add all
  * conversations.
  *
- * @param serviceId ID of service, which participates in conversation
- * @param contactId ID of contact, which participates in conversation
+ * @param service which participates in conversation
+ * @param contact which participates in conversation
  * @param contactChannelValue contact channel value for sending messages to service
  */
-- (void)addConversationFromServiceId:(NSString *)serviceId
-                         toContactId:(NSString *)contactId
-                 contactChannelValue:(NSString *)contactChannelValue
-                             success:(void (^)(ZNGConversation* conversation))success
-                             failure:(void (^)(ZNGError* error))failure;
+- (void)addConversationFromService:(ZNGService *)service
+                         toContact:(ZNGContact *)contact
+               contactChannelValue:(NSString *)contactChannelValue
+                           success:(void (^)(ZNGConversation* conversation))success
+                           failure:(void (^)(ZNGError* error))failure;
 
 
 - (ZNGConversation *)conversationToService:(NSString *)serviceId;
@@ -68,12 +68,10 @@
  *
  * @param conversation object which contains the messages to display
  */
-- (ZNGConversationViewController *)conversationViewControllerForConversation:(ZNGConversation *)conversation;
-
-- (ZNGConversationViewController *)conversationViewControllerWithServiceId:(NSString *)serviceId
-                                                                 contactId:(NSString *)contactId
-                                                       contactChannelValue:(NSString *)contactChannelValue
-                                                                senderName:(NSString *)senderName
-                                                              receiverName:(NSString *)receiverName;
+- (ZNGConversationViewController *)conversationViewControllerWithService:(ZNGService *)service
+                                                                 contact:(ZNGContact *)contact
+                                                     contactChannelValue:(NSString *)contactChannelValue
+                                                              senderName:(NSString *)senderName
+                                                            receiverName:(NSString *)receiverName;
 
 @end

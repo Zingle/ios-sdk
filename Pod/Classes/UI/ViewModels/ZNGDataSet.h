@@ -19,16 +19,6 @@
 + (instancetype)sharedDataSet;
 
 /**
- * Add service object to shared data set.
- */
-- (void)addService:(ZNGService *)services;
-
-/**
- * Add service object to shared data set.
- */
-- (void)addContact:(ZNGContact *)contact;
-
-/**
  * Add conversation object to a service to shared data set.
  */
 - (void)addConversation:(ZNGConversation *)conversation toServiceId:(NSString *)serviceId;

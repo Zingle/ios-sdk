@@ -15,20 +15,19 @@
     return @{ @"participantId" : @"id", @"channelValue" : @"channel_value" };
 }
 
-+ (ZNGParticipant *)participantForService:(ZNGService *)service
++ (ZNGParticipant *)participantForServiceId:(NSString *)serviceId
 {
     ZNGParticipant *serviceParticipant = [[ZNGParticipant alloc] init];
     serviceParticipant.type = ZNGParticipantTypeService;
-    serviceParticipant.participantId = service.serviceId;
-    serviceParticipant.name = service.displayName;
+    serviceParticipant.participantId = serviceId;
     return serviceParticipant;
 }
 
-+ (ZNGParticipant *)participantForContact:(ZNGContact *)contact withContactChannelValue:(NSString *)contactChannelValue
++ (ZNGParticipant *)participantForContactId:(NSString *)contactId withContactChannelValue:(NSString *)contactChannelValue
 {
     ZNGParticipant *contactParticipant = [[ZNGParticipant alloc] init];
     contactParticipant.type = ZNGParticipantTypeContact;
-    contactParticipant.participantId = contact.contactId;
+    contactParticipant.participantId = contactId;
     contactParticipant.channelValue = contactChannelValue;
     return contactParticipant;
 }

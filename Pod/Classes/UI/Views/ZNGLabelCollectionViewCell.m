@@ -35,6 +35,7 @@
     self.label.font = [UIFont openSansSemiboldFontOfSize:11.0f];
     self.layer.cornerRadius = 3;
     self.clipsToBounds = YES;
+    [self.contentView setNeedsLayout];
 }
 
 @end

@@ -1,1 +1,1 @@
-../../../../../Pod/Classes/Models/ZNGContactFieldValue.h
+../../../../../Pod/Classes/Models/ZNGContactFieldValues/ZNGContactFieldValue.h

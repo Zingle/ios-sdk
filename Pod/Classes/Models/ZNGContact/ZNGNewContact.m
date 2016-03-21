@@ -7,7 +7,7 @@
 //
 
 #import "ZNGNewContact.h"
-#import "ZNGContactFieldValue.h"
+#import "ZNGNewContactFieldValue.h"
 
 @implementation ZNGNewContact
 
@@ -35,7 +35,7 @@
 
 + (NSValueTransformer*)customFieldValuesJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGContactFieldValue.class];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGNewContactFieldValue.class];
 }
 
 @end

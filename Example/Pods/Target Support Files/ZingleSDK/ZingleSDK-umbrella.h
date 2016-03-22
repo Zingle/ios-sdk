@@ -27,6 +27,7 @@
 #import "ZNGNewContactChannel.h"
 #import "ZNGContactField.h"
 #import "ZNGContactFieldValue.h"
+#import "ZNGNewContactFieldOption.h"
 #import "ZNGNewContactFieldValue.h"
 #import "ZNGCorrespondent.h"
 #import "ZNGError.h"

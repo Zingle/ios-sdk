@@ -11,7 +11,6 @@
 @interface ZNGNewContactFieldValue : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong) NSString* value;
-@property(nonatomic, strong) NSString* selectedCustomFieldOptionId;
 @property(nonatomic, strong) NSString* customFieldId;
 
 @end

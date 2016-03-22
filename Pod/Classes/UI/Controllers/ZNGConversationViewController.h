@@ -23,6 +23,7 @@
 @property (nonatomic) BOOL toService;
 @property (nonatomic, strong) ZNGService *service;
 @property (nonatomic, strong) ZNGContact *contact;
+@property (nonatomic, strong) ZNGConversation *conversation;
 
 /**
  *  Returns a ZNGConversationViewController.

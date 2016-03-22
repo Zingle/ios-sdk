@@ -16,8 +16,6 @@
 
 @interface ZNGConversationViewController ()
 
-@property (nonatomic, strong) ZNGConversation *conversation;
-
 @property (nonatomic, strong) NSMutableArray *viewModels;
 
 @property (strong, nonatomic) ZNGBubbleImage *outgoingBubbleImageData;

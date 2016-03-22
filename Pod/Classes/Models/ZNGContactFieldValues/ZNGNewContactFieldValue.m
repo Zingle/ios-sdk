@@ -14,6 +14,7 @@
 {
     return @{
              @"value" : @"value",
+             @"selectedCustomFieldOptionId" : @"selected_custom_field_option_id",
              @"customFieldId" : @"custom_field_id"
              };
 }

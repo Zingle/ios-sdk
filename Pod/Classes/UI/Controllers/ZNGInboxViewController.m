@@ -121,10 +121,8 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGContact *contact = [self.contacts objectAtIndex:indexPath.row];
-    
-    NSString *contactChannelValue = @"ryans.testapp";
-    
-    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerWithService:self.service contact:contact contactChannelValue:contactChannelValue senderName:@"Me" receiverName:[contact fullName]];
+        
+    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:self.service senderName:@"Me" receiverName:[contact fullName]];
 
     [self.navigationController pushViewController:vc animated:YES];
 }

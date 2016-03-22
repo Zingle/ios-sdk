@@ -20,21 +20,31 @@
 
 @interface ZNGConversationViewController : ZNGBaseViewController <UIActionSheetDelegate, ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
 
+@property (nonatomic) BOOL toService;
+@property (nonatomic, strong) ZNGService *service;
+@property (nonatomic, strong) ZNGContact *contact;
+
 /**
  *  Returns a ZNGConversationViewController.
  *
  *  @param conversation Object containing participants in a conversation and the 
  *  conversation messages. Controller must be created with conversation.
  */
-+ (ZNGConversationViewController *)withService:(ZNGService *)service
-                                       contact:(ZNGContact *)contact
-                           contactChannelValue:(NSString *)contactChannelValue
-                                    senderName:(NSString *)senderName
-                                  receiverName:(NSString *)receiverName;
++ (ZNGConversationViewController *)toService:(ZNGService *)service
+                                     contact:(ZNGContact *)contact
+                                  senderName:(NSString *)senderName
+                                receiverName:(NSString *)receiverName;
 
-@property (nonatomic, strong) ZNGService *service;
-@property (nonatomic, strong) ZNGContact *contact;
-@property (nonatomic, strong) NSString *contactChannelValue;
+/**
+ *  Returns a ZNGConversationViewController.
+ *
+ *  @param conversation Object containing participants in a conversation and the
+ *  conversation messages. Controller must be created with conversation.
+ */
++ (ZNGConversationViewController *)toContact:(ZNGContact *)contact
+                                     service:(ZNGService *)service
+                                  senderName:(NSString *)senderName
+                                receiverName:(NSString *)receiverName;
 
 /**
  *  If ZNGConversationViewController is presented modally the delegateModel should

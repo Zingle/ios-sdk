@@ -53,79 +53,63 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 - (void)addConversationFromContact:(ZNGContact *)contact
                          toService:(ZNGService *)service
-               contactChannelValue:(NSString *)contactChannelValue
                            success:(void (^)(ZNGConversation* conversation))success
                            failure:(void (^)(ZNGError* error))failure
 {
-    [self addConversationToService:YES withService:service contact:contact contactChannelValue:contactChannelValue success:success failure:failure];
+    [self addConversationToService:YES withService:service contact:contact success:success failure:failure];
 }
 
 - (void)addConversationFromService:(ZNGService *)service
                          toContact:(ZNGContact *)contact
-               contactChannelValue:(NSString *)contactChannelValue
                            success:(void (^)(ZNGConversation* conversation))success
                            failure:(void (^)(ZNGError* error))failure
 {
-    [self addConversationToService:NO withService:service contact:contact contactChannelValue:contactChannelValue success:success failure:failure];
+    [self addConversationToService:NO withService:service contact:contact success:success failure:failure];
 }
 
 - (void)addConversationToService:(BOOL)toService
                      withService:(ZNGService *)service
                          contact:(ZNGContact *)contact
+                         success:(void (^)(ZNGConversation* conversation))success
+                         failure:(void (^)(ZNGError* error))failure
+{
+    ZNGConversation *conversation = [[ZNGConversation alloc] init];
+    conversation.toService = toService;
+    conversation.contactId = contact.contactId;
+    conversation.serviceId = service.serviceId;
+    
+    if (toService) {
+        [[ZNGDataSet sharedDataSet] addConversation:conversation toServiceId:service.serviceId];
+    } else {
+        [[ZNGDataSet sharedDataSet] addConversation:conversation toContactId:contact.contactId];
+    }
+    if (success) {
+        success(conversation);
+    }
+}
+
+- (void)addConversationToService:(BOOL)toService
+                     withService:(ZNGService *)service
+                         contact:(ZNGContact *)contact
+                   channelTypeId:(NSString *)channelTypeId
              contactChannelValue:(NSString *)contactChannelValue
                          success:(void (^)(ZNGConversation* conversation))success
                          failure:(void (^)(ZNGError* error))failure
 {
     ZNGConversation *conversation = [[ZNGConversation alloc] init];
     conversation.toService = toService;
-    conversation.contactChannelValue = contactChannelValue;
     conversation.contactId = contact.contactId;
     conversation.serviceId = service.serviceId;
+    conversation.channelTypeId = channelTypeId;
+    conversation.contactChannelValue = contactChannelValue;
     
-    NSString *allowedChannelTypeClass = kAllowedChannelTypeClass;
-    for (ZNGChannel *channel in contact.channels) {
-        
-        if ([channel.channelType.typeClass isEqualToString:allowedChannelTypeClass]) {
-            conversation.channelTypeId = channel.channelType.channelTypeId;
-        }
-    }
-    
-    if (conversation.channelTypeId == nil) {
-        for (ZNGChannelType *channelType in service.channelTypes) {
-            
-            if ([channelType.typeClass isEqualToString:allowedChannelTypeClass]) {
-                conversation.channelTypeId = channelType.channelTypeId;
-            }
-        }
-        if (conversation.channelTypeId == nil) {
-            NSLog(@"Service %@ (id=%@) does not support user defined channels.", service.displayName, service.serviceId);
-            return;
-        }
-        
-        ZNGNewContactChannel *newChannel = [[ZNGNewContactChannel alloc] init];
-        newChannel.channelTypeId = conversation.channelTypeId;
-        newChannel.value = contactChannelValue;
-        
-        [ZNGContactChannelClient saveContactChannel:newChannel withContactId:contact.contactId withServiceId:service.serviceId success:^(ZNGContactChannel *contactChannel, ZNGStatus *status) {
-            if (toService) {
-                [[ZNGDataSet sharedDataSet] addConversation:conversation toServiceId:service.serviceId];
-            } else {
-                [[ZNGDataSet sharedDataSet] addConversation:conversation toContactId:contact.contactId];
-            }
-            if (success) {
-                success(conversation);
-            }
-        } failure:failure];
-        
+    if (toService) {
+        [[ZNGDataSet sharedDataSet] addConversation:conversation toServiceId:service.serviceId];
     } else {
-        if (toService) {
-            [[ZNGDataSet sharedDataSet] addConversation:conversation toServiceId:service.serviceId];
-        } else {
-            [[ZNGDataSet sharedDataSet] addConversation:conversation toContactId:contact.contactId];
-        }
-        if (success) {
-            success(conversation);
-        }
+        [[ZNGDataSet sharedDataSet] addConversation:conversation toContactId:contact.contactId];
+    }
+    if (success) {
+        success(conversation);
     }
 }
 
@@ -139,15 +123,21 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     return [[ZNGDataSet sharedDataSet] getConversationToContactId:contactId];
 }
 
-- (ZNGConversationViewController *)conversationViewControllerWithService:(ZNGService *)service
-                                                                 contact:(ZNGContact *)contact
-                                                     contactChannelValue:(NSString *)contactChannelValue
-                                                              senderName:(NSString *)senderName
-                                                            receiverName:(NSString *)receiverName
+- (ZNGConversationViewController *)conversationViewControllerToService:(ZNGService *)service
+                                                               contact:(ZNGContact *)contact
+                                                            senderName:(NSString *)senderName
+                                                          receiverName:(NSString *)receiverName
 {
-    return [ZNGConversationViewController withService:service contact:contact contactChannelValue:contactChannelValue senderName:senderName receiverName:receiverName];
+    return [ZNGConversationViewController toService:service contact:contact senderName:senderName receiverName:receiverName];
 }
 
+- (ZNGConversationViewController *)conversationViewControllerToContact:(ZNGContact *)contact
+                                                               service:(ZNGService *)service
+                                                            senderName:(NSString *)senderName
+                                                          receiverName:(NSString *)receiverName
+{
+    return [ZNGConversationViewController toContact:contact service:service senderName:senderName receiverName:receiverName];
+}
 
 - (AFHTTPSessionManager*)sharedSessionManager
 {

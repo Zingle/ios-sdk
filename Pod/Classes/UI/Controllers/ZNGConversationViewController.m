@@ -28,9 +28,6 @@
 
 @property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
 
-
-
-
 @property (strong, nonatomic) UIBarButtonItem *starBarButton;
 @property (strong, nonatomic) UIBarButtonItem *confirmBarButton;
 @property (strong, nonatomic) UIBarButtonItem *detailsBarButton;
@@ -43,18 +40,35 @@
 
 @implementation ZNGConversationViewController
 
-+ (ZNGConversationViewController *)withService:(ZNGService *)service
-                                       contact:(ZNGContact *)contact
-                           contactChannelValue:(NSString *)contactChannelValue
-                                    senderName:(NSString *)senderName
-                                  receiverName:(NSString *)receiverName
++ (ZNGConversationViewController *)toService:(ZNGService *)service
+                                     contact:(ZNGContact *)contact
+                                  senderName:(NSString *)senderName
+                                receiverName:(NSString *)receiverName
 {
     ZNGConversationViewController *vc = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
     
     if (vc) {
+        vc.toService = YES;
         vc.service = service;
         vc.contact = contact;
-        vc.contactChannelValue = contactChannelValue;
+        vc.senderName = senderName;
+        vc.receiverName = receiverName;
+    }
+    
+    return vc;
+}
+
++ (ZNGConversationViewController *)toContact:(ZNGContact *)contact
+                                     service:(ZNGService *)service
+                                  senderName:(NSString *)senderName
+                                receiverName:(NSString *)receiverName
+{
+    ZNGConversationViewController *vc = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
+    
+    if (vc) {
+        vc.toService = NO;
+        vc.service = service;
+        vc.contact = contact;
         vc.senderName = senderName;
         vc.receiverName = receiverName;
     }
@@ -151,7 +165,14 @@
     
     self.senderId = self.service.serviceId;
 
-    ZNGConversation *conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
+    ZNGConversation *conversation;
+    if (self.toService) {
+        self.senderId = self.contact.contactId;
+        conversation = [[ZingleSDK sharedSDK] conversationToService:self.service.serviceId];
+    } else {
+        self.senderId = self.service.serviceId;
+        conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
+    }
     if (conversation) {
         self.conversation = conversation;
         self.conversation.delegate = self;
@@ -263,20 +284,37 @@
 
 - (void)loadConversation
 {
-    [[ZingleSDK sharedSDK] addConversationFromService:self.service toContact:self.contact contactChannelValue:self.contactChannelValue success:^(ZNGConversation *conversation) {
-        self.conversation = conversation;
-        self.conversation.delegate = self;
-        
-        [self refreshViewModels];
-    } failure:^(ZNGError *error) {
-        [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
-                                    message:nil
-                                   delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-        [self.activityIndicator removeFromSuperview];
-        [self.activityIndicator stopAnimating];
-    }];
+    if (self.toService) {
+        [[ZingleSDK sharedSDK] addConversationFromContact:self.contact toService:self.service success:^(ZNGConversation *conversation) {
+            self.conversation = conversation;
+            self.conversation.delegate = self;
+            
+            [self refreshViewModels];
+        } failure:^(ZNGError *error) {
+            [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
+                                        message:nil
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
+            [self.activityIndicator removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+        }];
+    } else {
+        [[ZingleSDK sharedSDK] addConversationFromService:self.service toContact:self.contact success:^(ZNGConversation *conversation) {
+            self.conversation = conversation;
+            self.conversation.delegate = self;
+            
+            [self refreshViewModels];
+        } failure:^(ZNGError *error) {
+            [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
+                                        message:nil
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
+            [self.activityIndicator removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+        }];
+    }
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -364,7 +402,9 @@
     [self finishReceivingMessageAnimated:NO];
     [self.activityIndicator removeFromSuperview];
     [self.activityIndicator stopAnimating];
-    [self setupBarButtonItems];
+    if (!self.toService) {
+        [self setupBarButtonItems];
+    }
 }
 
 - (void)showErrorSendingMessage

@@ -35,11 +35,9 @@
  *
  * @param service which participates in conversation
  * @param contact which participates in conversation
- * @param contactChannelValue contact channel value for sending messages to service
  */
 - (void)addConversationFromContact:(ZNGContact *)contact
                          toService:(ZNGService *)service
-               contactChannelValue:(NSString *)contactChannelValue
                            success:(void (^)(ZNGConversation* conversation))success
                            failure:(void (^)(ZNGError* error))failure;
 
@@ -51,27 +49,48 @@
  *
  * @param service which participates in conversation
  * @param contact which participates in conversation
- * @param contactChannelValue contact channel value for sending messages to service
  */
 - (void)addConversationFromService:(ZNGService *)service
                          toContact:(ZNGContact *)contact
-               contactChannelValue:(NSString *)contactChannelValue
                            success:(void (^)(ZNGConversation* conversation))success
                            failure:(void (^)(ZNGError* error))failure;
 
-
+/**
+ *  Returns a ZNGConversation conversation Object containing participants in a conversation and the
+ *  conversation messages
+ *
+ *  @param serviceId service that the conversation is sent to
+ */
 - (ZNGConversation *)conversationToService:(NSString *)serviceId;
+
+/**
+ *  Returns a ZNGConversation conversation Object containing participants in a conversation and the
+ *  conversation messages
+ *
+ *  @param contactId contact that the conversation is sent to
+ */
 - (ZNGConversation *)conversationToContact:(NSString *)contactId;
 
 /**
- * Returns a new conversation view controller for the specified conversation that can be presented and/or added to a navigation stack.
+ *  Returns a ZNGConversationViewController.
  *
- * @param conversation object which contains the messages to display
+ *  @param conversation Object containing participants in a conversation and the
+ *  conversation messages. Controller must be created with conversation.
  */
-- (ZNGConversationViewController *)conversationViewControllerWithService:(ZNGService *)service
-                                                                 contact:(ZNGContact *)contact
-                                                     contactChannelValue:(NSString *)contactChannelValue
-                                                              senderName:(NSString *)senderName
-                                                            receiverName:(NSString *)receiverName;
+- (ZNGConversationViewController *)conversationViewControllerToService:(ZNGService *)service
+                                                               contact:(ZNGContact *)contact
+                                                            senderName:(NSString *)senderName
+                                                          receiverName:(NSString *)receiverName;
+
+/**
+ *  Returns a ZNGConversationViewController.
+ *
+ *  @param conversation Object containing participants in a conversation and the
+ *  conversation messages. Controller must be created with conversation.
+ */
+- (ZNGConversationViewController *)conversationViewControllerToContact:(ZNGContact *)contact
+                                                               service:(ZNGService *)service
+                                                            senderName:(NSString *)senderName
+                                                          receiverName:(NSString *)receiverName;
 
 @end

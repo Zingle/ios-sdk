@@ -21,7 +21,7 @@
 @interface ZNGMessageViewModel : NSObject <ZNGMessageData, NSCoding, NSCopying>
 
 /**
- *  Returns the string identifier that uniquely identifies the user who sent the message. 
+ *  Returns the string identifier that uniquely identifies the user who sent the message.
  */
 @property (copy, nonatomic, readonly) NSString *senderId;
 
@@ -54,6 +54,11 @@
  */
 @property (copy, nonatomic, readonly) id<ZNGMessageMediaData> media;
 
+/**
+ *  Returns an extra bit of info about the message, or `nil`.
+ */
+@property (copy, nonatomic, readonly) NSString *note;
+
 
 #pragma mark - Initialization
 
@@ -71,7 +76,8 @@
  */
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName
-                               text:(NSString *)text;
+                               text:(NSString *)text
+                               note:(NSString *)note;
 
 /**
  *  Initializes and returns a message object having the given senderId, senderDisplayName, date, and text.
@@ -88,7 +94,8 @@
 - (instancetype)initWithSenderId:(NSString *)senderId
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
-                            text:(NSString *)text;
+                            text:(NSString *)text
+                            note:(NSString *)note;
 /**
  *  Initializes and returns a message object having the given senderId, displayName, media,
  *  and current system date.
@@ -103,7 +110,8 @@
  */
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName
-                              media:(id<ZNGMessageMediaData>)media;
+                              media:(id<ZNGMessageMediaData>)media
+                               note:(NSString *)note;
 
 /**
  *  Initializes and returns a message object having the given senderId, displayName, date, and media.
@@ -120,6 +128,7 @@
 - (instancetype)initWithSenderId:(NSString *)senderId
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
-                           media:(id<ZNGMessageMediaData>)media;
+                           media:(id<ZNGMessageMediaData>)media
+                            note:(NSString *)note;
 
 @end

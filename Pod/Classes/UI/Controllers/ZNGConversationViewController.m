@@ -383,15 +383,17 @@
             ZNGNetworkPhotoMediaItem *item = [[ZNGNetworkPhotoMediaItem alloc] initWithURL:message.attachments[0]];
             item.appliesMediaViewMaskAsOutgoing = [message.sender.correspondentId isEqualToString:self.senderId];
             ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
-                                               senderDisplayName:senderDisplayName
-                                                            date:message.createdAt
-                                                           media:item];
+                                                                           senderDisplayName:senderDisplayName
+                                                                                        date:message.createdAt
+                                                                                       media:item
+                                                                                        note:message.recipient.channel.formattedValue];
             [tempArray addObject:viewModel];
         } else if (message.body) {
             ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:message.sender.correspondentId
                                                                            senderDisplayName:senderDisplayName
                                                                                         date:message.createdAt
-                                                                                        text:message.body];
+                                                                                        text:message.body
+                                                                                        note:message.recipient.channel.formattedValue];
             [tempArray addObject:viewModel];
         }
     }
@@ -442,7 +444,8 @@
         ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:senderId
                                                                        senderDisplayName:senderDisplayName
                                                                                     date:[NSDate date]
-                                                                                    text:text];
+                                                                                    text:text
+                                                                                    note:@"Delivered"];
         [self.viewModels addObject:viewModel];
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
@@ -497,7 +500,8 @@
             ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
                                                                            senderDisplayName:self.senderDisplayName
                                                                                         date:[NSDate date]
-                                                                                       media:item];
+                                                                                       media:item
+                                                                                        note:@"Delivered"];
             [self.viewModels addObject:viewModel];
             [self finishSendingMessageAnimated:YES];
 
@@ -560,6 +564,10 @@
 
 - (NSAttributedString *)collectionView:(ZNGCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGMessageViewModel *message = [self.viewModels objectAtIndex:indexPath.item];
+    if (message.note) {
+        return [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"Channel: %@", message.note]];
+    }
     return nil;
 }
 
@@ -687,7 +695,8 @@
         ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
                                                                        senderDisplayName:self.senderDisplayName
                                                                                     date:[NSDate date]
-                                                                                   media:item];
+                                                                                   media:item
+                                                                                    note:@"Delivered"];
         [self.viewModels addObject:viewModel];
         [self finishSendingMessageAnimated:YES];
         

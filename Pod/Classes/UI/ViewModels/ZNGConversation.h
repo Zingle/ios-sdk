@@ -21,8 +21,9 @@
 
 @interface ZNGConversation : NSObject
 
-@property (nonatomic, strong) NSString *channelTypeId;
+@property (nonatomic, strong) ZNGChannelType *channelType;
 @property (nonatomic, strong) NSString *contactChannelValue;
+@property (nonatomic, strong) NSString *serviceChannelValue;
 @property (nonatomic, strong) NSString *serviceId;
 @property (nonatomic, strong) NSString *contactId;
 

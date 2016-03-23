@@ -91,7 +91,7 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 - (void)addConversationToService:(BOOL)toService
                      withService:(ZNGService *)service
                          contact:(ZNGContact *)contact
-                   channelTypeId:(NSString *)channelTypeId
+                     channelType:(ZNGChannelType *)channelType
              contactChannelValue:(NSString *)contactChannelValue
                          success:(void (^)(ZNGConversation* conversation))success
                          failure:(void (^)(ZNGError* error))failure
@@ -100,7 +100,7 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     conversation.toService = toService;
     conversation.contactId = contact.contactId;
     conversation.serviceId = service.serviceId;
-    conversation.channelTypeId = channelTypeId;
+    conversation.channelType = channelType;
     conversation.contactChannelValue = contactChannelValue;
     
     if (toService) {

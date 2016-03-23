@@ -15,11 +15,12 @@
     return @{ @"participantId" : @"id", @"channelValue" : @"channel_value" };
 }
 
-+ (ZNGParticipant *)participantForServiceId:(NSString *)serviceId
++ (ZNGParticipant *)participantForServiceId:(NSString *)serviceId withServiceChannelValue:(NSString *)serviceChannelValue
 {
     ZNGParticipant *serviceParticipant = [[ZNGParticipant alloc] init];
     serviceParticipant.type = ZNGParticipantTypeService;
     serviceParticipant.participantId = serviceId;
+    serviceParticipant.channelValue = serviceChannelValue;
     return serviceParticipant;
 }
 

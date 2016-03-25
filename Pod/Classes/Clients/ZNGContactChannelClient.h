@@ -7,8 +7,8 @@
 //
 
 #import "ZNGBaseClient.h"
-#import "ZNGContactChannel.h"
-#import "ZNGNewContactChannel.h"
+#import "ZNGChannel.h"
+#import "ZNGNewChannel.h"
 
 @interface ZNGContactChannelClient : ZNGBaseClient
 
@@ -17,15 +17,15 @@
 + (void)contactChannelWithId:(NSString*)contactChannelId
                withContactId:(NSString*)contactId
                withServiceId:(NSString*)serviceId
-                     success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
+                     success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
-+ (void)saveContactChannel:(ZNGNewContactChannel*)contactChannel
++ (void)saveContactChannel:(ZNGNewChannel*)contactChannel
              withContactId:(NSString*)contactId
              withServiceId:(NSString*)serviceId
-                   success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
+                   success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
@@ -34,7 +34,7 @@
                     withParameters:(NSDictionary*)parameters
                      withContactId:(NSString*)contactId
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
+                           success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods

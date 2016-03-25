@@ -6,7 +6,7 @@
 //
 //
 
-#import "ZNGNewServiceChannel.h"
+#import "ZNGNewChannel.h"
 #import "ZNGServiceChannelClient.h"
 
 @implementation ZNGServiceChannelClient
@@ -15,22 +15,22 @@
 
 + (void)serviceChannelWithId:(NSString*)serviceChannelId
                withServiceId:(NSString*)serviceId
-                     success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
+                     success:(void (^)(ZNGChannel* serviceChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/channels/%@", serviceId, serviceChannelId];
     
     [self getWithResourcePath:path
-                responseClass:[ZNGServiceChannel class]
+                responseClass:[ZNGChannel class]
                       success:success
                       failure:failure];
 }
 
 #pragma mark - POST methods
 
-+ (void)saveServiceChannel:(ZNGServiceChannel*)serviceChannel
++ (void)saveServiceChannel:(ZNGChannel*)serviceChannel
              withServiceId:(NSString*)serviceId
-                   success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
+                   success:(void (^)(ZNGChannel* serviceChannel, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure
 {
     if (serviceChannel.channelType.channelTypeId == nil) {
@@ -45,13 +45,13 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: serviceChannel.country"];
     }
     
-    ZNGNewServiceChannel* newServiceChannel = [[ZNGNewServiceChannel alloc] initWithServiceChannel:serviceChannel];
+    ZNGNewChannel* newServiceChannel = [[ZNGNewChannel alloc] initWithChannel:serviceChannel];
     
     NSString* path = [NSString stringWithFormat:@"services/%@/channels", serviceId];
     
     [self postWithModel:newServiceChannel
                    path:path
-          responseClass:[ZNGServiceChannel class]
+          responseClass:[ZNGChannel class]
                 success:success
                 failure:failure];
 }
@@ -61,14 +61,14 @@
 + (void)updateServiceChannelWithId:(NSString*)serviceChannelId
                     withParameters:(NSDictionary*)parameters
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
+                           success:(void (^)(ZNGChannel* serviceChannel, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/channels/%@", serviceId, serviceChannelId];
     
     [self putWithPath:path
            parameters:parameters
-        responseClass:[ZNGServiceChannel class]
+        responseClass:[ZNGNewChannel class]
               success:success
               failure:failure];
 }

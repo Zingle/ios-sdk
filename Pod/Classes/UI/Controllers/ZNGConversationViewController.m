@@ -134,7 +134,7 @@
     [self.activityIndicator startAnimating];
     
     self.senderDisplayName = self.senderName ?: @"Me";
-    self.titleViewLabel.text = self.receiverName ?: @"Chat";
+
     self.titleViewLabel.font = [UIFont openSansBoldFontOfSize:17.0f];
     
     self.inputToolbar.contentView.textView.pasteDelegate = self;
@@ -318,6 +318,12 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
+    if (self.toService) {
+        self.titleViewLabel.text = self.service.displayName;
+    } else {
+        self.titleViewLabel.text = [self.contact fullName];
+    }
     
     if (self.delegateModal) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop

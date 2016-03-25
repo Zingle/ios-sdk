@@ -14,6 +14,11 @@
 
 + (NSString *)cellReuseIdentifier;
 
-- (void)configureCellWithField:(NSString *)field withPlaceholder:(NSString *)placeHolder;
+- (void)configureCellWithField:(NSString *)field
+               withPlaceholder:(NSString *)placeHolder
+                 withIndexPath:(NSIndexPath *)indexPath
+                  withDelegate:(id<UITextFieldDelegate>)delegate;
+
+- (void)setTextFieldInputView:(UIView *)inputView;
 
 @end

@@ -75,35 +75,59 @@
 
 - (void)configureCellWithContact:(ZNGContact *)contact withServiceId:(NSString *)serviceId
 {
-    self.contact = contact;
-    self.serviceId = serviceId;
-    self.contactName.text = [contact fullName];
-    self.lastMessage.text = contact.lastMessage.body;
-    self.dateLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:contact.lastMessage.createdAt];
+    if ([contact isKindOfClass:[NSNull class]]) {
+        self.contact = nil;
+        self.serviceId = nil;
+        [self configureBlankCell];
+    } else {
+        self.contact = contact;
+        self.serviceId = serviceId;
+        self.contactName.text = [self.contact fullName];
+        
+        if (self.contact.lastMessage.body.length > 0) {
+            self.lastMessage.text = self.contact.lastMessage.body;
+            self.dateLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:self.contact.lastMessage.createdAt];
+        } else {
+            self.lastMessage.text = @" ";
+            self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
+        }
+        
+        if (self.contact.isConfirmed) {
+            self.confirmedView.backgroundColor = [UIColor clearColor];
+        } else {
+            self.confirmedView.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
+        }
+        
+        self.starButton.hidden = NO;
+        if (self.contact.isStarred) {
+            [self.starButton setImage:[UIImage zng_starredImage] forState:UIControlStateNormal];
+        } else {
+            [self.starButton setImage:[UIImage zng_unstarredImage] forState:UIControlStateNormal];
+        }
+        
+        if ([self.contact.labels count] > 0) {
+            self.labelCollectionView.hidden = NO;
+            self.labelCollectionView.delegate = self;
+            self.labelCollectionView.dataSource = self;
+            self.labelCollectionView.userInteractionEnabled = NO;
+            UINib *cellNib = [ZNGLabelCollectionViewCell nib];
+            [self.labelCollectionView registerNib:cellNib forCellWithReuseIdentifier:[ZNGLabelCollectionViewCell cellReuseIdentifier]];
+            _sizingCell = [[cellNib instantiateWithOwner:nil options:nil] objectAtIndex:0];
+            [self.labelCollectionView reloadData];
+            [self setNeedsDisplay];
+        }
+        [self.contentView layoutIfNeeded];
+    }
+}
 
-    if (contact.isConfirmed) {
-        self.confirmedView.backgroundColor = [UIColor clearColor];
-    } else {
-        self.confirmedView.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
-    }
-    
-    if (contact.isStarred) {
-        [self.starButton setImage:[UIImage zng_starredImage] forState:UIControlStateNormal];
-    } else {
-        [self.starButton setImage:[UIImage zng_unstarredImage] forState:UIControlStateNormal];
-    }
-    
-    if ([contact.labels count] > 0) {
-        self.labelCollectionView.delegate = self;
-        self.labelCollectionView.dataSource = self;
-        self.labelCollectionView.userInteractionEnabled = NO;
-        UINib *cellNib = [ZNGLabelCollectionViewCell nib];
-        [self.labelCollectionView registerNib:cellNib forCellWithReuseIdentifier:[ZNGLabelCollectionViewCell cellReuseIdentifier]];
-        _sizingCell = [[cellNib instantiateWithOwner:nil options:nil] objectAtIndex:0];
-        [self.labelCollectionView reloadData];
-        [self setNeedsDisplay];
-    }
-    [self.contentView layoutIfNeeded];
+- (void)configureBlankCell
+{
+    self.contactName.text = @"Loading contact...";
+    self.lastMessage.text = @"Loading message...";
+    self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@"..."];
+    self.confirmedView.backgroundColor = [UIColor clearColor];
+    self.starButton.hidden = YES;
+    self.labelCollectionView.hidden = YES;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section

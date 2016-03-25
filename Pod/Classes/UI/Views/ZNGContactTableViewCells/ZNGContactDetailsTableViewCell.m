@@ -34,12 +34,25 @@
     self.textField.font = [UIFont openSansSemiboldFontOfSize:16.0f];
 }
 
-- (void)configureCellWithField:(NSString *)field withPlaceholder:(NSString *)placeHolder
+- (void)configureCellWithField:(NSString *)field
+               withPlaceholder:(NSString *)placeHolder
+                 withIndexPath:(NSIndexPath *)indexPath
+                  withDelegate:(id<UITextFieldDelegate>)delegate
 {
     self.textField.placeholder = placeHolder;
     if (field.length > 0) {
         self.textField.text = field;
+    } else {
+        self.textField.text = @"";
     }
+    self.superview.tag = indexPath.section;
+    self.textField.tag = indexPath.row;
+    self.textField.delegate = delegate;
+}
+
+- (void)setTextFieldInputView:(UIView *)inputView
+{
+    self.textField.inputView = inputView;
 }
 
 @end

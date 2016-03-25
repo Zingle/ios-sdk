@@ -1,16 +1,15 @@
 //
-//  ZNGNewServiceChannel.h
+//  ZNGNewChannel.h
 //  Pods
 //
-//  Created by Ryan Farley on 2/8/16.
+//  Created by Ryan Farley on 2/9/16.
 //
 //
 
-#import <ZingleSDK/ZingleSDK.h>
 #import <Mantle/Mantle.h>
-#import "ZNGServiceChannel.h"
+#import "ZNGChannel.h"
 
-@interface ZNGNewServiceChannel : MTLModel<MTLJSONSerializing>
+@interface ZNGNewChannel : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong) NSString* channelTypeId;
 @property(nonatomic, strong) NSString* value;
@@ -18,6 +17,6 @@
 @property(nonatomic, strong) NSString* displayName;
 @property(nonatomic) BOOL isDefaultForType;
 
-- (id)initWithServiceChannel:(ZNGServiceChannel*)serviceChannel;
+- (id)initWithChannel:(ZNGChannel*)channel;
 
 @end

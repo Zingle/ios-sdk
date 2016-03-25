@@ -16,7 +16,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [[AFNetworkActivityLogger sharedLogger] startLogging];
-        
+    [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
+    
     NSString *token = @"rfarley@zingleme.com";
     NSString *key = @"WfM-uYS-CBV-n6J";
     

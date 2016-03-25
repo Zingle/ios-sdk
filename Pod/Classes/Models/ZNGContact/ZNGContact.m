@@ -58,41 +58,41 @@
     return [ZingleValueTransformers dateValueTransformer];
 }
 
--(NSString *)title
+-(ZNGContactFieldValue *)titleFieldValue
 {
     for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {
         if ([fieldValue.customField.displayName isEqualToString:@"Title"]) {
-            return fieldValue.value;
+            return fieldValue;
         }
     }
     return nil;
 }
 
--(NSString *)firstName
+-(ZNGContactFieldValue *)firstNameFieldValue
 {
     for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {
         if ([fieldValue.customField.displayName isEqualToString:@"First Name"]) {
-            return fieldValue.value;
+            return fieldValue;
         }
     }
     return nil;
 }
 
--(NSString *)lastName
+-(ZNGContactFieldValue *)lastNameFieldValue
 {
     for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {
         if ([fieldValue.customField.displayName isEqualToString:@"Last Name"]) {
-            return fieldValue.value;
+            return fieldValue;
         }
     }
     return nil;
 }
 
--(NSString *)phoneNumber
+-(ZNGChannel *)phoneNumberChannel
 {
     for (ZNGChannel *channel in self.channels) {
         if ([channel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
-            return channel.formattedValue;
+            return channel;
         }
     }
     return nil;
@@ -100,13 +100,13 @@
 
 - (NSString *)fullName
 {
-    NSString *title = [self title];
-    NSString *firstName = [self firstName];
-    NSString *lastName = [self lastName];
+    NSString *title = [self titleFieldValue].value;
+    NSString *firstName = [self firstNameFieldValue].value;
+    NSString *lastName = [self lastNameFieldValue].value;
     
     if(firstName.length < 1 && lastName.length < 1)
     {
-        NSString *phoneNumber = [self phoneNumber];
+        NSString *phoneNumber = [self phoneNumberChannel].formattedValue;
         if (phoneNumber) {
             return phoneNumber;
         } else {

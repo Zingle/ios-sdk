@@ -39,10 +39,16 @@
     self.textField.textColor = [UIColor colorFromHexString:@"#00a1df"];
 }
 
-- (void)configureCellWithField:(ZNGContactField *)field andValues:(NSArray *)values
+- (void)configureCellWithField:(ZNGContactField *)field
+                    withValues:(NSArray *)values
+                 withIndexPath:(NSIndexPath *)indexPath
+                  withDelegate:(id<UITextFieldDelegate>)delegate
 {
     self.label.text = field.displayName;
     self.textField.placeholder = field.displayName;
+    self.textField.superview.tag = indexPath.section;
+    self.textField.tag = indexPath.row;
+    self.textField.delegate = delegate;
     
     for (ZNGContactFieldValue *value in values) {
         if ([value.customField.contactFieldId isEqualToString:field.contactFieldId]) {

@@ -89,7 +89,7 @@
                 failure:failure];
 }
 
-+ (void)updateContactFieldValue:(ZNGContactFieldValue*)contactFieldValue
++ (void)updateContactFieldValue:(ZNGNewContactFieldValue*)contactFieldValue
              withContactFieldId:(NSString*)contactFieldId
                   withContactId:(NSString*)contactId
                   withServiceId:(NSString*)serviceId

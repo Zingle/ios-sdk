@@ -1,25 +1,25 @@
 //
-//  ZNGNewContactChannel.m
+//  ZNGNewChannel.m
 //  Pods
 //
 //  Created by Ryan Farley on 2/9/16.
 //
 //
 
-#import "ZNGNewContactChannel.h"
+#import "ZNGNewChannel.h"
 
-@implementation ZNGNewContactChannel
+@implementation ZNGNewChannel
 
-- (id)initWithContactChannel:(ZNGContactChannel*)contactChannel
+- (id)initWithChannel:(ZNGChannel*)channel
 {
     self = [super init];
     
     if (self) {
-        _channelTypeId = contactChannel.channelType.channelTypeId;
-        _value = contactChannel.value;
-        _country = contactChannel.country;
-        _displayName = contactChannel.displayName;
-        _isDefaultForType = contactChannel.isDefaultForType;
+        _channelTypeId = channel.channelType.channelTypeId;
+        _value = channel.value;
+        _country = channel.country;
+        _displayName = channel.displayName;
+        _isDefaultForType = channel.isDefaultForType;
     }
     
     return self;

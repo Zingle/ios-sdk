@@ -8,6 +8,7 @@
 
 #import <Mantle/Mantle.h>
 #import "ZNGMessage.h"
+#import "ZNGContactFieldValue.h"
 
 @interface ZNGContact : MTLModel<MTLJSONSerializing>
 
@@ -21,10 +22,10 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
 
--(NSString *)title;
--(NSString *)firstName;
--(NSString *)lastName;
--(NSString *)phoneNumber;
+-(ZNGContactFieldValue *)titleFieldValue;
+-(ZNGContactFieldValue *)firstNameFieldValue;
+-(ZNGContactFieldValue *)lastNameFieldValue;
+-(ZNGChannel *)phoneNumberChannel;
 
 - (NSString *)fullName;
 

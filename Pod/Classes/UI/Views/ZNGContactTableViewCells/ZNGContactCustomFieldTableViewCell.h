@@ -15,6 +15,9 @@
 
 + (NSString *)cellReuseIdentifier;
 
-- (void)configureCellWithField:(ZNGContactField *)field andValues:(NSArray *)values;
+- (void)configureCellWithField:(ZNGContactField *)field
+                    withValues:(NSArray *)values
+                 withIndexPath:(NSIndexPath *)indexPath
+                  withDelegate:(id<UITextFieldDelegate>)delegate;
 
 @end

@@ -8,7 +8,7 @@
 
 #import "ZNGBaseClient.h"
 #import "ZNGContact.h"
-#import "ZNGContactFieldValue.h"
+#import "ZNGNewContactFieldValue.h"
 
 @interface ZNGContactClient : ZNGBaseClient
 
@@ -41,7 +41,7 @@
             success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
-+ (void)updateContactFieldValue:(ZNGContactFieldValue*)contactFieldValue
++ (void)updateContactFieldValue:(ZNGNewContactFieldValue*)contactFieldValue
              withContactFieldId:(NSString*)contactFieldId
                   withContactId:(NSString*)contactId
                   withServiceId:(NSString*)serviceId

@@ -22,7 +22,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBa-nb-zNh">
-                        <rect key="frame" x="18" y="37" width="106" height="21"/>
+                        <rect key="frame" x="18" y="37" width="423" height="21"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <color key="textColor" red="0.34901960784313724" green="0.34901960784313724" blue="0.34901960784313724" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -98,6 +98,7 @@
                     <constraint firstItem="xba-GW-bAR" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-8" id="bWG-Ij-pru"/>
                     <constraint firstItem="Bcp-Jc-OsM" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="cb4-J8-zM2"/>
                     <constraint firstAttribute="trailingMargin" secondItem="LUx-5V-4az" secondAttribute="trailing" constant="-12" id="dFq-oI-1Iu"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="nKa-R1-arl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Bcp-Jc-OsM" secondAttribute="trailing" id="pkM-Rh-5Oy"/>
                     <constraint firstAttribute="topMargin" secondItem="Blq-2G-nRN" secondAttribute="top" id="tce-jX-rie"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="leading" secondItem="xba-GW-bAR" secondAttribute="leading" id="teM-4g-JN7"/>

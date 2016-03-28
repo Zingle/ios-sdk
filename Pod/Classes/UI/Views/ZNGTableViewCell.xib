@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10116" systemVersion="15E65" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
@@ -12,7 +12,7 @@
             <rect key="frame" x="0.0" y="0.0" width="449" height="125"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="449" height="125"/>
+                <rect key="frame" x="0.0" y="0.0" width="449" height="124"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Contact name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Blq-2G-nRN">
@@ -60,7 +60,7 @@
                             </mask>
                         </variation>
                     </label>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bcp-Jc-OsM">
+                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bcp-Jc-OsM">
                         <rect key="frame" x="18" y="66" width="423" height="50"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mma-kZ-PRG">
@@ -70,14 +70,25 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                     </collectionView>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m4M-d6-zfV">
+                        <rect key="frame" x="335" y="8" width="106" height="17"/>
+                        <color key="backgroundColor" red="0.96470588235294119" green="0.96470588235294119" blue="0.97254901960784312" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="17" id="8nF-5J-3JI"/>
+                            <constraint firstAttribute="width" constant="106" id="gvg-1a-4zA"/>
+                        </constraints>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="8" id="02S-nn-AOQ"/>
+                    <constraint firstAttribute="topMargin" secondItem="m4M-d6-zfV" secondAttribute="top" id="0cM-lg-BkD"/>
                     <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="3i6-2W-Bih"/>
                     <constraint firstAttribute="trailingMargin" secondItem="LUx-5V-4az" secondAttribute="trailing" id="80Q-7A-gIT"/>
                     <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" id="AM2-bW-kED"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="m4M-d6-zfV" secondAttribute="trailing" id="CFs-52-Xx2"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="8" id="K2p-s6-ySC"/>
                     <constraint firstAttribute="bottomMargin" secondItem="xba-GW-bAR" secondAttribute="bottom" constant="-13" id="L4G-CN-CgD"/>
+                    <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="-8" id="PnP-9h-kzJ"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="Rs6-ED-Nou"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="LUx-5V-4az" secondAttribute="centerY" id="WMO-rG-xQu"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="xba-GW-bAR" secondAttribute="leading" id="YhF-St-lRv"/>
@@ -98,6 +109,7 @@
                         <exclude reference="YhF-St-lRv"/>
                         <exclude reference="teM-4g-JN7"/>
                         <exclude reference="02S-nn-AOQ"/>
+                        <exclude reference="3i6-2W-Bih"/>
                         <exclude reference="80Q-7A-gIT"/>
                         <exclude reference="AM2-bW-kED"/>
                     </mask>
@@ -109,6 +121,7 @@
                 <outlet property="dateLabel" destination="gdp-gA-wBf" id="fsD-8B-nWV"/>
                 <outlet property="labelCollectionView" destination="Bcp-Jc-OsM" id="v5c-eY-yzt"/>
                 <outlet property="lastMessage" destination="XBa-nb-zNh" id="FDW-CG-wwF"/>
+                <outlet property="placeholderView" destination="m4M-d6-zfV" id="SEZ-2f-5iC"/>
                 <outlet property="starButton" destination="LUx-5V-4az" id="OhE-yK-ceH"/>
             </connections>
             <point key="canvasLocation" x="306.5" y="334.5"/>

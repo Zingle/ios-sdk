@@ -21,6 +21,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *starButton;
 @property (weak, nonatomic) IBOutlet UIView *confirmedView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIView *placeholderView;
 
 @property (nonatomic, strong) ZNGContact *contact;
 @property (nonatomic, strong) NSString *serviceId;
@@ -77,7 +78,7 @@
 {
     self.contactName.backgroundColor = [UIColor clearColor];
     self.lastMessage.backgroundColor = [UIColor clearColor];
-    self.dateLabel.backgroundColor = [UIColor clearColor];
+    self.placeholderView.hidden = YES;
     
     if ([contact isKindOfClass:[NSNull class]]) {
         self.contact = nil;
@@ -127,18 +128,19 @@
 - (void)configureBlankCell
 {
     self.contactName.text = @"                                                         ";
-    self.contactName.backgroundColor = [UIColor colorFromHexString:@"#e2e2e2"];
+    self.contactName.backgroundColor = [UIColor colorFromHexString:@"#f6f7f8"];
 
     self.lastMessage.text = @"                                ";
-    self.lastMessage.backgroundColor = [UIColor colorFromHexString:@"#e2e2e2"];
+    self.lastMessage.backgroundColor = [UIColor colorFromHexString:@"#f6f7f8"];
     
     self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@"      "];
-    self.dateLabel.backgroundColor = [UIColor colorFromHexString:@"#e2e2e2"];
     
     self.confirmedView.backgroundColor = [UIColor clearColor];
     
     self.starButton.enabled = NO;
     [self.starButton setImage:nil forState:UIControlStateNormal];
+    
+    self.placeholderView.hidden = NO;
     
     self.labelCollectionView.hidden = YES;
 }

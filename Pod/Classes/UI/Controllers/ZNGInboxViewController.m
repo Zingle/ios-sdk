@@ -18,15 +18,6 @@
 
 @property (strong, nonatomic) ZNGPagedArray *pagedArray;
 @property (strong, nonatomic) NSMutableDictionary *dataLoadingOperations;
-//@property (nonatomic) BOOL loadingNextPage;
-
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (strong, nonatomic) NSArray *contacts;
-@property (strong, nonatomic) NSString *serviceId;
-@property (strong, nonatomic) ZNGService *service;
-
-@property (strong, nonatomic) NSIndexPath *selectedIndexPath;
-
 @property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
 
 @end
@@ -71,26 +62,27 @@
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
-    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
-    ;
-    self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
-    [self.view addSubview:self.activityIndicator];
-    [self.activityIndicator startAnimating];
-    
     self.title = @"Inbox";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.estimatedRowHeight = 118.0;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerNib:[ZNGTableViewCell nib] forCellReuseIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+    self.tableView.tableFooterView = [[UIView alloc] init];
     
+    [self refresh];
+}
+
+- (void)refresh {
+    self.tableView.hidden = YES;
+    [self showActivityIndicator];
     [self refresh:nil];
 }
 
 - (void)refresh:(UIRefreshControl *)refreshControl {
     [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
         self.service = service;
-        [ZNGContactClient contactListWithServiceId:self.serviceId parameters:nil success:^(NSArray *contacts, ZNGStatus *status) {
+        [ZNGContactClient contactListWithServiceId:self.serviceId parameters:self.currentFilterParams success:^(NSArray *contacts, ZNGStatus *status) {
             
             self.pagedArray = [[ZNGPagedArray alloc] initWithCount:status.totalRecords objectsPerPage:status.pageSize];
             self.pagedArray.delegate = self;
@@ -99,18 +91,15 @@
             self.dataLoadingOperations = [NSMutableDictionary dictionary];
             
             self.tableView.hidden = NO;
-            [self.activityIndicator removeFromSuperview];
-            [self.activityIndicator stopAnimating];
+            [self hideActivityIndicator];
             [self.tableView reloadData];
             [refreshControl endRefreshing];
         } failure:^(ZNGError *error) {
-            [self.activityIndicator removeFromSuperview];
-            [self.activityIndicator stopAnimating];
+            [self hideActivityIndicator];
             [refreshControl endRefreshing];
         }];
     } failure:^(ZNGError *error) {
-        [self.activityIndicator removeFromSuperview];
-        [self.activityIndicator stopAnimating];
+        [self hideActivityIndicator];
         [refreshControl endRefreshing];
     }];
 }
@@ -122,18 +111,29 @@
         ZNGContact *contact = [[self contacts] objectAtIndex:self.selectedIndexPath.row];
         if ([contact.contactId isEqualToString:@"DELETED"]) {
             self.tableView.hidden = YES;
-            self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
-            ;
-            self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
-            [self.view addSubview:self.activityIndicator];
-            [self.activityIndicator startAnimating];
-            [self refresh:nil];
+            [self refresh];
         } else {
             [self.tableView beginUpdates];
             [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
             [self.tableView endUpdates];
         }
     }
+}
+
+- (void)showActivityIndicator
+{
+    self.activityIndicator.stopAnimating;
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
+    self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
+    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+}
+
+- (void)hideActivityIndicator
+{
+    self.activityIndicator.hidden = YES;
+    [self.activityIndicator removeFromSuperview];
+    self.activityIndicator.stopAnimating;
 }
 
 #pragma mark - UITableViewDataSource
@@ -159,9 +159,9 @@
     self.selectedIndexPath = indexPath;
     
     ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
-        
+    
     ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:self.service senderName:@"Me" receiverName:[contact fullName]];
-
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -192,12 +192,12 @@
     
     NSIndexSet *indexes = [_pagedArray indexSetForPage:page];
     
-    NSDictionary *params = @{
-                             @"page_size" : [NSNumber numberWithInteger: self.pagedArray.objectsPerPage],
-                             @"page" : [NSNumber numberWithInteger: page]
-                             };
-    [ZNGContactClient contactListWithServiceId:self.serviceId parameters:params success:^(NSArray *contacts, ZNGStatus *status) {
-
+    NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
+    [combinedParams setObject:[NSNumber numberWithInteger: self.pagedArray.objectsPerPage] forKey:@"page_size"];
+    [combinedParams setObject:[NSNumber numberWithInteger: page] forKey:@"page"];
+    
+    [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
+        
         [_dataLoadingOperations removeObjectForKey:@(status.page)];
         [self.pagedArray setObjects:contacts forPage:status.page];
         

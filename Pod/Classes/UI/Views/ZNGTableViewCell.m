@@ -75,6 +75,10 @@
 
 - (void)configureCellWithContact:(ZNGContact *)contact withServiceId:(NSString *)serviceId
 {
+    self.contactName.backgroundColor = [UIColor clearColor];
+    self.lastMessage.backgroundColor = [UIColor clearColor];
+    self.dateLabel.backgroundColor = [UIColor clearColor];
+    
     if ([contact isKindOfClass:[NSNull class]]) {
         self.contact = nil;
         self.serviceId = nil;
@@ -98,7 +102,7 @@
             self.confirmedView.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
         }
         
-        self.starButton.hidden = NO;
+        self.starButton.enabled = YES;
         if (self.contact.isStarred) {
             [self.starButton setImage:[UIImage zng_starredImage] forState:UIControlStateNormal];
         } else {
@@ -122,11 +126,20 @@
 
 - (void)configureBlankCell
 {
-    self.contactName.text = @"Loading contact...";
-    self.lastMessage.text = @"Loading message...";
-    self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@"..."];
+    self.contactName.text = @"                                                         ";
+    self.contactName.backgroundColor = [UIColor colorFromHexString:@"#e2e2e2"];
+
+    self.lastMessage.text = @"                                ";
+    self.lastMessage.backgroundColor = [UIColor colorFromHexString:@"#e2e2e2"];
+    
+    self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@"      "];
+    self.dateLabel.backgroundColor = [UIColor colorFromHexString:@"#e2e2e2"];
+    
     self.confirmedView.backgroundColor = [UIColor clearColor];
-    self.starButton.hidden = YES;
+    
+    self.starButton.enabled = NO;
+    [self.starButton setImage:nil forState:UIControlStateNormal];
+    
     self.labelCollectionView.hidden = YES;
 }
 

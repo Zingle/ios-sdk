@@ -311,7 +311,8 @@
                             newChannel.isDefaultForType = [self phoneNumberChannel].isDefaultForType;
                             [ZNGContactChannelClient saveContactChannel:newChannel withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
                                 
-                                NSMutableArray *temp = [NSMutableArray arrayWithArray:self.contact.channels];
+                                NSMutableArray *temp = [[NSMutableArray alloc] init];
+                                [temp addObjectsFromArray:self.contact.channels];
                                 [temp addObject:contactChannel];
                                 self.contact.channels = temp;
                                 textField.text = contactChannel.formattedValue;
@@ -370,6 +371,8 @@
             updatedField.value = textField.text;
             [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:field.contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
                 self.contact = contact;
+                NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:2];
+                [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];
             } failure:^(ZNGError *error) {
                 [self showAlertForError:error];
             }];

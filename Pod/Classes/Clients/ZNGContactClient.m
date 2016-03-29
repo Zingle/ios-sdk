@@ -131,7 +131,7 @@
     
     [self postWithModel:nil
                    path:path
-          responseClass:nil
+          responseClass:[ZNGContact class]
                 success:success
                 failure:failure];
 }

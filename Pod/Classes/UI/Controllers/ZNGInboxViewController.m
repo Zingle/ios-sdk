@@ -159,10 +159,10 @@
     ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
     if (![contact isKindOfClass:[NSNull class]]) {
         if (contact.labels.count > 4) {
-            return 107.5;
+            return 113;
         }
         if (contact.labels.count > 0) {
-            return 81.5;
+            return 87;
         }
     }
     return 71;

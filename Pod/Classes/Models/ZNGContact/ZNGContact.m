@@ -65,7 +65,14 @@
             return fieldValue;
         }
     }
-    return nil;
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
+    fieldValue.customField = [[ZNGContactField alloc] init];
+    fieldValue.customField.displayName = @"Title";
+    
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
+    [array addObject:fieldValue];
+    self.customFieldValues = array;
+    return fieldValue;
 }
 
 -(ZNGContactFieldValue *)firstNameFieldValue
@@ -75,7 +82,14 @@
             return fieldValue;
         }
     }
-    return nil;
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
+    fieldValue.customField = [[ZNGContactField alloc] init];
+    fieldValue.customField.displayName = @"First Name";
+    
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
+    [array addObject:fieldValue];
+    self.customFieldValues = array;
+    return fieldValue;
 }
 
 -(ZNGContactFieldValue *)lastNameFieldValue
@@ -85,7 +99,14 @@
             return fieldValue;
         }
     }
-    return nil;
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
+    fieldValue.customField = [[ZNGContactField alloc] init];
+    fieldValue.customField.displayName = @"Last Name";
+    
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
+    [array addObject:fieldValue];
+    self.customFieldValues = array;
+    return fieldValue;
 }
 
 -(ZNGChannel *)phoneNumberChannel

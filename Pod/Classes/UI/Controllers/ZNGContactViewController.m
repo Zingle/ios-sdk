@@ -13,6 +13,7 @@
 #import "ZNGcontactClient.h"
 #import "ZNGContactChannelClient.h"
 #import "ZNGFieldOption.h"
+#import "ZNGContactFieldClient.h"
 
 @interface ZNGContactViewController () <UITextFieldDelegate>
 
@@ -84,6 +85,46 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (ZNGContactField *)titleCustomField
+{
+    for (ZNGContactField *contactField in self.service.contactCustomFields) {
+        if ([contactField.displayName isEqualToString:@"Title"]) {
+            return contactField;
+        }
+    }
+    return nil;
+}
+
+- (ZNGContactField *)firstNameCustomField
+{
+    for (ZNGContactField *contactField in self.service.contactCustomFields) {
+        if ([contactField.displayName isEqualToString:@"First Name"]) {
+            return contactField;
+        }
+    }
+    return nil;
+}
+
+- (ZNGContactField *)lastNameCustomField
+{
+    for (ZNGContactField *contactField in self.service.contactCustomFields) {
+        if ([contactField.displayName isEqualToString:@"Last Name"]) {
+            return contactField;
+        }
+    }
+    return nil;
+}
+
+-(ZNGChannel *)phoneNumberChannel
+{
+    for (ZNGChannel *channel in self.service.channels) {
+        if ([channel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
+            return channel;
+        }
+    }
+    return nil;
 }
 
 - (void)extractExtraCustomFields {
@@ -191,7 +232,7 @@
                               cancelButtonTitle:@"Cancel"
                               otherButtonTitles:@"Delete", nil] show];
         }
-
+            
             break;
             
         default:
@@ -216,12 +257,12 @@
                         
                         ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
                         updatedField.customFieldOptionId = [self.contact titleFieldValue].selectedCustomFieldOptionId;
-                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self.contact titleFieldValue].customField.contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self titleCustomField].contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact = contact;
                             self.title = [self.contact fullName];
                             self.previousTitle = [self.contact titleFieldValue].value;
                         } failure:^(ZNGError *error) {
-                            
+                            [self showAlertForError:error];
                         }];
                     }
                     break;
@@ -232,12 +273,12 @@
                         [self.contact firstNameFieldValue].value = textField.text;
                         ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
                         updatedField.value = textField.text;
-                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self.contact firstNameFieldValue].customField.contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self firstNameCustomField].contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact = contact;
                             self.title = [self.contact fullName];
                             self.previousFirstName = [self.contact firstNameFieldValue].value;
                         } failure:^(ZNGError *error) {
-                            
+                            [self showAlertForError:error];
                         }];
                     }
                     break;
@@ -248,12 +289,12 @@
                         [self.contact lastNameFieldValue].value = textField.text;
                         ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
                         updatedField.value = textField.text;
-                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self.contact lastNameFieldValue].customField.contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self lastNameCustomField].contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact = contact;
                             self.title = [self.contact fullName];
                             self.previousLastName = [self.contact lastNameFieldValue].value;
                         } failure:^(ZNGError *error) {
-                            
+                            [self showAlertForError:error];
                         }];
                     }
                     break;
@@ -263,11 +304,11 @@
                         if ([self.contact phoneNumberChannel] == nil) {
                             
                             ZNGNewChannel *newChannel = [[ZNGNewChannel alloc] init];
-                            newChannel.channelTypeId = [self.contact phoneNumberChannel].channelType.channelTypeId;
+                            newChannel.channelTypeId = [self phoneNumberChannel].channelType.channelTypeId;
                             newChannel.value = textField.text;
                             newChannel.country = @"US";
-                            newChannel.displayName = [self.contact phoneNumberChannel].displayName;
-                            newChannel.isDefaultForType = [self.contact phoneNumberChannel].isDefaultForType;
+                            newChannel.displayName = [self phoneNumberChannel].displayName;
+                            newChannel.isDefaultForType = [self phoneNumberChannel].isDefaultForType;
                             [ZNGContactChannelClient saveContactChannel:newChannel withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
                                 
                                 NSMutableArray *temp = [NSMutableArray arrayWithArray:self.contact.channels];
@@ -276,7 +317,7 @@
                                 textField.text = contactChannel.formattedValue;
                                 
                             } failure:^(ZNGError *error) {
-                                NSLog(@"ERROR: %@", error);
+                                [self showAlertForError:error];
                             }];
                             
                         } else {
@@ -302,11 +343,11 @@
                                         textField.text = contactChannel.formattedValue;
                                         
                                     } failure:^(ZNGError *error) {
-                                        NSLog(@"ERROR: %@", error);
+                                        [self showAlertForError:error];
                                     }];
                                 }
                             } failure:^(ZNGError *error) {
-                                NSLog(@"ERROR: %@", error);
+                                [self showAlertForError:error];
                             }];
                         }
                     }
@@ -330,11 +371,11 @@
             [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:field.contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
                 self.contact = contact;
             } failure:^(ZNGError *error) {
-                
+                [self showAlertForError:error];
             }];
             break;
         }
-           
+            
         default:
             break;
     }
@@ -375,12 +416,12 @@
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component {
-    return [[self.contact titleFieldValue].customField.options count];
+    return [[self titleCustomField].options count];
 }
 
 #pragma mark - UIPickerViewDelegate
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
-    ZNGFieldOption *option = [[self.contact titleFieldValue].customField.options objectAtIndex:row];
+    ZNGFieldOption *option = [[self titleCustomField].options objectAtIndex:row];
     if ([option.value isEqualToString:@""]) {
         return @"No title";
     }
@@ -388,8 +429,8 @@
 }
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
-    ZNGFieldOption *option = [[self.contact titleFieldValue].customField.options objectAtIndex:row];
-    
+    ZNGFieldOption *option = [[self titleCustomField].options objectAtIndex:row];
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
     [self.contact titleFieldValue].value = option.value;
     [self.contact titleFieldValue].selectedCustomFieldOptionId = option.optionId;
     [self.tableView reloadData];
@@ -416,8 +457,17 @@
         [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:indx] animated:YES];
         
     } failure:^(ZNGError *error) {
-        
+        [self showAlertForError:error];
     }];
+}
+
+- (void)showAlertForError:(ZNGError *)error
+{
+    [[[UIAlertView alloc] initWithTitle:error.errorText
+                                message:error.errorDescription
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil] show];
 }
 
 @end

@@ -174,6 +174,10 @@
     
     ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
     
+    if ([contact isKindOfClass:[NSNull class]]) {
+        return;
+    }
+    
     ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:self.service senderName:@"Me" receiverName:[contact fullName]];
     
     [self.navigationController pushViewController:vc animated:YES];

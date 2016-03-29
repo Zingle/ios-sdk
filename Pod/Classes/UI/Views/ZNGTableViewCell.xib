@@ -22,7 +22,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LUx-5V-4az">
-                        <rect key="frame" x="403" y="-6" width="50" height="50"/>
+                        <rect key="frame" x="403" y="-8" width="50" height="50"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="50" id="2ce-rL-0vz"/>
@@ -41,7 +41,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Mar 11 12:44 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdp-gA-wBf">
-                        <rect key="frame" x="285" y="8" width="126" height="21"/>
+                        <rect key="frame" x="285" y="6" width="126" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="126" id="7Vu-HZ-P42"/>
                         </constraints>
@@ -146,7 +146,7 @@
                     <constraint firstAttribute="bottom" secondItem="xba-GW-bAR" secondAttribute="bottom" id="L4G-CN-CgD"/>
                     <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="-8" id="PnP-9h-kzJ"/>
                     <constraint firstAttribute="bottomMargin" secondItem="m4M-d6-zfV" secondAttribute="bottom" constant="-8" id="QxG-xf-3Zm"/>
-                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="Rs6-ED-Nou"/>
+                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="-2" id="Rs6-ED-Nou"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="LUx-5V-4az" secondAttribute="centerY" id="WMO-rG-xQu"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="xba-GW-bAR" secondAttribute="leading" id="YhF-St-lRv"/>
                     <constraint firstItem="xba-GW-bAR" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="-8" id="Z81-7O-AhU"/>

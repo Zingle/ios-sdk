@@ -6,6 +6,7 @@
 
 #import "NSString+ZingleSDK.h"
 
+#import "UIFont+OpenSans.h"
 
 @interface ZNGComposerTextView ()
 
@@ -45,7 +46,7 @@
     self.scrollsToTop = NO;
     self.userInteractionEnabled = YES;
     
-    self.font = [UIFont systemFontOfSize:16.0f];
+    self.font = [UIFont openSansFontOfSize:16.0f];
     self.textColor = [UIColor blackColor];
     self.textAlignment = NSTextAlignmentNatural;
     

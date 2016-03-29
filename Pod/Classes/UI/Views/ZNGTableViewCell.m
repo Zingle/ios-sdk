@@ -48,14 +48,11 @@
     
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
-    self.contactName.textColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-    self.contactName.font = [UIFont openSansSemiboldFontOfSize:12.0f];
+    self.contactName.textColor = [UIColor colorFromHexString:@"#333333"];
+    self.contactName.font = [UIFont openSansBoldFontOfSize:15.0f];
     
-    self.lastMessage.textColor = [UIColor colorWithRed:89/255.0f green:89/255.0f blue:89/255.0f alpha:1.0f];
-    self.lastMessage.font = [UIFont openSansFontOfSize:12.0f];
-    
-    self.dateLabel.textColor = [UIColor colorWithRed:70/255.0f green:161/255.0f blue:223/255.0f alpha:1.0];
-    self.dateLabel.font = [UIFont openSansBoldFontOfSize:12.0f];
+    self.lastMessage.textColor = [UIColor colorFromHexString:@"#595959"];
+    self.lastMessage.font = [UIFont openSansFontOfSize:13.0f];
     
     self.labelCollectionView.collectionViewLayout = [[ZNGLabelCollectionViewFlowLayout alloc] init];
     ZNGLabelCollectionViewFlowLayout *flow = (ZNGLabelCollectionViewFlowLayout *)self.labelCollectionView.collectionViewLayout;
@@ -76,8 +73,6 @@
 
 - (void)configureCellWithContact:(ZNGContact *)contact withServiceId:(NSString *)serviceId
 {
-    self.contactName.backgroundColor = [UIColor clearColor];
-    self.lastMessage.backgroundColor = [UIColor clearColor];
     self.placeholderView.hidden = YES;
     
     if ([contact isKindOfClass:[NSNull class]]) {
@@ -92,6 +87,7 @@
         if (self.contact.lastMessage.body.length > 0) {
             self.lastMessage.text = self.contact.lastMessage.body;
             self.dateLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:self.contact.lastMessage.createdAt];
+            self.dateLabel.textColor = [UIColor colorFromHexString:@"#00a1df"];
         } else {
             self.lastMessage.text = @" ";
             self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
@@ -127,13 +123,11 @@
 
 - (void)configureBlankCell
 {
-    self.contactName.text = @"                                                         ";
-    self.contactName.backgroundColor = [UIColor colorFromHexString:@"#f6f7f8"];
-
-    self.lastMessage.text = @"                                ";
-    self.lastMessage.backgroundColor = [UIColor colorFromHexString:@"#f6f7f8"];
+    self.contactName.text = @" ";
     
-    self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@"      "];
+    self.lastMessage.text = @" ";
+    
+    self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
     
     self.confirmedView.backgroundColor = [UIColor clearColor];
     

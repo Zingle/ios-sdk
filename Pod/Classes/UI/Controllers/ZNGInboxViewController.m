@@ -154,6 +154,20 @@
 
 #pragma mark - UITableViewDelegate
 
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
+    if (![contact isKindOfClass:[NSNull class]]) {
+        if (contact.labels.count > 4) {
+            return 107.5;
+        }
+        if (contact.labels.count > 0) {
+            return 81.5;
+        }
+    }
+    return 71;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedIndexPath = indexPath;

@@ -4,7 +4,7 @@
 #import "UIColor+ZingleSDK.h"
 #import "UIImage+ZingleSDK.h"
 #import "NSBundle+ZingleSDK.h"
-
+#import "UIFont+OpenSans.h"
 
 @implementation ZNGToolbarButtonFactory
 
@@ -35,7 +35,7 @@
     [sendButton setTitleColor:[[UIColor zng_messageBubbleGreenColor] zng_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
     [sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
 
-    sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:17.0f];
+    sendButton.titleLabel.font = [UIFont openSansBoldFontOfSize:17.0f];
     sendButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     sendButton.titleLabel.minimumScaleFactor = 0.85f;
     sendButton.contentMode = UIViewContentModeCenter;

@@ -407,7 +407,7 @@
         Class targetClass = NSClassFromString(@"ZNGInboxViewController");
         int indx = 0;
         for(UIViewController *viewController in self.navigationController.viewControllers){
-            if([viewController isMemberOfClass:targetClass]){
+            if([viewController isKindOfClass:targetClass]){
                 break;
             }
             indx++;

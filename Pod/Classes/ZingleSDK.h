@@ -93,4 +93,5 @@
                                                             senderName:(NSString *)senderName
                                                           receiverName:(NSString *)receiverName;
 
+- (void)setToken:(NSString *)token andKey:(NSString *)key forDebugMode:(BOOL)debugMode;
 @end

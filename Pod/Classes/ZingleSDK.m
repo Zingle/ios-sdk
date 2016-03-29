@@ -24,6 +24,7 @@
 @implementation ZingleSDK
 
 NSString* const kLiveBaseURL = @"https://api.zingle.me/v1/";
+NSString* const kDebugBaseURL = @"https://qa-api.zingle.me/v1/";
 NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 + (ZingleSDK*)sharedSDK
@@ -40,11 +41,16 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 - (void)setToken:(NSString*)token andKey:(NSString*)key
 {
+    [self setToken:token andKey:key forDebugMode:NO];
+}
+
+- (void)setToken:(NSString *)token andKey:(NSString *)key forDebugMode:(BOOL)debugMode
+{
     if (token == nil || key == nil) {
         [NSException raise:NSInvalidArgumentException format:@"ZingleSDK must be initialized with a token and key."];
     }
-    
-    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:kLiveBaseURL]];
+    NSString *baseURL = debugMode ? kDebugBaseURL : kLiveBaseURL;
+    self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];

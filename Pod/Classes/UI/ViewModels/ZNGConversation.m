@@ -52,6 +52,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         if ([messages count] == [self.messages count]) {
             [self.delegate messagesUpdated:NO];
+            return;
         }
         self.messages = [messages mutableCopy];
         

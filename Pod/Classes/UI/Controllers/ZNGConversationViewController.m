@@ -429,6 +429,9 @@
     if (newMessages) {
         [self refreshViewModels];
         [self finishReceivingMessage];
+    } else {
+        [self.activityIndicator removeFromSuperview];
+        [self.activityIndicator stopAnimating];
     }
 }
 

@@ -59,6 +59,7 @@
     self.tableView.hidden = YES;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    [refreshControl setTintColor:[UIColor colorFromHexString:@"#00a0de"]];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     

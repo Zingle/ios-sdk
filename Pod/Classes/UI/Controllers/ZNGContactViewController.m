@@ -165,6 +165,9 @@
             return 4;
             break;
         case 1:
+            if ([self.service.contactLabels count] == [self.contact.labels count]) {
+                return [self.contact.labels count];
+            }
             return [self.contact.labels count] + 1;
             break;
         case 2:

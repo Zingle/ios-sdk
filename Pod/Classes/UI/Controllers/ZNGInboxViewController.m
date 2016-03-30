@@ -85,6 +85,8 @@
         
         NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
         [combinedParams setObject:@"last_message_created_at" forKey:@"sort_field"];
+        [combinedParams setObject:@"desc" forKey:@"sort_direction"];
+        [combinedParams setObject:@"greater_than(0)" forKey:@"last_message_created_at"];
         
         [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
             
@@ -218,6 +220,8 @@
     [combinedParams setObject:[NSNumber numberWithInteger: self.pagedArray.objectsPerPage] forKey:@"page_size"];
     [combinedParams setObject:[NSNumber numberWithInteger: page] forKey:@"page"];
     [combinedParams setObject:@"last_message_created_at" forKey:@"sort_field"];
+    [combinedParams setObject:@"desc" forKey:@"sort_direction"];
+    [combinedParams setObject:@"greater_than(0)" forKey:@"last_message_created_at"];
     
     [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
         

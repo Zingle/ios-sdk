@@ -214,9 +214,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     [self zng_configureMessagesViewController];
     [self zng_registerForNotifications:YES];
     
-    if ([[UIApplication sharedApplication] statusBarFrame].size.height < 1) {
-        self.titleViewLabelTopConstraint.constant = 44;
-    }
+    self.titleViewLabelTopConstraint.constant = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -299,6 +297,8 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
         self.showTypingIndicator = YES;
         [self.collectionView reloadData];
     }
+
+    self.titleViewLabelTopConstraint.constant = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
 }
 
 #pragma mark - Messages view controller

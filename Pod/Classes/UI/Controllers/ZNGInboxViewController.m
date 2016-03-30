@@ -82,7 +82,11 @@
 - (void)refresh:(UIRefreshControl *)refreshControl {
     [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
         self.service = service;
-        [ZNGContactClient contactListWithServiceId:self.serviceId parameters:self.currentFilterParams success:^(NSArray *contacts, ZNGStatus *status) {
+        
+        NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
+        [combinedParams setObject:@"last_message_created_at" forKey:@"sort_field"];
+        
+        [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
             
             self.pagedArray = [[ZNGPagedArray alloc] initWithCount:status.totalRecords objectsPerPage:status.pageSize];
             self.pagedArray.delegate = self;
@@ -213,6 +217,7 @@
     NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
     [combinedParams setObject:[NSNumber numberWithInteger: self.pagedArray.objectsPerPage] forKey:@"page_size"];
     [combinedParams setObject:[NSNumber numberWithInteger: page] forKey:@"page"];
+    [combinedParams setObject:@"last_message_created_at" forKey:@"sort_field"];
     
     [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
         

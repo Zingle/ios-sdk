@@ -127,12 +127,6 @@
 {
     [super viewDidLoad];
     
-    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
-    ;
-    self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
-    [self.view addSubview:self.activityIndicator];
-    [self.activityIndicator startAnimating];
-    
     self.senderDisplayName = self.senderName ?: @"Me";
 
     self.titleViewLabel.font = [UIFont openSansBoldFontOfSize:17.0f];
@@ -178,6 +172,12 @@
     } else {
         [self loadConversation];
     }
+    
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
+    ;
+    self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
+    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
 }
 
 - (void)setupBarButtonItems

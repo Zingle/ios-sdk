@@ -241,11 +241,26 @@
                 [alertView show];
             } else {
                 UIAlertController *labelMenu = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-                for (ZNGLabel *label in self.service.contactLabels) {
+                
+                NSMutableArray *commonLabels = [NSMutableArray array];
+                for (ZNGLabel *serviceLabel in self.service.contactLabels) {
+                    for (ZNGLabel *contactLabel in self.contact.labels) {
+                        if ([contactLabel.labelId isEqualToString:serviceLabel.labelId]) {
+                            [commonLabels addObject:serviceLabel];
+                        }
+                    }
+                }
+                
+                NSMutableSet* set1 = [NSMutableSet setWithArray:self.service.contactLabels];
+                NSMutableSet* set2 = [NSMutableSet setWithArray:commonLabels];
+                [set1 minusSet:set2];
+                
+                NSArray* result = [set1 allObjects];
+
+                for (ZNGLabel *label in result) {
                     UIAlertAction *action = [UIAlertAction actionWithTitle:label.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [ZNGContactClient addLabelWithId:label.labelId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
-                            
-                            self.contact = contact;
+                            self.contact.labels = contact.labels;
                             [self.tableView reloadData];
                             
                         } failure:^(ZNGError *error) {

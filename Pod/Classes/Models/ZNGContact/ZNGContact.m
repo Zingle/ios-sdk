@@ -19,7 +19,7 @@
              @"contactId" : @"id",
              @"isConfirmed" : @"is_confirmed",
              @"isStarred" : @"is_starred",
-             @"lastMessage" : @"last_communication",
+             @"lastMessage" : @"last_message",
              @"channels" : @"channels",
              @"customFieldValues" : @"custom_field_values",
              @"labels" : @"labels",

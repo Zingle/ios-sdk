@@ -15,7 +15,7 @@
 
 @protocol ZNGConversationDelegate <NSObject>
 
-- (void)messagesUpdated;
+- (void)messagesUpdated:(BOOL)newMessages;
 
 @end
 

@@ -51,13 +51,13 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
         
         if ([messages count] == [self.messages count]) {
-            return;
+            [self.delegate messagesUpdated:NO];
         }
         self.messages = [messages mutableCopy];
         
         NSInteger pageNumbers = status.totalPages;
         
-        [self.delegate messagesUpdated];
+        [self.delegate messagesUpdated:YES];
         
         for (int i = 2; i <= pageNumbers; i++) {
             NSDictionary *params = @{kConversationPageSize : @100,
@@ -71,7 +71,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                 [temp addObjectsFromArray:messages];
                 self.messages = temp;
                 
-                [self.delegate messagesUpdated];
+                [self.delegate messagesUpdated:YES];
                 
             } failure:nil];
         }

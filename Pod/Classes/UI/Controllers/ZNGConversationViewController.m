@@ -170,14 +170,18 @@
         self.conversation.delegate = self;
         [self refreshViewModels];
     } else {
+        self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
+        ;
+        CGRect actFrame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
+        self.activityIndicator.frame = actFrame;
+        [self.view addSubview:self.activityIndicator];
+        [self.activityIndicator startAnimating];
+        
         [self loadConversation];
     }
-    
-    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
-    ;
-    self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
-    [self.view addSubview:self.activityIndicator];
-    [self.activityIndicator startAnimating];
+    if (!self.toService) {
+        [self setupBarButtonItems];
+    }
 }
 
 - (void)setupBarButtonItems
@@ -287,7 +291,6 @@
             self.conversation = conversation;
             self.conversation.delegate = self;
             
-            [self refreshViewModels];
         } failure:^(ZNGError *error) {
             [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
                                         message:nil
@@ -302,7 +305,6 @@
             self.conversation = conversation;
             self.conversation.delegate = self;
             
-            [self refreshViewModels];
         } failure:^(ZNGError *error) {
             [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
                                         message:nil
@@ -408,9 +410,6 @@
     [self finishReceivingMessageAnimated:NO];
     [self.activityIndicator removeFromSuperview];
     [self.activityIndicator stopAnimating];
-    if (!self.toService) {
-        [self setupBarButtonItems];
-    }
 }
 
 - (void)showErrorSendingMessage
@@ -424,11 +423,13 @@
 
 #pragma mark - ZNGConversationDelegate
 
-- (void)messagesUpdated
+- (void)messagesUpdated:(BOOL)newMessages;
 {
     [self startPollingTimer];
-    [self refreshViewModels];
-    [self finishReceivingMessage];
+    if (newMessages) {
+        [self refreshViewModels];
+        [self finishReceivingMessage];
+    }
 }
 
 #pragma mark - Actions

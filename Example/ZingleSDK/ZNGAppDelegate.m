@@ -22,7 +22,7 @@
     NSString *key = @"WfM-uYS-CBV-n6J";
     
     // 1
-    [[ZingleSDK sharedSDK] setToken:token andKey:key];
+    [[ZingleSDK sharedSDK] setToken:token andKey:key forDebugMode:YES];
     ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:@"e545a46e-bfcd-4db2-bfee-8e590fdcb33f"];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

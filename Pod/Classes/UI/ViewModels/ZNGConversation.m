@@ -10,6 +10,12 @@
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
 
+@interface ZNGConversation ()
+
+@property (nonatomic) NSInteger totalMessageCount;
+
+@end
+
 @implementation ZNGConversation
 
 NSString *const kConversationPage = @"page";
@@ -50,10 +56,12 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
         
-        if ([messages count] == [self.messages count]) {
+        if (status.totalRecords == self.totalMessageCount) {
             [self.delegate messagesUpdated:NO];
             return;
         }
+        
+        self.totalMessageCount = status.totalRecords;
         self.messages = [messages mutableCopy];
         
         NSInteger pageNumbers = status.totalPages;

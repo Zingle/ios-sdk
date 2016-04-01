@@ -407,7 +407,7 @@
     }
     
     self.viewModels = tempArray;
-    [self finishReceivingMessageAnimated:NO];
+    [self finishReceivingMessageAnimated:YES];
     [self.activityIndicator removeFromSuperview];
     [self.activityIndicator stopAnimating];
 }
@@ -428,7 +428,6 @@
     [self startPollingTimer];
     if (newMessages) {
         [self refreshViewModels];
-        [self finishReceivingMessage];
     } else {
         [self.activityIndicator removeFromSuperview];
         [self.activityIndicator stopAnimating];

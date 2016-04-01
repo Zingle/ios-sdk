@@ -12,7 +12,7 @@
 #import "ZNGMessage.h"
 
 /**
- *  The `ZNGMessage` class is a concrete class for message model objects that represents a single user message.
+ *  The `ZNGMessageViewModel` class is a concrete class for message model objects that represents a single user message.
  *  The message can be a text message or media message, depending on how it is initialized.
  *  It implements the `ZNGMessageData` protocol and it contains the senderId, senderDisplayName,
  *  and the date that the message was sent. If initialized as a media message it also contains a media attachment,

@@ -13,6 +13,7 @@
 @interface ZNGConversation ()
 
 @property (nonatomic) NSInteger totalMessageCount;
+@property (nonatomic) NSInteger pagesLeftToLoad;
 
 @end
 
@@ -64,33 +65,39 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         self.totalMessageCount = status.totalRecords;
         self.messages = [messages mutableCopy];
         
-        NSInteger pageNumbers = status.totalPages;
+        self.pagesLeftToLoad = status.totalPages - 1;
         
-        if (pageNumbers > 1) {
+        if (self.pagesLeftToLoad > 0) {
+            [self loadNextPage:status.page + 1];
             
-            for (int i = 2; i <= pageNumbers; i++) {
-                NSDictionary *params = @{kConversationPageSize : @100,
-                                         kConversationContactId : self.contactId,
-                                         kConversationPage : @(i),
-                                         kConversationSortField : kConversationCreatedAt};
-                
-                [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
-                    
-                    NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
-                    [temp addObjectsFromArray:messages];
-                    self.messages = temp;
-                    
-                    if (status.page == pageNumbers) {
-                        [self.delegate messagesUpdated:YES];
-                    }
-                    
-                } failure:nil];
-            }
         } else {
             [self.delegate messagesUpdated:YES];
         }
         
     } failure:nil];
+}
+
+- (void)loadNextPage:(NSInteger)page
+{
+        NSDictionary *params = @{kConversationPageSize : @100,
+                                 kConversationContactId : self.contactId,
+                                 kConversationPage : @(page),
+                                 kConversationSortField : kConversationCreatedAt};
+        
+        [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+            
+            NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
+            [temp addObjectsFromArray:messages];
+            self.messages = temp;
+            self.pagesLeftToLoad--;
+            
+            if (self.pagesLeftToLoad < 1) {
+                [self.delegate messagesUpdated:YES];
+            } else {
+                [self loadNextPage:status.page + 1];
+            }
+            
+        } failure:nil];
 }
 
 - (void)sendMessageWithBody:(NSString *)body

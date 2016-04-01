@@ -184,6 +184,12 @@
     }
 }
 
+-(void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [[ZingleSDK sharedSDK] clearCachedConversations];
+}
+
 - (void)setupBarButtonItems
 {
     self.unstarredImage = [UIImage zng_lrg_unstarredImage];

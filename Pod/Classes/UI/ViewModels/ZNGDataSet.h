@@ -38,4 +38,10 @@
  */
 - (ZNGConversation *)getConversationToContactId:(NSString *)contactId;
 
+/**
+ *  Clears in-memory cached conversations
+ *
+ */
+- (void *)clearConversations;
+
 @end

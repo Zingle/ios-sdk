@@ -129,6 +129,11 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     return [[ZNGDataSet sharedDataSet] getConversationToContactId:contactId];
 }
 
+- (void *)clearCachedConversations
+{
+    [[ZNGDataSet sharedDataSet] clearConversations];
+}
+
 - (ZNGConversationViewController *)conversationViewControllerToService:(ZNGService *)service
                                                                contact:(ZNGContact *)contact
                                                             senderName:(NSString *)senderName

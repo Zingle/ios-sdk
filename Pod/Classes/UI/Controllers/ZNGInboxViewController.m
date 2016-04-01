@@ -127,6 +127,12 @@
     }
 }
 
+-(void)didReceiveMemoryWarning
+{
+    [super didReceiveMemoryWarning];
+    [[ZingleSDK sharedSDK] clearCachedConversations];
+}
+
 - (void)showActivityIndicator
 {
     self.activityIndicator.stopAnimating;

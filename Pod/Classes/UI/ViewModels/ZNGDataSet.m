@@ -55,4 +55,11 @@
     return [self.conversations objectForKey:contactId];
 }
 
+- (void)clearConversations
+{
+    self.services = [[NSMutableDictionary alloc] init];
+    self.contacts = [[NSMutableDictionary alloc] init];
+    self.conversations = [[NSMutableDictionary alloc] init];
+}
+
 @end

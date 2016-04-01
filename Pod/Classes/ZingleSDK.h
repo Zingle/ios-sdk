@@ -20,12 +20,21 @@
 + (instancetype)sharedSDK;
 
 /**
- * Initializes basic auth for connecting to API. Does not verify login and password are correct.
+ * Initializes basic auth for connecting to the production API. Does not verify login and password are correct.
  *
  * @param token user name for API
  * @param password password for API
  */
 - (void)setToken:(NSString*)token andKey:(NSString*)key;
+
+/**
+ * Initializes basic auth for connecting to API. Does not verify login and password are correct.
+ *
+ * @param token user name for API
+ * @param password password for API
+ * @param debugMode when true connects to potentially unstable QA API
+ */
+- (void)setToken:(NSString *)token andKey:(NSString *)key forDebugMode:(BOOL)debugMode;
 
 /**
  * Registers a new conversation in ZingleSDK. This will return a chat interface from a contact to a service. On success,
@@ -72,6 +81,12 @@
 - (ZNGConversation *)conversationToContact:(NSString *)contactId;
 
 /**
+ *  Clears in-memory cached conversations
+ *
+ */
+- (void *)clearCachedConversations;
+
+/**
  *  Returns a ZNGConversationViewController.
  *
  *  @param conversation Object containing participants in a conversation and the
@@ -92,6 +107,4 @@
                                                                service:(ZNGService *)service
                                                             senderName:(NSString *)senderName
                                                           receiverName:(NSString *)receiverName;
-
-- (void)setToken:(NSString *)token andKey:(NSString *)key forDebugMode:(BOOL)debugMode;
 @end

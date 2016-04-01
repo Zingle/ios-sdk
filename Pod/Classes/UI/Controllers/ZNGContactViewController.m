@@ -86,7 +86,7 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [[ZingleSDK sharedSDK] clearCachedConversations];
 }
 
 - (void)showAlertForError:(ZNGError *)error

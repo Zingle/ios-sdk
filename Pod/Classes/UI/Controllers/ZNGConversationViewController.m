@@ -413,7 +413,7 @@
     }
     
     self.viewModels = tempArray;
-    [self finishReceivingMessageAnimated:YES];
+    [self finishReceivingMessageAnimated:NO];
     [self.activityIndicator removeFromSuperview];
     [self.activityIndicator stopAnimating];
 }

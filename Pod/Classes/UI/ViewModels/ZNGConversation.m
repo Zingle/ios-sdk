@@ -66,23 +66,28 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         NSInteger pageNumbers = status.totalPages;
         
-        [self.delegate messagesUpdated:YES];
-        
-        for (int i = 2; i <= pageNumbers; i++) {
-            NSDictionary *params = @{kConversationPageSize : @100,
-                                     kConversationContactId : self.contactId,
-                                     kConversationPage : @(i),
-                                     kConversationSortField : kConversationCreatedAt};
-
-            [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+        if (pageNumbers > 1) {
+            
+            for (int i = 2; i <= pageNumbers; i++) {
+                NSDictionary *params = @{kConversationPageSize : @100,
+                                         kConversationContactId : self.contactId,
+                                         kConversationPage : @(i),
+                                         kConversationSortField : kConversationCreatedAt};
                 
-                NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
-                [temp addObjectsFromArray:messages];
-                self.messages = temp;
-                
-                [self.delegate messagesUpdated:YES];
-                
-            } failure:nil];
+                [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+                    
+                    NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
+                    [temp addObjectsFromArray:messages];
+                    self.messages = temp;
+                    
+                    if (status.page == pageNumbers) {
+                        [self.delegate messagesUpdated:YES];
+                    }
+                    
+                } failure:nil];
+            }
+        } else {
+            [self.delegate messagesUpdated:YES];
         }
         
     } failure:nil];

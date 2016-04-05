@@ -97,7 +97,9 @@
             
             self.pagedArray = [[ZNGPagedArray alloc] initWithCount:status.totalRecords objectsPerPage:status.pageSize];
             self.pagedArray.delegate = self;
-            [self.pagedArray setObjects:contacts forPage:status.page];
+            if ([contacts count] > 0) {
+                [self.pagedArray setObjects:contacts forPage:status.page];
+            }
             
             self.dataLoadingOperations = [NSMutableDictionary dictionary];
             

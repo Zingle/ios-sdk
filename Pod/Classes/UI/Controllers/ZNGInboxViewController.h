@@ -15,6 +15,8 @@
 
 + (instancetype)withServiceId:(NSString *)serviceId;
 
+- (void)search;
+
 - (void)refresh;
 
 - (NSArray *)contacts;

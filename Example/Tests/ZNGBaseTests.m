@@ -18,7 +18,7 @@
     NSString *token = [[[NSProcessInfo processInfo] environment] objectForKey:@"TEST_TOKEN"];
     
     ZingleSDK *sdk = [ZingleSDK sharedSDK];
-    [sdk setToken:token andKey:key];
+    [sdk setToken:token andKey:key forDebugMode:YES];
 }
 
 - (NSString *)accountId
@@ -105,9 +105,9 @@
     return channelType;
 }
 
-- (ZNGServiceChannel *)serviceChannelWithValue:(NSString *)value
+- (ZNGChannel *)serviceChannelWithValue:(NSString *)value
 {
-    ZNGServiceChannel *serviceChannel = [[ZNGServiceChannel alloc] init];
+    ZNGChannel *serviceChannel = [[ZNGChannel alloc] init];
     serviceChannel.displayName = @"Test service channel";
     serviceChannel.value = value;
     serviceChannel.channelType = [self channelType];
@@ -117,16 +117,16 @@
     return serviceChannel;
 }
 
-- (ZNGNewContactChannel *)contactChannelWithValue:(NSString *)value
+- (ZNGChannel *)contactChannelWithValue:(NSString *)value
 {
-    ZNGContactChannel *contactChannel = [[ZNGContactChannel alloc] init];
+    ZNGChannel *contactChannel = [[ZNGChannel alloc] init];
     contactChannel.displayName = @"MOBILE";
     contactChannel.value = value;
     contactChannel.channelType = [self channelType];
     contactChannel.country = @"US";
     contactChannel.isDefaultForType = false;
     
-    ZNGNewContactChannel *newChannel = [[ZNGNewContactChannel alloc] initWithContactChannel:contactChannel];
+    ZNGNewChannel *newChannel = [[ZNGNewChannel alloc] initWithChannel:contactChannel];
     
     return newChannel;
 }

@@ -9,10 +9,9 @@
 #import <XCTest/XCTest.h>
 #import "ZNGAsyncSemaphor.h"
 #import "ZNGService.h"
-#import "ZNGServiceChannel.h"
-#import "ZNGContactChannel.h"
+#import "ZNGChannel.h"
 #import "ZNGContact.h"
-#import "ZNGNewContactChannel.h"
+#import "ZNGNewChannel.h"
 
 @interface ZNGBaseTests : XCTestCase
 
@@ -25,8 +24,8 @@
 - (ZNGService *)service;
 - (ZNGAccount *)account;
 - (NSString *)serviceChannelId;
-- (ZNGServiceChannel *)serviceChannelWithValue:(NSString *)value;
-- (ZNGNewContactChannel *)contactChannelWithValue:(NSString *)value;
+- (ZNGChannel *)serviceChannelWithValue:(NSString *)value;
+- (ZNGNewChannel *)contactChannelWithValue:(NSString *)value;
 - (ZNGContact *)contact;
 - (NSString *)automationId;
 - (NSString *)labelId;

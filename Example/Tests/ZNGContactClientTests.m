@@ -51,9 +51,12 @@
         
         ZNGContact *contact = [contacts firstObject];
         ZNGContactFieldValue *fieldValue = [contact.customFieldValues firstObject];
-        fieldValue.value = @"Matthews";
+
+        ZNGNewContactFieldValue *newFieldValue = [[ZNGNewContactFieldValue alloc] init];
+        newFieldValue.customFieldId = fieldValue.customField.contactFieldId;
+        newFieldValue.value = @"Matthews";
         
-        [ZNGContactClient updateContactFieldValue:fieldValue withContactFieldId:fieldValue.customField.contactFieldId withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact, ZNGStatus *status) {
+        [ZNGContactClient updateContactFieldValue:newFieldValue withContactFieldId:fieldValue.customField.contactFieldId withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact, ZNGStatus *status) {
             
             XCTAssert(contact != nil, @"Contact is nil!");
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactCustomFieldValue"];

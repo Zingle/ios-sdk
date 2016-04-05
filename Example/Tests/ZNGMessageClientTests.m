@@ -66,7 +66,7 @@
 {
     ZNGParticipant *sender = [[ZNGParticipant alloc] init];
     sender.participantId = [self serviceId];
-    sender.channelValue = @"+18582810205";
+    sender.channelValue = @"+16194323023";
     
     ZNGParticipant *recipient = [[ZNGParticipant alloc] init];
     recipient.channelValue = @"+12242171591";

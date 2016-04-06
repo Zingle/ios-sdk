@@ -146,8 +146,6 @@
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
-    self.navigationController.navigationBar.tintColor = [UIColor colorFromHexString:@"#00a0de"];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(stopPollingTimer)
                                                  name:UIApplicationWillResignActiveNotification

@@ -13,6 +13,7 @@
 #import "ZNGContactClient.h"
 #import "UIFont+OpenSans.h"
 #import "ZNGContactViewController.h"
+#import "ZNGTemplateClient.h"
 
 @interface ZNGConversationViewController ()
 
@@ -449,7 +450,7 @@
 
 #pragma mark - ZNGBaseViewController method overrides
 
-- (void)didPressSendButton:(UIButton *)button
+- (void)didPressSendButton:(UIButton *)buttonÏ
            withMessageText:(NSString *)text
                   senderId:(NSString *)senderId
          senderDisplayName:(NSString *)senderDisplayName
@@ -471,35 +472,87 @@
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
     [self.inputToolbar.contentView.textView resignFirstResponder];
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"Media messages"
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                        delegate:self
                                               cancelButtonTitle:@"Cancel"
                                          destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Take a Photo", @"Choose a Photo", nil];
+                                              otherButtonTitles:@"Use Template",
+                                                                @"Insert Custom Field",
+//                                                                @"Add Note",
+                                                                @"Take a Photo",
+                                                                @"Choose a Photo",
+                                                                @"Automation",
+                                                                nil];
     
     [sheet showFromToolbar:self.inputToolbar];
 }
 
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
-    if (buttonIndex == actionSheet.cancelButtonIndex) {
+    if (buttonIndex == actionSheet.cancelButtonIndex)
+    {
         return;
     }
     
-    UIImagePickerController *picker = [[UIImagePickerController alloc] init];
-    picker.delegate = self;
-    picker.allowsEditing = YES;
-    
-    if( buttonIndex == 0 )
+    if (buttonIndex == 0)
     {
+        [self showTemplates];
+    }
+    else if (buttonIndex == 1)
+    {
+        
+    }
+    else if (buttonIndex == 2)
+    {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        [self presentViewController:picker animated:YES completion:nil];
     }
-    else if( buttonIndex == 1)
+    else if (buttonIndex == 3)
     {
+        UIImagePickerController *picker = [[UIImagePickerController alloc] init];
+        picker.delegate = self;
+        picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+        [self presentViewController:picker animated:YES completion:nil];
     }
-    
-    [self presentViewController:picker animated:YES completion:nil];
+    else if (buttonIndex == 4)
+    {
+        
+    }
+}
+
+- (void)showTemplates
+{
+    [ZNGTemplateClient templateListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *templ, ZNGStatus *status) {
+        
+        UIAlertController *templateMenu = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        for (ZNGTemplate *template in templ) {
+            UIAlertAction *action = [UIAlertAction actionWithTitle:template.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                self.inputToolbar.contentView.textView.text = template.body;
+                [self.inputToolbar toggleSendButtonEnabled];
+            }];
+            
+            [templateMenu addAction:action];
+        }
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [templateMenu addAction:cancelAction];
+        
+        [self presentViewController:templateMenu animated:YES completion:nil];
+
+    } failure:^(ZNGError *error) {
+        [[[UIAlertView alloc] initWithTitle:@"There was a problem loading templates. Please try again later."
+                                    message:nil
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil] show];
+        [self.activityIndicator removeFromSuperview];
+        [self.activityIndicator stopAnimating];
+    }];
 }
 
 #pragma mark - UIImagePickerControllerDelegate

@@ -14,6 +14,8 @@
 #import "UIFont+OpenSans.h"
 #import "ZNGContactViewController.h"
 #import "ZNGTemplateClient.h"
+#import "ZNGAutomationClient.h"
+#import "ZNGContactClient.h"
 
 @interface ZNGConversationViewController ()
 
@@ -520,7 +522,49 @@
     }
     else if (buttonIndex == 4)
     {
-        
+        [ZNGAutomationClient automationListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *automations, ZNGStatus *status) {
+            
+            UIAlertController *automationTemplate = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+            
+            for (ZNGAutomation *automation in automations) {
+                UIAlertAction *action = [UIAlertAction actionWithTitle:automation.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    
+                    [ZNGContactClient triggerAutomationWithId:automation.automationId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                        [[[UIAlertView alloc] initWithTitle:@"Automation triggered."
+                                                    message:nil
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil] show];
+                        [self.activityIndicator removeFromSuperview];
+                        [self.activityIndicator stopAnimating];
+                    } failure:^(ZNGError *error) {
+                        [[[UIAlertView alloc] initWithTitle:error.errorDescription
+                                                    message:nil
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil] show];
+                        [self.activityIndicator removeFromSuperview];
+                        [self.activityIndicator stopAnimating];
+                    }];
+                }];
+                
+                [automationTemplate addAction:action];
+            }
+            
+            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+            [automationTemplate addAction:cancelAction];
+            
+            [self presentViewController:automationTemplate animated:YES completion:nil];
+            
+        } failure:^(ZNGError *error) {
+            [[[UIAlertView alloc] initWithTitle:@"There was a problem loading automations. Please try again later."
+                                        message:nil
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil] show];
+            [self.activityIndicator removeFromSuperview];
+            [self.activityIndicator stopAnimating];
+        }];
     }
 }
 

@@ -231,7 +231,6 @@
                                                              style:UIBarButtonItemStylePlain
                                                             target:self
                                                             action:@selector(detailsButtonPressed:)];
-    self.detailsBarButton.tintColor = [UIColor colorFromHexString:@"#00a0de"];
     
     self.navigationItem.rightBarButtonItems = @[self.detailsBarButton , self.confirmBarButton, self.starBarButton];
 }

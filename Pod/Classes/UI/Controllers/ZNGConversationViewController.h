@@ -18,7 +18,7 @@
 
 @end
 
-@interface ZNGConversationViewController : ZNGBaseViewController <UIActionSheetDelegate, ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIAlertViewDelegate>
+@interface ZNGConversationViewController : ZNGBaseViewController <ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
 @property (nonatomic) BOOL toService;
 @property (nonatomic, strong) ZNGService *service;

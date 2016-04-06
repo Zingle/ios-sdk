@@ -301,11 +301,7 @@
             self.conversation.delegate = self;
             
         } failure:^(ZNGError *error) {
-            [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
-                                        message:nil
-                                       delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil] show];
+            [self showAlertForError:error];
             [self.activityIndicator removeFromSuperview];
             [self.activityIndicator stopAnimating];
         }];
@@ -315,11 +311,7 @@
             self.conversation.delegate = self;
             
         } failure:^(ZNGError *error) {
-            [[[UIAlertView alloc] initWithTitle:@"There was a problem loading this conversation. Please try again later."
-                                        message:nil
-                                       delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil] show];
+            [self showAlertForError:error];
             [self.activityIndicator removeFromSuperview];
             [self.activityIndicator stopAnimating];
         }];
@@ -351,7 +343,8 @@
     self.automaticallyScrollsToMostRecentMessage = YES;
 }
 
-- (void)viewDidDisappear:(BOOL)animated{
+- (void)viewDidDisappear:(BOOL)animated
+{
     [super viewDidDisappear:animated];
     [self stopPollingTimer];
 }
@@ -359,6 +352,18 @@
 - (void)refreshConversation
 {
     [self.conversation updateMessages];
+}
+
+- (void)showAlertForError:(ZNGError *)error
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:error.errorText message:error.errorDescription preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction: ok];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Timer Long Poll
@@ -423,11 +428,16 @@
 
 - (void)showErrorSendingMessage
 {
-    [[[UIAlertView alloc] initWithTitle:@"There was a problem sending your message. Please try again later."
-                                message:nil
-                               delegate:nil
-                      cancelButtonTitle:@"OK"
-                      otherButtonTitles:nil] show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"There was a problem sending your message. Please try again later."
+                                                                   message:nil
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction: ok];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - ZNGConversationDelegate
@@ -474,98 +484,85 @@
 - (void)didPressAccessoryButton:(UIButton *)sender
 {
     [self.inputToolbar.contentView.textView resignFirstResponder];
-    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
-                                                       delegate:self
-                                              cancelButtonTitle:@"Cancel"
-                                         destructiveButtonTitle:nil
-                                              otherButtonTitles:@"Use Template",
-                                                                @"Insert Custom Field",
-//                                                                @"Add Note",
-                                                                @"Take a Photo",
-                                                                @"Choose a Photo",
-                                                                @"Automation",
-                                                                nil];
     
-    [sheet showFromToolbar:self.inputToolbar];
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == actionSheet.cancelButtonIndex)
-    {
-        return;
-    }
+    UIAlertController *sheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    if (buttonIndex == 0)
-    {
+    UIAlertAction *template = [UIAlertAction actionWithTitle:@"Use Template" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self showTemplates];
-    }
-    else if (buttonIndex == 1)
-    {
+    }];
+    [sheet addAction:template];
+    
+    UIAlertAction *customField = [UIAlertAction actionWithTitle:@"Insert Custom Field" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self showCustomFields];
-    }
-    else if (buttonIndex == 2)
-    {
+    }];
+    [sheet addAction:customField];
+    
+    UIAlertAction *takePhoto = [UIAlertAction actionWithTitle:@"Take a Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypeCamera;
         [self presentViewController:picker animated:YES completion:nil];
-    }
-    else if (buttonIndex == 3)
-    {
+    }];
+    [sheet addAction:takePhoto];
+    
+    UIAlertAction *choosePhoto = [UIAlertAction actionWithTitle:@"Choose a Photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UIImagePickerController *picker = [[UIImagePickerController alloc] init];
         picker.delegate = self;
         picker.allowsEditing = YES;
         picker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         [self presentViewController:picker animated:YES completion:nil];
-    }
-    else if (buttonIndex == 4)
-    {
-        [ZNGAutomationClient automationListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *automations, ZNGStatus *status) {
-            
-            UIAlertController *automationTemplate = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-            
-            for (ZNGAutomation *automation in automations) {
-                UIAlertAction *action = [UIAlertAction actionWithTitle:automation.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                    
-                    [ZNGContactClient triggerAutomationWithId:automation.automationId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
-                        [[[UIAlertView alloc] initWithTitle:@"Automation triggered."
-                                                    message:nil
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil] show];
-                        [self.activityIndicator removeFromSuperview];
-                        [self.activityIndicator stopAnimating];
-                    } failure:^(ZNGError *error) {
-                        [[[UIAlertView alloc] initWithTitle:error.errorDescription
-                                                    message:nil
-                                                   delegate:nil
-                                          cancelButtonTitle:@"OK"
-                                          otherButtonTitles:nil] show];
-                        [self.activityIndicator removeFromSuperview];
-                        [self.activityIndicator stopAnimating];
-                    }];
-                }];
+    }];
+    [sheet addAction:choosePhoto];
+    
+    UIAlertAction *automations = [UIAlertAction actionWithTitle:@"Automation" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self showAutomations];
+    }];
+    [sheet addAction:automations];
+    
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [sheet addAction:cancelAction];
+    
+    [self presentViewController:sheet animated:YES completion:nil];
+}
+
+- (void)showAutomations
+{
+    [ZNGAutomationClient automationListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *automations, ZNGStatus *status) {
+        
+        UIAlertController *automationTemplate = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        
+        for (ZNGAutomation *automation in automations) {
+            UIAlertAction *action = [UIAlertAction actionWithTitle:automation.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
-                [automationTemplate addAction:action];
-            }
+                [ZNGContactClient triggerAutomationWithId:automation.automationId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                    
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Automation triggered."
+                                                                                   message:nil
+                                                                            preferredStyle:UIAlertControllerStyleAlert];
+                    
+                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                        [alert dismissViewControllerAnimated:YES completion:nil];
+                    }];
+                    [alert addAction: ok];
+                    
+                    [self presentViewController:alert animated:YES completion:nil];
+                } failure:^(ZNGError *error) {
+                    [self showAlertForError:error];
+                }];
+            }];
             
-            UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-            [automationTemplate addAction:cancelAction];
-            
-            [self presentViewController:automationTemplate animated:YES completion:nil];
-            
-        } failure:^(ZNGError *error) {
-            [[[UIAlertView alloc] initWithTitle:@"There was a problem loading automations. Please try again later."
-                                        message:nil
-                                       delegate:nil
-                              cancelButtonTitle:@"OK"
-                              otherButtonTitles:nil] show];
-            [self.activityIndicator removeFromSuperview];
-            [self.activityIndicator stopAnimating];
-        }];
-    }
+            [automationTemplate addAction:action];
+        }
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [automationTemplate addAction:cancelAction];
+        
+        [self presentViewController:automationTemplate animated:YES completion:nil];
+        
+    } failure:^(ZNGError *error) {
+        [self showAlertForError:error];
+    }];
 }
 
 - (void)showTemplates
@@ -589,13 +586,7 @@
         [self presentViewController:templateMenu animated:YES completion:nil];
 
     } failure:^(ZNGError *error) {
-        [[[UIAlertView alloc] initWithTitle:@"There was a problem loading templates. Please try again later."
-                                    message:nil
-                                   delegate:nil
-                          cancelButtonTitle:@"OK"
-                          otherButtonTitles:nil] show];
-        [self.activityIndicator removeFromSuperview];
-        [self.activityIndicator stopAnimating];
+        [self showAlertForError:error];
     }];
 }
 
@@ -815,45 +806,41 @@
     NSLog(@"Tapped cell at %@!", NSStringFromCGPoint(touchLocation));
 }
 
-#pragma mark - UIAlertViewDelegate methods
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0) {
-        [self scrollToBottomAnimated:YES];
-        return;
-    }
-    
-    [self scrollToBottomAnimated:YES];
-    // If there's an image in the pasteboard, `send` it.
-    [self.conversation sendMessageWithImage:[UIPasteboard generalPasteboard].image success:^(ZNGStatus *status) {
-        
-        ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];
-        item.appliesMediaViewMaskAsOutgoing = YES;
-        ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
-                                                                       senderDisplayName:self.senderDisplayName
-                                                                                    date:[NSDate date]
-                                                                                   media:item
-                                                                                    note:@"Delivered"];
-        [self.viewModels addObject:viewModel];
-        [self finishSendingMessageAnimated:YES];
-        
-    } failure:^(ZNGError *error) {
-        [self showErrorSendingMessage];
-    }];
-}
-
 #pragma mark - ZNGComposerTextViewPasteDelegate methods
 
 - (BOOL)composerTextView:(ZNGComposerTextView *)textView shouldPasteWithSender:(id)sender
 {
     if ([UIPasteboard generalPasteboard].image) {
+    
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Send image in clipboard?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         
-        [[[UIAlertView alloc] initWithTitle:@"Send image in clipboard?"
-                                    message:nil
-                                   delegate:self
-                          cancelButtonTitle:@"Cancel"
-                          otherButtonTitles:@"Send", nil] show];
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+            [alert dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction: cancel];
+        
+        UIAlertAction *send = [UIAlertAction actionWithTitle:@"Send" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+            [self scrollToBottomAnimated:YES];
+            // If there's an image in the pasteboard, `send` it.
+            [self.conversation sendMessageWithImage:[UIPasteboard generalPasteboard].image success:^(ZNGStatus *status) {
+                
+                ZNGPhotoMediaItem *item = [[ZNGPhotoMediaItem alloc] initWithImage:[UIPasteboard generalPasteboard].image];
+                item.appliesMediaViewMaskAsOutgoing = YES;
+                ZNGMessageViewModel *viewModel =   [[ZNGMessageViewModel alloc] initWithSenderId:self.senderId
+                                                                               senderDisplayName:self.senderDisplayName
+                                                                                            date:[NSDate date]
+                                                                                           media:item
+                                                                                            note:@"Delivered"];
+                [self.viewModels addObject:viewModel];
+                [self finishSendingMessageAnimated:YES];
+                
+            } failure:^(ZNGError *error) {
+                [self showErrorSendingMessage];
+            }];
+        }];
+        [alert addAction: send];
+        
+        [self presentViewController:alert animated:YES completion:nil];
         
         return NO;
     }

@@ -29,8 +29,6 @@
 
 @property (strong, nonatomic) UIPickerView *pickerView;
 
-#define kZNGContactViewControllerDeleteAlert -100
-
 @end
 
 @implementation ZNGContactViewController
@@ -84,18 +82,22 @@
     [self extractExtraCustomFields];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     [[ZingleSDK sharedSDK] clearCachedConversations];
 }
 
 - (void)showAlertForError:(ZNGError *)error
 {
-    [[[UIAlertView alloc] initWithTitle:error.errorText
-                                message:error.errorDescription
-                               delegate:nil
-                      cancelButtonTitle:@"OK"
-                      otherButtonTitles:nil] show];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:error.errorText message:error.errorDescription preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+        [alert dismissViewControllerAnimated:YES completion:nil];
+    }];
+    [alert addAction: ok];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (ZNGContactField *)titleCustomField
@@ -235,13 +237,30 @@
             if (indexPath.row != [self.contact.labels count]) {
                 ZNGLabel *label = [self.contact.labels objectAtIndex:indexPath.row];
                 NSString *alertTitle = [NSString stringWithFormat:@"Are you sure you want to remove the label - %@?", label.displayName];
-                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:alertTitle
-                                            message:nil
-                                           delegate:self
-                                  cancelButtonTitle:@"Cancel"
-                                  otherButtonTitles:@"Remove label", nil];
-                alertView.tag = indexPath.row;
-                [alertView show];
+                
+                UIAlertController *alert = [UIAlertController alertControllerWithTitle:alertTitle message:nil preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                    [alert dismissViewControllerAnimated:YES completion:nil];
+                }];
+                [alert addAction: cancel];
+                
+                UIAlertAction *removeLabel = [UIAlertAction actionWithTitle:@"Remove label" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                    [ZNGContactClient removeLabelWithId:label.labelId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                        
+                        NSMutableArray *labelsArray = [NSMutableArray arrayWithArray:self.contact.labels];
+                        [labelsArray removeObject:label];
+                        self.contact.labels = labelsArray;
+                        [self.tableView reloadData];
+                        
+                    } failure:^(ZNGError *error) {
+                        [self showAlertForError:error];
+                    }];
+                }];
+                [alert addAction: removeLabel];
+                
+                [self presentViewController:alert animated:YES completion:nil];
+                
             } else {
                 UIAlertController *labelMenu = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
                 
@@ -286,13 +305,34 @@
             
         case 3:
         {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Are you sure you want to delete this contact?"
-                                        message:nil
-                                       delegate:self
-                              cancelButtonTitle:@"Cancel"
-                              otherButtonTitles:@"Delete", nil];
-            alertView.tag = kZNGContactViewControllerDeleteAlert;
-            [alertView show];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Are you sure you want to delete this contact?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * action) {
+                [alert dismissViewControllerAnimated:YES completion:nil];
+            }];
+            [alert addAction: cancel];
+            
+            UIAlertAction *delete = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
+                [ZNGContactClient deleteContactWithId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                    self.contact.contactId = @"DELETED";
+                    Class targetClass = NSClassFromString(@"ZNGInboxViewController");
+                    int indx = 0;
+                    for(UIViewController *viewController in self.navigationController.viewControllers){
+                        if([viewController isKindOfClass:targetClass]){
+                            break;
+                        }
+                        indx++;
+                    }
+                    
+                    [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:indx] animated:YES];
+                    
+                } failure:^(ZNGError *error) {
+                    [self showAlertForError:error];
+                }];
+            }];
+            [alert addAction: delete];
+            
+            [self presentViewController:alert animated:YES completion:nil];
         }
             
             break;
@@ -499,45 +539,6 @@
     [self.contact titleFieldValue].value = option.value;
     [self.contact titleFieldValue].selectedCustomFieldOptionId = option.optionId;
     [self.tableView reloadData];
-}
-
-#pragma mark - UIAlertViewDelegate methods
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 0) {
-        return;
-    }
-    if (alertView.tag == kZNGContactViewControllerDeleteAlert) {
-        [ZNGContactClient deleteContactWithId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
-            self.contact.contactId = @"DELETED";
-            Class targetClass = NSClassFromString(@"ZNGInboxViewController");
-            int indx = 0;
-            for(UIViewController *viewController in self.navigationController.viewControllers){
-                if([viewController isKindOfClass:targetClass]){
-                    break;
-                }
-                indx++;
-            }
-            
-            [self.navigationController popToViewController:[self.navigationController.viewControllers objectAtIndex:indx] animated:YES];
-            
-        } failure:^(ZNGError *error) {
-            [self showAlertForError:error];
-        }];
-    } else {
-        ZNGLabel *label = [self.contact.labels objectAtIndex:alertView.tag];
-        [ZNGContactClient removeLabelWithId:label.labelId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
-            
-            NSMutableArray *labelsArray = [NSMutableArray arrayWithArray:self.contact.labels];
-            [labelsArray removeObject:label];
-            self.contact.labels = labelsArray;
-            [self.tableView reloadData];
-        
-        } failure:^(ZNGError *error) {
-            [self showAlertForError:error];
-        }];
-    }
 }
 
 @end

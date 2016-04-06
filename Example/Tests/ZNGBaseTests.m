@@ -117,7 +117,7 @@
     return serviceChannel;
 }
 
-- (ZNGChannel *)contactChannelWithValue:(NSString *)value
+- (ZNGNewChannel *)contactChannelWithValue:(NSString *)value
 {
     ZNGChannel *contactChannel = [[ZNGChannel alloc] init];
     contactChannel.displayName = @"MOBILE";

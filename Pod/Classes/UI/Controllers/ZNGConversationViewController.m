@@ -487,12 +487,12 @@
     UIAlertController *sheet = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction *template = [UIAlertAction actionWithTitle:@"Use Template" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self showTemplates];
+        [self showTemplates:sender];
     }];
     [sheet addAction:template];
     
     UIAlertAction *customField = [UIAlertAction actionWithTitle:@"Insert Custom Field" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self showCustomFields];
+        [self showCustomFields:sender];
     }];
     [sheet addAction:customField];
     
@@ -515,7 +515,7 @@
     [sheet addAction:choosePhoto];
     
     UIAlertAction *automations = [UIAlertAction actionWithTitle:@"Automation" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self showAutomations];
+        [self showAutomations:sender];
     }];
     [sheet addAction:automations];
     
@@ -530,7 +530,7 @@
     [self presentViewController:sheet animated:YES completion:nil];
 }
 
-- (void)showAutomations
+- (void)showAutomations:(UIButton *)sender
 {
     [ZNGAutomationClient automationListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *automations, ZNGStatus *status) {
         
@@ -562,6 +562,11 @@
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
         [automationTemplate addAction:cancelAction];
         
+        if (automationTemplate.popoverPresentationController) {
+            automationTemplate.popoverPresentationController.sourceView = sender;
+            automationTemplate.popoverPresentationController.sourceRect = sender.bounds;
+        }
+        
         [self presentViewController:automationTemplate animated:YES completion:nil];
         
     } failure:^(ZNGError *error) {
@@ -569,7 +574,7 @@
     }];
 }
 
-- (void)showTemplates
+- (void)showTemplates:(UIButton *)sender
 {
     [ZNGTemplateClient templateListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *templ, ZNGStatus *status) {
         
@@ -584,6 +589,11 @@
             [templateMenu addAction:action];
         }
         
+        if (templateMenu.popoverPresentationController) {
+            templateMenu.popoverPresentationController.sourceView = sender;
+            templateMenu.popoverPresentationController.sourceRect = sender.bounds;
+        }
+        
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
         [templateMenu addAction:cancelAction];
         
@@ -594,7 +604,7 @@
     }];
 }
 
-- (void)showCustomFields
+- (void)showCustomFields:(UIButton *)sender
 {
     UIAlertController *fieldMenu = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
@@ -612,6 +622,11 @@
         }];
         
         [fieldMenu addAction:action];
+    }
+    
+    if (fieldMenu.popoverPresentationController) {
+        fieldMenu.popoverPresentationController.sourceView = sender;
+        fieldMenu.popoverPresentationController.sourceRect = sender.bounds;
     }
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];

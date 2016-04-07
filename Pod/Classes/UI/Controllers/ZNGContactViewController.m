@@ -296,6 +296,11 @@
                 UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
                 [labelMenu addAction:cancelAction];
                 
+                if (labelMenu.popoverPresentationController) {
+                    labelMenu.popoverPresentationController.sourceView = [tableView cellForRowAtIndexPath:indexPath];
+                    labelMenu.popoverPresentationController.sourceRect = [[tableView cellForRowAtIndexPath:indexPath] bounds];
+                }
+                
                 [self presentViewController:labelMenu animated:YES completion:nil];
             }
             break;

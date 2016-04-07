@@ -609,19 +609,21 @@
     UIAlertController *fieldMenu = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     for (ZNGContactFieldValue *fieldValue in self.contact.customFieldValues) {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:fieldValue.value style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (fieldValue.value) {
+            UIAlertAction *action = [UIAlertAction actionWithTitle:fieldValue.value style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                
+                UITextRange *selRange = self.inputToolbar.contentView.textView.selectedTextRange;
+                UITextPosition *selStartPos = selRange.start;
+                NSInteger idx = [self.inputToolbar.contentView.textView offsetFromPosition:self.inputToolbar.contentView.textView.beginningOfDocument toPosition:selStartPos];
+                
+                NSMutableString *textViewString = [NSMutableString stringWithString:self.inputToolbar.contentView.textView.text];
+                [textViewString insertString:fieldValue.value atIndex:idx];
+                self.inputToolbar.contentView.textView.text = textViewString;
+                [self.inputToolbar toggleSendButtonEnabled];
+            }];
             
-            UITextRange *selRange = self.inputToolbar.contentView.textView.selectedTextRange;
-            UITextPosition *selStartPos = selRange.start;
-            NSInteger idx = [self.inputToolbar.contentView.textView offsetFromPosition:self.inputToolbar.contentView.textView.beginningOfDocument toPosition:selStartPos];
-            
-            NSMutableString *textViewString = [NSMutableString stringWithString:self.inputToolbar.contentView.textView.text];
-            [textViewString insertString:fieldValue.value atIndex:idx];
-            self.inputToolbar.contentView.textView.text = textViewString;
-            [self.inputToolbar toggleSendButtonEnabled];
-        }];
-        
-        [fieldMenu addAction:action];
+            [fieldMenu addAction:action];
+        }
     }
     
     if (fieldMenu.popoverPresentationController) {

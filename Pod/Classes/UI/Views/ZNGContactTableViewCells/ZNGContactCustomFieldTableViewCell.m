@@ -35,8 +35,8 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.label.font = [UIFont openSansSemiboldFontOfSize:16.0f];
     self.textField.font = [UIFont openSansSemiboldFontOfSize:16.0f];
-    self.label.textColor = [UIColor colorFromHexString:@"#155C8C"];
-    self.textField.textColor = [UIColor colorFromHexString:@"#00a1df"];
+    self.label.textColor = [UIColor zng_blue];
+    self.textField.textColor = [UIColor zng_lightBlue];
 }
 
 - (void)configureCellWithField:(ZNGContactField *)field

@@ -87,7 +87,7 @@
         if (self.contact.lastMessage.body.length > 0) {
             self.lastMessage.text = self.contact.lastMessage.body;
             self.dateLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:self.contact.lastMessage.createdAt];
-            self.dateLabel.textColor = [UIColor colorFromHexString:@"#00a1df"];
+            self.dateLabel.textColor = [UIColor zng_lightBlue];
         } else {
             self.lastMessage.text = @" ";
             self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
@@ -96,7 +96,7 @@
         if (self.contact.isConfirmed) {
             self.confirmedView.backgroundColor = [UIColor clearColor];
         } else {
-            self.confirmedView.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
+            self.confirmedView.backgroundColor = [UIColor zng_green];
         }
         
         self.starButton.enabled = YES;

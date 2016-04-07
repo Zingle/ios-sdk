@@ -171,7 +171,7 @@
         self.conversation.delegate = self;
         [self refreshViewModels];
     } else {
-        self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
+        self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
         ;
         CGRect actFrame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
         self.activityIndicator.frame = actFrame;
@@ -201,13 +201,13 @@
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(starButtonPressed:)];
-        self.starBarButton.tintColor = [UIColor colorFromHexString:@"#FFCF3A"];
+        self.starBarButton.tintColor = [UIColor zng_yellow];
     } else {
         self.starBarButton = [[UIBarButtonItem alloc] initWithImage:self.unstarredImage
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(starButtonPressed:)];
-        self.starBarButton.tintColor = [UIColor colorFromHexString:@"#B6B8BA"];
+        self.starBarButton.tintColor = [UIColor zng_gray];
     }
     
     self.confirmButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
@@ -218,11 +218,11 @@
     self.confirmBarButton = [[UIBarButtonItem alloc] initWithCustomView:self.confirmButton];
     
     if (self.contact.isConfirmed) {
-        self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#00a0de"];
+        self.confirmButton.backgroundColor = [UIColor zng_lightBlue];
         [self.confirmButton setTitle:@" Confirmed " forState:UIControlStateNormal];
         [self.confirmButton sizeToFit];
     } else {
-        self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
+        self.confirmButton.backgroundColor = [UIColor zng_green];
         [self.confirmButton setTitle:@" Unconfirmed " forState:UIControlStateNormal];
         [self.confirmButton sizeToFit];
     }
@@ -242,12 +242,12 @@
     NSNumber *confirmedParam = self.contact.isConfirmed ? @NO : @YES;
     if (self.contact.isConfirmed) {
         self.contact.isConfirmed = NO;
-        self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#02CE68"];
+        self.confirmButton.backgroundColor = [UIColor zng_green];
         [self.confirmButton setTitle:@" Unconfirmed " forState:UIControlStateNormal];
         [self.confirmButton sizeToFit];
     } else {
         self.contact.isConfirmed = YES;
-        self.confirmButton.backgroundColor = [UIColor colorFromHexString:@"#00a0de"];
+        self.confirmButton.backgroundColor = [UIColor zng_lightBlue];
         [self.confirmButton setTitle:@" Confirmed " forState:UIControlStateNormal];
         [self.confirmButton sizeToFit];
     }
@@ -268,11 +268,11 @@
     if (self.contact.isStarred) {
         self.contact.isStarred = NO;
         self.starBarButton.image = self.unstarredImage;
-        self.starBarButton.tintColor = [UIColor colorFromHexString:@"#B6B8BA"];
+        self.starBarButton.tintColor = [UIColor zng_gray];
     } else {
         self.contact.isStarred = YES;
         self.starBarButton.image = self.starredImage;
-        self.starBarButton.tintColor = [UIColor colorFromHexString:@"#FFCF3A"];
+        self.starBarButton.tintColor = [UIColor zng_yellow];
     }
     NSDictionary *params = @{@"is_starred" : starParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {

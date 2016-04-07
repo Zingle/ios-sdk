@@ -32,6 +32,17 @@
  */
 + (UIColor *)zng_messageBubbleLightGrayColor;
 
+
++ (UIColor *)zng_blue;
+
++ (UIColor *)zng_lightBlue;
+
++ (UIColor *)zng_green;
+
++ (UIColor *)zng_gray;
+
++ (UIColor *)zng_yellow;
+
 /**
  *  Creates and returns a new color object from a hex color value.
  *

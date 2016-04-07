@@ -60,7 +60,7 @@
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl setBackgroundColor:[UIColor whiteColor]];
-    [refreshControl setTintColor:[UIColor colorFromHexString:@"#00a0de"]];
+    [refreshControl setTintColor:[UIColor zng_lightBlue]];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
     
@@ -152,7 +152,7 @@
 - (void)showActivityIndicator
 {
     self.activityIndicator.stopAnimating;
-    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor colorFromHexString:@"#00a0de"] size:30.0f];
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
     self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
     [self.view addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];

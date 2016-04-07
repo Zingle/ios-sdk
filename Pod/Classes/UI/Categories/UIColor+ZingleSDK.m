@@ -37,6 +37,32 @@
                            alpha:1.0f];
 }
 
++ (UIColor *)zng_blue
+{
+    return [UIColor colorFromHexString:@"#155c8c"];
+}
+
++ (UIColor *)zng_lightBlue
+{
+    return [UIColor colorFromHexString:@"#00a1df"];
+}
+
++ (UIColor *)zng_green
+{
+    return [UIColor colorFromHexString:@"#02CE68"];
+}
+
++ (UIColor *)zng_gray
+{
+    return [UIColor colorFromHexString:@"#B6B8BA"];
+}
+
++ (UIColor *)zng_yellow
+{
+    return [UIColor colorFromHexString:@"#FFCF3A"];
+}
+
+
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {
     unsigned rgbValue = 0;

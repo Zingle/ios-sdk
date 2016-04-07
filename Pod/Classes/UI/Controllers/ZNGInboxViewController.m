@@ -59,10 +59,19 @@
     self.tableView.hidden = YES;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl setBackgroundColor:[UIColor clearColor]];
+    [refreshControl setBackgroundColor:[UIColor whiteColor]];
     [refreshControl setTintColor:[UIColor colorFromHexString:@"#00a0de"]];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     [self.tableView addSubview:refreshControl];
+    
+    // Creating view for extending background color
+    CGRect frame = self.tableView.bounds;
+    frame.origin.y = -frame.size.height;
+    UIView* bgView = [[UIView alloc] initWithFrame:frame];
+    bgView.backgroundColor = [UIColor whiteColor];
+    
+    // Adding the view below the refresh control
+    [self.tableView insertSubview:bgView atIndex:0];
     
     self.title = @"Inbox";
     self.tableView.delegate = self;

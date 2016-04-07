@@ -20,11 +20,6 @@
 
 @interface ZNGConversationViewController : ZNGBaseViewController <ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-@property (nonatomic) BOOL toService;
-@property (nonatomic, strong) ZNGService *service;
-@property (nonatomic, strong) ZNGContact *contact;
-@property (nonatomic, strong) ZNGConversation *conversation;
-
 /**
  *  Returns a ZNGConversationViewController.
  *
@@ -110,5 +105,16 @@
  *  bubble will say "Received".
  */
 @property (nonatomic, copy) NSString *receiverName;
+
+
+// Temporarily exposed during development
+
+@property (nonatomic) BOOL toService;
+@property (nonatomic, strong) ZNGService *service;
+@property (nonatomic, strong) ZNGContact *contact;
+@property (nonatomic, strong) ZNGConversation *conversation;
+- (void)refreshViewModels;
+- (void)loadConversation;
+- (void)setupBarButtonItems;
 
 @end

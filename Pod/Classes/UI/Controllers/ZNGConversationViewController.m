@@ -156,8 +156,6 @@
                                                  name:UIApplicationDidBecomeActiveNotification
                                                object:nil];
     
-    self.senderId = self.service.serviceId;
-
     ZNGConversation *conversation;
     if (self.toService) {
         self.senderId = self.contact.contactId;
@@ -171,13 +169,6 @@
         self.conversation.delegate = self;
         [self refreshViewModels];
     } else {
-        self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
-        ;
-        CGRect actFrame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
-        self.activityIndicator.frame = actFrame;
-        [self.view addSubview:self.activityIndicator];
-        [self.activityIndicator startAnimating];
-        
         [self loadConversation];
     }
     if (!self.toService) {
@@ -292,6 +283,13 @@
 
 - (void)loadConversation
 {
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
+    ;
+    CGRect actFrame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
+    self.activityIndicator.frame = actFrame;
+    [self.view addSubview:self.activityIndicator];
+    [self.activityIndicator startAnimating];
+    
     if (self.toService) {
         [[ZingleSDK sharedSDK] addConversationFromContact:self.contact toService:self.service success:^(ZNGConversation *conversation) {
             self.conversation = conversation;

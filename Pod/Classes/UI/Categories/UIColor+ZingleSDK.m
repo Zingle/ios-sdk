@@ -39,7 +39,7 @@
 
 + (UIColor *)zng_blue
 {
-    return [UIColor colorFromHexString:@"#155c8c"];
+    return [UIColor colorFromHexString:@"#285C8C"];
 }
 
 + (UIColor *)zng_lightBlue

@@ -131,11 +131,11 @@
     [super viewDidLoad];
     
     self.senderDisplayName = self.senderName ?: @"Me";
-
+    
     self.titleViewLabel.font = [UIFont openSansBoldFontOfSize:17.0f];
     
     self.inputToolbar.contentView.textView.pasteDelegate = self;
-
+    
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
@@ -146,33 +146,37 @@
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(stopPollingTimer)
-                                                 name:UIApplicationWillResignActiveNotification
-                                               object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startPollingTimer)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
     
-    ZNGConversation *conversation;
-    if (self.toService) {
-        self.senderId = self.contact.contactId;
-        conversation = [[ZingleSDK sharedSDK] conversationToService:self.service.serviceId];
-    } else {
-        self.senderId = self.service.serviceId;
-        conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
-    }
-    if (conversation) {
-        self.conversation = conversation;
-        self.conversation.delegate = self;
-        [self refreshViewModels];
-    } else {
-        [self loadConversation];
-    }
-    if (!self.toService) {
-        [self setupBarButtonItems];
+    if (self.service) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(stopPollingTimer)
+                                                     name:UIApplicationWillResignActiveNotification
+                                                   object:nil];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(startPollingTimer)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:nil];
+        
+        ZNGConversation *conversation;
+        if (self.toService) {
+            self.senderId = self.contact.contactId;
+            conversation = [[ZingleSDK sharedSDK] conversationToService:self.service.serviceId];
+        } else {
+            self.senderId = self.service.serviceId;
+            conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
+        }
+        if (conversation) {
+            self.conversation = conversation;
+            self.conversation.delegate = self;
+            [self refreshViewModels];
+        } else {
+            [self loadConversation];
+        }
+        if (!self.toService) {
+            [self setupBarButtonItems];
+        }
     }
 }
 
@@ -517,6 +521,11 @@
     
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
     [sheet addAction:cancelAction];
+    
+    if (sheet.popoverPresentationController) {
+        sheet.popoverPresentationController.sourceView = sender;
+        sheet.popoverPresentationController.sourceRect = sender.bounds;
+    }
     
     [self presentViewController:sheet animated:YES completion:nil];
 }

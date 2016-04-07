@@ -17,6 +17,6 @@
 @property(nonatomic, strong) NSString* displayName;
 @property(nonatomic) BOOL isDefaultForType;
 
-- (id)initWithChannel:(ZNGChannel*)channel;
+- (instancetype)initWithChannel:(ZNGChannel*)channel;
 
 @end

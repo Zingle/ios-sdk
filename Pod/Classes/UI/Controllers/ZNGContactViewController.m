@@ -15,7 +15,7 @@
 #import "ZNGFieldOption.h"
 #import "ZNGContactFieldClient.h"
 
-@interface ZNGContactViewController () <UITextFieldDelegate>
+@interface ZNGContactViewController () <UITextFieldDelegate, UIPickerViewDelegate>
 
 @property (nonatomic, strong) ZNGContact *contact;
 @property (nonatomic, strong) ZNGService *service;
@@ -535,7 +535,6 @@
 
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component {
     ZNGFieldOption *option = [[self titleCustomField].options objectAtIndex:row];
-    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
     [self.contact titleFieldValue].value = option.value;
     [self.contact titleFieldValue].selectedCustomFieldOptionId = option.optionId;
     [self.tableView reloadData];

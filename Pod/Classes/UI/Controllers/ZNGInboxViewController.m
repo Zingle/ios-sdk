@@ -14,7 +14,7 @@
 #import "DGActivityIndicatorView.h"
 #import "ZNGPagedArray.h"
 
-@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate, ZNGPagedArrayDelegate>
 
 @property (strong, nonatomic) ZNGPagedArray *pagedArray;
 @property (strong, nonatomic) NSMutableDictionary *dataLoadingOperations;
@@ -151,7 +151,7 @@
 
 - (void)showActivityIndicator
 {
-    self.activityIndicator.stopAnimating;
+    [self.activityIndicator stopAnimating];
     self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
     self.activityIndicator.frame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
     [self.view addSubview:self.activityIndicator];
@@ -162,7 +162,7 @@
 {
     self.activityIndicator.hidden = YES;
     [self.activityIndicator removeFromSuperview];
-    self.activityIndicator.stopAnimating;
+    [self.activityIndicator stopAnimating];
 }
 
 #pragma mark - UITableViewDataSource
@@ -236,8 +236,6 @@
 - (void)_loadDataForPage:(NSUInteger)page {
     
     _dataLoadingOperations[@(page)] = [NSString stringWithFormat: @"%ld", (long)page];;
-    
-    NSIndexSet *indexes = [_pagedArray indexSetForPage:page];
     
     NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
     [combinedParams setObject:[NSNumber numberWithInteger: self.pagedArray.objectsPerPage] forKey:@"page_size"];

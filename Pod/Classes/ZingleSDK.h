@@ -84,7 +84,7 @@
  *  Clears in-memory cached conversations
  *
  */
-- (void *)clearCachedConversations;
+- (void)clearCachedConversations;
 
 /**
  *  Returns a ZNGConversationViewController.

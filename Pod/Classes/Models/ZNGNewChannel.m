@@ -10,7 +10,7 @@
 
 @implementation ZNGNewChannel
 
-- (id)initWithChannel:(ZNGChannel*)channel
+- (instancetype)initWithChannel:(ZNGChannel*)channel
 {
     self = [super init];
     

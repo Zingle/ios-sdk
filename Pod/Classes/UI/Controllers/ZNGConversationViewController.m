@@ -301,7 +301,7 @@
 {
     self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
     ;
-    CGRect actFrame = CGRectMake((self.collectionView.bounds.size.width)/2 - 15, (self.collectionView.bounds.size.height)/2 - 15, 30, 30);
+    CGRect actFrame = CGRectMake((self.navigationController.navigationBar.bounds.size.width)/2 - 15, (self.collectionView.bounds.size.height)/2 - 15, 30, 30);
     self.activityIndicator.frame = actFrame;
     [self.view addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];

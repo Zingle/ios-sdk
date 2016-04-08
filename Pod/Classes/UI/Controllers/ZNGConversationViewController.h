@@ -12,11 +12,17 @@
 
 @class ZNGConversationViewController;
 
-@protocol ZNGConversationViewControllerDelegate <NSObject>
+@protocol ZNGConversationModalDelegate <NSObject>
+
+@optional
+- (void)didDismissZNGConversationViewController:(ZNGConversationViewController *)vc;
+
+@end
+
+@protocol ZNGConversationDetailDelegate <NSObject>
 
 @optional
 - (void)didUpdateContact;
-- (void)didDismissZNGConversationViewController:(ZNGConversationViewController *)vc;
 
 @end
 
@@ -45,13 +51,22 @@
                                 receiverName:(NSString *)receiverName;
 
 /**
- *  If ZNGConversationViewController is presented modally the delegateModel should
+ *  If ZNGConversationViewController is presented modally the modalDelegate should
  *  should be set to handle dismissing the modal.
  *
- *  @param delegateModal Object conforming to ZNGConversationViewControllerDelegate 
+ *  @param delegateModal Object conforming to ZNGConversationModalDelegate
  *  that should handle dismissing the ZNGConversationViewController.
  */
-@property (weak, nonatomic) id<ZNGConversationViewControllerDelegate> convoDelegate;
+@property (weak, nonatomic) id<ZNGConversationModalDelegate> modalDelegate;
+
+/**
+ *  If ZNGConversationViewController is presented with a master detail view the
+ *  detailDelegate should be used to update the master view.
+ *
+ *  @param detailDelegate Object conforming to ZNGConversationDetailDelegate
+ *  that should handle updating the master view.
+ */
+@property (weak, nonatomic) id<ZNGConversationDetailDelegate> detailDelegate;
 
 /**
  * OPTIONAL UI SETTINGS

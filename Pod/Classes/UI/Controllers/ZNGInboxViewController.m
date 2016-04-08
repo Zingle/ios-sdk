@@ -14,7 +14,7 @@
 #import "DGActivityIndicatorView.h"
 #import "ZNGPagedArray.h"
 
-@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate, ZNGPagedArrayDelegate, ZNGConversationViewControllerDelegate>
+@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate, ZNGPagedArrayDelegate>
 
 @property (strong, nonatomic) ZNGPagedArray *pagedArray;
 @property (strong, nonatomic) NSMutableDictionary *dataLoadingOperations;
@@ -208,7 +208,7 @@
     }
     
     ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:self.service senderName:@"Me" receiverName:[contact fullName]];
-    vc.convoDelegate = self;
+    vc.detailDelegate = self;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -282,7 +282,7 @@
 
 - (void)didUpdateContact
 {
-    [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationFade];
+    [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

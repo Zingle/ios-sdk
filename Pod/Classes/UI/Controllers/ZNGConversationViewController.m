@@ -249,8 +249,8 @@
     NSDictionary *params = @{@"is_confirmed" : confirmedParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
         self.contact = contact;
-        if (self.convoDelegate) {
-            [self.convoDelegate didUpdateContact];
+        if (self.detailDelegate) {
+            [self.detailDelegate didUpdateContact];
         }
         self.confirmButton.enabled = YES;
     } failure:^(ZNGError *error) {
@@ -275,8 +275,8 @@
     NSDictionary *params = @{@"is_starred" : starParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
         self.contact = contact;
-        if (self.convoDelegate) {
-            [self.convoDelegate didUpdateContact];
+        if (self.detailDelegate) {
+            [self.detailDelegate didUpdateContact];
         }
         self.starBarButton.enabled = YES;
     } failure:^(ZNGError *error) {
@@ -333,7 +333,7 @@
         self.titleViewLabel.text = [self.contact fullName];
     }
     
-    if (self.convoDelegate) {
+    if (self.modalDelegate) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemStop
                                                                                               target:self
                                                                                               action:@selector(closePressed:)];
@@ -462,7 +462,7 @@
 
 - (void)closePressed:(UIBarButtonItem *)sender
 {
-    [self.convoDelegate didDismissZNGConversationViewController:self];
+    [self.modalDelegate didDismissZNGConversationViewController:self];
 }
 
 #pragma mark - ZNGBaseViewController method overrides

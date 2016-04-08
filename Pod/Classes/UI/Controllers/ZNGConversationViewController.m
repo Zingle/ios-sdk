@@ -253,7 +253,7 @@
     }
     NSDictionary *params = @{@"is_confirmed" : confirmedParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        self.contact = contact;
+//        self.contact = contact;
         if (self.detailDelegate) {
             [self.detailDelegate didUpdateContact];
         }
@@ -279,7 +279,7 @@
     }
     NSDictionary *params = @{@"is_starred" : starParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        self.contact = contact;
+//        self.contact = contact;
         if (self.detailDelegate) {
             [self.detailDelegate didUpdateContact];
         }
@@ -341,6 +341,10 @@
         self.titleViewLabel.text = self.service.displayName;
     } else {
         self.titleViewLabel.text = [self.contact fullName];
+    }
+    
+    if (self.detailDelegate) {
+        [self.detailDelegate didUpdateContact];
     }
     
     if (self.modalDelegate) {

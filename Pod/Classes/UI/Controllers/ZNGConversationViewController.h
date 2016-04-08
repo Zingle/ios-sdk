@@ -14,6 +14,8 @@
 
 @protocol ZNGConversationViewControllerDelegate <NSObject>
 
+@optional
+- (void)didUpdateContact;
 - (void)didDismissZNGConversationViewController:(ZNGConversationViewController *)vc;
 
 @end
@@ -49,7 +51,7 @@
  *  @param delegateModal Object conforming to ZNGConversationViewControllerDelegate 
  *  that should handle dismissing the ZNGConversationViewController.
  */
-@property (weak, nonatomic) id<ZNGConversationViewControllerDelegate> delegateModal;
+@property (weak, nonatomic) id<ZNGConversationViewControllerDelegate> convoDelegate;
 
 /**
  * OPTIONAL UI SETTINGS

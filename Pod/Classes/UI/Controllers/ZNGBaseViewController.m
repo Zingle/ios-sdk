@@ -295,8 +295,9 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     if (self.showTypingIndicator) {
         self.showTypingIndicator = NO;
         self.showTypingIndicator = YES;
-        [self.collectionView reloadData];
     }
+
+    [self.collectionView reloadData];
 
     self.titleViewLabelTopConstraint.constant = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
 }

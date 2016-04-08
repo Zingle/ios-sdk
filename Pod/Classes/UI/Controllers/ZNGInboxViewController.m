@@ -84,10 +84,6 @@
     [self refresh];
 }
 
-- (void)search {
-    [self refresh: nil];
-}
-
 - (void)refresh {
     self.tableView.hidden = YES;
     [self showActivityIndicator];

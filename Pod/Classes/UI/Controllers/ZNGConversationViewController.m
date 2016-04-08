@@ -228,6 +228,12 @@
                                                             action:@selector(detailsButtonPressed:)];
     
     self.navigationItem.rightBarButtonItems = @[self.detailsBarButton , self.confirmBarButton, self.starBarButton];
+    
+    if (self.toService) {
+        self.titleViewLabel.text = self.service.displayName;
+    } else {
+        self.titleViewLabel.text = [self.contact fullName];
+    }
 }
 
 - (void)confirmedButtonPressed:(UIBarButtonItem *)sender
@@ -295,7 +301,7 @@
 {
     self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
     ;
-    CGRect actFrame = CGRectMake(([UIScreen mainScreen].bounds.size.width)/2 - 15, ([UIScreen mainScreen].bounds.size.height)/2 - 15, 30, 30);
+    CGRect actFrame = CGRectMake((self.collectionView.bounds.size.width)/2 - 15, (self.collectionView.bounds.size.height)/2 - 15, 30, 30);
     self.activityIndicator.frame = actFrame;
     [self.view addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];

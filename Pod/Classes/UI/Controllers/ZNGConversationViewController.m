@@ -146,8 +146,6 @@
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
-    
-    
     if (self.service) {
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(stopPollingTimer)
@@ -168,6 +166,7 @@
             conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
         }
         if (conversation) {
+            [self showActivityIndicator];
             self.conversation = conversation;
             self.conversation.delegate = self;
             [self refreshViewModels];
@@ -297,7 +296,7 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-- (void)loadConversation
+- (void)showActivityIndicator
 {
     self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
     ;
@@ -305,6 +304,11 @@
     self.activityIndicator.frame = actFrame;
     [self.view addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];
+}
+
+- (void)loadConversation
+{
+    [self showActivityIndicator];
     
     if (self.toService) {
         [[ZingleSDK sharedSDK] addConversationFromContact:self.contact toService:self.service success:^(ZNGConversation *conversation) {

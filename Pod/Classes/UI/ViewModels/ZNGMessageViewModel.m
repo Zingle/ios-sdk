@@ -99,7 +99,7 @@
 
 - (NSUInteger)messageHash
 {
-    return self.hash;
+    return [self hash];
 }
 
 #pragma mark - NSObject

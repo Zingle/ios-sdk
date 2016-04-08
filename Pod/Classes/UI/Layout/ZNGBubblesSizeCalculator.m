@@ -87,7 +87,7 @@
 {
     NSValue *cachedSize = [self.cache objectForKey:@([messageData messageHash])];
     if (cachedSize != nil) {
-        return [cachedSize CGSizeValue];
+//        return [cachedSize CGSizeValue];
     }
 
     CGSize finalSize = CGSizeZero;
@@ -127,7 +127,7 @@
     }
 
     [self.cache setObject:[NSValue valueWithCGSize:finalSize] forKey:@([messageData messageHash])];
-
+    
     return finalSize;
 }
 

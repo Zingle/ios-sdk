@@ -149,7 +149,7 @@
 {
     [self.activityIndicator stopAnimating];
     self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
-    self.activityIndicator.frame = CGRectMake((self.tableView.bounds.size.width)/2 - 15, (self.tableView.bounds.size.height)/2 - 15, 30, 30);
+    self.activityIndicator.frame = CGRectMake((self.view.bounds.size.width)/2 - 15, (self.view.bounds.size.height)/2 - 15, 30, 30);
     [self.view addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];
 }

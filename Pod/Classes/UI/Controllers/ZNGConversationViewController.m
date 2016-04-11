@@ -235,6 +235,14 @@
     }
 }
 
+- (void)refreshContact
+{
+    [ZNGContactClient contactWithId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+        self.contact = contact;
+        [self setupBarButtonItems];
+    } failure:nil];
+}
+
 - (void)confirmedButtonPressed:(UIBarButtonItem *)sender
 {
     self.confirmButton.enabled = NO;

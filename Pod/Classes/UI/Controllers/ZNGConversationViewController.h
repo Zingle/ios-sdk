@@ -133,5 +133,6 @@
 - (void)refreshViewModels;
 - (void)loadConversation;
 - (void)setupBarButtonItems;
+- (void)refreshContact;
 
 @end

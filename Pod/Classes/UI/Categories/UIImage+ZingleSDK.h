@@ -57,6 +57,11 @@
 + (UIImage *)zng_defaultAccessoryImage;
 
 /**
+ *  @return The default input toolbar add item image.
+ */
++ (UIImage *)zng_addItemImage;
+
+/**
  *  @return The default typing indicator image.
  */
 + (UIImage *)zng_defaultTypingIndicatorImage;

@@ -10,9 +10,9 @@
 
 + (UIButton *)defaultAccessoryButtonItem
 {
-    UIImage *accessoryImage = [UIImage zng_defaultAccessoryImage];
-    UIImage *normalImage = [accessoryImage zng_imageMaskedWithColor:[UIColor lightGrayColor]];
-    UIImage *highlightedImage = [accessoryImage zng_imageMaskedWithColor:[UIColor darkGrayColor]];
+    UIImage *accessoryImage = [UIImage zng_addItemImage];
+    UIImage *normalImage = [accessoryImage zng_imageMaskedWithColor:[UIColor zng_lightBlue]];
+    UIImage *highlightedImage = [accessoryImage zng_imageMaskedWithColor:[UIColor zng_blue]];
 
     UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, accessoryImage.size.width, 32.0f)];
     [accessoryButton setImage:normalImage forState:UIControlStateNormal];

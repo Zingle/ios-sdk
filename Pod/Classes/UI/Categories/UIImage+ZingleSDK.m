@@ -75,6 +75,12 @@
     return image;
 }
 
++ (UIImage *)zng_addItemImage
+{
+    UIImage *image = [UIImage zng_bubbleImageFromBundleWithName:@"add"];
+    return image;
+}
+
 + (UIImage *)zng_defaultTypingIndicatorImage
 {
     return [UIImage zng_bubbleImageFromBundleWithName:@"typing"];

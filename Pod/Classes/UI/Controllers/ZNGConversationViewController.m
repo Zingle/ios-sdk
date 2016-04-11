@@ -360,6 +360,8 @@
                                                                                               target:self
                                                                                               action:@selector(closePressed:)];
     }
+    
+    [self refreshContact];
 }
 
 - (void)viewDidAppear:(BOOL)animated

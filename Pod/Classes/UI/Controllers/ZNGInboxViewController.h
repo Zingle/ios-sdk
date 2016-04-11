@@ -18,6 +18,8 @@
 
 - (void)refresh;
 
+- (void)refresh:(UIRefreshControl *)refreshControl;
+
 - (NSArray *)contacts;
 
 @property (strong, nonatomic) ZNGService *service;

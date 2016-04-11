@@ -96,7 +96,15 @@
         if (self.contact.isConfirmed) {
             self.confirmedView.backgroundColor = [UIColor clearColor];
         } else {
-            self.confirmedView.backgroundColor = [UIColor zng_green];
+            if (self.contact.lastMessage.createdAt) {
+                NSTimeInterval distanceBetweenDates = [self.contact.lastMessage.createdAt timeIntervalSinceNow];
+                if (distanceBetweenDates < -500) {
+                    self.confirmedView.backgroundColor = [UIColor zng_messageBubbleRedColor];
+                } else {
+                    self.confirmedView.backgroundColor = [UIColor zng_green];
+                }
+            }
+            
         }
         
         self.starButton.enabled = YES;

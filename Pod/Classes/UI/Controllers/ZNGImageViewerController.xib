@@ -45,8 +45,9 @@
                         <constraint firstItem="4Tx-kf-3JR" firstAttribute="centerX" secondItem="ncE-yI-7yP" secondAttribute="centerX" id="qve-sr-70r"/>
                     </constraints>
                 </scrollView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hMZ-fJ-uMW">
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hMZ-fJ-uMW">
                     <rect key="frame" x="0.0" y="524" width="320" height="44"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     <items>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="kcC-X1-jqE"/>
                         <barButtonItem systemItem="action" id="c5c-Yp-T2M">
@@ -55,6 +56,7 @@
                             </connections>
                         </barButtonItem>
                     </items>
+                    <color key="barTintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                 </toolbar>
             </subviews>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>

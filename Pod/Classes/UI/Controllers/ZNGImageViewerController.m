@@ -60,4 +60,9 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (IBAction)actionButtonPressed:(id)sender {
+    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[self.imageView.image] applicationActivities:nil];
+    [self presentViewController:activityViewController animated:YES completion:nil];
+}
+
 @end

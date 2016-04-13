@@ -820,6 +820,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
     heightFromBottom = MAX(0.0f, heightFromBottom);
 
+    [self scrollToBottomAnimated:NO];
     [self zng_setToolbarBottomLayoutGuideConstant:heightFromBottom];
 }
 

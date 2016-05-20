@@ -37,6 +37,7 @@
 		DFFBF23C1C64862600FF47B4 /* ZNGServiceClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */; };
 		DFFBF2501C6538A000FF47B4 /* ZNGTimeZoneClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */; };
 		DFFBF2641C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */; };
+		E140C45F1CEFA4C3005B3A99 /* ZNGEventClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C45E1CEFA4C3005B3A99 /* ZNGEventClientTests.m */; };
 		F416B50C257FC5C1393D4546 /* Pods_ZingleSDK_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A2AFED18FB44DDD29BD8F177 /* Pods_ZingleSDK_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 		DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceClientTests.m; sourceTree = "<group>"; };
 		DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGTimeZoneClientTests.m; sourceTree = "<group>"; };
 		DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumberClientTests.m; sourceTree = "<group>"; };
+		E140C45E1CEFA4C3005B3A99 /* ZNGEventClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGEventClientTests.m; sourceTree = "<group>"; };
 		E23016B636C0EB9C349A5BCE /* Pods-ZingleSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -206,6 +208,7 @@
 				DF62326F1C91EC720013F8A5 /* ZNGTestingAppDelegate.h */,
 				DF6232701C91EC720013F8A5 /* ZNGTestingAppDelegate.m */,
 				DFB895A31CB45C6C00E9AC11 /* ZNGNotificationTests.m */,
+				E140C45E1CEFA4C3005B3A99 /* ZNGEventClientTests.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -467,6 +470,7 @@
 				DFEDE4071C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m in Sources */,
 				DFFBF23A1C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m in Sources */,
 				DF756FE21C6C3ACF00732BE2 /* ZNGContactFieldClientTests.m in Sources */,
+				E140C45F1CEFA4C3005B3A99 /* ZNGEventClientTests.m in Sources */,
 				DFB895A41CB45C6C00E9AC11 /* ZNGNotificationTests.m in Sources */,
 				DF5D861D1C6A82B200CB84C4 /* ZNGContactChannelClientTests.m in Sources */,
 				DFFBF2381C64816400FF47B4 /* ZNGBaseTests.m in Sources */,

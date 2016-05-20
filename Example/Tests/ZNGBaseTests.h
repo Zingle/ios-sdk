@@ -34,5 +34,6 @@
 - (NSString *)contactId;
 - (NSString *)contactChannelId;
 - (NSString *)messageId;
+- (NSString *)eventId;
 
 @end

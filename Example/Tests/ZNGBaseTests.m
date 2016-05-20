@@ -166,7 +166,12 @@
 
 - (NSString *)messageId
 {
-    return @"4e4ea449-762e-4b18-a53d-8eb98f6dfc99";
+    return @"e7881016-8a75-445b-9f3f-13c88badce14";
+}
+
+- (NSString *)eventId
+{
+    return @"bd90b458-2fe5-4ede-8b91-12f52e1ecf21";
 }
 
 @end

@@ -414,6 +414,8 @@
 		E0E53744CD2306FAFCD62BF778080168 /* ZNGLoadEarlierHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D91468DCA6B78EC543E88C0E81531AA /* ZNGLoadEarlierHeaderView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E140C4541CEF9377005B3A99 /* ZNGUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4501CEF9370005B3A99 /* ZNGUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E140C4551CEF937C005B3A99 /* ZNGUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C4511CEF9370005B3A99 /* ZNGUser.m */; };
+		E140C4581CEF9FE8005B3A99 /* ZNGEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4561CEF9FE8005B3A99 /* ZNGEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E140C4591CEF9FE8005B3A99 /* ZNGEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C4571CEF9FE8005B3A99 /* ZNGEvent.m */; };
 		E2BEA93256B26EA7D1C8F402B3786C40 /* DGActivityIndicatorBallSpinFadeLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CC790A4DCB324DA73B683AAD1291092 /* DGActivityIndicatorBallSpinFadeLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4A089AB2047B73031232D40A3809201 /* ZNGContactFieldClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 890991F917FA48D86BE165C0E79706AA /* ZNGContactFieldClient.m */; };
 		E4D2414595D5EB2CC4AC8878DF31FD72 /* DGActivityIndicatorBallTrianglePathAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C779ADEB2D52B225271E7EDC8AEBD9 /* DGActivityIndicatorBallTrianglePathAnimation.m */; };
@@ -1048,6 +1050,8 @@
 		E13F5093516935964585C1F7FA214EB9 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+MTLPredefinedTransformerAdditions.m"; path = "Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.m"; sourceTree = "<group>"; };
 		E140C4501CEF9370005B3A99 /* ZNGUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGUser.h; sourceTree = "<group>"; };
 		E140C4511CEF9370005B3A99 /* ZNGUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGUser.m; sourceTree = "<group>"; };
+		E140C4561CEF9FE8005B3A99 /* ZNGEvent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGEvent.h; sourceTree = "<group>"; };
+		E140C4571CEF9FE8005B3A99 /* ZNGEvent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGEvent.m; sourceTree = "<group>"; };
 		E161A7FDB7B6D870BA382B080A173DC3 /* ZNGToolbarContentView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGToolbarContentView.xib; sourceTree = "<group>"; };
 		E17460E9166A1C58B0B6462AF9131F13 /* DGActivityIndicatorView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DGActivityIndicatorView-dummy.m"; sourceTree = "<group>"; };
 		E17D9E3FD1EE417D2A8E50DC40DBED5C /* AFNetworking-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworking-dummy.m"; sourceTree = "<group>"; };
@@ -2027,6 +2031,8 @@
 		E2D650342F8F28AAF71C048CED95B282 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E140C4561CEF9FE8005B3A99 /* ZNGEvent.h */,
+				E140C4571CEF9FE8005B3A99 /* ZNGEvent.m */,
 				E140C4501CEF9370005B3A99 /* ZNGUser.h */,
 				E140C4511CEF9370005B3A99 /* ZNGUser.m */,
 				B1632DC4019BC81225A043F3CBA8BC2C /* ZNGAccount.h */,
@@ -2377,6 +2383,7 @@
 				D9309821C1A905A5E17BBC3D77C37447 /* ZNGToolbarContentView.h in Headers */,
 				5772C9D5E28B0DD2DF1DC08159D7BEDC /* ZNGTypingIndicatorFooterView.h in Headers */,
 				D604C08850A023E8F8A4B507F896B6A1 /* ZNGVideoMediaItem.h in Headers */,
+				E140C4581CEF9FE8005B3A99 /* ZNGEvent.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2877,6 +2884,7 @@
 			files = (
 				D43F1180F893CF6E66C1EF7F8B2EDE88 /* NSBundle+ZingleSDK.m in Sources */,
 				5D8ED3D7608561B299E640784A0CEBDD /* NSString+ZingleSDK.m in Sources */,
+				E140C4591CEF9FE8005B3A99 /* ZNGEvent.m in Sources */,
 				85F4BE2C23C7BEDA528BCBF0E897698B /* UIColor+ZingleSDK.m in Sources */,
 				F6827A1FFF9901A7FDF4F0A5D1214FD0 /* UIDevice+ZingleSDK.m in Sources */,
 				B962D9AC06250E822BBC517B6D0BA7C8 /* UIImage+ZingleSDK.m in Sources */,

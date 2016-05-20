@@ -34,6 +34,22 @@
     [ZNGMessageClient messageListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *messages, ZNGStatus *status) {
         
         XCTAssert(messages != nil, @"Messages are nil!");
+        
+        // Verify the triggeredByUser exists and contains all the User properties.
+        for (ZNGMessage *message in messages) {
+            
+            ZNGUser *triggeredByUser = message.triggeredByUser;
+            
+            XCTAssertNotNil(triggeredByUser, "message.triggeredByUser is nil!");
+            
+            XCTAssertNotNil(triggeredByUser.userId, "triggeredByUser.userId is nil!");
+            XCTAssertNotNil(triggeredByUser.email, "triggeredByUser.email is nil!");
+            XCTAssertNotNil(triggeredByUser.firstName, "triggeredByUser.firstName is nil!");
+            XCTAssertNotNil(triggeredByUser.lastName, "triggeredByUser.lastName is nil!");
+            XCTAssertNotNil(triggeredByUser.title, "triggeredByUser.title is nil!");
+            
+        }
+        
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageList"];
         
     } failure:^(ZNGError *error) {

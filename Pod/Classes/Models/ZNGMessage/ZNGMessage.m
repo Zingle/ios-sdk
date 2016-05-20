@@ -22,6 +22,7 @@
              @"translatedBody" : @"translated_body",
              @"translatedBodyLanguageCode" : @"translated_body_language_code",
              @"triggeredByUserId" : @"triggered_by_user_id",
+             @"triggeredByUser" : @"triggered_by_user",
              @"templateId" : @"template_id",
              @"senderType" : @"sender_type",
              @"sender" : @"sender",
@@ -51,6 +52,11 @@
 + (NSValueTransformer*)readAtJSONTransformer
 {
     return [ZingleValueTransformers dateValueTransformer];
+}
+
++ (NSValueTransformer*)triggeredByUserJSONTransformer
+{
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGUser.class];
 }
 
 @end

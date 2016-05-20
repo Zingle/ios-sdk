@@ -23,17 +23,17 @@
 
 - (NSString *)accountId
 {
-    return @"bbc1f555-bc73-447b-90e5-4893e895acb7";
+    return @"11111111-1111-1111-1111-111111111114";
 }
 
 - (NSString *)planId
 {
-    return @"14c602b5-202b-47b4-9753-895785c868df";
+    return @"c77c7516-c14a-438f-b869-bf05f9e398bd";
 }
 
 - (NSString *)serviceId
 {
-    return @"e545a46e-bfcd-4db2-bfee-8e590fdcb33f";
+    return @"22111111-1111-1111-1111-111111111111";
 }
 
 - (NSString *)timeZone
@@ -43,7 +43,7 @@
 
 - (NSString *)planCode
 {
-    return @"enterprise_platinum";
+    return @"enterprise_lite";
 }
 
 - (ZNGServiceAddress *)serviceAddress
@@ -61,7 +61,7 @@
 - (ZNGAccountPlan *)plan
 {
     ZNGAccountPlan *plan = [[ZNGAccountPlan alloc] init];
-    plan.planId = @"14c602b5-202b-47b4-9753-895785c868df";
+    plan.planId = @"c77c7516-c14a-438f-b869-bf05f9e398bd";
     plan.code = @"sandbox";
     plan.monthlyOrUnitPrice = @0;
     plan.termMonths = @1;
@@ -87,14 +87,14 @@
 - (ZNGAccount *)account
 {
     ZNGAccount *account = [[ZNGAccount alloc] init];
-    account.accountId = @"bbc1f555-bc73-447b-90e5-4893e895acb7";
+    account.accountId = @"11111111-1111-1111-1111-111111111114";
     
     return account;
 }
 
 - (NSString *)serviceChannelId
 {
-    return @"5dae0d6f-31ac-4f92-b393-e1648b129b97";
+    return @"8c8b4e95-cf9f-4d08-b6ee-2f8cca2e69ec";
 }
 
 - (ZNGChannelType *)channelType
@@ -103,6 +103,11 @@
     channelType.channelTypeId = @"0a293ea3-4721-433e-a031-610ebcf43255";
     
     return channelType;
+}
+
+- (NSString *)channelValue
+{
+    return @"+18585557777";
 }
 
 - (ZNGChannel *)serviceChannelWithValue:(NSString *)value

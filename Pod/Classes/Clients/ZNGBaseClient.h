@@ -35,6 +35,12 @@
                                success:(void (^)(id responseObject, ZNGStatus *status))success
                                failure:(void (^)(ZNGError* error))failure;
 
++ (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
+                                       path:(NSString*)path
+                              responseClass:(Class)responseClass
+                                    success:(void (^)(id responseObject, ZNGStatus *status))success
+                                    failure:(void (^)(ZNGError* error))failure;
+
 #pragma mark - PUT methods
 
 + (NSURLSessionDataTask*)putWithPath:(NSString*)path

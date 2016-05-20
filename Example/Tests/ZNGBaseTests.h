@@ -24,6 +24,8 @@
 - (ZNGService *)service;
 - (ZNGAccount *)account;
 - (NSString *)serviceChannelId;
+- (ZNGChannelType *)channelType;
+- (NSString *)channelValue;
 - (ZNGChannel *)serviceChannelWithValue:(NSString *)value;
 - (ZNGNewChannel *)contactChannelWithValue:(NSString *)value;
 - (ZNGContact *)contact;

@@ -11,6 +11,8 @@
 #import "ZNGInboxViewController.h"
 #import "AFNetworkActivityLogger.h"
 
+#import "ZNGContactClient.h"
+
 @implementation ZNGAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -18,12 +20,12 @@
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
     
-    NSString *token = @"rfarley@zingleme.com";
-    NSString *key = @"WfM-uYS-CBV-n6J";
+    NSString *token = @"[YOUR ZINGLE TOKEN]";
+    NSString *key = @"[YOUR ZINGLE KEY]";
     
     // 1
     [[ZingleSDK sharedSDK] setToken:token andKey:key forDebugMode:YES];
-    ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:@"e545a46e-bfcd-4db2-bfee-8e590fdcb33f"];
+    ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:@"[YOUR ZINGLE SERVICE ID]"];
 
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];

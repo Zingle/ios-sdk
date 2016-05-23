@@ -17,7 +17,7 @@
              @"contactId" : @"contact_id",
              @"accountId" : @"account_id",
              @"serviceId" : @"service_id",
-             @"unreadMessageCount" : @"unread_message_count",
+             @"unreadMessageCount" : @"contact_unread_message_count",
              @"serviceDisplayName" : @"service_display_name",
              @"accountDisplayName" : @"account_display_name",
              @"lastMessage" : @"last_message",

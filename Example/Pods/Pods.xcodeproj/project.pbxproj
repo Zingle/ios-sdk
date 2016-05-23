@@ -414,6 +414,8 @@
 		E0E53744CD2306FAFCD62BF778080168 /* ZNGLoadEarlierHeaderView.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D91468DCA6B78EC543E88C0E81531AA /* ZNGLoadEarlierHeaderView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E11BA7841CF364EA00A0E963 /* ZNGContactService.h in Headers */ = {isa = PBXBuildFile; fileRef = E11BA7821CF364EA00A0E963 /* ZNGContactService.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E11BA7851CF364EA00A0E963 /* ZNGContactService.m in Sources */ = {isa = PBXBuildFile; fileRef = E11BA7831CF364EA00A0E963 /* ZNGContactService.m */; };
+		E11BA7881CF3684500A0E963 /* ZNGContactServiceClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E11BA7861CF3684500A0E963 /* ZNGContactServiceClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E11BA7891CF3684500A0E963 /* ZNGContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E11BA7871CF3684500A0E963 /* ZNGContactServiceClient.m */; };
 		E140C4541CEF9377005B3A99 /* ZNGUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4501CEF9370005B3A99 /* ZNGUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E140C4551CEF937C005B3A99 /* ZNGUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C4511CEF9370005B3A99 /* ZNGUser.m */; };
 		E140C4581CEF9FE8005B3A99 /* ZNGEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4561CEF9FE8005B3A99 /* ZNGEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1055,6 +1057,8 @@
 		E0B2D6FA2E3D417E2BAA6712BEA5383E /* ZNGNewContact.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNewContact.m; sourceTree = "<group>"; };
 		E11BA7821CF364EA00A0E963 /* ZNGContactService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGContactService.h; sourceTree = "<group>"; };
 		E11BA7831CF364EA00A0E963 /* ZNGContactService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactService.m; sourceTree = "<group>"; };
+		E11BA7861CF3684500A0E963 /* ZNGContactServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGContactServiceClient.h; sourceTree = "<group>"; };
+		E11BA7871CF3684500A0E963 /* ZNGContactServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactServiceClient.m; sourceTree = "<group>"; };
 		E13F5093516935964585C1F7FA214EB9 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+MTLPredefinedTransformerAdditions.m"; path = "Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.m"; sourceTree = "<group>"; };
 		E140C4501CEF9370005B3A99 /* ZNGUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGUser.h; sourceTree = "<group>"; };
 		E140C4511CEF9370005B3A99 /* ZNGUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGUser.m; sourceTree = "<group>"; };
@@ -1884,6 +1888,8 @@
 		B979F9123F22A60A5130C339564A2267 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
+				E11BA7861CF3684500A0E963 /* ZNGContactServiceClient.h */,
+				E11BA7871CF3684500A0E963 /* ZNGContactServiceClient.m */,
 				E140C45A1CEFA3CF005B3A99 /* ZNGEventClient.h */,
 				E140C45B1CEFA3CF005B3A99 /* ZNGEventClient.m */,
 				D945C959CF45B92C0814BB4E9C56C5DD /* ZNGAccountClient.h */,
@@ -2372,6 +2378,7 @@
 				82AB8D230805DFD4CB8EA944745DCD5C /* ZNGMessage.h in Headers */,
 				747BF89FB19415E2A0E338528638F66E /* ZNGMessageAvatarImageDataSource.h in Headers */,
 				F3781E1CF0B1BDB3B43E65BC82EC99C6 /* ZNGMessageBubbleImageDataSource.h in Headers */,
+				E11BA7881CF3684500A0E963 /* ZNGContactServiceClient.h in Headers */,
 				92152AE1F5FC3D8E0A045B63CE5729C8 /* ZNGMessageClient.h in Headers */,
 				87E8788FA6E89977BF55AAF4647F8070 /* ZNGMessageData.h in Headers */,
 				A2D2A79ECBE4FDFD8FEC38301628AB30 /* ZNGMessageMediaData.h in Headers */,
@@ -2940,6 +2947,7 @@
 				5661ADF5C6BEED0A7A591F2ADE5E744C /* ZNGCollectionViewCellIncoming.m in Sources */,
 				1774BD566E14440F2ACDE006D3093E41 /* ZNGCollectionViewCellOutgoing.m in Sources */,
 				14E720C915B47FB94412D761889564B5 /* ZNGCollectionViewFlowLayout.m in Sources */,
+				E11BA7891CF3684500A0E963 /* ZNGContactServiceClient.m in Sources */,
 				38002EA0DFB33D642189771D17BA3631 /* ZNGCollectionViewFlowLayoutInvalidationContext.m in Sources */,
 				8AC620528CCD8EA44317519B755B10EA /* ZNGCollectionViewLayoutAttributes.m in Sources */,
 				C59C60F0496CC73A4B3C8CAD483F1E27 /* ZNGComposerTextView.m in Sources */,

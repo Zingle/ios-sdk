@@ -24,6 +24,8 @@
 #import "ZNGChannel.h"
 #import "ZNGChannelType.h"
 #import "ZNGContact.h"
+#import "ZNGContactService.h"
+#import "ZNGContactServiceClient.h"
 #import "ZNGNewContact.h"
 #import "ZNGContactField.h"
 #import "ZNGContactFieldValue.h"

@@ -18,7 +18,5 @@
 @property(nonatomic, strong) NSString* serviceDisplayName;
 @property(nonatomic, strong) NSString* accountDisplayName;
 @property(nonatomic, strong) ZNGMessage* lastMessage;
-@property(nonatomic, strong) NSDate* createdAt;
-@property(nonatomic, strong) NSDate* updatedAt;
 
 @end

@@ -171,7 +171,7 @@
 
 - (NSString *)eventId
 {
-    return @"bd90b458-2fe5-4ede-8b91-12f52e1ecf21";
+    return @"1d35bd5a-e2f5-4d91-8355-80627a80ace8";
 }
 
 @end

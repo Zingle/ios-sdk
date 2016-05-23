@@ -26,12 +26,9 @@
 
 #pragma mark - POST methods
 
-/*
- // FIXME: Currently returns a 500 error.
 + (void)sendEvent:(ZNGNewEvent*)newEvent
-      withServiceId:(NSString*)serviceId
-            success:(void (^)(ZNGEvent* event, ZNGStatus* status))success
-            failure:(void (^)(ZNGError* error))failure;
- */
+    withServiceId:(NSString*)serviceId
+          success:(void (^)(ZNGEvent* event, ZNGStatus* status))success
+          failure:(void (^)(ZNGError* error))failure;
 
 @end

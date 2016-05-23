@@ -28,24 +28,24 @@
 
 - (void)testEventList
 {
-    [ZNGEventClient eventListWithParameters:nil withServiceId:[self serviceId] success:^(NSArray *events, ZNGStatus *status) {
+    NSDictionary *parameters = @{ @"sort_field" : @"created_at",
+                                  @"sort_direction" : @"desc" };
+    
+    [ZNGEventClient eventListWithParameters:parameters withServiceId:[self serviceId] success:^(NSArray *events, ZNGStatus *status) {
         
         XCTAssert(events != nil, @"Events are nil!");
         
-        // Verify the triggeredByUser exists and contains all the User properties.
-        for (ZNGEvent *event in events) {
-            
-            ZNGUser *triggeredByUser = event.triggeredByUser;
-            
-            XCTAssertNotNil(triggeredByUser, "event.triggeredByUser is nil!");
-            XCTAssertNotNil(triggeredByUser.userId, "triggeredByUser.userId is nil!");
-            XCTAssertNotNil(triggeredByUser.email, "triggeredByUser.email is nil!");
-            XCTAssertNotNil(triggeredByUser.firstName, "triggeredByUser.firstName is nil!");
-            XCTAssertNotNil(triggeredByUser.lastName, "triggeredByUser.lastName is nil!");
-            XCTAssertNotNil(triggeredByUser.title, "triggeredByUser.title is nil!");
-            
-        }
+        // Get the most recent event.
+        ZNGEvent *event = events.firstObject;
         
+        // Verify the triggeredByUser exists and contains all the required properties.
+        ZNGUser *triggeredByUser = event.triggeredByUser;
+        XCTAssertNotNil(triggeredByUser, "event.triggeredByUser is nil!");
+        XCTAssertNotNil(triggeredByUser.userId, "triggeredByUser.userId is nil!");
+        XCTAssertNotNil(triggeredByUser.email, "triggeredByUser.email is nil!");
+        XCTAssertNotNil(triggeredByUser.firstName, "triggeredByUser.firstName is nil!");
+        XCTAssertNotNil(triggeredByUser.lastName, "triggeredByUser.lastName is nil!");
+    
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testEventList"];
         
     } failure:^(ZNGError *error) {
@@ -62,14 +62,13 @@
         
         XCTAssert(event != nil, @"Event is nil!");
         
-        // Verify the triggeredByUser exists and contains all the User properties.
+        // Verify the triggeredByUser exists and contains all the required User properties.
         ZNGUser *triggeredByUser = event.triggeredByUser;
         XCTAssertNotNil(triggeredByUser, "event.triggeredByUser is nil!");
         XCTAssertNotNil(triggeredByUser.userId, "triggeredByUser.userId is nil!");
         XCTAssertNotNil(triggeredByUser.email, "triggeredByUser.email is nil!");
         XCTAssertNotNil(triggeredByUser.firstName, "triggeredByUser.firstName is nil!");
         XCTAssertNotNil(triggeredByUser.lastName, "triggeredByUser.lastName is nil!");
-        XCTAssertNotNil(triggeredByUser.title, "triggeredByUser.title is nil!");
         
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testEventById"];
         
@@ -84,8 +83,6 @@
 
 #pragma mark - POST methods
 
-/*
- // TODO: Re-enable this test when the sendEvent function has been fixed.
 - (void)testSendEvent
 {
     ZNGNewEvent *newEvent = [[ZNGNewEvent alloc] init];
@@ -105,6 +102,6 @@
     }];
     
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testSendEvent"];
-}*/
+}
 
 @end

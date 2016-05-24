@@ -416,6 +416,8 @@
 		E11BA7851CF364EA00A0E963 /* ZNGContactService.m in Sources */ = {isa = PBXBuildFile; fileRef = E11BA7831CF364EA00A0E963 /* ZNGContactService.m */; };
 		E11BA7881CF3684500A0E963 /* ZNGContactServiceClient.h in Headers */ = {isa = PBXBuildFile; fileRef = E11BA7861CF3684500A0E963 /* ZNGContactServiceClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E11BA7891CF3684500A0E963 /* ZNGContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E11BA7871CF3684500A0E963 /* ZNGContactServiceClient.m */; };
+		E11BA78E1CF49DE800A0E963 /* ZNGUserAuthorization.h in Headers */ = {isa = PBXBuildFile; fileRef = E11BA78C1CF49DE800A0E963 /* ZNGUserAuthorization.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E11BA78F1CF49DE800A0E963 /* ZNGUserAuthorization.m in Sources */ = {isa = PBXBuildFile; fileRef = E11BA78D1CF49DE800A0E963 /* ZNGUserAuthorization.m */; };
 		E140C4541CEF9377005B3A99 /* ZNGUser.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4501CEF9370005B3A99 /* ZNGUser.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E140C4551CEF937C005B3A99 /* ZNGUser.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C4511CEF9370005B3A99 /* ZNGUser.m */; };
 		E140C4581CEF9FE8005B3A99 /* ZNGEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4561CEF9FE8005B3A99 /* ZNGEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1059,6 +1061,8 @@
 		E11BA7831CF364EA00A0E963 /* ZNGContactService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactService.m; sourceTree = "<group>"; };
 		E11BA7861CF3684500A0E963 /* ZNGContactServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGContactServiceClient.h; sourceTree = "<group>"; };
 		E11BA7871CF3684500A0E963 /* ZNGContactServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactServiceClient.m; sourceTree = "<group>"; };
+		E11BA78C1CF49DE800A0E963 /* ZNGUserAuthorization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGUserAuthorization.h; sourceTree = "<group>"; };
+		E11BA78D1CF49DE800A0E963 /* ZNGUserAuthorization.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGUserAuthorization.m; sourceTree = "<group>"; };
 		E13F5093516935964585C1F7FA214EB9 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSValueTransformer+MTLPredefinedTransformerAdditions.m"; path = "Mantle/NSValueTransformer+MTLPredefinedTransformerAdditions.m"; sourceTree = "<group>"; };
 		E140C4501CEF9370005B3A99 /* ZNGUser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGUser.h; sourceTree = "<group>"; };
 		E140C4511CEF9370005B3A99 /* ZNGUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGUser.m; sourceTree = "<group>"; };
@@ -2051,6 +2055,8 @@
 		E2D650342F8F28AAF71C048CED95B282 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				E11BA78C1CF49DE800A0E963 /* ZNGUserAuthorization.h */,
+				E11BA78D1CF49DE800A0E963 /* ZNGUserAuthorization.m */,
 				E11BA7821CF364EA00A0E963 /* ZNGContactService.h */,
 				E11BA7831CF364EA00A0E963 /* ZNGContactService.m */,
 				E140C4561CEF9FE8005B3A99 /* ZNGEvent.h */,
@@ -2384,6 +2390,7 @@
 				A2D2A79ECBE4FDFD8FEC38301628AB30 /* ZNGMessageMediaData.h in Headers */,
 				5C6BB93B6E3A0A18F48AF9B06910B01E /* ZNGMessageRead.h in Headers */,
 				E8D04522479F801516182557F263697C /* ZNGMessageViewModel.h in Headers */,
+				E11BA78E1CF49DE800A0E963 /* ZNGUserAuthorization.h in Headers */,
 				CC292C1119DAB703533F07A008AE540F /* ZNGNetworkPhotoMediaItem.h in Headers */,
 				1CD873A17EB6A1F133144F9730D0DD7A /* ZNGNewChannel.h in Headers */,
 				1464ABC48B4842A0B9E6A502274B4C5C /* ZNGNewContact.h in Headers */,
@@ -2943,6 +2950,7 @@
 				644DC817F342028981B668EB8E8613F8 /* ZNGChannel.m in Sources */,
 				677FB3AD077853128A91D365A1DC88F4 /* ZNGChannelType.m in Sources */,
 				2EBC8AEC7F5093D5C89D0FDF6704256F /* ZNGCollectionView.m in Sources */,
+				E11BA78F1CF49DE800A0E963 /* ZNGUserAuthorization.m in Sources */,
 				E58290C3D12BD83BCD907E75CF7B0969 /* ZNGCollectionViewCell.m in Sources */,
 				5661ADF5C6BEED0A7A591F2ADE5E744C /* ZNGCollectionViewCellIncoming.m in Sources */,
 				1774BD566E14440F2ACDE006D3093E41 /* ZNGCollectionViewCellOutgoing.m in Sources */,

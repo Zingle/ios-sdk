@@ -49,6 +49,8 @@
 #import "ZNGStatus.h"
 #import "ZNGTemplate.h"
 #import "ZNGUser.h"
+#import "ZNGUserAuthorization.h"
+#import "ZNGUserAuthorizationClient.h"
 #import "NSBundle+ZingleSDK.h"
 #import "NSString+ZingleSDK.h"
 #import "UIColor+ZingleSDK.h"

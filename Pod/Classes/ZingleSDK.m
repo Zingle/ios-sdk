@@ -14,6 +14,8 @@
 #import "ZNGConversation.h"
 #import "ZNGParticipant.h"
 #import "ZNGContactChannelClient.h"
+#import "ZNGUserAuthorizationClient.h"
+#import "ZNGUserAuthorization.h"
 
 @interface ZingleSDK ()
 
@@ -55,6 +57,31 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
     [self.sessionManager.requestSerializer setValue:@"iOS_SDK" forHTTPHeaderField:@"Zingle_Agent"];
+}
+
+- (void)checkAuthorizationForContactService:(ZNGContactService *)contactService
+                                    success:(void (^)(BOOL isAuthorized))success
+                                    failure:(void (^)(ZNGError* error))failure
+{
+    [ZNGUserAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
+        
+        if (userAuthorization) {
+            
+            if ([userAuthorization.authorizationClass isEqualToString:@"contact"]) {
+                [self.sessionManager.requestSerializer setValue:contactService.contactId forHTTPHeaderField:@"x-zingle-contact-id"];
+            } else {
+                [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
+            }
+            
+            success(true);
+        } else {
+            success(false);
+        }
+    
+    } failure:^(ZNGError *error) {
+        failure(error);
+    }];
+    
 }
 
 - (void)addConversationFromContact:(ZNGContact *)contact

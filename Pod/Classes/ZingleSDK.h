@@ -11,6 +11,7 @@
 #import "ZNGConversation.h"
 #import "ZNGContact.h"
 #import "ZNGService.h"
+#import "ZNGContactService.h"
 
 @interface ZingleSDK : NSObject
 
@@ -35,6 +36,17 @@
  * @param debugMode when true connects to potentially unstable QA API
  */
 - (void)setToken:(NSString *)token andKey:(NSString *)key forDebugMode:(BOOL)debugMode;
+
+/**
+ * Checks if the user has authorization for the given contact service.
+ * Sets the x-zingle-contact-id header for the given contactService if the User Authorization Class is "contact".
+ * Call this method after selecting a ZNGContactService and before making other API requests.
+ *
+ * @param contactService the Contact Service for which to set the x-zingle-contact-id
+ */
+- (void)checkAuthorizationForContactService:(ZNGContactService *)contactService
+                                    success:(void (^)(BOOL isAuthorized))success
+                                    failure:(void (^)(ZNGError* error))failure;
 
 /**
  * Registers a new conversation in ZingleSDK. This will return a chat interface from a contact to a service. On success,

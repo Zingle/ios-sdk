@@ -56,6 +56,38 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testEventList"];
 }
 
+- (void)testEventListWithAuthorizationClassContact
+{
+    ZNGContactService *contactService = [[ZNGContactService alloc] init];
+    // Only the contactId is required for this test.
+    contactService.contactId = @"3d15b92f-9284-4e30-b119-1147f0465d88";
+    
+    [[ZingleSDK sharedSDK] checkAuthorizationForContactService:contactService success:^(BOOL isAuthorized) {
+        
+        NSDictionary *parameters = @{ @"sort_field" : @"created_at",
+                                      @"sort_direction" : @"desc" };
+        
+        [ZNGEventClient eventListWithParameters:parameters withServiceId:[self serviceId] success:^(NSArray *events, ZNGStatus *status) {
+            
+            XCTAssert(events != nil, @"Events are nil!");
+            
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testEventListWithAuthenticationClassContact"];
+            
+        } failure:^(ZNGError *error) {
+            XCTFail(@"fail: \"%@\"", error);
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testEventListWithAuthenticationClassContact"];
+        }];
+        
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error: %@", error);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testEventListWithAuthenticationClassContact"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testEventListWithAuthenticationClassContact"];
+
+}
+
 - (void)testEventById
 {
     [ZNGEventClient eventWithId:[self eventId] withServiceId:[self serviceId] success:^(ZNGEvent *event, ZNGStatus *status) {

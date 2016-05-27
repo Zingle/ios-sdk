@@ -313,6 +313,17 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Ryan Farley";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = EME9422BAK;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};

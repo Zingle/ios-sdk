@@ -100,6 +100,7 @@
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGContactDetailsTableViewCell.h"
 #import "ZNGContactLabelsTableViewCell.h"
+#import "ZNGContactServicesViewController.h"
 #import "ZNGInputToolbar.h"
 #import "ZNGLabelCollectionViewCell.h"
 #import "ZNGLabelCollectionViewFlowLayout.h"

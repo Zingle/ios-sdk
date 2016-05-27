@@ -428,6 +428,9 @@
 		E140C45D1CEFA3CF005B3A99 /* ZNGEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C45B1CEFA3CF005B3A99 /* ZNGEventClient.m */; };
 		E140C4621CEFB093005B3A99 /* ZNGNewEvent.h in Headers */ = {isa = PBXBuildFile; fileRef = E140C4601CEFB093005B3A99 /* ZNGNewEvent.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E140C4631CEFB093005B3A99 /* ZNGNewEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = E140C4611CEFB093005B3A99 /* ZNGNewEvent.m */; };
+		E188F14F1CF8FC950070A015 /* ZNGContactServicesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = E188F14D1CF8FC950070A015 /* ZNGContactServicesViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E188F1501CF8FC950070A015 /* ZNGContactServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E188F14E1CF8FC950070A015 /* ZNGContactServicesViewController.m */; };
+		E188F1541CF901060070A015 /* ZNGContactServicesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E188F1531CF901060070A015 /* ZNGContactServicesViewController.xib */; };
 		E2BEA93256B26EA7D1C8F402B3786C40 /* DGActivityIndicatorBallSpinFadeLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0CC790A4DCB324DA73B683AAD1291092 /* DGActivityIndicatorBallSpinFadeLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4A089AB2047B73031232D40A3809201 /* ZNGContactFieldClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 890991F917FA48D86BE165C0E79706AA /* ZNGContactFieldClient.m */; };
 		E4D2414595D5EB2CC4AC8878DF31FD72 /* DGActivityIndicatorBallTrianglePathAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C779ADEB2D52B225271E7EDC8AEBD9 /* DGActivityIndicatorBallTrianglePathAnimation.m */; };
@@ -1079,6 +1082,9 @@
 		E161A7FDB7B6D870BA382B080A173DC3 /* ZNGToolbarContentView.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGToolbarContentView.xib; sourceTree = "<group>"; };
 		E17460E9166A1C58B0B6462AF9131F13 /* DGActivityIndicatorView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DGActivityIndicatorView-dummy.m"; sourceTree = "<group>"; };
 		E17D9E3FD1EE417D2A8E50DC40DBED5C /* AFNetworking-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AFNetworking-dummy.m"; sourceTree = "<group>"; };
+		E188F14D1CF8FC950070A015 /* ZNGContactServicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGContactServicesViewController.h; sourceTree = "<group>"; };
+		E188F14E1CF8FC950070A015 /* ZNGContactServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactServicesViewController.m; sourceTree = "<group>"; };
+		E188F1531CF901060070A015 /* ZNGContactServicesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZNGContactServicesViewController.xib; sourceTree = "<group>"; };
 		E416890C086DFAFB4905660D7C972BD6 /* DGActivityIndicatorBallZigZagDeflectAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallZigZagDeflectAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallZigZagDeflectAnimation.h; sourceTree = "<group>"; };
 		E44CEEEA2906D256AEFB8F3C2EFB601A /* NSError+MTLModelException.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSError+MTLModelException.m"; path = "Mantle/NSError+MTLModelException.m"; sourceTree = "<group>"; };
 		E55AAAC023E291F526450AC59DDD2382 /* Mantle.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Mantle.modulemap; sourceTree = "<group>"; };
@@ -1393,6 +1399,7 @@
 				3EC5D0F3E08FEBF27CAE0645969F4F68 /* ZNGContactViewController.xib */,
 				B5F14411C96229C1FFA61E66C0BAB585 /* ZNGImageViewerController.xib */,
 				5164901E28CFAEF7CC9CF5D7BB09B294 /* ZNGInboxViewController.xib */,
+				E188F1531CF901060070A015 /* ZNGContactServicesViewController.xib */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -1428,6 +1435,8 @@
 				DB3CED13101BA805A167B1FE83E2055B /* ZNGInboxViewController.m */,
 				097BE9380E0FDC5C2C649732E48AB8C9 /* ZNGKeyboardController.h */,
 				5DA23564CAB4A93C991795F92AA93A9F /* ZNGKeyboardController.m */,
+				E188F14D1CF8FC950070A015 /* ZNGContactServicesViewController.h */,
+				E188F14E1CF8FC950070A015 /* ZNGContactServicesViewController.m */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -2388,6 +2397,7 @@
 				2A49AEC4FEF301F73F5E0F074CADF240 /* ZNGMediaItem.h in Headers */,
 				98C492BFA42D91963D50DF892C641E3A /* ZNGMediaPlaceholderView.h in Headers */,
 				843D502EA4FBAE37FBAB08D46901774E /* ZNGMediaViewBubbleImageMasker.h in Headers */,
+				E188F14F1CF8FC950070A015 /* ZNGContactServicesViewController.h in Headers */,
 				82AB8D230805DFD4CB8EA944745DCD5C /* ZNGMessage.h in Headers */,
 				747BF89FB19415E2A0E338528638F66E /* ZNGMessageAvatarImageDataSource.h in Headers */,
 				F3781E1CF0B1BDB3B43E65BC82EC99C6 /* ZNGMessageBubbleImageDataSource.h in Headers */,
@@ -2740,6 +2750,7 @@
 				19FEC43D34CAE634BEBCACA64E391638 /* clip@2x.png in Resources */,
 				F91D56FF264C462BB00DA9131788F5EB /* clip@3x.png in Resources */,
 				9FC26204B6D4FEE84552FC021D1576E9 /* confirmed.imageset in Resources */,
+				E188F1541CF901060070A015 /* ZNGContactServicesViewController.xib in Resources */,
 				A953EC3D95ED93DFE06B094D8FDC438D /* confirmed.pdf in Resources */,
 				DC2A30F548AC2F9143981DD57FAF2F72 /* Contents.json in Resources */,
 				DC2A30F548AC2F9143981DD57FAF2F72 /* Contents.json in Resources */,
@@ -2946,6 +2957,7 @@
 				21A39E02B43777300971501DCE1875EA /* ZNGAvailablePhoneNumberClient.m in Sources */,
 				2C0F98D48C41F5F5CAB03EAC8C36D3A8 /* ZNGAvatarImage.m in Sources */,
 				A16CBFB7A6A9DB6CAD8079E8ACC23A24 /* ZNGAvatarImageFactory.m in Sources */,
+				E188F1501CF8FC950070A015 /* ZNGContactServicesViewController.m in Sources */,
 				40961106D30379F8FF78A302D6771EE8 /* ZNGBaseClient.m in Sources */,
 				C5BA0E64369FBEC5248FE7247B67CC2B /* ZNGBaseViewController.m in Sources */,
 				97F490D6742B5F627477B8570BFBA562 /* ZNGBubbleImage.m in Sources */,

@@ -45,8 +45,10 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
 @property (assign, nonatomic) CGSize avatarViewSize;
 
 @property (weak, nonatomic, readwrite) UITapGestureRecognizer *tapGestureRecognizer;
+@property (weak, nonatomic, readwrite) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 - (void)zng_handleTapGesture:(UITapGestureRecognizer *)tap;
+- (void)zng_handleLongPressGesture:(UILongPressGestureRecognizer *)longPress;
 
 - (void)zng_updateConstraint:(NSLayoutConstraint *)constraint withConstant:(CGFloat)constant;
 
@@ -114,6 +116,10 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zng_handleTapGesture:)];
     [self addGestureRecognizer:tap];
     self.tapGestureRecognizer = tap;
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(zng_handleLongPressGesture:)];
+    [self addGestureRecognizer:longPress];
+    self.longPressGestureRecognizer = longPress;
 }
 
 - (void)dealloc
@@ -350,6 +356,15 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     }
     else {
         [self.delegate messagesCollectionViewCellDidTapCell:self atPosition:touchPt];
+    }
+}
+
+- (void)zng_handleLongPressGesture:(UILongPressGestureRecognizer *)longPress
+{
+    CGPoint touchPt = [longPress locationInView:self];
+    
+    if (CGRectContainsPoint(self.messageBubbleContainerView.frame, touchPt)) {
+        [self.delegate messagesCollectionViewCellDidLongPressMessageBubble:self];
     }
 }
 

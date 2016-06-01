@@ -59,6 +59,38 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMessageList"];
 }
 
+- (void)testMessageListWithAuthorizationClassContact
+{
+    ZNGContactService *contactService = [[ZNGContactService alloc] init];
+    // Only the contactId is required for this test.
+    contactService.contactId = @"3d15b92f-9284-4e30-b119-1147f0465d88";
+    
+    [[ZingleSDK sharedSDK] checkAuthorizationForContactService:contactService success:^(BOOL isAuthorized) {
+        
+        NSDictionary *parameters = @{ @"sort_field" : @"created_at",
+                                      @"sort_direction" : @"desc" };
+        
+        [ZNGMessageClient messageListWithParameters:parameters withServiceId:[self serviceId] success:^(NSArray *messages, ZNGStatus *status) {
+            
+            XCTAssert(messages != nil, @"Messages are nil!");
+            
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthorizationClassContact"];
+            
+        } failure:^(ZNGError *error) {
+            XCTFail(@"fail: \"%@\"", error);
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthorizationClassContact"];
+        }];
+        
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error: %@", error);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthorizationClassContact"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testEventListWithAuthenticationClassContact"];
+    
+}
+
 - (void)testMessageById
 {
     [ZNGMessageClient messageWithId:[self messageId] withServiceId:[self serviceId] success:^(ZNGMessage *message, ZNGStatus *status) {
@@ -90,7 +122,7 @@
 {
     ZNGParticipant *sender = [[ZNGParticipant alloc] init];
     sender.participantId = [self serviceId];
-    sender.channelValue = @"+16194323023";
+    sender.channelValue = @"+18585557777";
     
     ZNGParticipant *recipient = [[ZNGParticipant alloc] init];
     recipient.channelValue = @"+12242171591";

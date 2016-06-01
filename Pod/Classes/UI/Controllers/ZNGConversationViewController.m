@@ -157,6 +157,11 @@
                                                      name:UIApplicationDidBecomeActiveNotification
                                                    object:nil];
         
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(zng_didReceivePushNotification:)
+                                                     name:@"zng_receivePushNotification"
+                                                   object:nil];
+        
         ZNGConversation *conversation;
         if (self.toService) {
             self.senderId = self.contact.contactId;
@@ -177,6 +182,11 @@
             [self setupBarButtonItems];
         }
     }
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"zng_receivePushNotification" object:nil];
 }
 
 -(void)didReceiveMemoryWarning
@@ -896,6 +906,14 @@
         return NO;
     }
     return YES;
+}
+
+#pragma mark - Notification Handlers
+
+- (void)zng_didReceivePushNotification:(NSNotification *)notification
+{
+    // TODO: improve efficiency by only refreshing the row that corresponds with the notification.
+    [self refreshConversation];
 }
 
 @end

@@ -36,4 +36,14 @@
                       success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure;
 
++ (void)deleteMessages:(NSArray *)messageIds
+         withServiceId:(NSString*)serviceId
+               success:(void (^)(ZNGStatus* status))success
+               failure:(void (^)(ZNGError* error))failure;
+
++ (void)deleteAllMessagesForContactId:(NSString *)contactId
+                        withServiceId:(NSString*)serviceId
+                              success:(void (^)(ZNGStatus* status))success
+                              failure:(void (^)(ZNGError* error))failure;
+
 @end

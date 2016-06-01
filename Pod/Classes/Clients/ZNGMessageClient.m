@@ -93,4 +93,40 @@
                 failure:failure];
 }
 
++ (void)deleteMessages:(NSArray *)messageIds
+         withServiceId:(NSString*)serviceId
+               success:(void (^)(ZNGStatus* status))success
+               failure:(void (^)(ZNGError* error))failure
+{
+    NSString *path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", serviceId];
+    
+    NSDictionary *parameters = @{ @"message_ids" : messageIds };
+    
+    [self postWithParameters:parameters
+                        path:path
+               responseClass:nil
+                     success:^(id responseObject, ZNGStatus *status) {
+                         success(status);
+                     }
+                     failure:failure];
+}
+
++ (void)deleteAllMessagesForContactId:(NSString *)contactId
+                        withServiceId:(NSString*)serviceId
+                              success:(void (^)(ZNGStatus* status))success
+                              failure:(void (^)(ZNGError* error))failure
+{
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", serviceId];
+    
+    NSDictionary *parameters = @{ @"contact_id" : contactId };
+    
+    [self postWithParameters:parameters
+                        path:path
+               responseClass:nil
+                     success:^(id responseObject, ZNGStatus *status) {
+                         success(status);
+                     }
+                     failure:failure];
+}
+
 @end

@@ -8,13 +8,14 @@
 
 #import "ZNGAppDelegate.h"
 #import <ZingleSDK/ZingleSDK.h>
+#import "ZNGInboxViewController.h"
+#import "ZNGContactServicesViewController.h"
+#import "AFNetworkActivityLogger.h"
+#import "ZNGContactServiceClient.h"
 #import "ZNGContactClient.h"
-#import "ZNGConversationViewController.h"
+#import "ZNGNotificationsClient.h"
 
-@interface ZNGAppDelegate () <UITableViewDataSource, UITableViewDelegate>
-
-@property (strong, nonatomic) UITableViewController *tableVC;
-@property (strong, nonatomic) NSMutableArray *conversations;
+@interface ZNGAppDelegate () <ZNGContactServicesViewControllerDelegate>
 
 @end
 
@@ -22,78 +23,100 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.conversations = [[NSMutableArray alloc] init];
-
-    self.tableVC = [[UITableViewController alloc] init];
-    self.tableVC.title = @"Zingle SDK";
-    self.tableVC.tableView.delegate = self;
-    self.tableVC.tableView.dataSource = self;
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
+    
+    NSString *token = @"[YOUR ZINGLE TOKEN]";
+    NSString *key = @"[YOUR ZINGLE KEY]";
+    
+    // 1
+    [[ZingleSDK sharedSDK] setToken:token andKey:key forDebugMode:YES];
+    
+    // 2
+    // Register for User Notifications
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+    }
+    
+    // TODO: Find a way to nicely demonstrate both InboxVC and the ContactServicesVC.
+    //ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:@"22111111-1111-1111-1111-111111111111"];
+    
+    ZNGContactServicesViewController *vc = [ZNGContactServicesViewController withServiceId:@"22111111-1111-1111-1111-111111111111" channelTypeId:@"0a293ea3-4721-433e-a031-610ebcf43255" channelValue:@"+18585557777"];
+    vc.delegate = self;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: self.tableVC];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
     [self.window makeKeyAndVisible];
-    
-    [self loadConversations];
     
     return YES;
 }
 
-- (void)loadConversations
-{
-    NSDictionary *environment = [[NSProcessInfo processInfo] environment];
+// 3
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
     
-    NSString *token = environment[@"BUILD_TOKEN"] ?: @"YOUR ZINGLE USERNAME";
-    NSString *key = environment[@"BUILD_KEY"] ?: @"YOUR ZINGLE PASSWORD";
-    NSString *contactChannelValue = environment[@"BUILD_CHANNEL_VALUE"] ?: @"YOUR APP'S CHANNEL TYPE VALUE";
-    NSString *contactId = environment[@"BUILD_CONTACT_ID"] ?: @"THE ZINGLE CONTACT ID";
-    NSString *serviceId = environment[@"BUILD_SERVICE_ID"] ?: @"THE ZINGLE SERVICE ID";
+    if (notificationSettings.types) {
+        [application registerForRemoteNotifications];
+    }
+    
+}
 
-    // 1
-    [[ZingleSDK sharedSDK] setToken:token andKey:key];
+// 4
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+    // TODO: Load serviceId from NSUserDefaults.
+    NSString *serviceId = @"22111111-1111-1111-1111-111111111111";
     
-    // 2
-    [[ZingleSDK sharedSDK] addConversationFromContactId:contactId toServiceId:serviceId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
+    NSString *deviceId = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    [ZNGNotificationsClient unregisterForNotificationsWithDeviceId:deviceId success:^(ZNGStatus *status) {
         
-        [self.conversations addObject:conversation];
-        [self.tableVC.tableView reloadData];
+        [ZNGNotificationsClient registerForNotificationsWithDeviceId:deviceId withServiceIds:@[serviceId] success:^(ZNGStatus *status) {
+            NSLog(@"%@", status);
+        } failure:^(ZNGError *error) {
+            NSLog(@"error: %@", error);
+        }];
+        
     } failure:^(ZNGError *error) {
-        // handle failure
-    }];
-    
-    [[ZingleSDK sharedSDK] addConversationFromServiceId:serviceId toContactId:contactId contactChannelValue:contactChannelValue success:^(ZNGConversation *conversation) {
-        [self.conversations addObject:conversation];
-        [self.tableVC.tableView reloadData];
-    } failure:^(ZNGError *error) {
-        // handle failure
+        NSLog(@"error: %@", error);
     }];
 }
 
-#pragma mark - UITableViewDataSource
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
 {
-    return [self.conversations count];
+    NSLog(@"Failed to get token, error: %@", error);
 }
 
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    ZNGConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
-    NSString *from = conversation.toService ? @"contact" : @"service";
-    
-    UITableViewCell *cell = [[UITableViewCell alloc] init];
-    cell.textLabel.text = [NSString stringWithFormat:@"Conversation from %@", from];
-    return cell;
+    [[NSNotificationCenter defaultCenter] postNotificationName:zng_receivedPushNotification object:nil userInfo:userInfo];
 }
 
-#pragma mark - UITableViewDelegate
+// MARK: - ZNGContactServicesViewControllerDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGConversation *conversation = [self.conversations objectAtIndex:indexPath.row];
+- (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService {
     
-    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-
-    [(UINavigationController *)self.window.rootViewController pushViewController:vc animated:YES];
+    [[ZingleSDK sharedSDK] checkAuthorizationForContactService:contactService success:^(BOOL isAuthorized) {
+        
+        if (isAuthorized) {
+            
+            ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:contactService.serviceId];
+            
+            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+            [navController pushViewController:vc animated:YES];
+            
+        }
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error: %@", error);
+    }];
+    
+    
+    
+    
+    
+    
+    
+    
 }
 
 @end

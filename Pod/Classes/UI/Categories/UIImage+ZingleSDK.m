@@ -75,6 +75,12 @@
     return image;
 }
 
++ (UIImage *)zng_addItemImage
+{
+    UIImage *image = [UIImage zng_bubbleImageFromBundleWithName:@"add"];
+    return image;
+}
+
 + (UIImage *)zng_defaultTypingIndicatorImage
 {
     return [UIImage zng_bubbleImageFromBundleWithName:@"typing"];
@@ -83,6 +89,36 @@
 + (UIImage *)zng_defaultPlayImage
 {
     return [UIImage zng_bubbleImageFromBundleWithName:@"play"];
+}
+
++ (UIImage *)zng_starredImage
+{
+    return [UIImage zng_bubbleImageFromBundleWithName:@"starred"];
+}
+
++ (UIImage *)zng_unstarredImage
+{
+    return [UIImage zng_bubbleImageFromBundleWithName:@"unstarred"];
+}
+
++ (UIImage *)zng_lrg_starredImage
+{
+    return [UIImage zng_bubbleImageFromBundleWithName:@"lrg_starred"];
+}
+
++ (UIImage *)zng_lrg_unstarredImage
+{
+    return [UIImage zng_bubbleImageFromBundleWithName:@"lrg_unstarred"];
+}
+
++ (UIImage *)zng_confirmedImage
+{
+    return [UIImage zng_bubbleImageFromBundleWithName:@"confirmed"];
+}
+
++ (UIImage *)zng_unconfirmedImage
+{
+    return [UIImage zng_bubbleImageFromBundleWithName:@"unconfirmed"];
 }
 
 @end

@@ -74,17 +74,32 @@
       <EnvironmentVariables>
          <EnvironmentVariable
             key = "TEST_TOKEN"
-            value = "rfarley@zingleme.com"
+            value = "[YOUR ZINGLE TOKEN]"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "TEST_KEY"
+            value = "[YOUR ZINGLE KEY]"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "TEST_CONTACT_TOKEN"
+            value = "[YOUR ZINGLE TOKEN FOR CONTACT CLASS USER]"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "TEST_CONTACT_KEY"
+            value = "[YOUR ZINGLE KEY FOR CONTACT CLASS USER]"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "BUILD_TOKEN"
-            value = "rfarley@zingleme.com"
+            value = "[YOUR ZINGLE TOKEN]"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "BUILD_KEY"
-            value = "WfM-uYS-CBV-n6J"
+            value = "[YOUR ZINGLE KEY]"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
@@ -94,17 +109,12 @@
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "BUILD_CHANNEL_VALUE"
-            value = "ryans.testapp"
+            value = "sample.testapp"
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
             key = "BUILD_SERVICE_ID"
-            value = "e545a46e-bfcd-4db2-bfee-8e590fdcb33f"
-            isEnabled = "YES">
-         </EnvironmentVariable>
-         <EnvironmentVariable
-            key = "TEST_KEY"
-            value = "WfM-uYS-CBV-n6J"
+            value = "22111111-1111-1111-1111-111111111111"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>

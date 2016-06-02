@@ -87,7 +87,8 @@
 {
     NSValue *cachedSize = [self.cache objectForKey:@([messageData messageHash])];
     if (cachedSize != nil) {
-        return [cachedSize CGSizeValue];
+        // This works on iphone, doesn't quite work on iPad. Need to look into it.
+//        return [cachedSize CGSizeValue];
     }
 
     CGSize finalSize = CGSizeZero;
@@ -127,7 +128,7 @@
     }
 
     [self.cache setObject:[NSValue valueWithCGSize:finalSize] forKey:@([messageData messageHash])];
-
+    
     return finalSize;
 }
 

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9532" systemVersion="15D21" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="ZNGLabelCollectionViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="134" height="47"/>
+            <autoresizingMask key="autoresizingMask"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="134" height="47"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fya-M1-SZ9">
+                        <rect key="frame" x="2" y="0.0" width="130" height="46"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="11"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            </view>
+            <constraints>
+                <constraint firstAttribute="bottom" secondItem="fya-M1-SZ9" secondAttribute="bottom" constant="1" id="Aem-Vf-OvG"/>
+                <constraint firstItem="fya-M1-SZ9" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="2" id="hHt-YA-Yny"/>
+                <constraint firstAttribute="trailing" secondItem="fya-M1-SZ9" secondAttribute="trailing" constant="2" id="mXW-hB-Vyi"/>
+                <constraint firstItem="fya-M1-SZ9" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="oCI-M8-1pk"/>
+            </constraints>
+            <size key="customSize" width="134" height="47"/>
+            <connections>
+                <outlet property="label" destination="fya-M1-SZ9" id="IUY-eK-MBw"/>
+            </connections>
+            <point key="canvasLocation" x="539" y="312.5"/>
+        </collectionViewCell>
+    </objects>
+</document>

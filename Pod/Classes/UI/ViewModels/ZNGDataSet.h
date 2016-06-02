@@ -19,23 +19,29 @@
 + (instancetype)sharedDataSet;
 
 /**
- * Add service object to shared data set.
+ * Add conversation object to a service to shared data set.
  */
-- (void)addService:(ZNGService *)services;
+- (void)addConversation:(ZNGConversation *)conversation toServiceId:(NSString *)serviceId;
 
 /**
- * Add service object to shared data set.
+ * Add conversation object to a contact to shared data set.
  */
-- (void)addContact:(ZNGContact *)contact;
+- (void)addConversation:(ZNGConversation *)conversation toContactId:(NSString *)contactId;
 
 /**
- * Add conversation object to shared data set.
+ * Get conversation object to a service from shared data set with id of service.
  */
-- (void)addConversation:(ZNGConversation *)conversation;
+- (ZNGConversation *)getConversationToServiceId:(NSString *)serviceId;
 
 /**
- * Get conversation object from shared data set with id of service.
+ * Get conversation object to a contact from shared data set with id of service.
  */
-- (ZNGConversation *)getConversationWithServiceId:(NSString *)serviceId;
+- (ZNGConversation *)getConversationToContactId:(NSString *)contactId;
+
+/**
+ *  Clears in-memory cached conversations
+ *
+ */
+- (void *)clearConversations;
 
 @end

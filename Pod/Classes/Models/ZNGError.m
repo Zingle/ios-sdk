@@ -20,11 +20,20 @@ NSString* const kZingleErrorDomain = @"ZINGLE ERROR";
 
 - (id)initWithAPIError:(NSError *)error
 {
-    NSData* errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
-    NSDictionary* serializedData = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
-    NSDictionary* status = [serializedData objectForKey:kErrorStatus];
+    NSDictionary *status;
+    NSInteger code;
     
-    self = [super initWithDomain:kZingleErrorDomain code:[[status objectForKey:kErrorCode] integerValue] userInfo:status];
+    NSData* errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+    if (errorData) {
+        NSDictionary* serializedData = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
+        status = [serializedData objectForKey:kErrorStatus];
+        code = [[status objectForKey:kErrorCode] integerValue];
+    } else {
+        code = error.code;
+        status = error.userInfo;
+    }
+
+    self = [super initWithDomain:kZingleErrorDomain code:code userInfo:status];
     
     if (self) {
         _errorText = [status objectForKey:kErrorText];

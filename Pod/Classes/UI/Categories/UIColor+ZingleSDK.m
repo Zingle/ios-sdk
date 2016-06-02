@@ -37,6 +37,41 @@
                            alpha:1.0f];
 }
 
++ (UIColor *)zng_blue
+{
+    return [UIColor colorFromHexString:@"#285C8C"];
+}
+
++ (UIColor *)zng_lightBlue
+{
+    return [UIColor colorFromHexString:@"#00a1df"];
+}
+
++ (UIColor *)zng_green
+{
+    return [UIColor colorFromHexString:@"#02CE68"];
+}
+
++ (UIColor *)zng_gray
+{
+    return [UIColor colorFromHexString:@"#B6B8BA"];
+}
+
++ (UIColor *)zng_yellow
+{
+    return [UIColor colorFromHexString:@"#FFCF3A"];
+}
+
+
++ (UIColor *)colorFromHexString:(NSString *)hexString
+{
+    unsigned rgbValue = 0;
+    NSScanner *scanner = [NSScanner scannerWithString:hexString];
+    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanHexInt:&rgbValue];
+    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
+}
+
 #pragma mark - Utilities
 
 - (UIColor *)zng_colorByDarkeningColorWithValue:(CGFloat)value

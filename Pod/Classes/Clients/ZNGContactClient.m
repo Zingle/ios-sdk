@@ -13,6 +13,17 @@
 
 #pragma mark - GET methods
 
++ (void)contactListWithParameters:(NSDictionary *)parameters
+                          success:(void (^)(NSArray* contacts, ZNGStatus* status))success
+                          failure:(void (^)(ZNGError* error))failure
+{
+    [self getListWithParameters:parameters
+                           path:@"contacts"
+                  responseClass:[ZNGContact class]
+                        success:success
+                        failure:failure];
+}
+
 + (void)contactListWithServiceId:(NSString*)serviceId
                       parameters:(NSDictionary*)parameters
                          success:(void (^)(NSArray* contacts, ZNGStatus* status))success
@@ -46,18 +57,17 @@
                                      success:(void (^) (ZNGContact *contact, ZNGStatus* status))success
                                      failure:(void (^) (ZNGError *error))failure
 {
-    NSDictionary *params = @{ @"channel_value" : channelValue,
-                              @"channel_type_id" : channelTypeId };
+    NSDictionary *channels = @{ @"value" : channelValue,
+                                @"channel_type_id" : channelTypeId };
+    NSDictionary *params = @{ @"channels" : @[ channels ]};
     
-    [self contactListWithServiceId:serviceId parameters:params success:^(NSArray *contacts, ZNGStatus* status) {
-        
-        if ([contacts count] > 0) {
-            success([contacts lastObject], status);
-        } else {
-            ZNGContact *contact = [[ZNGContact alloc] init];
-            [self saveContact:contact withServiceId:serviceId success:success failure:failure];
-        }
-    } failure:failure];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts?return_existing=1", serviceId];
+    
+    [self postWithParameters:params
+                   path:path
+          responseClass:[ZNGContact class]
+                success:success
+                failure:failure];
 }
 
 #pragma mark - POST methods
@@ -78,7 +88,7 @@
                 failure:failure];
 }
 
-+ (void)updateContactFieldValue:(ZNGContactFieldValue*)contactFieldValue
++ (void)updateContactFieldValue:(ZNGNewContactFieldValue*)contactFieldValue
              withContactFieldId:(NSString*)contactFieldId
                   withContactId:(NSString*)contactId
                   withServiceId:(NSString*)serviceId
@@ -120,7 +130,7 @@
     
     [self postWithModel:nil
                    path:path
-          responseClass:nil
+          responseClass:[ZNGContact class]
                 success:success
                 failure:failure];
 }

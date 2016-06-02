@@ -51,9 +51,12 @@
         
         ZNGContact *contact = [contacts firstObject];
         ZNGContactFieldValue *fieldValue = [contact.customFieldValues firstObject];
-        fieldValue.value = @"Matthews";
+
+        ZNGNewContactFieldValue *newFieldValue = [[ZNGNewContactFieldValue alloc] init];
+        newFieldValue.customFieldId = fieldValue.customField.contactFieldId;
+        newFieldValue.value = @"Matthews";
         
-        [ZNGContactClient updateContactFieldValue:fieldValue withContactFieldId:fieldValue.customField.contactFieldId withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact, ZNGStatus *status) {
+        [ZNGContactClient updateContactFieldValue:newFieldValue withContactFieldId:fieldValue.customField.contactFieldId withContactId:contact.contactId withServiceId:[self serviceId] success:^(ZNGContact *contact, ZNGStatus *status) {
             
             XCTAssert(contact != nil, @"Contact is nil!");
             [[ZNGAsyncSemaphor sharedInstance] lift:@"testUpdateContactCustomFieldValue"];
@@ -195,6 +198,44 @@
     }];
     
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testContactClient"];
+}
+
+- (void)testFindOrCreateContactWithChannelTypeIdAndChannelValue
+{
+    XCTestExpectation *expectation = [self expectationWithDescription:@"ZNGContactClient.findOrCreateContactWithChannelTypeIdAndChannelValue"];
+    
+    [ZNGContactClient findOrCreateContactWithChannelTypeID:[self channelType].channelTypeId andChannelValue:[self channelValue] withServiceId:[self serviceId] success:^(ZNGContact *contact, ZNGStatus *status) {
+        
+        XCTAssert(contact != nil, @"Contact is nil!");
+        
+        BOOL matchingChannelFound = NO;
+        for (ZNGChannel *channel in contact.channels) {
+            if ([channel.channelType.channelTypeId isEqualToString:[self channelType].channelTypeId] &&
+                [channel.value isEqualToString:[self channelValue]]) {
+                matchingChannelFound = YES;
+                break;
+            }
+        }
+        
+        XCTAssertTrue(matchingChannelFound, @"Contact channel.channelTypeId and channel.value do not match!");
+        
+        [expectation fulfill];
+    
+    } failure:^(ZNGError *error) {
+        XCTFail(@"fail: \"%@\"", error);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testFindOrCreateContactWithChannelTypeIdAndChannelValue"];
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:20.0 handler:^(NSError *error) {
+        
+        if (error) {
+            XCTFail(@"Timeout while waiting for testFindOrCreateContactWithChannelTypeIdAndChannelValue: %@", error.localizedDescription);
+        }
+        
+    }];
+    
 }
 
 @end

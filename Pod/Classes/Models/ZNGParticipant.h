@@ -7,6 +7,8 @@
 //
 
 #import <Mantle/Mantle.h>
+#import "ZNGService.h"
+#import "ZNGContact.h"
 
 @interface ZNGParticipant : MTLModel<MTLJSONSerializing>
 
@@ -20,5 +22,8 @@ typedef NS_ENUM(NSInteger, ZNGParticipantType) {
 @property(nonatomic, strong) NSString* channelType;
 @property(nonatomic, strong) NSString* channelValue;
 @property(nonatomic, strong) NSString* name;
+
++ (ZNGParticipant *)participantForServiceId:(NSString *)serviceId withServiceChannelValue:(NSString *)serviceChannelValue;
++ (ZNGParticipant *)participantForContactId:(NSString *)contactId withContactChannelValue:(NSString *)contactChannelValue;
 
 @end

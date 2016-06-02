@@ -1,5 +1,6 @@
 
 #import "ZNGTimestampFormatter.h"
+#import "UIFont+OpenSans.h"
 
 @interface ZNGTimestampFormatter ()
 
@@ -38,11 +39,11 @@
         NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.alignment = NSTextAlignmentCenter;
         
-        _dateTextAttributes = @{ NSFontAttributeName : [UIFont boldSystemFontOfSize:12.0f],
+        _dateTextAttributes = @{ NSFontAttributeName : [UIFont openSansBoldFontOfSize:12.0f],
                                  NSForegroundColorAttributeName : color,
                                  NSParagraphStyleAttributeName : paragraphStyle };
         
-        _timeTextAttributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:12.0f],
+        _timeTextAttributes = @{ NSFontAttributeName : [UIFont openSansFontOfSize:12.0f],
                                  NSForegroundColorAttributeName : color,
                                  NSParagraphStyleAttributeName : paragraphStyle };
     }
@@ -64,7 +65,7 @@
         return nil;
     }
     
-    [self.dateFormatter setDateStyle:NSDateFormatterMediumStyle];
+    [self.dateFormatter setDateStyle:NSDateFormatterShortStyle];
     [self.dateFormatter setTimeStyle:NSDateFormatterShortStyle];
     return [self.dateFormatter stringFromDate:date];
 }

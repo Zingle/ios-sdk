@@ -8,6 +8,14 @@
 
 #import "ZNGConversation.h"
 #import "ZNGMessageClient.h"
+#import "ZNGServiceClient.h"
+
+@interface ZNGConversation ()
+
+@property (nonatomic) NSInteger totalMessageCount;
+@property (nonatomic) NSInteger pagesLeftToLoad;
+
+@end
 
 @implementation ZNGConversation
 
@@ -24,97 +32,182 @@ NSString *const kConversationContact = @"contact";
 NSString *const kMessageDirectionInbound = @"inbound";
 NSString *const kMessageDirectionOutbound = @"outbound";
 
+- (NSString *)contactChannelValue
+{
+    if (_contactChannelValue == nil) {
+        _contactChannelValue = self.contactId;
+    }
+    return _contactChannelValue;
+}
+
+- (NSString *)serviceChannelValue
+{
+    if (_serviceChannelValue == nil) {
+        _serviceChannelValue = self.serviceId;
+    }
+    return _serviceChannelValue;
+}
+
 - (void)updateMessages
 {
     NSDictionary *params = @{kConversationPageSize : @100,
-                             kConversationContactId : self.contact.participantId,
+                             kConversationContactId : self.contactId,
                              kConversationPage : @1,
                              kConversationSortField : kConversationCreatedAt};
     
-    [ZNGMessageClient messageListWithParameters:params withServiceId:self.service.participantId success:^(NSArray *messages, ZNGStatus* status) {
+    [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
         
-        if ([messages count] == [self.messages count]) {
+        if (status.totalRecords == self.totalMessageCount) {
+            [self.delegate messagesUpdated:NO];
             return;
         }
+        
+        self.totalMessageCount = status.totalRecords;
         self.messages = [messages mutableCopy];
         
-        NSInteger pageNumbers = status.totalPages;
+        self.pagesLeftToLoad = status.totalPages - 1;
         
-        [self.delegate messagesUpdated];
-        
-        for (int i = 2; i <= pageNumbers; i++) {
-            NSDictionary *params = @{kConversationPageSize : @100,
-                                     kConversationContactId : self.contact.participantId,
-                                     kConversationPage : @(i),
-                                     kConversationSortField : kConversationCreatedAt};
-
-            [ZNGMessageClient messageListWithParameters:params withServiceId:self.service.participantId success:^(NSArray *messages, ZNGStatus* status) {
-                
-                NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
-                [temp addObjectsFromArray:messages];
-                self.messages = temp;
-                
-                [self.delegate messagesUpdated];
-                
-            } failure:nil];
+        if (self.pagesLeftToLoad > 0) {
+            [self loadNextPage:status.page + 1];
+            
+        } else {
+            [self.delegate messagesUpdated:YES];
         }
         
     } failure:nil];
+}
+
+- (void)loadNextPage:(NSInteger)page
+{
+        NSDictionary *params = @{kConversationPageSize : @100,
+                                 kConversationContactId : self.contactId,
+                                 kConversationPage : @(page),
+                                 kConversationSortField : kConversationCreatedAt};
+        
+        [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+            
+            NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
+            [temp addObjectsFromArray:messages];
+            self.messages = temp;
+            self.pagesLeftToLoad--;
+            
+            if (self.pagesLeftToLoad < 1) {
+                [self.delegate messagesUpdated:YES];
+            } else {
+                [self loadNextPage:status.page + 1];
+            }
+            
+        } failure:nil];
 }
 
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
 {
-    ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
-    newMessage.body = body;
-    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:^(ZNGMessage *message, ZNGStatus *status) {
-        if (success) {
-            success(status);
-        }
-    } failure:failure];
+    if (self.channelType == nil) {
+        [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
+            for (ZNGChannelType *channelType in service.channelTypes) {
+                
+                if ([channelType.typeClass isEqualToString:@"UserDefinedChannel"]) {
+                    self.channelType = channelType;
+                    ZNGNewMessage *newMessage = [self newMessageToService:self.toService forTypeClass:channelType.typeClass];
+                    newMessage.body = body;
+                    newMessage.channelTypeIds = @[self.channelType.channelTypeId];
+                    [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+                        if (success) {
+                            success(status);
+                        }
+                    } failure:failure];
+                }
+            }
+            if (self.channelType == nil) {
+                NSLog(@"Service %@ (id=%@) does not support user defined channels. You must set the channelTypeId.", service.displayName, service.serviceId);
+                failure(nil);
+            }
+        } failure:^(ZNGError *error) {
+            NSLog(@"Service ID is required.");
+            failure(error);
+        }];
+    } else {
+        ZNGNewMessage *newMessage = [self newMessageToService:self.toService forTypeClass:self.channelType.typeClass];
+        newMessage.body = body;
+        newMessage.channelTypeIds = @[self.channelType.channelTypeId];
+        [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+            if (success) {
+                success(status);
+            }
+        } failure:failure];
+    }
 }
 
 - (void)sendMessageWithImage:(UIImage *)image
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure
 {
-    ZNGNewMessage *newMessage = [self newMessageToService:self.toService];
-    
     UIImage *imageForUpload = [self resizeImage:image];
     
     NSData *base64Data = [UIImagePNGRepresentation(imageForUpload) base64EncodedDataWithOptions:0];
     NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
     
-    newMessage.attachments = @[@{
-                                   kAttachementContentTypeKey : kAttachementContentTypeParam,
-                                   kAttachementBase64 : encodedString
-                                }];
-    
-    [ZNGMessageClient sendMessage:newMessage withServiceId:self.service.participantId success:^(ZNGMessage *message, ZNGStatus *status) {
-        if (success) {
-            success(status);
-        }
-    } failure:failure];
+    if (self.channelType == nil) {
+        [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
+            for (ZNGChannelType *channelType in service.channelTypes) {
+                
+                if ([channelType.typeClass isEqualToString:@"UserDefinedChannel"]) {
+                    self.channelType = channelType;
+                    ZNGNewMessage *newMessage = [self newMessageToService:self.toService forTypeClass:channelType.typeClass];
+                    newMessage.attachments = @[@{
+                                                   kAttachementContentTypeKey : kAttachementContentTypeParam,
+                                                   kAttachementBase64 : encodedString
+                                                   }];
+                    newMessage.channelTypeIds = @[self.channelType.channelTypeId];
+                    [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+                        if (success) {
+                            success(status);
+                        }
+                    } failure:failure];
+                }
+            }
+            if (self.channelType == nil) {
+                NSLog(@"Service %@ (id=%@) does not support user defined channels. You must set the channelTypeId.", service.displayName, service.serviceId);
+                failure(nil);
+            }
+        } failure:^(ZNGError *error) {
+            NSLog(@"Service ID is required.");
+            failure(error);
+        }];
+    } else {
+        ZNGNewMessage *newMessage = [self newMessageToService:self.toService forTypeClass:self.channelType.typeClass];
+        newMessage.attachments = @[@{
+                                       kAttachementContentTypeKey : kAttachementContentTypeParam,
+                                       kAttachementBase64 : encodedString
+                                       }];
+        newMessage.channelTypeIds = @[self.channelType.channelTypeId];
+        [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+            if (success) {
+                success(status);
+            }
+        } failure:failure];
+    }
 }
 
-- (ZNGNewMessage *)newMessageToService:(BOOL)toService
+- (ZNGNewMessage *)newMessageToService:(BOOL)toService forTypeClass:(NSString *)typeClass
 {
     ZNGNewMessage *newMessage = [[ZNGNewMessage alloc] init];
     
+    NSString *serviceChannelValue = [typeClass isEqualToString:@"UserDefinedChannel"] ? nil : self.serviceChannelValue;
+
     if (toService) {
         newMessage.senderType = kConversationContact;
-        newMessage.sender = self.contact;
+        newMessage.sender = [ZNGParticipant participantForContactId:self.contactId withContactChannelValue:self.contactChannelValue];
         newMessage.recipientType = kConversationService;
-        newMessage.recipients = @[self.service];
+        newMessage.recipients = @[[ZNGParticipant participantForServiceId:self.serviceId withServiceChannelValue:serviceChannelValue]];
     } else {
         newMessage.senderType = kConversationService;
-        newMessage.sender = self.service;
+        newMessage.sender = [ZNGParticipant participantForServiceId:self.serviceId withServiceChannelValue:serviceChannelValue];
         newMessage.recipientType = kConversationContact;
-        newMessage.recipients = @[self.contact];
+        newMessage.recipients = @[[ZNGParticipant participantForContactId:self.contactId withContactChannelValue:self.contactChannelValue]];
     }
-    
-    newMessage.channelTypeIds = @[self.channelTypeId];
     
     return newMessage;
 }

@@ -1,0 +1,30 @@
+//
+//  ZNGContactServicesViewController.h
+//  Pods
+//
+//  Created by Robert Harrison on 5/27/16.
+//
+//
+
+#import <UIKit/UIKit.h>
+
+#import "ZNGContactService.h"
+
+@protocol ZNGContactServicesViewControllerDelegate <NSObject>
+
+- (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService;
+
+@end
+
+@interface ZNGContactServicesViewController : UIViewController
+
+@property (nonatomic, assign) id<ZNGContactServicesViewControllerDelegate> delegate;
+
+@property (nonatomic, strong) NSString *channelValue;
+@property (nonatomic, strong) NSString *channelTypeId;
+@property (strong, nonatomic) NSString *serviceId;
+
++ (instancetype)contactServicesViewController;
++ (instancetype)withServiceId:(NSString *)serviceId channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue;
+
+@end

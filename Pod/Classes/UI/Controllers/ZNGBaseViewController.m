@@ -37,6 +37,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarHeightConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarBottomLayoutGuide;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *titleViewLabelTopConstraint;
 
 @property (weak, nonatomic) UIView *snapshotView;
 
@@ -212,6 +213,8 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
     [self zng_configureMessagesViewController];
     [self zng_registerForNotifications:YES];
+    
+    self.titleViewLabelTopConstraint.constant = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -292,8 +295,11 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     if (self.showTypingIndicator) {
         self.showTypingIndicator = NO;
         self.showTypingIndicator = YES;
-        [self.collectionView reloadData];
     }
+
+    [self.collectionView reloadData];
+
+    self.titleViewLabelTopConstraint.constant = self.navigationController.navigationBar.frame.size.height + [[UIApplication sharedApplication] statusBarFrame].size.height;
 }
 
 #pragma mark - Messages view controller
@@ -517,13 +523,15 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     cell.messageBubbleTopLabel.attributedText = [collectionView.dataSource collectionView:collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:indexPath];
     cell.cellBottomLabel.attributedText = [collectionView.dataSource collectionView:collectionView attributedTextForCellBottomLabelAtIndexPath:indexPath];
 
-    CGFloat bubbleTopLabelInset = (avatarImageDataSource != nil) ? 60.0f : 15.0f;
+    CGFloat bubbleLabelInset = (avatarImageDataSource != nil) ? 60.0f : 15.0f;
 
     if (isOutgoingMessage) {
-        cell.messageBubbleTopLabel.textInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, bubbleTopLabelInset);
+        cell.messageBubbleTopLabel.textInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, bubbleLabelInset);
+        cell.cellBottomLabel.textInsets = UIEdgeInsetsMake(0.0f, 0.0f, 0.0f, bubbleLabelInset);
     }
     else {
-        cell.messageBubbleTopLabel.textInsets = UIEdgeInsetsMake(0.0f, bubbleTopLabelInset, 0.0f, 0.0f);
+        cell.messageBubbleTopLabel.textInsets = UIEdgeInsetsMake(0.0f, bubbleLabelInset, 0.0f, 0.0f);
+        cell.cellBottomLabel.textInsets = UIEdgeInsetsMake(0.0f, bubbleLabelInset, 0.0f, 0.0f);
     }
 
     cell.textView.dataDetectorTypes = UIDataDetectorTypeAll;
@@ -729,6 +737,14 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     if (self.keyboardController.keyboardIsVisible) {
         [self zng_setToolbarBottomLayoutGuideConstant:CGRectGetHeight(self.keyboardController.currentKeyboardFrame)];
     }
+    NSValue* rectValue = [[notification userInfo] valueForKey:UIApplicationStatusBarFrameUserInfoKey];
+    CGRect oldFrame;
+    [rectValue getValue:&oldFrame];
+    if (oldFrame.size.height > 0) {
+        self.titleViewLabelTopConstraint.constant = 44;
+    } else {
+        self.titleViewLabelTopConstraint.constant = 64;
+    }
 }
 
 - (void)zng_didReceiveMenuWillShowNotification:(NSNotification *)notification
@@ -804,6 +820,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
     heightFromBottom = MAX(0.0f, heightFromBottom);
 
+    [self scrollToBottomAnimated:NO];
     [self zng_setToolbarBottomLayoutGuideConstant:heightFromBottom];
 }
 

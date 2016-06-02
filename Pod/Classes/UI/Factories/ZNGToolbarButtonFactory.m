@@ -4,15 +4,15 @@
 #import "UIColor+ZingleSDK.h"
 #import "UIImage+ZingleSDK.h"
 #import "NSBundle+ZingleSDK.h"
-
+#import "UIFont+OpenSans.h"
 
 @implementation ZNGToolbarButtonFactory
 
 + (UIButton *)defaultAccessoryButtonItem
 {
-    UIImage *accessoryImage = [UIImage zng_defaultAccessoryImage];
-    UIImage *normalImage = [accessoryImage zng_imageMaskedWithColor:[UIColor lightGrayColor]];
-    UIImage *highlightedImage = [accessoryImage zng_imageMaskedWithColor:[UIColor darkGrayColor]];
+    UIImage *accessoryImage = [UIImage zng_addItemImage];
+    UIImage *normalImage = [accessoryImage zng_imageMaskedWithColor:[UIColor zng_lightBlue]];
+    UIImage *highlightedImage = [accessoryImage zng_imageMaskedWithColor:[UIColor zng_blue]];
 
     UIButton *accessoryButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0f, 0.0f, accessoryImage.size.width, 32.0f)];
     [accessoryButton setImage:normalImage forState:UIControlStateNormal];
@@ -35,7 +35,7 @@
     [sendButton setTitleColor:[[UIColor zng_messageBubbleGreenColor] zng_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
     [sendButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateDisabled];
 
-    sendButton.titleLabel.font = [UIFont boldSystemFontOfSize:17.0f];
+    sendButton.titleLabel.font = [UIFont openSansBoldFontOfSize:17.0f];
     sendButton.titleLabel.adjustsFontSizeToFitWidth = YES;
     sendButton.titleLabel.minimumScaleFactor = 0.85f;
     sendButton.contentMode = UIViewContentModeCenter;

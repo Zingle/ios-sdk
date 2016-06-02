@@ -8,6 +8,7 @@
 
 #import <Mantle/Mantle.h>
 #import "ZNGCorrespondent.h"
+#import "ZNGUser.h"
 
 @interface ZNGMessage : MTLModel<MTLJSONSerializing>
 
@@ -19,6 +20,7 @@
 @property(nonatomic, strong) NSString* translatedBody;
 @property(nonatomic, strong) NSString* translatedBodyLanguageCode;
 @property(nonatomic, strong) NSString* triggeredByUserId;
+@property(nonatomic, strong) ZNGUser* triggeredByUser;
 @property(nonatomic, strong) NSString* templateId;
 @property(nonatomic, strong) NSString* senderType;
 @property(nonatomic, strong) ZNGCorrespondent* sender;

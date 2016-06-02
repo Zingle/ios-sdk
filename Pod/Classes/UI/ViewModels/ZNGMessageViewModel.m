@@ -3,17 +3,6 @@
 #import "ZNGMessageViewModel.h"
 #import "ZNGPhotoMediaItem.h"
 
-@interface ZNGMessageViewModel ()
-
-- (instancetype)initWithSenderId:(NSString *)senderId
-               senderDisplayName:(NSString *)senderDisplayName
-                            date:(NSDate *)date
-                         isMedia:(BOOL)isMedia;
-
-@end
-
-
-
 @implementation ZNGMessageViewModel
 
 #pragma mark - Initialization
@@ -21,21 +10,24 @@
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName
                                text:(NSString *)text
+                               note:(NSString *)note
 {
     return [[self alloc] initWithSenderId:senderId
                         senderDisplayName:displayName
                                      date:[NSDate date]
-                                     text:text];
+                                     text:text
+                                     note:note];
 }
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
                             text:(NSString *)text
+                            note:(NSString *)note
 {
     NSParameterAssert(text != nil);
-
-    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:NO];
+    
+    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:NO note:note];
     if (self) {
         _text = [text copy];
     }
@@ -45,21 +37,24 @@
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName
                               media:(id<ZNGMessageMediaData>)media
+                               note:(NSString *)note
 {
     return [[self alloc] initWithSenderId:senderId
                         senderDisplayName:displayName
                                      date:[NSDate date]
-                                    media:media];
+                                    media:media
+                                     note:note];
 }
 
 - (instancetype)initWithSenderId:(NSString *)senderId
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
                            media:(id<ZNGMessageMediaData>)media
+                            note:(NSString *)note
 {
     NSParameterAssert(media != nil);
-
-    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:YES];
+    
+    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:YES note:note];
     if (self) {
         _media = media;
     }
@@ -70,17 +65,19 @@
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
                          isMedia:(BOOL)isMedia
+                            note:(NSString *)note
 {
     NSParameterAssert(senderId != nil);
     NSParameterAssert(senderDisplayName != nil);
     NSParameterAssert(date != nil);
-
+    
     self = [super init];
     if (self) {
         _senderId = [senderId copy];
         _senderDisplayName = [senderDisplayName copy];
         _date = [date copy];
         _isMediaMessage = isMedia;
+        _note = note;
     }
     return self;
 }
@@ -102,7 +99,7 @@
 
 - (NSUInteger)messageHash
 {
-    return self.hash;
+    return [self hash];
 }
 
 #pragma mark - NSObject
@@ -112,19 +109,19 @@
     if (self == object) {
         return YES;
     }
-
+    
     if (![object isKindOfClass:[self class]]) {
         return NO;
     }
-
+    
     ZNGMessageViewModel *aMessage = (ZNGMessageViewModel *)object;
-
+    
     if (self.isMediaMessage != aMessage.isMediaMessage) {
         return NO;
     }
-
+    
     BOOL hasEqualContent = self.isMediaMessage ? [self.media isEqual:aMessage.media] : [self.text isEqualToString:aMessage.text];
-
+    
     return [self.senderId isEqualToString:aMessage.senderId]
     && [self.senderDisplayName isEqualToString:aMessage.senderDisplayName]
     && ([self.date compare:aMessage.date] == NSOrderedSame)
@@ -171,7 +168,7 @@
     [aCoder encodeObject:self.date forKey:NSStringFromSelector(@selector(date))];
     [aCoder encodeBool:self.isMediaMessage forKey:NSStringFromSelector(@selector(isMediaMessage))];
     [aCoder encodeObject:self.text forKey:NSStringFromSelector(@selector(text))];
-
+    
     if ([self.media conformsToProtocol:@protocol(NSCoding)]) {
         [aCoder encodeObject:self.media forKey:NSStringFromSelector(@selector(media))];
     }
@@ -185,13 +182,15 @@
         return [[[self class] allocWithZone:zone] initWithSenderId:self.senderId
                                                  senderDisplayName:self.senderDisplayName
                                                               date:self.date
-                                                             media:self.media];
+                                                             media:self.media
+                                                              note:self.note];
     }
-
+    
     return [[[self class] allocWithZone:zone] initWithSenderId:self.senderId
                                              senderDisplayName:self.senderDisplayName
                                                           date:self.date
-                                                          text:self.text];
+                                                          text:self.text
+                                                          note:self.note];
 }
 
 @end

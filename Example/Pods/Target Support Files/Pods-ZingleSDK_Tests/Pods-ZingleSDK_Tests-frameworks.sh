@@ -86,12 +86,16 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods-ZingleSDK_Tests/AFNetworkActivityLogger.framework"
   install_framework "Pods-ZingleSDK_Tests/AFNetworking.framework"
+  install_framework "Pods-ZingleSDK_Tests/DGActivityIndicatorView.framework"
+  install_framework "Pods-ZingleSDK_Tests/GoogleFontsiOS.framework"
   install_framework "Pods-ZingleSDK_Tests/Mantle.framework"
   install_framework "Pods-ZingleSDK_Tests/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods-ZingleSDK_Tests/AFNetworkActivityLogger.framework"
   install_framework "Pods-ZingleSDK_Tests/AFNetworking.framework"
+  install_framework "Pods-ZingleSDK_Tests/DGActivityIndicatorView.framework"
+  install_framework "Pods-ZingleSDK_Tests/GoogleFontsiOS.framework"
   install_framework "Pods-ZingleSDK_Tests/Mantle.framework"
   install_framework "Pods-ZingleSDK_Tests/ZingleSDK.framework"
 fi

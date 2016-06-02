@@ -19,7 +19,7 @@
              @"contactId" : @"id",
              @"isConfirmed" : @"is_confirmed",
              @"isStarred" : @"is_starred",
-             @"lastMessage" : @"last_messages",
+             @"lastMessage" : @"last_message",
              @"channels" : @"channels",
              @"customFieldValues" : @"custom_field_values",
              @"labels" : @"labels",
@@ -56,6 +56,102 @@
 + (NSValueTransformer*)updatedAtJSONTransformer
 {
     return [ZingleValueTransformers dateValueTransformer];
+}
+
+-(ZNGContactFieldValue *)titleFieldValue
+{
+    for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {
+        if ([fieldValue.customField.displayName isEqualToString:@"Title"]) {
+            return fieldValue;
+        }
+    }
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
+    fieldValue.customField = [[ZNGContactField alloc] init];
+    fieldValue.customField.displayName = @"Title";
+    
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
+    [array addObject:fieldValue];
+    self.customFieldValues = array;
+    return fieldValue;
+}
+
+-(ZNGContactFieldValue *)firstNameFieldValue
+{
+    for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {
+        if ([fieldValue.customField.displayName isEqualToString:@"First Name"]) {
+            return fieldValue;
+        }
+    }
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
+    fieldValue.customField = [[ZNGContactField alloc] init];
+    fieldValue.customField.displayName = @"First Name";
+    
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
+    [array addObject:fieldValue];
+    self.customFieldValues = array;
+    return fieldValue;
+}
+
+-(ZNGContactFieldValue *)lastNameFieldValue
+{
+    for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {
+        if ([fieldValue.customField.displayName isEqualToString:@"Last Name"]) {
+            return fieldValue;
+        }
+    }
+    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
+    fieldValue.customField = [[ZNGContactField alloc] init];
+    fieldValue.customField.displayName = @"Last Name";
+    
+    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
+    [array addObject:fieldValue];
+    self.customFieldValues = array;
+    return fieldValue;
+}
+
+-(ZNGChannel *)phoneNumberChannel
+{
+    for (ZNGChannel *channel in self.channels) {
+        if ([channel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
+            return channel;
+        }
+    }
+    return nil;
+}
+
+- (NSString *)fullName
+{
+    NSString *title = [self titleFieldValue].value;
+    NSString *firstName = [self firstNameFieldValue].value;
+    NSString *lastName = [self lastNameFieldValue].value;
+    
+    if(firstName.length < 1 && lastName.length < 1)
+    {
+        NSString *phoneNumber = [self phoneNumberChannel].formattedValue;
+        if (phoneNumber) {
+            return phoneNumber;
+        } else {
+            return @"Anonymous User";
+        }
+    }
+    else
+    {
+        NSString *name = @"";
+        
+        if(title.length > 0)
+        {
+            name = [name stringByAppendingString:[NSString stringWithFormat:@"%@ ", title]];
+        }
+        if(firstName.length > 0)
+        {
+            name = [name stringByAppendingString:[NSString stringWithFormat:@"%@ ", firstName]];
+        }
+        if(lastName.length > 0)
+        {
+            name = [name stringByAppendingString:lastName];
+        }
+        return name;
+    }
 }
 
 @end

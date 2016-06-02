@@ -8,6 +8,7 @@
 #import "UIView+ZingleSDK.h"
 #import "UIDevice+ZingleSDK.h"
 
+#import "UIFont+OpenSans.h"
 
 static NSMutableSet *zngCollectionViewCellActions = nil;
 
@@ -44,8 +45,10 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
 @property (assign, nonatomic) CGSize avatarViewSize;
 
 @property (weak, nonatomic, readwrite) UITapGestureRecognizer *tapGestureRecognizer;
+@property (weak, nonatomic, readwrite) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 - (void)zng_handleTapGesture:(UITapGestureRecognizer *)tap;
+- (void)zng_handleLongPressGesture:(UILongPressGestureRecognizer *)longPress;
 
 - (void)zng_updateConstraint:(NSLayoutConstraint *)constraint withConstant:(CGFloat)constant;
 
@@ -101,18 +104,22 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     self.avatarViewSize = CGSizeZero;
 
     self.cellTopLabel.textAlignment = NSTextAlignmentCenter;
-    self.cellTopLabel.font = [UIFont boldSystemFontOfSize:12.0f];
+    self.cellTopLabel.font = [UIFont openSansBoldFontOfSize:12.0f];
     self.cellTopLabel.textColor = [UIColor lightGrayColor];
 
-    self.messageBubbleTopLabel.font = [UIFont systemFontOfSize:12.0f];
+    self.messageBubbleTopLabel.font = [UIFont openSansFontOfSize:12.0f];
     self.messageBubbleTopLabel.textColor = [UIColor lightGrayColor];
 
-    self.cellBottomLabel.font = [UIFont systemFontOfSize:11.0f];
+    self.cellBottomLabel.font = [UIFont openSansFontOfSize:11.0f];
     self.cellBottomLabel.textColor = [UIColor lightGrayColor];
 
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zng_handleTapGesture:)];
     [self addGestureRecognizer:tap];
     self.tapGestureRecognizer = tap;
+    
+    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(zng_handleLongPressGesture:)];
+    [self addGestureRecognizer:longPress];
+    self.longPressGestureRecognizer = longPress;
 }
 
 - (void)dealloc
@@ -349,6 +356,15 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     }
     else {
         [self.delegate messagesCollectionViewCellDidTapCell:self atPosition:touchPt];
+    }
+}
+
+- (void)zng_handleLongPressGesture:(UILongPressGestureRecognizer *)longPress
+{
+    CGPoint touchPt = [longPress locationInView:self];
+    
+    if (CGRectContainsPoint(self.messageBubbleContainerView.frame, touchPt)) {
+        [self.delegate messagesCollectionViewCellDidLongPressMessageBubble:self];
     }
 }
 

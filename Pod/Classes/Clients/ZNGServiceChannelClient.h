@@ -7,7 +7,7 @@
 //
 
 #import "ZNGBaseClient.h"
-#import "ZNGServiceChannel.h"
+#import "ZNGChannel.h"
 
 @interface ZNGServiceChannelClient : ZNGBaseClient
 
@@ -15,14 +15,14 @@
 
 + (void)serviceChannelWithId:(NSString*)serviceChannelId
                withServiceId:(NSString*)serviceId
-                     success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
+                     success:(void (^)(ZNGChannel* serviceChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
-+ (void)saveServiceChannel:(ZNGServiceChannel*)serviceChannel
++ (void)saveServiceChannel:(ZNGChannel*)serviceChannel
              withServiceId:(NSString*)serviceId
-                   success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
+                   success:(void (^)(ZNGChannel* serviceChannel, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
@@ -30,7 +30,7 @@
 + (void)updateServiceChannelWithId:(NSString*)serviceChannelId
                     withParameters:(NSDictionary*)parameters
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGServiceChannel* serviceChannel, ZNGStatus* status))success
+                           success:(void (^)(ZNGChannel* serviceChannel, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods

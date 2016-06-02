@@ -170,6 +170,50 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     }];
 }
 
++ (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
+                                       path:(NSString*)path
+                              responseClass:(Class)responseClass
+                                    success:(void (^)(id responseObject, ZNGStatus *status))success
+                                    failure:(void (^)(ZNGError* error))failure
+{
+    
+    return [[self sessionManager] POST:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
+        if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
+            if (success) {
+                success(responseObject[kBaseClientResult], status);
+            }
+            return;
+        }
+        
+        NSDictionary* result = responseObject[kBaseClientResult];
+        id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
+        
+        if (error) {
+            ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+            
+            if (failure) {
+                failure(zngError);
+            }
+        } else {
+            if (success) {
+                success(responseObj, status);
+            }
+        }
+    } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
+        if (failure) {
+            ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+            failure(zngError);
+        }
+    }];
+    
+}
+
 #pragma mark - PUT methods
 
 + (NSURLSessionDataTask*)putWithPath:(NSString*)path

@@ -16,23 +16,23 @@
 + (void)contactChannelWithId:(NSString*)contactChannelId
                withContactId:(NSString*)contactId
                withServiceId:(NSString*)serviceId
-                     success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
+                     success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", serviceId, contactId, contactChannelId];
     
     [self getWithResourcePath:path
-                responseClass:[ZNGContactChannel class]
+                responseClass:[ZNGChannel class]
                       success:success
                       failure:failure];
 }
 
 #pragma mark - POST methods
 
-+ (void)saveContactChannel:(ZNGNewContactChannel*)contactChannel
++ (void)saveContactChannel:(ZNGNewChannel*)contactChannel
              withContactId:(NSString*)contactId
              withServiceId:(NSString*)serviceId
-                   success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
+                   success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                    failure:(void (^)(ZNGError* error))failure
 {
     if (contactChannel.channelTypeId == nil) {
@@ -47,7 +47,7 @@
     
     [self postWithModel:contactChannel
                    path:path
-          responseClass:[ZNGContactChannel class]
+          responseClass:[ZNGChannel class]
                 success:success
                 failure:failure];
 }
@@ -58,14 +58,14 @@
                     withParameters:(NSDictionary*)parameters
                      withContactId:(NSString*)contactId
                      withServiceId:(NSString*)serviceId
-                           success:(void (^)(ZNGContactChannel* contactChannel, ZNGStatus* status))success
+                           success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", serviceId, contactId, contactChannelId];
     
     [self putWithPath:path
            parameters:parameters
-        responseClass:[ZNGContactChannel class]
+        responseClass:[ZNGChannel class]
               success:success
               failure:failure];
 }

@@ -87,4 +87,11 @@
  */
 - (id<ZNGMessageMediaData>)media;
 
+/**
+ *  @return An extra bit of info about the message.
+ *
+ *  @warning You must not return `nil` from this method.
+ */
+- (NSString *)note;
+
 @end

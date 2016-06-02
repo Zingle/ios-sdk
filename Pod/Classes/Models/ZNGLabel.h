@@ -16,4 +16,7 @@
 @property(nonatomic, strong) NSString* textColor;
 @property(nonatomic) BOOL isGlobal;
 
+- (UIColor *)textUIColor;
+- (UIColor *)backgroundUIColor;
+
 @end

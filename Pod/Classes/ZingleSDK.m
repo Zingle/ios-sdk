@@ -17,6 +17,8 @@
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGUserAuthorization.h"
 
+NSString *const zng_receivedPushNotification = @"zng_receivedPushNotification";
+
 @interface ZingleSDK ()
 
 @property(nonatomic, strong) AFHTTPSessionManager* sessionManager;

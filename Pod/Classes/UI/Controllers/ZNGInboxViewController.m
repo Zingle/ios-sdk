@@ -51,7 +51,7 @@
 
 - (void)dealloc
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"zng_receivePushNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:zng_receivedPushNotification object:nil];
 }
 
 - (NSArray *)contacts {
@@ -88,7 +88,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(zng_didReceivePushNotification:)
-                                                 name:@"zng_receivePushNotification"
+                                                 name:zng_receivedPushNotification
                                                object:nil];
     
     [self refresh];

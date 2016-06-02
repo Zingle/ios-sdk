@@ -88,7 +88,7 @@
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"zng_receivePushNotification" object:nil userInfo:userInfo];
+    [[NSNotificationCenter defaultCenter] postNotificationName:zng_receivedPushNotification object:nil userInfo:userInfo];
 }
 
 // MARK: - ZNGContactServicesViewControllerDelegate

@@ -125,8 +125,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     self.incomingCellIdentifier = [ZNGCollectionViewCellIncoming cellReuseIdentifier];
     self.incomingMediaCellIdentifier = [ZNGCollectionViewCellIncoming mediaCellReuseIdentifier];
 
-    // NOTE: let this behavior be opt-in for now
-    // [ZNGCollectionViewCell registerMenuAction:@selector(delete:)];
+    [ZNGCollectionViewCell registerMenuAction:@selector(delete:)];
 
     self.showTypingIndicator = NO;
 

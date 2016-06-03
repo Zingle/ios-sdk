@@ -16,6 +16,7 @@
 #import "ZNGTemplateClient.h"
 #import "ZNGAutomationClient.h"
 #import "ZNGContactClient.h"
+#import "ZNGMessageClient.h"
 
 @interface ZNGConversationViewController ()
 
@@ -40,6 +41,9 @@
 @end
 
 @implementation ZNGConversationViewController
+
+static NSString *kZNGSendMessageError = @"There was a problem sending your message. Please try again later.";
+static NSString *kZNGDeleteMessageError = @"There was a problem deleting your message. Please try again later.";
 
 + (ZNGConversationViewController *)toService:(ZNGService *)service
                                      contact:(ZNGContact *)contact
@@ -465,9 +469,9 @@
     [self.activityIndicator stopAnimating];
 }
 
-- (void)showErrorSendingMessage
+- (void)showErrorMessage:(NSString *)errorMessage
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"There was a problem sending your message. Please try again later."
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:errorMessage
                                                                    message:nil
                                                             preferredStyle:UIAlertControllerStyleAlert];
     
@@ -516,7 +520,7 @@
         [self.viewModels addObject:viewModel];
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
-        [self showErrorSendingMessage];
+        [self showErrorMessage:kZNGSendMessageError];
     }];
 }
 
@@ -696,7 +700,7 @@
             [self finishSendingMessageAnimated:YES];
 
         } failure:^(ZNGError *error) {
-            [self showErrorSendingMessage];
+            [self showErrorMessage:kZNGSendMessageError];
         }];
     }];
 }
@@ -706,6 +710,37 @@
 - (id<ZNGMessageData>)collectionView:(ZNGCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return [self.viewModels objectAtIndex:indexPath.item];
+}
+
+- (void)collectionView:(ZNGCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGMessageViewModel *messageViewModel = [self.viewModels objectAtIndex:indexPath.item];
+    
+    // Search for the message. Search in reverse because most likely message to delete will be at the end.
+    // TODO: To make this more efficient, the ZNGMessageViewModel should have a messageId property.
+    ZNGMessage *message = nil;
+    for (ZNGMessage *m in [self.conversation.messages reverseObjectEnumerator]) {
+        
+        if ([messageViewModel.text isEqualToString:m.body] &&
+            [messageViewModel.date compare:m.createdAt] == NSOrderedSame) {
+            
+            message = m;
+            break;
+        }
+    
+    }
+    
+    if (message != nil) {
+        
+        [ZNGMessageClient deleteMessages:@[message.messageId] withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+            
+        } failure:^(ZNGError *error) {
+            [self showErrorMessage:kZNGDeleteMessageError];
+        }];
+        
+        [self.viewModels removeObjectAtIndex:indexPath.item];
+    }
+    
 }
 
 - (id<ZNGMessageBubbleImageDataSource>)collectionView:(ZNGCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -896,7 +931,7 @@
                 [self finishSendingMessageAnimated:YES];
                 
             } failure:^(ZNGError *error) {
-                [self showErrorSendingMessage];
+                [self showErrorMessage:kZNGSendMessageError];
             }];
         }];
         [alert addAction: send];

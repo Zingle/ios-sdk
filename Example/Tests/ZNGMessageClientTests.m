@@ -168,7 +168,7 @@
 - (void)testDeleteMessages
 {
     
-    [ZNGMessageClient deleteMessages:@[@"b2ecc906-3bb7-45db-ba72-d0b0c3d58254"] withServiceId:[self serviceId] success:^(ZNGStatus *status) {
+    [ZNGMessageClient deleteMessages:@[@"b37a27e6-e815-407b-9313-384b6731ffc7"] withServiceId:[self serviceId] success:^(ZNGStatus *status) {
         
         XCTAssert(status != nil, @"Status is nil!");
         XCTAssert(status.statusCode == 200, @"statusCode is not 200!");

@@ -116,4 +116,4 @@ NSString *contactChannelValue = @“test.app”;
 NSString *contactId = @“CONTACT ID”;
 NSString *serviceId = @“SERVICE ID”;
 ```
-Please direct any inquiries about the SDK and examples to rfarley@zingleme.com or your account manager.
+Please direct any inquiries about the SDK and examples to devsupport@zingleme.com or your account manager.

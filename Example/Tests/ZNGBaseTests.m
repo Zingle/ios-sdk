@@ -156,7 +156,7 @@
 
 - (NSString *)contactId
 {
-    return @"e07aa3e3-20b4-4e6d-90b0-6606f0d14f64";
+    return @"3d15b92f-9284-4e30-b119-1147f0465d88";
 }
 
 - (NSString *)contactChannelId

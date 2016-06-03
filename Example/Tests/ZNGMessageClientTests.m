@@ -165,4 +165,41 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMarkMessageRead"];
 }
 
+- (void)testDeleteMessages
+{
+    
+    [ZNGMessageClient deleteMessages:@[@"b2ecc906-3bb7-45db-ba72-d0b0c3d58254"] withServiceId:[self serviceId] success:^(ZNGStatus *status) {
+        
+        XCTAssert(status != nil, @"Status is nil!");
+        XCTAssert(status.statusCode == 200, @"statusCode is not 200!");
+        
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testDeleteMessages"];
+        
+    } failure:^(ZNGError *error) {
+        XCTFail(@"fail: \"%@\"", [error description]);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testDeleteMessages"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testDeleteMessages"];
+}
+
+- (void)testDeleteAllMessages
+{
+    
+    [ZNGMessageClient deleteAllMessagesForContactId:[self contactId] withServiceId:[self serviceId] success:^(ZNGStatus *status) {
+        
+        XCTAssert(status != nil, @"Status is nil!");
+        XCTAssert(status.statusCode == 200, @"statusCode is not 200!");
+        
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testDeleteAllMessages"];
+        
+    } failure:^(ZNGError *error) {
+        XCTFail(@"fail: \"%@\"", [error description]);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testDeleteAllMessages"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testDeleteAllMessages"];
+    
+}
+
 @end

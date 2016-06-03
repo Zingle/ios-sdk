@@ -17,7 +17,7 @@
  * This class is inspired by NSFetchRequest's batching mechanism which returns a custom NSArray subclass.
  * @see NSFetchRequest fetchBatchSize
  */
-@interface ZNGPagedArray : NSProxy
+@interface ZNGPagedArray<__covariant ObjectType> : NSProxy
 
 /**
  * The designated initializer for this class
@@ -37,7 +37,7 @@
  * @throws ZNGPagedArrayObjectsPerPageMismatchException when page size mismatch the initialized objectsPerPage property
  * for any page other than the last.
  */
-- (void)setObjects:(NSArray *)objects forPage:(NSUInteger)page;
+- (void)setObjects:(NSArray<ObjectType> *)objects forPage:(NSUInteger)page;
 
 - (NSUInteger)pageForIndex:(NSUInteger)index;
 - (NSIndexSet *)indexSetForPage:(NSUInteger)page;
@@ -49,7 +49,7 @@
 /**
  * Contains NSArray instances of pages, backing the data
  */
-@property (nonatomic, readonly) NSDictionary *pages;
+@property (nonatomic, readonly) NSDictionary<NSNumber *, NSArray<ObjectType> *> *pages;
 
 @property (nonatomic, weak) id<ZNGPagedArrayDelegate> delegate;
 

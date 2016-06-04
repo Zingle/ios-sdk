@@ -181,14 +181,6 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     return [ZNGConversationViewController toContact:contact service:service senderName:senderName receiverName:receiverName];
 }
 
-- (ZNGConversationViewController *)conversationViewControllerToContactId:(NSString *)contactId
-                                                               serviceId:(NSString *)serviceId
-                                                              senderName:(NSString *)senderName
-                                                            receiverName:(NSString *)receiverName
-{
-    return [ZNGConversationViewController toContactId:contactId serviceId:serviceId senderName:senderName receiverName:receiverName];
-}
-
 - (AFHTTPSessionManager*)sharedSessionManager
 {
     if (!self.sessionManager) {

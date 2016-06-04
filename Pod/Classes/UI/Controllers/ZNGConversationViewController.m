@@ -39,9 +39,6 @@
 @property (strong, nonatomic) UIImage *starredImage;
 @property (strong, nonatomic) UIButton *confirmButton;
 
-@property (strong, nonatomic) NSString *serviceId;
-@property (strong, nonatomic) NSString *contactId;
-
 @end
 
 @implementation ZNGConversationViewController
@@ -59,9 +56,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     if (vc) {
         vc.toService = YES;
         vc.service = service;
-        vc.serviceId = service.serviceId;
         vc.contact = contact;
-        vc.contactId = contact.contactId;
         vc.senderName = senderName;
         vc.receiverName = receiverName;
     }
@@ -79,31 +74,9 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     if (vc) {
         vc.toService = NO;
         vc.service = service;
-        vc.serviceId = service.serviceId;
         vc.contact = contact;
-        vc.contactId = contact.contactId;
         vc.senderName = senderName;
         vc.receiverName = receiverName;
-    }
-    
-    return vc;
-}
-
-+ (ZNGConversationViewController *)toContactId:(NSString *)contactId
-                                     serviceId:(NSString *)serviceId
-                                    senderName:(NSString *)senderName
-                                  receiverName:(NSString *)receiverName
-{
-    ZNGConversationViewController *vc = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
-    
-    if (vc) {
-        vc.toService = NO;
-        vc.service = nil;
-        vc.serviceId = serviceId;
-        vc.contact = nil;
-        vc.contactId = contactId;
-        vc.senderName = senderName;
-        vc.receiverName = nil;
     }
     
     return vc;
@@ -180,76 +153,38 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     
     if (self.service) {
         
-        self.senderId = self.toService ? self.contact.contactId : self.service.serviceId;
-        [self configureConversation];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(stopPollingTimer)
+                                                     name:UIApplicationWillResignActiveNotification
+                                                   object:nil];
         
-    } else if (self.serviceId && self.contactId) {
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(startPollingTimer)
+                                                     name:UIApplicationDidBecomeActiveNotification
+                                                   object:nil];
         
-        self.senderId = self.toService ? self.contactId : self.serviceId;
-        [self loadService];
-    }
-}
+        ZNGConversation *conversation;
+        if (self.toService) {
+            self.senderId = self.contact.contactId;
+            conversation = [[ZingleSDK sharedSDK] conversationToService:self.service.serviceId];
+        } else {
+            self.senderId = self.service.serviceId;
+            conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
+        }
+        if (conversation) {
+            [self showActivityIndicator];
+            self.conversation = conversation;
+            self.conversation.delegate = self;
+            [self refreshViewModels];
+        } else {
+            [self loadConversation];
+        }
+        if (!self.toService) {
+            [self setupBarButtonItems];
+        }
 
-- (void)loadService
-{
-    [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
         
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.service = service;
-            [self loadContact];
-        });
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"error = %@", error.localizedDescription);
-    }];
-    
-}
-
-- (void)loadContact
-{
-    [ZNGContactClient contactWithId:self.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.contact = contact;
-            self.receiverName = [contact fullName];
-            [self configureConversation];
-        });
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"error = %@", error.localizedDescription);
-    }];
-}
-
-- (void)configureConversation
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(stopPollingTimer)
-                                                 name:UIApplicationWillResignActiveNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(startPollingTimer)
-                                                 name:UIApplicationDidBecomeActiveNotification
-                                               object:nil];
-    
-    ZNGConversation *conversation;
-    if (self.toService) {
-        conversation = [[ZingleSDK sharedSDK] conversationToService:self.service.serviceId];
-    } else {
-        conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
     }
-    if (conversation) {
-        [self showActivityIndicator];
-        self.conversation = conversation;
-        self.conversation.delegate = self;
-        [self refreshViewModels];
-    } else {
-        [self loadConversation];
-    }
-    if (!self.toService) {
-        [self setupBarButtonItems];
-    }
-    
 }
 
 -(void)didReceiveMemoryWarning

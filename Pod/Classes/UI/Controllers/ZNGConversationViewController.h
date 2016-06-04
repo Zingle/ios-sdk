@@ -50,11 +50,6 @@
                                   senderName:(NSString *)senderName
                                 receiverName:(NSString *)receiverName;
 
-+ (ZNGConversationViewController *)toContactId:(NSString *)contactId
-                                     serviceId:(NSString *)serviceId
-                                    senderName:(NSString *)senderName
-                                  receiverName:(NSString *)receiverName;
-
 /**
  *  If ZNGConversationViewController is presented modally the modalDelegate should
  *  should be set to handle dismissing the modal.

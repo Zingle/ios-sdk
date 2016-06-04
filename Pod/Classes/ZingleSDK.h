@@ -121,12 +121,4 @@
                                                           receiverName:(NSString *)receiverName;
 
 
-/**
- *  Returns a ZNGConversationViewController.
- */
-- (ZNGConversationViewController *)conversationViewControllerToContactId:(NSString *)contactId
-                                                               serviceId:(NSString *)serviceId
-                                                              senderName:(NSString *)senderName
-                                                            receiverName:(NSString *)receiverName;
-
 @end

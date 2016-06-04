@@ -56,8 +56,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.pushedContactId = [[NSMutableString alloc] init];
-    
     self.tableView.hidden = YES;
     
     UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
@@ -82,22 +80,6 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerNib:[ZNGTableViewCell nib] forCellReuseIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
     self.tableView.tableFooterView = [[UIView alloc] init];
-    
-    /*
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(zng_didReceivePushNotification:)
-                                                 name:zng_receivedPushNotification
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(zng_didReceivePushNotificationInBackground:)
-                                                 name:zng_receivedPushNotificationInBackground
-                                               object:nil];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(zng_didReceivePushNotificationInactive:)
-                                                 name:zng_receivedPushNotificationInactive
-                                               object:nil];*/
     
     [self refresh];
 }
@@ -131,29 +113,6 @@
             [self hideActivityIndicator];
             [self.tableView reloadData];
             [refreshControl endRefreshing];
-            
-            /*
-            if ([self.pushedContactId length] > 0) {
-                // Find the index of the contact.
-                for (NSUInteger i = 0; i < self.contacts.count; i++) {
-                    ZNGContact *c = [self.contacts objectAtIndex:i];
-                    if ([c.contactId isEqualToString:self.pushedContactId]) {
-                        
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            self.selectedIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
-                        
-                            ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:c service:self.service senderName:@"Me" receiverName:[c fullName]];
-                            vc.detailDelegate = self;
-                            [self.navigationController pushViewController:vc animated:YES];
-                            
-                        });
-                        
-                        break;
-                    }
-                }
-                
-                [self.pushedContactId setString:@""];
-            }*/
             
         } failure:^(ZNGError *error) {
             [self hideActivityIndicator];

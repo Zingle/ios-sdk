@@ -13,6 +13,7 @@
 #import "AFNetworkActivityLogger.h"
 #import "ZNGContactServiceClient.h"
 #import "ZNGContactClient.h"
+#import "ZNGServiceClient.h"
 #import "ZNGNotificationsClient.h"
 #import "ZNGConversationViewController.h"
 
@@ -53,11 +54,7 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
     NSDictionary *notificationData = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (notificationData) {
         NSString *contactId = [notificationData objectForKey:@"feedId"];
-        
-        ZNGConversationViewController *cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContactId:contactId serviceId:kZNGServiceId senderName:@"Me" receiverName:@""];
-        
-        [vc.navigationController pushViewController:cvc animated:NO];
-
+        [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc];
     }
     
     // TODO: Find a way to nicely demonstrate both InboxVC and the ContactServicesVC.
@@ -69,7 +66,7 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
     
     
     
-
+    
     return YES;
 }
 
@@ -135,12 +132,36 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
     
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:@" \n"];
     NSString *message = [body stringByTrimmingCharactersInSet:characterSet];
-    
+
     [self application:application handlePushNotificationWithContactId:contactId serviceId:kZNGServiceId message:message];
-    
 }
 
 // MARK: - Push Notification Helpers
+
+- (void)navigateToConversationViewControllerWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId fromViewController:(UIViewController *)sourceViewController
+{
+    [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
+        
+        [ZNGContactClient contactWithId:contactId withServiceId:serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+            
+            ZNGConversationViewController *cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:service senderName:@"Me" receiverName:[contact fullName]];
+            
+            if (!sourceViewController) {
+                UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
+                [navController popToRootViewControllerAnimated:NO];
+                [navController pushViewController:cvc animated:NO];
+            } else {
+                [sourceViewController.navigationController pushViewController:cvc animated:NO];
+            }
+            
+        } failure:^(ZNGError *error) {
+            NSLog(@"error = %@", error.localizedDescription);
+        }];
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error = %@", error.localizedDescription);
+    }];
+}
 
 - (void)application:(UIApplication *)application handlePushNotificationWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId message:(NSString *)message
 {
@@ -149,15 +170,13 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
     
     UIApplicationState state = [application applicationState];
     
+    
     if (state == UIApplicationStateInactive || state == UIApplicationStateBackground) {
         
         if ([visibleViewController isKindOfClass:[ZNGInboxViewController class]]) {
             
-            // The InboxViewController is currently visible, so push the ConversationViewController.
-            
-            ZNGConversationViewController *cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContactId:contactId serviceId:serviceId senderName:@"Me" receiverName:@""];
-            [visibleViewController.navigationController pushViewController:cvc animated:NO];
-            
+            [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:visibleViewController];
+        
         } else if ([visibleViewController isKindOfClass:[ZNGConversationViewController class]]) {
             
             // The ConversationViewController is currently visible.
@@ -173,23 +192,17 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
                 
                 // Received message from another contact, so replace the existing ConversationViewController with a new one.
                 
-                UINavigationController *topNavController = visibleViewController.navigationController;
+                [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:nil];
                 
-                // Remove the existing Conversation View Controller from the view hieararchy.
-                [topNavController popViewControllerAnimated:NO];
-                
-                // Create a new Conversation View Controller and display it.
-                ZNGConversationViewController *newCVC = [[ZingleSDK sharedSDK] conversationViewControllerToContactId:contactId serviceId:serviceId senderName:@"Me" receiverName:@""];
-                [topNavController pushViewController:newCVC animated:NO];
             }
             
         } else {
             
             // Some other view controller is currently displayed, so display a banner at the top of the screen.
-            [self showNotificationBannerForContactId:contactId serviceId:serviceId message:message];
+            [self showNotificationBannerForContactId:contactId message:message];
             
         }
-    
+        
     } else {
         
         // Application is in UIApplicationStateActive (running in foreground).
@@ -214,13 +227,13 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
             } else {
                 
                 // Received message from another contact, so display a banner at the top of the screen.
-                [self showNotificationBannerForContactId:contactId serviceId:serviceId message:message];
+                [self showNotificationBannerForContactId:contactId message:message];
             }
             
         } else {
             
             // Some other view controller is currently displayed, so display a banner at the top of the screen.
-            [self showNotificationBannerForContactId:contactId serviceId:serviceId message:message];
+            [self showNotificationBannerForContactId:contactId message:message];
             
         }
         
@@ -228,9 +241,10 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
     
 }
 
-- (void)showNotificationBannerForContactId:(NSString *)contactId serviceId:(NSString *)serviceId message:(NSString *)message
+- (void)showNotificationBannerForContactId:(NSString *)contactId message:(NSString *)message
 {
-    [ZNGContactClient contactWithId:contactId withServiceId:serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+    
+    [ZNGContactClient contactWithId:contactId withServiceId:kZNGServiceId success:^(ZNGContact *contact, ZNGStatus *status) {
         
         if (self.notificationBannerView) {
             [self.notificationBannerView removeFromSuperview];
@@ -266,9 +280,9 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
             
         }];
         
-        
         // Dismiss after 5 seconds.
         [self performSelector:@selector(dismissNotificationBannerView) withObject:nil afterDelay:5.0];
+        
         
     } failure:^(ZNGError *error) {
         NSLog(@"error = %@", error.localizedDescription);

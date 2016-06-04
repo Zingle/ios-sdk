@@ -13,11 +13,6 @@
 #import "ZNGService.h"
 #import "ZNGContactService.h"
 
-/**
- * Add an observer for this notification to be notified of Push Notifications from the API.
- */
-extern NSString *const zng_receivedPushNotification;
-
 @interface ZingleSDK : NSObject
 
 /**
@@ -124,5 +119,14 @@ extern NSString *const zng_receivedPushNotification;
                                                                service:(ZNGService *)service
                                                             senderName:(NSString *)senderName
                                                           receiverName:(NSString *)receiverName;
+
+
+/**
+ *  Returns a ZNGConversationViewController.
+ */
+- (ZNGConversationViewController *)conversationViewControllerToContactId:(NSString *)contactId
+                                                               serviceId:(NSString *)serviceId
+                                                              senderName:(NSString *)senderName
+                                                            receiverName:(NSString *)receiverName;
 
 @end

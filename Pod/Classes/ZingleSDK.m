@@ -18,6 +18,8 @@
 #import "ZNGUserAuthorization.h"
 
 NSString *const zng_receivedPushNotification = @"zng_receivedPushNotification";
+NSString *const zng_receivedPushNotificationInBackground = @"zng_receivedPushNotificationInBackground";
+NSString *const zng_receivedPushNotificationInactive = @"zng_receivedPushNotificationInactive";
 
 @interface ZingleSDK ()
 
@@ -177,6 +179,14 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
                                                           receiverName:(NSString *)receiverName
 {
     return [ZNGConversationViewController toContact:contact service:service senderName:senderName receiverName:receiverName];
+}
+
+- (ZNGConversationViewController *)conversationViewControllerToContactId:(NSString *)contactId
+                                                               serviceId:(NSString *)serviceId
+                                                              senderName:(NSString *)senderName
+                                                            receiverName:(NSString *)receiverName
+{
+    return [ZNGConversationViewController toContactId:contactId serviceId:serviceId senderName:senderName receiverName:receiverName];
 }
 
 - (AFHTTPSessionManager*)sharedSessionManager

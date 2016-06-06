@@ -14,7 +14,7 @@
 #pragma mark - GET methods
 
 + (void)accountListWithParameters:(NSDictionary*)parameters
-                          success:(void (^)(NSArray* accounts, ZNGStatus* status))success
+                          success:(void (^)(NSArray<ZNGAccount *> * accounts, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 
 + (void)accountWithId:(NSString*)accountId

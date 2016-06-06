@@ -45,10 +45,8 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
 @property (assign, nonatomic) CGSize avatarViewSize;
 
 @property (weak, nonatomic, readwrite) UITapGestureRecognizer *tapGestureRecognizer;
-@property (weak, nonatomic, readwrite) UILongPressGestureRecognizer *longPressGestureRecognizer;
 
 - (void)zng_handleTapGesture:(UITapGestureRecognizer *)tap;
-- (void)zng_handleLongPressGesture:(UILongPressGestureRecognizer *)longPress;
 
 - (void)zng_updateConstraint:(NSLayoutConstraint *)constraint withConstant:(CGFloat)constant;
 
@@ -112,14 +110,11 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
 
     self.cellBottomLabel.font = [UIFont openSansFontOfSize:11.0f];
     self.cellBottomLabel.textColor = [UIColor lightGrayColor];
-
+    
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(zng_handleTapGesture:)];
     [self addGestureRecognizer:tap];
     self.tapGestureRecognizer = tap;
     
-    UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(zng_handleLongPressGesture:)];
-    [self addGestureRecognizer:longPress];
-    self.longPressGestureRecognizer = longPress;
 }
 
 - (void)dealloc
@@ -220,6 +215,8 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     }
 }
 
+
+
 #pragma mark - Menu actions
 
 - (BOOL)respondsToSelector:(SEL)aSelector
@@ -229,6 +226,22 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     }
 
     return [super respondsToSelector:aSelector];
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    return (action == @selector(copy:) || action == @selector(delete:) || action == @selector(zng_deleteAll:));
+}
+
+- (BOOL)canBecomeFirstResponder
+{
+    return NO;
+}
+
+- (void)zng_deleteAll:(id)sender {
+    
+    // Manually call didPerformAction because Delete All is a custom action.
+    [self.delegate messagesCollectionViewCell:self didPerformAction:@selector(zng_deleteAll:) withSender:self];
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation
@@ -356,15 +369,6 @@ static NSMutableSet *zngCollectionViewCellActions = nil;
     }
     else {
         [self.delegate messagesCollectionViewCellDidTapCell:self atPosition:touchPt];
-    }
-}
-
-- (void)zng_handleLongPressGesture:(UILongPressGestureRecognizer *)longPress
-{
-    CGPoint touchPt = [longPress locationInView:self];
-    
-    if (CGRectContainsPoint(self.messageBubbleContainerView.frame, touchPt)) {
-        [self.delegate messagesCollectionViewCellDidLongPressMessageBubble:self];
     }
 }
 

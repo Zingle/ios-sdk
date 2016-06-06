@@ -708,6 +708,8 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)collectionView:(ZNGCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self stopPollingTimer];
+    
     ZNGMessageViewModel *messageViewModel = [self.viewModels objectAtIndex:indexPath.item];
     
     // Search for the message. Search in reverse because most likely message to delete will be at the end.
@@ -731,10 +733,30 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         } failure:^(ZNGError *error) {
             [self showErrorMessage:kZNGDeleteMessageError];
         }];
-        
+
         [self.viewModels removeObjectAtIndex:indexPath.item];
+        [collectionView deleteItemsAtIndexPaths:@[indexPath]];
+        
     }
     
+    [self startPollingTimer];
+
+}
+
+- (void)didDeleteAllMessagesInCollectionView:(ZNGCollectionView *)collectionView
+{
+    [self stopPollingTimer];
+    
+    [ZNGMessageClient deleteAllMessagesForContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+        
+    } failure:^(ZNGError *error) {
+        [self showErrorMessage:kZNGDeleteMessageError];
+    }];
+    
+    [self.viewModels removeAllObjects];
+    [self.collectionView reloadData];
+    
+    [self startPollingTimer];
 }
 
 - (id<ZNGMessageBubbleImageDataSource>)collectionView:(ZNGCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath

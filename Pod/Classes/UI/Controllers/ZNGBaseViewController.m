@@ -126,7 +126,12 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     self.incomingMediaCellIdentifier = [ZNGCollectionViewCellIncoming mediaCellReuseIdentifier];
 
     [ZNGCollectionViewCell registerMenuAction:@selector(delete:)];
-
+    
+    // Manually add a menuItem for "Delete All" because it is a Non-Standard/Non-System action.
+    UIMenuItem *deleteAllMenuItem = [[UIMenuItem alloc] initWithTitle:@"Delete All" action:@selector(zng_deleteAll:)];
+    [[UIMenuController sharedMenuController] setMenuItems:[NSArray arrayWithObject:deleteAllMenuItem]];
+    [[UIMenuController sharedMenuController] update];
+    
     self.showTypingIndicator = NO;
 
     self.showLoadEarlierMessagesHeader = NO;
@@ -410,6 +415,11 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
 }
 
+- (void)didDeleteAllMessagesInCollectionView:(ZNGCollectionView *)collectionView
+{
+    NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
+}
+
 - (id<ZNGMessageBubbleImageDataSource>)collectionView:(ZNGCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSAssert(NO, @"ERROR: required method not implemented: %s", __PRETTY_FUNCTION__);
@@ -600,7 +610,7 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    if (action == @selector(copy:) || action == @selector(delete:)) {
+    if (action == @selector(copy:) || action == @selector(delete:) || action == @selector(zng_deleteAll:)) {
         return YES;
     }
 
@@ -615,9 +625,8 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
     }
     else if (action == @selector(delete:)) {
         [collectionView.dataSource collectionView:collectionView didDeleteMessageAtIndexPath:indexPath];
-
-        [collectionView deleteItemsAtIndexPaths:@[indexPath]];
-        [collectionView.collectionViewLayout invalidateLayout];
+    } else if (action == @selector(zng_deleteAll:)) {
+        [collectionView.dataSource didDeleteAllMessagesInCollectionView:collectionView];
     }
 }
 
@@ -1058,6 +1067,13 @@ static void * kZNGKeyValueObservingContext = &kZNGKeyValueObservingContext;
                                                                       action:@selector(zng_handleInteractivePopGestureRecognizer:)];
         self.currentInteractivePopGestureRecognizer = self.navigationController.interactivePopGestureRecognizer;
     }
+}
+
+// MARK: - Custom UIMenuViewController Options
+
+- (void)zng_deleteAllMessages:(id)sender
+{
+    NSLog(@"zng_deleteAllMessages");
 }
 
 @end

@@ -60,6 +60,8 @@
  */
 - (void)collectionView:(ZNGCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath;
 
+- (void)didDeleteAllMessagesInCollectionView:(ZNGCollectionView *)collectionView;
+
 /**
  *  Asks the data source for the message bubble image data that corresponds to the specified message data item at indexPath in the collectionView.
  *

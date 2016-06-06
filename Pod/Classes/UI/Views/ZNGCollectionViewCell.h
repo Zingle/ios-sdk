@@ -62,13 +62,6 @@
  */
 - (void)messagesCollectionViewCell:(ZNGCollectionViewCell *)cell didPerformAction:(SEL)action withSender:(id)sender;
 
-/**
- *  Tells the delegate that the message bubble of the cell has been long pressed.
- *
- *  @param cell The cell that received the long press touch event.
- */
-- (void)messagesCollectionViewCellDidLongPressMessageBubble:(ZNGCollectionViewCell *)cell;
-
 @end
 
 

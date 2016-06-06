@@ -49,11 +49,6 @@
     return vc;
 }
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:zng_receivedPushNotification object:nil];
-}
-
 - (NSArray *)contacts {
     return (NSArray *)_pagedArray;
 }
@@ -85,11 +80,6 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
     [self.tableView registerNib:[ZNGTableViewCell nib] forCellReuseIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
     self.tableView.tableFooterView = [[UIView alloc] init];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(zng_didReceivePushNotification:)
-                                                 name:zng_receivedPushNotification
-                                               object:nil];
     
     [self refresh];
 }
@@ -123,6 +113,7 @@
             [self hideActivityIndicator];
             [self.tableView reloadData];
             [refreshControl endRefreshing];
+            
         } failure:^(ZNGError *error) {
             [self hideActivityIndicator];
             [refreshControl endRefreshing];
@@ -289,14 +280,6 @@
 - (void)didUpdateContact
 {
     [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-}
-
-#pragma mark - Notification Handlers
-
-- (void)zng_didReceivePushNotification:(NSNotification *)notification
-{
-    // TODO: improve efficiency by only refreshing the row that corresponds with the notification.
-    [self refresh];
 }
 
 @end

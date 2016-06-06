@@ -18,6 +18,8 @@
 #import "ZNGUserAuthorization.h"
 
 NSString *const zng_receivedPushNotification = @"zng_receivedPushNotification";
+NSString *const zng_receivedPushNotificationInBackground = @"zng_receivedPushNotificationInBackground";
+NSString *const zng_receivedPushNotificationInactive = @"zng_receivedPushNotificationInactive";
 
 @interface ZingleSDK ()
 

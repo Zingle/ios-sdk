@@ -134,5 +134,6 @@
 - (void)loadConversation;
 - (void)setupBarButtonItems;
 - (void)refreshContact;
+- (void)refreshConversation;
 
 @end

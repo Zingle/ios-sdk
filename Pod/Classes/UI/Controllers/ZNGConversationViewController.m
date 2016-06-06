@@ -17,6 +17,7 @@
 #import "ZNGAutomationClient.h"
 #import "ZNGContactClient.h"
 #import "ZNGMessageClient.h"
+#import "ZNGServiceClient.h"
 
 @interface ZNGConversationViewController ()
 
@@ -151,6 +152,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
     if (self.service) {
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(stopPollingTimer)
                                                      name:UIApplicationWillResignActiveNotification
@@ -159,11 +161,6 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(startPollingTimer)
                                                      name:UIApplicationDidBecomeActiveNotification
-                                                   object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(zng_didReceivePushNotification:)
-                                                     name:zng_receivedPushNotification
                                                    object:nil];
         
         ZNGConversation *conversation;
@@ -185,12 +182,9 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         if (!self.toService) {
             [self setupBarButtonItems];
         }
-    }
-}
 
-- (void)dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:zng_receivedPushNotification object:nil];
+        
+    }
 }
 
 -(void)didReceiveMemoryWarning
@@ -941,14 +935,6 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         return NO;
     }
     return YES;
-}
-
-#pragma mark - Notification Handlers
-
-- (void)zng_didReceivePushNotification:(NSNotification *)notification
-{
-    // TODO: improve efficiency by only refreshing the row that corresponds with the notification.
-    [self refreshConversation];
 }
 
 @end

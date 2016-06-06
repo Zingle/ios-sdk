@@ -30,7 +30,7 @@ NSString *const zng_receivedPushNotificationInactive = @"zng_receivedPushNotific
 @implementation ZingleSDK
 
 NSString* const kLiveBaseURL = @"https://api.zingle.me/v1/";
-NSString* const kDebugBaseURL = @"https://qa-api.zingle.me/v1/";
+NSString* const kDebugBaseURL = @"https://ci-api.zingle.me/v1/";
 NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 + (ZingleSDK*)sharedSDK

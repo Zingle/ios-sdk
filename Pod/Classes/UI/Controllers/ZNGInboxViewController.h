@@ -21,7 +21,7 @@
 
 - (void)refresh:(UIRefreshControl *)refreshControl;
 
-- (NSArray<ZNGContact *> *)contacts;
+- (NSArray *)contacts;
 
 @property (strong, nonatomic) ZNGService *service;
 @property (strong, nonatomic) NSString *serviceId;

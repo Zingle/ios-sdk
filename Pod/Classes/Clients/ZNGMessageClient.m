@@ -93,6 +93,20 @@
                 failure:failure];
 }
 
++ (void)markMessagesReadWithServiceId:(NSString *)serviceId success:(void (^)(ZNGStatus *))success failure:(void (^)(ZNGError *))failure
+{
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", serviceId];
+    
+    
+    [self postWithParameters:nil
+                        path:path
+               responseClass:[ZNGStatus class]
+                     success:^(id responseObject, ZNGStatus *status) {
+                         success(status);
+                     } failure:failure];
+    
+}
+
 + (void)deleteMessages:(NSArray *)messageIds
          withServiceId:(NSString*)serviceId
                success:(void (^)(ZNGStatus* status))success

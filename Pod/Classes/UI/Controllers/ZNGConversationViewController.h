@@ -123,6 +123,13 @@
  */
 @property (nonatomic, copy) NSString *receiverName;
 
+/**
+ *  Sets whether or not the messages should be automatically marked as read.
+ *
+ *  @param autoMarkAsReadEnabled If YES, then the messages are automatically marked as read.
+ *  Default value is NO.
+ */
+@property (nonatomic, assign, getter=isAutoMarkAsReadEnabled) BOOL autoMarkAsReadEnabled;
 
 // Temporarily exposed during development
 
@@ -135,5 +142,6 @@
 - (void)setupBarButtonItems;
 - (void)refreshContact;
 - (void)refreshConversation;
+- (void)updateToLastMessage;
 
 @end

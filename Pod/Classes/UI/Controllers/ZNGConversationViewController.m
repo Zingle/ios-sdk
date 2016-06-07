@@ -391,6 +391,11 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     [self.conversation updateMessages];
 }
 
+- (void)updateToLastMessage
+{
+    //[self.conversation updateToLastMessage];
+}
+
 - (void)showAlertForError:(ZNGError *)error
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:error.errorText message:error.errorDescription preferredStyle:UIAlertControllerStyleAlert];
@@ -455,6 +460,17 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
                                                                                         note:message.recipient.channel.formattedValue];
             [tempArray addObject:viewModel];
         }
+        
+        if (message.readAt == nil && [message.communicationDirection isEqualToString:@"inbound"]) {
+            
+            message.readAt = [NSDate date];
+            
+            [ZNGMessageClient markMessageReadWithId:message.messageId withServiceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+                NSLog(@"Message marked as read: %@", message.messageId);
+            } failure:^(ZNGError *error) {
+                NSLog(@"Error marking message as read. messageId = %@, error = %@", message.messageId, error.localizedDescription);
+            }];
+        }
     }
     
     self.viewModels = tempArray;
@@ -483,11 +499,25 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 {
     [self startPollingTimer];
     if (newMessages) {
-        [self refreshViewModels];
+        
+        //if (self.isAutoMarkAsReadEnabled) {
+        //    [self.conversation markMessagesAsRead];
+        //} else {
+            [self refreshViewModels];
+        //}
+        
     } else {
         [self.activityIndicator removeFromSuperview];
         [self.activityIndicator stopAnimating];
     }
+}
+
+- (void)messagesMarkedAsRead:(BOOL)success {
+    
+    if (success) {
+        [self refreshViewModels];
+    }
+    
 }
 
 #pragma mark - Actions
@@ -840,6 +870,21 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
                                               NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid) };
         
         cell.messageBubbleTopLabel.textColor = self.authorTextColor;
+    }
+
+    // If necessary, mark the message as read.
+    // TODO: message should be a property of the ZNGMessageViewModel.
+    ZNGMessage *message = [self.conversation.messages objectAtIndex:indexPath.item];
+    // Comparing readAt to 1970 because 1970 is the default value for readAt when it is "null" in the API.
+    if (self.isAutoMarkAsReadEnabled && (message.readAt == nil || [message.readAt compare:[NSDate dateWithTimeIntervalSince1970:0]] == NSOrderedSame) && [message.communicationDirection isEqualToString:@"inbound"]) {
+        
+        message.readAt = [NSDate date];
+        
+        [ZNGMessageClient markMessageReadWithId:message.messageId withServiceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+            NSLog(@"Message marked as read: %@", message.messageId);
+        } failure:^(ZNGError *error) {
+            NSLog(@"Error marking message as read. messageId = %@, error = %@", message.messageId, error.localizedDescription);
+        }];
     }
     
     return cell;

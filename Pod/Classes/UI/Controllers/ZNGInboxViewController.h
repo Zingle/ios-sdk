@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ZNGConversationViewController.h"
 @class ZNGService;
+@class ZNGContact;
 
 @interface ZNGInboxViewController : UIViewController <ZNGConversationDetailDelegate>
 
@@ -20,7 +21,7 @@
 
 - (void)refresh:(UIRefreshControl *)refreshControl;
 
-- (NSArray *)contacts;
+- (NSArray<ZNGContact *> *)contacts;
 
 @property (strong, nonatomic) ZNGService *service;
 @property (strong, nonatomic) NSString *serviceId;

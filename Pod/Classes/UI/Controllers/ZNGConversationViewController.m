@@ -875,8 +875,8 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     // If necessary, mark the message as read.
     // TODO: message should be a property of the ZNGMessageViewModel.
     ZNGMessage *message = [self.conversation.messages objectAtIndex:indexPath.item];
-    // Comparing readAt to 1970 because 1970 is the default value for readAt when it is "null" in the API.
-    if (self.isAutoMarkAsReadEnabled && (message.readAt == nil || [message.readAt compare:[NSDate dateWithTimeIntervalSince1970:0]] == NSOrderedSame) && [message.communicationDirection isEqualToString:@"inbound"]) {
+
+    if ((self.isAutoMarkAsReadEnabled) && (message.readAt == nil) && ([message.communicationDirection isEqualToString:@"inbound"])) {
         
         message.readAt = [NSDate date];
         

@@ -73,21 +73,22 @@
         [ZNGMessageClient messageListWithParameters:parameters withServiceId:[self serviceId] success:^(NSArray *messages, ZNGStatus *status) {
             
             XCTAssert(messages != nil, @"Messages are nil!");
+            XCTAssert(messages.count > 0, @"messages.count is 0!");
             
-            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthorizationClassContact"];
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthenticationClassContact"];
             
         } failure:^(ZNGError *error) {
             XCTFail(@"fail: \"%@\"", error);
-            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthorizationClassContact"];
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthenticationClassContact"];
         }];
         
         
     } failure:^(ZNGError *error) {
         NSLog(@"error: %@", error);
-        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthorizationClassContact"];
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMessageListWithAuthenticationClassContact"];
     }];
     
-    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testEventListWithAuthenticationClassContact"];
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMessageListWithAuthenticationClassContact"];
     
 }
 
@@ -151,7 +152,7 @@
 
 - (void)testMarkMessageRead
 {
-    [ZNGMessageClient markMessageReadWithId:@"bb707200-7137-42f2-8933-a0b96270d5cc" withServiceId:[self serviceId] success:^(ZNGMessage *message, ZNGStatus *status) {
+    [ZNGMessageClient markMessageReadWithId:@"bcfc4bc0-69cb-48c6-99cc-0bbac8801ee4" withServiceId:[self serviceId] success:^(ZNGMessage *message, ZNGStatus *status) {
         
         XCTAssert(message != nil, @"Message is nil!");
         [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessageRead"];
@@ -163,6 +164,83 @@
     }];
     
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMarkMessageRead"];
+}
+
+- (void)testMarkMessageReadWithAuthorizationClassContact
+{
+    
+    ZNGContactService *contactService = [[ZNGContactService alloc] init];
+    // Only the contactId is required for this test.
+    contactService.contactId = @"3d15b92f-9284-4e30-b119-1147f0465d88";
+    
+    [[ZingleSDK sharedSDK] checkAuthorizationForContactService:contactService success:^(BOOL isAuthorized) {
+        
+        [ZNGMessageClient markMessageReadWithId:@"ecc68609-dedb-4b3c-9e05-1477a08864b7" withServiceId:[self serviceId] success:^(ZNGMessage *message, ZNGStatus *status) {
+            
+            XCTAssert(message != nil, @"Message is nil!");
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessageReadWithAuthorizationClassContact"];
+            
+        } failure:^(ZNGError *error) {
+            
+            XCTFail(@"fail: \"%@\"", [error description]);
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessageReadWithAuthorizationClassContact"];
+        }];
+        
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error: %@", error);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessageReadWithAuthorizationClassContact"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMarkMessageReadWithAuthorizationClassContact"];
+    
+}
+
+- (void)testMarkMessagesRead
+{
+    [ZNGMessageClient markAllMessagesReadWithServiceId:[self serviceId] success:^(ZNGStatus *status){
+        
+        XCTAssert(status != nil, @"Status is nil!");
+        XCTAssert(status.statusCode == 200, @"statusCode is not 200!");
+        
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessagesRead"];
+        
+    } failure:^(ZNGError *error) {
+        XCTFail(@"fail: \"%@\"", [error description]);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessagesRead"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMarkMessagesRead"];
+}
+
+- (void)testMarkMessagesReadWithAuthorizationClassContact
+{
+    ZNGContactService *contactService = [[ZNGContactService alloc] init];
+    // Only the contactId is required for this test.
+    contactService.contactId = @"3d15b92f-9284-4e30-b119-1147f0465d88";
+    
+    [[ZingleSDK sharedSDK] checkAuthorizationForContactService:contactService success:^(BOOL isAuthorized) {
+        
+        [ZNGMessageClient markAllMessagesReadWithServiceId:[self serviceId] success:^(ZNGStatus *status){
+            
+            XCTAssert(status != nil, @"Status is nil!");
+            XCTAssert(status.statusCode == 200, @"statusCode is not 200!");
+            
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessagesReadWithAuthorizationClassContact"];
+            
+        } failure:^(ZNGError *error) {
+            XCTFail(@"fail: \"%@\"", [error description]);
+            [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessagesReadWithAuthorizationClassContact"];
+        }];
+        
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error: %@", error);
+        [[ZNGAsyncSemaphor sharedInstance] lift:@"testMarkMessagesReadWithAuthorizationClassContact"];
+    }];
+    
+    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testMarkMessagesReadWithAuthorizationClassContact"];
+    
 }
 
 - (void)testDeleteMessages

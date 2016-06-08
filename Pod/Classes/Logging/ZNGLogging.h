@@ -9,18 +9,10 @@
 #ifndef ZingleLogging_h
 #define ZingleLogging_h
 
-#ifdef DD_LEGACY_MACROS
-#undef DD_LEGACY_MACROS
-#define DD_LEGACY_MACROS    1
-#endif
-
 #import <CocoaLumberjack/CocoaLumberjack.h>
 
 #define ZINGLE_LOG_CONTEXT      889
 #define ZINGLE_LOG_LEVEL_DEF   zngLogLevel
-
-#define ZINGLE_LOG_LEVEL_OFF    0
-#define ZINGLE_LOG_LEVEL_ERROR
 
 /**
  *  Log levels are used to filter out logs. Used together with flags.

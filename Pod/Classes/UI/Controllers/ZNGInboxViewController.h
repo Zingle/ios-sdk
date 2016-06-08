@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "ZNGConversationViewController.h"
 @class ZNGService;
+@class ZNGContact;
 
 @interface ZNGInboxViewController : UIViewController <ZNGConversationDetailDelegate>
 

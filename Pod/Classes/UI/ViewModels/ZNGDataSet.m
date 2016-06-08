@@ -12,7 +12,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary* services;
 @property (nonatomic, strong) NSMutableDictionary* contacts;
-@property (nonatomic, strong) NSMutableDictionary* conversations;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, ZNGConversation *> * conversations;
 
 @end
 

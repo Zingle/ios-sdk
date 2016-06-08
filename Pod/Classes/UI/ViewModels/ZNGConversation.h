@@ -13,6 +13,8 @@
 #import "ZNGContact.h"
 #import "ZNGService.h"
 
+@class ZNGMessage;
+
 @protocol ZNGConversationDelegate <NSObject>
 
 - (void)messagesUpdated:(BOOL)newMessages;
@@ -29,7 +31,7 @@
 @property (nonatomic, strong) NSString *contactId;
 
 @property (nonatomic) BOOL toService;
-@property (nonatomic, strong) NSMutableArray *messages;
+@property (nonatomic, strong) NSMutableArray<ZNGMessage *> *messages;
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 - (void)updateMessages;

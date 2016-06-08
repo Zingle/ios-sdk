@@ -21,7 +21,7 @@
 
 @interface ZNGConversationViewController ()
 
-@property (nonatomic, strong) NSMutableArray *viewModels;
+@property (nonatomic, strong) NSMutableArray<id <ZNGMessageData>> *viewModels;
 
 @property (strong, nonatomic) ZNGBubbleImage *outgoingBubbleImageData;
 
@@ -270,7 +270,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     NSDictionary *params = @{@"is_confirmed" : confirmedParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
 //        self.contact = contact;
-        if (self.detailDelegate) {
+        if ([self.detailDelegate respondsToSelector:@selector(didUpdateContact)]) {
             [self.detailDelegate didUpdateContact];
         }
         self.confirmButton.enabled = YES;
@@ -296,7 +296,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     NSDictionary *params = @{@"is_starred" : starParam };
     [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
 //        self.contact = contact;
-        if (self.detailDelegate) {
+        if ([self.detailDelegate respondsToSelector:@selector(didUpdateContact)]) {
             [self.detailDelegate didUpdateContact];
         }
         self.starBarButton.enabled = YES;
@@ -359,7 +359,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         self.titleViewLabel.text = [self.contact fullName];
     }
     
-    if (self.detailDelegate) {
+    if ([self.detailDelegate respondsToSelector:@selector(didUpdateContact)]) {
         [self.detailDelegate didUpdateContact];
     }
     
@@ -508,7 +508,9 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)closePressed:(UIBarButtonItem *)sender
 {
-    [self.modalDelegate didDismissZNGConversationViewController:self];
+    if ([self.modalDelegate respondsToSelector:@selector(didDismissZNGConversationViewController:)]) {
+        [self.modalDelegate didDismissZNGConversationViewController:self];
+    }
 }
 
 #pragma mark - ZNGBaseViewController method overrides

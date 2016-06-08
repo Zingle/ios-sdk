@@ -18,7 +18,7 @@
 
 @interface ZNGContactServicesViewController : UIViewController
 
-@property (nonatomic, assign) id<ZNGContactServicesViewControllerDelegate> delegate;
+@property (nonatomic, weak) id<ZNGContactServicesViewControllerDelegate> delegate;
 
 @property (nonatomic, strong) NSString *channelValue;
 @property (nonatomic, strong) NSString *channelTypeId;

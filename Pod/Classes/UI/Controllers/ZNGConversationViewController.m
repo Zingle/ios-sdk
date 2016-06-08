@@ -750,6 +750,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
             [self showErrorMessage:kZNGDeleteMessageError];
         }];
 
+        [self.conversation.messages removeObjectAtIndex:indexPath.item];
         [self.viewModels removeObjectAtIndex:indexPath.item];
         [collectionView deleteItemsAtIndexPaths:@[indexPath]];
         
@@ -769,6 +770,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         [self showErrorMessage:kZNGDeleteMessageError];
     }];
     
+    [self.conversation.messages removeAllObjects];
     [self.viewModels removeAllObjects];
     [self.collectionView reloadData];
     

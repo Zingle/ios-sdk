@@ -16,7 +16,7 @@
 #import "ZNGContactChannelClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGUserAuthorization.h"
-#import "ZingleLogging.h"
+#import "ZNGLogging.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 

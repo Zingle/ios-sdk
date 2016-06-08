@@ -32,13 +32,21 @@
             failure:(void (^)(ZNGError* error))failure;
 
 + (void)markMessageReadWithId:(NSString*)messageId
-                withServiceId:(NSString*)serviceId
+                       readAt:(NSDate *)readAt
+                    serviceId:(NSString*)serviceId
                       success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure;
 
-+ (void)markAllMessagesReadWithServiceId:(NSString*)serviceId
-                                 success:(void (^)(ZNGStatus* status))success
-                                 failure:(void (^)(ZNGError* error))failure;
++ (void)markMessagesReadWithMessageIds:(NSArray *)messageIds
+                                readAt:(NSDate *)readAt
+                             serviceId:(NSString*)serviceId
+                               success:(void (^)(ZNGStatus* status))success
+                               failure:(void (^)(ZNGError* error))failure;
+
++ (void)markAllMessagesReadWithReadAt:(NSDate *)readAt
+                            serviceId:(NSString*)serviceId
+                              success:(void (^)(ZNGStatus* status))success
+                              failure:(void (^)(ZNGError* error))failure;
 
 + (void)deleteMessages:(NSArray *)messageIds
          withServiceId:(NSString*)serviceId

@@ -77,14 +77,15 @@
 }
 
 + (void)markMessageReadWithId:(NSString*)messageId
-                withServiceId:(NSString*)serviceId
+                       readAt:(NSDate *)readAt
+                    serviceId:(NSString*)serviceId
                       success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", serviceId, messageId];
     
     ZNGMessageRead *messageRead = [[ZNGMessageRead alloc] init];
-    messageRead.readAt = [NSDate date];
+    messageRead.readAt = readAt;
     
     [self postWithModel:messageRead
                    path:path
@@ -93,14 +94,62 @@
                 failure:failure];
 }
 
-+ (void)markMessagesReadWithServiceId:(NSString *)serviceId success:(void (^)(ZNGStatus *))success failure:(void (^)(ZNGError *))failure
++ (void)markMessagesReadWithMessageIds:(NSArray *)messageIds
+                                readAt:(NSDate *)readAt
+                             serviceId:(NSString *)serviceId
+                               success:(void (^)(ZNGStatus *))success
+                               failure:(void (^)(ZNGError *))failure
+{
+    
+    NSAssert(messageIds != nil && messageIds.count > 0, @"ERROR: There are no messageIds!");
+    
+    if (messageIds.count == 1) {
+        
+        [self markMessageReadWithId:[messageIds objectAtIndex:0]
+                             readAt:(NSDate *)readAt
+                          serviceId:serviceId
+                            success:^(ZNGMessage *message, ZNGStatus *status){
+            success(status);
+        } failure:failure];
+    
+    } else if (messageIds.count > 1) {
+        
+        NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", serviceId];
+        
+        NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
+        parameters[@"message_ids"] = messageIds;
+        
+        if (readAt) {
+            parameters[@"read_at"] = [NSNumber numberWithInteger:(NSInteger)readAt.timeIntervalSince1970];
+        }
+    
+        [self postWithParameters:parameters
+                            path:path
+                   responseClass:nil
+                         success:^(id responseObject, ZNGStatus *status) {
+                             success(status);
+                         } failure:failure];
+        
+    }
+    
+}
+
+// This call should not be made under the Account user authorization class.
++ (void)markAllMessagesReadWithReadAt:(NSDate *)readAt
+                            serviceId:(NSString *)serviceId
+                              success:(void (^)(ZNGStatus *))success
+                              failure:(void (^)(ZNGError *))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", serviceId];
     
+    NSDictionary *parameters = nil;
+    if (readAt) {
+        parameters = @{ @"read_at" : [NSNumber numberWithInteger:(NSInteger)readAt.timeIntervalSince1970] };
+    }
     
-    [self postWithParameters:nil
+    [self postWithParameters:parameters
                         path:path
-               responseClass:[ZNGStatus class]
+               responseClass:nil
                      success:^(id responseObject, ZNGStatus *status) {
                          success(status);
                      } failure:failure];

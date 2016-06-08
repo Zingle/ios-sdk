@@ -18,6 +18,7 @@
 @protocol ZNGConversationDelegate <NSObject>
 
 - (void)messagesUpdated:(BOOL)newMessages;
+- (void)messagesMarkedAsRead:(BOOL)success;
 
 @end
 
@@ -34,6 +35,7 @@
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 - (void)updateMessages;
+- (void)markMessagesAsRead;
 
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success

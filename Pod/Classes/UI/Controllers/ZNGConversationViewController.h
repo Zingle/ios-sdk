@@ -142,6 +142,5 @@
 - (void)setupBarButtonItems;
 - (void)refreshContact;
 - (void)refreshConversation;
-- (void)updateToLastMessage;
 
 @end

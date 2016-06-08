@@ -100,6 +100,52 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         } failure:nil];
 }
 
+- (void)markMessagesAsRead
+{
+    NSMutableArray *messageIds = [[NSMutableArray alloc] init];
+    NSDate *readAt = [NSDate date];
+    
+    // Build a list of message Ids to mark as read.
+    for (ZNGMessage *message in self.messages) {
+        
+        if (message.readAt == nil && [message.communicationDirection isEqualToString:@"inbound"]) {
+        
+            // Set the readAt property so we don't mark this message as read again.
+            message.readAt = readAt;
+            
+            [messageIds addObject:message.messageId];
+            
+        }
+    }
+    
+    if (messageIds.count > 0) {
+        
+        [ZNGMessageClient markMessagesReadWithMessageIds:messageIds
+                                                  readAt:readAt
+                                               serviceId:self.serviceId
+                                                 success:^(ZNGStatus *status) {
+                                                     
+            if (status.statusCode == 200) {
+                NSLog(@"Messages marked as read.");
+                [self.delegate messagesMarkedAsRead:YES];
+            } else {
+                NSLog(@"Failed to mark messages marked as read. statusCode = %ld", status.statusCode);
+                [self.delegate messagesMarkedAsRead:NO];
+            }
+                                                     
+        } failure:^(ZNGError *error) {
+                NSLog(@"Error marking messages as read. Error = %@", error.localizedDescription);
+                [self.delegate messagesMarkedAsRead:NO];
+        }];
+        
+    } else {
+        
+        [self.delegate messagesMarkedAsRead:YES];
+        
+    }
+    
+}
+
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure

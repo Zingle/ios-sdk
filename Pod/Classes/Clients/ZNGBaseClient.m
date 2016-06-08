@@ -10,6 +10,7 @@
 #import "ZNGBaseClient.h"
 #import "ZNGLogging.h"
 
+// Debug level in BaseClient will show every outgoing request URL and every incoming model class (and count)
 static const int zngLogLevel = ZNGLogLevelDebug;
 
 @interface ZingleSDK ()

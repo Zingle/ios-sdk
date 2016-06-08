@@ -45,4 +45,9 @@ NSString* const kZingleErrorDomain = @"ZINGLE ERROR";
     return self;
 }
 
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"Zingle Error (%d): %@ %@", self.code, self.errorText, self.errorDescription];
+}
+
 @end

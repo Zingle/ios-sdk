@@ -89,7 +89,51 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                      success:(void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(void (^)(ZNGError* error))failure
 {
-    [self getListWithParameters:nil path:path responseClass:responseClass success:success failure:failure];
+    ZNGLogDebug(@"Sending request to %@, expecting %@ in response", path, responseClass);
+    
+    return [[self sessionManager] GET:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
+        if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
+            ZNGLogDebug(@"Received non-Mantle response to GET of type %@", responseClass);
+            
+            if (success) {
+                success(responseObject[kBaseClientResult], status);
+            }
+            return;
+        }
+        
+        NSDictionary* result = responseObject[kBaseClientResult];
+        id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
+        
+        if (error) {
+            ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+            
+            ZNGLogInfo(@"Received GET response.  Unable to parse a %@ from the result: %@", responseClass, error.localizedDescription);
+            ZNGLogDebug(@"%@", result);
+            
+            if (failure) {
+                failure(zngError);
+            }
+        } else {
+            ZNGLogDebug(@"Received and parsed GET response of type %@", responseClass);
+            
+            if (success) {
+                success(responseObj, status);
+            }
+        }
+    } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
+        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGLogInfo(@"GET failed to %@: %@", path, zngError);
+        
+        if (failure) {
+            failure(zngError);
+        }
+    }];
 }
 
 #pragma mark - POST methods

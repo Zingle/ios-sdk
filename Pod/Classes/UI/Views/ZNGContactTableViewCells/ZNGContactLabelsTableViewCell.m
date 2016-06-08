@@ -52,7 +52,7 @@
 - (void)configureCellWithLabel:(ZNGLabel *)label;
 {
     self.label.text = [label.displayName uppercaseString];
-    self.label.textColor = [UIColor colorFromHexString:label.textColor];
-    self.backgroundColor = [UIColor colorFromHexString:label.backgroundColor];
+    self.label.textColor = [label textUIColor];
+    self.backgroundColor = [label backgroundColor];
 }
 @end

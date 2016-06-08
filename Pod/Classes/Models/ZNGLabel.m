@@ -7,6 +7,9 @@
 //
 
 #import "ZNGLabel.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGLabel
 
@@ -37,12 +40,26 @@
 
 - (UIColor *)textUIColor
 {
-    return [ZNGLabel colorFromHexString:self.textColor];
+    NSString * colorString = self.textColor;
+    
+    if ([colorString length] == 0) {
+        ZNGLogWarn(@"%@ label has no text color information.  Using default #ffffff", self.displayName);
+        colorString = @"#ffffff";
+    }
+    
+    return [ZNGLabel colorFromHexString:colorString];
 }
 
 - (UIColor *)backgroundUIColor
 {
-    return [ZNGLabel colorFromHexString:self.backgroundColor];
+    NSString * colorString = self.backgroundColor;
+    
+    if ([colorString length] == 0) {
+        ZNGLogWarn(@"%@ label has no text color information.  Using default #595959", self.displayName);
+        colorString = @"#595959";
+    }
+    
+    return [ZNGLabel colorFromHexString:colorString];
 }
 
 @end

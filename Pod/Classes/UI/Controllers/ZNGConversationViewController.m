@@ -463,9 +463,10 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         
         if (message.readAt == nil && [message.communicationDirection isEqualToString:@"inbound"]) {
             
-            message.readAt = [NSDate date];
+            NSDate *readAt = [NSDate date];
+            message.readAt = readAt;
             
-            [ZNGMessageClient markMessageReadWithId:message.messageId withServiceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+            [ZNGMessageClient markMessageReadWithId:message.messageId readAt:readAt serviceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
                 NSLog(@"Message marked as read: %@", message.messageId);
             } failure:^(ZNGError *error) {
                 NSLog(@"Error marking message as read. messageId = %@, error = %@", message.messageId, error.localizedDescription);
@@ -876,9 +877,10 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
     if ((self.isAutoMarkAsReadEnabled) && (message.readAt == nil) && ([message.communicationDirection isEqualToString:@"inbound"])) {
         
-        message.readAt = [NSDate date];
+        NSDate *readAt = [NSDate date];
+        message.readAt = readAt;
         
-        [ZNGMessageClient markMessageReadWithId:message.messageId withServiceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+        [ZNGMessageClient markMessageReadWithId:message.messageId readAt:readAt serviceId:self.service.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
             NSLog(@"Message marked as read: %@", message.messageId);
         } failure:^(ZNGError *error) {
             NSLog(@"Error marking message as read. messageId = %@, error = %@", message.messageId, error.localizedDescription);

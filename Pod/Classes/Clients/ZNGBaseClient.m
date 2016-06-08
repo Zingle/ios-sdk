@@ -61,7 +61,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
             
-            ZNGLogInfo(@"Received GET response.  Unable to parse a %@ from the result.", responseClass);
+            ZNGLogInfo(@"Received GET response.  Unable to parse a %@ from the result: %@", responseClass, error.localizedDescription);
             ZNGLogDebug(@"%@", result);
             
             if (failure) {
@@ -140,7 +140,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
             
-            ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, zngError);
+            ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
             ZNGLogDebug(@"%@", result);
             
             if (failure) {
@@ -193,7 +193,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
             
-            ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, zngError);
+            ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
             ZNGLogDebug(@"%@", result);
             
             if (failure) {
@@ -249,7 +249,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
             
-            ZNGLogInfo(@"Unable to parse %@ from %@ PUT request: %@", responseClass, path, zngError);
+            ZNGLogInfo(@"Unable to parse %@ from %@ PUT request: %@", responseClass, path, error.localizedDescription);
             ZNGLogDebug(@"%@", result);
             
             if (failure) {

@@ -37,7 +37,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                        success:(void (^)(id responseObject, ZNGStatus *status))success
                                        failure:(void (^)(ZNGError* error))failure
 {
-    ZNGLogDebug(@"Sending request to %@, expecting %@ in response", path, responseClass);
+    ZNGLogDebug(@"Sending request to %@, expecting [%@] in response", path, responseClass);
     
     return [[self sessionManager] GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
@@ -47,7 +47,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
         if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            ZNGLogDebug(@"Received non-Mantle response to GET of type %@", responseClass);
+            ZNGLogDebug(@"Received non-Mantle response to GET of type [%@]", responseClass);
             
             if (success) {
                 success(responseObject[kBaseClientResult], status);
@@ -61,14 +61,14 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
             
-            ZNGLogInfo(@"Received GET response.  Unable to parse a %@ from the result: %@", responseClass, error.localizedDescription);
+            ZNGLogInfo(@"Received GET response.  Unable to parse a [%@] from the result: %@", responseClass, error.localizedDescription);
             ZNGLogDebug(@"%@", result);
             
             if (failure) {
                 failure(zngError);
             }
         } else {
-            ZNGLogDebug(@"Received and parsed GET response of type %@", responseClass);
+            ZNGLogDebug(@"Received and parsed GET response of type [%@][%llu]", responseClass, [responseObj count]);
             
             if (success) {
                 success(responseObj, status);

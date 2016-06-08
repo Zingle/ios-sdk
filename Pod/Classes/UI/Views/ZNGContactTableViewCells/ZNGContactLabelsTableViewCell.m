@@ -53,6 +53,6 @@
 {
     self.label.text = [label.displayName uppercaseString];
     self.label.textColor = [label textUIColor];
-    self.backgroundColor = [label backgroundColor];
+    self.backgroundColor = [label backgroundUIColor];
 }
 @end

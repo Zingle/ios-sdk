@@ -303,6 +303,8 @@
 		9604FDB3631174BFBC65BF15968BC160 /* ZNGContactLabelsTableViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D5F640E3E2F58B8EA0ECED78EFEFA42 /* ZNGContactLabelsTableViewCell.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9630205806FA13CEE278F4E4FA6DA3F0 /* DDLegacyMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 5AE6BF2C92A53A5068BD44F060CDA9C6 /* DDLegacyMacros.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		964BD1F4E6F7309CA463F8F2299B9DAD /* ZNGNotificationsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 973BFB92A1E4CA7267BD4F3380EF4252 /* ZNGNotificationsClient.m */; };
+		967504F11D0A23B600020194 /* ZNGInboxDataSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 967504EF1D0A23B600020194 /* ZNGInboxDataSet.h */; };
+		967504F21D0A23B600020194 /* ZNGInboxDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 967504F01D0A23B600020194 /* ZNGInboxDataSet.m */; };
 		96B25D1FE5B2D5E2300F9569C5805915 /* bubble_regular@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 399506480F873D3396AA5CE1E558BACE /* bubble_regular@3x.png */; };
 		9874B958AE9EC5BA553A321E7A7928D3 /* clip.png in Resources */ = {isa = PBXBuildFile; fileRef = 98DC659EB46F732A06795FE10D1F5A0E /* clip.png */; };
 		98CF8468B9300A8C5969499E77A924DD /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BCF8A5551F1BA150D96004C0B1FE8A01 /* SystemConfiguration.framework */; };
@@ -977,6 +979,8 @@
 		95FA639215E5FF489C41C4D78E4C3720 /* AFNetworking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-prefix.pch"; sourceTree = "<group>"; };
 		960492645B7610C614CF76B534A84D8B /* ZNGLabelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelClient.m; sourceTree = "<group>"; };
 		965F611801FB31B206B07A2C20C6FBF1 /* bubble_tailless.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = bubble_tailless.png; sourceTree = "<group>"; };
+		967504EF1D0A23B600020194 /* ZNGInboxDataSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGInboxDataSet.h; sourceTree = "<group>"; };
+		967504F01D0A23B600020194 /* ZNGInboxDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGInboxDataSet.m; sourceTree = "<group>"; };
 		96EC61AACC220AD2943BF67047F03AB1 /* MTLModel+NSCoding.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "MTLModel+NSCoding.m"; path = "Mantle/MTLModel+NSCoding.m"; sourceTree = "<group>"; };
 		973BFB92A1E4CA7267BD4F3380EF4252 /* ZNGNotificationsClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGNotificationsClient.m; sourceTree = "<group>"; };
 		98300721978D751D2ED6624B62FC62BD /* ZNGDataSet.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGDataSet.m; sourceTree = "<group>"; };
@@ -1819,6 +1823,8 @@
 				A22329B2AC90D554581497EDB4E595D2 /* ZNGContact.m */,
 				09610B813D49579801B1C3E5C0D218DD /* ZNGNewContact.h */,
 				C7182E01337712EA2C204D7CB30D2B89 /* ZNGNewContact.m */,
+				967504EF1D0A23B600020194 /* ZNGInboxDataSet.h */,
+				967504F01D0A23B600020194 /* ZNGInboxDataSet.m */,
 			);
 			path = ZNGContact;
 			sourceTree = "<group>";
@@ -2426,6 +2432,7 @@
 				23DB1B1C8C903A9C437C0E926D77529D /* ZNGCollectionViewDelegateFlowLayout.h in Headers */,
 				9399D5F6091B16D1992F607DF7E490D9 /* ZNGCollectionViewFlowLayout.h in Headers */,
 				81D289DD3302778179560804F3684DD6 /* ZNGCollectionViewFlowLayoutInvalidationContext.h in Headers */,
+				967504F11D0A23B600020194 /* ZNGInboxDataSet.h in Headers */,
 				5564B13DAC664EBD9EBDECE55E30E34A /* ZNGCollectionViewLayoutAttributes.h in Headers */,
 				99E3E5F768EE56072B392F9F467C8770 /* ZNGComposerTextView.h in Headers */,
 				75E9B2780D1E86C270E8DE691334BEBA /* ZNGContact.h in Headers */,
@@ -3066,6 +3073,7 @@
 				94A3F3A15F43BD016FEE56CD74590135 /* ZNGBaseViewController.m in Sources */,
 				8FCDADE5B3BAF839CA977D51596F85D7 /* ZNGBubbleImage.m in Sources */,
 				5AEB9792199AEB241D7EA18425737EC4 /* ZNGBubbleImageFactory.m in Sources */,
+				967504F21D0A23B600020194 /* ZNGInboxDataSet.m in Sources */,
 				3B1C5D11EBCCB21FF97C4ACE22F9070C /* ZNGBubblesSizeCalculator.m in Sources */,
 				01BEC081444550BD05C4F4F08F249EF5 /* ZNGCellLabel.m in Sources */,
 				B0C909C7519736BAC110A0C7FABF89FC /* ZNGCellTextView.m in Sources */,

@@ -42,6 +42,6 @@
  *  Clears in-memory cached conversations
  *
  */
-- (void *)clearConversations;
+- (void)clearConversations;
 
 @end

@@ -1,12 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
 use_frameworks!
 
-target 'ZingleSDK_Example', :exclusive => true do
+target 'ZingleSDK_Example' do
   pod 'ZingleSDK', :path => '../'
 end
 
-target 'ZingleSDK_Tests', :exclusive => true do
+target 'ZingleSDK_Tests' do
   pod 'ZingleSDK', :path => '../'
-
-  
 end

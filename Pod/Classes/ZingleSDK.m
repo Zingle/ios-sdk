@@ -17,6 +17,9 @@
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGUserAuthorization.h"
 #import "ZNGNotificationsClient.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 NSString *const zng_receivedPushNotification = @"zng_receivedPushNotification";
 NSString *const zng_receivedPushNotificationInBackground = @"zng_receivedPushNotificationInBackground";
@@ -44,6 +47,18 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     });
     
     return sharedSDK;
+}
+
+- (id) init
+{
+    self = [super init];
+    
+    if (self != nil)
+    {
+        ZNGLogInfo(@"Loaded Zingle SDK");
+    }
+    
+    return self;
 }
 
 - (void)setToken:(NSString*)token andKey:(NSString*)key

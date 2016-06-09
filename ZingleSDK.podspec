@@ -31,4 +31,5 @@ Pod::Spec.new do |s|
   s.dependency 'Mantle', '~> 2.0'
   s.dependency 'GoogleFontsiOS/OpenSans'
   s.dependency 'DGActivityIndicatorView'
+  s.dependency 'CocoaLumberjack/Swift'
 end

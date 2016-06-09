@@ -7,6 +7,10 @@
 //
 
 #import "ZNGLabel.h"
+#import "ZNGLogging.h"
+#import "UIColor+ZingleSDK.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGLabel
 
@@ -21,28 +25,28 @@
              };
 }
 
-// Assumes input like "#00FF00" (#RRGGBB).
-+ (UIColor *)colorFromHexString:(NSString *)hexString
-{
-    if (hexString == nil) {
-        return nil;
-    }
-    
-    unsigned rgbValue = 0;
-    NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    [scanner setScanLocation:1]; // bypass '#' character
-    [scanner scanHexInt:&rgbValue];
-    return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
-}
-
 - (UIColor *)textUIColor
 {
-    return [ZNGLabel colorFromHexString:self.textColor];
+    NSString * colorString = self.textColor;
+    
+    if ([colorString length] == 0) {
+        ZNGLogWarn(@"%@ label has no text color information.  Using default #ffffff", self.displayName);
+        colorString = @"#ffffff";
+    }
+    
+    return [UIColor colorFromHexString:colorString];
 }
 
 - (UIColor *)backgroundUIColor
 {
-    return [ZNGLabel colorFromHexString:self.backgroundColor];
+    NSString * colorString = self.backgroundColor;
+    
+    if ([colorString length] == 0) {
+        ZNGLogWarn(@"%@ label has no text color information.  Using default #595959", self.displayName);
+        colorString = @"#595959";
+    }
+    
+    return [UIColor colorFromHexString:colorString];
 }
 
 @end

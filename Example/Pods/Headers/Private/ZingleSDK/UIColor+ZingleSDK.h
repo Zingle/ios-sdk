@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/UI/Categories/UIColor+ZingleSDK.h

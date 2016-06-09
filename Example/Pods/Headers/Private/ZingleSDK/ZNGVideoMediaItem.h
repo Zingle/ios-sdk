@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/UI/ViewModels/ZNGVideoMediaItem.h

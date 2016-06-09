@@ -23,16 +23,24 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - CocoaLumberjack/Core (2.3.0)
+  - CocoaLumberjack/Default (2.3.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.3.0):
+    - CocoaLumberjack/Default
+  - CocoaLumberjack/Swift (2.3.0):
+    - CocoaLumberjack/Extensions
   - DGActivityIndicatorView (2.0)
   - GoogleFontsiOS/Core (0.1.1)
   - GoogleFontsiOS/OpenSans (0.1.1):
     - GoogleFontsiOS/Core
-  - Mantle (2.0.6):
-    - Mantle/extobjc (= 2.0.6)
-  - Mantle/extobjc (2.0.6)
+  - Mantle (2.0.7):
+    - Mantle/extobjc (= 2.0.7)
+  - Mantle/extobjc (2.0.7)
   - ZingleSDK (0.2.4):
     - AFNetworkActivityLogger (~> 2.0)
     - AFNetworking (~> 2.6)
+    - CocoaLumberjack/Swift
     - DGActivityIndicatorView
     - GoogleFontsiOS/OpenSans
     - Mantle (~> 2.0)
@@ -47,9 +55,12 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
   GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
-  Mantle: 299966b00759634931699f69cb6a30b9239b944d
-  ZingleSDK: de73f0873b6a3127ea924759781d6ee12763baf3
+  Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
+  ZingleSDK: d804c5a2737335c7a691eeeb33e8cd278c386efa
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 842ec4489eb0939ddd694d9166043bd9b29fc7a4
+
+COCOAPODS: 1.0.1

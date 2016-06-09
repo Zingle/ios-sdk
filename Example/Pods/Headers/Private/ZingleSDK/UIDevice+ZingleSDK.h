@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/UI/Categories/UIDevice+ZingleSDK.h

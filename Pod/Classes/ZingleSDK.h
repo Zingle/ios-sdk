@@ -120,5 +120,13 @@
                                                             senderName:(NSString *)senderName
                                                           receiverName:(NSString *)receiverName;
 
+/**
+ *  Registers a device to receive push notifications from the Zingle system.
+ *
+ *  @param deviceToken A unique identifier provided by the Apple Push Notification Service (APNS).
+ *  @param serviceIds An array of service IDs.
+ */
+- (void)registerForNotificationsWithDeviceToken:(NSData *)deviceToken withServiceIds:(NSArray *)serviceIds;
+
 
 @end

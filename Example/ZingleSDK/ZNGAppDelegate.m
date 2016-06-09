@@ -14,37 +14,74 @@
 #import "ZNGContactServiceClient.h"
 #import "ZNGContactClient.h"
 #import "ZNGServiceClient.h"
-#import "ZNGNotificationsClient.h"
 #import "ZNGConversationViewController.h"
 
 @interface ZNGAppDelegate () <ZNGContactServicesViewControllerDelegate>
 
 @property (nonatomic, strong) UIView *notificationBannerView;
+@property (nonatomic, assign) BOOL userAccountEnabled;
 
 @end
 
 @implementation ZNGAppDelegate
 
+static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
+static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
+
 static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
+
+// User-Defined Channel if using Contact User Authorization
+static NSString *kZNGChannelTypeId = @"7176e36e-87d2-4161-ae2b-6848fbf3de11";
+static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    /******************************************************************************************
+    * Uncomment the appropriate line below depending on which type of Zingle Account you have.
+    ******************************************************************************************/
+    [self accountApplication:application didFinishLaunchingWithOptions:launchOptions];
+    //[self contactApplication:application didFinishLaunchingWithOptions:launchOptions];
+    
+    return YES;
+}
+
+- (void)accountApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.userAccountEnabled = YES;
+    
+    [self registerUserNotificationsForApplication:application];
+    
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
     
-    NSString *token = @"[YOUR ZINGLE TOKEN]";
-    NSString *key = @"[YOUR ZINGLE KEY]";
+    [[ZingleSDK sharedSDK] setToken:kZNGToken andKey:kZNGKey forDebugMode:YES];
     
-    // 1
-    [[ZingleSDK sharedSDK] setToken:token andKey:key forDebugMode:YES];
+     ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:kZNGServiceId];
+     
+     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
+     [self.window makeKeyAndVisible];
+     
+     // Check if application was launched due to a push notification.
+     NSDictionary *notificationData = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+     if (notificationData) {
+     NSString *contactId = [notificationData objectForKey:@"feedId"];
+         [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
+     }
+}
+
+- (void)contactApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+    self.userAccountEnabled = NO;
     
-    // 2
-    // Register for User Notifications
-    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
-        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
-    }
+    [self registerUserNotificationsForApplication:application];
     
-    ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:kZNGServiceId];
+    [[AFNetworkActivityLogger sharedLogger] startLogging];
+    [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
+    
+    [[ZingleSDK sharedSDK] setToken:kZNGToken andKey:kZNGKey forDebugMode:YES];
+    
+    ZNGContactServicesViewController *vc = [ZNGContactServicesViewController withServiceId:kZNGServiceId channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue];
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
@@ -54,47 +91,30 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
     NSDictionary *notificationData = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (notificationData) {
         NSString *contactId = [notificationData objectForKey:@"feedId"];
-        [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc];
+        [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
     }
-    
-    // TODO: Find a way to nicely demonstrate both InboxVC and the ContactServicesVC.
-    //ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:@"22111111-1111-1111-1111-111111111111"];
-    
-    //ZNGContactServicesViewController *vc = [ZNGContactServicesViewController withServiceId:@"22111111-1111-1111-1111-111111111111" channelTypeId:@"0a293ea3-4721-433e-a031-610ebcf43255" channelValue:@"+18585557777"];
-    //vc.delegate = self;
-    
-    
-    
-    
-    
-    return YES;
 }
 
-// 3
+// MARK: - Push Notifications
+
+- (void)registerUserNotificationsForApplication:(UIApplication *)application
+{
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)]) {
+        [application registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert|UIUserNotificationTypeBadge|UIUserNotificationTypeSound categories:nil]];
+    }
+}
+
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings {
     
-    if (notificationSettings.types) {
+    if (notificationSettings.types != UIUserNotificationTypeNone) {
         [application registerForRemoteNotifications];
     }
     
 }
 
-// 4
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    NSString *deviceId = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    [ZNGNotificationsClient unregisterForNotificationsWithDeviceId:deviceId success:^(ZNGStatus *status) {
-        
-        [ZNGNotificationsClient registerForNotificationsWithDeviceId:deviceId withServiceIds:@[kZNGServiceId] success:^(ZNGStatus *status) {
-            NSLog(@"%@", status);
-        } failure:^(ZNGError *error) {
-            NSLog(@"error: %@", error);
-        }];
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"error: %@", error);
-    }];
+    [[ZingleSDK sharedSDK] registerForNotificationsWithDeviceToken:deviceToken withServiceIds:@[kZNGServiceId]];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -138,20 +158,28 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
 
 // MARK: - Push Notification Helpers
 
-- (void)navigateToConversationViewControllerWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId fromViewController:(UIViewController *)sourceViewController
+- (void)navigateToConversationViewControllerWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId fromViewController:(UIViewController *)sourceViewController animated:(BOOL)animated
 {
     [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
         
         [ZNGContactClient contactWithId:contactId withServiceId:serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
             
-            ZNGConversationViewController *cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:service senderName:@"Me" receiverName:[contact fullName]];
+            ZNGConversationViewController *cvc = nil;
+            if (self.userAccountEnabled) {
+                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:service senderName:@"Me" receiverName:[contact fullName]];
+            } else {
+                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToService:service contact:contact senderName:@"Me" receiverName:@"receiverName"];
+            }
             
             if (!sourceViewController) {
                 UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
                 [navController popToRootViewControllerAnimated:NO];
-                [navController pushViewController:cvc animated:NO];
+                [navController pushViewController:cvc animated:animated];
+            } else if ([sourceViewController isKindOfClass:[UINavigationController class]]) {
+                UINavigationController *navController = (UINavigationController *)sourceViewController;
+                [navController pushViewController:cvc animated:animated];
             } else {
-                [sourceViewController.navigationController pushViewController:cvc animated:NO];
+                [sourceViewController.navigationController pushViewController:cvc animated:animated];
             }
             
         } failure:^(ZNGError *error) {
@@ -175,7 +203,7 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
         
         if ([visibleViewController isKindOfClass:[ZNGInboxViewController class]]) {
             
-            [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:visibleViewController];
+            [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:visibleViewController animated:NO];
         
         } else if ([visibleViewController isKindOfClass:[ZNGConversationViewController class]]) {
             
@@ -192,7 +220,7 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
                 
                 // Received message from another contact, so replace the existing ConversationViewController with a new one.
                 
-                [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:nil];
+                [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:nil animated:NO];
                 
             }
             
@@ -309,10 +337,9 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
         
         if (isAuthorized) {
             
-            ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:contactService.serviceId];
-            
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-            [navController pushViewController:vc animated:YES];
+            
+            [self navigateToConversationViewControllerWithContactId:contactService.contactId serviceId:kZNGServiceId fromViewController:navController animated:YES];
             
         }
         

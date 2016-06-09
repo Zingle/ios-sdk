@@ -16,6 +16,7 @@
 #import "ZNGContactChannelClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGUserAuthorization.h"
+#import "ZNGNotificationsClient.h"
 
 NSString *const zng_receivedPushNotification = @"zng_receivedPushNotification";
 NSString *const zng_receivedPushNotificationInBackground = @"zng_receivedPushNotificationInBackground";
@@ -30,7 +31,7 @@ NSString *const zng_receivedPushNotificationInactive = @"zng_receivedPushNotific
 @implementation ZingleSDK
 
 NSString* const kLiveBaseURL = @"https://api.zingle.me/v1/";
-NSString* const kDebugBaseURL = @"https://ci-api.zingle.me/v1/";
+NSString* const kDebugBaseURL = @"https://qa-api.zingle.me/v1/";
 NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 + (ZingleSDK*)sharedSDK
@@ -179,6 +180,23 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
                                                           receiverName:(NSString *)receiverName
 {
     return [ZNGConversationViewController toContact:contact service:service senderName:senderName receiverName:receiverName];
+}
+
+- (void)registerForNotificationsWithDeviceToken:(NSData *)deviceToken withServiceIds:(NSArray *)serviceIds
+{
+    NSString *deviceId = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    [ZNGNotificationsClient unregisterForNotificationsWithDeviceId:deviceId success:^(ZNGStatus *status) {
+        
+        [ZNGNotificationsClient registerForNotificationsWithDeviceId:deviceId withServiceIds:serviceIds success:^(ZNGStatus *status) {
+            NSLog(@"%@", status);
+        } failure:^(ZNGError *error) {
+            NSLog(@"error: %@", error);
+        }];
+        
+    } failure:^(ZNGError *error) {
+        NSLog(@"error: %@", error);
+    }];
 }
 
 - (AFHTTPSessionManager*)sharedSessionManager

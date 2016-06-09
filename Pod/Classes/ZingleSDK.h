@@ -129,11 +129,9 @@
 - (void)registerForNotificationsWithDeviceToken:(NSData *)deviceToken withServiceIds:(NSArray *)serviceIds;
 
 /**
- *  Used in debug builds to override the server.  Not available in release builds
+ *  Used in debug builds to override the server.  Ignored in release builds.
  */
-#ifdef DEBUG
 @property (nonatomic, copy) NSString * baseUrl;
-#endif
 
 
 @end

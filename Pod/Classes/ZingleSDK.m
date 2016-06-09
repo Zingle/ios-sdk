@@ -81,12 +81,23 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
 
 - (NSString *) baseUrlForDebugMode:(BOOL)debugMode
 {
+#ifdef DEBUG
     // If there is a specific override, use that.
     if (self.baseUrl != nil) {
         return self.baseUrl;
     }
+#endif
     
     return debugMode ? kDebugBaseURL : kLiveBaseURL;
+}
+
+- (void) setBaseUrl:(NSString *)baseUrl
+{
+#ifdef DEBUG
+    _baseUrl = [baseUrl copy];
+#else
+    ZNGLogError(@"BaseURL was specified in a release build.  Ignoring.");
+#endif
 }
 
 - (void)checkAuthorizationForContactService:(ZNGContactService *)contactService

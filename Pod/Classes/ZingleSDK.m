@@ -71,12 +71,22 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     if (token == nil || key == nil) {
         [NSException raise:NSInvalidArgumentException format:@"ZingleSDK must be initialized with a token and key."];
     }
-    NSString *baseURL = debugMode ? kDebugBaseURL : kLiveBaseURL;
+    NSString *baseURL = [self baseUrlForDebugMode:debugMode];
     self.sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:baseURL]];
     self.sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
     self.sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
     [self.sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
     [self.sessionManager.requestSerializer setValue:@"iOS_SDK" forHTTPHeaderField:@"Zingle_Agent"];
+}
+
+- (NSString *) baseUrlForDebugMode:(BOOL)debugMode
+{
+    // If there is a specific override, use that.
+    if (self.baseUrl != nil) {
+        return self.baseUrl;
+    }
+    
+    return debugMode ? kDebugBaseURL : kLiveBaseURL;
 }
 
 - (void)checkAuthorizationForContactService:(ZNGContactService *)contactService

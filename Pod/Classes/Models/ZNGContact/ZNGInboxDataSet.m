@@ -88,10 +88,25 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) refreshStartingAtIndex:(NSUInteger)index
 {
+    // Calculate what page indices should be loaded in order to load some data starting at the specified index.
+    
     NSMutableOrderedSet<NSNumber *> * pagesToRefresh = [[NSMutableOrderedSet alloc] init];
     NSUInteger loadedCount = [_contacts count];
-    NSUInteger lastPageToLoad = (index / pageSize) + 1;
+    NSUInteger lastPageToLoad = (index / pageSize) + 1; // The page holding the object at the specified index
     
+    // Sanity check how many pages we plan to load if we have any existing pagination data.
+    if ((totalPageCount > 0) && (lastPageToLoad > totalPageCount)) {
+        ZNGLogWarn(@"A request was made to load up to the %ld page of data, but we only expect to have %ld pages total.  This may fire off several requests that will return no data.",
+                   (unsigned long)lastPageToLoad, (unsigned long)totalPageCount);
+        
+        // If the value is total nonsense, ignore it
+        if ((lastPageToLoad - totalPageCount) > 10) {
+            ZNGLogError(@"Refusing to request extra pages of data beyond expected index.");
+            return;
+        }
+    }
+    
+    // First, we are going to need the page that holds the object at this specific index
     [pagesToRefresh addObject:@(lastPageToLoad)];
     
     // If the index they requested would load fewer than 10 entries, load an additional page

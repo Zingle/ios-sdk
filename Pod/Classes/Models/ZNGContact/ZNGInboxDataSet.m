@@ -12,14 +12,20 @@
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
-NSString * const ParameterKeyPageIndex  = @"page";
-NSString * const ParameterKeyPageSize   = @"page_size";
-NSString * const ParameterKeySortField  = @"sort_field";
-NSString * const ParameterKeySortDirection  = @"sort_direction";
+NSString * const ParameterKeyPageIndex              = @"page";
+NSString * const ParameterKeyPageSize               = @"page_size";
+NSString * const ParameterKeySortField              = @"sort_field";
+NSString * const ParameterKeySortDirection          = @"sort_direction";
 NSString * const ParameterKeyLastMessageCreatedAt   = @"last_message_created_at";
+NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
+NSString * const ParameterKeyIsClosed               = @"is_closed";
+NSString * const ParameterKeyLabelId                = @"label_id";
+NSString * const ParameterKeyQuery                  = @"query";
 
-NSString * const ParameterValueGreaterThanZero  = @"greater_than(0)";
-NSString * const ParameterValueDescending       = @"desc";
+NSString * const ParameterValueTrue                 = @"true";
+NSString * const ParameterValueFalse                = @"false";
+NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
+NSString * const ParameterValueDescending           = @"desc";
 NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
 
 @implementation ZNGInboxDataSet

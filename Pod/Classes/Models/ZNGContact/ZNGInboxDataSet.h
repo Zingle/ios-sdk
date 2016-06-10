@@ -9,6 +9,22 @@
 #import <Foundation/Foundation.h>
 @class ZNGContact;
 
+extern NSString * const ParameterKeyPageIndex;
+extern NSString * const ParameterKeyPageSize;
+extern NSString * const ParameterKeySortField;             
+extern NSString * const ParameterKeySortDirection;         
+extern NSString * const ParameterKeyLastMessageCreatedAt;  
+extern NSString * const ParameterKeyIsConfirmed;           
+extern NSString * const ParameterKeyIsClosed;              
+extern NSString * const ParameterKeyLabelId;               
+extern NSString * const ParameterKeyQuery;                 
+
+extern NSString * const ParameterValueTrue;                
+extern NSString * const ParameterValueFalse;               
+extern NSString * const ParameterValueGreaterThanZero;     
+extern NSString * const ParameterValueDescending;          
+extern NSString * const ParameterValueLastMessageCreatedAt;
+
 /**
  *  Provides paginated data to be used by a UITableView.  Supports KVO on all properties.
  *

@@ -36,7 +36,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSUInteger totalPageCount;
 }
 
-- (id) initWithServiceId:(NSString *)theServiceId
+- (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId
 {
     self = [super init];
     
@@ -52,7 +52,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 }
 
 #pragma mark - Filtering
-- (NSMutableDictionary *) parameters
+- (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
     parameters[ParameterKeyPageSize] = @(pageSize);

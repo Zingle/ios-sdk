@@ -10,7 +10,7 @@
 
 @implementation ZNGInboxDataUnconfirmed
 
-- (NSMutableDictionary *) parameters
+- (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [super parameters];
     

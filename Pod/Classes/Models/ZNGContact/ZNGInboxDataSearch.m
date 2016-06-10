@@ -13,7 +13,7 @@
     NSString * searchTerm;
 }
 
-- (id) initWithServiceId:(NSString *)theServiceId searchTerm:(NSString *)theSearchTerm
+- (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId searchTerm:(nonnull NSString *)theSearchTerm
 {
     self = [super initWithServiceId:theServiceId];
     
@@ -24,7 +24,7 @@
     return self;
 }
 
-- (NSMutableDictionary *) parameters
+- (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [super parameters];
     

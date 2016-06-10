@@ -9,22 +9,22 @@
 #import <Foundation/Foundation.h>
 @class ZNGContact;
 
-extern NSString * const ParameterKeyPageIndex;
-extern NSString * const ParameterKeyPageSize;
-extern NSString * const ParameterKeySortField;             
-extern NSString * const ParameterKeySortDirection;         
-extern NSString * const ParameterKeyLastMessageCreatedAt;  
-extern NSString * const ParameterKeyIsConfirmed;           
-extern NSString * const ParameterKeyIsClosed;              
-extern NSString * const ParameterKeyLabelId;               
-extern NSString * const ParameterKeyQuery;
-extern NSString * const ParameterKeyIsStarred;
+extern NSString * __nonnull const ParameterKeyPageIndex;
+extern NSString * __nonnull const ParameterKeyPageSize;
+extern NSString * __nonnull const ParameterKeySortField;
+extern NSString * __nonnull const ParameterKeySortDirection;
+extern NSString * __nonnull const ParameterKeyLastMessageCreatedAt;
+extern NSString * __nonnull const ParameterKeyIsConfirmed;
+extern NSString * __nonnull const ParameterKeyIsClosed;
+extern NSString * __nonnull const ParameterKeyLabelId;
+extern NSString * __nonnull const ParameterKeyQuery;
+extern NSString * __nonnull const ParameterKeyIsStarred;
 
-extern NSString * const ParameterValueTrue;                
-extern NSString * const ParameterValueFalse;               
-extern NSString * const ParameterValueGreaterThanZero;     
-extern NSString * const ParameterValueDescending;          
-extern NSString * const ParameterValueLastMessageCreatedAt;
+extern NSString * __nonnull const ParameterValueTrue;
+extern NSString * __nonnull const ParameterValueFalse;
+extern NSString * __nonnull const ParameterValueGreaterThanZero;
+extern NSString * __nonnull const ParameterValueDescending;
+extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 
 /**
  *  Provides paginated data to be used by a UITableView.  Supports KVO on all properties.
@@ -54,7 +54,7 @@ extern NSString * const ParameterValueLastMessageCreatedAt;
  *
  * @param theServiceId The service identifier string for the user's current service.
  */
-- (id) initWithServiceId:(NSString *)theServiceId;
+- (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId;
 
 /**
  *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loading property.
@@ -75,6 +75,6 @@ extern NSString * const ParameterValueLastMessageCreatedAt;
  *
  *  These default parameters include page size and sort order. 
  */
-- (NSMutableDictionary *) parameters;
+- (nonnull NSMutableDictionary *) parameters;
 
 @end

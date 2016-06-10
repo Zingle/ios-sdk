@@ -116,7 +116,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         [pagesToRefresh addObject:@(lastPageToLoad + 1)];
     }
     
-    // Do we need to load any data leading up to this data?
+    // Do we need to load any data leading up to this data?  (e.g. They requested object #25 but we have only loaded the first 10 objects.  Since our data is held in an
+    //  array, we need the missing values first.)
     if (index > loadedCount) {
         NSUInteger firstPageToLoad = (loadedCount / pageSize) + 1;
         
@@ -146,6 +147,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 return;
             }
             
+            // Semaphore to keep the task alive and spinning until we receive a response
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             
             NSMutableDictionary * parameters = [self parameters];

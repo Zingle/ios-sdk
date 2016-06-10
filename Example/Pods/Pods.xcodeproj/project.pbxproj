@@ -1974,20 +1974,20 @@
 		9653CFC01D0A40BD0093321C /* Subclasses */ = {
 			isa = PBXGroup;
 			children = (
-				9653CFC11D0A40F40093321C /* ZNGInboxDataConfirmed.h */,
-				9653CFC21D0A40F40093321C /* ZNGInboxDataConfirmed.m */,
-				9653CFC51D0A43300093321C /* ZNGInboxDataUnconfirmed.h */,
-				9653CFC61D0A43300093321C /* ZNGInboxDataUnconfirmed.m */,
-				9653CFC91D0A43520093321C /* ZNGInboxDataOpen.h */,
-				9653CFCA1D0A43520093321C /* ZNGInboxDataOpen.m */,
 				9653CFCD1D0A43800093321C /* ZNGInboxDataClosed.h */,
 				9653CFCE1D0A43800093321C /* ZNGInboxDataClosed.m */,
-				9653CFD11D0A43A40093321C /* ZNGInboxDataStarred.h */,
-				9653CFD21D0A43A40093321C /* ZNGInboxDataStarred.m */,
+				9653CFC11D0A40F40093321C /* ZNGInboxDataConfirmed.h */,
+				9653CFC21D0A40F40093321C /* ZNGInboxDataConfirmed.m */,
 				9653CFD91D0A44EA0093321C /* ZNGInboxDataLabel.h */,
 				9653CFDA1D0A44EA0093321C /* ZNGInboxDataLabel.m */,
+				9653CFC91D0A43520093321C /* ZNGInboxDataOpen.h */,
+				9653CFCA1D0A43520093321C /* ZNGInboxDataOpen.m */,
 				9653CFDE1D0A45C30093321C /* ZNGInboxDataSearch.h */,
 				9653CFDF1D0A45C30093321C /* ZNGInboxDataSearch.m */,
+				9653CFD11D0A43A40093321C /* ZNGInboxDataStarred.h */,
+				9653CFD21D0A43A40093321C /* ZNGInboxDataStarred.m */,
+				9653CFC51D0A43300093321C /* ZNGInboxDataUnconfirmed.h */,
+				9653CFC61D0A43300093321C /* ZNGInboxDataUnconfirmed.m */,
 			);
 			name = Subclasses;
 			sourceTree = "<group>";

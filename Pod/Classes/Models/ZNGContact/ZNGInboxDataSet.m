@@ -28,7 +28,6 @@ NSString * const ParameterValueFalse                = @"false";
 NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
 NSString * const ParameterValueDescending           = @"desc";
 NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
-NSString * const ParameterValueCheckedIn            = @"
 
 @implementation ZNGInboxDataSet
 {

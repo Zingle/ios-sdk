@@ -39,8 +39,8 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     /******************************************************************************************
     * Uncomment the appropriate line below depending on which type of Zingle Account you have.
     ******************************************************************************************/
-    [self accountApplication:application didFinishLaunchingWithOptions:launchOptions];
-    //[self contactApplication:application didFinishLaunchingWithOptions:launchOptions];
+    //[self accountApplication:application didFinishLaunchingWithOptions:launchOptions];
+    [self contactApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     return YES;
 }
@@ -92,7 +92,19 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     NSDictionary *notificationData = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (notificationData) {
         NSString *contactId = [notificationData objectForKey:@"feedId"];
-        [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
+        
+        [[ZingleSDK sharedSDK] checkAuthorizationForContactId:contactId success:^(BOOL isAuthorized) {
+            
+            if (isAuthorized) {
+                
+                [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
+                
+            }
+            
+        } failure:^(ZNGError *error) {
+            NSLog(@"error: %@", error);
+        }];
+        
     }
 }
 
@@ -115,7 +127,10 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    [[ZingleSDK sharedSDK] registerForNotificationsWithDeviceToken:deviceToken withServiceIds:@[kZNGServiceId]];
+    [[ZingleSDK sharedSDK] setPushNotificationDeviceToken:deviceToken];
+    if (self.userAccountEnabled) {
+        [[ZingleSDK sharedSDK] registerForNotificationsWithServiceIds:@[kZNGServiceId]];
+    }
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -157,6 +172,11 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     [self application:application handlePushNotificationWithContactId:contactId serviceId:kZNGServiceId message:message];
 }
 
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+    application.applicationIconBadgeNumber = 0;
+}
+
 // MARK: - Push Notification Helpers
 
 - (void)navigateToConversationViewControllerWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId fromViewController:(UIViewController *)sourceViewController animated:(BOOL)animated
@@ -169,7 +189,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
             if (self.userAccountEnabled) {
                 cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:service senderName:@"Me" receiverName:[contact fullName]];
             } else {
-                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToService:service contact:contact senderName:@"Me" receiverName:@"receiverName"];
+                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToService:service contact:contact senderName:@"Me" receiverName:nil];
             }
             
             if (!sourceViewController) {
@@ -334,10 +354,14 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService {
     
-    [[ZingleSDK sharedSDK] checkAuthorizationForContactService:contactService success:^(BOOL isAuthorized) {
+    [[ZingleSDK sharedSDK] checkAuthorizationForContactId:contactService.contactId success:^(BOOL isAuthorized) {
         
         if (isAuthorized) {
             
+            if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+                [[ZingleSDK sharedSDK] registerForNotificationsWithServiceIds:@[kZNGServiceId]];
+            }
+        
             UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
             
             [self navigateToConversationViewControllerWithContactId:contactService.contactId serviceId:kZNGServiceId fromViewController:navController animated:YES];

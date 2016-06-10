@@ -28,6 +28,7 @@ NSString *const zng_receivedPushNotificationInactive = @"zng_receivedPushNotific
 @interface ZingleSDK ()
 
 @property(nonatomic, strong) AFHTTPSessionManager* sessionManager;
+@property (nonatomic, strong) NSData *deviceToken;
 
 @end
 
@@ -79,16 +80,16 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     [self.sessionManager.requestSerializer setValue:@"iOS_SDK" forHTTPHeaderField:@"Zingle_Agent"];
 }
 
-- (void)checkAuthorizationForContactService:(ZNGContactService *)contactService
-                                    success:(void (^)(BOOL isAuthorized))success
-                                    failure:(void (^)(ZNGError* error))failure
+- (void)checkAuthorizationForContactId:(NSString *)contactId
+                                      success:(void (^)(BOOL isAuthorized))success
+                                      failure:(void (^)(ZNGError* error))failure
 {
     [ZNGUserAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
         
         if (userAuthorization) {
             
             if ([userAuthorization.authorizationClass isEqualToString:@"contact"]) {
-                [self.sessionManager.requestSerializer setValue:contactService.contactId forHTTPHeaderField:@"x-zingle-contact-id"];
+                [self.sessionManager.requestSerializer setValue:contactId forHTTPHeaderField:@"x-zingle-contact-id"];
             } else {
                 [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
             }
@@ -197,9 +198,28 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
     return [ZNGConversationViewController toContact:contact service:service senderName:senderName receiverName:receiverName];
 }
 
-- (void)registerForNotificationsWithDeviceToken:(NSData *)deviceToken withServiceIds:(NSArray *)serviceIds
+- (void)setPushNotificationDeviceToken:(NSData *)deviceToken
 {
-    NSString *deviceId = [[[deviceToken.description stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
+    self.deviceToken = deviceToken;
+    
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:deviceToken forKey:@"zng_device_token"];
+    [userDefaults synchronize];
+}
+
+- (void)registerForNotificationsWithServiceIds:(NSArray *)serviceIds
+{
+    if (!self.deviceToken) {
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        self.deviceToken = [userDefaults objectForKey:@"zng_device_token"];
+    }
+    
+    if (!self.deviceToken) {
+        NSLog(@"Error: Push Notification Device Token is not set!");
+        return;
+    }
+    
+    NSString *deviceId = [[[self.deviceToken.description stringByReplacingOccurrencesOfString:@"<" withString:@""] stringByReplacingOccurrencesOfString:@">" withString:@""] stringByReplacingOccurrencesOfString:@" " withString:@""];
     
     [ZNGNotificationsClient unregisterForNotificationsWithDeviceId:deviceId success:^(ZNGStatus *status) {
         
@@ -211,7 +231,24 @@ NSString* const kAllowedChannelTypeClass = @"UserDefinedChannel";
         
     } failure:^(ZNGError *error) {
         NSLog(@"error: %@", error);
+        
+        if (error.zingleErrorCode == 3000) {
+            
+            [ZNGNotificationsClient registerForNotificationsWithDeviceId:deviceId withServiceIds:serviceIds success:^(ZNGStatus *status) {
+                NSLog(@"%@", status);
+            } failure:^(ZNGError *error) {
+                NSLog(@"error: %@", error);
+            }];
+            
+        }
+        
     }];
+}
+
+- (void)registerForNotifications {
+    
+    [self registerForNotificationsWithServiceIds:@[]];
+    
 }
 
 - (AFHTTPSessionManager*)sharedSessionManager

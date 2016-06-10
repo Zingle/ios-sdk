@@ -82,6 +82,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     [[ZingleSDK sharedSDK] setToken:kZNGToken andKey:kZNGKey forDebugMode:YES];
     
     ZNGContactServicesViewController *vc = [ZNGContactServicesViewController withServiceId:kZNGServiceId channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue];
+    vc.delegate = self;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];

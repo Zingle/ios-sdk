@@ -83,7 +83,6 @@
 		282D3A9BDE27FD42C7BF1659A96AA5AA /* bubble_min_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = 664C85DCB143538AAF8CAE9CCAA37C6B /* bubble_min_tailless.png */; };
 		295077C984CFDF5FA8BB48267019BBEB /* ZNGAvailablePhoneNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = FF3774A04CE64BF7D85C6890026C2B8B /* ZNGAvailablePhoneNumber.m */; };
 		2985DF8D1A8CAF6CA4EEDC817DBEDCB6 /* ZNGCellLabel.h in Headers */ = {isa = PBXBuildFile; fileRef = E72BB624B57B6D88BBB7E7BF81F95EDF /* ZNGCellLabel.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29C9E30D4158EC49EB4815E3B6537955 /* ZNGContactServicesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = CB679E1E421F1A3F6C23F091B5DA81BF /* ZNGContactServicesViewController.xib */; };
 		29EA77330891CBFA70DE24D193D6F6C2 /* ZNGMessage.h in Headers */ = {isa = PBXBuildFile; fileRef = D02C1588F2F292C77BF6C1150C1F0218 /* ZNGMessage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A6A29CAD800ED3F71FC72F380E5ADBB /* DDTTYLogger.m in Sources */ = {isa = PBXBuildFile; fileRef = DB445D13B666D31234BC3F2499047A65 /* DDTTYLogger.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		2AE7B39A63A8E44D3BFD537DD1F77953 /* ZNGContactService.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5BA356EF379D719C3DAD8AED4CFE5A /* ZNGContactService.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -129,7 +128,6 @@
 		3F2A88DE70CC2265523BA878EAF72FF9 /* ZNGEvent.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BBEAB213FD0FFC0BACFC17C919E53D5 /* ZNGEvent.m */; };
 		3F36B3C06DCBB77F519C12330A7CE830 /* ZNGCollectionViewCellIncoming.xib in Resources */ = {isa = PBXBuildFile; fileRef = B1111C203B3881AA053D2E612D2E1E64 /* ZNGCollectionViewCellIncoming.xib */; };
 		3F996679F94A15AB6AD1BD04F4753DC0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B733B1D1000CCD26A789C9A6E2185B /* Foundation.framework */; };
-		407A1A6E347567295E9FDFF28D961D7E /* ZNGContactServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E242B571846D48DB362E87EA34898055 /* ZNGContactServicesViewController.m */; };
 		40CCE16E3660E9178ADC98CB5BCA1D3C /* ZNGInputToolbar.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C324BDD5EA81CA46CA682F114A5284F /* ZNGInputToolbar.m */; };
 		426E50F74BBB9A7CAB0984BD9DC47D80 /* bubble_tailless.png in Resources */ = {isa = PBXBuildFile; fileRef = 965F611801FB31B206B07A2C20C6FBF1 /* bubble_tailless.png */; };
 		42B2810617208AD14FEFC4B938BA5632 /* NSDictionary+MTLMappingAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = F50C691ADAAA22CFB2FB61F6A9E1C32A /* NSDictionary+MTLMappingAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -211,7 +209,6 @@
 		6D4F3EBCC79AA5C7AE0A324BD3DE6ACC /* AFHTTPSessionManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 4636759E394902D9856741FFD58EE608 /* AFHTTPSessionManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6DA89FBBB8CEE5D14CF6A95831E881B1 /* UIProgressView+AFNetworking.h in Headers */ = {isa = PBXBuildFile; fileRef = 50D10D0FB36CB38744FFFFE03E0E01F8 /* UIProgressView+AFNetworking.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6E3208FC3925E741D244D3778058BA75 /* ZNGInputToolbar.h in Headers */ = {isa = PBXBuildFile; fileRef = E4679A6C9461B06A61900848B0193C70 /* ZNGInputToolbar.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6EA1530561DCF3F8CB3266370A870DEF /* ZNGContactServicesViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 0346E10D00ACCCA72CF106EDE00D30B2 /* ZNGContactServicesViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6EB08960ED847D4742E20C2B22305D27 /* OpenSans-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 6A46D850F1E3494EC3E6DB825F7796C3 /* OpenSans-LightItalic.ttf */; };
 		6F0236E7519D06366AB277F19B5FA873 /* ZNGStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 615503F1A988DD3B61E093E90154A95B /* ZNGStatus.m */; };
 		6F1505E0A2E72178585A5A1915B264A2 /* OpenSans-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 98B51C794C478739D10A26FB3CEEDDD1 /* OpenSans-Bold.ttf */; };
@@ -676,7 +673,6 @@
 		028C289585A57F2D69FDBDAFC8F14AE5 /* NSString+ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "NSString+ZingleSDK.h"; sourceTree = "<group>"; };
 		02F3E3A796A6E075BAD10999E76918B9 /* DGActivityIndicatorAnimationProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorAnimationProtocol.h; path = DGActivityIndicatorView/DGActivityIndicatorAnimationProtocol.h; sourceTree = "<group>"; };
 		033579E79EF798A61D4D69A5749D4B10 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0346E10D00ACCCA72CF106EDE00D30B2 /* ZNGContactServicesViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactServicesViewController.h; sourceTree = "<group>"; };
 		03A3684D387A33436660A5E60EABF53B /* OpenSans-SemiboldItalic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-SemiboldItalic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-SemiboldItalic.ttf"; sourceTree = "<group>"; };
 		041B2B054D0A3F47FAA2AE8E24C81318 /* DGActivityIndicatorNineDotsAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorNineDotsAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorNineDotsAnimation.m; sourceTree = "<group>"; };
 		0422ECA8B98BF30D6B2A86E5A84CE378 /* DGActivityIndicatorBallScaleRippleAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorBallScaleRippleAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleRippleAnimation.m; sourceTree = "<group>"; };
@@ -1115,7 +1111,6 @@
 		C878FB2A435DC7B9C02D9AA8839EAD5A /* CocoaLumberjack-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "CocoaLumberjack-dummy.m"; sourceTree = "<group>"; };
 		C914B628718307E81B6DF188D92D79BA /* Mantle.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Mantle.xcconfig; sourceTree = "<group>"; };
 		CB13A3A8D932982D0862D3880CCC06DA /* ZNGParticipant.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGParticipant.m; sourceTree = "<group>"; };
-		CB679E1E421F1A3F6C23F091B5DA81BF /* ZNGContactServicesViewController.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGContactServicesViewController.xib; sourceTree = "<group>"; };
 		CB70FAAAF73BE6FE79A3A36ABEA98549 /* ZNGPagedArray.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGPagedArray.h; sourceTree = "<group>"; };
 		CE7C6B7390DA2268EE197442C4C67FE9 /* bubble_stroked_tailless@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_stroked_tailless@2x.png"; sourceTree = "<group>"; };
 		CE9246C8FC79129253668475CDEF5EFC /* Mantle-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Mantle-dummy.m"; sourceTree = "<group>"; };
@@ -1160,7 +1155,6 @@
 		E124E42F913E182E0F724CED6CF0CFA2 /* DGActivityIndicatorTriangleSkewSpinAnimation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DGActivityIndicatorTriangleSkewSpinAnimation.m; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTriangleSkewSpinAnimation.m; sourceTree = "<group>"; };
 		E15A96B25F16E545A9CC104113F135A2 /* play.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = play.png; sourceTree = "<group>"; };
 		E238C96C205E87CA5774C37B173004D7 /* ZNGVideoMediaItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGVideoMediaItem.m; sourceTree = "<group>"; };
-		E242B571846D48DB362E87EA34898055 /* ZNGContactServicesViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGContactServicesViewController.m; sourceTree = "<group>"; };
 		E26678FC1776FB06A3F5633E1A4579BE /* ZNGLoadEarlierHeaderView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLoadEarlierHeaderView.h; sourceTree = "<group>"; };
 		E2BFCA005E23151BC8F95BEBDED89215 /* AFSecurityPolicy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFSecurityPolicy.m; path = AFNetworking/AFSecurityPolicy.m; sourceTree = "<group>"; };
 		E2D33DF6AA708BBECEAE1F2020046C79 /* ZNGCollectionViewLayoutAttributes.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGCollectionViewLayoutAttributes.h; sourceTree = "<group>"; };
@@ -2367,8 +2361,6 @@
 			children = (
 				922C2FB281B0DC2119799C0DBF3431E1 /* ZNGBaseViewController.h */,
 				924659204B7B3FD441DCB4C0FF31ECFE /* ZNGBaseViewController.m */,
-				0346E10D00ACCCA72CF106EDE00D30B2 /* ZNGContactServicesViewController.h */,
-				E242B571846D48DB362E87EA34898055 /* ZNGContactServicesViewController.m */,
 				31CB641A609ED6F52C49092BD49D1BD9 /* ZNGContactViewController.h */,
 				33D27ED5EA8D0ED53CD2457E06A6E5C4 /* ZNGContactViewController.m */,
 				14C45E4BE6E3A743E562BF3E23702822 /* ZNGConversationViewController.h */,
@@ -2387,7 +2379,6 @@
 			isa = PBXGroup;
 			children = (
 				B5113E5FEA1B0F9D8FEA80F5DF13A91B /* ZNGBaseViewController.xib */,
-				CB679E1E421F1A3F6C23F091B5DA81BF /* ZNGContactServicesViewController.xib */,
 				836AF83EA179598C82513EC105A9F867 /* ZNGContactViewController.xib */,
 				1551B2473A480EFB3256264F14D6F18F /* ZNGImageViewerController.xib */,
 				444E1AA204B3AC9D6A3C9F3A26085495 /* ZNGInboxViewController.xib */,
@@ -2508,7 +2499,6 @@
 				9604FDB3631174BFBC65BF15968BC160 /* ZNGContactLabelsTableViewCell.h in Headers */,
 				2AE7B39A63A8E44D3BFD537DD1F77953 /* ZNGContactService.h in Headers */,
 				22D5E29E8E80B3F463EE660CAEE85BBA /* ZNGContactServiceClient.h in Headers */,
-				6EA1530561DCF3F8CB3266370A870DEF /* ZNGContactServicesViewController.h in Headers */,
 				5D18B37042FD28CA835A91E10AA620D1 /* ZNGContactViewController.h in Headers */,
 				171ADEC1B4699BA78B825EC68FA5DE22 /* ZNGConversation.h in Headers */,
 				186115C984D7962C095A104D44EAC5CC /* ZNGConversationViewController.h in Headers */,
@@ -2964,7 +2954,6 @@
 				0666D365C976A453ED95A1B8CA9977DF /* ZNGContactCustomFieldTableViewCell.xib in Resources */,
 				D63117894CCC15C10BE7E9FAD0971C4F /* ZNGContactDetailsTableViewCell.xib in Resources */,
 				F59F0D38813DD4831E19BA8A75D90EDD /* ZNGContactLabelsTableViewCell.xib in Resources */,
-				29C9E30D4158EC49EB4815E3B6537955 /* ZNGContactServicesViewController.xib in Resources */,
 				9D5B4E4A2BA4251202BBECBE446D6174 /* ZNGContactViewController.xib in Resources */,
 				BD76E73CD5EC7083ABFEB17D66EC584A /* ZNGImages.xcassets in Resources */,
 				F294597EF276A911DD61C761B7450D09 /* ZNGImageViewerController.xib in Resources */,
@@ -3170,7 +3159,6 @@
 				156523A8B0C272A30F381949D2AA5E1B /* ZNGContactLabelsTableViewCell.m in Sources */,
 				5BCD88DCC18CF47C4FF23D1FBEA50E99 /* ZNGContactService.m in Sources */,
 				F17953AD1C095E6B0D47A9CBB685AD71 /* ZNGContactServiceClient.m in Sources */,
-				407A1A6E347567295E9FDFF28D961D7E /* ZNGContactServicesViewController.m in Sources */,
 				61E8090F345F86CC92E170F71989FF13 /* ZNGContactViewController.m in Sources */,
 				E9F8480CAAAE3DE8A865CE435C648184 /* ZNGConversation.m in Sources */,
 				B566FCEA1C2938C3CF9021DC47A1031F /* ZNGConversationViewController.m in Sources */,

@@ -33,6 +33,13 @@
 @property (nonatomic, readonly, nonnull) NSArray<ZNGContact *> * contacts;
 
 /**
+ *  Designated initializer.
+ *
+ * @param theServiceId The service identifier string for the user's current service.
+ */
+- (id) initWithServiceId:(NSString *)theServiceId;
+
+/**
  *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loading property.
  */
 - (void) refresh;
@@ -43,5 +50,14 @@
  *  @note If this data lies beyond the current range of loaded data, all missing data leading up to this value will be loaded.
  */
 - (void) refreshStartingAtIndex:(NSUInteger)index;
+
+/**
+ *  Overridden by subclasses to effect filtering.
+ *
+ *  It is recommended that subclasses call this implementation of parameters to start building their own.
+ *
+ *  These default parameters include page size and sort order. 
+ */
+- (NSMutableDictionary *) parameters;
 
 @end

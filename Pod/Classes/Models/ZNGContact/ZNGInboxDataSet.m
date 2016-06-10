@@ -94,7 +94,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     if (index > loadedCount) {
         NSUInteger firstPageToLoad = (loadedCount / pageSize) + 1;
         
-        for (NSUInteger i = firstPageToLoad; i <= lastPageToLoad; i++) {
+        for (NSUInteger i = lastPageToLoad - 1; i >= firstPageToLoad; i--) {
             [pagesToRefresh insertObject:@(i) atIndex:0];
         }
     }

@@ -19,7 +19,7 @@
 static int const zngLogLevel = ZNGLogLevelDebug;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
-static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialdata";
+static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialData";
 static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 @interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate, ZNGPagedArrayDelegate>
@@ -101,6 +101,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     self.tableView.hidden = YES;
     
+    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
+    self.activityIndicator.frame = CGRectMake((self.navigationController.navigationBar.bounds.size.width)/2 - 15, (self.view.bounds.size.height)/2 - 15, 30, 30);
+    [self.view addSubview:self.activityIndicator];
+    
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl setBackgroundColor:[UIColor whiteColor]];
     [refreshControl setTintColor:[UIColor zng_lightBlue]];
@@ -162,7 +166,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     NSIndexSet * changeIndexes = change[NSKeyValueChangeIndexesKey];
     NSMutableArray<NSIndexPath *> * paths = [[NSMutableArray alloc] initWithCapacity:[changeIndexes count]];
     [changeIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-        [paths addObject:[NSIndexPath indexPathWithIndex:idx]];
+        [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
     }];
     
     [refreshControl endRefreshing];
@@ -208,17 +212,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void)showActivityIndicator
 {
-    [self.activityIndicator stopAnimating];
-    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
-    self.activityIndicator.frame = CGRectMake((self.navigationController.navigationBar.bounds.size.width)/2 - 15, (self.view.bounds.size.height)/2 - 15, 30, 30);
-    [self.view addSubview:self.activityIndicator];
     [self.activityIndicator startAnimating];
+    self.activityIndicator.hidden = NO;
 }
 
 - (void)hideActivityIndicator
 {
     self.activityIndicator.hidden = YES;
-    [self.activityIndicator removeFromSuperview];
     [self.activityIndicator stopAnimating];
 }
 

@@ -278,7 +278,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     // This method could be tweaked to take velocity into account.  For now we will just grab more data if we are within 10 items from the bottom of our current data.
     BOOL nearBottom = (indexPath.row > ([self.data.contacts count] - 10));
-    BOOL moreDataAvailable = ([self.data.contacts count] != self.data.count);
+    BOOL moreDataAvailable = ([self.data.contacts count] < self.data.count);
     
     return (nearBottom && moreDataAvailable);
 }

@@ -32,6 +32,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 @interface ZNGInboxDataSet ()
 @property (nonatomic, assign) BOOL loading;
 @property (nonatomic, assign) NSUInteger count;
+@property (nonatomic, strong, nonnull) NSArray<ZNGContact *> * contacts;
 @end
 
 @implementation ZNGInboxDataSet
@@ -78,7 +79,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 {
     NSMutableArray<NSNumber *> * pagesToRefresh = [[NSMutableArray alloc] init];
     NSUInteger loadedCount = [_contacts count];
-    NSUInteger lastPageToLoad = (index / pageSize);
+    NSUInteger lastPageToLoad = (index / pageSize) + 1;
     
     // If the index they requested is more than 50% through its page, we will load one more
     NSUInteger remainingCountPastIndexOnPage = pageSize - (index % pageSize);
@@ -88,15 +89,15 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     }
     
     // Make sure we do not request an empty page
-    if (lastPageToLoad > totalPageCount) {
+    if ((totalPageCount > 0) && (lastPageToLoad > totalPageCount)) {
         lastPageToLoad = totalPageCount;
     }
     
     // Build our list of page indices
-    if (index > (loadedCount + 1)) {
-        NSUInteger firstPageToLoad = (loadedCount / pageSize);
+    if ((loadedCount == 0) || (index >= loadedCount)) {
+        NSUInteger firstPageToLoad = (loadedCount / pageSize) + 1;
         
-        for (NSUInteger i = firstPageToLoad; i < lastPageToLoad; i++) {
+        for (NSUInteger i = firstPageToLoad; i <= lastPageToLoad; i++) {
             [pagesToRefresh addObject:@(i)];
         }
     }
@@ -140,7 +141,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSMutableArray<ZNGContact *> * mutableContacts = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
     
     NSUInteger oldDataCount = [mutableContacts count];
-    NSUInteger startIndex = status.page * status.pageSize;
+    NSUInteger startIndex = (status.page - 1) * status.pageSize;
     
     // Check for the most simple and common case: We have brand new data to append.
     if (startIndex >= [self.contacts count]) {
@@ -170,6 +171,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     
     self.loading = NO;
     self.count = status.totalRecords;
+    totalPageCount = status.totalPages;
 }
 
 @end

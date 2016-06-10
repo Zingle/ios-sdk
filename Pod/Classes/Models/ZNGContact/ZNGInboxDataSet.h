@@ -36,7 +36,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 /**
  *  Initially set to YES until the first set of paginated data arrives, allowing us to set the count value.
  */
-@property (nonatomic, readonly) BOOL loading;
+@property (nonatomic, readonly) BOOL loadingInitialData;
 
 /**
  *  Once we have received our first piece of data, this contains the amount of total data available (but not necessarily

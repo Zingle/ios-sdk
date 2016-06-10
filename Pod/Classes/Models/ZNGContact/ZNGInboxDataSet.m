@@ -30,7 +30,7 @@ NSString * const ParameterValueDescending           = @"desc";
 NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
 
 @interface ZNGInboxDataSet ()
-@property (nonatomic, assign) BOOL loading;
+@property (nonatomic, assign) BOOL loadingInitialData;
 @property (nonatomic, assign) NSUInteger count;
 @property (nonatomic, strong, nonnull) NSArray<ZNGContact *> * contacts;
 @end
@@ -54,7 +54,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         fetchQueue.maxConcurrentOperationCount = 1;
         
         serviceId = theServiceId;
-        self.loading = YES;
+        self.loadingInitialData = YES;
         _contacts = @[];
         pageSize = 10;  // TODO: Raise this value after initial testing to at least 20 or 25.
         [self refresh];
@@ -216,7 +216,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         }
     }
     
-    self.loading = NO;
+    self.loadingInitialData = NO;
     self.count = status.totalRecords;
     totalPageCount = status.totalPages;
 }

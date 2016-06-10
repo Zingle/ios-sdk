@@ -39,7 +39,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * colorString = self.textColor;
     
     if ([colorString length] == 0) {
-        ZNGLogWarn(@"%@ label has no text color information.  Using default #ffffff", self.displayName);
+        ZNGLogInfo(@"%@ label has no text color information.  Using default #ffffff", self.displayName);
         colorString = @"#ffffff";
     }
     
@@ -51,7 +51,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * colorString = self.backgroundColor;
     
     if ([colorString length] == 0) {
-        ZNGLogWarn(@"%@ label has no text color information.  Using default #595959", self.displayName);
+        ZNGLogInfo(@"%@ label has no text color information.  Using default #595959", self.displayName);
         colorString = @"#595959";
     }
     

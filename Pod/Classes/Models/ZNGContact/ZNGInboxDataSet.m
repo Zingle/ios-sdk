@@ -31,6 +31,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 @interface ZNGInboxDataSet ()
 @property (nonatomic, assign) BOOL loadingInitialData;
+@property (nonatomic, assign) BOOL loading;
 @property (nonatomic, assign) NSUInteger count;
 @property (nonatomic, strong, nonnull) NSArray<ZNGContact *> * contacts;
 @end
@@ -54,7 +55,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         fetchQueue.maxConcurrentOperationCount = 1;
         
         serviceId = theServiceId;
-        self.loadingInitialData = YES;
+        _loading = YES;
+        _loadingInitialData = YES;
         _contacts = @[];
         pageSize = 10;  // TODO: Raise this value after initial testing to at least 20 or 25.
         [self refresh];
@@ -146,6 +148,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) fetchPages:(NSArray<NSNumber *> *)pages
 {
+    self.loading = YES;
+    
     // Create an NSBlockOperation for each page to fetch.  Feed them into the fetchQueue so that they will run one at a time in order.
     // Using NSBlockOperation also allows proper cancellation if we are deallocated.  This is a very real concern, especially when doing
     //  filtering based on a live-typed search term.  (We can expect many ZNGInboxDataSearch objects to be created and destroyed as the
@@ -181,10 +185,23 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         
         [fetchQueue addOperation:operation];
     }
+    
+    [fetchQueue addOperationWithBlock:^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.loading = NO;
+        });
+    }];
 }
 
 - (void) mergeNewData:(NSArray<ZNGContact *> *)incomingContacts withStatus:(ZNGStatus *)status
 {
+    if ([incomingContacts count] == 0) {
+        self.loadingInitialData = NO;
+        self.count = status.totalRecords;
+        totalPageCount = status.totalPages;
+        return;
+    }
+    
     if (![[NSThread currentThread] isMainThread]) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self mergeNewData:incomingContacts withStatus:status];

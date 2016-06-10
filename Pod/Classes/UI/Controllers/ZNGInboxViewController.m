@@ -267,6 +267,22 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     return 71;
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ((!self.data.loading) && [self shouldRequestNewDataAfterViewingIndexPath:indexPath]) {
+        [self.data refreshStartingAtIndex:indexPath.row + 10];
+    }
+}
+
+- (BOOL) shouldRequestNewDataAfterViewingIndexPath:(NSIndexPath *)indexPath
+{
+    // This method could be tweaked to take velocity into account.  For now we will just grab more data if we are within 10 items from the bottom of our current data.
+    BOOL nearBottom = (indexPath.row > ([self.data.contacts count] - 10));
+    BOOL moreDataAvailable = ([self.data.contacts count] != self.data.count);
+    
+    return (nearBottom && moreDataAvailable);
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedIndexPath = indexPath;

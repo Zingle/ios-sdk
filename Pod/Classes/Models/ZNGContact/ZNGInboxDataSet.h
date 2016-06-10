@@ -39,6 +39,11 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 @property (nonatomic, readonly) BOOL loadingInitialData;
 
 /**
+ *  Toggled every time new requests are pending after a refresh call.
+ */
+@property (nonatomic, readonly) BOOL loading;
+
+/**
  *  Once we have received our first piece of data, this contains the amount of total data available (but not necessarily
  *  yet retrieved.)
  *

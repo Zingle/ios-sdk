@@ -151,7 +151,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         [mutableContacts addObjectsFromArray:incomingContacts];
     } else {
         // We have some overlap between our current data and this data.
-        NSRange overlapRange = NSMakeRange(startIndex, MIN(oldDataCount, startIndex + [incomingContacts count]));
+        NSUInteger overlapFinalIndex = MIN(oldDataCount - 1, startIndex + [incomingContacts count]);
+        NSRange overlapRange = NSMakeRange(startIndex, overlapFinalIndex - startIndex);
         
         // Replace the overlapping objects
         [mutableContacts replaceObjectsInRange:overlapRange withObjectsFromArray:incomingContacts];

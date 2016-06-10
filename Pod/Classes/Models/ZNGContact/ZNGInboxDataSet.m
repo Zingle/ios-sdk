@@ -29,6 +29,11 @@ NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
 NSString * const ParameterValueDescending           = @"desc";
 NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
 
+@interface ZNGInboxDataSet ()
+@property (nonatomic, assign) BOOL loading;
+@property (nonatomic, assign) NSUInteger count;
+@end
+
 @implementation ZNGInboxDataSet
 {
     NSString * serviceId;
@@ -42,7 +47,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     
     if (self != nil) {
         serviceId = theServiceId;
-        _loading = YES;
+        self.loading = YES;
         _contacts = @[];
         pageSize = 10;  // TODO: Raise this value after initial testing to at least 20 or 25.
         [self refresh];
@@ -162,6 +167,9 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             [mutableContacts addObjectsFromArray:overflow];
         }
     }
+    
+    self.loading = NO;
+    self.count = status.totalRecords;
 }
 
 @end

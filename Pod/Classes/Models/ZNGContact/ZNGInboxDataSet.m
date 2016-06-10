@@ -27,7 +27,6 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSString * serviceId;
     NSUInteger pageSize;
     NSUInteger totalPageCount;
-    dispatch_queue_t processingQueue;
 }
 
 - (id) initWithServiceId:(NSString *)theServiceId
@@ -35,8 +34,6 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     self = [super init];
     
     if (self != nil) {
-        processingQueue = dispatch_queue_create("com.zingle.sdk.inbox.dataProcessing", NULL);
-        
         serviceId = theServiceId;
         _loading = YES;
         _contacts = @[];

@@ -14,6 +14,9 @@
 #import "DGActivityIndicatorView.h"
 #import "ZNGPagedArray.h"
 #import "ZNGInboxDataFilters.h"
+#import "ZNGLogging.h"
+
+static int const zngLogLevel = ZNGLogLevelDebug;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialdata";
@@ -161,6 +164,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             break;
             
         case NSKeyValueChangeReplacement:
+            // TODO: Check for messages that have swapped locations and use move instead of reload on those rows
             [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
@@ -212,22 +216,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (self.selectedIndexPath) {
-        ZNGContact *contact = [[self contacts] objectAtIndex:self.selectedIndexPath.row];
-        if ([contact.contactId isEqualToString:@"DELETED"]) {
-            self.tableView.hidden = YES;
-            [self refresh];
-        } else {
-            [self.tableView beginUpdates];
-            [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-            [self.tableView endUpdates];
-        }
-    }
-}
-
 -(void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -252,25 +240,38 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 #pragma mark - UITableViewDataSource
 
+- (ZNGContact *) contactAtIndexPath:(NSIndexPath *)indexPath
+{
+    return (indexPath.row < [self.data.contacts count]) ? self.data.contacts[indexPath.row] : nil;
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[self contacts] count];
+    return [self.data.contacts count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
-    ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
-    [cell configureCellWithContact:contact withServiceId:self.serviceId];
-    [cell.labelCollectionView reloadData];
-    return cell;
+    ZNGContact * contact = [self contactAtIndexPath:indexPath];
+    
+    if (contact != nil) {
+        ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+        [cell configureCellWithContact:contact withServiceId:self.serviceId];
+        [cell.labelCollectionView reloadData];
+        
+        return cell;
+    }
+    
+    ZNGLogError(@"Unable to load data for contact at index %ld.", (unsigned long)indexPath.row);
+    return nil;
 }
 
 #pragma mark - UITableViewDelegate
 
 -(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
+    ZNGContact *contact = [self contactAtIndexPath:indexPath];
+    
     if (![contact isKindOfClass:[NSNull class]]) {
         if (contact.labels.count > 4) {
             return 113;
@@ -286,9 +287,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     self.selectedIndexPath = indexPath;
     
-    ZNGContact *contact = [[self contacts] objectAtIndex:indexPath.row];
+    ZNGContact *contact = [self contactAtIndexPath:indexPath];
     
-    if ([contact isKindOfClass:[NSNull class]]) {
+    if (contact == nil) {
         return;
     }
     
@@ -296,19 +297,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     vc.detailDelegate = self;
     [self.navigationController pushViewController:vc animated:YES];
 }
-
-#pragma mark - ZNGPagedArrayDelegate
-
-- (void)pagedArray:(ZNGPagedArray *)pagedArray willAccessIndex:(NSUInteger)index returnObject:(__autoreleasing id *)returnObject {
-    
-    
-    if ([*returnObject isKindOfClass:[NSNull class]]) {
-        [self _setShouldLoadDataForPage:[pagedArray pageForIndex:index]];
-    } else {
-        [self _preloadNextPageIfNeededForIndex:index];
-    }
-}
-
 
 #pragma mark - ZNGConversationViewControllerDelegate
 

@@ -41,6 +41,8 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 /**
  *  Once we have received our first piece of data, this contains the amount of total data available (but not necessarily
  *  yet retrieved.)
+ *
+ *  This varies from [contacts count] in that [contacts count] only returns the number of entries actually downloaded and fully available.
  */
 @property (nonatomic, readonly) NSUInteger count;
 

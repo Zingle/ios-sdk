@@ -80,6 +80,15 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     return parameters;
 }
 
+- (BOOL) isEqual:(ZNGInboxDataSet *)object
+{
+    if (![object isKindOfClass:[ZNGInboxDataSet class]]) {
+        return NO;
+    }
+    
+    return [[self parameters] isEqualToDictionary:[object parameters]];
+}
+
 #pragma mark - Loading data
 - (void) refresh
 {
@@ -183,6 +192,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         return;
     }
     
+    // Call willChangeValue before we make any array changes, keeping our data relatively consistent to KVO observers
+    [self willChangeValueForKey:NSStringFromSelector(@selector(loadingInitialData))];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(count))];
+    
     // Grab our mutable proxy object
     NSMutableArray<ZNGContact *> * mutableContacts = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
     
@@ -216,9 +229,12 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         }
     }
     
-    self.loadingInitialData = NO;
-    self.count = status.totalRecords;
+    _loadingInitialData = NO;
+    _count = status.totalRecords;
     totalPageCount = status.totalPages;
+    
+    [self didChangeValueForKey:NSStringFromSelector(@selector(count))];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(loadingInitialData))];
 }
 
 @end

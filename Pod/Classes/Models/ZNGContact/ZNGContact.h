@@ -29,4 +29,12 @@
 
 - (NSString *)fullName;
 
+/**
+ *  Returns YES if any of the inbox display information has changed between instances, such as name, last message, star, labels, confirmation status
+ *
+ *  @param old The instance of this contact to compare against.
+ *  @returns YES if information has differed since the old instance.
+ */
+- (BOOL)requiresVisualRefeshSince:(ZNGContact *)old;
+
 @end

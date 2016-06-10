@@ -11,6 +11,15 @@
 
 @implementation ZNGMessage
 
+- (BOOL) isEqual:(ZNGMessage *)other
+{
+    if (![other isKindOfClass:[ZNGMessage class]]) {
+        return NO;
+    }
+    
+    return (self.messageId == other.messageId);
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

@@ -14,6 +14,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGLabel
 
+- (BOOL) isEqual:(ZNGLabel *)other
+{
+    if (![other isKindOfClass:[ZNGLabel class]]) {
+        return NO;
+    }
+    
+    return (self.labelId == other.labelId);
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

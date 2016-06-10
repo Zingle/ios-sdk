@@ -154,4 +154,13 @@
     }
 }
 
+- (BOOL)requiresVisualRefeshSince:(ZNGContact *)old
+{
+    return ((old.lastMessage == self.lastMessage) &&
+            ([[old fullName] isEqualToString:[self fullName]]) &&
+            (old.isStarred == self.isStarred) &&
+            (old.isConfirmed == self.isConfirmed) &&
+            ([old.labels isEqualToArray:self.labels]));
+}
+
 @end

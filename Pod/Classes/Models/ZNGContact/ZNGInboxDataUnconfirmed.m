@@ -1,20 +1,20 @@
 //
-//  ZNGInboxDataConfirmed.m
+//  ZNGInboxDataUnconfirmed.m
 //  Pods
 //
 //  Created by Jason Neel on 6/9/16.
 //
 //
 
-#import "ZNGInboxDataConfirmed.h"
+#import "ZNGInboxDataUnconfirmed.h"
 
-@implementation ZNGInboxDataConfirmed
+@implementation ZNGInboxDataUnconfirmed
 
 - (NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [super parameters];
     
-    parameters[ParameterKeyIsConfirmed] = ParameterValueTrue;
+    parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
     
     return parameters;
 }

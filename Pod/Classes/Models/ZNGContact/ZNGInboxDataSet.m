@@ -21,12 +21,14 @@ NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
 NSString * const ParameterKeyIsClosed               = @"is_closed";
 NSString * const ParameterKeyLabelId                = @"label_id";
 NSString * const ParameterKeyQuery                  = @"query";
+NSString * const ParameterKeyIsStarred              = @"is_starred";
 
 NSString * const ParameterValueTrue                 = @"true";
 NSString * const ParameterValueFalse                = @"false";
 NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
 NSString * const ParameterValueDescending           = @"desc";
 NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
+NSString * const ParameterValueCheckedIn            = @"
 
 @implementation ZNGInboxDataSet
 {

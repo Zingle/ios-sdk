@@ -17,7 +17,8 @@ extern NSString * const ParameterKeyLastMessageCreatedAt;
 extern NSString * const ParameterKeyIsConfirmed;           
 extern NSString * const ParameterKeyIsClosed;              
 extern NSString * const ParameterKeyLabelId;               
-extern NSString * const ParameterKeyQuery;                 
+extern NSString * const ParameterKeyQuery;
+extern NSString * const ParameterKeyIsStarred;
 
 extern NSString * const ParameterValueTrue;                
 extern NSString * const ParameterValueFalse;               

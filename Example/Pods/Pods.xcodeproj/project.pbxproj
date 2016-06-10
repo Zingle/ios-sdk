@@ -992,6 +992,7 @@
 		95A03F4B0D01D88A99E5518C733C1A32 /* DGActivityIndicatorLineScaleAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorLineScaleAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorLineScaleAnimation.h; sourceTree = "<group>"; };
 		95FA639215E5FF489C41C4D78E4C3720 /* AFNetworking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-prefix.pch"; sourceTree = "<group>"; };
 		960492645B7610C614CF76B534A84D8B /* ZNGLabelClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelClient.m; sourceTree = "<group>"; };
+		963002801D0B201500DEE845 /* ZNGInboxDataFilters.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZNGInboxDataFilters.h; sourceTree = "<group>"; };
 		9653CFC11D0A40F40093321C /* ZNGInboxDataConfirmed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGInboxDataConfirmed.h; sourceTree = "<group>"; };
 		9653CFC21D0A40F40093321C /* ZNGInboxDataConfirmed.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGInboxDataConfirmed.m; sourceTree = "<group>"; };
 		9653CFC51D0A43300093321C /* ZNGInboxDataUnconfirmed.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGInboxDataUnconfirmed.h; sourceTree = "<group>"; };
@@ -1964,6 +1965,7 @@
 		9653CFBF1D0A409F0093321C /* Inbox Data */ = {
 			isa = PBXGroup;
 			children = (
+				963002801D0B201500DEE845 /* ZNGInboxDataFilters.h */,
 				967504EF1D0A23B600020194 /* ZNGInboxDataSet.h */,
 				967504F01D0A23B600020194 /* ZNGInboxDataSet.m */,
 				9653CFC01D0A40BD0093321C /* Subclasses */,

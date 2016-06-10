@@ -155,7 +155,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     //  filtering based on a live-typed search term.  (We can expect many ZNGInboxDataSearch objects to be created and destroyed as the
     //  user types.)
     for (NSNumber * pageNumber in pages) {
-        __block NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
+        NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
             if (operation.cancelled) {
                 return;
             }
@@ -185,6 +185,24 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         
         [fetchQueue addOperation:operation];
     }
+    
+    // Remove any data past this current refresh
+    NSBlockOperation * removeTailOperation = [NSBlockOperation blockOperationWithBlock:^{
+        if (removeTailOperation.cancelled) {
+            return;
+        }
+        
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * pageSize;
+            
+            if (indexAfterCurrentData < [self.contacts count]) {
+                NSMutableArray<ZNGContact *> * mutable = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+                [mutable removeObjectsInRange:NSMakeRange(indexAfterCurrentData, [mutable count] - 1 - indexAfterCurrentData)];
+            }
+        });
+    }];
+    
+    [fetchQueue addOperation:removeTailOperation];
     
     [fetchQueue addOperationWithBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{

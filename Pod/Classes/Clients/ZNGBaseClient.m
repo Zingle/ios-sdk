@@ -29,9 +29,16 @@ NSString *const kBaseClientStatus = @"status";
 NSString *const kBaseClientResult = @"result";
 NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 
+static dispatch_queue_t jsonProcessingQueue;
+
 + (AFHTTPSessionManager*)sessionManager
 {
     return [[ZingleSDK sharedSDK] sharedSessionManager];
+}
+
++ (void) load
+{
+    jsonProcessingQueue = dispatch_queue_create("com.zingle.sdk.jsonProcessing", NULL);
 }
 
 #pragma mark - GET methods
@@ -60,25 +67,32 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             return;
         }
         
-        NSArray* result = responseObject[kBaseClientResult];
-        NSArray* responseObj = [MTLJSONAdapter modelsOfClass:responseClass fromJSONArray:result error:&error];
-        
-        if (error) {
-            ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+        dispatch_async(jsonProcessingQueue, ^{
+            NSError * error;
+            NSArray* result = responseObject[kBaseClientResult];
+            NSArray* responseObj = [MTLJSONAdapter modelsOfClass:responseClass fromJSONArray:result error:&error];
             
-            ZNGLogInfo(@"Received GET response.  Unable to parse a [%@] from the result: %@", responseClass, error.localizedDescription);
-            ZNGLogDebug(@"%@", result);
-            
-            if (failure) {
-                failure(zngError);
+            if (error) {
+                ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+                
+                ZNGLogInfo(@"Received GET response.  Unable to parse a [%@] from the result: %@", responseClass, error.localizedDescription);
+                ZNGLogDebug(@"%@", result);
+                
+                if (failure) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(zngError);
+                    });
+                }
+            } else {
+                ZNGLogDebug(@"Received and parsed GET response of type [%@][%llu]", responseClass, [responseObj count]);
+                
+                if (success) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success(responseObj, status);
+                    });
+                }
             }
-        } else {
-            ZNGLogDebug(@"Received and parsed GET response of type [%@][%llu]", responseClass, [responseObj count]);
-            
-            if (success) {
-                success(responseObj, status);
-            }
-        }
+        });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
         ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
         ZNGLogInfo(@"GET failed to %@: %@", path, zngError);

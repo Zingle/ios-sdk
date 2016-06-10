@@ -73,6 +73,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void) commonInit
 {
+    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(data)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
 }
@@ -81,6 +82,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     [self removeObserver:self forKeyPath:ZNGKVOContactsPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingPath context:ZNGInboxKVOContext];
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(data)) context:ZNGInboxKVOContext];
 }
 
 + (instancetype)withServiceId:(NSString *)serviceId
@@ -122,7 +124,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self.tableView registerNib:[ZNGTableViewCell nib] forCellReuseIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self refresh];
+    [self showActivityIndicator];
+    
+    self.data = [[ZNGInboxDataSet alloc] initWithServiceId:self.serviceId];
 }
 
 #pragma mark - Key Value Observing
@@ -132,12 +136,20 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
-    if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
-        if (self.data.loadingInitialData) {
-            // Our data is loading
-            
-        } else {
-            // Our data has either finished loading, or our data provider has disapeared.
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(data))]) {
+        int changeType = [change[NSKeyValueChangeKindKey] intValue];
+        ZNGInboxDataSet * oldData = change[NSKeyValueChangeOldKey];
+        
+        if (![self.data isEqual:oldData]) {
+            // This is a new filtering type
+            self.tableView.hidden = YES;
+            [self showActivityIndicator];
+        }
+    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
+        if (!self.data.loadingInitialData) {
+            // We just finished loading
+            [self hideActivityIndicator];
+            self.tableView.hidden = NO;
         }
     } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
         [self handleContactsUpdateWithChangeDictionary:change];
@@ -152,6 +164,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [changeIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
         [paths addObject:[NSIndexPath indexPathWithIndex:idx]];
     }];
+    
+    [refreshControl endRefreshing];
     
     switch (changeType)
     {
@@ -183,37 +197,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 }
 
 - (void)refresh:(UIRefreshControl *)aRefreshControl {
-    [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
-        self.service = service;
-        
-        NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
-        [combinedParams setObject:@"last_message_created_at" forKey:@"sort_field"];
-        [combinedParams setObject:@"desc" forKey:@"sort_direction"];
-        [combinedParams setObject:@"greater_than(0)" forKey:@"last_message_created_at"];
-        
-        [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
-            
-            self.pagedArray = [[ZNGPagedArray alloc] initWithCount:status.totalRecords objectsPerPage:status.pageSize];
-            self.pagedArray.delegate = self;
-            if ([contacts count] > 0) {
-                [self.pagedArray setObjects:contacts forPage:status.page];
-            }
-            
-            self.dataLoadingOperations = [NSMutableDictionary dictionary];
-            
-            self.tableView.hidden = NO;
-            [self hideActivityIndicator];
-            [self.tableView reloadData];
-            [refreshControl endRefreshing];
-            
-        } failure:^(ZNGError *error) {
-            [self hideActivityIndicator];
-            [refreshControl endRefreshing];
-        }];
-    } failure:^(ZNGError *error) {
-        [self hideActivityIndicator];
-        [refreshControl endRefreshing];
-    }];
+    [self.data refresh];
 }
 
 -(void)didReceiveMemoryWarning

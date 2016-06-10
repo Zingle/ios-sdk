@@ -13,6 +13,11 @@
 #import "ZNGTableViewCell.h"
 #import "DGActivityIndicatorView.h"
 #import "ZNGPagedArray.h"
+#import "ZNGInboxDataFilters.h"
+
+static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
+static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialdata";
+static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 @interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate, ZNGPagedArrayDelegate>
 
@@ -23,8 +28,11 @@
 @end
 
 @implementation ZNGInboxViewController
+{
+    UIRefreshControl * refreshControl;
+}
 
-#pragma mark - Class methods
+#pragma mark - Life cycle
 
 + (UINib *)nib
 {
@@ -38,6 +46,40 @@
                                           bundle:[NSBundle bundleForClass:[ZNGInboxViewController class]]];
 }
 
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    [self addObserver:self forKeyPath:ZNGKVOContactsLoadingPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
+    [self addObserver:self forKeyPath:ZNGKVOContactsPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
+}
+
+- (void) dealloc
+{
+    [self removeObserver:self forKeyPath:ZNGKVOContactsPath context:ZNGInboxKVOContext];
+    [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingPath context:ZNGInboxKVOContext];
+}
+
 + (instancetype)withServiceId:(NSString *)serviceId
 {
     ZNGInboxViewController *vc = (ZNGInboxViewController *)[ZNGInboxViewController inboxViewController];
@@ -49,16 +91,12 @@
     return vc;
 }
 
-- (NSArray *)contacts {
-    return (NSArray *)_pagedArray;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
     self.tableView.hidden = YES;
     
-    UIRefreshControl *refreshControl = [[UIRefreshControl alloc] init];
+    refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl setBackgroundColor:[UIColor whiteColor]];
     [refreshControl setTintColor:[UIColor zng_lightBlue]];
     [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
@@ -84,13 +122,63 @@
     [self refresh];
 }
 
+#pragma mark - Key Value Observing
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if (context != ZNGInboxKVOContext) {
+        return;
+    }
+    
+    if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
+        if (self.data.loadingInitialData) {
+            // Our data is loading
+            
+        } else {
+            // Our data has either finished loading, or our data provider has disapeared.
+        }
+    } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
+        [self handleContactsUpdateWithChangeDictionary:change];
+    }
+}
+
+- (void) handleContactsUpdateWithChangeDictionary:(NSDictionary<NSString *, id> *)change
+{
+    int changeType = [change[NSKeyValueChangeKindKey] intValue];
+    NSIndexSet * changeIndexes = change[NSKeyValueChangeIndexesKey];
+    NSMutableArray<NSIndexPath *> * paths = [[NSMutableArray alloc] initWithCapacity:[changeIndexes count]];
+    [changeIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        [paths addObject:[NSIndexPath indexPathWithIndex:idx]];
+    }];
+    
+    switch (changeType)
+    {
+        case NSKeyValueChangeInsertion:
+            [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+            
+        case NSKeyValueChangeRemoval:
+            [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+            
+        case NSKeyValueChangeReplacement:
+            [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            break;
+            
+        case NSKeyValueChangeSetting:
+        default:
+            // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
+            [self.tableView reloadData];
+    }
+}
+
+#pragma mark - Data Handling
 - (void)refresh {
     self.tableView.hidden = YES;
     [self showActivityIndicator];
     [self refresh:nil];
 }
 
-- (void)refresh:(UIRefreshControl *)refreshControl {
+- (void)refresh:(UIRefreshControl *)aRefreshControl {
     [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
         self.service = service;
         
@@ -221,59 +309,6 @@
     }
 }
 
-#pragma mark - Private methods
-- (void)_setShouldLoadDataForPage:(NSUInteger)page {
-    
-    if (!_pagedArray.pages[@(page)] && !_dataLoadingOperations[@(page)]) {
-        // Don't load data if there already is a loading operation in progress
-        [self _loadDataForPage:page];
-    }
-}
-
-- (void)_loadDataForPage:(NSUInteger)page {
-    
-    _dataLoadingOperations[@(page)] = [NSString stringWithFormat: @"%ld", (long)page];;
-    
-    NSMutableDictionary *combinedParams = [[NSMutableDictionary alloc] initWithDictionary:self.currentFilterParams copyItems:YES];
-    [combinedParams setObject:[NSNumber numberWithInteger: self.pagedArray.objectsPerPage] forKey:@"page_size"];
-    [combinedParams setObject:[NSNumber numberWithInteger: page] forKey:@"page"];
-    [combinedParams setObject:@"last_message_created_at" forKey:@"sort_field"];
-    [combinedParams setObject:@"desc" forKey:@"sort_direction"];
-    [combinedParams setObject:@"greater_than(0)" forKey:@"last_message_created_at"];
-    
-    [ZNGContactClient contactListWithServiceId:self.serviceId parameters:combinedParams success:^(NSArray *contacts, ZNGStatus *status) {
-        
-        [_dataLoadingOperations removeObjectForKey:@(status.page)];
-        [self.pagedArray setObjects:contacts forPage:status.page];
-        
-        NSMutableArray *indexPathsToReload = [NSMutableArray array];
-        NSIndexSet *indexes = [self.pagedArray indexSetForPage:status.page];
-        
-        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-            
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
-            if ([self.tableView.indexPathsForVisibleRows containsObject:indexPath]) {
-                [indexPathsToReload addObject:indexPath];
-            }
-        }];
-        
-        if (indexPathsToReload.count > 0) {
-            [self.tableView reloadRowsAtIndexPaths:indexPathsToReload withRowAnimation:UITableViewRowAnimationFade];
-        }
-    } failure:^(ZNGError *error) {
-        [_dataLoadingOperations removeObjectForKey:@(page)];
-    }];
-}
-
-- (void)_preloadNextPageIfNeededForIndex:(NSUInteger)index {
-    
-    NSUInteger currentPage = [_pagedArray pageForIndex:index];
-    NSUInteger preloadPage = [_pagedArray pageForIndex:index+5];
-    
-    if (preloadPage > currentPage && preloadPage <= _pagedArray.numberOfPages) {
-        [self _setShouldLoadDataForPage:preloadPage];
-    }
-}
 
 #pragma mark - ZNGConversationViewControllerDelegate
 

@@ -10,6 +10,7 @@
 #import "ZNGConversationViewController.h"
 @class ZNGService;
 @class ZNGContact;
+@class ZNGInboxDataSet;
 
 @interface ZNGInboxViewController : UIViewController <ZNGConversationDetailDelegate>
 
@@ -21,8 +22,6 @@
 
 - (void)refresh:(UIRefreshControl *)refreshControl;
 
-- (NSArray *)contacts;
-
 @property (strong, nonatomic) ZNGService *service;
 @property (strong, nonatomic) NSString *serviceId;
 
@@ -30,5 +29,7 @@
 
 @property (strong, nonatomic) NSIndexPath *selectedIndexPath;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+
+@property (nonatomic, strong, nullable) ZNGInboxDataSet * data;
 
 @end

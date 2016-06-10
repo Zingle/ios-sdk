@@ -77,28 +77,25 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) refreshStartingAtIndex:(NSUInteger)index
 {
-    NSMutableArray<NSNumber *> * pagesToRefresh = [[NSMutableArray alloc] init];
+    NSMutableOrderedSet<NSNumber *> * pagesToRefresh = [[NSMutableOrderedSet alloc] init];
     NSUInteger loadedCount = [_contacts count];
     NSUInteger lastPageToLoad = (index / pageSize) + 1;
     
-    // If the index they requested is more than 50% through its page, we will load one more
+    [pagesToRefresh addObject:@(lastPageToLoad)];
+    
+    // If the index they requested would load fewer than 10 entries, load an additional page
     NSUInteger remainingCountPastIndexOnPage = pageSize - (index % pageSize);
     
-    if (remainingCountPastIndexOnPage < (pageSize / 2)) {
-        lastPageToLoad++;
+    if (remainingCountPastIndexOnPage < 10) {
+        [pagesToRefresh addObject:@(lastPageToLoad + 1)];
     }
     
-    // Make sure we do not request an empty page
-    if ((totalPageCount > 0) && (lastPageToLoad > totalPageCount)) {
-        lastPageToLoad = totalPageCount;
-    }
-    
-    // Build our list of page indices
-    if ((loadedCount == 0) || (index >= loadedCount)) {
+    // Do we need to load any data leading up to this data?
+    if (index > loadedCount) {
         NSUInteger firstPageToLoad = (loadedCount / pageSize) + 1;
         
         for (NSUInteger i = firstPageToLoad; i <= lastPageToLoad; i++) {
-            [pagesToRefresh addObject:@(i)];
+            [pagesToRefresh insertObject:@(i) atIndex:0];
         }
     }
     
@@ -108,7 +105,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         return;
     }
     
-    [self fetchPages:pagesToRefresh];
+    [self fetchPages:[pagesToRefresh array]];
 }
 
 - (void) fetchPages:(NSArray<NSNumber *> *)pages

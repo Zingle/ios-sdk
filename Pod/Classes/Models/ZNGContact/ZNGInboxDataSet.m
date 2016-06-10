@@ -40,6 +40,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSString * serviceId;
     NSUInteger pageSize;
     NSUInteger totalPageCount;
+    
+    dispatch_queue_t fetchingQueue;
 }
 
 - (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId
@@ -47,6 +49,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     self = [super init];
     
     if (self != nil) {
+        fetchingQueue = dispatch_queue_create("com.zingle.sdk.contact.fetching", NULL);
+        
         serviceId = theServiceId;
         self.loading = YES;
         _contacts = @[];
@@ -110,25 +114,34 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) fetchPages:(NSArray<NSNumber *> *)pages
 {
-    for (NSNumber * pageNumber in pages) {
-        NSMutableDictionary * parameters = [self parameters];
-        parameters[ParameterKeyPageIndex] = pageNumber;
+    dispatch_async(fetchingQueue, ^{
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         
-        [ZNGContactClient contactListWithServiceId:serviceId parameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
-            totalPageCount = status.totalPages;
-            _count = status.totalRecords;
+        for (NSNumber * pageNumber in pages) {
+            NSMutableDictionary * parameters = [self parameters];
+            parameters[ParameterKeyPageIndex] = pageNumber;
             
-            [self mergeNewData:contacts withStatus:status];
-        } failure:^(ZNGError *error) {
-            ZNGLogWarn(@"Unable to fetch inbox data for page %@: %@", pageNumber, error);
-        }];
-    }
+            [ZNGContactClient contactListWithServiceId:serviceId parameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
+                totalPageCount = status.totalPages;
+                _count = status.totalRecords;
+                
+                [self mergeNewData:contacts withStatus:status];
+                dispatch_semaphore_signal(semaphore);
+            } failure:^(ZNGError *error) {
+                ZNGLogWarn(@"Unable to fetch inbox data for page %@: %@", pageNumber, error);
+                dispatch_semaphore_signal(semaphore);
+            }];
+            
+            dispatch_time_t thirtySecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30.0 * NSEC_PER_SEC));
+            dispatch_semaphore_wait(semaphore, thirtySecondTimeout);
+        }
+    });
 }
 
 - (void) mergeNewData:(NSArray<ZNGContact *> *)incomingContacts withStatus:(ZNGStatus *)status
 {
     if (![[NSThread currentThread] isMainThread]) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
             [self mergeNewData:incomingContacts withStatus:status];
         });
         return;

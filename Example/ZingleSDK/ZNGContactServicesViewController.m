@@ -8,6 +8,8 @@
 
 #import "ZNGContactServicesViewController.h"
 #import "ZNGContactServiceClient.h"
+#import "ZNGContactClient.h"
+#import "ZNGContact.h"
 
 @interface ZNGContactServicesViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -115,9 +117,36 @@
 {
     ZNGContactService *contactService = [self.contactServices objectAtIndex:indexPath.row];
     
-    if (self.delegate) {
-        [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
+    if (!contactService.contactId) {
+        
+        [ZNGContactClient findOrCreateContactWithChannelTypeID:self.channelTypeId andChannelValue:self.channelValue withServiceId:self.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+            
+            if (contact) {
+                
+                if (self.delegate) {
+                    contactService.contactId = contact.contactId;
+                    [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
+                }
+                
+            } else {
+                NSLog(@"contact is nil!");
+            }
+            
+            
+        } failure:^(ZNGError *error) {
+            NSLog(@"Error while attempting to findOrCreateContact: %@", error.localizedDescription);
+        }];
+        
+        
+        
+    } else {
+        
+        if (self.delegate) {
+            [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
+        }
+        
     }
+
 }
 
 @end

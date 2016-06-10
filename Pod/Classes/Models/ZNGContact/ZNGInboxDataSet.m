@@ -41,7 +41,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSUInteger pageSize;
     NSUInteger totalPageCount;
     
-    dispatch_queue_t fetchingQueue;
+    NSOperationQueue * fetchQueue;
 }
 
 - (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId
@@ -49,7 +49,9 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     self = [super init];
     
     if (self != nil) {
-        fetchingQueue = dispatch_queue_create("com.zingle.sdk.contact.fetching", NULL);
+        fetchQueue = [[NSOperationQueue alloc] init];
+        fetchQueue.name = @"Zingle Inbox fetching";
+        fetchQueue.maxConcurrentOperationCount = 1;
         
         serviceId = theServiceId;
         self.loading = YES;
@@ -59,6 +61,11 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+    [fetchQueue cancelAllOperations];
 }
 
 #pragma mark - Filtering
@@ -114,10 +121,18 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) fetchPages:(NSArray<NSNumber *> *)pages
 {
-    dispatch_async(fetchingQueue, ^{
-        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-        
-        for (NSNumber * pageNumber in pages) {
+    // Create an NSBlockOperation for each page to fetch.  Feed them into the fetchQueue so that they will run one at a time in order.
+    // Using NSBlockOperation also allows proper cancellation if we are deallocated.  This is a very real concern, especially when doing
+    //  filtering based on a live-typed search term.  (We can expect many ZNGInboxDataSearch objects to be created and destroyed as the
+    //  user types.)
+    for (NSNumber * pageNumber in pages) {
+        __block NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
+            if (operation.cancelled) {
+                return;
+            }
+            
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            
             NSMutableDictionary * parameters = [self parameters];
             parameters[ParameterKeyPageIndex] = pageNumber;
             
@@ -125,7 +140,9 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 totalPageCount = status.totalPages;
                 _count = status.totalRecords;
                 
-                [self mergeNewData:contacts withStatus:status];
+                if (!(operation.cancelled)) {
+                    [self mergeNewData:contacts withStatus:status];
+                }
                 dispatch_semaphore_signal(semaphore);
             } failure:^(ZNGError *error) {
                 ZNGLogWarn(@"Unable to fetch inbox data for page %@: %@", pageNumber, error);
@@ -134,8 +151,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             
             dispatch_time_t thirtySecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(30.0 * NSEC_PER_SEC));
             dispatch_semaphore_wait(semaphore, thirtySecondTimeout);
-        }
-    });
+        }];
+        
+        [fetchQueue addOperation:operation];
+    }
 }
 
 - (void) mergeNewData:(NSArray<ZNGContact *> *)incomingContacts withStatus:(ZNGStatus *)status

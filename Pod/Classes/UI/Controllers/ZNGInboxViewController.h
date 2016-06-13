@@ -14,19 +14,19 @@
 
 @interface ZNGInboxViewController : UIViewController <ZNGConversationDetailDelegate>
 
-+ (instancetype)inboxViewController;
++ (nonnull instancetype)inboxViewController;
 
-+ (instancetype)withServiceId:(NSString *)serviceId;
++ (nonnull instancetype)withServiceId:(nonnull NSString *)serviceId;
 
 - (void)refresh;
 
-- (void)refresh:(UIRefreshControl *)refreshControl;
+- (void)refresh:(nullable UIRefreshControl *)refreshControl;
 
-@property (strong, nonatomic) ZNGService *service;
-@property (strong, nonatomic) NSString *serviceId;
+@property (strong, nonatomic, nullable) ZNGService *service;
+@property (strong, nonatomic, nullable) NSString *serviceId;
 
-@property (strong, nonatomic) NSIndexPath *selectedIndexPath;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic, nullable) NSIndexPath *selectedIndexPath;
+@property (weak, nonatomic, nullable) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong, nullable) ZNGInboxDataSet * data;
 

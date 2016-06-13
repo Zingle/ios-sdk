@@ -10,7 +10,7 @@
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 NSString * const ParameterKeyPageIndex              = @"page";
 NSString * const ParameterKeyPageSize               = @"page_size";

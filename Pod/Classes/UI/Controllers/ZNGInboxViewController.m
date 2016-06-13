@@ -16,7 +16,7 @@
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 
-static int const zngLogLevel = ZNGLogLevelVerbose;
+static int const zngLogLevel = ZNGLogLevelInfo;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialData";

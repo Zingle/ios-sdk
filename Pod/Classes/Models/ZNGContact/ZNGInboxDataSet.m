@@ -10,7 +10,7 @@
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelVerbose;
 
 NSString * const ParameterKeyPageIndex              = @"page";
 NSString * const ParameterKeyPageSize               = @"page_size";
@@ -197,7 +197,12 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             
             if (indexAfterCurrentData < [self.contacts count]) {
                 NSMutableArray<ZNGContact *> * mutable = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
-                [mutable removeObjectsInRange:NSMakeRange(indexAfterCurrentData, [mutable count] - 1 - indexAfterCurrentData)];
+                NSRange removalRange = NSMakeRange(indexAfterCurrentData, [mutable count] - indexAfterCurrentData);
+                NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:removalRange];
+                
+                ZNGLogVerbose(@"Removing %ld objects that occur past the current refresh range.", (unsigned long)removalRange.length);
+                
+                [mutable removeObjectsAtIndexes:indexSet];
             }
         });
     }];
@@ -244,23 +249,39 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             ZNGLogWarn(@"Incoming data starts at index %ld, but we only have %ld items in our current data.  Appending anyway (at incorrect indices.)", (unsigned long)startIndex, (unsigned long)oldDataCount);
         }
         
-        // Append all of the objects
-        [mutableContacts addObjectsFromArray:incomingContacts];
+        ZNGLogVerbose(@"Appending %ld objects that all appear outside of our current range.", (unsigned long)[incomingContacts count]);
+        
+        // Append all of the objects.
+        // Note that insertObjects:atIndexes: is used instead of addObjectsFromArray: because the latter does one by one updates, causing
+        //  tons of individual KVO notifications to be posted.
+        NSRange indexRange = NSMakeRange([mutableContacts count], [incomingContacts count]);
+        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:indexRange];
+        [mutableContacts insertObjects:incomingContacts atIndexes:indexSet];
+        
     } else {
         // We have some overlap between our current data and this data.
-        NSUInteger overlapFinalIndex = MIN(oldDataCount - 1, startIndex + [incomingContacts count]);
+        NSUInteger overlapFinalIndex = MIN(oldDataCount, startIndex + [incomingContacts count]);
         NSRange overlapRange = NSMakeRange(startIndex, overlapFinalIndex - startIndex);
         
+        NSInteger overflowCount = [incomingContacts count] - overlapRange.length;
+        NSArray * replacements = incomingContacts;
+
+        if (overflowCount > 0) {
+            replacements = [replacements subarrayWithRange:NSMakeRange(0, overlapRange.length)];
+        }
+        
+        ZNGLogVerbose(@"We received %ld contacts, %ld of which overlap with our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
+        
         // Replace the overlapping objects
-        [mutableContacts replaceObjectsInRange:overlapRange withObjectsFromArray:incomingContacts];
+        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRange];
+        [mutableContacts replaceObjectsAtIndexes:indexSet withObjects:replacements];
         
         // Append any extra
-        NSInteger overflowCount = [incomingContacts count] - overlapRange.length;
-        
         if (overflowCount > 0) {
             NSRange overflowRange = NSMakeRange(overlapRange.length, [incomingContacts count] - overlapRange.length);
+            NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overflowRange];
             NSArray * overflow = [incomingContacts subarrayWithRange:overflowRange];
-            [mutableContacts addObjectsFromArray:overflow];
+            [mutableContacts insertObjects:overflow atIndexes:indexSet];    // See note above about insertObjects:AtIndexes: vs. addObjectsFromArray; re: KVO
         }
     }
     

@@ -124,7 +124,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSUInteger remainingCountPastIndexOnPage = pageSize - (index % pageSize);
     
     if (remainingCountPastIndexOnPage < 10) {
-        [pagesToRefresh addObject:@(lastPageToLoad + 1)];
+        // Ensure that we are not appending an extra page beyond the actual data
+        if ((totalPageCount == 0) || (lastPageToLoad+1 < totalPageCount)) {
+            [pagesToRefresh addObject:@(lastPageToLoad + 1)];
+        }
     }
     
     // Do we need to load any data leading up to this data?  (e.g. They requested object #25 but we have only loaded the first 10 objects.  Since our data is held in an
@@ -219,6 +222,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 - (void) mergeNewData:(NSArray<ZNGContact *> *)incomingContacts withStatus:(ZNGStatus *)status
 {
     if ([incomingContacts count] == 0) {
+        ZNGLogDebug(@"Received 0 contacts in response");
         self.loadingInitialData = NO;
         self.count = status.totalRecords;
         totalPageCount = status.totalPages;

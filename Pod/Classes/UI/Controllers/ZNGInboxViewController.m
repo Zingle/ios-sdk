@@ -169,7 +169,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
     }];
     
-    [refreshControl endRefreshing];
+    // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
+    // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
+    if (refreshControl.isRefreshing) {
+        [refreshControl endRefreshing];
+    }
     
     switch (changeType)
     {

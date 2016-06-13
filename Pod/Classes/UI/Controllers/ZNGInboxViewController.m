@@ -16,7 +16,7 @@
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 
-static int const zngLogLevel = ZNGLogLevelDebug;
+static int const zngLogLevel = ZNGLogLevelVerbose;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialData";
@@ -178,20 +178,24 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     switch (changeType)
     {
         case NSKeyValueChangeInsertion:
+            ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
             [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSKeyValueChangeRemoval:
+            ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
             [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSKeyValueChangeReplacement:
+            ZNGLogVerbose(@"Replacing %ld items", (unsigned long)[paths count]);
             // TODO: Check for messages that have swapped locations and use move instead of reload on those rows
             [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
             break;
             
         case NSKeyValueChangeSetting:
         default:
+            ZNGLogVerbose(@"Reloading the table");
             // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
             [self.tableView reloadData];
     }

@@ -29,18 +29,21 @@ NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
 NSString * const ParameterValueDescending           = @"desc";
 NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
 
+// Readonly property re-declarations to ensure that they are properly backed with KVO compliant setters.
 @interface ZNGInboxDataSet ()
 @property (nonatomic, assign) BOOL loadingInitialData;
 @property (nonatomic, assign) BOOL loading;
 @property (nonatomic, assign) NSUInteger count;
 @property (nonatomic, strong, nonnull) NSArray<ZNGContact *> * contacts;
+
+// Private property.  Used to avoid having to do some weak->totalPageCount nonsense within our NSOperationQueue operations.
+@property (nonatomic, assign) NSUInteger totalPageCount;
 @end
 
 @implementation ZNGInboxDataSet
 {
     NSString * serviceId;
     NSUInteger pageSize;
-    NSUInteger totalPageCount;
     
     NSOperationQueue * fetchQueue;
 }
@@ -104,6 +107,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSMutableOrderedSet<NSNumber *> * pagesToRefresh = [[NSMutableOrderedSet alloc] init];
     NSUInteger loadedCount = [_contacts count];
     NSUInteger lastPageToLoad = (index / pageSize) + 1; // The page holding the object at the specified index
+    NSUInteger totalPageCount = self.totalPageCount;
     
     // Sanity check how many pages we plan to load if we have any existing pagination data.
     if ((totalPageCount > 0) && (lastPageToLoad > totalPageCount)) {
@@ -152,6 +156,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 - (void) fetchPages:(NSArray<NSNumber *> *)pages
 {
     self.loading = YES;
+    __weak ZNGInboxDataSet * weakSelf = self;
     
     // Create an NSBlockOperation for each page to fetch.  Feed them into the fetchQueue so that they will run one at a time in order.
     // Using NSBlockOperation also allows proper cancellation if we are deallocated.  This is a very real concern, especially when doing
@@ -166,15 +171,15 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             // Semaphore to keep the task alive and spinning until we receive a response
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             
-            NSMutableDictionary * parameters = [self parameters];
+            NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = pageNumber;
             
             [ZNGContactClient contactListWithServiceId:serviceId parameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
-                totalPageCount = status.totalPages;
-                _count = status.totalRecords;
+                weakSelf.totalPageCount = status.totalPages;
+                weakSelf.count = status.totalRecords;
                 
                 if (!(operation.cancelled)) {
-                    [self mergeNewData:contacts withStatus:status];
+                    [weakSelf mergeNewData:contacts withStatus:status];
                 }
                 dispatch_semaphore_signal(semaphore);
             } failure:^(ZNGError *error) {
@@ -198,8 +203,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         dispatch_sync(dispatch_get_main_queue(), ^{
             NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * pageSize;
             
-            if (indexAfterCurrentData < [self.contacts count]) {
-                NSMutableArray<ZNGContact *> * mutable = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+            if (indexAfterCurrentData < [weakSelf.contacts count]) {
+                NSMutableArray<ZNGContact *> * mutable = [weakSelf mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
                 NSRange removalRange = NSMakeRange(indexAfterCurrentData, [mutable count] - indexAfterCurrentData);
                 NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:removalRange];
                 
@@ -214,7 +219,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     
     [fetchQueue addOperationWithBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            self.loading = NO;
+            weakSelf.loading = NO;
         });
     }];
 }
@@ -225,7 +230,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         ZNGLogDebug(@"Received 0 contacts in response");
         self.loadingInitialData = NO;
         self.count = status.totalRecords;
-        totalPageCount = status.totalPages;
+        self.totalPageCount = status.totalPages;
         return;
     }
     
@@ -291,7 +296,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     
     _loadingInitialData = NO;
     _count = status.totalRecords;
-    totalPageCount = status.totalPages;
+    self.totalPageCount = status.totalPages;
     
     [self didChangeValueForKey:NSStringFromSelector(@selector(count))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(loadingInitialData))];

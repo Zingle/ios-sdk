@@ -64,21 +64,23 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 - (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId;
 
 /**
- *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loading property.
+ *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loadingInitialData property.
  */
 - (void) refresh;
 
 /**
- *  Refreshes data starting around the current value.  This data will be merged into the contacts array if possible.
+ *  Refreshes data starting around the current value.  This data will be merged into the contacts array if possible.  Any data trailing past the data fetched
+ *   by this request will be discarded.  (e.g. If we refresh and that ends up retrieving page 4 of 10, any page 5 or later will be discarded until it is fetched
+ *   again in the future.)
  *
- *  @note If this data lies beyond the current range of loaded data, all missing data leading up to this value will be loaded.
+ *  @note If this data lies beyond the current range of loaded data, all missing data leading up to this value will be loaded first.
  */
 - (void) refreshStartingAtIndex:(NSUInteger)index;
 
 /**
  *  Overridden by subclasses to effect filtering.
  *
- *  It is recommended that subclasses call this implementation of parameters to start building their own.
+ *  It is recommended that subclasses call [super parameters] to start building their own.
  *
  *  These default parameters include page size and sort order. 
  */

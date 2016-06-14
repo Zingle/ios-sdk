@@ -74,7 +74,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
  *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
  *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
  */
-- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
 @end
 

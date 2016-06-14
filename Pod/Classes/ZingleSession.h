@@ -37,6 +37,6 @@
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
  */
-- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
 
 @end

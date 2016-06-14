@@ -21,6 +21,6 @@
 @property (nonatomic, readonly, nonnull) ZNGAccount * account;
 @property (nonatomic, readonly, nonnull) ZNGService * service;
 
-- (instancetype) initWithToken:(NSString *)token key:(NSString *)key account:(ZNGAccount *)account service:(ZNGService *)service;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service;
 
 @end

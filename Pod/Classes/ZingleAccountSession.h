@@ -10,6 +10,8 @@
 
 @class ZNGService;
 @class ZNGAccount;
+@class ZNGAccountClient;
+@class ZNGServiceClient;
 
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * _Nonnull availableAccounts);
 typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Nonnull availableServices);

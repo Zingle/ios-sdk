@@ -39,15 +39,4 @@
  */
 - (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
 
-/*
- *  Designated initializer for a Zingle session object.  Provides URL overriding capabilities via baseUrl and isDebug flags that are ignored during release builds.
- *
- *  @param token Token for Zingle API user
- *  @param key Security key for Zingle API user
- *  @param baseUrl URL override for debug builds.  Used to allow settings bundle to specify a server target.  Ignored in release builds.
- *  @param isDebug Flag used when baseUrl is not provided to determine which server to target.
- */
-- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key urlOverride:(nullable NSString *)baseUrl debugMode:(BOOL)isDebug;
-
-
 @end

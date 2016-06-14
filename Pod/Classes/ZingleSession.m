@@ -37,13 +37,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         isDebugging = isDebug;
 #else
         if (baseUrl != nil) {
-            ZNGLogWarn(@"Base URl override was specified as \"%@,\" but this is a release build, so it is being ignored.", baseUrl);
+            ZNGLogWarn(@"Base URL override was specified as \"%@,\" but this is a release build, so it is being ignored.", baseUrl);
         }
 #endif
         
         _token = [token copy];
         _key = [token copy];
-        NSString * urlString = [self _baseUrl];
+        NSString * urlString = LiveBaseURL;
         
         sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
         sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
@@ -53,15 +53,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     return self;
-}
-
-- (NSString *) _baseUrl
-{
-    if ([_baseUrl length] > 0) {
-        return _baseUrl;
-    }
-    
-    return (isDebugging) ? DebugBaseURL : LiveBaseURL;
 }
 
 @end

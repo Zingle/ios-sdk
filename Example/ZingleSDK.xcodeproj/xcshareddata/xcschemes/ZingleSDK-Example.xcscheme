@@ -32,9 +32,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6003F5AD195388D20070C39A"
-               BuildableName = "ZingleSDK_Tests.xctest"
-               BlueprintName = "ZingleSDK_Tests"
+               BlueprintIdentifier = "960FCBAD1D0F6E9C00B7E82C"
+               BuildableName = "Tests.xctest"
+               BlueprintName = "Tests"
                ReferencedContainer = "container:ZingleSDK.xcodeproj">
             </BuildableReference>
          </TestableReference>

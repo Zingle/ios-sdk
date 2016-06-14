@@ -33,7 +33,6 @@
 		DFFBF22F1C644C6700FF47B4 /* ZNGAccountClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF22E1C644C6700FF47B4 /* ZNGAccountClientTests.m */; };
 		DFFBF2331C645B3900FF47B4 /* ZNGAsyncSemaphor.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2321C645B3900FF47B4 /* ZNGAsyncSemaphor.m */; };
 		DFFBF2381C64816400FF47B4 /* ZNGBaseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2371C64816400FF47B4 /* ZNGBaseTests.m */; };
-		DFFBF23A1C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2391C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m */; };
 		DFFBF23C1C64862600FF47B4 /* ZNGServiceClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */; };
 		DFFBF2501C6538A000FF47B4 /* ZNGTimeZoneClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */; };
 		DFFBF2641C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m in Sources */ = {isa = PBXBuildFile; fileRef = DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */; };
@@ -98,7 +97,6 @@
 		DFFBF2321C645B3900FF47B4 /* ZNGAsyncSemaphor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGAsyncSemaphor.m; path = Async/ZNGAsyncSemaphor.m; sourceTree = "<group>"; };
 		DFFBF2361C64816400FF47B4 /* ZNGBaseTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGBaseTests.h; sourceTree = "<group>"; };
 		DFFBF2371C64816400FF47B4 /* ZNGBaseTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGBaseTests.m; sourceTree = "<group>"; };
-		DFFBF2391C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGAccountPlanClientTests.m; sourceTree = "<group>"; };
 		DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGServiceClientTests.m; sourceTree = "<group>"; };
 		DFFBF24F1C6538A000FF47B4 /* ZNGTimeZoneClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGTimeZoneClientTests.m; sourceTree = "<group>"; };
 		DFFBF2631C654D5900FF47B4 /* ZNGAvailablePhoneNumberClientTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGAvailablePhoneNumberClientTests.m; sourceTree = "<group>"; };
@@ -203,7 +201,6 @@
 				DFFBF2301C645AFE00FF47B4 /* Async */,
 				6003F5B6195388D20070C39A /* Supporting Files */,
 				DFFBF22E1C644C6700FF47B4 /* ZNGAccountClientTests.m */,
-				DFFBF2391C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m */,
 				DFFBF2361C64816400FF47B4 /* ZNGBaseTests.h */,
 				DFFBF2371C64816400FF47B4 /* ZNGBaseTests.m */,
 				DFFBF23B1C64862600FF47B4 /* ZNGServiceClientTests.m */,
@@ -496,7 +493,6 @@
 				E11BA7951CF4A0F700A0E963 /* ZNGUserAuthorizationClientTests.m in Sources */,
 				DFEDE41F1C69515A004ACAC4 /* ZNGContactClientTests.m in Sources */,
 				DFEDE4071C6939E5004ACAC4 /* ZNGServiceChannelClientTests.m in Sources */,
-				DFFBF23A1C6482DB00FF47B4 /* ZNGAccountPlanClientTests.m in Sources */,
 				DF756FE21C6C3ACF00732BE2 /* ZNGContactFieldClientTests.m in Sources */,
 				E140C45F1CEFA4C3005B3A99 /* ZNGEventClientTests.m in Sources */,
 				DFB895A41CB45C6C00E9AC11 /* ZNGNotificationTests.m in Sources */,

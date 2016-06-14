@@ -77,3 +77,11 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
 - (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
 @end
+
+/*
+ *  The methods and property get/set methods in this category will generate a logged error and have no effect if they are called before the 'available' flag is set
+ *  i.e. they cannot be called until we have a specific account and service selected
+ */
+@interface ZingleAccountSession (MethodsRequiringAuthentication)
+
+@end

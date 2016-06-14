@@ -31,7 +31,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
 {
-    self = [self initWithToken:token key:key accountChooser:nil serviceChooser:nil];
+    return [self initWithToken:token key:key accountChooser:nil serviceChooser:nil];
 }
 
 - (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser

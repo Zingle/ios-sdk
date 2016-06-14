@@ -10,12 +10,29 @@
 #import "ZNGLogging.h"
 #import "ZNGAccount.h"
 #import "ZNGService.h"
+#import "ZNGAccountClient.h"
+#import "ZNGServiceClient.h"
+#import "ZingleSpecificAccountSession.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZingleAccountSession
 {
-    ZingleSession * privateSession; // The session object that handles the actual session once the user has chosen an account and a service.
+    ZingleSpecificAccountSession * privateSession; // The session object that handles the actual session once the user has chosen an account and a service.
+    ZNGAccountClient * accountClient;
+    ZNGServiceClient * serviceClient;
+}
+
+- (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
+{
+    self = [super initWithToken:token key:key];
+    
+    if (self != nil) {
+        accountClient = [[ZNGAccountClient alloc] init];
+        [self retrieveAvailableAccounts];
+    }
+    
+    return self;
 }
 
 #pragma mark - Service/Account setters
@@ -39,6 +56,16 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self updateStateForNewAccountOrService];
 }
 
+- (void) setAvailableAccounts:(NSArray<ZNGAccount *> * _Nullable)availableAccounts
+{
+    _availableAccounts = availableAccounts;
+}
+
+- (void) setAvailableServices:(NSArray<ZNGService *> * _Nullable)availableServices
+{
+    _availableServices = availableServices;
+}
+
 #pragma mark - Account/Service state management
 - (void) updateStateForNewAccountOrService
 {
@@ -57,6 +84,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     // We now have both an account and a service selected.
     
     // Setup our proxy object to handle all requests.
+    privateSession = [[ZingleSpecificAccountSession alloc] initWithToken:self.token key:self.key account:self.account service:self.service];
 }
 
 - (BOOL) hasSelectedAccount
@@ -105,13 +133,26 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 #pragma mark - Account retrieval
 - (void) retrieveAvailableAccounts
 {
-    // TODO: Retrieve account info
+    [accountClient getAccountListWithSuccess:^(NSArray *accounts, ZNGStatus *status) {
+        self.availableAccounts = accounts;
+        self.availableServices = nil;
+        
+        [self updateStateForNewAccountOrService];
+    } failure:^(ZNGError *error) {
+        self.availableAccounts = nil;
+        self.availableServices = nil;
+    }];
 }
 
 #pragma mark - Service retrieval
 - (void) retrieveAvailableServices
 {
-    // TODO: Retrieve service info
+    serviceClient = [[ZNGServiceClient alloc] initWithAccount:self.account];
+    [serviceClient serviceListWithSuccess:^(NSArray *services, ZNGStatus *status) {
+        self.availableServices = services;
+    } failure:^(ZNGError *error) {
+        self.availableServices = nil;
+    }];
 }
 
 @end

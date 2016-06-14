@@ -16,6 +16,12 @@
 
 #pragma mark - GET methods
 
+- (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
+                                         path:(NSString*)path
+                                responseClass:(Class)responseClass
+                                      success:(void (^)(id responseObject, ZNGStatus *status))success
+                                      failure:(void (^)(ZNGError* error))failure;
+
 + (NSURLSessionDataTask*)getListWithParameters:(NSDictionary*)parameters
                                           path:(NSString*)path
                                  responseClass:(Class)responseClass

@@ -6,12 +6,15 @@
 //
 //
 
-#import "ZNGBaseClient.h"
+#import "ZNGBaseClientAccount.h"
 #import "ZNGService.h"
 
-@interface ZNGServiceClient : ZNGBaseClient
+@interface ZNGServiceClient : ZNGBaseClientAccount
 
 #pragma mark - GET methods
+
+- (void)serviceListWithSuccess:(void (^)(NSArray* services, ZNGStatus* status))success
+                       failure:(void (^)(ZNGError* error))failure;
 
 + (void)serviceListWithParameters:(NSDictionary*)parameters
                           success:(void (^)(NSArray* services, ZNGStatus* status))success

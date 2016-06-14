@@ -13,6 +13,12 @@
 
 #pragma mark - GET methods
 
+- (void)serviceListWithSuccess:(void (^)(NSArray* services, ZNGStatus* status))success
+                       failure:(void (^)(ZNGError* error))failure
+{
+    [self getListWithParameters:nil path:@"services" responseClass:[ZNGService class] success:success failure:failure];
+}
+
 + (void)serviceListWithParameters:(NSDictionary*)parameters
                           success:(void (^)(NSArray* services, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure

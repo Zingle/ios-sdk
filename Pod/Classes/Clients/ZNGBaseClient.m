@@ -43,6 +43,15 @@ static dispatch_queue_t jsonProcessingQueue;
 
 #pragma mark - GET methods
 
+- (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
+                                           path:(NSString*)path
+                                  responseClass:(Class)responseClass
+                                        success:(void (^)(id responseObject, ZNGStatus *status))success
+                                        failure:(void (^)(ZNGError* error))failure
+{
+    [[self class] getListWithParameters:parameters path:path responseClass:responseClass success:success failure:failure];
+}
+
 + (NSURLSessionDataTask*)getListWithParameters:(NSDictionary*)parameters
                                           path:(NSString*)path
                                  responseClass:(Class)responseClass

@@ -15,6 +15,15 @@
 
 @implementation ZNGService
 
+- (BOOL) isEqual:(ZNGService *)other
+{
+    if (![other isKindOfClass:[ZNGService class]]) {
+        return NO;
+    }
+    
+    return (self.serviceId == other.serviceId);
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

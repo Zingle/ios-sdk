@@ -11,6 +11,15 @@
 
 @implementation ZNGAccount
 
+- (BOOL) isEqual:(ZNGAccount *)other
+{
+    if (![other isKindOfClass:[ZNGAccount class]]) {
+        return NO;
+    }
+    
+    return (self.accountId == other.accountId);
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

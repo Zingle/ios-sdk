@@ -6,7 +6,7 @@
 //
 //
 
-#import "ZNGBaseClientAccount.h"\
+#import "ZNGBaseClientAccount.h"
 
 @class ZNGService;
 

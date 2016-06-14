@@ -16,6 +16,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
 
 @interface ZingleAccountSession : ZingleSession
 
+#pragma mark - Account/Service selection
 /*
  *  All accounts available to this user.  This array will be set to an empty array @[] if a response has arrived from the server
  *   that does not contain any accounts.
@@ -38,11 +39,24 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
  */
 @property (nonatomic, strong, nullable) ZNGService * service;
 
+#pragma mark - Status
 /*
  *  KVO compliant flag that indicates when the session has been fully initialized (with an account and a service) and may take requests.
  */
 @property (nonatomic, assign) BOOL available;
 
+#pragma mark - Clients
+/*
+ *  The client used to retrieve ZNGAccount information
+ */
+@property (nonatomic, readonly, nullable) ZNGAccountClient * accountClient;
+
+/*
+ *  The client used to retrieve ZNGService information
+ */
+@property (nonatomic, readonly, nullable) ZNGServiceClient * serviceClient;
+
+#pragma mark - Initialization
 /*
  *  Constructor for a Zingle account-level session object.  Includes optional parameters which may be used to provide callbacks to select
  *   an account and service if more than one of either is available.  These blocks will be unused and dealloced if there is only one account

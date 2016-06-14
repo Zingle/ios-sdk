@@ -5,6 +5,6 @@ target 'ZingleSDK_Example' do
   pod 'ZingleSDK', :path => '../'
 end
 
-target 'ZingleSDK_Tests' do
+target 'Tests' do
   pod 'ZingleSDK', :path => '../'
 end

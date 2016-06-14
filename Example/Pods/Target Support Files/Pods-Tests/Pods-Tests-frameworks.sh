@@ -84,20 +84,20 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS8.0/AFNetworkActivityLogger.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS8.0/AFNetworking.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS8.0/CocoaLumberjack.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS8.0/DGActivityIndicatorView.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS8.0/GoogleFontsiOS.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS8.0/Mantle.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS8.0/ZingleSDK.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS9.3/AFNetworkActivityLogger.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS9.3/AFNetworking.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS9.3/DGActivityIndicatorView.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS9.3/GoogleFontsiOS.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS8.0/AFNetworkActivityLogger.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS8.0/AFNetworking.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS8.0/CocoaLumberjack.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS8.0/DGActivityIndicatorView.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS8.0/GoogleFontsiOS.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS8.0/Mantle.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS8.0/ZingleSDK.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS9.3/AFNetworkActivityLogger.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS9.3/AFNetworking.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS9.3/DGActivityIndicatorView.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS9.3/GoogleFontsiOS.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi

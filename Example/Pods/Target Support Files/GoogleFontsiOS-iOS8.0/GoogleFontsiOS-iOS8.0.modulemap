@@ -1,0 +1,6 @@
+framework module GoogleFontsiOS {
+  umbrella header "GoogleFontsiOS-iOS8.0-umbrella.h"
+
+  export *
+  module * { export * }
+}

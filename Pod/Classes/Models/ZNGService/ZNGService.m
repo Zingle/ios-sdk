@@ -24,6 +24,11 @@
     return (self.serviceId == other.serviceId);
 }
 
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"%@ (%@)", self.displayName, [self class]];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

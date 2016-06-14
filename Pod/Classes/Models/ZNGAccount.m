@@ -20,6 +20,11 @@
     return (self.accountId == other.accountId);
 }
 
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"%@ (%@)", self.displayName, [self class]];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

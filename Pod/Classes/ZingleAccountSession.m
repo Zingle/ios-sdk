@@ -160,6 +160,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return ([privateSession respondsToSelector:aSelector]);
 }
 
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
+{
+    NSMethodSignature * signature = [privateSession methodSignatureForSelector:aSelector];
+    
+    if (([self shouldForwardInvocations]) && (signature != nil)) {
+        return signature;
+    }
+    
+    return [super methodSignatureForSelector:aSelector];
+}
+
 - (void) forwardInvocation:(NSInvocation *)anInvocation
 {
     if ([privateSession respondsToSelector:anInvocation.selector]) {

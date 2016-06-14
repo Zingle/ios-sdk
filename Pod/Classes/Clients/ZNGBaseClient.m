@@ -41,17 +41,35 @@ static dispatch_queue_t jsonProcessingQueue;
     jsonProcessingQueue = dispatch_queue_create("com.zingle.sdk.jsonProcessing", NULL);
 }
 
-#pragma mark - GET methods
 
+#pragma mark - Lazy instance methods for now
 - (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
                                            path:(NSString*)path
                                   responseClass:(Class)responseClass
                                         success:(void (^)(id responseObject, ZNGStatus *status))success
                                         failure:(void (^)(ZNGError* error))failure
 {
-    [[self class] getListWithParameters:parameters path:path responseClass:responseClass success:success failure:failure];
+    return [[self class] getListWithParameters:parameters path:path responseClass:responseClass success:success failure:failure];
 }
 
+- (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
+                               responseClass:(Class)responseClass
+                                     success:(void (^)(id responseObject, ZNGStatus *status))success
+                                     failure:(void (^)(ZNGError* error))failure
+{
+    return [[self class] getWithResourcePath:path responseClass:responseClass success:success failure:failure];
+}
+
+- (NSURLSessionDataTask*)putWithPath:(NSString*)path
+                          parameters:(NSDictionary*)parameters
+                       responseClass:(Class)responseClass
+                             success:(void (^)(id responseObject, ZNGStatus *status))success
+                             failure:(void (^)(ZNGError* error))failure
+{
+    return [[self class] putWithPath:path parameters:parameters responseClass:responseClass success:success failure:failure];
+}
+
+#pragma mark - GET methods
 + (NSURLSessionDataTask*)getListWithParameters:(NSDictionary*)parameters
                                           path:(NSString*)path
                                  responseClass:(Class)responseClass

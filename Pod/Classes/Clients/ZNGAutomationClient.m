@@ -12,12 +12,11 @@
 
 #pragma mark - GET methods
 
-+ (void)automationListWithParameters:(NSDictionary*)parameters
-                       withServiceId:(NSString *)serviceId
+- (void)automationListWithParameters:(NSDictionary*)parameters
                              success:(void (^)(NSArray* automations, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/automations", serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/automations", self.service.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -26,12 +25,11 @@
                         failure:failure];
 }
 
-+ (void)automationWithId:(NSString*)automationId
-           withServiceId:(NSString *)serviceId
+- (void)automationWithId:(NSString*)automationId
                  success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
                  failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", serviceId, automationId];
+    NSString * path = [NSString stringWithFormat:@"services/%@/automations/%@", self.service.serviceId, automationId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGAutomation class]
@@ -41,14 +39,13 @@
 
 #pragma mark - PUT methods
 
-+ (void)updateAutomationWithId:(NSString*)automationId
-                 withServiceId:(NSString *)serviceId
-                withParameters:(NSDictionary*)parameters
-                       success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
-                       failure:(void (^)(ZNGError* error))failure
+- (void)updateAutomation:(ZNGAutomation *)automation
+          withParameters:(NSDictionary*)parameters
+                 success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
+                 failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", serviceId, automationId];
-    
+    NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", self.service.serviceId, automation.automationId];
+
     [self putWithPath:path
            parameters:parameters
         responseClass:[ZNGAutomation class]

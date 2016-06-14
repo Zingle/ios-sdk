@@ -6,29 +6,29 @@
 //
 //
 
-#import "ZNGBaseClient.h"
+#import "ZNGBaseClientService.h"
 #import "ZNGAutomation.h"
 
-@interface ZNGAutomationClient : ZNGBaseClient
+@class ZNGAutomation;
+
+@interface ZNGAutomationClient : ZNGBaseClientService
 
 #pragma mark - GET methods
 
-+ (void)automationListWithParameters:(NSDictionary*)parameters
-                       withServiceId:(NSString *)serviceId
+- (void)automationListWithParameters:(NSDictionary*)parameters
                              success:(void (^)(NSArray* automations, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure;
 
-+ (void)automationWithId:(NSString*)automationId
-           withServiceId:(NSString *)serviceId
+- (void)automationWithId:(NSString*)automationId
                  success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
                  failure:(void (^)(ZNGError* error))failure;
 
+
 #pragma mark - PUT methods
 
-+ (void)updateAutomationWithId:(NSString*)automationId
-                 withServiceId:(NSString *)serviceId
-                withParameters:(NSDictionary*)parameters
-                       success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
-                       failure:(void (^)(ZNGError* error))failure;
+- (void)updateAutomation:(ZNGAutomation *)automation
+          withParameters:(NSDictionary*)parameters
+                 success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
+                 failure:(void (^)(ZNGError* error))failure;
 
 @end

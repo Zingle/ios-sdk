@@ -28,6 +28,11 @@
                                        success:(void (^)(id responseObject, ZNGStatus *status))success
                                        failure:(void (^)(ZNGError* error))failure;
 
+- (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
+                               responseClass:(Class)responseClass
+                                     success:(void (^)(id responseObject, ZNGStatus *status))success
+                                     failure:(void (^)(ZNGError* error))failure;
+
 + (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
                                responseClass:(Class)responseClass
                                      success:(void (^)(id responseObject, ZNGStatus *status))success
@@ -48,6 +53,12 @@
                                     failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
+
+- (NSURLSessionDataTask*)putWithPath:(NSString*)path
+                          parameters:(NSDictionary*)parameters
+                       responseClass:(Class)responseClass
+                             success:(void (^)(id responseObject, ZNGStatus *status))success
+                             failure:(void (^)(ZNGError* error))failure;
 
 + (NSURLSessionDataTask*)putWithPath:(NSString*)path
                           parameters:(NSDictionary*)parameters

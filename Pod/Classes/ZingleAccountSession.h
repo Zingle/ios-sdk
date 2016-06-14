@@ -12,6 +12,7 @@
 @class ZNGAccount;
 @class ZNGAccountClient;
 @class ZNGServiceClient;
+@class ZNGAutomationClient;
 
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * _Nonnull availableAccounts);
 typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Nonnull availableServices);
@@ -83,5 +84,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
  *  i.e. they cannot be called until we have a specific account and service selected
  */
 @interface ZingleAccountSession (MethodsRequiringAuthentication)
+
+@property (nonatomic, readonly, nullable) ZNGAutomationClient * automationClient;
 
 @end

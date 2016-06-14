@@ -10,7 +10,7 @@
 #import "ZNGContact.h"
 #import "ZNGService.h"
 
-@interface ZNGContactViewController : UITableViewController
+@interface ZNGContactViewController : UITableViewController <UIPickerViewDataSource>
 
 + (instancetype)withContact:(ZNGContact *)contact withService:(ZNGService *)service;
 

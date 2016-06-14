@@ -84,7 +84,7 @@ static dispatch_queue_t jsonProcessingQueue;
                     });
                 }
             } else {
-                ZNGLogDebug(@"Received and parsed GET response of type [%@][%llu]", responseClass, [responseObj count]);
+                ZNGLogDebug(@"Received and parsed GET response of type [%@][%lu]", responseClass, (unsigned long)[responseObj count]);
                 
                 if (success) {
                     dispatch_async(dispatch_get_main_queue(), ^{

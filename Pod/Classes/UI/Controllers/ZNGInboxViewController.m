@@ -139,7 +139,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }
     
     if ([keyPath isEqualToString:NSStringFromSelector(@selector(data))]) {
-        int changeType = [change[NSKeyValueChangeKindKey] intValue];
         ZNGInboxDataSet * oldData = change[NSKeyValueChangeOldKey];
         
         if (![self.data isEqual:oldData]) {

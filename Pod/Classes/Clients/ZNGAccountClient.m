@@ -15,34 +15,11 @@
 - (void) getAccountListWithSuccess:(void (^)(NSArray* accounts, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
-    [[self class] getListWithParameters:nil
-                                   path:@"accounts"
-                          responseClass:[ZNGAccount class]
-                                success:success
-                                failure:failure];
-}
-
-+ (void)accountListWithParameters:(NSDictionary*)parameters
-                          success:(void (^)(NSArray<ZNGAccount *> * accounts, ZNGStatus* status))success
-                          failure:(void (^)(ZNGError* error))failure
-{
-    [self getListWithParameters:parameters
+    [self getListWithParameters:nil
                            path:@"accounts"
                   responseClass:[ZNGAccount class]
                         success:success
                         failure:failure];
-}
-
-+ (void)accountWithId:(NSString*)accountId
-              success:(void (^)(ZNGAccount* account, ZNGStatus* status))success
-              failure:(void (^)(ZNGError* error))failure
-{
-    NSString* path = [NSString stringWithFormat:@"accounts/%@", accountId];
-    
-    [self getWithResourcePath:path
-                responseClass:[ZNGAccount class]
-                      success:success
-                      failure:failure];
 }
 
 @end

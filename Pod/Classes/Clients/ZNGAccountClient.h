@@ -16,12 +16,4 @@
 - (void) getAccountListWithSuccess:(void (^)(NSArray* accounts, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure;
 
-+ (void)accountListWithParameters:(NSDictionary*)parameters
-                          success:(void (^)(NSArray<ZNGAccount *> * accounts, ZNGStatus* status))success
-                          failure:(void (^)(ZNGError* error))failure;
-
-+ (void)accountWithId:(NSString*)accountId
-              success:(void (^)(ZNGAccount* account, ZNGStatus* status))success
-              failure:(void (^)(ZNGError* error))failure;
-
 @end

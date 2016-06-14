@@ -44,20 +44,4 @@
     [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testAccountList"];
 }
 
-- (void)testAccountById
-{
-    [ZNGAccountClient accountWithId:[self accountId] success:^(ZNGAccount *account, ZNGStatus *status) {
-        
-        XCTAssert(account != nil, @"Account is nil!");
-        [[ZNGAsyncSemaphor sharedInstance] lift:@"testAccountById"];
-        
-    } failure:^(ZNGError *error) {
-        
-        XCTFail(@"fail: \"%@\"", error);
-        [[ZNGAsyncSemaphor sharedInstance] lift:@"testAccountById"];
-    }];
-    
-    [[ZNGAsyncSemaphor sharedInstance] waitForKey:@"testAccountById"];
-}
-
 @end

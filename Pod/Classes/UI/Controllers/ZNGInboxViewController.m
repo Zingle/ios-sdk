@@ -12,7 +12,6 @@
 #import "ZNGServiceClient.h"
 #import "ZNGTableViewCell.h"
 #import "DGActivityIndicatorView.h"
-#import "ZNGPagedArray.h"
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 
@@ -22,9 +21,8 @@ static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialData";
 static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
-@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate, ZNGPagedArrayDelegate>
+@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) ZNGPagedArray *pagedArray;
 @property (strong, nonatomic) NSMutableDictionary *dataLoadingOperations;
 @property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
 

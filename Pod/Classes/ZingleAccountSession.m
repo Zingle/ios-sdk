@@ -21,9 +21,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZingleSpecificAccountSession * privateSession; // The session object that handles the actual session once the user has chosen an account and a service.
     ZNGAccountClient * accountClient;
     ZNGServiceClient * serviceClient;
+    
+    ZNGAccountChooser accountChooser;
+    ZNGServiceChooser serviceChooser;
 }
 
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
+{
+    self = [self initWithToken:token key:key accountChooser:nil serviceChooser:nil];
+}
+
+- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser
 {
     self = [super initWithToken:token key:key];
     
@@ -35,11 +43,18 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return self;
 }
 
+
 #pragma mark - Service/Account setters
 - (void) setAccount:(ZNGAccount *)account
 {
     if ((_account != nil) && (![_account isEqual:account])) {
         ZNGLogError(@"Account was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _account ,account);
+        [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
+        [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
+        _service = nil;
+        _available = nil;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
+        [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
     }
     
     _account = account;
@@ -52,7 +67,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
     }
     
+    [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
+    _available = (_service != nil);
     _service = service;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
+    
     [self updateStateForNewAccountOrService];
 }
 
@@ -71,13 +92,37 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     // Do we need to select an account?
     if (![self hasSelectedAccount]) {
-        [self retrieveAvailableAccounts];
+        if (self.availableAccounts == nil) {
+            // We have no available accounts.  Go request them.
+            [self retrieveAvailableAccounts];
+        } else if (accountChooser != nil) {
+            // We have just gotten a list of available accounts.
+            
+            // If there is anything in the list, we will ask our chooser to pick one
+            if ([self.availableAccounts count] > 1) {
+                self.account = accountChooser(self.availableAccounts);
+            }
+            
+            accountChooser = nil;
+        }
         return;
     }
     
     // Do we need to select a service?
     if (![self hasSelectedService]) {
-        [self retrieveAvailableServices];
+        if (self.availableServices == nil) {
+            // We have no available services.  Go request them.
+            [self retrieveAvailableServices];
+        } else if (serviceChooser != nil) {
+            // We have just gotten a list of services
+            
+            // If there is anything in the list, we will ask our chooser to pick one
+            if ([self.availableServices count] > 1) {
+                self.service = serviceChooser(self.availableServices);
+            }
+            
+            serviceChooser = nil;
+        }
         return;
     }
     
@@ -134,12 +179,19 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) retrieveAvailableAccounts
 {
     [accountClient getAccountListWithSuccess:^(NSArray *accounts, ZNGStatus *status) {
+        
+        if ([accounts count] == 0) {
+            self.availableAccounts = @[];   // This ensures that we will set our list explicitly to an empty array instead of just nil if there is no data
+        } else {
         self.availableAccounts = accounts;
+        }
+        
+        // Clear our services since we may have just picked a new account.
         self.availableServices = nil;
         
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
-        self.availableAccounts = nil;
+        self.availableAccounts = @[];
         self.availableServices = nil;
     }];
 }
@@ -149,7 +201,16 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     serviceClient = [[ZNGServiceClient alloc] initWithAccount:self.account];
     [serviceClient serviceListWithSuccess:^(NSArray *services, ZNGStatus *status) {
-        self.availableServices = services;
+        
+        if ([services count] == 0) {
+            self.availableServices = @[];
+        } else {
+            self.availableServices = services;
+        }
+        
+        if ([services count] == 1) {
+            self.service = [services firstObject];
+        }
     } failure:^(ZNGError *error) {
         self.availableServices = nil;
     }];

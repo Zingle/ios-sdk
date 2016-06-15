@@ -20,6 +20,11 @@
     return (self.messageId == other.messageId);
 }
 
+- (BOOL) isOutbound
+{
+    return [self.communicationDirection isEqualToString:@"outbound"];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

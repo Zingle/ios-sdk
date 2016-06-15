@@ -30,4 +30,6 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
 
+- (BOOL) isOutbound;
+
 @end

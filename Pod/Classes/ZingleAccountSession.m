@@ -126,7 +126,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     // We now have both an account and a service selected.
     
     // Setup our proxy object to handle all requests.
-    privateSession = [[ZingleSpecificAccountSession alloc] initWithToken:self.token key:self.key account:self.account service:self.service];
+    privateSession = [[ZingleSpecificAccountSession alloc] initWithAccountSession:self account:self.account service:self.service];
 }
 
 - (BOOL) hasSelectedAccount

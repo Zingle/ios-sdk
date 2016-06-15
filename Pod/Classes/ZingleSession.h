@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+@class AFHTTPSessionManager;
+
 /*
  *  This abstract class represents the current session with the Zingle API.  This must be initialized with a set of API credentials.
  *
@@ -30,6 +32,10 @@
  *  The base URL.  Can be overridden only in debug builds.  Immutable after initialization.
  */
 @property (nonatomic, readonly, nullable) NSString * baseUrl;
+
+#pragma mark - Properties used by client objects
+@property (nonatomic, readonly, nonnull) AFHTTPSessionManager * sessionManager;
+@property (nonatomic, readonly, nonnull) dispatch_queue_t jsonProcessingQueue;
 
 /*
  *  Initializer for a Zingle session object.

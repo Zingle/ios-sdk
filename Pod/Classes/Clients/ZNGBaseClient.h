@@ -12,64 +12,58 @@
 #import "ZNGStatus.h"
 #import "ZNGError.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
+@class ZingleSession;
+
 @interface ZNGBaseClient : NSObject
+
+@property (nonatomic, weak, nullable) ZingleSession * session;
+
+#pragma mark - Initialization
+- (instancetype) initWithSession:(__weak ZingleSession *)session;
 
 #pragma mark - GET methods
 
-- (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
+- (NSURLSessionDataTask *)getListWithParameters:(nullable NSDictionary*)parameters
                                          path:(NSString*)path
                                 responseClass:(Class)responseClass
-                                      success:(void (^)(id responseObject, ZNGStatus *status))success
-                                      failure:(void (^)(ZNGError* error))failure;
-
-+ (NSURLSessionDataTask*)getListWithParameters:(NSDictionary*)parameters
-                                          path:(NSString*)path
-                                 responseClass:(Class)responseClass
-                                       success:(void (^)(id responseObject, ZNGStatus *status))success
-                                       failure:(void (^)(ZNGError* error))failure;
+                                      success:(nullable void (^)(id responseObject, ZNGStatus *status))success
+                                      failure:(nullable void (^)(ZNGError* error))failure;
 
 - (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
                                responseClass:(Class)responseClass
-                                     success:(void (^)(id responseObject, ZNGStatus *status))success
-                                     failure:(void (^)(ZNGError* error))failure;
-
-+ (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
-                               responseClass:(Class)responseClass
-                                     success:(void (^)(id responseObject, ZNGStatus *status))success
-                                     failure:(void (^)(ZNGError* error))failure;
+                                     success:(nullable void (^)(id responseObject, ZNGStatus *status))success
+                                     failure:(nullable void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
 + (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
                                   path:(NSString*)path
                          responseClass:(Class)responseClass
-                               success:(void (^)(id responseObject, ZNGStatus *status))success
-                               failure:(void (^)(ZNGError* error))failure;
+                               success:(nullable void (^)(id responseObject, ZNGStatus *status))success
+                               failure:(nullable void (^)(ZNGError* error))failure;
 
 + (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
                                        path:(NSString*)path
                               responseClass:(Class)responseClass
-                                    success:(void (^)(id responseObject, ZNGStatus *status))success
-                                    failure:(void (^)(ZNGError* error))failure;
+                                    success:(nullable void (^)(id responseObject, ZNGStatus *status))success
+                                    failure:(nullable void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
 
 - (NSURLSessionDataTask*)putWithPath:(NSString*)path
                           parameters:(NSDictionary*)parameters
                        responseClass:(Class)responseClass
-                             success:(void (^)(id responseObject, ZNGStatus *status))success
-                             failure:(void (^)(ZNGError* error))failure;
-
-+ (NSURLSessionDataTask*)putWithPath:(NSString*)path
-                          parameters:(NSDictionary*)parameters
-                       responseClass:(Class)responseClass
-                             success:(void (^)(id responseObject, ZNGStatus *status))success
-                             failure:(void (^)(ZNGError* error))failure;
+                             success:(nullable void (^)(id responseObject, ZNGStatus *status))success
+                             failure:(nullable void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods
 
 + (NSURLSessionDataTask*)deleteWithPath:(NSString*)path
-                                success:(void (^)(ZNGStatus *status))success
-                                failure:(void (^)(ZNGError* error))failure;
+                                success:(nullable void (^)(ZNGStatus *status))success
+                                failure:(nullable void (^)(ZNGError* error))failure;
 
 @end
+
+NS_ASSUME_NONNULL_END

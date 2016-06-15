@@ -9,6 +9,7 @@
 #import <AFNetworking/AFNetworking.h>
 #import "ZNGBaseClient.h"
 #import "ZNGLogging.h"
+#import "ZingleSession.h"
 
 // Debug level in BaseClient will show every outgoing request URL and every incoming model class (and count)
 #ifdef DEBUG
@@ -24,64 +25,43 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 @end
 
 @implementation ZNGBaseClient
+{
+    __weak ZingleSession * session;
+}
 
 NSString *const kBaseClientStatus = @"status";
 NSString *const kBaseClientResult = @"result";
 NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 
-static dispatch_queue_t jsonProcessingQueue;
+- (instancetype) initWithSession:(__weak ZingleSession *)aSession
+{
+    self = [super init];
+    
+    if (self != nil) {
+        session = aSession;
+    }
+    
+    return self;
+}
 
 + (AFHTTPSessionManager*)sessionManager
 {
     return [[ZingleSDK sharedSDK] sharedSessionManager];
 }
 
-+ (void) load
-{
-    jsonProcessingQueue = dispatch_queue_create("com.zingle.sdk.jsonProcessing", NULL);
-}
-
-
-#pragma mark - Lazy instance methods for now
+#pragma mark - GET
 - (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
                                            path:(NSString*)path
                                   responseClass:(Class)responseClass
                                         success:(void (^)(id responseObject, ZNGStatus *status))success
                                         failure:(void (^)(ZNGError* error))failure
 {
-    return [[self class] getListWithParameters:parameters path:path responseClass:responseClass success:success failure:failure];
-}
-
-- (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
-                               responseClass:(Class)responseClass
-                                     success:(void (^)(id responseObject, ZNGStatus *status))success
-                                     failure:(void (^)(ZNGError* error))failure
-{
-    return [[self class] getWithResourcePath:path responseClass:responseClass success:success failure:failure];
-}
-
-- (NSURLSessionDataTask*)putWithPath:(NSString*)path
-                          parameters:(NSDictionary*)parameters
-                       responseClass:(Class)responseClass
-                             success:(void (^)(id responseObject, ZNGStatus *status))success
-                             failure:(void (^)(ZNGError* error))failure
-{
-    return [[self class] putWithPath:path parameters:parameters responseClass:responseClass success:success failure:failure];
-}
-
-#pragma mark - GET methods
-+ (NSURLSessionDataTask*)getListWithParameters:(NSDictionary*)parameters
-                                          path:(NSString*)path
-                                 responseClass:(Class)responseClass
-                                       success:(void (^)(id responseObject, ZNGStatus *status))success
-                                       failure:(void (^)(ZNGError* error))failure
-{
     ZNGLogDebug(@"Sending request to %@, expecting [%@] in response", path, responseClass);
     
-    return [[self sessionManager] GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
-
+        
         NSDictionary* statusDict = responseObject[kBaseClientStatus];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
         
@@ -94,7 +74,7 @@ static dispatch_queue_t jsonProcessingQueue;
             return;
         }
         
-        dispatch_async(jsonProcessingQueue, ^{
+        dispatch_async(self.session.jsonProcessingQueue, ^{
             NSError * error;
             NSArray* result = responseObject[kBaseClientResult];
             NSArray* responseObj = [MTLJSONAdapter modelsOfClass:responseClass fromJSONArray:result error:&error];
@@ -130,14 +110,14 @@ static dispatch_queue_t jsonProcessingQueue;
     }];
 }
 
-+ (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
+- (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
                                responseClass:(Class)responseClass
                                      success:(void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(void (^)(ZNGError* error))failure
 {
     ZNGLogDebug(@"Sending request to %@, expecting %@ in response", path, responseClass);
     
-    return [[self sessionManager] GET:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager GET:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -153,7 +133,7 @@ static dispatch_queue_t jsonProcessingQueue;
             return;
         }
         
-        dispatch_async(jsonProcessingQueue, ^{
+        dispatch_async(self.session.jsonProcessingQueue, ^{
             NSError * error;
             NSDictionary* result = responseObject[kBaseClientResult];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
@@ -189,148 +169,8 @@ static dispatch_queue_t jsonProcessingQueue;
     }];
 }
 
-#pragma mark - POST methods
-
-+ (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
-                                  path:(NSString*)path
-                         responseClass:(Class)responseClass
-                               success:(void (^)(id responseObject, ZNGStatus *status))success
-                               failure:(void (^)(ZNGError* error))failure
-{
-    NSDictionary* params;
-    
-    ZNGLogDebug(@"POSTing a %@ to %@, expecting %@", [model class], path, responseClass);
-    
-    if (model) {
-        NSError* error = nil;
-        params = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
-        
-        if (error) {
-            ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
-            ZNGLogWarn(@"Unable to encode %@ to JSON: %@", [model class], zngError);
-            
-            if (failure) {
-                failure(zngError);
-            }
-        }
-    }
-    
-    return [[self sessionManager] POST:path parameters:params success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
-        
-        NSError* error = nil;
-        
-        NSDictionary* statusDict = responseObject[kBaseClientStatus];
-        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
-        
-        if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            ZNGLogDebug(@"Received non-Mantle response to POST %@", path);
-            
-            if (success) {
-                success(responseObject[kBaseClientResult], status);
-            }
-            return;
-        }
-        
-        dispatch_async(jsonProcessingQueue, ^{
-            NSError * error;
-            NSDictionary* result = responseObject[kBaseClientResult];
-            id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
-            
-            if (error) {
-                ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
-                
-                ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
-                ZNGLogDebug(@"%@", result);
-                
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        failure(zngError);
-                    });
-                }
-            } else {
-                ZNGLogDebug(@"Successfully received %@ from POST", responseClass);
-                
-                if (success) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        success(responseObj, status);
-                    });
-                }
-            }
-        });
-    } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
-        ZNGLogInfo(@"POST failed to %@: %@", path, zngError);
-        
-        if (failure) {
-            failure(zngError);
-        }
-    }];
-}
-
-+ (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
-                                       path:(NSString*)path
-                              responseClass:(Class)responseClass
-                                    success:(void (^)(id responseObject, ZNGStatus *status))success
-                                    failure:(void (^)(ZNGError* error))failure
-{
-    ZNGLogDebug(@"POSTing to %@, expecting %@", path, responseClass);
-    
-    return [[self sessionManager] POST:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
-        
-        NSError* error = nil;
-        
-        NSDictionary* statusDict = responseObject[kBaseClientStatus];
-        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
-        
-        if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
-            ZNGLogDebug(@"Received non-Mantle response to POST %@", path);
-            
-            if (success) {
-                success(responseObject[kBaseClientResult], status);
-            }
-            return;
-        }
-        
-        dispatch_async(jsonProcessingQueue, ^{
-            NSError * error;
-            NSDictionary* result = responseObject[kBaseClientResult];
-            id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
-            
-            if (error) {
-                ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
-                
-                ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
-                ZNGLogDebug(@"%@", result);
-                
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        failure(zngError);
-                    });
-                }
-            } else {
-                ZNGLogDebug(@"Successfully received %@ from POST", responseClass);
-                
-                if (success) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        success(responseObj, status);
-                    });
-                }
-            }
-        });
-    } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
-        ZNGLogInfo(@"POST failed to %@: %@", path, zngError);
-        
-        if (failure) {
-            failure(zngError);
-        }
-    }];
-    
-}
-
-#pragma mark - PUT methods
-
-+ (NSURLSessionDataTask*)putWithPath:(NSString*)path
+#pragma mark - PUT
+- (NSURLSessionDataTask*)putWithPath:(NSString*)path
                           parameters:(NSDictionary*)parameters
                        responseClass:(Class)responseClass
                              success:(void (^)(id responseObject, ZNGStatus *status))success
@@ -338,7 +178,7 @@ static dispatch_queue_t jsonProcessingQueue;
 {
     ZNGLogDebug(@"PUTting to %@, expecting %@", path, responseClass);
     
-    return [[self sessionManager] PUT:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
+    return [self.session.sessionManager PUT:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
         
         NSError* error = nil;
         
@@ -354,7 +194,7 @@ static dispatch_queue_t jsonProcessingQueue;
             return;
         }
         
-        dispatch_async(jsonProcessingQueue, ^{
+        dispatch_async(self.session.jsonProcessingQueue, ^{
             NSError * error;
             NSDictionary* result = responseObject[kBaseClientResult];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
@@ -390,16 +230,155 @@ static dispatch_queue_t jsonProcessingQueue;
     }];
 }
 
-#pragma mark - DELETE methods
 
-+ (NSURLSessionDataTask*)deleteWithPath:(NSString*)path
+#pragma mark - POST
+- (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
+                                  path:(NSString*)path
+                         responseClass:(Class)responseClass
+                               success:(void (^)(id responseObject, ZNGStatus *status))success
+                               failure:(void (^)(ZNGError* error))failure
+{
+    NSDictionary* params;
+    
+    ZNGLogDebug(@"POSTing a %@ to %@, expecting %@", [model class], path, responseClass);
+    
+    if (model) {
+        NSError* error = nil;
+        params = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
+        
+        if (error) {
+            ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+            ZNGLogWarn(@"Unable to encode %@ to JSON: %@", [model class], zngError);
+            
+            if (failure) {
+                failure(zngError);
+            }
+        }
+    }
+    
+    return [self.session.sessionManager POST:path parameters:params success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
+        if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
+            ZNGLogDebug(@"Received non-Mantle response to POST %@", path);
+            
+            if (success) {
+                success(responseObject[kBaseClientResult], status);
+            }
+            return;
+        }
+        
+        dispatch_async(self.session.jsonProcessingQueue, ^{
+            NSError * error;
+            NSDictionary* result = responseObject[kBaseClientResult];
+            id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
+            
+            if (error) {
+                ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+                
+                ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
+                ZNGLogDebug(@"%@", result);
+                
+                if (failure) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(zngError);
+                    });
+                }
+            } else {
+                ZNGLogDebug(@"Successfully received %@ from POST", responseClass);
+                
+                if (success) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success(responseObj, status);
+                    });
+                }
+            }
+        });
+    } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
+        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGLogInfo(@"POST failed to %@: %@", path, zngError);
+        
+        if (failure) {
+            failure(zngError);
+        }
+    }];
+}
+
+- (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
+                                       path:(NSString*)path
+                              responseClass:(Class)responseClass
+                                    success:(void (^)(id responseObject, ZNGStatus *status))success
+                                    failure:(void (^)(ZNGError* error))failure
+{
+    ZNGLogDebug(@"POSTing to %@, expecting %@", path, responseClass);
+    
+    return [self.session.sessionManager POST:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+        
+        NSError* error = nil;
+        
+        NSDictionary* statusDict = responseObject[kBaseClientStatus];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];
+        
+        if (![responseClass conformsToProtocol:@protocol(MTLJSONSerializing)]) {
+            ZNGLogDebug(@"Received non-Mantle response to POST %@", path);
+            
+            if (success) {
+                success(responseObject[kBaseClientResult], status);
+            }
+            return;
+        }
+        
+        dispatch_async(self.session.jsonProcessingQueue, ^{
+            NSError * error;
+            NSDictionary* result = responseObject[kBaseClientResult];
+            id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
+            
+            if (error) {
+                ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
+                
+                ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
+                ZNGLogDebug(@"%@", result);
+                
+                if (failure) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        failure(zngError);
+                    });
+                }
+            } else {
+                ZNGLogDebug(@"Successfully received %@ from POST", responseClass);
+                
+                if (success) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        success(responseObj, status);
+                    });
+                }
+            }
+        });
+    } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
+        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGLogInfo(@"POST failed to %@: %@", path, zngError);
+        
+        if (failure) {
+            failure(zngError);
+        }
+    }];
+    
+}
+
+
+#pragma mark - DELETE
+- (NSURLSessionDataTask*)deleteWithPath:(NSString*)path
                                 success:(void (^)(ZNGStatus *status))success
                                 failure:(void (^)(ZNGError* error))failure
 {
     ZNGLogDebug(@"Sending DELETE to %@", path);
     
-    return [[self sessionManager] DELETE:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
-        dispatch_async(jsonProcessingQueue, ^{
+    return [self.session.sessionManager DELETE:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
+        dispatch_async(self.session.jsonProcessingQueue, ^{
             NSError* error = nil;
             NSDictionary* statusDict = responseObject[kBaseClientStatus];
             ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];

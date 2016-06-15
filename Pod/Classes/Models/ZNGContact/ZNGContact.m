@@ -119,6 +119,33 @@
     return nil;
 }
 
+- (ZNGChannel *)channelForFreshOutgoingMessage
+{
+    if (self.lastMessage != nil) {
+        // We have a message to or from this person.  Let's return that same channel.
+        
+        // Outgoing or incoming?
+        ZNGCorrespondent * dude = ([self.lastMessage isOutbound]) ? self.lastMessage.recipient : self.lastMessage.sender;
+        return dude.channel;
+    }
+    
+    
+    // We resort to finding a phone number channel if possible
+    ZNGChannel * phoneChannel = nil;
+    
+    for (ZNGChannel * channel in self.channels) {
+        if ([channel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
+            phoneChannel = channel;
+            
+            if (phoneChannel.isDefaultForType) {
+                return phoneChannel;
+            }
+        }
+    }
+    
+    return phoneChannel;
+}
+
 - (NSString *)fullName
 {
     NSString *title = [self titleFieldValue].value;

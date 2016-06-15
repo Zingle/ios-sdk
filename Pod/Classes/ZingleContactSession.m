@@ -15,45 +15,62 @@
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
-@implementation ZingleContactSession
-{
-    void (^completion)(BOOL success, ZNGError * _Nullable error);
-}
+// Override our read only contact service array property to get a free KVO compliant setter
+@interface ZingleContactSession ()
+@property (nonatomic, strong, nullable) NSArray<ZNGContactService *> * availableContactServices;
+@end
 
-- (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue completion:(nullable void (^)(BOOL success, ZNGError * _Nullable error))theCompletion
+@implementation ZingleContactSession
+
+- (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser
 {
+    NSParameterAssert(channelTypeId);
+    NSParameterAssert(channelValue);
+    
     self = [super initWithToken:token key:key];
     
     if (self != nil) {
         _channelTypeID = [channelTypeId copy];
         _channelValue = [channelValue copy];
-        completion = [theCompletion copy];
+        self.contactServiceChooser = contactServiceChooser;
         
-        // First we must find our contact service
+        // First we must populate our list of available contact services
         NSDictionary *parameters = @{ @"channel_value" : channelValue,
                                       @"channel_type_id" : channelTypeId };
         [self.contactServiceClient contactServiceListWithParameters:parameters success:^(NSArray *contactServices, ZNGStatus *status) {
-            if ([contactServices count] == 0) {
-                ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", channelValue, channelTypeId);
-                completion(NO, nil);
-                completion = nil;
-                return;
-            }
+            self.availableContactServices = contactServices;
             
-            if ([contactServices count] > 1) {
-                ZNGLogWarn(@"Found %lu matches for contact services with value \"%@\" of type \"%@\".  Using first match.",(unsigned long)[contactServices count], channelValue, channelTypeId);
+            if (self.contactServiceChooser != nil) {
+                self.contactServiceChooser(contactServices);
             }
-            
-            _contactService = [contactServices firstObject];
-            [self findOrCreateContactForContactService];
         } failure:^(ZNGError *error) {
             ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", channelValue, channelTypeId);
-            completion(NO, error);
-            completion = nil;
         }];
     }
     
     return self;
+}
+
+- (void) setContactService:(ZNGContactService *)contactService
+{
+    ZNGContactService * selectedContactService = contactService;
+    
+    if ((![self.availableContactServices containsObject:selectedContactService]) && (selectedContactService != nil)) {
+        ZNGLogError(@"Our %ld available contact services do not include the selection of %@", (unsigned long)[self.availableContactServices count], contactService);
+        selectedContactService = nil;
+    }
+    
+    // Make sure setting our contact service and wiping away any old contact happen atomically
+    [self willChangeValueForKey:NSStringFromSelector(@selector(contactService))];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(contact))];
+    _contactService = selectedContactService;
+    _contact = nil;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(contact))];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(contactService))];
+    
+    if (selectedContactService != nil) {
+        [self findOrCreateContactForContactService];
+    }
 }
 
 - (void) findOrCreateContactForContactService
@@ -61,8 +78,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self.contactClient findOrCreateContactWithChannelTypeID:_channelTypeID andChannelValue:_channelValue success:^(ZNGContact *contact, ZNGStatus *status) {
         if (contact == nil) {
             ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request returned no result.", _channelValue, _channelTypeID);
-            completion(NO, nil);
-            completion = nil;
             return;
         }
         
@@ -71,8 +86,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self setAuthorizationHeader];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
-        completion(NO, error);
-        completion = nil;
     }];
 }
 
@@ -81,8 +94,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
         if (userAuthorization == nil) {
             ZNGLogError(@"Server did not respond with a user authorization object.");
-            completion(NO, nil);
-            completion = nil;
             return;
         }
         
@@ -94,12 +105,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }
         
         // Job done!  We are ready to be used.  Use us.
-        completion(YES, nil);
-        completion = nil;
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to check user authorization status.");
-        completion(NO, error);
-        completion = nil;
     }];
 }
 

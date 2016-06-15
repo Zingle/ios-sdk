@@ -114,5 +114,22 @@
     return nil;
 }
 
+- (ZNGChannel *)defaultChannelForType:(ZNGChannelType *)channelType
+{
+    ZNGChannel * chosenChannel = nil;
+    
+    for (ZNGChannel * channel in self.channels) {
+        if ([channel.channelType.channelTypeId isEqualToString:channelType.channelTypeId]) {
+            chosenChannel = channel;
+            
+            if (chosenChannel.isDefaultForType) {
+                break;
+            }
+        }
+    }
+    
+    return chosenChannel;
+}
+
 
 @end

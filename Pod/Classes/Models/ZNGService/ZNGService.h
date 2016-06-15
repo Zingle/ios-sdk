@@ -37,4 +37,6 @@
 
 - (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName;
 
+- (ZNGChannel *)defaultChannelForType:(ZNGChannelType *)channelType;
+
 @end

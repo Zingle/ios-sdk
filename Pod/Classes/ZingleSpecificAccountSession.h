@@ -27,7 +27,6 @@
 @property (nonatomic, strong, nonnull) ZNGContactChannelClient * contactChannelClient;
 @property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
 @property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
-@property (nonatomic, strong, nonnull) ZNGMessageClient * messageClient;
 @property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;
 
 - (nonnull instancetype) initWithAccountSession:(nonnull __weak ZingleAccountSession *)accountSession account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service;

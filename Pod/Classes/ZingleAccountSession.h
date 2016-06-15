@@ -85,7 +85,6 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
 
 @property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nonnull) ZNGContactChannelClient * contactChannelClient;
-@property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
 @property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nonnull) ZNGMessageClient * messageClient;
 @property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;

@@ -10,10 +10,13 @@
 
 @class AFHTTPSessionManager;
 @class ZNGAccountClient;
+@class ZNGContactClient;
 @class ZNGContactServiceClient;
+@class ZNGMessageClient;
 @class ZNGNotificationsClient;
 @class ZNGServiceClient;
 @class ZNGUserAuthorizationClient;
+
 
 /*
  *  This abstract class represents the current session with the Zingle API.  This must be initialized with a set of API credentials.
@@ -39,11 +42,13 @@
 @property (nonatomic, readonly, nullable) NSString * baseUrl;
 
 #pragma mark - Clients
-@property (nonatomic, strong, nonnull) ZNGAccountClient * accountClient;
-@property (nonatomic, strong, nonnull) ZNGContactServiceClient * contactServiceClient;
-@property (nonatomic, strong, nonnull) ZNGNotificationsClient * notificationsClient;
-@property (nonatomic, strong, nonnull) ZNGServiceClient * serviceClient;
-@property (nonatomic, strong, nonnull) ZNGUserAuthorizationClient * userAuthorizationClient;
+@property (nonatomic, strong, nullable) ZNGAccountClient * accountClient;
+@property (nonatomic, strong, nullable) ZNGContactClient * contactClient;
+@property (nonatomic, strong, nullable) ZNGContactServiceClient * contactServiceClient;
+@property (nonatomic, strong, nullable) ZNGMessageClient * messageClient;
+@property (nonatomic, strong, nullable) ZNGNotificationsClient * notificationsClient;
+@property (nonatomic, strong, nullable) ZNGServiceClient * serviceClient;
+@property (nonatomic, strong, nullable) ZNGUserAuthorizationClient * userAuthorizationClient;
 
 #pragma mark - Properties used by client objects
 @property (nonatomic, readonly, nonnull) AFHTTPSessionManager * sessionManager;

@@ -7,9 +7,11 @@
 //
 
 #import "ZingleContactSession.h"
+#import <AFNetworking/AFNetworking.h>
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"
+#import "ZNGUserAuthorizationClient.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -64,12 +66,38 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             return;
         }
         
-        // We did it!
+        // We have a contact!  Now we need to set our header.
         _contact = contact;
+        [self setAuthorizationHeader];
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
+        completion(NO, error);
+        completion = nil;
+    }];
+}
+
+- (void) setAuthorizationHeader
+{
+    [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
+        if (userAuthorization == nil) {
+            ZNGLogError(@"Server did not respond with a user authorization object.");
+            completion(NO, nil);
+            completion = nil;
+            return;
+        }
+        
+        if ([userAuthorization.authorizationClass isEqualToString:@"contact"]) {
+            [self.sessionManager.requestSerializer setValue:self.contact.contactId forHTTPHeaderField:@"x-zingle-contact-id"];
+        } else {
+            ZNGLogWarn(@"User is of type \"%@,\" not contact.  Is the wrong type of session object being used?", userAuthorization.authorizationClass);
+            [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
+        }
+        
+        // Job done!  We are ready to be used.  Use us.
         completion(YES, nil);
         completion = nil;
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
+        ZNGLogError(@"Unable to check user authorization status.");
         completion(NO, error);
         completion = nil;
     }];

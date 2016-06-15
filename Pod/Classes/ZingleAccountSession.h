@@ -11,6 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 @class ZNGService;
 @class ZNGAccount;
+@class ZNGChannelType;
+@class ZNGContact;
+@class ZNGConversation;
 @class ZNGAutomationClient, ZNGContactChannelClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
 
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
@@ -73,6 +76,19 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
  *  @param key Security key for Zingle API user
  */
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
+
+#pragma mark - Messaging methods
+
+/*
+ *  Retrieves a conversation between the current service and the specified contact.
+ *
+ *  If no such conversation yet exists in our data, a blank conversation will be returned.  It will populate itself
+ *   as soon as a network request returns.
+ *
+ *  @param contactId The identifier for the desired contact
+ */
+- (ZNGConversation *) conversationWithContact:(ZNGContact *)contact;
+
 
 @end
 

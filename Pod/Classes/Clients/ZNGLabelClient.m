@@ -12,12 +12,11 @@
 
 #pragma mark - GET methods
 
-+ (void)labelListWithParameters:(NSDictionary*)parameters
-                  withServiceId:(NSString *)serviceId
+- (void)labelListWithParameters:(NSDictionary*)parameters
                         success:(void (^)(NSArray* contactFields, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", self.service.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -26,12 +25,11 @@
                         failure:failure];
 }
 
-+ (void)labelWithId:(NSString*)labelId
-      withServiceId:(NSString *)serviceId
+- (void)labelWithId:(NSString*)labelId
             success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", serviceId, labelId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.service.serviceId, labelId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGLabel class]
@@ -41,8 +39,7 @@
 
 #pragma mark - POST methods
 
-+ (void)saveLabel:(ZNGLabel*)label
-    withServiceId:(NSString *)serviceId
+- (void)saveLabel:(ZNGLabel*)label
           success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
           failure:(void (^)(ZNGError* error))failure
 {
@@ -56,7 +53,7 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: label.textColor"];
     }
     
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", self.service.serviceId];
     
     [self postWithModel:label
                    path:path
@@ -67,13 +64,12 @@
 
 #pragma mark - PUT methods
 
-+ (void)updateLabelWithId:(NSString*)labelId
-            withServiceId:(NSString *)serviceId
+- (void)updateLabelWithId:(NSString*)labelId
            withParameters:(NSDictionary*)parameters
                   success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", serviceId, labelId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.service.serviceId, labelId];
     
     [self putWithPath:path
            parameters:parameters
@@ -84,12 +80,11 @@
 
 #pragma mark - DELETE methods
 
-+ (void)deleteLabelWithId:(NSString*)labelId
-            withServiceId:(NSString *)serviceId
+- (void)deleteLabelWithId:(NSString*)labelId
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", serviceId, labelId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.service.serviceId, labelId];
     
     [self deleteWithPath:path
                  success:success

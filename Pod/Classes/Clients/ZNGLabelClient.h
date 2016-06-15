@@ -6,42 +6,37 @@
 //
 //
 
-#import "ZNGBaseClient.h"
+#import "ZNGBaseClientService.h"
 #import "ZNGLabel.h"
 
-@interface ZNGLabelClient : ZNGBaseClient
+@interface ZNGLabelClient : ZNGBaseClientService
 
 #pragma mark - GET methods
 
-+ (void)labelListWithParameters:(NSDictionary*)parameters
-                  withServiceId:(NSString *)serviceId
+- (void)labelListWithParameters:(NSDictionary*)parameters
                         success:(void (^)(NSArray* contactFields, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure;
 
-+ (void)labelWithId:(NSString*)labelId
-      withServiceId:(NSString *)serviceId
+- (void)labelWithId:(NSString*)labelId
             success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
-+ (void)saveLabel:(ZNGLabel*)label
-    withServiceId:(NSString *)serviceId
+- (void)saveLabel:(ZNGLabel*)label
           success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
           failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
 
-+ (void)updateLabelWithId:(NSString*)labelId
-            withServiceId:(NSString *)serviceId
+- (void)updateLabelWithId:(NSString*)labelId
            withParameters:(NSDictionary*)parameters
                   success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods
 
-+ (void)deleteLabelWithId:(NSString*)labelId
-            withServiceId:(NSString *)serviceId
+- (void)deleteLabelWithId:(NSString*)labelId
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure;
 

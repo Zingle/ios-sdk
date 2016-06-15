@@ -6,55 +6,47 @@
 //
 //
 
-#import "ZNGBaseClient.h"
+#import "ZNGBaseClientService.h"
 #import "ZNGMessage.h"
 #import "ZNGNewMessage.h"
 
-@interface ZNGMessageClient : ZNGBaseClient
+@interface ZNGMessageClient : ZNGBaseClientService
 
 #pragma mark - GET methods
 
-+ (void)messageListWithParameters:(NSDictionary*)parameters
-                    withServiceId:(NSString*)serviceId
+- (void)messageListWithParameters:(NSDictionary*)parameters
                           success:(void (^)(NSArray* messages, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 
-+ (void)messageWithId:(NSString*)messageId
-        withServiceId:(NSString*)serviceId
+- (void)messageWithId:(NSString*)messageId
               success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - POST methods
 
-+ (void)sendMessage:(ZNGNewMessage*)newMessage
-      withServiceId:(NSString*)serviceId
+- (void)sendMessage:(ZNGNewMessage*)newMessage
             success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
-+ (void)markMessageReadWithId:(NSString*)messageId
+- (void)markMessageReadWithId:(NSString*)messageId
                        readAt:(NSDate *)readAt
-                    serviceId:(NSString*)serviceId
                       success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure;
 
-+ (void)markMessagesReadWithMessageIds:(NSArray *)messageIds
+- (void)markMessagesReadWithMessageIds:(NSArray *)messageIds
                                 readAt:(NSDate *)readAt
-                             serviceId:(NSString*)serviceId
                                success:(void (^)(ZNGStatus* status))success
                                failure:(void (^)(ZNGError* error))failure;
 
-+ (void)markAllMessagesReadWithReadAt:(NSDate *)readAt
-                            serviceId:(NSString*)serviceId
+- (void)markAllMessagesReadWithReadAt:(NSDate *)readAt
                               success:(void (^)(ZNGStatus* status))success
                               failure:(void (^)(ZNGError* error))failure;
 
-+ (void)deleteMessages:(NSArray *)messageIds
-         withServiceId:(NSString*)serviceId
+- (void)deleteMessages:(NSArray *)messageIds
                success:(void (^)(ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure;
 
-+ (void)deleteAllMessagesForContactId:(NSString *)contactId
-                        withServiceId:(NSString*)serviceId
+- (void)deleteAllMessagesForContactId:(NSString *)contactId
                               success:(void (^)(ZNGStatus* status))success
                               failure:(void (^)(ZNGError* error))failure;
 

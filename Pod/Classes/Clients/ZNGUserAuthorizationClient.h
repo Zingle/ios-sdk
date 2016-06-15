@@ -13,7 +13,7 @@
 
 #pragma mark - GET methods
 
-+ (void)userAuthorizationWithSuccess:(void (^)(ZNGUserAuthorization* userAuthorization, ZNGStatus* status))success
+- (void)userAuthorizationWithSuccess:(void (^)(ZNGUserAuthorization* userAuthorization, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure;
 
 @end

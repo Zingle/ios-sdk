@@ -13,12 +13,11 @@
 
 #pragma mark - GET methods
 
-+ (void)messageListWithParameters:(NSDictionary*)parameters
-                    withServiceId:(NSString*)serviceId
+- (void)messageListWithParameters:(NSDictionary*)parameters
                           success:(void (^)(NSArray* messages, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages", serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages", self.service.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -27,12 +26,11 @@
                         failure:failure];
 }
 
-+ (void)messageWithId:(NSString*)messageId
-        withServiceId:(NSString*)serviceId
+- (void)messageWithId:(NSString*)messageId
               success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@", serviceId, messageId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@", self.service.serviceId, messageId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGMessage class]
@@ -42,8 +40,7 @@
 
 #pragma mark - POST methods
 
-+ (void)sendMessage:(ZNGNewMessage*)newMessage
-      withServiceId:(NSString*)serviceId
+- (void)sendMessage:(ZNGNewMessage*)newMessage
             success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
@@ -67,7 +64,7 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: newMessage.channelTypeIds"];
     }
     
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages", serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages", self.service.serviceId];
     
     [self postWithModel:newMessage
                    path:path
@@ -76,13 +73,12 @@
                 failure:failure];
 }
 
-+ (void)markMessageReadWithId:(NSString*)messageId
+- (void)markMessageReadWithId:(NSString*)messageId
                        readAt:(NSDate *)readAt
-                    serviceId:(NSString*)serviceId
                       success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", serviceId, messageId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", self.service.serviceId, messageId];
     
     ZNGMessageRead *messageRead = [[ZNGMessageRead alloc] init];
     messageRead.readAt = readAt;
@@ -94,11 +90,10 @@
                 failure:failure];
 }
 
-+ (void)markMessagesReadWithMessageIds:(NSArray *)messageIds
+- (void)markMessagesReadWithMessageIds:(NSArray *)messageIds
                                 readAt:(NSDate *)readAt
-                             serviceId:(NSString *)serviceId
-                               success:(void (^)(ZNGStatus *))success
-                               failure:(void (^)(ZNGError *))failure
+                               success:(void (^)(ZNGStatus* status))success
+                               failure:(void (^)(ZNGError* error))failure
 {
     
     NSAssert(messageIds != nil && messageIds.count > 0, @"ERROR: There are no messageIds!");
@@ -107,14 +102,13 @@
         
         [self markMessageReadWithId:[messageIds objectAtIndex:0]
                              readAt:(NSDate *)readAt
-                          serviceId:serviceId
                             success:^(ZNGMessage *message, ZNGStatus *status){
             success(status);
         } failure:failure];
     
     } else if (messageIds.count > 1) {
         
-        NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", serviceId];
+        NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", self.service.serviceId];
         
         NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
         parameters[@"message_ids"] = messageIds;
@@ -135,12 +129,11 @@
 }
 
 // This call should not be made under the Account user authorization class.
-+ (void)markAllMessagesReadWithReadAt:(NSDate *)readAt
-                            serviceId:(NSString *)serviceId
-                              success:(void (^)(ZNGStatus *))success
-                              failure:(void (^)(ZNGError *))failure
+- (void)markAllMessagesReadWithReadAt:(NSDate *)readAt
+                              success:(void (^)(ZNGStatus* status))success
+                              failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", self.service.serviceId];
     
     NSDictionary *parameters = nil;
     if (readAt) {
@@ -156,12 +149,11 @@
     
 }
 
-+ (void)deleteMessages:(NSArray *)messageIds
-         withServiceId:(NSString*)serviceId
+- (void)deleteMessages:(NSArray *)messageIds
                success:(void (^)(ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.service.serviceId];
     
     NSDictionary *parameters = @{ @"message_ids" : messageIds };
     
@@ -174,12 +166,11 @@
                      failure:failure];
 }
 
-+ (void)deleteAllMessagesForContactId:(NSString *)contactId
-                        withServiceId:(NSString*)serviceId
+- (void)deleteAllMessagesForContactId:(NSString *)contactId
                               success:(void (^)(ZNGStatus* status))success
                               failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.service.serviceId];
     
     NSDictionary *parameters = @{ @"contact_id" : contactId };
     

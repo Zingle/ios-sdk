@@ -12,7 +12,7 @@
 
 #pragma mark - GET methods
 
-+ (void)contactServiceListWithParameters:(NSDictionary*)parameters
+- (void)contactServiceListWithParameters:(NSDictionary*)parameters
                                  success:(void (^)(NSArray* contactServices, ZNGStatus* status))success
                                  failure:(void (^)(ZNGError* error))failure;
 

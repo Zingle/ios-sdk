@@ -6,78 +6,64 @@
 //
 //
 
-#import "ZNGBaseClient.h"
+#import "ZNGBaseClientService.h"
 #import "ZNGContact.h"
 #import "ZNGNewContactFieldValue.h"
 
-@interface ZNGContactClient : ZNGBaseClient
+@interface ZNGContactClient : ZNGBaseClientService
 
 #pragma mark - GET methods
 
-+ (void)contactListWithParameters:(NSDictionary *)parameters
+- (void)contactListWithParameters:(NSDictionary*)parameters
                           success:(void (^)(NSArray* contacts, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 
-+ (void)contactListWithServiceId:(NSString*)serviceId
-                      parameters:(NSDictionary*)parameters
-                         success:(void (^)(NSArray* contacts, ZNGStatus* status))success
-                         failure:(void (^)(ZNGError* error))failure;
-
-+ (void)contactWithId:(NSString*)contactId
-        withServiceId:(NSString*)serviceId
+- (void)contactWithId:(NSString*)contactId
               success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 
-+ (void)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeId
+- (void)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeId
                              andChannelValue:(NSString *)channelValue
-                               withServiceId:(NSString *)serviceId
                                      success:(void (^) (ZNGContact *contact, ZNGStatus* status))success
                                      failure:(void (^) (ZNGError *error))failure;
 
 #pragma mark - POST methods
 
-+ (void)saveContact:(ZNGContact*)contact
-      withServiceId:(NSString*)serviceId
+- (void)saveContact:(ZNGContact*)contact
             success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
-+ (void)updateContactFieldValue:(ZNGNewContactFieldValue*)contactFieldValue
+- (void)updateContactFieldValue:(ZNGNewContactFieldValue*)contactFieldValue
              withContactFieldId:(NSString*)contactFieldId
                   withContactId:(NSString*)contactId
-                  withServiceId:(NSString*)serviceId
                         success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure;
 
-+ (void)triggerAutomationWithId:(NSString*)automationId
+- (void)triggerAutomationWithId:(NSString*)automationId
                   withContactId:(NSString*)contactId
-                  withServiceId:(NSString*)serviceId
                         success:(void (^)(ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure;
 
-+ (void)addLabelWithId:(NSString*)labelId
+- (void)addLabelWithId:(NSString*)labelId
          withContactId:(NSString*)contactId
-         withServiceId:(NSString*)serviceId
                success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - PUT methods
 
-+ (void)updateContactWithId:(NSString*)contactId
-              withServiceId:(NSString*)serviceId
+- (void)updateContactWithId:(NSString*)contactId
              withParameters:(NSDictionary*)parameters
                     success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - DELETE methods
 
-+ (void)deleteContactWithId:(NSString*)contactId
-              withServiceId:(NSString*)serviceId
+- (void)deleteContactWithId:(NSString*)contactId
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure;
 
-+ (void)removeLabelWithId:(NSString*)labelId
+- (void)removeLabelWithId:(NSString*)labelId
             withContactId:(NSString*)contactId
-            withServiceId:(NSString*)serviceId
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure;
 

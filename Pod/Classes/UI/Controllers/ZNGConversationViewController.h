@@ -11,6 +11,9 @@
 #import "ZNGContact.h"
 
 @class ZNGConversationViewController;
+@class ZingleSession;
+@class ZingleAccountSession;
+@class ZingleContactSession;
 
 @protocol ZNGConversationModalDelegate <NSObject>
 
@@ -28,27 +31,20 @@
 
 @interface ZNGConversationViewController : ZNGBaseViewController <ZNGComposerTextViewPasteDelegate, ZNGConversationDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
-/**
- *  Returns a ZNGConversationViewController.
- *
- *  @param conversation Object containing participants in a conversation and the 
- *  conversation messages. Controller must be created with conversation.
- */
 + (ZNGConversationViewController *)toService:(ZNGService *)service
-                                     contact:(ZNGContact *)contact
+                                 withSession:(ZingleContactSession *)session
                                   senderName:(NSString *)senderName
                                 receiverName:(NSString *)receiverName;
 
-/**
- *  Returns a ZNGConversationViewController.
- *
- *  @param conversation Object containing participants in a conversation and the
- *  conversation messages. Controller must be created with conversation.
- */
 + (ZNGConversationViewController *)toContact:(ZNGContact *)contact
-                                     service:(ZNGService *)service
+                                 withSession:(ZingleAccountSession *)session
                                   senderName:(NSString *)senderName
                                 receiverName:(NSString *)receiverName;
+
+/*
+ *  The session used for all network communication.
+ */
+@property (nonatomic, strong) ZingleSession * session;
 
 /**
  *  If ZNGConversationViewController is presented modally the modalDelegate should

@@ -7,6 +7,7 @@
 //
 
 #import "ZNGConversationViewController.h"
+#import "ZNGLogging.h"
 #import "ZNGImageViewerController.h"
 #import "ZingleSDK.h"
 #import "DGActivityIndicatorView.h"
@@ -18,6 +19,10 @@
 #import "ZNGContactClient.h"
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
+#import "ZingleAccountSession.h"
+#import "ZingleContactSession.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @interface ZNGConversationViewController ()
 
@@ -47,16 +52,17 @@ static NSString *kZNGSendMessageError = @"There was a problem sending your messa
 static NSString *kZNGDeleteMessageError = @"There was a problem deleting your message. Please try again later.";
 
 + (ZNGConversationViewController *)toService:(ZNGService *)service
-                                     contact:(ZNGContact *)contact
+                                 withSession:(ZingleContactSession *)session
                                   senderName:(NSString *)senderName
                                 receiverName:(NSString *)receiverName
 {
-    ZNGConversationViewController *vc = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
+    ZNGConversationViewController * vc = [ZNGConversationViewController messagesViewController];
     
-    if (vc) {
+    if (vc != nil) {
+        vc.session = session;
         vc.toService = YES;
         vc.service = service;
-        vc.contact = contact;
+        vc.contact = session.contact;
         vc.senderName = senderName;
         vc.receiverName = receiverName;
     }
@@ -65,15 +71,16 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 }
 
 + (ZNGConversationViewController *)toContact:(ZNGContact *)contact
-                                     service:(ZNGService *)service
+                                 withSession:(ZingleAccountSession *)session
                                   senderName:(NSString *)senderName
                                 receiverName:(NSString *)receiverName
 {
-    ZNGConversationViewController *vc = (ZNGConversationViewController *)[ZNGConversationViewController messagesViewController];
-    
-    if (vc) {
+    ZNGConversationViewController * vc = [ZNGConversationViewController messagesViewController];
+
+    if (vc != nil) {
+        vc.session = session;
         vc.toService = NO;
-        vc.service = service;
+        vc.service = session.service;
         vc.contact = contact;
         vc.senderName = senderName;
         vc.receiverName = receiverName;
@@ -245,7 +252,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)refreshContact
 {
-    [ZNGContactClient contactWithId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+    [self.session.contactClient contactWithId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
         self.contact = contact;
         [self setupBarButtonItems];
     } failure:nil];
@@ -268,7 +275,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         [self.confirmButton sizeToFit];
     }
     NSDictionary *params = @{@"is_confirmed" : confirmedParam };
-    [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+    [self.session.contactClient updateContactWithId:self.contact.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
 //        self.contact = contact;
         if ([self.detailDelegate respondsToSelector:@selector(didUpdateContact)]) {
             [self.detailDelegate didUpdateContact];
@@ -294,7 +301,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
         self.starBarButton.tintColor = [UIColor zng_yellow];
     }
     NSDictionary *params = @{@"is_starred" : starParam };
-    [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.service.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+    [self.session.contactClient updateContactWithId:self.contact.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
 //        self.contact = contact;
         if ([self.detailDelegate respondsToSelector:@selector(didUpdateContact)]) {
             [self.detailDelegate didUpdateContact];
@@ -586,14 +593,22 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)showAutomations:(UIButton *)sender
 {
-    [ZNGAutomationClient automationListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *automations, ZNGStatus *status) {
+    if (self.toService) {
+        ZNGLogError(@"Call was made to show automations in a contact client.  Ignoring.");
+        return;
+    }
+    
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    ZNGAutomationClient * automationClient = session.automationClient;
+    
+    [automationClient automationListWithParameters:nil success:^(NSArray *automations, ZNGStatus *status) {
         
         UIAlertController *automationTemplate = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         
         for (ZNGAutomation *automation in automations) {
             UIAlertAction *action = [UIAlertAction actionWithTitle:automation.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 
-                [ZNGContactClient triggerAutomationWithId:automation.automationId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                [self.session.contactClient triggerAutomationWithId:automation.automationId withContactId:self.contact.contactId success:^(ZNGStatus *status) {
                     
                     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Automation triggered."
                                                                                    message:nil
@@ -630,7 +645,15 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)showTemplates:(UIButton *)sender
 {
-    [ZNGTemplateClient templateListWithParameters:nil withServiceId:self.service.serviceId success:^(NSArray *templ, ZNGStatus *status) {
+    if (self.toService) {
+        ZNGLogError(@"Call was made to show templates in a contact client.  Ignoring.");
+        return;
+    }
+    
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    ZNGTemplateClient * templateClient = session.templateClient;
+    
+    [templateClient templateListWithParameters:nil success:^(NSArray *templ, ZNGStatus *status) {
         
         UIAlertController *templateMenu = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
         
@@ -744,7 +767,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
     
     if (message != nil) {
         
-        [ZNGMessageClient deleteMessages:@[message.messageId] withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+        [self.session.messageClient deleteMessages:@[message.messageId] success:^(ZNGStatus *status) {
             
         } failure:^(ZNGError *error) {
             [self showErrorMessage:kZNGDeleteMessageError];
@@ -764,7 +787,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 {
     [self stopPollingTimer];
     
-    [ZNGMessageClient deleteAllMessagesForContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+    [self.session.messageClient deleteAllMessagesForContactId:self.contact.contactId success:^(ZNGStatus *status) {
         
     } failure:^(ZNGError *error) {
         [self showErrorMessage:kZNGDeleteMessageError];

@@ -9,6 +9,11 @@
 #import "ZingleSession.h"
 #import "ZNGLogging.h"
 #import <AFNetworking/AFNetworking.h>
+#import "ZNGAccountClient.h"
+#import "ZNGContactServiceClient.h"
+#import "ZNGNotificationsClient.h"
+#import "ZNGServiceClient.h"
+#import "ZNGUserAuthorizationClient.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -37,6 +42,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         _sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
         [_sessionManager.requestSerializer setValue:@"iOS_SDK" forHTTPHeaderField:@"Zingle_Agent"];
+        
+        self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
+        self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
+        self.notificationsClient = [[ZNGNotificationsClient alloc] initWithSession:self];
+        self.serviceClient = [[ZNGServiceClient alloc] initWithSession:self];
+        self.userAuthorizationClient = [[ZNGUserAuthorizationClient alloc] initWithSession:self];
     }
     
     return self;

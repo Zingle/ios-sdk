@@ -11,9 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 @class ZNGService;
 @class ZNGAccount;
-@class ZNGAccountClient;
-@class ZNGServiceClient;
-@class ZNGAutomationClient;
+@class ZNGAutomationClient, ZNGContactChannelClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
 
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
 typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * availableServices);
@@ -49,17 +47,6 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
  */
 @property (nonatomic, assign) BOOL available;
 
-#pragma mark - Clients
-/*
- *  The client used to retrieve ZNGAccount information
- */
-@property (nonatomic, readonly, nullable) ZNGAccountClient * accountClient;
-
-/*
- *  The client used to retrieve ZNGService information
- */
-@property (nonatomic, readonly, nullable) ZNGServiceClient * serviceClient;
-
 #pragma mark - Initialization
 /*
  *  Constructor for a Zingle account-level session object.  Includes optional parameters which may be used to provide callbacks to select
@@ -86,7 +73,13 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
  */
 @interface ZingleAccountSession (MethodsRequiringAuthentication)
 
-@property (nonatomic, readonly, nullable) ZNGAutomationClient * automationClient;
+@property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
+@property (nonatomic, strong, nonnull) ZNGContactChannelClient * contactChannelClient;
+@property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
+@property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
+@property (nonatomic, strong, nonnull) ZNGMessageClient * messageClient;
+@property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;
 
 @end
+
 NS_ASSUME_NONNULL_END

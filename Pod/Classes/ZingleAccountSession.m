@@ -16,11 +16,6 @@
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
-@interface ZingleAccountSession ()
-@property (nonatomic, strong, nullable) ZNGAccountClient * accountClient;
-@property (nonatomic, strong, nullable) ZNGServiceClient * serviceClient;
-@end
-
 @implementation ZingleAccountSession
 {
     ZingleSpecificAccountSession * privateSession; // The session object that handles the actual session once the user has chosen an account and a service.
@@ -39,7 +34,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self = [super initWithToken:token key:key];
     
     if (self != nil) {
-        self.accountClient = [[ZNGAccountClient alloc] init];
         [self retrieveAvailableAccounts];
     }
     
@@ -213,7 +207,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 #pragma mark - Service retrieval
 - (void) retrieveAvailableServices
 {
-    self.serviceClient = [[ZNGServiceClient alloc] initWithAccount:self.account];
     [self.serviceClient serviceListWithSuccess:^(NSArray *services, ZNGStatus *status) {
         
         if ([services count] == 0) {

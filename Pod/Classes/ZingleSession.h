@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @class AFHTTPSessionManager;
+@class ZNGAccountClient;
+@class ZNGContactServiceClient;
+@class ZNGNotificationsClient;
+@class ZNGServiceClient;
+@class ZNGUserAuthorizationClient;
 
 /*
  *  This abstract class represents the current session with the Zingle API.  This must be initialized with a set of API credentials.
@@ -32,6 +37,13 @@
  *  The base URL.  Can be overridden only in debug builds.  Immutable after initialization.
  */
 @property (nonatomic, readonly, nullable) NSString * baseUrl;
+
+#pragma mark - Clients
+@property (nonatomic, strong, nonnull) ZNGAccountClient * accountClient;
+@property (nonatomic, strong, nonnull) ZNGContactServiceClient * contactServiceClient;
+@property (nonatomic, strong, nonnull) ZNGNotificationsClient * notificationsClient;
+@property (nonatomic, strong, nonnull) ZNGServiceClient * serviceClient;
+@property (nonatomic, strong, nonnull) ZNGUserAuthorizationClient * userAuthorizationClient;
 
 #pragma mark - Properties used by client objects
 @property (nonatomic, readonly, nonnull) AFHTTPSessionManager * sessionManager;

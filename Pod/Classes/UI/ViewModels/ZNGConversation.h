@@ -14,6 +14,7 @@
 #import "ZNGService.h"
 
 @class ZNGMessage;
+@class ZingleSession;
 
 @protocol ZNGConversationDelegate <NSObject>
 
@@ -23,6 +24,8 @@
 @end
 
 @interface ZNGConversation : NSObject
+
+@property (nonatomic, weak) ZingleSession * session;
 
 @property (nonatomic, strong) ZNGChannelType *channelType;
 @property (nonatomic, strong) NSString *contactChannelValue;

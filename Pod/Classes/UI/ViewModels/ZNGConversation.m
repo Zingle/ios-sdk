@@ -9,6 +9,7 @@
 #import "ZNGConversation.h"
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
+#import "ZingleSession.h"
 
 @interface ZNGConversation ()
 
@@ -55,7 +56,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                              kConversationPage : @1,
                              kConversationSortField : kConversationCreatedAt};
     
-    [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+    [self.session.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
         
         if (status.totalRecords == self.totalMessageCount) {
             [self.delegate messagesUpdated:NO];
@@ -84,7 +85,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                  kConversationPage : @(page),
                                  kConversationSortField : kConversationCreatedAt};
         
-        [ZNGMessageClient messageListWithParameters:params withServiceId:self.serviceId success:^(NSArray *messages, ZNGStatus* status) {
+        [self.session.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
             
             NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
             [temp addObjectsFromArray:messages];
@@ -120,9 +121,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     if (messageIds.count > 0) {
         
-        [ZNGMessageClient markMessagesReadWithMessageIds:messageIds
+        [self.session.messageClient markMessagesReadWithMessageIds:messageIds
                                                   readAt:readAt
-                                               serviceId:self.serviceId
                                                  success:^(ZNGStatus *status) {
                                                      
             if (status.statusCode == 200) {
@@ -151,7 +151,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     failure:(void (^) (ZNGError *error))failure
 {
     if (self.channelType == nil) {
-        [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
+        [self.session.serviceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
             for (ZNGChannelType *channelType in service.channelTypes) {
                 
                 if ([channelType.typeClass isEqualToString:@"UserDefinedChannel"]) {
@@ -159,7 +159,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     ZNGNewMessage *newMessage = [self newMessageToService:self.toService forTypeClass:channelType.typeClass];
                     newMessage.body = body;
                     newMessage.channelTypeIds = @[self.channelType.channelTypeId];
-                    [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+                    [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
                         if (success) {
                             success(status);
                         }
@@ -178,7 +178,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         ZNGNewMessage *newMessage = [self newMessageToService:self.toService forTypeClass:self.channelType.typeClass];
         newMessage.body = body;
         newMessage.channelTypeIds = @[self.channelType.channelTypeId];
-        [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+        [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
             if (success) {
                 success(status);
             }
@@ -196,7 +196,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
     
     if (self.channelType == nil) {
-        [ZNGServiceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
+        [self.session.serviceClient serviceWithId:self.serviceId success:^(ZNGService *service, ZNGStatus *status) {
             for (ZNGChannelType *channelType in service.channelTypes) {
                 
                 if ([channelType.typeClass isEqualToString:@"UserDefinedChannel"]) {
@@ -207,7 +207,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                                    kAttachementBase64 : encodedString
                                                    }];
                     newMessage.channelTypeIds = @[self.channelType.channelTypeId];
-                    [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+                    [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
                         if (success) {
                             success(status);
                         }
@@ -229,7 +229,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                        kAttachementBase64 : encodedString
                                        }];
         newMessage.channelTypeIds = @[self.channelType.channelTypeId];
-        [ZNGMessageClient sendMessage:newMessage withServiceId:self.serviceId success:^(ZNGMessage *message, ZNGStatus *status) {
+        [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
             if (success) {
                 success(status);
             }

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 @class ZNGContact;
+@class ZNGContactClient;
 
 extern NSString * __nonnull const ParameterKeyPageIndex;
 extern NSString * __nonnull const ParameterKeyPageSize;
@@ -61,7 +62,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  *
  * @param theServiceId The service identifier string for the user's current service.
  */
-- (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId;
+- (nonnull instancetype) initWithContactClient:(nonnull ZNGContactClient *)contactClient;
 
 /**
  *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loadingInitialData property.

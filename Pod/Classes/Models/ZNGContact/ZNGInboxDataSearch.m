@@ -13,9 +13,9 @@
     NSString * searchTerm;
 }
 
-- (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId searchTerm:(nonnull NSString *)theSearchTerm
+- (nonnull instancetype) initWithContactClient:(ZNGContactClient *)contactClient searchTerm:(nonnull NSString *)theSearchTerm;
 {
-    self = [super initWithServiceId:theServiceId];
+    self = [super initWithContactClient:contactClient];
     
     if (self != nil) {
         searchTerm = theSearchTerm;

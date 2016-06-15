@@ -13,9 +13,9 @@
     NSString * labelId;
 }
 
-- (id) initWithServiceId:(NSString *)theServiceId labelId:(NSString *)theLabelId
+- (id) initWithContactClient:(ZNGContactClient *)contactClient labelId:(NSString *)theLabelId;
 {
-    self = [super initWithServiceId:theServiceId];
+    self = [super initWithContactClient:contactClient];
     
     if (self != nil) {
         labelId = theLabelId;

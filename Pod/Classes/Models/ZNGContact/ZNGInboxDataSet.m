@@ -42,22 +42,24 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 @implementation ZNGInboxDataSet
 {
-    NSString * serviceId;
+    ZNGContactClient * contactClient;
+    
     NSUInteger pageSize;
     
     NSOperationQueue * fetchQueue;
 }
 
-- (nonnull instancetype) initWithServiceId:(nonnull NSString *)theServiceId
+- (nonnull instancetype) initWithContactClient:(ZNGContactClient *)aContactClient
 {
     self = [super init];
     
     if (self != nil) {
+        contactClient = aContactClient;
+        
         fetchQueue = [[NSOperationQueue alloc] init];
         fetchQueue.name = @"Zingle Inbox fetching";
         fetchQueue.maxConcurrentOperationCount = 1;
         
-        serviceId = theServiceId;
         _loading = YES;
         _loadingInitialData = YES;
         _contacts = @[];
@@ -174,7 +176,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = pageNumber;
             
-            [ZNGContactClient contactListWithServiceId:serviceId parameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
+            [contactClient contactListWithParameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;
                 weakSelf.count = status.totalRecords;
                 

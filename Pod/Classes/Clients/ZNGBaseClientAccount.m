@@ -11,9 +11,9 @@
 
 @implementation ZNGBaseClientAccount
 
-- (instancetype) initWithAccount:(ZNGAccount *)account
+- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account
 {
-    self = [super init];
+    self = [super initWithSession:session];
     
     if (self != nil) {
         _account = account;

@@ -17,6 +17,6 @@
 
 @property (nonatomic, readonly, nonnull) ZNGService * service;
 
-- (nonnull instancetype) initWithAccount:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service;
+- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service;
 
 @end

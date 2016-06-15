@@ -586,6 +586,10 @@
 		95B6DAE99A2EEA5D1E567AB88633F74E /* ZNGCollectionViewFlowLayoutInvalidationContext.m in Sources */ = {isa = PBXBuildFile; fileRef = DC7974F63C5DB398DA191E049845CBBB /* ZNGCollectionViewFlowLayoutInvalidationContext.m */; };
 		95E7FAD382E65A635CCBDAF2030E542F /* DGActivityIndicatorFiveDotsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB3EE3C0A1E539EDA0F9D2E8AE9C690 /* DGActivityIndicatorFiveDotsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		962B6445D3F3192F72AE733771D0AF48 /* ZNGTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D4AF7C2561321A26A0776ED993A016D3 /* ZNGTableViewCell.m */; };
+		9687EF0F1D11C99D00BB36FB /* ZingleContactSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 9687EF0D1D11C99D00BB36FB /* ZingleContactSession.h */; };
+		9687EF101D11C99D00BB36FB /* ZingleContactSession.h in Headers */ = {isa = PBXBuildFile; fileRef = 9687EF0D1D11C99D00BB36FB /* ZingleContactSession.h */; };
+		9687EF111D11C99D00BB36FB /* ZingleContactSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 9687EF0E1D11C99D00BB36FB /* ZingleContactSession.m */; };
+		9687EF121D11C99D00BB36FB /* ZingleContactSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 9687EF0E1D11C99D00BB36FB /* ZingleContactSession.m */; };
 		969843772EE69C80E9D425672AB3E8FD /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 704F561D27968250F7D8F0D33A6D420E /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		96BAFE37D7054515799A618B6A28BD78 /* DGActivityIndicatorDoubleBounceAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4695DDE84D7D8C90E2599BFFA1766210 /* DGActivityIndicatorDoubleBounceAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96FC7E8A2877E5C681A78A3C6038AEF3 /* bubble_stroked_tailless@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AF6D5678A6BFEDD29184E1BE09EBC547 /* bubble_stroked_tailless@2x.png */; };
@@ -1546,6 +1550,8 @@
 		95C593C26AE49E5EE08E5A06E675B4B7 /* bubble_min@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@2x.png"; sourceTree = "<group>"; };
 		95FB2A246506F622002CE6634CB6D55A /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		962D6E6A348C296E5DF4AC928A4204E0 /* AFNetworking-iOS8.0-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-iOS8.0-umbrella.h"; sourceTree = "<group>"; };
+		9687EF0D1D11C99D00BB36FB /* ZingleContactSession.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZingleContactSession.h; sourceTree = "<group>"; };
+		9687EF0E1D11C99D00BB36FB /* ZingleContactSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZingleContactSession.m; sourceTree = "<group>"; };
 		96FDE0CAE4114F82F9F43568270F3757 /* ZNGLabelCollectionViewCell.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGLabelCollectionViewCell.h; sourceTree = "<group>"; };
 		9843D7E5DB18AB85A0167C0067AAA5A6 /* DGActivityIndicatorBallRotateAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallRotateAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallRotateAnimation.h; sourceTree = "<group>"; };
 		98E93D2DE1C533DF200C476B721F0060 /* Pods-Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Tests.modulemap"; sourceTree = "<group>"; };
@@ -2759,6 +2765,8 @@
 				D59FB026287BD493704F388D4F091861 /* ZingleAccountSession.m */,
 				D7488E0C33D9A816A813840ACAEAFC85 /* ZingleSpecificAccountSession.h */,
 				5D8898C3EB56A23CD61CBD1A7A8A6231 /* ZingleSpecificAccountSession.m */,
+				9687EF0D1D11C99D00BB36FB /* ZingleContactSession.h */,
+				9687EF0E1D11C99D00BB36FB /* ZingleContactSession.m */,
 				A722E41923A87F2EFAFA0AF2F30F3AEA /* Clients */,
 				C3797159E11A1FB7A7EE63ED426E4741 /* Logging */,
 				97B3C3A38535A489B142443283ABAD12 /* Models */,
@@ -3258,6 +3266,7 @@
 				60C0F083C538966AF6CE64549B4E1444 /* ZNGInboxViewController.h in Headers */,
 				0F66B1769C74E3A1591687FA7C052FF9 /* ZNGInputToolbar.h in Headers */,
 				258E75A8F23C5605F903EA8A8CCD4F22 /* ZNGKeyboardController.h in Headers */,
+				9687EF0F1D11C99D00BB36FB /* ZingleContactSession.h in Headers */,
 				1A0C0950BF513168FEA64E52AFA9C500 /* ZNGLabel.h in Headers */,
 				173EDEDB3E0AC0836D9269553B2DF0E4 /* ZNGLabelClient.h in Headers */,
 				527E3F7A4DBCDACCAC7A09306E347791 /* ZNGLabelCollectionViewCell.h in Headers */,
@@ -3571,6 +3580,7 @@
 				034B525420836FB467C2CF48926BE983 /* ZNGInboxViewController.h in Headers */,
 				044B8751CB5BFEE33865F1F85536B383 /* ZNGInputToolbar.h in Headers */,
 				2121F98572B90E889A048AD2422EA87B /* ZNGKeyboardController.h in Headers */,
+				9687EF101D11C99D00BB36FB /* ZingleContactSession.h in Headers */,
 				1F646AECD89382D8E90F7AB43BC2729E /* ZNGLabel.h in Headers */,
 				F0C5A78D49D7C8F6D5E53EE2CD2A55D4 /* ZNGLabelClient.h in Headers */,
 				4F0AE2FACD80E951984CC3DB935A9B4F /* ZNGLabelCollectionViewCell.h in Headers */,
@@ -4190,6 +4200,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				487FB35BEF711E5B516CB7C59B1018D6 /* NSBundle+ZingleSDK.m in Sources */,
+				9687EF111D11C99D00BB36FB /* ZingleContactSession.m in Sources */,
 				71D36352909584DFBA2C711C81CA2065 /* NSString+ZingleSDK.m in Sources */,
 				183C4D53CA28664450291F1BD9642195 /* UIColor+ZingleSDK.m in Sources */,
 				1E50A2D1E5CB215D9944F19CCE99805D /* UIDevice+ZingleSDK.m in Sources */,
@@ -4423,6 +4434,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				49D21B11937467ED25F3CDBC277B7A27 /* NSBundle+ZingleSDK.m in Sources */,
+				9687EF121D11C99D00BB36FB /* ZingleContactSession.m in Sources */,
 				828F0B64E22875912509728592461217 /* NSString+ZingleSDK.m in Sources */,
 				8D31679C27B93482AFF7141E99F60459 /* UIColor+ZingleSDK.m in Sources */,
 				DF21CB8475FEF20A2BA33E4F18008DD2 /* UIDevice+ZingleSDK.m in Sources */,

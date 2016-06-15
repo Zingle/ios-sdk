@@ -8,14 +8,15 @@
 
 #import "ZingleSession.h"
 
+NS_ASSUME_NONNULL_BEGIN
 @class ZNGService;
 @class ZNGAccount;
 @class ZNGAccountClient;
 @class ZNGServiceClient;
 @class ZNGAutomationClient;
 
-typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * _Nonnull availableAccounts);
-typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Nonnull availableServices);
+typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
+typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * availableServices);
 
 @interface ZingleAccountSession : ZingleSession
 
@@ -75,7 +76,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
  *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
  *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
  */
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
+- (instancetype) initWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
 @end
 
@@ -88,3 +89,4 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * _Non
 @property (nonatomic, readonly, nullable) ZNGAutomationClient * automationClient;
 
 @end
+NS_ASSUME_NONNULL_END

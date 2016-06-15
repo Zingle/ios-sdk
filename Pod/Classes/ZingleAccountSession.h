@@ -65,8 +65,18 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
  */
 - (instancetype) initWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
+/*
+ *  Initializer for a Zingle session object.  If this constructor is used to create a ZingleAccountSession, the caller is later responsible for selecting an account
+ *   and service if two or more of either exist for this account.  They will be available in the availableAccounts and availableServices KVO-compliant properties.
+ *
+ *  @param token Token for Zingle API user
+ *  @param key Security key for Zingle API user
+ */
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
+
 @end
 
+#pragma mark - Clients that require a selected service
 /*
  *  The methods and property get/set methods in this category will generate a logged error and have no effect if they are called before the 'available' flag is set
  *  i.e. they cannot be called until we have a specific account and service selected

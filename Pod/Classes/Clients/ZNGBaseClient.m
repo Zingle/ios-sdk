@@ -25,9 +25,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 @end
 
 @implementation ZNGBaseClient
-{
-    __weak ZingleSession * session;
-}
 
 NSString *const kBaseClientStatus = @"status";
 NSString *const kBaseClientResult = @"result";
@@ -38,7 +35,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     self = [super init];
     
     if (self != nil) {
-        session = aSession;
+        _session = aSession;
     }
     
     return self;

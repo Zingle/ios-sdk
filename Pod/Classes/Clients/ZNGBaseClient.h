@@ -38,13 +38,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - POST methods
 
-+ (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
+- (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
                                   path:(NSString*)path
                          responseClass:(Class)responseClass
                                success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                                failure:(nullable void (^)(ZNGError* error))failure;
 
-+ (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
+- (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
                                        path:(NSString*)path
                               responseClass:(Class)responseClass
                                     success:(nullable void (^)(id responseObject, ZNGStatus *status))success
@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - DELETE methods
 
-+ (NSURLSessionDataTask*)deleteWithPath:(NSString*)path
+- (NSURLSessionDataTask*)deleteWithPath:(NSString*)path
                                 success:(nullable void (^)(ZNGStatus *status))success
                                 failure:(nullable void (^)(ZNGError* error))failure;
 

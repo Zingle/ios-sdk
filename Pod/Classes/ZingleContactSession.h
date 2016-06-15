@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZNGContactService;
+@class ZNGConversation;
 @class ZNGError;
 
 @class ZNGAutomationClient;
@@ -34,6 +35,7 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *  Set automatically shortly after a contact service is selected.
  */
 @property (nonatomic, readonly, nullable) ZNGContact * contact;
+@property (nonatomic, readonly, nullable) ZNGConversation * conversation;
 
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGContactClient * contactClient;

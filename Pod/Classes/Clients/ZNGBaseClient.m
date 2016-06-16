@@ -41,11 +41,6 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     return self;
 }
 
-+ (AFHTTPSessionManager*)sessionManager
-{
-    return [[ZingleSDK sharedSDK] sharedSessionManager];
-}
-
 #pragma mark - GET
 - (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
                                            path:(NSString*)path

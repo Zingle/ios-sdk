@@ -70,4 +70,11 @@
  */
 - (void) _registerForPushNotificationsForServiceIds:(NSArray<NSString *> *)serviceIds removePreviousSubscriptions:(BOOL)removePrevious;
 
+/**
+ *  Private method used when all push notifications registrations should be removed without adding any new ones (such as during a logout)
+ *
+ *  @note Use _registerForPushNotificationsForServiceIds:removePreviousSubscriptions: instead if new subscriptions should be added simultaneously.
+ */
+- (void) _unregisterForAllPushNotifications;
+
 @end

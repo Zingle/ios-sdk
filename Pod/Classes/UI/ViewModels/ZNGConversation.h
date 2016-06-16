@@ -13,6 +13,7 @@
 #import "ZNGContact.h"
 #import "ZNGService.h"
 
+@class ZNGContact;
 @class ZNGMessage;
 @class ZingleSession;
 
@@ -32,6 +33,7 @@
 @property (nonatomic, strong) NSString *serviceChannelValue;
 @property (nonatomic, strong) NSString *serviceId;
 @property (nonatomic, strong) NSString *contactId;
+@property (nonatomic, strong) ZNGContact * contact;
 
 @property (nonatomic) BOOL toService;
 @property (nonatomic, strong) NSMutableArray<ZNGMessage *> *messages;

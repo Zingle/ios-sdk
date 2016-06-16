@@ -14,6 +14,7 @@
 #import "DGActivityIndicatorView.h"
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
+#import "ZingleAccountSession.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -83,12 +84,12 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(data)) context:ZNGInboxKVOContext];
 }
 
-+ (instancetype)withServiceId:(NSString *)serviceId
++ (instancetype)withAccountSession:(ZingleAccountSession *)aSession
 {
     ZNGInboxViewController *vc = (ZNGInboxViewController *)[ZNGInboxViewController inboxViewController];
     
     if (vc) {
-        vc.serviceId = serviceId;
+        vc.session = aSession;
     }
     
     return vc;
@@ -128,7 +129,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     [self showActivityIndicator];
     
-    self.data = [[ZNGInboxDataSet alloc] initWithServiceId:self.serviceId];
+    self.data = [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
 }
 
 #pragma mark - Key Value Observing
@@ -207,12 +208,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void)refresh:(UIRefreshControl *)aRefreshControl {
     [self.data refresh];
-}
-
--(void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    [[ZingleSDK sharedSDK] clearCachedConversations];
 }
 
 - (void)showActivityIndicator

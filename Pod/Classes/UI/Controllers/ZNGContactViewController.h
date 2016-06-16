@@ -10,8 +10,12 @@
 #import "ZNGContact.h"
 #import "ZNGService.h"
 
+@class ZingleAccountSession;
+
 @interface ZNGContactViewController : UITableViewController <UIPickerViewDataSource>
 
-+ (instancetype)withContact:(ZNGContact *)contact withService:(ZNGService *)service;
+@property (nonatomic, strong, nonnull) ZingleAccountSession * session;
+
++ (instancetype)withContact:(ZNGContact *)contact session:(ZingleAccountSession *)aSession;
 
 @end

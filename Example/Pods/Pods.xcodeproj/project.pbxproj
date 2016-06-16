@@ -575,6 +575,10 @@
 		951F272F31211B0706793C895CECE517 /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = E779D7064C830AA1F1EF94F66CFFD57C /* DDDispatchQueueLogFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		9526E9958ACB048E4B892C34844982FF /* UIDevice+ZingleSDK.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F162FD4FE5DD2ABBF950455A56A17F3 /* UIDevice+ZingleSDK.m */; };
 		95E7FAD382E65A635CCBDAF2030E542F /* DGActivityIndicatorFiveDotsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FB3EE3C0A1E539EDA0F9D2E8AE9C690 /* DGActivityIndicatorFiveDotsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		967648A91D13662600E45D50 /* ZNGContactConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 967648A71D13662500E45D50 /* ZNGContactConversationViewController.h */; };
+		967648AA1D13662600E45D50 /* ZNGContactConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 967648A71D13662500E45D50 /* ZNGContactConversationViewController.h */; };
+		967648AB1D13662600E45D50 /* ZNGContactConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 967648A81D13662600E45D50 /* ZNGContactConversationViewController.m */; };
+		967648AC1D13662600E45D50 /* ZNGContactConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 967648A81D13662600E45D50 /* ZNGContactConversationViewController.m */; };
 		969843772EE69C80E9D425672AB3E8FD /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 704F561D27968250F7D8F0D33A6D420E /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		96BAFE37D7054515799A618B6A28BD78 /* DGActivityIndicatorDoubleBounceAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 4695DDE84D7D8C90E2599BFFA1766210 /* DGActivityIndicatorDoubleBounceAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		96CEC0CC1EA9645DC6BC7C51157FC5BA /* ZNGLabelCollectionViewFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = DF91A4920AC953CE572D777273D4A8D6 /* ZNGLabelCollectionViewFlowLayout.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1574,6 +1578,8 @@
 		95C593C26AE49E5EE08E5A06E675B4B7 /* bubble_min@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@2x.png"; sourceTree = "<group>"; };
 		95FB2A246506F622002CE6634CB6D55A /* OpenSans-BoldItalic.ttf */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file; name = "OpenSans-BoldItalic.ttf"; path = "Pod/Assets/Fonts/opensans/OpenSans-BoldItalic.ttf"; sourceTree = "<group>"; };
 		962D6E6A348C296E5DF4AC928A4204E0 /* AFNetworking-iOS8.0-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AFNetworking-iOS8.0-umbrella.h"; sourceTree = "<group>"; };
+		967648A71D13662500E45D50 /* ZNGContactConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGContactConversationViewController.h; sourceTree = "<group>"; };
+		967648A81D13662600E45D50 /* ZNGContactConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactConversationViewController.m; sourceTree = "<group>"; };
 		97182A67FDCA79752EDDD93C9BB96628 /* ZNGAvatarImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGAvatarImage.h; sourceTree = "<group>"; };
 		9843D7E5DB18AB85A0167C0067AAA5A6 /* DGActivityIndicatorBallRotateAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallRotateAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallRotateAnimation.h; sourceTree = "<group>"; };
 		98E93D2DE1C533DF200C476B721F0060 /* Pods-Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Tests.modulemap"; sourceTree = "<group>"; };
@@ -2727,6 +2733,8 @@
 				86F491750EC11CF2440B0B53024FED72 /* ZNGContactViewController.m */,
 				3449192468D6A562E79C877BF7D4DA7B /* ZNGConversationViewController.h */,
 				D459ABF1757EDF75E3CCFDE876946D1C /* ZNGConversationViewController.m */,
+				967648A71D13662500E45D50 /* ZNGContactConversationViewController.h */,
+				967648A81D13662600E45D50 /* ZNGContactConversationViewController.m */,
 				7BFA92ED44A3B9E98485493EDB3CA61E /* ZNGImageViewerController.h */,
 				3F5443E6B80A08C51EA67FA2E3E108EA /* ZNGImageViewerController.m */,
 				669D3F0A1C3A7711F1464D9402780CC2 /* ZNGInboxViewController.h */,
@@ -3274,6 +3282,7 @@
 				E9C91B5A8DDD43F9F362F50AFA38FD94 /* ZNGToolbarContentView.h in Headers */,
 				6E6141B89BDD1BAFE500779011DF424D /* ZNGTypingIndicatorFooterView.h in Headers */,
 				AA7F111ADA950808E67D01BD48B002D7 /* ZNGUser.h in Headers */,
+				967648A91D13662600E45D50 /* ZNGContactConversationViewController.h in Headers */,
 				CD233F93742EF534C3F57D07B1417EF5 /* ZNGUserAuthorization.h in Headers */,
 				6969FEFA2F4CB2DE35BE09B1F7055DC6 /* ZNGUserAuthorizationClient.h in Headers */,
 				5DBEF2807D676B712C4C7D6AA4675B60 /* ZNGVideoMediaItem.h in Headers */,
@@ -3571,6 +3580,7 @@
 				950D1F96B2B8001655E0A22CE343AEE4 /* ZNGToolbarContentView.h in Headers */,
 				1D75F2F5BA055FE01C7AAC56CF89568F /* ZNGTypingIndicatorFooterView.h in Headers */,
 				653302745043600174EE88926F6E57A7 /* ZNGUser.h in Headers */,
+				967648AA1D13662600E45D50 /* ZNGContactConversationViewController.h in Headers */,
 				4EDCAA612FD75FB2DCF9E77A0C33CB13 /* ZNGUserAuthorization.h in Headers */,
 				F447A6DBE7AC23EFDD02619AC177513F /* ZNGUserAuthorizationClient.h in Headers */,
 				C16491DFBB128D1DD8DC5EC8D01B68FD /* ZNGVideoMediaItem.h in Headers */,
@@ -4316,6 +4326,7 @@
 				EF65A135CD0187EE09DDB6DF468CF044 /* ZNGKeyboardController.m in Sources */,
 				0440B097931ACDE1B3EB68D4774E4CCF /* ZNGLabel.m in Sources */,
 				5637D07B803D571126A27296F623958A /* ZNGLabelClient.m in Sources */,
+				967648AB1D13662600E45D50 /* ZNGContactConversationViewController.m in Sources */,
 				540BEF3B03A194425AF30C36EC25D2E8 /* ZNGLabelCollectionViewCell.m in Sources */,
 				BE08D78E2A4E83FB219B98EB585C0EEA /* ZNGLabelCollectionViewFlowLayout.m in Sources */,
 				CAC055AE3B21E2E4385E830E31D3BA04 /* ZNGLoadEarlierHeaderView.m in Sources */,
@@ -4531,6 +4542,7 @@
 				54B7CFFBD1900B6DE883979BF03557F9 /* ZNGKeyboardController.m in Sources */,
 				5E6280156EA519592410D260EFA18743 /* ZNGLabel.m in Sources */,
 				35A2D7F0383896BFDE6BAE343BAA6B4D /* ZNGLabelClient.m in Sources */,
+				967648AC1D13662600E45D50 /* ZNGContactConversationViewController.m in Sources */,
 				A284D7FA7D6A78CC6B6DDD619FDD3B50 /* ZNGLabelCollectionViewCell.m in Sources */,
 				B07EF34C60F90F03B9E39E38CDAACA6C /* ZNGLabelCollectionViewFlowLayout.m in Sources */,
 				0BEB2EAA25346A58057E68E9F138BFA1 /* ZNGLoadEarlierHeaderView.m in Sources */,

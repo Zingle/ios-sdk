@@ -262,6 +262,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
     conversation = [[ZNGConversation alloc] init];
     conversation.session = self;
+    conversation.contact = contact;
     conversation.channelType = channelType;
     conversation.contactChannelValue = channel.value;
     conversation.serviceChannelValue = serviceChannel.value;
@@ -272,6 +273,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [conversation updateMessages];
     
     return conversation;
+}
+
+- (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation
+{
+    if (conversation == nil) {
+        ZNGLogError(@"Attempted to display view controller for a nil conversation.");
+        return nil;
+    }
+    
+    ZNGConversationViewController * vc = [ZNGConversationViewController toContact:conversation.contact withSession:self senderName:@"Me" receiverName:[conversation.contact fullName]];
+    return vc;
 }
 
 @end

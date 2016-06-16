@@ -11,6 +11,7 @@
 @class ZNGService;
 @class ZNGContact;
 @class ZNGInboxDataSet;
+@class ZingleAccountSession;
 
 @interface ZNGInboxViewController : UIViewController <ZNGConversationDetailDelegate>
 
@@ -22,7 +23,7 @@
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;
 
-@property (strong, nonatomic, nullable) ZNGService *service;
+@property (strong, nonatomic, nonnull) ZingleAccountSession * session;
 @property (strong, nonatomic, nullable) NSString *serviceId;
 
 @property (strong, nonatomic, nullable) NSIndexPath *selectedIndexPath;

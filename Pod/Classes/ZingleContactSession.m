@@ -14,6 +14,7 @@
 #import "ZNGNotificationsClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGServiceClient.h"
+#import "ZNGContactConversationViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -135,6 +136,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         
         ZNGConversation * conversation = [[ZNGConversation alloc] init];
         conversation.session = self;
+        conversation.contact = self.contact;
         conversation.channelType = serviceChannel.channelType;
         conversation.contactChannelValue = self.channelValue;
         conversation.serviceChannelValue = serviceChannel.value;
@@ -190,7 +192,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return nil;
     }
     
-    return [ZNGConversationViewController toService:_service withSession:self senderName:@"Me" receiverName:nil];
+    return [ZNGContactConversationViewController toService:_service withSession:self senderName:@"Me" receiverName:nil];
 }
 
 @end

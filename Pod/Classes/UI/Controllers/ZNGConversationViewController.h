@@ -15,6 +15,8 @@
 @class ZingleAccountSession;
 @class ZingleContactSession;
 
+@class DGActivityIndicatorView;
+
 @protocol ZNGConversationModalDelegate <NSObject>
 
 @optional
@@ -126,6 +128,16 @@
  *  Default value is NO.
  */
 @property (nonatomic, assign, getter=isAutoMarkAsReadEnabled) BOOL autoMarkAsReadEnabled;
+
+@property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
+
+@property (strong, nonatomic) UIBarButtonItem *starBarButton;
+@property (strong, nonatomic) UIBarButtonItem *confirmBarButton;
+@property (strong, nonatomic) UIBarButtonItem *detailsBarButton;
+
+@property (strong, nonatomic) UIImage *unstarredImage;
+@property (strong, nonatomic) UIImage *starredImage;
+@property (strong, nonatomic) UIButton *confirmButton;
 
 // Temporarily exposed during development
 

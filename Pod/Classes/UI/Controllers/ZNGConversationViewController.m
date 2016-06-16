@@ -34,16 +34,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 @property (weak) NSTimer *pollingTimer;
 
-@property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
-
-@property (strong, nonatomic) UIBarButtonItem *starBarButton;
-@property (strong, nonatomic) UIBarButtonItem *confirmBarButton;
-@property (strong, nonatomic) UIBarButtonItem *detailsBarButton;
-
-@property (strong, nonatomic) UIImage *unstarredImage;
-@property (strong, nonatomic) UIImage *starredImage;
-@property (strong, nonatomic) UIButton *confirmButton;
-
 @end
 
 @implementation ZNGConversationViewController
@@ -310,7 +300,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)detailsButtonPressed:(UIBarButtonItem *)sender
 {
-    ZNGContactViewController *vc = [ZNGContactViewController withContact:self.contact withService:self.service];
+    ZNGContactViewController * vc = [ZNGContactViewController withContact:self.contact session:self.session];
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -326,29 +316,7 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
 - (void)loadConversation
 {
-    [self showActivityIndicator];
-    
-    if (self.toService) {
-        [[ZingleSDK sharedSDK] addConversationFromContact:self.contact toService:self.service success:^(ZNGConversation *conversation) {
-            self.conversation = conversation;
-            self.conversation.delegate = self;
-            
-        } failure:^(ZNGError *error) {
-            [self showAlertForError:error];
-            [self.activityIndicator removeFromSuperview];
-            [self.activityIndicator stopAnimating];
-        }];
-    } else {
-        [[ZingleSDK sharedSDK] addConversationFromService:self.service toContact:self.contact success:^(ZNGConversation *conversation) {
-            self.conversation = conversation;
-            self.conversation.delegate = self;
-            
-        } failure:^(ZNGError *error) {
-            [self showAlertForError:error];
-            [self.activityIndicator removeFromSuperview];
-            [self.activityIndicator stopAnimating];
-        }];
-    }
+    // TODO: Determine if this method is actually needed since the June 2016 refactor
 }
 
 - (void)viewWillAppear:(BOOL)animated

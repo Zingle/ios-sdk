@@ -13,6 +13,7 @@
 #import "ZNGcontactClient.h"
 #import "ZNGContactChannelClient.h"
 #import "ZNGFieldOption.h"
+#import "ZingleAccountSession.h"
 
 @interface ZNGContactViewController () <UITextFieldDelegate, UIPickerViewDelegate>
 
@@ -46,14 +47,13 @@
                                           bundle:[NSBundle bundleForClass:[ZNGContactViewController class]]];
 }
 
-+ (instancetype)withContact:(ZNGContact *)contact withService:(ZNGService *)service
++ (instancetype)withContact:(ZNGContact *)contact session:(ZingleAccountSession *)aSession;
 {
     ZNGContactViewController *vc = (ZNGContactViewController *)[ZNGContactViewController contactViewController];
     
     if (vc) {
         vc.contact = contact;
-        vc.service = service;
-        
+        vc.session = aSession;
     }
     
     return vc;
@@ -274,7 +274,7 @@
 
                 for (ZNGLabel *label in result) {
                     UIAlertAction *action = [UIAlertAction actionWithTitle:label.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                        [ZNGContactClient addLabelWithId:label.labelId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [self.session.contactClient addLabelWithId:label.labelId withContactId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact.labels = contact.labels;
                             [self.tableView reloadData];
                             
@@ -311,7 +311,7 @@
             [alert addAction: cancel];
             
             UIAlertAction *delete = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                [ZNGContactClient deleteContactWithId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                [self.session.contactClient deleteContactWithId:self.contact.contactId success:^(ZNGStatus *status) {
                     self.contact.contactId = @"DELETED";
                     Class targetClass = NSClassFromString(@"ZNGInboxViewController");
                     int indx = 0;
@@ -357,7 +357,7 @@
                         
                         ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
                         updatedField.customFieldOptionId = [self.contact titleFieldValue].selectedCustomFieldOptionId;
-                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self titleCustomField].contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [self.session.contactClient updateContactFieldValue:updatedField withContactFieldId:[self titleCustomField].contactFieldId withContactId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact = contact;
                             self.title = [self.contact fullName];
                             self.previousTitle = [self.contact titleFieldValue].value;
@@ -373,7 +373,7 @@
                         [self.contact firstNameFieldValue].value = textField.text;
                         ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
                         updatedField.value = textField.text;
-                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self firstNameCustomField].contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [self.session.contactClient updateContactFieldValue:updatedField withContactFieldId:[self firstNameCustomField].contactFieldId withContactId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact = contact;
                             self.title = [self.contact fullName];
                             self.previousFirstName = [self.contact firstNameFieldValue].value;
@@ -389,7 +389,7 @@
                         [self.contact lastNameFieldValue].value = textField.text;
                         ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
                         updatedField.value = textField.text;
-                        [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:[self lastNameCustomField].contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+                        [self.session.contactClient updateContactFieldValue:updatedField withContactFieldId:[self lastNameCustomField].contactFieldId withContactId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
                             self.contact = contact;
                             self.title = [self.contact fullName];
                             self.previousLastName = [self.contact lastNameFieldValue].value;
@@ -409,7 +409,7 @@
                             newChannel.country = @"US";
                             newChannel.displayName = [self phoneNumberChannel].displayName;
                             newChannel.isDefaultForType = [self phoneNumberChannel].isDefaultForType;
-                            [ZNGContactChannelClient saveContactChannel:newChannel withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
+                            [self.session.contactChannelClient saveContactChannel:newChannel withContactId:self.contact.contactId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
                                 
                                 NSMutableArray *temp = [[NSMutableArray alloc] init];
                                 [temp addObjectsFromArray:self.contact.channels];
@@ -422,7 +422,7 @@
                             }];
                             
                         } else {
-                            [ZNGContactChannelClient deleteContactChannelWithId:[self.contact phoneNumberChannel].channelId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                            [self.session.contactChannelClient deleteContactChannelWithId:[self.contact phoneNumberChannel].channelId withContactId:self.contact.contactId success:^(ZNGStatus *status) {
                                 
                                 NSMutableArray *temp = [NSMutableArray arrayWithArray:self.contact.channels];
                                 [temp removeObject:[self.contact phoneNumberChannel]];
@@ -436,7 +436,7 @@
                                     newChannel.displayName = [self.contact phoneNumberChannel].displayName;
                                     newChannel.isDefaultForType = [self.contact phoneNumberChannel].isDefaultForType;
                                     
-                                    [ZNGContactChannelClient saveContactChannel:newChannel withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
+                                    [self.session.contactChannelClient saveContactChannel:newChannel withContactId:self.contact.contactId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
                                         
                                         NSMutableArray *temp = [NSMutableArray arrayWithArray:self.contact.channels];
                                         [temp addObject:contactChannel];
@@ -469,7 +469,7 @@
             }
             ZNGNewContactFieldValue *updatedField = [[ZNGNewContactFieldValue alloc] init];
             updatedField.value = textField.text;
-            [ZNGContactClient updateContactFieldValue:updatedField withContactFieldId:field.contactFieldId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+            [self.session.contactClient updateContactFieldValue:updatedField withContactFieldId:field.contactFieldId withContactId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
                 self.contact = contact;
                 NSIndexSet *indexSet = [NSIndexSet indexSetWithIndex:2];
                 [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationNone];

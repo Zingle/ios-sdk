@@ -72,4 +72,39 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return [[NSUserDefaults standardUserDefaults] valueForKey:PushNotificationDeviceTokenUserDefaultsKey];
 }
 
+- (void) _registerForPushNotificationsForServiceIds:(NSArray<NSString *> *)serviceIds removePreviousSubscriptions:(BOOL)removePrevious
+{
+    NSString * token = [self pushNotificationDeviceToken];
+    
+    if (token == nil) {
+        ZNGLogDebug(@"Not registering for push notifications because no device token has been set.");
+        return;
+    }
+    
+    if ([serviceIds count] == 0) {
+        ZNGLogInfo(@"No service IDs provided to register for push notifications method.  Ignoring.");
+        return;
+    }
+    
+    void (^registerForNotifications)() = ^{
+        [self.notificationsClient registerForNotificationsWithDeviceId:token withServiceIds:serviceIds success:^(ZNGStatus *status) {
+            ZNGLogDebug(@"Registered for push notifications successfully.");
+        } failure:^(ZNGError *error) {
+            ZNGLogWarn(@"Failed to register for push notifications: %@", error);
+        }];
+    };
+    
+    if (!removePrevious) {
+        registerForNotifications();
+    } else {
+        [self.notificationsClient unregisterForNotificationsWithDeviceId:token success:^(ZNGStatus *status) {
+            registerForNotifications();
+        } failure:^(ZNGError *error) {
+            ZNGLogWarn(@"Failed to unregister for push notifications before registering for a new service ID: %@\nAttempting to register the new ID anyway...", error);
+            registerForNotifications();
+        }];
+    }
+}
+
+
 @end

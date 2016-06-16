@@ -64,4 +64,10 @@
  */
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
 
+/**
+ *  Private method used by subclasses to subscribe for push notifications.
+ *  Has no effect if pushNotificationDeviceToken is not set.
+ */
+- (void) _registerForPushNotificationsForServiceIds:(NSArray<NSString *> *)serviceIds removePreviousSubscriptions:(BOOL)removePrevious;
+
 @end

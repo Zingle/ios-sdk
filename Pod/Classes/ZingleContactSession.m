@@ -27,6 +27,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 @implementation ZingleContactSession
 {
     BOOL _onlyRegisterPushNotificationsForCurrentContactService;    // Flag that will be tied to support for multiple push notification registrations in the future
+    
+    ZNGService * _service;   // Needed for creation of conversation view controller.  This may be unnecessary with a small refactor of that view.
 }
 
 - (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser
@@ -75,6 +77,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     _contactService = selectedContactService;
     _contact = nil;
     _conversation = nil;
+    _service = nil;
     [self didChangeValueForKey:NSStringFromSelector(@selector(conversation))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contact))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contactService))];
@@ -115,6 +118,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     [self.serviceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
         
+        _service = service;
         ZNGChannel * serviceChannel = nil;
         
         for (ZNGChannel * channel in service.channels) {
@@ -176,6 +180,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     NSArray * serviceIds = @[self.contactService.serviceId];
     [self _registerForPushNotificationsForServiceIds:serviceIds removePreviousSubscriptions:_onlyRegisterPushNotificationsForCurrentContactService];
+}
+
+#pragma mark - UI convenience
+- (ZNGConversationViewController *) conversationViewController
+{
+    if (_service == nil) {
+        ZNGLogWarn(@"Unable to return conversation view controller.  There is no current conversation nor service.");
+        return nil;
+    }
+    
+    return [ZNGConversationViewController toService:_service withSession:self senderName:@"Me" receiverName:nil];
 }
 
 @end

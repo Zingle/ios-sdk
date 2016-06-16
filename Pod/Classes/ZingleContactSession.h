@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGMessageClient;
 @class ZNGTemplateClient;
 
+@class ZNGConversationViewController;
+
 typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> *);
 
 @interface ZingleContactSession : ZingleSession
@@ -84,6 +86,11 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
  */
 - (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser;
+
+/**
+ *  Constructs and returns a view controller for the current conversation.
+ */
+- (ZNGConversationViewController *) conversationViewController;
 
 @end
 

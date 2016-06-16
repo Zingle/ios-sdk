@@ -10,6 +10,8 @@
 
 #import "ZNGContactService.h"
 
+@class ZingleContactSession;
+
 @protocol ZNGContactServicesViewControllerDelegate <NSObject>
 
 - (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService;

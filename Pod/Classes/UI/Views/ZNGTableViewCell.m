@@ -14,6 +14,7 @@
 #import "UIImage+ZingleSDK.h"
 #import "UIFont+OpenSans.h"
 #import "ZNGContactClient.h"
+#import "ZingleAccountSession.h"
 
 @interface ZNGTableViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
@@ -185,7 +186,7 @@
         [self.starButton setImage:[UIImage zng_starredImage] forState:UIControlStateNormal];
     }
     NSDictionary *params = @{@"is_starred" : starParam };
-    [ZNGContactClient updateContactWithId:self.contact.contactId withServiceId:self.serviceId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+    [self.session.contactClient updateContactWithId:self.contact.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
         self.starButton.enabled = YES;
         self.contact = contact;
     } failure:^(ZNGError *error) {

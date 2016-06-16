@@ -240,6 +240,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+        cell.session = self.session;
         [cell configureCellWithContact:contact withServiceId:self.serviceId];
         [cell.labelCollectionView reloadData];
         
@@ -293,7 +294,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
-    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:self.service senderName:@"Me" receiverName:[contact fullName]];
+    ZNGConversationViewController * vc = [self.session conversationWithContact:contact];
+    
     vc.detailDelegate = self;
     [self.navigationController pushViewController:vc animated:YES];
 }

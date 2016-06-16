@@ -11,6 +11,7 @@
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"
+#import "ZNGNotificationsClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGServiceClient.h"
 
@@ -24,6 +25,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 @end
 
 @implementation ZingleContactSession
+{
+    BOOL _onlyRegisterPushNotificationsForCurrentContactService;    // Flag that will be tied to support for multiple push notification registrations in the future
+}
 
 - (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser
 {
@@ -35,6 +39,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         _channelTypeID = [channelTypeId copy];
         _channelValue = [channelValue copy];
+        _onlyRegisterPushNotificationsForCurrentContactService = YES;
         self.contactServiceChooser = contactServiceChooser;
         
         // First we must populate our list of available contact services
@@ -77,6 +82,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (selectedContactService != nil) {
         [self findOrCreateContactForContactService];
         [self findChannelTypeAndSetupConversation];
+    } else if (_onlyRegisterPushNotificationsForCurrentContactService) {
+        // We are deselecting the current contact service and we are only maintaining push notifications for currently selected contact services.  We need to
+        //  deregister for pushes.
+        [self _unregisterForAllPushNotifications];
     }
 }
 
@@ -152,10 +161,21 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
         }
         
-        // Job done!  We are ready to be used.  Use us.
+        [self registerForPushNotifications];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to check user authorization status.");
     }];
+}
+
+- (void) registerForPushNotifications
+{
+    if (self.contactService.serviceId == nil) {
+        ZNGLogWarn(@"Unable to register for push notifications with no selected contact service.");
+        return;
+    }
+    
+    NSArray * serviceIds = @[self.contactService.serviceId];
+    [self _registerForPushNotificationsForServiceIds:serviceIds removePreviousSubscriptions:_onlyRegisterPushNotificationsForCurrentContactService];
 }
 
 @end

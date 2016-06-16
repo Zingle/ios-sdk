@@ -159,6 +159,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 {
     self.loading = YES;
     __weak ZNGInboxDataSet * weakSelf = self;
+    __weak ZNGContactClient * weakContactClient = contactClient;
     
     // Create an NSBlockOperation for each page to fetch.  Feed them into the fetchQueue so that they will run one at a time in order.
     // Using NSBlockOperation also allows proper cancellation if we are deallocated.  This is a very real concern, especially when doing
@@ -166,7 +167,11 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     //  user types.)
     for (NSNumber * pageNumber in pages) {
         __block NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
-            if (operation.cancelled) {
+            // Grab a strong reference to the client before we set our semaphore
+            ZNGContactClient * contactClient = weakContactClient;
+            
+            // Ensure we are still on schedule and our contact client has not disappeared
+            if ((operation.cancelled) || (contactClient == nil)) {
                 return;
             }
             

@@ -41,6 +41,8 @@
  */
 @property (nonatomic, readonly, nullable) NSString * baseUrl;
 
+@property (nonatomic, strong, nullable) NSString * pushNotificationDeviceToken;
+
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAccountClient * accountClient;
 @property (nonatomic, strong, nullable) ZNGContactClient * contactClient;

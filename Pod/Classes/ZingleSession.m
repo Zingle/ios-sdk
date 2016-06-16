@@ -18,6 +18,8 @@
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
 
+NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
+
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZingleSession
@@ -51,6 +53,23 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     return self;
+}
+
+#pragma mark - Push notifications
+- (void) setPushNotificationDeviceToken:(NSString *)pushNotificationDeviceToken
+{
+    NSString * deviceToken = pushNotificationDeviceToken;
+    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@"<" withString:@""];
+    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@">" withString:@""];
+    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
+    
+    [[NSUserDefaults standardUserDefaults] setValue:deviceToken forKey:PushNotificationDeviceTokenUserDefaultsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
+- (NSString *) pushNotificationDeviceToken
+{
+    return [[NSUserDefaults standardUserDefaults] valueForKey:PushNotificationDeviceTokenUserDefaultsKey];
 }
 
 @end

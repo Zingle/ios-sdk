@@ -12,141 +12,67 @@
 #import "ZNGContact.h"
 #import "ZNGService.h"
 #import "ZNGContactService.h"
+#import "ZingleAccountSession.h"
+#import "ZingleContactSession.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface ZingleSDK : NSObject
 
-/**
- * Returns the ZingleSDK singleton object.
- */
-+ (instancetype)sharedSDK;
+#pragma mark - Contact access
 
 /**
- * Initializes basic auth for connecting to the production API. Does not verify login and password are correct.
+ *  The initializer for a Zingle session of the Contact type.  This includes both authentication information for the API user (i.e. the develoepr) and a set of identifying
+ *   information for the contact to be sending messages (channel value and channel type ID.)
  *
- * @param token user name for API
- * @param password password for API
+ *  Once a list of available, matching contact services has been returned by the server, the availableContactServices array will be populated.
+ *  @param token Token for Zingle API user
+ *  @param key Security key for Zingle API user
+ *  @param channelTypeId An identifier for the channel type, e.g. the identifier for Big Hotel Messaging System
+ *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
  */
-- (void)setToken:(NSString*)token andKey:(NSString*)key;
+- (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue;
 
 /**
- * Initializes basic auth for connecting to API. Does not verify login and password are correct.
+ *  The initializer for a Zingle session of the Contact type.  This includes both authentication information for the API user (i.e. the develoepr) and a set of identifying
+ *   information for the contact to be sending messages (channel value and channel type ID.)
  *
- * @param token user name for API
- * @param password password for API
- * @param debugMode when true connects to potentially unstable QA API
- */
-- (void)setToken:(NSString *)token andKey:(NSString *)key forDebugMode:(BOOL)debugMode;
-
-/**
- * Checks if the user has authorization for the given contact service.
- * Sets the x-zingle-contact-id header for the given contactId if the User Authorization Class is "contact".
- * Call this method after selecting a ZNGContactService and before making other API requests.
+ *  Once a list of available, matching contact services has been returned by the server, the availableContactServices array will be populated and the contactServiceChooser will
+ *   be called if one was provided.
  *
- * @param contactId Identifier of the Contact for which to set the x-zingle-contact-id
+ *  @param token Token for Zingle API user
+ *  @param key Security key for Zingle API user
+ *  @param channelTypeId An identifier for the channel type, e.g. the identifier for Big Hotel Messaging System
+ *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
+ *  @param contactServiceChooser Optional block to be used to select a contact service once we obtain the list of available contact services.  May be neglected or return nil.
+ *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
  */
-- (void)checkAuthorizationForContactId:(NSString *)contactId
-                               success:(void (^)(BOOL isAuthorized))success
-                               failure:(void (^)(ZNGError* error))failure;
+- (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser;
 
+#pragma mark - Account access
 /**
- * Registers a new conversation in ZingleSDK. This will return a chat interface from a contact to a service. On success,
- * system will receive all messages for specified contact and service IDs. It will then be possible to create the UI for
- * this conversation with conversationViewControllerForService:serviceId. Can be called as many times as needed to add all 
- * conversations.
+ *  Provides a session object with the provided API credentials.  This is an account type session that is used by a specific service.
  *
- * @param service which participates in conversation
- * @param contact which participates in conversation
- */
-- (void)addConversationFromContact:(ZNGContact *)contact
-                         toService:(ZNGService *)service
-                           success:(void (^)(ZNGConversation* conversation))success
-                           failure:(void (^)(ZNGError* error))failure;
-
-/**
- * Registers a new conversation in ZingleSDK. This will return a chat interface from a service to a contact. On success,
- * system will receive all messages for specified service and contact IDs. It will then be possible to create the UI for
- * this conversation with conversationViewControllerForService:serviceId. Can be called as many times as needed to add all
- * conversations.
+ *  Using this constructor requires the developer to observe the availableAccounts and availableServices arrays on the returned session object
+ *   in order to select one.  If multiple accounts/services are available and one is not selected, most API calls will fail.
  *
- * @param service which participates in conversation
- * @param contact which participates in conversation
+ *  @param token Token for Zingle API user
+ *  @param key Security key for Zingle API user
  */
-- (void)addConversationFromService:(ZNGService *)service
-                         toContact:(ZNGContact *)contact
-                           success:(void (^)(ZNGConversation* conversation))success
-                           failure:(void (^)(ZNGError* error))failure;
+- (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key;
 
 /**
- *  Returns a ZNGConversation conversation Object containing participants in a conversation and the
- *  conversation messages
+ *  Provides a session object with the provided API credentials.  This is an account type session that is used by a specific service.
  *
- *  @param serviceId service that the conversation is sent to
- */
-- (ZNGConversation *)conversationToService:(NSString *)serviceId;
-
-/**
- *  Returns a ZNGConversation conversation Object containing participants in a conversation and the
- *  conversation messages
+ *  The chooser blocks are optional and will only be called if multiple accounts or services are available to the current user.  Both blocks are released
+ *   once they are used or ruled unneeded (e.g. only one account is available.)
  *
- *  @param contactId contact that the conversation is sent to
+ *  @param token Token for Zingle API user
+ *  @param key Security key for Zingle API user
+ *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
+ *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
  */
-- (ZNGConversation *)conversationToContact:(NSString *)contactId;
-
-/**
- *  Clears in-memory cached conversations
- *
- */
-- (void)clearCachedConversations;
-
-/**
- *  Returns a ZNGConversationViewController.
- *
- *  @param conversation Object containing participants in a conversation and the
- *  conversation messages. Controller must be created with conversation.
- */
-- (ZNGConversationViewController *)conversationViewControllerToService:(ZNGService *)service
-                                                               contact:(ZNGContact *)contact
-                                                            senderName:(NSString *)senderName
-                                                          receiverName:(NSString *)receiverName;
-
-/**
- *  Returns a ZNGConversationViewController.
- *
- *  @param conversation Object containing participants in a conversation and the
- *  conversation messages. Controller must be created with conversation.
- */
-- (ZNGConversationViewController *)conversationViewControllerToContact:(ZNGContact *)contact
-                                                               service:(ZNGService *)service
-                                                            senderName:(NSString *)senderName
-                                                          receiverName:(NSString *)receiverName;
-
-/*
- * Save the device token generated by APNS (Apple Push Notification Service).
- 
- *  @param deviceToken A unique identifier provided by the Apple Push Notification Service (APNS).
- */
-- (void)setPushNotificationDeviceToken:(NSData *)deviceToken;
-
-/**
- *  Register to receive push notifications from the Zingle system for the given services.
- *  Use this for the Account User Authorization Class.
- *
- *  @param serviceIds An array of service IDs.
- */
-- (void)registerForNotificationsWithServiceIds:(NSArray *)serviceIds;
-
-/**
- *  Register to receive push notifications from the Zingle system.
- *  Use this for the Contact User Authorization Class.
- *
- *  @param serviceIds An array of service IDs.
- */
-- (void)registerForNotifications;
-
-/**
- *  Used in debug builds to override the server.  Ignored in release builds.
- */
-@property (nonatomic, copy) NSString * baseUrl;
-
+- (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
 @end
+NS_ASSUME_NONNULL_END

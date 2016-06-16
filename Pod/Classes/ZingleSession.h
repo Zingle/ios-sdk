@@ -18,7 +18,7 @@
 @class ZNGUserAuthorizationClient;
 
 
-/*
+/**
  *  This abstract class represents the current session with the Zingle API.  This must be initialized with a set of API credentials.
  *
  *  @see ZingleAccountSession
@@ -26,17 +26,17 @@
  */
 @interface ZingleSession : NSObject
 
-/*
+/**
  *  The token identifying the API user.  Immutable after initialization.
  */
 @property (nonatomic, readonly, nonnull) NSString * token;
 
-/*
+/**
  *  The security key/password of the current API user.  Immutable after initialization.
  */
 @property (nonatomic, readonly, nonnull) NSString * key;
 
-/*
+/**
  *  The base URL.  Can be overridden only in debug builds.  Immutable after initialization.
  */
 @property (nonatomic, readonly, nullable) NSString * baseUrl;
@@ -54,7 +54,7 @@
 @property (nonatomic, readonly, nonnull) AFHTTPSessionManager * sessionManager;
 @property (nonatomic, readonly, nonnull) dispatch_queue_t jsonProcessingQueue;
 
-/*
+/**
  *  Initializer for a Zingle session object.
  *
  *  @param token Token for Zingle API user

@@ -10,7 +10,7 @@
 
 @class ZNGAccount;
 
-/*
+/**
  *  A Zingle SDK client that must be initiazed with an account
  */
 @interface ZNGBaseClientAccount : ZNGBaseClient

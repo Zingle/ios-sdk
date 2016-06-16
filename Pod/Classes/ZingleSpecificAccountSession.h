@@ -13,7 +13,7 @@
 @class ZNGService;
 @class ZNGAutomationClient, ZNGContactChannelClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
 
-/*
+/**
  *  Private subclass of ZingleAccountSession that will always have session and account information available.
  *
  *  Should only be accessed through a ZingleAccountSession object.

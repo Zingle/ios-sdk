@@ -22,36 +22,36 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
 @interface ZingleAccountSession : ZingleSession
 
 #pragma mark - Account/Service selection
-/*
+/**
  *  All accounts available to this user.  This array will be set to an empty array @[] if a response has arrived from the server
  *   that does not contain any accounts.
  */
 @property (nonatomic, readonly, nullable) NSArray<ZNGAccount *> * availableAccounts;
 
-/*
+/**
  *  All services that are available to the current acount.  This array will be set to an empty array @[] if a response has arrived
  *   from the server that does not contain any services.
  */
 @property (nonatomic, readonly, nullable) NSArray<ZNGService *> * availableServices;
 
-/*
+/**
  *  The current account.  This may be set to any value in availableAccounts.  Setting it multiple times has undefined behavior.
  */
 @property (nonatomic, strong, nullable) ZNGAccount * account;
 
-/*
+/**
  *  The current service.  This may be set to any value in availableServices.  Setting it multiple times has undefined behavior.
  */
 @property (nonatomic, strong, nullable) ZNGService * service;
 
 #pragma mark - Status
-/*
+/**
  *  KVO compliant flag that indicates when the session has been fully initialized (with an account and a service) and may take requests.
  */
 @property (nonatomic, assign) BOOL available;
 
 #pragma mark - Initialization
-/*
+/**
  *  Constructor for a Zingle account-level session object.  Includes optional parameters which may be used to provide callbacks to select
  *   an account and service if more than one of either is available.  These blocks will be unused and dealloced if there is only one account
  *   or service.
@@ -68,7 +68,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
  */
 - (instancetype) initWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
-/*
+/**
  *  Initializer for a Zingle session object.  If this constructor is used to create a ZingleAccountSession, the caller is later responsible for selecting an account
  *   and service if two or more of either exist for this account.  They will be available in the availableAccounts and availableServices KVO-compliant properties.
  *
@@ -79,7 +79,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
 
 #pragma mark - Messaging methods
 
-/*
+/**
  *  Retrieves a conversation between the current service and the specified contact.
  *
  *  If no such conversation yet exists in our data, a blank conversation will be returned.  It will populate itself
@@ -93,7 +93,7 @@ typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * avai
 @end
 
 #pragma mark - Clients that require a selected service
-/*
+/**
  *  The methods and property get/set methods in this category will generate a logged error and have no effect if they are called before the 'available' flag is set
  *  i.e. they cannot be called until we have a specific account and service selected
  */

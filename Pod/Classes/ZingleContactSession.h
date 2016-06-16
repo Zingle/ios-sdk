@@ -6,6 +6,7 @@
 //
 //
 #import "ZingleSession.h"
+#import "ZingleSDK.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,8 +21,6 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGTemplateClient;
 
 @class ZNGConversationViewController;
-
-typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> *);
 
 @interface ZingleContactSession : ZingleSession
 

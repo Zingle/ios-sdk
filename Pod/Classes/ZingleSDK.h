@@ -12,10 +12,15 @@
 #import "ZNGContact.h"
 #import "ZNGService.h"
 #import "ZNGContactService.h"
-#import "ZingleAccountSession.h"
-#import "ZingleContactSession.h"
+
+@class ZingleAccountSession;
+@class ZingleContactSession;
 
 NS_ASSUME_NONNULL_BEGIN
+
+typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
+typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * availableServices);
+typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> *);
 
 @interface ZingleSDK : NSObject
 

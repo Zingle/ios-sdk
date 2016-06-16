@@ -13,7 +13,6 @@
 #import "ZNGcontactClient.h"
 #import "ZNGContactChannelClient.h"
 #import "ZNGFieldOption.h"
-#import "ZNGContactFieldClient.h"
 
 @interface ZNGContactViewController () <UITextFieldDelegate, UIPickerViewDelegate>
 
@@ -80,12 +79,6 @@
     self.pickerView.delegate = self;
     
     [self extractExtraCustomFields];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    [[ZingleSDK sharedSDK] clearCachedConversations];
 }
 
 - (void)showAlertForError:(ZNGError *)error
@@ -246,7 +239,7 @@
                 [alert addAction: cancel];
                 
                 UIAlertAction *removeLabel = [UIAlertAction actionWithTitle:@"Remove label" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action) {
-                    [ZNGContactClient removeLabelWithId:label.labelId withContactId:self.contact.contactId withServiceId:self.service.serviceId success:^(ZNGStatus *status) {
+                    [self.session.contactClient removeLabelWithId:label.labelId withContactId:self.contact.contactId success:^(ZNGStatus *status) {
                         
                         NSMutableArray *labelsArray = [NSMutableArray arrayWithArray:self.contact.labels];
                         [labelsArray removeObject:label];

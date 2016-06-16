@@ -171,12 +171,13 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
                                                    object:nil];
         
         ZNGConversation *conversation;
+        
         if (self.toService) {
             self.senderId = self.contact.contactId;
-            conversation = [[ZingleSDK sharedSDK] conversationToService:self.service.serviceId];
+            conversation = [(ZingleContactSession *)self.session conversation];
         } else {
             self.senderId = self.service.serviceId;
-            conversation = [[ZingleSDK sharedSDK] conversationToContact:self.contact.contactId];
+            conversation = [(ZingleAccountSession *)self.session conversationWithContact:self.contact];
         }
         if (conversation) {
             [self showActivityIndicator];
@@ -192,12 +193,6 @@ static NSString *kZNGDeleteMessageError = @"There was a problem deleting your me
 
         
     }
-}
-
--(void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    [[ZingleSDK sharedSDK] clearCachedConversations];
 }
 
 - (void)setupBarButtonItems

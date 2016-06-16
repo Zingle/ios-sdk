@@ -30,6 +30,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 #pragma mark - Initializers
 - (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key
 {
+    NSParameterAssert(token);
+    NSParameterAssert(key);
+    
     self = [super init];
     
     if (self != nil) {

@@ -23,20 +23,47 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
 
 @interface ZingleContactSession : ZingleSession
 
+/*
+ *  Channel type ID as specified during initialization.  e.g. "1234-123456-1234," the ID representing "My Hotels Messaging."
+ */
 @property (nonatomic, readonly, nonnull) NSString * channelTypeID;
+
+/*
+ *  Channel value as specified during initializaion.  e.g. "johnsmith123," the username for the user in My Hotels Messaging.
+ */
 @property (nonatomic, readonly, nonnull) NSString * channelValue;
 
+/*
+ *  The KVO-observable array of available Contact Services, containing ZNGContactService objects representing services such
+ *   as "Chicago Special Hotel Spa," "Miami Schmyatt Hotel Valet," "San Francisco Hotel Front Desk"
+ */
 @property (nonatomic, readonly, nullable) NSArray<ZNGContactService *> * availableContactServices;
+
+/*
+ *  An optional callback to be called whenever new values for availableContactServices arrive.  This block is retained even after being called, so weak references
+ *   should be used when possible.
+ */
 @property (nonatomic, copy, nullable) ZNGContactServiceChooser contactServiceChooser;
 
+/*
+ *  The getter and setter for the current contactService selection.  When setting, the value must be present in availableContactServices.
+ *
+ *  Setting this value resets the contact and conversation properties to nil until they can be retrieved from the server a few moments later.
+ */
 @property (nonatomic, strong, nullable) ZNGContactService * contactService;
 
 /*
- *  Set automatically shortly after a contact service is selected.
+ *  The current user's contact object under the current contact service.  Set automatically shortly after a contact service is selected.
  */
 @property (nonatomic, readonly, nullable) ZNGContact * contact;
+
+/*
+ *  The current messaging conversation between the contact and the contact service.  Al messages are sent and received through this property.
+ *  This is set automatically along with the contact property.
+ */
 @property (nonatomic, readonly, nullable) ZNGConversation * conversation;
 
+#pragma mark - Clients used internally for connectivity
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGContactClient * contactClient;
 @property (nonatomic, strong, nullable) ZNGMessageClient * messageClient;

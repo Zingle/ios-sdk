@@ -34,6 +34,8 @@
         self.contactClient = [[ZNGContactClient alloc] initWithSession:self account:_account service:_service];
         self.labelClient = [[ZNGLabelClient alloc] initWithSession:self account:_account service:_service];
         self.messageClient = [[ZNGMessageClient alloc] initWithSession:self account:_account service:_service];
+        
+        [self _registerForPushNotificationsForServiceIds:@[service.serviceId] removePreviousSubscriptions:YES];
     }
     
     return self;

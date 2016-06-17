@@ -87,6 +87,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser;
 
 /**
+ *  Initializing without specifying channel info is not allowed for a contact session.
+ */
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_UNAVAILABLE;
+
+
+/**
  *  Constructs and returns a view controller for the current conversation.
  */
 - (ZNGConversationViewController *) conversationViewController;

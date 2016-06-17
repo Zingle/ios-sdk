@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ZNGConversationViewController.h"
 #import "ZNGConversation.h"
 #import "ZNGContact.h"
 #import "ZNGService.h"
@@ -36,7 +35,7 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *  @param channelTypeId An identifier for the channel type, e.g. the identifier for Big Hotel Messaging System
  *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
  */
-- (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue;
++ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue;
 
 /**
  *  The initializer for a Zingle session of the Contact type.  This includes both authentication information for the API user (i.e. the develoepr) and a set of identifying
@@ -52,7 +51,7 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *  @param contactServiceChooser Optional block to be used to select a contact service once we obtain the list of available contact services.  May be neglected or return nil.
  *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
  */
-- (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser;
++ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser;
 
 #pragma mark - Account access
 /**
@@ -64,7 +63,7 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
  */
-- (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key;
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key;
 
 /**
  *  Provides a session object with the provided API credentials.  This is an account type session that is used by a specific service.
@@ -77,7 +76,7 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
  *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
  */
-- (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
 
 @end
 NS_ASSUME_NONNULL_END

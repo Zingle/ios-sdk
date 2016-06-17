@@ -63,6 +63,7 @@
 #import "UIImage+ZingleSDK.h"
 #import "UIView+ZingleSDK.h"
 #import "ZNGBaseViewController.h"
+#import "ZNGContactConversationViewController.h"
 #import "ZNGContactViewController.h"
 #import "ZNGConversationViewController.h"
 #import "ZNGImageViewerController.h"

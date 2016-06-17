@@ -15,6 +15,7 @@
 #import "UIFont+OpenSans.h"
 #import "ZNGContactClient.h"
 #import "ZingleAccountSession.h"
+#import "UIColor+ZingleSDK.h"
 
 @interface ZNGTableViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *contactName;

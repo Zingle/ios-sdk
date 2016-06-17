@@ -15,6 +15,8 @@
 #import "ZNGContactClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGConversationViewController.h"
+#import "ZingleAccountSession.h"
+#import "ZingleContactSession.h"
 
 @interface ZNGAppDelegate () <ZNGContactServicesViewControllerDelegate>
 
@@ -24,6 +26,9 @@
 @end
 
 @implementation ZNGAppDelegate
+{
+    ZingleSession * session;
+}
 
 static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
@@ -54,7 +59,12 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
     
-    [[ZingleSDK sharedSDK] setToken:kZNGToken andKey:kZNGKey forDebugMode:YES];
+    // We will just pick the first available of each category if multiples are available
+    session = [ZingleSDK accountSessionWithToken:kZNGToken key:kZNGKey accountChooser:^ZNGAccount * _Nullable(NSArray<ZNGAccount *> * _Nonnull availableAccounts) {
+        return [availableAccounts firstObject];
+    } serviceChooser:^ZNGService * _Nullable(NSArray<ZNGService *> * _Nonnull availableServices) {
+        return [availableServices firstObject];
+    }];
     
      ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:kZNGServiceId];
      
@@ -79,10 +89,15 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
     
-    [[ZingleSDK sharedSDK] setToken:kZNGToken andKey:kZNGKey forDebugMode:YES];
+    // We will just pick the first available of each category if multiples are available
+    session = [ZingleSDK contactSessionWithToken:kZNGToken key:kZNGKey channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        // We are not actually picking a contact service.  We are using this block as our trigger to know that a selection is now available.
+        ZNGContactServicesViewController * vc = [ZNGContactServicesViewController withSession:(ZingleContactSession *)session];
+        vc.delegate = self;
+        return nil;
+    }];
     
-    ZNGContactServicesViewController *vc = [ZNGContactServicesViewController withServiceId:kZNGServiceId channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue];
-    vc.delegate = self;
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
@@ -93,18 +108,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     if (notificationData) {
         NSString *contactId = [notificationData objectForKey:@"feedId"];
         
-        [[ZingleSDK sharedSDK] checkAuthorizationForContactId:contactId success:^(BOOL isAuthorized) {
-            
-            if (isAuthorized) {
-                
-                [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
-                
-            }
-            
-        } failure:^(ZNGError *error) {
-            NSLog(@"error: %@", error);
-        }];
-        
+        [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
     }
 }
 
@@ -353,25 +357,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 // MARK: - ZNGContactServicesViewControllerDelegate
 
 - (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService {
-    
-    [[ZingleSDK sharedSDK] checkAuthorizationForContactId:contactService.contactId success:^(BOOL isAuthorized) {
-        
-        if (isAuthorized) {
-            
-            if ([[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
-                [[ZingleSDK sharedSDK] registerForNotificationsWithServiceIds:@[kZNGServiceId]];
-            }
-        
-            UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-            
-            [self navigateToConversationViewControllerWithContactId:contactService.contactId serviceId:kZNGServiceId fromViewController:navController animated:YES];
-            
-        }
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"error: %@", error);
-    }];
-    
+    self.session.contactService = contactService;
 }
 
 @end

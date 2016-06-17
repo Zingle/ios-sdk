@@ -10,6 +10,7 @@
 #import "ZNGContactServiceClient.h"
 #import "ZNGContactClient.h"
 #import "ZNGContact.h"
+#import "ZingleContactSession.h"
 
 @interface ZNGContactServicesViewController () <UITableViewDataSource, UITableViewDelegate>
 
@@ -34,14 +35,12 @@
                                           bundle:[NSBundle bundleForClass:[ZNGContactServicesViewController class]]];
 }
 
-+ (instancetype)withServiceId:(NSString *)serviceId channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue
++ (instancetype)withSession:(ZingleContactSession *)aSession;
 {
     ZNGContactServicesViewController *vc = (ZNGContactServicesViewController *)[ZNGContactServicesViewController contactServicesViewController];
     
     if (vc) {
-        vc.serviceId = serviceId;
-        vc.channelTypeId = channelTypeId;
-        vc.channelValue = channelValue;
+        vc.session = aSession;
     }
     
     return vc;
@@ -97,12 +96,12 @@
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.contactServices.count;
+    return [self.session.availableContactServices count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGContactService *contactService = [self.contactServices objectAtIndex:indexPath.row];
+    ZNGContactService *contactService = self.session.availableContactServices[indexPath.row];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ZNGContactServiceCell"];
     
@@ -115,38 +114,8 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGContactService *contactService = [self.contactServices objectAtIndex:indexPath.row];
-    
-    if (!contactService.contactId) {
-        
-        [ZNGContactClient findOrCreateContactWithChannelTypeID:self.channelTypeId andChannelValue:self.channelValue withServiceId:self.serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
-            
-            if (contact) {
-                
-                if (self.delegate) {
-                    contactService.contactId = contact.contactId;
-                    [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
-                }
-                
-            } else {
-                NSLog(@"contact is nil!");
-            }
-            
-            
-        } failure:^(ZNGError *error) {
-            NSLog(@"Error while attempting to findOrCreateContact: %@", error.localizedDescription);
-        }];
-        
-        
-        
-    } else {
-        
-        if (self.delegate) {
-            [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
-        }
-        
-    }
-
+    ZNGContactService *contactService = self.session.availableContactServices[indexPath.row];
+    [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
 }
 
 @end

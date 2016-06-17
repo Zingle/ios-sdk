@@ -13,6 +13,7 @@
 #import "ZNGAccountClient.h"
 #import "ZNGServiceClient.h"
 #import "ZingleSpecificAccountSession.h"
+#import "ZNGConversationViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 

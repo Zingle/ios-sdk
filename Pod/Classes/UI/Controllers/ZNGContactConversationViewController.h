@@ -6,7 +6,7 @@
 //
 //
 
-#import <ZingleSDK/ZingleSDK.h>
+#import "ZNGConversationViewController.h"
 
 /**
  *  This subclass handles the case of a contact conversation controller, a controller that has fewer properties and less power.

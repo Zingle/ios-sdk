@@ -35,12 +35,12 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="55"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hotel De Paris Front Desk" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AWT-Sz-Zmu" userLabel="Account Name label">
-                                                    <rect key="frame" x="18" y="0.0" width="278" height="28"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hotel De Paris" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AWT-Sz-Zmu" userLabel="Account Name label">
+                                                    <rect key="frame" x="18" y="0.0" width="135" height="24"/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="308" id="wGn-7o-Dda"/>
                                                     </constraints>
-                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                     <variation key="default">
@@ -49,37 +49,49 @@
                                                         </mask>
                                                     </variation>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Chevron" translatesAutoresizingMaskIntoConstraints="NO" id="AGD-7U-LEe">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" image="Chevron" translatesAutoresizingMaskIntoConstraints="NO" id="AGD-7U-LEe">
                                                     <rect key="frame" x="577" y="17" width="15" height="22"/>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a message that the front desk sent that is too large to fit in the UI." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAL-xh-Jqk" userLabel="message">
-                                                    <rect key="frame" x="18" y="28" width="542" height="21"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a message that the front desk sent that is too large to fit in the UI." textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAL-xh-Jqk" userLabel="message">
+                                                    <rect key="frame" x="131" y="23" width="429" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.26613628926701571" green="0.26613628926701571" blue="0.26613628926701571" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Front Desk" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NGd-xi-22i">
+                                                    <rect key="frame" x="18" y="24" width="79" height="20"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yesterday 12:23 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3fJ-ut-Vl6" userLabel="time label">
-                                                    <rect key="frame" x="411" y="6" width="149" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
-                                                    <color key="textColor" red="0.25102257853403143" green="0.25102257853403143" blue="0.25102257853403143" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <rect key="frame" x="426" y="5" width="134" height="18"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="leading" secondItem="o6E-yD-p2h" secondAttribute="leadingMargin" constant="10" id="0ds-uq-Qce"/>
+                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="baseline" secondItem="NGd-xi-22i" secondAttribute="baseline" id="1FV-dP-fhE"/>
                                                 <constraint firstItem="AWT-Sz-Zmu" firstAttribute="top" secondItem="o6E-yD-p2h" secondAttribute="topMargin" constant="-8" id="5fp-Rj-ef9"/>
+                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="trailing" secondItem="3fJ-ut-Vl6" secondAttribute="trailing" id="BCj-Ni-gVl"/>
+                                                <constraint firstItem="NGd-xi-22i" firstAttribute="leading" secondItem="AWT-Sz-Zmu" secondAttribute="leading" id="FmN-H6-ij1"/>
                                                 <constraint firstItem="3fJ-ut-Vl6" firstAttribute="top" secondItem="o6E-yD-p2h" secondAttribute="topMargin" constant="-4" id="J30-q3-nG0"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="AGD-7U-LEe" secondAttribute="trailing" id="JyV-dq-UQ9"/>
-                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="top" secondItem="AWT-Sz-Zmu" secondAttribute="bottom" id="QGb-kq-Co6"/>
+                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="leading" secondItem="NGd-xi-22i" secondAttribute="trailing" constant="34" id="OBs-dA-aRF"/>
                                                 <constraint firstItem="3fJ-ut-Vl6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AWT-Sz-Zmu" secondAttribute="trailing" constant="4" id="SkN-KI-2vR"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="nAL-xh-Jqk" secondAttribute="trailing" constant="32" id="nXk-We-bQY"/>
+                                                <constraint firstItem="NGd-xi-22i" firstAttribute="top" secondItem="AWT-Sz-Zmu" secondAttribute="bottom" id="YRN-L9-sSf"/>
+                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="NGd-xi-22i" secondAttribute="trailing" constant="34" id="YhS-xE-8hb"/>
                                                 <constraint firstItem="AGD-7U-LEe" firstAttribute="centerY" secondItem="o6E-yD-p2h" secondAttribute="centerY" id="oKf-y1-7zw"/>
                                                 <constraint firstItem="AWT-Sz-Zmu" firstAttribute="leading" secondItem="o6E-yD-p2h" secondAttribute="leadingMargin" constant="10" id="s7W-Il-RcA"/>
+                                                <constraint firstItem="NGd-xi-22i" firstAttribute="trailing" secondItem="AWT-Sz-Zmu" secondAttribute="trailing" id="x39-J7-8wo"/>
                                                 <constraint firstItem="AGD-7U-LEe" firstAttribute="leading" secondItem="3fJ-ut-Vl6" secondAttribute="trailing" constant="17" id="xlS-BS-2xU"/>
                                                 <constraint firstItem="3fJ-ut-Vl6" firstAttribute="baseline" secondItem="AWT-Sz-Zmu" secondAttribute="baseline" id="zaW-e7-mQe"/>
                                             </constraints>
                                             <variation key="default">
                                                 <mask key="constraints">
+                                                    <exclude reference="x39-J7-8wo"/>
+                                                    <exclude reference="OBs-dA-aRF"/>
                                                     <exclude reference="J30-q3-nG0"/>
                                                 </mask>
                                             </variation>

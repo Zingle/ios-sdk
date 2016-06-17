@@ -9,6 +9,7 @@
 #import "ContactServiceChoosingViewController.h"
 #import "ContactServiceTableViewCell.h"
 #import <ZingleSDK/ZingleSDK.h>
+#import "ZNGTimestampFormatter.h"
 
 static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
@@ -18,10 +19,6 @@ static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
 // User-Defined Channel if using Contact User Authorization
 static NSString *kZNGChannelTypeId = @"7176e36e-87d2-4161-ae2b-6848fbf3de11";
 static NSString *kZNGChannelValue = @"MyChatChannel1";
-
-@interface ContactServiceChoosingViewController ()
-
-@end
 
 @implementation ContactServiceChoosingViewController
 {
@@ -51,15 +48,19 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 #pragma mark - Table
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    return [contactServices count];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ContactServiceTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"contactServiceCell"];
+    ZNGContactService * contactService = contactServices[indexPath.row];
+    ZNGMessage * message = contactService.lastMessage;
     
-    // TODO: Implement
-    
+    cell.serviceLabel.text = contactService.serviceDisplayName;
+    cell.messageLabel.text = message.body;
+    cell.timestampLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:message.createdAt];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
 }

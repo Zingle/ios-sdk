@@ -12,6 +12,7 @@
 
 @class ZingleAccountSession;
 
+NS_ASSUME_NONNULL_BEGIN
 @interface ZNGContactViewController : UITableViewController <UIPickerViewDataSource>
 
 @property (nonatomic, strong, nonnull) ZingleAccountSession * session;
@@ -19,3 +20,4 @@
 + (instancetype)withContact:(ZNGContact *)contact session:(ZingleAccountSession *)aSession;
 
 @end
+NS_ASSUME_NONNULL_END

@@ -89,15 +89,15 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     [[AFNetworkActivityLogger sharedLogger] startLogging];
     [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
     
+    // We are not actually picking a contact service.  We are using this block as our trigger to know that a selection is now available.
+    ZNGContactServicesViewController * vc = [ZNGContactServicesViewController contactServicesViewController];
+    vc.delegate = self;
+    
     // We will just pick the first available of each category if multiples are available
     session = [ZingleSDK contactSessionWithToken:kZNGToken key:kZNGKey channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        // We are not actually picking a contact service.  We are using this block as our trigger to know that a selection is now available.
-        ZNGContactServicesViewController * vc = [ZNGContactServicesViewController withSession:(ZingleContactSession *)session];
-        vc.delegate = self;
+        vc.availableContactServices = availableContactServices;
         return nil;
     }];
-    
-    
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
@@ -131,10 +131,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    [[ZingleSDK sharedSDK] setPushNotificationDeviceToken:deviceToken];
-    if (self.userAccountEnabled) {
-        [[ZingleSDK sharedSDK] registerForNotificationsWithServiceIds:@[kZNGServiceId]];
-    }
+    session.pushNotificationDeviceToken = [[NSString alloc] initWithData:deviceToken encoding:NSUTF8StringEncoding];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -297,7 +294,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 - (void)showNotificationBannerForContactId:(NSString *)contactId message:(NSString *)message
 {
     
-    [ZNGContactClient contactWithId:contactId withServiceId:kZNGServiceId success:^(ZNGContact *contact, ZNGStatus *status) {
+    [session.contactClient contactWithId:contactId success:^(ZNGContact *contact, ZNGStatus *status) {
         
         if (self.notificationBannerView) {
             [self.notificationBannerView removeFromSuperview];
@@ -356,8 +353,10 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 // MARK: - ZNGContactServicesViewControllerDelegate
 
-- (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService {
-    self.session.contactService = contactService;
+- (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService
+{
+    ZingleContactSession * contactSession = (ZingleContactSession *)session;
+    contactSession.contactService = contactService;
 }
 
 @end

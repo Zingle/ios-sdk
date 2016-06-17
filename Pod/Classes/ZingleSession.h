@@ -68,7 +68,7 @@
  *  Private method used by subclasses to subscribe for push notifications.
  *  Has no effect if pushNotificationDeviceToken is not set.
  */
-- (void) _registerForPushNotificationsForServiceIds:(NSArray<NSString *> *)serviceIds removePreviousSubscriptions:(BOOL)removePrevious;
+- (void) _registerForPushNotificationsForServiceIds:(NSArray<NSString *> * _Nonnull)serviceIds removePreviousSubscriptions:(BOOL)removePrevious;
 
 /**
  *  Private method used when all push notifications registrations should be removed without adding any new ones (such as during a logout)

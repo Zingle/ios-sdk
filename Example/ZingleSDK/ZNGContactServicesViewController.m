@@ -35,17 +35,6 @@
                                           bundle:[NSBundle bundleForClass:[ZNGContactServicesViewController class]]];
 }
 
-+ (instancetype)withSession:(ZingleContactSession *)aSession;
-{
-    ZNGContactServicesViewController *vc = (ZNGContactServicesViewController *)[ZNGContactServicesViewController contactServicesViewController];
-    
-    if (vc) {
-        vc.session = aSession;
-    }
-    
-    return vc;
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -59,8 +48,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    [self refreshUI];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,40 +55,22 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)refreshUI {
-    
-    NSDictionary *parameters = @{ @"channel_value" : self.channelValue,
-                                  @"channel_type_id" : self.channelTypeId };
-    
-    [ZNGContactServiceClient contactServiceListWithParameters:parameters success:^(NSArray *contactServices, ZNGStatus *status) {
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (contactServices) {
-                [self.contactServices removeAllObjects];
-                [self.contactServices addObjectsFromArray:contactServices];
-                
-                [self.tableView reloadData];
-            }
-            
-        });
-        
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"%@", error);
-    }];
-    
+- (void) setAvailableContactServices:(NSArray<ZNGContactService *> *)availableContactServices
+{
+    _availableContactServices = availableContactServices;
+    [self.tableView reloadData];
 }
 
 #pragma mark - UITableViewDataSource
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.session.availableContactServices count];
+    return [self.availableContactServices count];
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGContactService *contactService = self.session.availableContactServices[indexPath.row];
+    ZNGContactService *contactService = self.availableContactServices[indexPath.row];
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"ZNGContactServiceCell"];
     
@@ -114,7 +83,7 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGContactService *contactService = self.session.availableContactServices[indexPath.row];
+    ZNGContactService *contactService = self.availableContactServices[indexPath.row];
     [self.delegate contactServicesViewControllerDidSelectContactService:contactService];
 }
 

@@ -21,13 +21,9 @@
 @interface ZNGContactServicesViewController : UIViewController
 
 @property (nonatomic, weak) id<ZNGContactServicesViewControllerDelegate> delegate;
-@property (nonatomic, strong) ZingleContactSession * session;
 
-@property (nonatomic, strong) NSString *channelValue;
-@property (nonatomic, strong) NSString *channelTypeId;
-@property (strong, nonatomic) NSString *serviceId;
+@property (nonatomic, strong) NSArray<ZNGContactService *> * availableContactServices;
 
 + (instancetype)contactServicesViewController;
-+ (instancetype)withSession:(ZingleContactSession *)aSession;
 
 @end

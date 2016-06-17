@@ -18,8 +18,6 @@
 		960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 960FCBB01D0F6E9C00B7E82C /* Tests.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
 		DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7FF2561C87671800BC720E /* Launch Screen.storyboard */; };
-		E1586DCA1D0B081D008593B2 /* ZNGContactServicesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = E1586DC81D0B081D008593B2 /* ZNGContactServicesViewController.m */; };
-		E1586DCB1D0B081D008593B2 /* ZNGContactServicesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = E1586DC91D0B081D008593B2 /* ZNGContactServicesViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,9 +59,6 @@
 		D68636E54258651279F5ACA5 /* Pods-Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.release.xcconfig"; sourceTree = "<group>"; };
 		DB342B2296015BCAFE19431E /* Pods_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		DF7FF2561C87671800BC720E /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
-		E1586DC71D0B081D008593B2 /* ZNGContactServicesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGContactServicesViewController.h; sourceTree = "<group>"; };
-		E1586DC81D0B081D008593B2 /* ZNGContactServicesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGContactServicesViewController.m; sourceTree = "<group>"; };
-		E1586DC91D0B081D008593B2 /* ZNGContactServicesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ZNGContactServicesViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,9 +124,6 @@
 			children = (
 				6003F59C195388D20070C39A /* ZNGAppDelegate.h */,
 				6003F59D195388D20070C39A /* ZNGAppDelegate.m */,
-				E1586DC71D0B081D008593B2 /* ZNGContactServicesViewController.h */,
-				E1586DC81D0B081D008593B2 /* ZNGContactServicesViewController.m */,
-				E1586DC91D0B081D008593B2 /* ZNGContactServicesViewController.xib */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -281,7 +273,6 @@
 				DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
-				E1586DCB1D0B081D008593B2 /* ZNGContactServicesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -394,7 +385,6 @@
 			files = (
 				6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				E1586DCA1D0B081D008593B2 /* ZNGContactServicesViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

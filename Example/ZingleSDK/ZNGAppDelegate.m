@@ -8,22 +8,6 @@
 
 #import "ZNGAppDelegate.h"
 #import <ZingleSDK/ZingleSDK.h>
-#import "ZNGInboxViewController.h"
-#import "ZNGContactServicesViewController.h"
-#import "AFNetworkActivityLogger.h"
-#import "ZNGContactServiceClient.h"
-#import "ZNGContactClient.h"
-#import "ZNGServiceClient.h"
-#import "ZNGConversationViewController.h"
-#import "ZingleAccountSession.h"
-#import "ZingleContactSession.h"
-
-@interface ZNGAppDelegate () <ZNGContactServicesViewControllerDelegate>
-
-@property (nonatomic, strong) UIView *notificationBannerView;
-@property (nonatomic, assign) BOOL userAccountEnabled;
-
-@end
 
 @implementation ZNGAppDelegate
 {
@@ -41,75 +25,8 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    /******************************************************************************************
-    * Uncomment the appropriate line below depending on which type of Zingle Account you have.
-    ******************************************************************************************/
-    //[self accountApplication:application didFinishLaunchingWithOptions:launchOptions];
-    [self contactApplication:application didFinishLaunchingWithOptions:launchOptions];
-    
+
     return YES;
-}
-
-- (void)accountApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    self.userAccountEnabled = YES;
-    
-    [self registerUserNotificationsForApplication:application];
-    
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
-    [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
-    
-    // We will just pick the first available of each category if multiples are available
-    session = [ZingleSDK accountSessionWithToken:kZNGToken key:kZNGKey accountChooser:^ZNGAccount * _Nullable(NSArray<ZNGAccount *> * _Nonnull availableAccounts) {
-        return [availableAccounts firstObject];
-    } serviceChooser:^ZNGService * _Nullable(NSArray<ZNGService *> * _Nonnull availableServices) {
-        return [availableServices firstObject];
-    }];
-    
-     ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:kZNGServiceId];
-     
-     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
-     [self.window makeKeyAndVisible];
-     
-     // Check if application was launched due to a push notification.
-     NSDictionary *notificationData = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-     if (notificationData) {
-     NSString *contactId = [notificationData objectForKey:@"feedId"];
-         [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
-     }
-}
-
-- (void)contactApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    self.userAccountEnabled = NO;
-    
-    [self registerUserNotificationsForApplication:application];
-    
-    [[AFNetworkActivityLogger sharedLogger] startLogging];
-    [AFNetworkActivityLogger sharedLogger].level = AFLoggerLevelDebug;
-    
-    // We are not actually picking a contact service.  We are using this block as our trigger to know that a selection is now available.
-    ZNGContactServicesViewController * vc = [ZNGContactServicesViewController contactServicesViewController];
-    vc.delegate = self;
-    
-    // We will just pick the first available of each category if multiples are available
-    session = [ZingleSDK contactSessionWithToken:kZNGToken key:kZNGKey channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        vc.availableContactServices = availableContactServices;
-        return nil;
-    }];
-    
-    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
-    [self.window makeKeyAndVisible];
-    
-    // Check if application was launched due to a push notification.
-    NSDictionary *notificationData = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-    if (notificationData) {
-        NSString *contactId = [notificationData objectForKey:@"feedId"];
-        
-        [self navigateToConversationViewControllerWithContactId:contactId serviceId:kZNGServiceId fromViewController:vc animated:NO];
-    }
 }
 
 // MARK: - Push Notifications
@@ -131,7 +48,6 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
 {
-    session.pushNotificationDeviceToken = [[NSString alloc] initWithData:deviceToken encoding:NSUTF8StringEncoding];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
@@ -170,193 +86,11 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:@" \n"];
     NSString *message = [body stringByTrimmingCharactersInSet:characterSet];
 
-    [self application:application handlePushNotificationWithContactId:contactId serviceId:kZNGServiceId message:message];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     application.applicationIconBadgeNumber = 0;
-}
-
-// MARK: - Push Notification Helpers
-
-- (void)navigateToConversationViewControllerWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId fromViewController:(UIViewController *)sourceViewController animated:(BOOL)animated
-{
-    [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
-        
-        [ZNGContactClient contactWithId:contactId withServiceId:serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
-            
-            ZNGConversationViewController *cvc = nil;
-            if (self.userAccountEnabled) {
-                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:service senderName:@"Me" receiverName:[contact fullName]];
-            } else {
-                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToService:service contact:contact senderName:@"Me" receiverName:nil];
-            }
-            
-            if (!sourceViewController) {
-                UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-                [navController popToRootViewControllerAnimated:NO];
-                [navController pushViewController:cvc animated:animated];
-            } else if ([sourceViewController isKindOfClass:[UINavigationController class]]) {
-                UINavigationController *navController = (UINavigationController *)sourceViewController;
-                [navController pushViewController:cvc animated:animated];
-            } else {
-                [sourceViewController.navigationController pushViewController:cvc animated:animated];
-            }
-            
-        } failure:^(ZNGError *error) {
-            NSLog(@"error = %@", error.localizedDescription);
-        }];
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"error = %@", error.localizedDescription);
-    }];
-}
-
-- (void)application:(UIApplication *)application handlePushNotificationWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId message:(NSString *)message
-{
-    UINavigationController *navController = (UINavigationController *)self.window.rootViewController;
-    UIViewController *visibleViewController = navController.visibleViewController;
-    
-    UIApplicationState state = [application applicationState];
-    
-    
-    if (state == UIApplicationStateInactive || state == UIApplicationStateBackground) {
-        
-        if ([visibleViewController isKindOfClass:[ZNGInboxViewController class]]) {
-            
-            [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:visibleViewController animated:NO];
-        
-        } else if ([visibleViewController isKindOfClass:[ZNGConversationViewController class]]) {
-            
-            // The ConversationViewController is currently visible.
-            
-            ZNGConversationViewController *cvc = (ZNGConversationViewController *)visibleViewController;
-            
-            if ([cvc.contact.contactId isEqualToString:contactId] && [cvc.service.serviceId isEqualToString:serviceId]) {
-                
-                // Received message from the current contact, so refresh.
-                [cvc refreshConversation];
-                
-            } else {
-                
-                // Received message from another contact, so replace the existing ConversationViewController with a new one.
-                
-                [self navigateToConversationViewControllerWithContactId:contactId serviceId:serviceId fromViewController:nil animated:NO];
-                
-            }
-            
-        } else {
-            
-            // Some other view controller is currently displayed, so display a banner at the top of the screen.
-            [self showNotificationBannerForContactId:contactId message:message];
-            
-        }
-        
-    } else {
-        
-        // Application is in UIApplicationStateActive (running in foreground).
-        
-        if ([visibleViewController isKindOfClass:[ZNGInboxViewController class]]) {
-            
-            // The InboxViewController is currently visible, so refresh it.
-            ZNGInboxViewController *inboxViewController = (ZNGInboxViewController *)visibleViewController;
-            [inboxViewController refresh];
-            
-        } else if ([visibleViewController isKindOfClass:[ZNGConversationViewController class]]) {
-            
-            // The ConversationViewController is currently visible.
-            
-            ZNGConversationViewController *cvc = (ZNGConversationViewController *)visibleViewController;
-            
-            if ([cvc.contact.contactId isEqualToString:contactId] && [cvc.service.serviceId isEqualToString:serviceId]) {
-                
-                // Received message from the current contact, so refresh.
-                [cvc refreshConversation];
-                
-            } else {
-                
-                // Received message from another contact, so display a banner at the top of the screen.
-                [self showNotificationBannerForContactId:contactId message:message];
-            }
-            
-        } else {
-            
-            // Some other view controller is currently displayed, so display a banner at the top of the screen.
-            [self showNotificationBannerForContactId:contactId message:message];
-            
-        }
-        
-    }
-    
-}
-
-- (void)showNotificationBannerForContactId:(NSString *)contactId message:(NSString *)message
-{
-    
-    [session.contactClient contactWithId:contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-        
-        if (self.notificationBannerView) {
-            [self.notificationBannerView removeFromSuperview];
-            self.notificationBannerView = nil;
-        }
-        
-        self.notificationBannerView = [[UIView alloc] initWithFrame:CGRectMake(0.0, -70.0, self.window.frame.size.width, 80.0)];
-        [self.notificationBannerView setBackgroundColor:[UIColor blackColor]];
-        [self.notificationBannerView setAlpha:0.90];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(15, 15, self.window.frame.size.width - 30.0 , 30.0)];
-        label.font = [UIFont systemFontOfSize:14.0];
-        label.text = [NSString stringWithFormat:@"%@: %@", [contact fullName], message];
-        label.textColor = [UIColor whiteColor];
-        label.numberOfLines = 1;
-        
-        [self.notificationBannerView addSubview:label];
-        
-        [self.window addSubview:self.notificationBannerView];
-        
-        // Dismiss if touched.
-        UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismissNotificationBannerView)];
-        tapGestureRecognizer.numberOfTapsRequired = 1;
-        tapGestureRecognizer.numberOfTouchesRequired = 1;
-        
-        [self.notificationBannerView addGestureRecognizer:tapGestureRecognizer];
-        
-        [UIView animateWithDuration:1.0 delay:.1 usingSpringWithDamping:0.5 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            
-            [self.notificationBannerView setFrame:CGRectMake(0.0, 0.0, self.window.frame.size.width, 60.0)];
-            
-        } completion:^(BOOL finished) {
-            
-        }];
-        
-        // Dismiss after 5 seconds.
-        [self performSelector:@selector(dismissNotificationBannerView) withObject:nil afterDelay:5.0];
-        
-        
-    } failure:^(ZNGError *error) {
-        NSLog(@"error = %@", error.localizedDescription);
-    }];
-    
-}
-
-- (void)dismissNotificationBannerView
-{
-    [UIView animateWithDuration:1.0 delay:.1 usingSpringWithDamping:0.5 initialSpringVelocity:0.1 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        
-        [self.notificationBannerView setFrame:CGRectMake(0.0, -70.0, self.window.frame.size.width, 60.0)];
-        
-    } completion:^(BOOL finished) {
-        
-    }];
-}
-
-// MARK: - ZNGContactServicesViewControllerDelegate
-
-- (void)contactServicesViewControllerDidSelectContactService:(ZNGContactService *)contactService
-{
-    ZingleContactSession * contactSession = (ZingleContactSession *)session;
-    contactSession.contactService = contactService;
 }
 
 @end

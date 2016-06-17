@@ -11,17 +11,8 @@
 
 @implementation ZNGAppDelegate
 {
-    ZingleSession * session;
+    ZingleContactSession * session;
 }
-
-static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
-static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
-
-static NSString *kZNGServiceId = @"22111111-1111-1111-1111-111111111111";
-
-// User-Defined Channel if using Contact User Authorization
-static NSString *kZNGChannelTypeId = @"7176e36e-87d2-4161-ae2b-6848fbf3de11";
-static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

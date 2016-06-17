@@ -16,6 +16,9 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		92E39693E54735C032BC69C0 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */; };
 		960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 960FCBB01D0F6E9C00B7E82C /* Tests.m */; };
+		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
+		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
+		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
 		DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7FF2561C87671800BC720E /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
@@ -53,6 +56,11 @@
 		960FCBAE1D0F6E9C00B7E82C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		960FCBB01D0F6E9C00B7E82C /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		960FCBB21D0F6E9C00B7E82C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
+		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
+		9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceTableViewCell.h; sourceTree = "<group>"; };
+		9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceTableViewCell.m; sourceTree = "<group>"; };
 		AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D3014CCAB506BA98DAAAD88B /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +132,11 @@
 			children = (
 				6003F59C195388D20070C39A /* ZNGAppDelegate.h */,
 				6003F59D195388D20070C39A /* ZNGAppDelegate.m */,
+				9670D1B31D1475500061F7C9 /* Main.storyboard */,
+				9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */,
+				9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */,
+				9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */,
+				9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -273,6 +286,7 @@
 				DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
+				9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +397,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */,
+				9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */,
 				6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 			);

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="ZiN-6J-F8L">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+    </dependencies>
+    <scenes>
+        <!--Contact Service Choosing View Controller-->
+        <scene sceneID="x4J-6c-E5O">
+            <objects>
+                <viewController id="ZiN-6J-F8L" customClass="ContactServiceChoosingViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="gca-h1-8KC"/>
+                        <viewControllerLayoutGuide type="bottom" id="buA-tU-ERc"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="gmU-dj-yNp">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a Contact Service" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hk1-Om-bTP">
+                                <rect key="frame" x="153" y="23" width="294" height="33"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="27"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="56" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="QIP-yE-KSp">
+                                <rect key="frame" x="0.0" y="64" width="600" height="536"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="contactServiceCell" rowHeight="56" id="7yD-gL-4eW" customClass="ContactServiceTableViewCell">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="56"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7yD-gL-4eW" id="o6E-yD-p2h">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="55"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hotel De Paris Front Desk" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AWT-Sz-Zmu" userLabel="Account Name label">
+                                                    <rect key="frame" x="18" y="0.0" width="278" height="28"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="308" id="wGn-7o-Dda"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="23"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="wGn-7o-Dda"/>
+                                                        </mask>
+                                                    </variation>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Chevron" translatesAutoresizingMaskIntoConstraints="NO" id="AGD-7U-LEe">
+                                                    <rect key="frame" x="577" y="17" width="15" height="22"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This is a message that the front desk sent that is too large to fit in the UI." lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nAL-xh-Jqk" userLabel="message">
+                                                    <rect key="frame" x="18" y="28" width="542" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.26613628926701571" green="0.26613628926701571" blue="0.26613628926701571" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Yesterday 12:23 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3fJ-ut-Vl6" userLabel="time label">
+                                                    <rect key="frame" x="411" y="6" width="149" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="17"/>
+                                                    <color key="textColor" red="0.25102257853403143" green="0.25102257853403143" blue="0.25102257853403143" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="leading" secondItem="o6E-yD-p2h" secondAttribute="leadingMargin" constant="10" id="0ds-uq-Qce"/>
+                                                <constraint firstItem="AWT-Sz-Zmu" firstAttribute="top" secondItem="o6E-yD-p2h" secondAttribute="topMargin" constant="-8" id="5fp-Rj-ef9"/>
+                                                <constraint firstItem="3fJ-ut-Vl6" firstAttribute="top" secondItem="o6E-yD-p2h" secondAttribute="topMargin" constant="-4" id="J30-q3-nG0"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="AGD-7U-LEe" secondAttribute="trailing" id="JyV-dq-UQ9"/>
+                                                <constraint firstItem="nAL-xh-Jqk" firstAttribute="top" secondItem="AWT-Sz-Zmu" secondAttribute="bottom" id="QGb-kq-Co6"/>
+                                                <constraint firstItem="3fJ-ut-Vl6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="AWT-Sz-Zmu" secondAttribute="trailing" constant="4" id="SkN-KI-2vR"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="nAL-xh-Jqk" secondAttribute="trailing" constant="32" id="nXk-We-bQY"/>
+                                                <constraint firstItem="AGD-7U-LEe" firstAttribute="centerY" secondItem="o6E-yD-p2h" secondAttribute="centerY" id="oKf-y1-7zw"/>
+                                                <constraint firstItem="AWT-Sz-Zmu" firstAttribute="leading" secondItem="o6E-yD-p2h" secondAttribute="leadingMargin" constant="10" id="s7W-Il-RcA"/>
+                                                <constraint firstItem="AGD-7U-LEe" firstAttribute="leading" secondItem="3fJ-ut-Vl6" secondAttribute="trailing" constant="17" id="xlS-BS-2xU"/>
+                                                <constraint firstItem="3fJ-ut-Vl6" firstAttribute="baseline" secondItem="AWT-Sz-Zmu" secondAttribute="baseline" id="zaW-e7-mQe"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="J30-q3-nG0"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="messageLabel" destination="nAL-xh-Jqk" id="zJ2-rr-0kh"/>
+                                            <outlet property="serviceLabel" destination="AWT-Sz-Zmu" id="aIg-iC-yEC"/>
+                                            <outlet property="timestampLabel" destination="3fJ-ut-Vl6" id="iPN-gg-ywA"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="ZiN-6J-F8L" id="958-NB-2R9"/>
+                                    <outlet property="delegate" destination="ZiN-6J-F8L" id="mbc-Fw-uTC"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="hk1-Om-bTP" firstAttribute="centerX" secondItem="gmU-dj-yNp" secondAttribute="centerX" id="B2h-DT-S0g"/>
+                            <constraint firstItem="buA-tU-ERc" firstAttribute="top" secondItem="QIP-yE-KSp" secondAttribute="bottom" id="X1x-uG-ruY"/>
+                            <constraint firstItem="hk1-Om-bTP" firstAttribute="top" secondItem="gca-h1-8KC" secondAttribute="bottom" constant="3" id="gLC-Fa-VD6"/>
+                            <constraint firstItem="QIP-yE-KSp" firstAttribute="top" secondItem="hk1-Om-bTP" secondAttribute="bottom" constant="8" id="nye-kU-uhR"/>
+                            <constraint firstItem="QIP-yE-KSp" firstAttribute="leading" secondItem="gmU-dj-yNp" secondAttribute="leadingMargin" constant="-20" id="poz-Xl-gYj"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="QIP-yE-KSp" secondAttribute="trailing" constant="-20" id="vui-L6-EGe"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="tableView" destination="QIP-yE-KSp" id="5rR-M1-V82"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="USc-bW-2xp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="819" y="449"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="Chevron" width="15" height="22"/>
+    </resources>
+</document>

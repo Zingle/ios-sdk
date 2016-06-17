@@ -16,7 +16,7 @@
 #import "ZNGUserAuthorizationClient.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
-NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
+NSString * const DebugBaseURL = @"https://ci-api.zingle.me/v1/";
 
 NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
 
@@ -38,7 +38,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         _token = [token copy];
         _key = [token copy];
-        NSString * urlString = LiveBaseURL;
+        NSString * urlString = DebugBaseURL;
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         

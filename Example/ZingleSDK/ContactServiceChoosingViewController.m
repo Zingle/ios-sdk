@@ -10,6 +10,8 @@
 #import "ContactServiceTableViewCell.h"
 #import <ZingleSDK/ZingleSDK.h>
 #import "ZNGTimestampFormatter.h"
+#import "MessageViewController.h"
+#import "ZingleContactSession.h"
 
 static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";

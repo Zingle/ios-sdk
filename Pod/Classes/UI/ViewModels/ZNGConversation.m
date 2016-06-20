@@ -216,6 +216,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     newMessage.body = body;
                     newMessage.channelTypeIds = @[self.channelType.channelTypeId];
                     [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+                        [self mergeNewMessagesAtHead:@[message]];
+                        
                         if (success) {
                             success(status);
                         }
@@ -235,6 +237,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         newMessage.body = body;
         newMessage.channelTypeIds = @[self.channelType.channelTypeId];
         [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+            [self mergeNewMessagesAtHead:@[message]];
+            
             if (success) {
                 success(status);
             }
@@ -264,6 +268,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                                    }];
                     newMessage.channelTypeIds = @[self.channelType.channelTypeId];
                     [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+                        [self mergeNewMessagesAtHead:@[message]];
                         if (success) {
                             success(status);
                         }
@@ -286,6 +291,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                        }];
         newMessage.channelTypeIds = @[self.channelType.channelTypeId];
         [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+            [self mergeNewMessagesAtHead:@[message]];
             if (success) {
                 success(status);
             }

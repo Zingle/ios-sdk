@@ -36,7 +36,12 @@
 @property (nonatomic, strong) ZNGContact * contact;
 
 @property (nonatomic) BOOL toService;
+
+/**
+ *  KVO compliant array of messages.  Observing this with KVO will give array insertion notifications.
+ */
 @property (nonatomic, strong) NSArray<ZNGMessage *> *messages;
+
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 - (void)updateMessages;

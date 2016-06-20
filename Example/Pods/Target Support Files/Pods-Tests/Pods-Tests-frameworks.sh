@@ -89,6 +89,8 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS9.3/DGActivityIndicatorView.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS9.3/GoogleFontsiOS.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/JSQMessagesViewController-iOS9.3/JSQMessagesViewController.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/JSQSystemSoundPlayer-iOS9.3/JSQSystemSoundPlayer.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi
@@ -98,6 +100,8 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS9.3/DGActivityIndicatorView.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS9.3/GoogleFontsiOS.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/JSQMessagesViewController-iOS9.3/JSQMessagesViewController.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/JSQSystemSoundPlayer-iOS9.3/JSQSystemSoundPlayer.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi

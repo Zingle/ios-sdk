@@ -75,6 +75,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return (self.messageId == other.messageId);
 }
 
+- (NSUInteger)hash
+{
+    return [self.messageId hash];
+}
+
 - (BOOL) isOutbound
 {
     return [self.communicationDirection isEqualToString:@"outbound"];

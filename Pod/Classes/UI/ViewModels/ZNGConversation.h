@@ -36,7 +36,7 @@
 @property (nonatomic, strong) ZNGContact * contact;
 
 @property (nonatomic) BOOL toService;
-@property (nonatomic, strong) NSMutableArray<ZNGMessage *> *messages;
+@property (nonatomic, strong) NSArray<ZNGMessage *> *messages;
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 - (void)updateMessages;
@@ -49,7 +49,5 @@
 - (void)sendMessageWithImage:(UIImage *)image
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure;
-
-- (NSString *)messageDirectionFor:(ZNGMessage *)message;
 
 @end

@@ -8,12 +8,22 @@
 
 #import "ZNGConversationViewController.h"
 #import "ZNGConversation.h"
+#import "UIColor+ZingleSDK.h"
+#import "JSQMessagesBubbleImage.h"
+
+static const uint64_t PollingIntervalSeconds = 10;
 
 @interface ZNGConversationViewController ()
+
+@property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
 
 @end
 
 @implementation ZNGConversationViewController
+{
+    dispatch_source_t pollingTimerSource;
+}
 
 - (void)viewDidLoad
 {
@@ -21,11 +31,92 @@
     
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    
+    // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
+    //   object is changed out from under us, but we will also not leak.
+    __weak ZNGConversationViewController * weakSelf = self;
+    pollingTimerSource = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    uint64_t pollingIntervalNanoseconds = PollingIntervalSeconds * NSEC_PER_SEC;
+    dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
+    dispatch_source_set_event_handler(pollingTimerSource, ^{
+        if (weakSelf != nil) {
+            ZNGConversationViewController * strongSelf = weakSelf;
+            [strongSelf->_conversation updateMessages];
+        }
+    });
+}
+
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    dispatch_resume(pollingTimerSource);
+}
+
+- (void) viewWillDisappear:(BOOL)animated
+{
+    dispatch_suspend(pollingTimerSource);
+    [super viewWillDisappear:animated];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void) dealloc
+{
+    if (pollingTimerSource != nil) {
+        dispatch_source_cancel(pollingTimerSource);
+    }
+}
+
+#pragma mark - Propertie
+
+-(UIColor *)outgoingBubbleColor
+{
+    if (_outgoingBubbleColor == nil) {
+        _outgoingBubbleColor = [UIColor zng_messageBubbleBlueColor];
+    }
+    return _outgoingBubbleColor;
+}
+
+-(UIColor *)incomingBubbleColor
+{
+    if (_incomingBubbleColor == nil) {
+        _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
+    }
+    return _incomingBubbleColor;
+}
+- (UIColor *)incomingTextColor
+{
+    if (_incomingTextColor == nil) {
+        _incomingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    }
+    return _incomingTextColor;
+}
+
+-(UIColor *)outgoingTextColor
+{
+    if (_outgoingTextColor == nil) {
+        _outgoingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+    }
+    return _outgoingTextColor;
+}
+
+-(UIColor *)authorTextColor
+{
+    if (_authorTextColor == nil) {
+        _authorTextColor = [UIColor lightGrayColor];
+    }
+    return _authorTextColor;
+}
+
+-(NSString *)receiverName
+{
+    if (_receiverName == nil) {
+        _receiverName = @"Received";
+    }
+    return _receiverName;
 }
 
 #pragma mark - Actions
@@ -42,8 +133,7 @@
 #pragma mark - Data source
 - (NSString *)senderId
 {
-    // TODO: Implement
-    return nil;
+    return (self.conversation.toService) ? self.conversation.contactId : self.conversation.serviceId;
 }
 
 - (NSString *)senderDisplayName
@@ -58,8 +148,13 @@
 
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Implement
-    return nil;
+    ZNGMessage * message = self.conversation.messages[indexPath.row];
+    
+    if ([message.senderId isEqualToString:[self senderId]]) {
+        return self.outgoingBubbleImageData;
+    }
+    
+    return self.incomingBubbleImageData;
 }
 
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath

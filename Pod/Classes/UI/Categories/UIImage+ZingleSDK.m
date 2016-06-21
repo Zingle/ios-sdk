@@ -2,8 +2,6 @@
 
 #import "UIImage+ZingleSDK.h"
 #import "ZingleSDK.h"
-#import "NSBundle+ZingleSDK.h"
-
 
 @implementation UIImage (ZingleSDK)
 

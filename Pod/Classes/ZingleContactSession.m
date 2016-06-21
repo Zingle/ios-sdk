@@ -14,7 +14,6 @@
 #import "ZNGNotificationsClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGServiceClient.h"
-#import "ZNGContactConversationViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 

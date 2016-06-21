@@ -30,8 +30,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGAccountChooser accountChooser;
     ZNGServiceChooser serviceChooser;
-    
-    NSMutableDictionary<NSString *, ZNGConversation *> * conversationsByContactId;
 }
 
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
@@ -44,7 +42,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self = [super initWithToken:token key:key];
     
     if (self != nil) {
-        conversationsByContactId = [[NSMutableDictionary alloc] init];
+        _conversationsByContactId = [[NSMutableDictionary alloc] init];
         [self retrieveAvailableAccounts];
     }
     
@@ -238,7 +236,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (ZNGConversation *) conversationWithContact:(ZNGContact *)contact;
 {
     // Do we have a cached version of this conversation already?
-    ZNGConversation * conversation = conversationsByContactId[contact.contactId];
+    ZNGConversation * conversation = self.conversationsByContactId[contact.contactId];
     
     if (conversation != nil) {
         // Ensure the conversation has a reference to us for communication.  This is 99% redundant and can be removed.

@@ -70,6 +70,10 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showMessages"]) {
+        NSIndexPath * indexPath = [self.tableView indexPathForSelectedRow];
+        ZNGContactService * selectedContactService = contactServices[indexPath.row];
+        session.contactService = selectedContactService;
+        
         ZNGConversationViewController * conversationView = segue.destinationViewController;
         ZNGConversation * conversation = session.conversation;
         conversationView.conversation = conversation;

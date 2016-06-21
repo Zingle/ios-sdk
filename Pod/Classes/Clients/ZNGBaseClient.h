@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - POST methods
 
-- (NSURLSessionDataTask*)postWithModel:(id<MTLJSONSerializing>)model
+- (NSURLSessionDataTask*)postWithModel:(nullable id<MTLJSONSerializing>)model
                                   path:(NSString*)path
                          responseClass:(Class)responseClass
                                success:(nullable void (^)(id responseObject, ZNGStatus *status))success

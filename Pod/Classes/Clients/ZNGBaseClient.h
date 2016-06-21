@@ -27,12 +27,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSURLSessionDataTask *)getListWithParameters:(nullable NSDictionary*)parameters
                                          path:(NSString*)path
-                                responseClass:(Class)responseClass
+                                responseClass:(nullable Class)responseClass
                                       success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                                       failure:(nullable void (^)(ZNGError* error))failure;
 
 - (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
-                               responseClass:(Class)responseClass
+                               responseClass:(nullable Class)responseClass
                                      success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(nullable void (^)(ZNGError* error))failure;
 
@@ -40,13 +40,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSURLSessionDataTask*)postWithModel:(nullable id<MTLJSONSerializing>)model
                                   path:(NSString*)path
-                         responseClass:(Class)responseClass
+                         responseClass:(nullable Class)responseClass
                                success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                                failure:(nullable void (^)(ZNGError* error))failure;
 
 - (NSURLSessionDataTask*)postWithParameters:(NSDictionary*)parameters
                                        path:(NSString*)path
-                              responseClass:(Class)responseClass
+                              responseClass:(nullable Class)responseClass
                                     success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                                     failure:(nullable void (^)(ZNGError* error))failure;
 
@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSURLSessionDataTask*)putWithPath:(NSString*)path
                           parameters:(NSDictionary*)parameters
-                       responseClass:(Class)responseClass
+                       responseClass:(nullable Class)responseClass
                              success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                              failure:(nullable void (^)(ZNGError* error))failure;
 

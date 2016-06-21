@@ -61,6 +61,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The current messaging conversation between the contact and the contact service.  Al messages are sent and received through this property.
  *  This is set automatically along with the contact property.
+ *
+ *  This is nil if no contact service has been selected.
  */
 @property (nonatomic, readonly, nullable) ZNGConversation * conversation;
 

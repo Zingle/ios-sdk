@@ -120,10 +120,10 @@
             </objects>
             <point key="canvasLocation" x="1594" y="449"/>
         </scene>
-        <!--Message View Controller-->
+        <!--Conversation View Controller-->
         <scene sceneID="qog-Jg-YwH">
             <objects>
-                <viewController id="wqF-lM-AQA" customClass="MessageViewController" sceneMemberID="viewController">
+                <viewController id="wqF-lM-AQA" customClass="ZNGConversationViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="AgE-gz-UUc"/>
                         <viewControllerLayoutGuide type="bottom" id="lXh-o1-3gC"/>
@@ -131,59 +131,8 @@
                     <view key="view" contentMode="scaleToFill" id="Wzl-Kf-CVo">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="EgV-Ch-e0Z">
-                                <rect key="frame" x="42" y="562" width="489" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eQX-Q6-Suj">
-                                <rect key="frame" x="544" y="562" width="36" height="30"/>
-                                <state key="normal" title="Send"/>
-                                <connections>
-                                    <action selector="presesdSend:" destination="wqF-lM-AQA" eventType="touchUpInside" id="gTR-37-JWO"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="y2P-EY-las">
-                                <rect key="frame" x="8" y="565" width="26" height="24"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="26" id="0Zw-zq-I82"/>
-                                    <constraint firstAttribute="height" constant="24" id="phx-tO-7w4"/>
-                                </constraints>
-                                <state key="normal" image="Paperclip"/>
-                                <connections>
-                                    <action selector="pressedAttach:" destination="wqF-lM-AQA" eventType="touchUpInside" id="uE5-5V-zVn"/>
-                                </connections>
-                            </button>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HZw-4t-BVe">
-                                <rect key="frame" x="0.0" y="64" width="600" height="489"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <connections>
-                                    <outlet property="dataSource" destination="wqF-lM-AQA" id="Yh3-KU-Ic3"/>
-                                    <outlet property="delegate" destination="wqF-lM-AQA" id="1mh-q8-3xI"/>
-                                </connections>
-                            </tableView>
-                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="lXh-o1-3gC" firstAttribute="top" secondItem="EgV-Ch-e0Z" secondAttribute="bottom" constant="8" id="8N0-Ts-NmJ"/>
-                            <constraint firstItem="eQX-Q6-Suj" firstAttribute="trailing" secondItem="Wzl-Kf-CVo" secondAttribute="trailingMargin" id="Pk0-Cd-xm8"/>
-                            <constraint firstItem="EgV-Ch-e0Z" firstAttribute="top" secondItem="HZw-4t-BVe" secondAttribute="bottom" constant="9" id="QyT-Km-dXY"/>
-                            <constraint firstItem="eQX-Q6-Suj" firstAttribute="leading" secondItem="EgV-Ch-e0Z" secondAttribute="trailing" constant="13" id="R8r-Iw-oLq"/>
-                            <constraint firstItem="HZw-4t-BVe" firstAttribute="leading" secondItem="Wzl-Kf-CVo" secondAttribute="leadingMargin" constant="-20" id="an4-yG-wZb"/>
-                            <constraint firstItem="EgV-Ch-e0Z" firstAttribute="leading" secondItem="y2P-EY-las" secondAttribute="trailing" constant="8" id="b2x-Z7-eHS"/>
-                            <constraint firstItem="y2P-EY-las" firstAttribute="centerY" secondItem="EgV-Ch-e0Z" secondAttribute="centerY" id="fUe-IP-Qh4"/>
-                            <constraint firstItem="HZw-4t-BVe" firstAttribute="top" secondItem="AgE-gz-UUc" secondAttribute="bottom" id="qDr-6l-2p0"/>
-                            <constraint firstItem="y2P-EY-las" firstAttribute="leading" secondItem="Wzl-Kf-CVo" secondAttribute="leadingMargin" constant="-12" id="r9I-H1-YaD"/>
-                            <constraint firstItem="eQX-Q6-Suj" firstAttribute="centerY" secondItem="EgV-Ch-e0Z" secondAttribute="centerY" id="rfb-7N-lTe"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="HZw-4t-BVe" secondAttribute="trailing" constant="-20" id="uYQ-o4-qwZ"/>
-                        </constraints>
                     </view>
-                    <connections>
-                        <outlet property="attachButton" destination="y2P-EY-las" id="JEu-iP-yky"/>
-                        <outlet property="inputTextField" destination="EgV-Ch-e0Z" id="uU3-tj-31P"/>
-                        <outlet property="tableView" destination="HZw-4t-BVe" id="hnY-Mj-pxM"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7p4-Qg-CHc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -210,6 +159,5 @@
     </scenes>
     <resources>
         <image name="Chevron" width="15" height="22"/>
-        <image name="Paperclip" width="26" height="24"/>
     </resources>
 </document>

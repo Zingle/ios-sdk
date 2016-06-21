@@ -16,7 +16,6 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		92E39693E54735C032BC69C0 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */; };
 		960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 960FCBB01D0F6E9C00B7E82C /* Tests.m */; };
-		9614EDCD1D1858FC001F7F8A /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9614EDCC1D1858FC001F7F8A /* MessageViewController.m */; };
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
@@ -57,8 +56,6 @@
 		960FCBAE1D0F6E9C00B7E82C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		960FCBB01D0F6E9C00B7E82C /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		960FCBB21D0F6E9C00B7E82C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		9614EDCB1D1858FC001F7F8A /* MessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
-		9614EDCC1D1858FC001F7F8A /* MessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
@@ -140,8 +137,6 @@
 				9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */,
 				9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */,
 				9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */,
-				9614EDCB1D1858FC001F7F8A /* MessageViewController.h */,
-				9614EDCC1D1858FC001F7F8A /* MessageViewController.m */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
@@ -403,7 +398,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */,
-				9614EDCD1D1858FC001F7F8A /* MessageViewController.m in Sources */,
 				9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */,
 				6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,

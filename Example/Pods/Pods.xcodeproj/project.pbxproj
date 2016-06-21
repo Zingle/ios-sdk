@@ -397,7 +397,6 @@
 		5E756BA0B6B6E472C059E9D8C252E30F /* ZNGContactChannelClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 7591292E90EAA7F8E90EE1C390CF3A54 /* ZNGContactChannelClient.m */; };
 		5E9496952F9EF644E5B34EE71B65B386 /* ZNGInboxDataSearch.h in Headers */ = {isa = PBXBuildFile; fileRef = AE8D5A4377144DF236D7E269E70AE5CF /* ZNGInboxDataSearch.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5ED61DE8E1E972EDAC960DF5B630F8C3 /* JSQMessagesMediaViewBubbleImageMasker.m in Sources */ = {isa = PBXBuildFile; fileRef = 881E04F73AFA2FE55687FDAE4D708DB1 /* JSQMessagesMediaViewBubbleImageMasker.m */; };
-		5F856608E1EAE22F9593CFE6E6D0D0E9 /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FB4446FC9F4F73C6FAD9C8EEEC8628 /* ZNGConversationViewController.m */; };
 		6102A4F59B62011E349487B9B4207B61 /* ZingleSDK-iOS9.3-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 465DD47F17C3682EFD03D148A24C6351 /* ZingleSDK-iOS9.3-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6190C89F9637DEAAA12103A60D4AEB24 /* DGActivityIndicatorLineScalePartyAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = FCF84C62CFD1ACED859CBF672518DBAF /* DGActivityIndicatorLineScalePartyAnimation.m */; };
 		61C4D1786110E922A8A595DEBA06BE2D /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A359EDF1DB83F7DBAE0CD132A148F0D7 /* CocoaLumberjack.framework */; };
@@ -423,7 +422,6 @@
 		65396A847B6AF2B8408330BAA954A7B3 /* JSQMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = F39D23CF3B13B0F335F531D2D7C9511B /* JSQMessage.m */; };
 		6545F739A0A2A383E13842F8178A9D31 /* AFURLRequestSerialization.m in Sources */ = {isa = PBXBuildFile; fileRef = 57183424F28BED7063E57EDF5C9AF363 /* AFURLRequestSerialization.m */; };
 		6561F08156F4EC4E89F5DE5002879DDF /* JSQMessagesToolbarButtonFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = E08414B4874534684D71CB7D0B7CC52D /* JSQMessagesToolbarButtonFactory.m */; };
-		66C4D50230F2F07F5E60367052C383C1 /* ZNGConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C748C83E49EBB51B92FC5B0F8C8A4EC1 /* ZNGConversationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		66F0CE846A42F59DC247F3E0F0BAF833 /* NSDictionary+MTLJSONKeyPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 6396D71A5C6D13178262CCA24E8BE0AD /* NSDictionary+MTLJSONKeyPath.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		6715D93EF2E028CED746A95DBB441A14 /* JSQSystemSoundPlayer-iOS9.3-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F37B46D8DA6CD814B28DCC34523EB5BD /* JSQSystemSoundPlayer-iOS9.3-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		672B15F52DD15403507E203CE5B1F79F /* ZNGContactLabelsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 800DF322D76210E02CCBDC22E001745C /* ZNGContactLabelsTableViewCell.xib */; };
@@ -662,7 +660,6 @@
 		9F6B416E3ACF756CB6BC5526B88C61A8 /* JSQMessagesComposerTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 545C754F284C8339D1510BDABB47B014 /* JSQMessagesComposerTextView.m */; };
 		A02E0F6EA8992E6D9F64A708A03D7A49 /* DGActivityIndicatorRotatingTrigonAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 994A0B4B86FD0FE8C3E22A46F0ABFDE7 /* DGActivityIndicatorRotatingTrigonAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A02F7EEF00130AC1EA123FFFD77D4451 /* MTLTransformerErrorHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 21EA1442C894EEA30331D77CBF2FCE5B /* MTLTransformerErrorHandling.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
-		A07A40486028B92DACBB4A6AC6C7583F /* ZNGConversationViewController.h in Headers */ = {isa = PBXBuildFile; fileRef = C748C83E49EBB51B92FC5B0F8C8A4EC1 /* ZNGConversationViewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A0AC7CA5618F5285297B03CBCE1DA806 /* ZNGSetting.m in Sources */ = {isa = PBXBuildFile; fileRef = 67EC77512F4C851908D9B4EE4E537C35 /* ZNGSetting.m */; };
 		A11BAEB157736F1CE002897A4A0BBF4E /* bubble_stroked.png in Resources */ = {isa = PBXBuildFile; fileRef = FA33936EB38370121392D542ED5BD3E0 /* bubble_stroked.png */; };
 		A11D6F654A8E5266440B6BBFC52CB7DF /* DDDispatchQueueLogFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = EBCD0DE2869B372C01A72B4C3E0B0ECC /* DDDispatchQueueLogFormatter.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -936,7 +933,6 @@
 		E3F0B172BA0F1E45FC6874B58938B75B /* ZNGSetting.h in Headers */ = {isa = PBXBuildFile; fileRef = 13B017D688C970F9A1DC7BB5847E6A25 /* ZNGSetting.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E43AF5016A8CE8AADD9987B46627C5E0 /* UIDevice+JSQMessages.h in Headers */ = {isa = PBXBuildFile; fileRef = 8E832C99023B73B5D8344D5A928B6990 /* UIDevice+JSQMessages.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E45D95F92FA1B4B30ED0573AC51FBA63 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 80836E26CF15853DDF21CFBD2B973650 /* UIKit.framework */; };
-		E4C6305EDE9A75F0EFC41EC022C7ADBC /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34FB4446FC9F4F73C6FAD9C8EEEC8628 /* ZNGConversationViewController.m */; };
 		E4D903974DA62B2811127ECEAC2E02D0 /* JSQMessagesCollectionViewCellIncoming.h in Headers */ = {isa = PBXBuildFile; fileRef = 02D3A3BFC357B2CB075D010938AF1A59 /* JSQMessagesCollectionViewCellIncoming.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E4F03A93600CF3D9EBB4BC08CFAD2469 /* DGActivityIndicatorBallPulseSyncAnimation.m in Sources */ = {isa = PBXBuildFile; fileRef = 1998EEF65D3879B073FC063818DB255E /* DGActivityIndicatorBallPulseSyncAnimation.m */; };
 		E53291129F490D3CFD303F476D0105A5 /* DGActivityIndicatorView-iOS9.3-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = BB3E1EA66DE1A2C3C19C360CAAE1F057 /* DGActivityIndicatorView-iOS9.3-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1459,7 +1455,6 @@
 		3366B81FD6B75478BE396D31BB9EBDF8 /* UIImage+JSQMessages.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+JSQMessages.h"; path = "JSQMessagesViewController/Categories/UIImage+JSQMessages.h"; sourceTree = "<group>"; };
 		338C85CF027DC86EAEF332FF5769884B /* DDAbstractDatabaseLogger.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DDAbstractDatabaseLogger.m; path = Classes/DDAbstractDatabaseLogger.m; sourceTree = "<group>"; };
 		347920D86A08F654195E2D0DAA161CFF /* DGActivityIndicatorTriplePulseAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorTriplePulseAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorTriplePulseAnimation.h; sourceTree = "<group>"; };
-		34FB4446FC9F4F73C6FAD9C8EEEC8628 /* ZNGConversationViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationViewController.m; sourceTree = "<group>"; };
 		358D12C04A4C11C1517573F3D25C285F /* ZNGContactViewController.xib */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = file.xib; path = ZNGContactViewController.xib; sourceTree = "<group>"; };
 		35FA7C7C2C5EEECC94603CC2FB8835EB /* NSError+MTLModelException.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSError+MTLModelException.m"; path = "Mantle/NSError+MTLModelException.m"; sourceTree = "<group>"; };
 		36B1146789CBBFE3C34D29CF51761E71 /* AFURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = AFNetworking/AFURLSessionManager.m; sourceTree = "<group>"; };
@@ -1819,7 +1814,6 @@
 		C6492BA02FBBB1907725D2BC101E2AE0 /* CocoaLumberjack-iOS8.0.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "CocoaLumberjack-iOS8.0.xcconfig"; sourceTree = "<group>"; };
 		C6D4B53EC5A6AF3DB6B2C30F082A98D8 /* DDFileLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DDFileLogger.h; path = Classes/DDFileLogger.h; sourceTree = "<group>"; };
 		C71BD06569BD6CA722093E7F25D31EC7 /* AFURLConnectionOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AFURLConnectionOperation.h; path = AFNetworking/AFURLConnectionOperation.h; sourceTree = "<group>"; };
-		C748C83E49EBB51B92FC5B0F8C8A4EC1 /* ZNGConversationViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGConversationViewController.h; sourceTree = "<group>"; };
 		C7DC137EFBE8B3923899B3EC1F77EFB6 /* UIAlertView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+AFNetworking.h"; path = "UIKit+AFNetworking/UIAlertView+AFNetworking.h"; sourceTree = "<group>"; };
 		C8E925D878FA4468057F31EB1C728436 /* JSQMessagesViewController-iOS9.3.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; name = "JSQMessagesViewController-iOS9.3.modulemap"; path = "../JSQMessagesViewController-iOS9.3/JSQMessagesViewController-iOS9.3.modulemap"; sourceTree = "<group>"; };
 		C8FAAA937D465B5AB54A1B33BAFEE41F /* DGActivityIndicatorBallGridPulseAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallGridPulseAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallGridPulseAnimation.h; sourceTree = "<group>"; };
@@ -3229,8 +3223,6 @@
 			children = (
 				92FF1025E64D141A8A3E5B30DAEA44C6 /* ZNGContactViewController.h */,
 				77F435C57B71E6AF284529F50E6DE048 /* ZNGContactViewController.m */,
-				C748C83E49EBB51B92FC5B0F8C8A4EC1 /* ZNGConversationViewController.h */,
-				34FB4446FC9F4F73C6FAD9C8EEEC8628 /* ZNGConversationViewController.m */,
 				70C592254DBFC88EA7FDDDBCCD71D8CA /* ZNGImageViewerController.h */,
 				D8632B1596A49E9374640277C6A62514 /* ZNGImageViewerController.m */,
 				91C8928C07D6BAC9C99F85DB81E7172D /* ZNGInboxViewController.h */,
@@ -3425,7 +3417,6 @@
 				8930C4787EB660B2F7F943AB3E660895 /* ZNGContactServiceClient.h in Headers */,
 				147790AD9EAF9847F252FB8BB248A34B /* ZNGContactViewController.h in Headers */,
 				2DF9D5E3695D32DF056BB9BE26287AAC /* ZNGConversation.h in Headers */,
-				A07A40486028B92DACBB4A6AC6C7583F /* ZNGConversationViewController.h in Headers */,
 				E08E7C229A10160BC8AC36B9925A3C8C /* ZNGCorrespondent.h in Headers */,
 				7BD128E45B3EDC8785EDC5DE50F39166 /* ZNGError.h in Headers */,
 				B05A3DA40A2921A5765C2CA312C48B7E /* ZNGEvent.h in Headers */,
@@ -3840,7 +3831,6 @@
 				F055E33C2C19A48C3972DC0DAC3FD206 /* ZNGContactServiceClient.h in Headers */,
 				648C90158A459D775AF938B0F9217EBD /* ZNGContactViewController.h in Headers */,
 				218B470A971FED6202CC879A475A5B5D /* ZNGConversation.h in Headers */,
-				66C4D50230F2F07F5E60367052C383C1 /* ZNGConversationViewController.h in Headers */,
 				7C84E9B5FF8E63191100ADAA98C3E167 /* ZNGCorrespondent.h in Headers */,
 				E9D978006ABC884C7F9460B0E8F47388 /* ZNGError.h in Headers */,
 				3B98B4A10F900FCAA491B6428CA73BC6 /* ZNGEvent.h in Headers */,
@@ -4661,7 +4651,6 @@
 				7BDBC4BC1338DC8A4ED4B9EBF122033D /* ZNGContactServiceClient.m in Sources */,
 				4817625F2AABEB2878412715D1BE5EE7 /* ZNGContactViewController.m in Sources */,
 				F4E6020428CE0F08AA073F2C91C0A13E /* ZNGConversation.m in Sources */,
-				E4C6305EDE9A75F0EFC41EC022C7ADBC /* ZNGConversationViewController.m in Sources */,
 				773DFE46DA44BC341D8CFBFD95AECC75 /* ZNGCorrespondent.m in Sources */,
 				14DCDFE9ADEC2547E0CC308B45337CBF /* ZNGError.m in Sources */,
 				8A03E34FD7B3D0E872DA2D7FEA3AD131 /* ZNGEvent.m in Sources */,
@@ -4766,7 +4755,6 @@
 				E65C3997BB576C64872E7BD436B63E31 /* ZNGContactServiceClient.m in Sources */,
 				EFE0835442A779B278C1AB912847ED12 /* ZNGContactViewController.m in Sources */,
 				AFC8F0E2FDC37E17947FC7C38A3EF342 /* ZNGConversation.m in Sources */,
-				5F856608E1EAE22F9593CFE6E6D0D0E9 /* ZNGConversationViewController.m in Sources */,
 				B17789ACA73E13E50667BF3942AB73E2 /* ZNGCorrespondent.m in Sources */,
 				D9D58F5F094C0014B519AA526025ED2B /* ZNGError.m in Sources */,
 				7644A75C555C0AE359CC7A04781648FA /* ZNGEvent.m in Sources */,

@@ -3,7 +3,6 @@
 #import "ZNGAccountClient.h"
 #import "ZNGAutomationClient.h"
 #import "ZNGBaseClient.h"
-#import "ZNGBaseClientAccount.h"
 #import "ZNGBaseClientService.h"
 #import "ZNGContactChannelClient.h"
 #import "ZNGContactClient.h"

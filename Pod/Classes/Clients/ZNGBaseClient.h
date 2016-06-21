@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <Mantle/Mantle.h>
-#import "ZingleSDK.h"
-#import "ZNGStatus.h"
-#import "ZNGError.h"
+
+@class ZNGError;
+@class ZNGStatus;
 
 NS_ASSUME_NONNULL_BEGIN
 

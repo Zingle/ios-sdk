@@ -29,11 +29,11 @@
         _account = account;
         _service = service;
         
-        self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self account:_account service:_service];
-        self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self account:_account service:_service];
-        self.contactClient = [[ZNGContactClient alloc] initWithSession:self account:_account service:_service];
-        self.labelClient = [[ZNGLabelClient alloc] initWithSession:self account:_account service:_service];
-        self.messageClient = [[ZNGMessageClient alloc] initWithSession:self account:_account service:_service];
+        self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self serviceId:_service];
+        self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self serviceId:_service];
+        self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:_service];
+        self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:_service];
+        self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:_service];
         
         [self _registerForPushNotificationsForServiceIds:@[service.serviceId] removePreviousSubscriptions:YES];
     }

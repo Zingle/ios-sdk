@@ -6,10 +6,10 @@
 //
 //
 
-#import "ZNGBaseClientAccount.h"
+#import "ZNGBaseClient.h"
 #import "ZNGService.h"
 
-@interface ZNGServiceClient : ZNGBaseClientAccount
+@interface ZNGServiceClient : ZNGBaseClient
 
 #pragma mark - GET methods
 

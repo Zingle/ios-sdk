@@ -10,6 +10,8 @@
 #import "ZNGMessage.h"
 #import "ZNGNewMessage.h"
 
+@class ZNGNewMessageResponse;
+
 @interface ZNGMessageClient : ZNGBaseClientService
 
 #pragma mark - GET methods

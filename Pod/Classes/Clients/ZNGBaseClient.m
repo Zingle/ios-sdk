@@ -10,6 +10,9 @@
 #import "ZNGBaseClient.h"
 #import "ZNGLogging.h"
 #import "ZingleSession.h"
+#import "ZNGError.h"
+#import "ZNGStatus.h"
+#import "ZingleSDK.h"
 
 // Debug level in BaseClient will show every outgoing request URL and every incoming model class (and count)
 #ifdef DEBUG

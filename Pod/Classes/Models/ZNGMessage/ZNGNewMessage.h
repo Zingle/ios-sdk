@@ -14,7 +14,7 @@
 @property(nonatomic, strong) NSString* senderType;
 @property(nonatomic, strong) ZNGParticipant* sender;
 @property(nonatomic, strong) NSString* recipientType;
-@property(nonatomic, strong) NSArray* recipients; // Array of ZNGRecipient
+@property(nonatomic, strong) NSArray<ZNGParticipant *> * recipients;
 @property(nonatomic, strong) NSArray* channelTypeIds; // Array of NSString
 @property(nonatomic, strong) NSString* body;
 @property(nonatomic, strong) NSArray* attachments;

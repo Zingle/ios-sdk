@@ -9,7 +9,7 @@
 #import <Mantle/Mantle.h>
 #import "ZNGCorrespondent.h"
 #import "ZNGUser.h"
-#import "JSQMessageData.h"
+#import <JSQMessagesViewController/JSQMessageData.h>
 
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 

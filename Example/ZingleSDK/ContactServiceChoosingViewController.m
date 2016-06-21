@@ -9,9 +9,9 @@
 #import "ContactServiceChoosingViewController.h"
 #import "ContactServiceTableViewCell.h"
 #import <ZingleSDK/ZingleSDK.h>
-#import "ZNGTimestampFormatter.h"
 #import "MessageViewController.h"
 #import "ZingleContactSession.h"
+#import "JSQMessagesTimestampFormatter.h"
 
 static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
@@ -61,7 +61,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     
     cell.serviceLabel.text = contactService.serviceDisplayName;
     cell.messageLabel.text = message.body;
-    cell.timestampLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:message.createdAt];
+    cell.timestampLabel.attributedText = [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:message.createdAt];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;

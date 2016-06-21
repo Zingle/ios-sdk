@@ -9,9 +9,9 @@
 #import "ContactServiceChoosingViewController.h"
 #import "ContactServiceTableViewCell.h"
 #import <ZingleSDK/ZingleSDK.h>
-#import "MessageViewController.h"
-#import "ZingleContactSession.h"
-#import "JSQMessagesTimestampFormatter.h"
+#import <ZingleSDK/ZingleContactSession.h>
+#import <ZingleSDK/ZNGConversationViewController.h>
+#import <JSQMessagesViewController/JSQMessagesTimestampFormatter.h>
 
 static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
@@ -67,10 +67,13 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     return cell;
 }
 
-- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    NSLog(@"Selected contact service #%ld", (long)indexPath.row);
+    if ([segue.identifier isEqualToString:@"showMessages"]) {
+        ZNGConversationViewController * conversationView = segue.destinationViewController;
+        ZNGConversation * conversation = session.conversation;
+        conversationView.conversation = conversation;
+    }
 }
-
 
 @end

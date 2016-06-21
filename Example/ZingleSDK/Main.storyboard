@@ -94,7 +94,7 @@
                                             <outlet property="messageLabel" destination="nAL-xh-Jqk" id="zJ2-rr-0kh"/>
                                             <outlet property="serviceLabel" destination="AWT-Sz-Zmu" id="aIg-iC-yEC"/>
                                             <outlet property="timestampLabel" destination="3fJ-ut-Vl6" id="iPN-gg-ywA"/>
-                                            <segue destination="wqF-lM-AQA" kind="show" identifier="showMessage" id="bM1-bb-dqk"/>
+                                            <segue destination="wqF-lM-AQA" kind="show" identifier="showMessages" id="bM1-bb-dqk"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

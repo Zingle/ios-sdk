@@ -69,7 +69,6 @@
 #import "ZNGLabelCollectionViewCell.h"
 #import "ZNGLabelCollectionViewFlowLayout.h"
 #import "ZNGTableViewCell.h"
-#import "ZNGHeaders.h"
 #import "ZingleValueTransformers.h"
 #import "ZingleAccountSession.h"
 #import "ZingleContactSession.h"

@@ -84,6 +84,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self didChangeValueForKey:NSStringFromSelector(@selector(contactService))];
     
     if (selectedContactService != nil) {
+        [self initializeClients];
         [self findOrCreateContactForContactService];
         [self findChannelTypeAndSetupConversation];
     } else if (_onlyRegisterPushNotificationsForCurrentContactService) {
@@ -91,6 +92,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         //  deregister for pushes.
         [self _unregisterForAllPushNotifications];
     }
+}
+
+- (void) initializeClients
+{
+    NSString * serviceId = self.contactService.serviceId;
+    self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
+    self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
 }
 
 - (void) findOrCreateContactForContactService

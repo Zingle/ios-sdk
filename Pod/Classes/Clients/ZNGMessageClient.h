@@ -25,7 +25,7 @@
 #pragma mark - POST methods
 
 - (void)sendMessage:(ZNGNewMessage*)newMessage
-            success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+            success:(void (^)(ZNGNewMessageResponse * message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
 - (void)markMessageReadWithId:(NSString*)messageId

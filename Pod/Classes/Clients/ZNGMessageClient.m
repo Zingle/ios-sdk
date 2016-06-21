@@ -8,6 +8,7 @@
 
 #import "ZNGMessageClient.h"
 #import "ZNGMessageRead.h"
+#import "ZNGNewMessageResponse.h"
 
 @implementation ZNGMessageClient
 
@@ -41,7 +42,7 @@
 #pragma mark - POST methods
 
 - (void)sendMessage:(ZNGNewMessage*)newMessage
-            success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
+            success:(void (^)(ZNGNewMessageResponse * message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
     if (newMessage.senderType == nil) {
@@ -68,7 +69,7 @@
     
     [self postWithModel:newMessage
                    path:path
-          responseClass:[ZNGMessage class]
+          responseClass:[ZNGNewMessageResponse class]
                 success:success
                 failure:failure];
 }

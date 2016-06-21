@@ -614,6 +614,10 @@
 		95E7FAD382E65A635CCBDAF2030E542F /* DGActivityIndicatorFiveDotsAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 3761B6D5BD0E365CF6A1D5B09005CBD9 /* DGActivityIndicatorFiveDotsAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9612765BD87C8C56CF2B6B45F9502579 /* JSQMessagesTimestampFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 175C12697B285ED563434DE524C85495 /* JSQMessagesTimestampFormatter.m */; };
 		9615948A13753B60783FBA9F583FBC1A /* ZNGInboxDataUnconfirmed.m in Sources */ = {isa = PBXBuildFile; fileRef = FEF353DFDD202375F03B65D81438ADE1 /* ZNGInboxDataUnconfirmed.m */; };
+		9639A2D31D19D5D500C506D8 /* ZNGNewMessageResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 9639A2D11D19D5D500C506D8 /* ZNGNewMessageResponse.h */; };
+		9639A2D41D19D5D500C506D8 /* ZNGNewMessageResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = 9639A2D11D19D5D500C506D8 /* ZNGNewMessageResponse.h */; };
+		9639A2D51D19D5D500C506D8 /* ZNGNewMessageResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639A2D21D19D5D500C506D8 /* ZNGNewMessageResponse.m */; };
+		9639A2D61D19D5D500C506D8 /* ZNGNewMessageResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 9639A2D21D19D5D500C506D8 /* ZNGNewMessageResponse.m */; };
 		967A7830FF8544C53A95FC162503B1AC /* ZNGUserAuthorizationClient.h in Headers */ = {isa = PBXBuildFile; fileRef = CDF0EEE8CF2F99DE1EE4BA283F160000 /* ZNGUserAuthorizationClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9683DE6CF1CBF84ACB2C25B947B8272E /* JSQMessagesCellTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36EDD6862051ED10F68A54E6E6F251D4 /* JSQMessagesCellTextView.m */; };
 		969843772EE69C80E9D425672AB3E8FD /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6561CD76BFBB36EA0F821578703C056A /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
@@ -1708,6 +1712,8 @@
 		95C05D6CF7C0A620978B0DE87E6C7E06 /* DGActivityIndicatorBallScaleRippleAnimation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = DGActivityIndicatorBallScaleRippleAnimation.h; path = DGActivityIndicatorView/Animations/DGActivityIndicatorBallScaleRippleAnimation.h; sourceTree = "<group>"; };
 		95C593C26AE49E5EE08E5A06E675B4B7 /* bubble_min@2x.png */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = image.png; path = "bubble_min@2x.png"; sourceTree = "<group>"; };
 		960BF7247F12CD9A3AC1C4C5E5EF76EE /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9639A2D11D19D5D500C506D8 /* ZNGNewMessageResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGNewMessageResponse.h; sourceTree = "<group>"; };
+		9639A2D21D19D5D500C506D8 /* ZNGNewMessageResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGNewMessageResponse.m; sourceTree = "<group>"; };
 		969A48297F7D63BB3942F9E53FB64834 /* MTLJSONAdapter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLJSONAdapter.h; path = Mantle/MTLJSONAdapter.h; sourceTree = "<group>"; };
 		96B1A5EB34CF834A26AA3906170C096C /* ZingleSpecificAccountSession.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZingleSpecificAccountSession.h; sourceTree = "<group>"; };
 		96E3D92A9397088FBF0113EAE3E85513 /* UIImage+ZingleSDK.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ZingleSDK.m"; sourceTree = "<group>"; };
@@ -3339,6 +3345,8 @@
 				63F6DDEE97D56ED36BAA760C2287042C /* ZNGMessage.m */,
 				B1432A16ED8F9583FC678E7C8916D6ED /* ZNGNewMessage.h */,
 				28F9839CE435A25A60A403941C563BF0 /* ZNGNewMessage.m */,
+				9639A2D11D19D5D500C506D8 /* ZNGNewMessageResponse.h */,
+				9639A2D21D19D5D500C506D8 /* ZNGNewMessageResponse.m */,
 			);
 			path = ZNGMessage;
 			sourceTree = "<group>";
@@ -3579,6 +3587,7 @@
 				F8870ACA867CC6B805BB83DE5F4E97C7 /* ZNGNotificationsClient.h in Headers */,
 				B8B5F4C47E31B72990526DB6269B2CA5 /* ZNGParticipant.h in Headers */,
 				59EAE40BCFC44FF84A887200A0B6C737 /* ZNGService.h in Headers */,
+				9639A2D31D19D5D500C506D8 /* ZNGNewMessageResponse.h in Headers */,
 				C61A4BD446E9DB96354A2CB84364D9A1 /* ZNGServiceAddress.h in Headers */,
 				04C8291DA99CA30A25B00B0B08BBBA57 /* ZNGServiceClient.h in Headers */,
 				88D93E4DEDBFD0752947EDCE806191D7 /* ZNGSetting.h in Headers */,
@@ -3670,6 +3679,7 @@
 				AC29FCB3FEA210AD5BBDAA29132478F0 /* ZNGNotificationsClient.h in Headers */,
 				D25EEBC41735CACD33790959F201FEE9 /* ZNGParticipant.h in Headers */,
 				C9CE3AD9F7A9A7B1B7146FD2B968CCBF /* ZNGService.h in Headers */,
+				9639A2D41D19D5D500C506D8 /* ZNGNewMessageResponse.h in Headers */,
 				275DDA228E9B578A5580736CC378F629 /* ZNGServiceAddress.h in Headers */,
 				94DC933B1E0C13E1BC28F4B3F3A8C946 /* ZNGServiceClient.h in Headers */,
 				91035C780033BD7052E4E250436BAABB /* ZNGSetting.h in Headers */,
@@ -4714,6 +4724,7 @@
 				E7D9C6E35526767AB62E177343BCE101 /* ZNGInboxDataClosed.m in Sources */,
 				416F72B0269620151322E623B900718D /* ZNGInboxDataConfirmed.m in Sources */,
 				C93F371CB15A766798093A5F5F668742 /* ZNGInboxDataLabel.m in Sources */,
+				9639A2D51D19D5D500C506D8 /* ZNGNewMessageResponse.m in Sources */,
 				D8779C4ADF0D4BB955B7E62486861B91 /* ZNGInboxDataOpen.m in Sources */,
 				134D2990EEADDB0C7D498EC92E481DA2 /* ZNGInboxDataSearch.m in Sources */,
 				AC617C83AA6CF5D5440475E091033C8B /* ZNGInboxDataSet.m in Sources */,
@@ -5104,6 +5115,7 @@
 				D9F1CEF34ECA783DF5342F40E3EE9B1D /* ZNGInboxDataClosed.m in Sources */,
 				3F4830CBF28B779EC72F4B6B539A66F0 /* ZNGInboxDataConfirmed.m in Sources */,
 				B67BD9C6F4370A7BAD7FAACF4C855EFB /* ZNGInboxDataLabel.m in Sources */,
+				9639A2D61D19D5D500C506D8 /* ZNGNewMessageResponse.m in Sources */,
 				B95453EECF8371C9C03662D38B27F15B /* ZNGInboxDataOpen.m in Sources */,
 				FD69ED9925D884A09CA56198330FC3B3 /* ZNGInboxDataSearch.m in Sources */,
 				57FF8F017CBF8BB97490E1235666FD50 /* ZNGInboxDataSet.m in Sources */,

@@ -113,5 +113,7 @@
 
 @property (strong, nonatomic, nullable) DGActivityIndicatorView *activityIndicator;
 
+- (void) refreshConversation;
+
 
 @end

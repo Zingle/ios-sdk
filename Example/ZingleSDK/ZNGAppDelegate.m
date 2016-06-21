@@ -66,8 +66,8 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
         return [availableServices firstObject];
     }];
     
-     ZNGInboxViewController *vc = [ZNGInboxViewController withServiceId:kZNGServiceId];
-     
+    ZNGInboxViewController *vc = [ZNGInboxViewController withSession:(ZingleAccountSession *)session];
+    
      self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
      self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController: vc];
      [self.window makeKeyAndVisible];
@@ -182,15 +182,18 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (void)navigateToConversationViewControllerWithContactId:(NSString *)contactId serviceId:(NSString *)serviceId fromViewController:(UIViewController *)sourceViewController animated:(BOOL)animated
 {
-    [ZNGServiceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
+    [session.serviceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
         
-        [ZNGContactClient contactWithId:contactId withServiceId:serviceId success:^(ZNGContact *contact, ZNGStatus *status) {
+        [session.contactClient contactWithId:contactId success:^(ZNGContact *contact, ZNGStatus *status) {
             
             ZNGConversationViewController *cvc = nil;
             if (self.userAccountEnabled) {
-                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToContact:contact service:service senderName:@"Me" receiverName:[contact fullName]];
+                ZingleAccountSession * accountSession = (ZingleAccountSession *)session;
+                ZNGConversation * conversation = [accountSession conversationWithContact:contact];
+                cvc = [accountSession conversationViewControllerForConversation:conversation];
             } else {
-                cvc = [[ZingleSDK sharedSDK] conversationViewControllerToService:service contact:contact senderName:@"Me" receiverName:nil];
+                ZingleContactSession * contactSession = (ZingleContactSession *)session;
+                cvc = [contactSession conversationViewController];
             }
             
             if (!sourceViewController) {
@@ -233,7 +236,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
             
             ZNGConversationViewController *cvc = (ZNGConversationViewController *)visibleViewController;
             
-            if ([cvc.contact.contactId isEqualToString:contactId] && [cvc.service.serviceId isEqualToString:serviceId]) {
+            if ([cvc.conversation.contactId isEqualToString:contactId] && [cvc.conversation.serviceId isEqualToString:serviceId]) {
                 
                 // Received message from the current contact, so refresh.
                 [cvc refreshConversation];
@@ -269,7 +272,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
             
             ZNGConversationViewController *cvc = (ZNGConversationViewController *)visibleViewController;
             
-            if ([cvc.contact.contactId isEqualToString:contactId] && [cvc.service.serviceId isEqualToString:serviceId]) {
+            if ([cvc.conversation.contactId isEqualToString:contactId] && [cvc.conversation.serviceId isEqualToString:serviceId]) {
                 
                 // Received message from the current contact, so refresh.
                 [cvc refreshConversation];

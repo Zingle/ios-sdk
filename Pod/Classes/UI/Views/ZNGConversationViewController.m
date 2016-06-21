@@ -128,6 +128,11 @@ static const uint64_t PollingIntervalSeconds = 10;
 }
 
 #pragma mark - Actions
+- (void) refreshConversation
+{
+    // TODO: Implement
+}
+
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
     

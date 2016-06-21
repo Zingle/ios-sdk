@@ -257,7 +257,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     if (conversation != nil) {
         // Ensure the conversation has a reference to us for communication.  This is 99% redundant and can be removed.
-        conversation.session = self;
+        conversation.messageClient = self.messageClient;
         
         // Ask the conversation to update itself as it is being delivered
         [conversation updateMessages];

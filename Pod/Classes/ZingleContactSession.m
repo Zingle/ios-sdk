@@ -14,6 +14,7 @@
 #import "ZNGNotificationsClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGServiceClient.h"
+#import "ZNGConversationViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -191,7 +192,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return nil;
     }
     
-    return [ZNGContactConversationViewController toService:_service withSession:self senderName:@"Me" receiverName:nil];
+    ZNGConversationViewController * vc = [[ZNGConversationViewController alloc] init];
+    vc.conversation = self.conversation;
 }
 
 @end

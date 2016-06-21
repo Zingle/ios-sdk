@@ -283,8 +283,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return nil;
     }
     
-    ZNGConversationViewController * vc = [ZNGConversationViewController toContact:conversation.contact withSession:self senderName:@"Me" receiverName:[conversation.contact fullName]];
-    return vc;
+    ZNGConversationViewController * vc = [[ZNGConversationViewController alloc] init];
+    vc.conversation = conversation;
 }
 
 @end

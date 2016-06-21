@@ -70,7 +70,15 @@ static const uint64_t PollingIntervalSeconds = 10;
     }
 }
 
-#pragma mark - Propertie
+#pragma mark - Data properties
+- (void) setConversation:(ZNGConversation *)conversation
+{
+    _conversation = conversation;
+    
+    // TODO: Update title and collection view
+}
+
+#pragma mark - UI properties
 
 -(UIColor *)outgoingBubbleColor
 {

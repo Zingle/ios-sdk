@@ -16,7 +16,7 @@
                              success:(void (^)(NSArray* automations, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/automations", self.service.serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/automations", self.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -29,7 +29,7 @@
                  success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
                  failure:(void (^)(ZNGError* error))failure
 {
-    NSString * path = [NSString stringWithFormat:@"services/%@/automations/%@", self.service.serviceId, automationId];
+    NSString * path = [NSString stringWithFormat:@"services/%@/automations/%@", self.serviceId, automationId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGAutomation class]
@@ -44,7 +44,7 @@
                  success:(void (^)(ZNGAutomation* automation, ZNGStatus* status))success
                  failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", self.service.serviceId, automation.automationId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/automations/%@", self.serviceId, automation.automationId];
 
     [self putWithPath:path
            parameters:parameters

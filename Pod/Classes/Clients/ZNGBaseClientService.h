@@ -8,15 +8,13 @@
 
 #import "ZNGBaseClientAccount.h"
 
-@class ZNGService;
-
 /**
  *  A Zingle SDK client that requires both an active account and service
  */
 @interface ZNGBaseClientService : ZNGBaseClientAccount
 
-@property (nonatomic, readonly, nonnull) ZNGService * service;
+@property (nonatomic, readonly, nonnull) NSString * serviceId;
 
-- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service;
+- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account serviceId:(nonnull NSString *)serviceId;
 
 @end

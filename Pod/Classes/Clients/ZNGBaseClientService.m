@@ -7,16 +7,15 @@
 //
 
 #import "ZNGBaseClientService.h"
-#import "ZNGService.h"
 
 @implementation ZNGBaseClientService
 
-- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service
+- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account serviceId:(nonnull NSString *)serviceId
 {
     self = [super initWithSession:session account:account];
     
     if (self != nil) {
-        _service = service;
+        _serviceId = serviceId;
     }
     
     return self;

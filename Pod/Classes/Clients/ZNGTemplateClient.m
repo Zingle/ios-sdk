@@ -16,7 +16,7 @@
                            success:(void (^)(NSArray* templ, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/templates", self.service.serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/templates", self.serviceId];
     
     [self getListWithParameters:parameters
                            path:path

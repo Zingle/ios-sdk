@@ -16,7 +16,7 @@
                         success:(void (^)(NSArray* contactFields, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", self.service.serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", self.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -29,7 +29,7 @@
             success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.service.serviceId, labelId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.serviceId, labelId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGLabel class]
@@ -53,7 +53,7 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: label.textColor"];
     }
     
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", self.service.serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels", self.serviceId];
     
     [self postWithModel:label
                    path:path
@@ -69,7 +69,7 @@
                   success:(void (^)(ZNGLabel* label, ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.service.serviceId, labelId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.serviceId, labelId];
     
     [self putWithPath:path
            parameters:parameters
@@ -84,7 +84,7 @@
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.service.serviceId, labelId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/contact-labels/%@", self.serviceId, labelId];
     
     [self deleteWithPath:path
                  success:success

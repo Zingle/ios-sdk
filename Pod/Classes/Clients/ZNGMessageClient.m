@@ -18,7 +18,7 @@
                           success:(void (^)(NSArray* messages, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages", self.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -31,7 +31,7 @@
               success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@", self.service.serviceId, messageId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@", self.serviceId, messageId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGMessage class]
@@ -65,7 +65,7 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: newMessage.channelTypeIds"];
     }
     
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages", self.serviceId];
     
     [self postWithModel:newMessage
                    path:path
@@ -79,7 +79,7 @@
                       success:(void (^)(ZNGMessage* message, ZNGStatus* status))success
                       failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", self.service.serviceId, messageId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/%@/read", self.serviceId, messageId];
     
     ZNGMessageRead *messageRead = [[ZNGMessageRead alloc] init];
     messageRead.readAt = readAt;
@@ -109,7 +109,7 @@
     
     } else if (messageIds.count > 1) {
         
-        NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", self.service.serviceId];
+        NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", self.serviceId];
         
         NSMutableDictionary *parameters = [[NSMutableDictionary alloc] init];
         parameters[@"message_ids"] = messageIds;
@@ -134,7 +134,7 @@
                               success:(void (^)(ZNGStatus* status))success
                               failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/read", self.serviceId];
     
     NSDictionary *parameters = nil;
     if (readAt) {
@@ -154,7 +154,7 @@
                success:(void (^)(ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure
 {
-    NSString *path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.service.serviceId];
+    NSString *path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.serviceId];
     
     NSDictionary *parameters = @{ @"message_ids" : messageIds };
     
@@ -171,7 +171,7 @@
                               success:(void (^)(ZNGStatus* status))success
                               failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.serviceId];
     
     NSDictionary *parameters = @{ @"contact_id" : contactId };
     

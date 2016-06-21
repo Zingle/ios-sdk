@@ -18,7 +18,7 @@
                      success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
                      failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", self.service.serviceId, contactId, contactChannelId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", self.serviceId, contactId, contactChannelId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGChannel class]
@@ -41,7 +41,7 @@
         [NSException raise:NSInvalidArgumentException format:@"Required argument: contactChannel.value"];
     }
     
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels", self.service.serviceId, contactId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels", self.serviceId, contactId];
     
     [self postWithModel:contactChannel
                    path:path
@@ -57,7 +57,7 @@
                            success:(void (^)(ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", self.service.serviceId, contactId, contactChannelId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", self.serviceId, contactId, contactChannelId];
     
     [self deleteWithPath:path
                  success:success

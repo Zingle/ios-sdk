@@ -295,7 +295,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
-    ZNGConversationViewController * vc = [self.session conversationWithContact:contact];
+    ZNGConversation * conversation = [self.session conversationWithContact:contact];
+    ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
     
     vc.detailDelegate = self;
     [self.navigationController pushViewController:vc animated:YES];

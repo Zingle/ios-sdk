@@ -10,6 +10,9 @@
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
 #import "ZingleSession.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @interface ZNGConversation ()
 
@@ -19,6 +22,9 @@
 @end
 
 @implementation ZNGConversation
+{
+    dispatch_queue_t messageMergingQueue;
+}
 
 NSString *const kConversationPage = @"page";
 NSString *const kConversationPageSize = @"page_size";
@@ -32,6 +38,18 @@ NSString *const kConversationService = @"service";
 NSString *const kConversationContact = @"contact";
 NSString *const kMessageDirectionInbound = @"inbound";
 NSString *const kMessageDirectionOutbound = @"outbound";
+
+- (id) init
+{
+    self = [super init];
+    
+    if (self != nil) {
+        _messages = @[];
+        messageMergingQueue = dispatch_queue_create("com.zingleme.message.conversation.merging", 0);
+    }
+    
+    return self;
+}
 
 - (NSString *)contactChannelValue
 {
@@ -64,9 +82,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         self.totalMessageCount = status.totalRecords;
-        self.messages = [messages mutableCopy];
-        
         self.pagesLeftToLoad = status.totalPages - 1;
+        [self mergeNewMessagesAtHead:messages];
         
         if (self.pagesLeftToLoad > 0) {
             [self loadNextPage:status.page + 1];
@@ -78,27 +95,66 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     } failure:nil];
 }
 
+- (void) mergeNewMessagesAtHead:(NSArray<ZNGMessage *> *)messages
+{
+    NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
+
+    if ([mutableMessages count] == 0) {
+        // We need to append this data
+        NSRange newMessageRange = NSMakeRange([mutableMessages count], [messages count]);
+        NSIndexSet * indexSet = [[NSIndexSet alloc] initWithIndexesInRange:newMessageRange];
+        [mutableMessages insertObjects:messages atIndexes:indexSet];
+        return;
+    }
+    
+    // We make the assumption that new data will only exist ahead of our existing data
+    NSUInteger indexOfOldFirstObjectInNewData = [messages indexOfObject:[mutableMessages firstObject]];
+    
+    if (indexOfOldFirstObjectInNewData == NSNotFound) {
+        // We were unable to find matching data anywhere.  Blow away our old array and use this new one.
+        [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
+        _messages = messages;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
+        return;
+    }
+    
+    NSRange newHeadRange = NSMakeRange(0, indexOfOldFirstObjectInNewData);
+    NSArray * messagesToInsertAtHead = [messages subarrayWithRange:newHeadRange];
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:newHeadRange];
+    [mutableMessages insertObjects:messagesToInsertAtHead atIndexes:indexSet];
+}
+
+- (void) appendMessages:(NSArray<ZNGMessage *> *)messages
+{
+    NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
+    NSRange range = NSMakeRange([mutableMessages count], [messages count]);
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
+    [mutableMessages insertObjects:mutableMessages atIndexes:indexSet];
+}
+
 - (void)loadNextPage:(NSInteger)page
 {
-        NSDictionary *params = @{kConversationPageSize : @100,
-                                 kConversationContactId : self.contactId,
-                                 kConversationPage : @(page),
-                                 kConversationSortField : kConversationCreatedAt};
+    if (page < 1) {
+        ZNGLogError(@"loadNextPage called with invalid page number of %ld", (long)page);
+        return;
+    }
+    
+    NSDictionary *params = @{kConversationPageSize : @100,
+                             kConversationContactId : self.contactId,
+                             kConversationPage : @(page),
+                             kConversationSortField : kConversationCreatedAt};
+
+    [self.session.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
+        [self appendMessages:messages];
+        self.pagesLeftToLoad--;
         
-        [self.session.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
-            
-            NSMutableArray *temp = [NSMutableArray arrayWithArray:self.messages];
-            [temp addObjectsFromArray:messages];
-            self.messages = temp;
-            self.pagesLeftToLoad--;
-            
-            if (self.pagesLeftToLoad < 1) {
-                [self.delegate messagesUpdated:YES];
-            } else {
-                [self loadNextPage:status.page + 1];
-            }
-            
-        } failure:nil];
+        if (self.pagesLeftToLoad < 1) {
+            [self.delegate messagesUpdated:YES];
+        } else {
+            [self loadNextPage:status.page + 1];
+        }
+        
+    } failure:nil];
 }
 
 - (void)markMessagesAsRead
@@ -160,6 +216,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     newMessage.body = body;
                     newMessage.channelTypeIds = @[self.channelType.channelTypeId];
                     [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+                        [self mergeNewMessagesAtHead:@[message]];
+                        
                         if (success) {
                             success(status);
                         }
@@ -179,6 +237,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         newMessage.body = body;
         newMessage.channelTypeIds = @[self.channelType.channelTypeId];
         [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+            [self mergeNewMessagesAtHead:@[message]];
+            
             if (success) {
                 success(status);
             }
@@ -208,6 +268,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                                    }];
                     newMessage.channelTypeIds = @[self.channelType.channelTypeId];
                     [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+                        [self mergeNewMessagesAtHead:@[message]];
                         if (success) {
                             success(status);
                         }
@@ -230,6 +291,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                                        }];
         newMessage.channelTypeIds = @[self.channelType.channelTypeId];
         [self.session.messageClient sendMessage:newMessage success:^(ZNGMessage *message, ZNGStatus *status) {
+            [self mergeNewMessagesAtHead:@[message]];
             if (success) {
                 success(status);
             }
@@ -256,16 +318,6 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
     
     return newMessage;
-}
-
-- (NSString *)messageDirectionFor:(ZNGMessage *)message
-{
-    NSString *direction = message.communicationDirection;
-    if( self.toService ) {
-        direction = ([direction isEqualToString:kMessageDirectionOutbound]) ? kMessageDirectionInbound : kMessageDirectionOutbound;
-    }
-    
-    return direction;
 }
 
 -(UIImage *)resizeImage:(UIImage *)image

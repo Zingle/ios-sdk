@@ -34,6 +34,9 @@ PODS:
   - GoogleFontsiOS/Core (0.1.1)
   - GoogleFontsiOS/OpenSans (0.1.1):
     - GoogleFontsiOS/Core
+  - JSQMessagesViewController (7.3.3):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQSystemSoundPlayer (2.0.1)
   - Mantle (2.0.7):
     - Mantle/extobjc (= 2.0.7)
   - Mantle/extobjc (2.0.7)
@@ -43,6 +46,7 @@ PODS:
     - CocoaLumberjack/Swift
     - DGActivityIndicatorView
     - GoogleFontsiOS/OpenSans
+    - JSQMessagesViewController
     - Mantle (~> 2.0)
 
 DEPENDENCIES:
@@ -58,8 +62,10 @@ SPEC CHECKSUMS:
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
   GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
+  JSQMessagesViewController: 0ee3f80237268192a3e8337fd0d787f1a1bf5a7a
+  JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
-  ZingleSDK: d804c5a2737335c7a691eeeb33e8cd278c386efa
+  ZingleSDK: 98f26c7ab390faf6dd0919ed2c6dc25b18447b93
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

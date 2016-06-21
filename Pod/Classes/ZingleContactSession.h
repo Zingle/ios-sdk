@@ -66,8 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Clients used internally for connectivity
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
-@property (nonatomic, strong, nullable) ZNGContactClient * contactClient;
-@property (nonatomic, strong, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, strong, nullable) ZNGTemplateClient * templateClient;
 
 /**
@@ -94,6 +92,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Constructs and returns a view controller for the current conversation.
+ *
+ *  If the selected contact service changes, this view controller will remain with the previous contact service.  The user may set the conversation property on
+ *   this view controller to the new conversation or request a brand new view controller with this method.
  */
 - (ZNGConversationViewController *) conversationViewController;
 

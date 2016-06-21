@@ -7,7 +7,6 @@
 //
 
 #import "ZNGTableViewCell.h"
-#import "ZNGTimestampFormatter.h"
 #import "ZNGLabel.h"
 #import "ZNGLabelCollectionViewCell.h"
 #import "ZNGLabelCollectionViewFlowLayout.h"
@@ -16,6 +15,7 @@
 #import "ZNGContactClient.h"
 #import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
+#import "JSQMessagesTimestampFormatter.h"
 
 @interface ZNGTableViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
@@ -88,7 +88,7 @@
         
         if (self.contact.lastMessage.body.length > 0) {
             self.lastMessage.text = self.contact.lastMessage.body;
-            self.dateLabel.attributedText = [[ZNGTimestampFormatter sharedFormatter] attributedTimestampForDate:self.contact.lastMessage.createdAt];
+            self.dateLabel.attributedText = [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:self.contact.lastMessage.createdAt];
             self.dateLabel.textColor = [UIColor zng_lightBlue];
         } else {
             self.lastMessage.text = @" ";

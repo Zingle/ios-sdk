@@ -9,8 +9,9 @@
 #import <Mantle/Mantle.h>
 #import "ZNGCorrespondent.h"
 #import "ZNGUser.h"
+#import <JSQMessagesViewController/JSQMessageData.h>
 
-@interface ZNGMessage : MTLModel<MTLJSONSerializing>
+@interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 @property(nonatomic, strong) NSString* messageId;
 @property(nonatomic, strong) NSString* body;

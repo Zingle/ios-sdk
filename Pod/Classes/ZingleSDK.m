@@ -11,8 +11,6 @@
 #import "ZingleAccountSession.h"
 #import "ZingleContactSession.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
-
 @implementation ZingleSDK
 
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue

@@ -15,6 +15,7 @@
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
+#import "UIColor+ZingleSDK.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -46,6 +47,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     return [[[self class] alloc] initWithNibName:NSStringFromClass([ZNGInboxViewController class])
                                           bundle:[NSBundle bundleForClass:[ZNGInboxViewController class]]];
+}
+
++ (instancetype) withSession:(ZingleAccountSession *)session
+{
+    ZNGInboxViewController * vc = [[ZNGInboxViewController alloc] init];
+    vc.session = session;
+    return vc;
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -241,7 +249,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
         cell.session = self.session;
-        [cell configureCellWithContact:contact withServiceId:self.serviceId];
+        [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         [cell.labelCollectionView reloadData];
         
         return cell;
@@ -294,7 +302,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
-    ZNGConversationViewController * vc = [self.session conversationWithContact:contact];
+    ZNGConversation * conversation = [self.session conversationWithContact:contact];
+    ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
     
     vc.detailDelegate = self;
     [self.navigationController pushViewController:vc animated:YES];

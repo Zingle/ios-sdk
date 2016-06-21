@@ -271,15 +271,17 @@
                 [set1 minusSet:set2];
                 
                 NSArray* result = [set1 allObjects];
+                
+                __weak ZNGContactViewController * weakSelf = self;
 
                 for (ZNGLabel *label in result) {
                     UIAlertAction *action = [UIAlertAction actionWithTitle:label.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         [self.session.contactClient addLabelWithId:label.labelId withContactId:self.contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-                            self.contact.labels = contact.labels;
-                            [self.tableView reloadData];
+                            weakSelf.contact.labels = contact.labels;
+                            [weakSelf.tableView reloadData];
                             
                         } failure:^(ZNGError *error) {
-                            [self showAlertForError:error];
+                            [weakSelf showAlertForError:error];
                         }];
                     }];
                     

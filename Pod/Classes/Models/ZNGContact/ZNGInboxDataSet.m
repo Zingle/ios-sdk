@@ -168,10 +168,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     for (NSNumber * pageNumber in pages) {
         __block NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
             // Grab a strong reference to the client before we set our semaphore
-            ZNGContactClient * contactClient = weakContactClient;
+            ZNGContactClient * strongContactClient = weakContactClient;
             
             // Ensure we are still on schedule and our contact client has not disappeared
-            if ((operation.cancelled) || (contactClient == nil)) {
+            if ((operation.cancelled) || (strongContactClient == nil)) {
                 return;
             }
             
@@ -181,7 +181,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = pageNumber;
             
-            [contactClient contactListWithParameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
+            [strongContactClient contactListWithParameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;
                 weakSelf.count = status.totalRecords;
                 

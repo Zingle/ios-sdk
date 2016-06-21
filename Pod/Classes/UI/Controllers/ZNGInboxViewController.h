@@ -17,14 +17,13 @@
 
 + (nonnull instancetype)inboxViewController;
 
-+ (nonnull instancetype)withServiceId:(nonnull NSString *)serviceId;
++ (nonnull instancetype) withSession:(nonnull ZingleAccountSession *)session;
 
 - (void)refresh;
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;
 
 @property (strong, nonatomic, nonnull) ZingleAccountSession * session;
-@property (strong, nonatomic, nullable) NSString *serviceId;
 
 @property (strong, nonatomic, nullable) NSIndexPath *selectedIndexPath;
 @property (weak, nonatomic, nullable) IBOutlet UITableView *tableView;

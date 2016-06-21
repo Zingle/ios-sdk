@@ -624,6 +624,14 @@
 		9614EDD21D18A683001F7F8A /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9614EDCF1D18A683001F7F8A /* ZNGConversationViewController.m */; };
 		9614EDD31D18A683001F7F8A /* ZNGConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9614EDCF1D18A683001F7F8A /* ZNGConversationViewController.m */; };
 		9631571DE3F7543F8A393D19995BF979 /* ZNGContactFieldValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 392BE37776D2A29D40F59737CB50BE66 /* ZNGContactFieldValue.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		963476581D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 963476541D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h */; };
+		963476591D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h in Headers */ = {isa = PBXBuildFile; fileRef = 963476541D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h */; };
+		9634765A1D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 963476551D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m */; };
+		9634765B1D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 963476551D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m */; };
+		9634765C1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 963476561D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h */; };
+		9634765D1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h in Headers */ = {isa = PBXBuildFile; fileRef = 963476561D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h */; };
+		9634765E1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 963476571D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m */; };
+		9634765F1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 963476571D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m */; };
 		9683DE6CF1CBF84ACB2C25B947B8272E /* JSQMessagesCellTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36EDD6862051ED10F68A54E6E6F251D4 /* JSQMessagesCellTextView.m */; };
 		969843772EE69C80E9D425672AB3E8FD /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6561CD76BFBB36EA0F821578703C056A /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		96BAFE37D7054515799A618B6A28BD78 /* DGActivityIndicatorDoubleBounceAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 56138C634E837DA209122792EE58B0F5 /* DGActivityIndicatorDoubleBounceAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1701,6 +1709,10 @@
 		960BF7247F12CD9A3AC1C4C5E5EF76EE /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9614EDCE1D18A683001F7F8A /* ZNGConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGConversationViewController.h; sourceTree = "<group>"; };
 		9614EDCF1D18A683001F7F8A /* ZNGConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationViewController.m; sourceTree = "<group>"; };
+		963476541D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGLabelCollectionViewCell.h; sourceTree = "<group>"; };
+		963476551D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelCollectionViewCell.m; sourceTree = "<group>"; };
+		963476561D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGLabelCollectionViewFlowLayout.h; sourceTree = "<group>"; };
+		963476571D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGLabelCollectionViewFlowLayout.m; sourceTree = "<group>"; };
 		969A48297F7D63BB3942F9E53FB64834 /* MTLJSONAdapter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLJSONAdapter.h; path = Mantle/MTLJSONAdapter.h; sourceTree = "<group>"; };
 		96E04B75BC492D048352CAB4B8E7F3C0 /* ZNGAutomationClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGAutomationClient.m; sourceTree = "<group>"; };
 		97448FF9314309726F0DFF9CF88749A4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../AFNetworking-iOS9.3/Info.plist"; sourceTree = "<group>"; };
@@ -2262,6 +2274,10 @@
 		0351D2F2A324E3372F56A266511B4508 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				963476541D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h */,
+				963476551D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m */,
+				963476561D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h */,
+				963476571D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m */,
 				AA95D3128641F7E53B9DDBBB7F70A698 /* ZNGTableViewCell.h */,
 				68637218B9FED99280DAC7EFE5435AD1 /* ZNGTableViewCell.m */,
 				9614EDCE1D18A683001F7F8A /* ZNGConversationViewController.h */,
@@ -3409,10 +3425,12 @@
 				BCF496FF276BA9EA216DCBF65FF441C7 /* ZNGContactChannelClient.h in Headers */,
 				2130DF390DD3EA196908DD9C34DBD635 /* ZNGContactClient.h in Headers */,
 				1DA345EFF82FBF979B4AA0BE07F9C788 /* ZNGContactCustomFieldTableViewCell.h in Headers */,
+				963476581D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h in Headers */,
 				4059CC101E104CDD03A70F9633EF2E01 /* ZNGContactDetailsTableViewCell.h in Headers */,
 				2334DF98C7B193D3F47DD227EFD29339 /* ZNGContactField.h in Headers */,
 				9A5D753646689967F574DC05073B21CA /* ZNGContactFieldValue.h in Headers */,
 				D65F70ABC476F8E0AF5EFE9B0080A70A /* ZNGContactLabelsTableViewCell.h in Headers */,
+				9634765C1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h in Headers */,
 				492934F30674924A8AC5C8EBA2B1452E /* ZNGContactService.h in Headers */,
 				8930C4787EB660B2F7F943AB3E660895 /* ZNGContactServiceClient.h in Headers */,
 				147790AD9EAF9847F252FB8BB248A34B /* ZNGContactViewController.h in Headers */,
@@ -3823,10 +3841,12 @@
 				E7E5DA127B896737432E9AA0FFA35E3B /* ZNGContactChannelClient.h in Headers */,
 				D52552E5A37E28C3051878CDDDDCBA27 /* ZNGContactClient.h in Headers */,
 				7E8BBF57C2CE81CC819A703B99B61883 /* ZNGContactCustomFieldTableViewCell.h in Headers */,
+				963476591D19B1ED003E77DC /* ZNGLabelCollectionViewCell.h in Headers */,
 				9119315A21D4A31071FF473D28A8DD30 /* ZNGContactDetailsTableViewCell.h in Headers */,
 				CD7BC95D1CECF3075DBB79C3D333FBBD /* ZNGContactField.h in Headers */,
 				9631571DE3F7543F8A393D19995BF979 /* ZNGContactFieldValue.h in Headers */,
 				CC88488D32C2D5F0420AFA40B97B6576 /* ZNGContactLabelsTableViewCell.h in Headers */,
+				9634765D1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.h in Headers */,
 				D09572F58801857EDA8E2E0B60A9EC1F /* ZNGContactService.h in Headers */,
 				F055E33C2C19A48C3972DC0DAC3FD206 /* ZNGContactServiceClient.h in Headers */,
 				648C90158A459D775AF938B0F9217EBD /* ZNGContactViewController.h in Headers */,
@@ -4626,6 +4646,7 @@
 				3F563C117FC479947B854F095E3218BA /* ZingleSDK-iOS9.3-dummy.m in Sources */,
 				7E985A1841BE2C2431B1FBFC85286C32 /* ZingleSDK.m in Sources */,
 				0C91901D2A1B881A71C655E4765C8EE2 /* ZingleSession.m in Sources */,
+				9634765F1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m in Sources */,
 				B950B83DA84E966961A8D1762CAA8F7F /* ZingleSpecificAccountSession.m in Sources */,
 				F87C9608FB2526A84DC9818BD4C76452 /* ZingleValueTransformers.m in Sources */,
 				5818EC0F878E88608E36B3AFB24DF724 /* ZNGAccount.m in Sources */,
@@ -4656,6 +4677,7 @@
 				8A03E34FD7B3D0E872DA2D7FEA3AD131 /* ZNGEvent.m in Sources */,
 				B9B5D94E4BB0F74F9775446C58D87FAA /* ZNGFieldOption.m in Sources */,
 				652EDF1AE6EE429A752818BC3816664A /* ZNGImageViewerController.m in Sources */,
+				9634765B1D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m in Sources */,
 				3D37C0D1132DD954EB0CA15EF14B15AE /* ZNGInboxDataClosed.m in Sources */,
 				04855200E03C865AFAF927861773FF6F /* ZNGInboxDataConfirmed.m in Sources */,
 				8CF2B88C3D97E9163FE0EEC14D576032 /* ZNGInboxDataLabel.m in Sources */,
@@ -4730,6 +4752,7 @@
 				D9910DB3838A4E7E62545D76C71CE8A5 /* ZingleSDK-iOS8.0-dummy.m in Sources */,
 				74CE86E6E3D45DD97F9B39DCA7C07352 /* ZingleSDK.m in Sources */,
 				A887053EBA9B21D8BA406BF5AEE8363E /* ZingleSession.m in Sources */,
+				9634765E1D19B1ED003E77DC /* ZNGLabelCollectionViewFlowLayout.m in Sources */,
 				F6DF8C85EC9D230D973AACA6145EE7EA /* ZingleSpecificAccountSession.m in Sources */,
 				F72C5F1516AA45F25DCE4769C8661D7A /* ZingleValueTransformers.m in Sources */,
 				0E3AC926A5AF26BB70D93B0C1BB9A263 /* ZNGAccount.m in Sources */,
@@ -4760,6 +4783,7 @@
 				7644A75C555C0AE359CC7A04781648FA /* ZNGEvent.m in Sources */,
 				D07AC4E6D04FBC7E6C9578364281BEF1 /* ZNGFieldOption.m in Sources */,
 				B89D1C12FD2BBAAD9B895B6C25DFD7F2 /* ZNGImageViewerController.m in Sources */,
+				9634765A1D19B1ED003E77DC /* ZNGLabelCollectionViewCell.m in Sources */,
 				18089EB5BBBEF540A3AC5A617594B1E5 /* ZNGInboxDataClosed.m in Sources */,
 				BE92E4E83F6CFA71A935E3493AFA9D78 /* ZNGInboxDataConfirmed.m in Sources */,
 				EF6A563B5744667D036DC51E9B8D0529 /* ZNGInboxDataLabel.m in Sources */,

@@ -66,8 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Clients used internally for connectivity
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
-@property (nonatomic, strong, nullable) ZNGContactClient * contactClient;
-@property (nonatomic, strong, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, strong, nullable) ZNGTemplateClient * templateClient;
 
 /**

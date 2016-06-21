@@ -15,6 +15,7 @@
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
+#import "UIColor+ZingleSDK.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 

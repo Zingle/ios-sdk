@@ -283,6 +283,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGConversationViewController * vc = [[ZNGConversationViewController alloc] init];
     vc.conversation = conversation;
+    return vc;
 }
 
 @end

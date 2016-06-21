@@ -43,6 +43,7 @@
 #import "ZNGLabel.h"
 #import "ZNGMessage.h"
 #import "ZNGNewMessage.h"
+#import "ZNGNewMessageResponse.h"
 #import "ZNGMessageRead.h"
 #import "ZNGNewChannel.h"
 #import "ZNGNewEvent.h"

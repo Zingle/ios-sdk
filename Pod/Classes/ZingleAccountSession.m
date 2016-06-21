@@ -30,6 +30,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGAccountChooser accountChooser;
     ZNGServiceChooser serviceChooser;
+    
+    ZNGAccount * _account;
+    ZNGService * _service;
 }
 
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
@@ -67,6 +70,32 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self updateStateForNewAccountOrService];
 }
 
+- (ZNGAccount *)account
+{
+    if (_account != nil) {
+        return _account;
+    }
+    
+    if ([self.availableAccounts count] == 1) {
+        return [self.availableAccounts firstObject];
+    }
+    
+    return nil;
+}
+
+- (ZNGService *)service
+{
+    if (_service != nil) {
+        return _service;
+    }
+    
+    if ([self.availableServices count] == 1) {
+        return [self.availableServices firstObject];
+    }
+    
+    return nil;
+}
+
 - (void) setService:(ZNGService *)service
 {
     if ((_service != nil) && (![_service isEqual:service])) {
@@ -97,7 +126,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) updateStateForNewAccountOrService
 {
     // Do we need to select an account?
-    if (![self hasSelectedAccount]) {
+    if (self.service == nil) {
         if (self.availableAccounts == nil) {
             // We have no available accounts.  Go request them.
             [self retrieveAvailableAccounts];
@@ -115,7 +144,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     // Do we need to select a service?
-    if (![self hasSelectedService]) {
+    if (self.account == nil) {
         if (self.availableServices == nil) {
             // We have no available services.  Go request them.
             [self retrieveAvailableServices];
@@ -138,22 +167,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     privateSession = [[ZingleSpecificAccountSession alloc] initWithAccountSession:self account:self.account service:self.service];
 }
 
-- (BOOL) hasSelectedAccount
-{
-    // Either we have one and only one account available or they have selected one.
-    return (([self.availableAccounts count] == 1) || (self.account != nil));
-}
-
-- (BOOL) hasSelectedService
-{
-    // Either we have one and only one service available or they have selected one.
-    return (([self.availableServices count] == 1) || (self.service != nil));
-}
-
 - (BOOL) shouldForwardInvocations
 {
     // Invocations will only be forwarded to our private proxy object if the user has selected a service and an account.
-    return (([self hasSelectedService]) && ([self hasSelectedAccount]));
+    return ((self.service != nil) && (self.account != nil));
 }
 
 #pragma mark - Proxying

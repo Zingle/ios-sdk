@@ -39,7 +39,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     NSURL * url = [NSURL URLWithString:path];
     
     if (url == nil) {
-        ZNGLogWarn(@"Unable to parse URL for message attachment: ", path);
+        ZNGLogWarn(@"Unable to parse URL for message attachment: %@", path);
         return;
     }
     

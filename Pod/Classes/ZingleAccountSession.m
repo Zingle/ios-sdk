@@ -233,8 +233,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 #pragma mark - Service retrieval
 - (void) retrieveAvailableServices
 {
-    [self.serviceClient serviceListWithSuccess:^(NSArray *services, ZNGStatus *status) {
-        
+    [self.serviceClient serviceListUnderAccountId:self.account.accountId success:^(NSArray *services, ZNGStatus *status) {
         if ([services count] == 0) {
             self.availableServices = @[];
         } else {

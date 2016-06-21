@@ -16,6 +16,10 @@
 - (void)serviceListWithSuccess:(void (^)(NSArray* services, ZNGStatus* status))success
                        failure:(void (^)(ZNGError* error))failure;
 
+- (void) serviceListUnderAccountId:(NSString *)accountId
+                           success:(void (^)(NSArray* services, ZNGStatus* status))success
+                           failure:(void (^)(ZNGError* error))failure;
+
 - (void)serviceListWithParameters:(NSDictionary*)parameters
                           success:(void (^)(NSArray* services, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;

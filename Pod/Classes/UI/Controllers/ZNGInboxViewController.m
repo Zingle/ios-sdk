@@ -49,6 +49,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
                                           bundle:[NSBundle bundleForClass:[ZNGInboxViewController class]]];
 }
 
++ (instancetype) withSession:(ZingleAccountSession *)session
+{
+    ZNGInboxViewController * vc = [[ZNGInboxViewController alloc] init];
+    vc.session = session;
+    return vc;
+}
+
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -242,7 +249,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
         cell.session = self.session;
-        [cell configureCellWithContact:contact withServiceId:self.serviceId];
+        [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         [cell.labelCollectionView reloadData];
         
         return cell;

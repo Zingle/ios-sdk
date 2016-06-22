@@ -16,7 +16,8 @@
 
 - (id) initFromServiceToContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient
 {
-    // TODO: Pick a channel and go
+    ZNGChannel * aChannel = [aContact channelForFreshOutgoingMessage];
+    return [self initFromServiceToContact:aContact usingChannel:aChannel withMessageClient:messageClient];
 }
 
 - (id) initFromServiceToContact:(ZNGContact *)aContact usingChannel:(ZNGChannel *)aChannel withMessageClient:(ZNGMessageClient *)messageClient
@@ -30,6 +31,11 @@
     }
     
     return self;
+}
+
+- (NSString *)remoteName
+{
+    return [contact fullName];
 }
 
 - (ZNGNewMessage *)freshMessage

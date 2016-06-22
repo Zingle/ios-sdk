@@ -296,6 +296,19 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 }
 
 #pragma mark - Protected/Abstract methods
+
+- (NSString *)remoteName
+{
+    ZNGLogWarn(@"Using empty implementation of %s", __PRETTY_FUNCTION__);
+    return @"";
+}
+
+- (NSString *)meId
+{
+    NSAssert(NO, @"Required method not implemented: %s", __PRETTY_FUNCTION__);
+    return nil;
+}
+
 - (ZNGNewMessage *)freshMessage
 {
     NSAssert(NO, @"Required method not implemented: %s", __PRETTY_FUNCTION__);

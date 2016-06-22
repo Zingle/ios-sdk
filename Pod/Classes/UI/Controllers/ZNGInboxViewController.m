@@ -16,6 +16,7 @@
 #import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
+#import "ZNGConversationServiceToContact.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -302,7 +303,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
-    ZNGConversation * conversation = [self.session conversationWithContact:contact];
+    ZNGConversationServiceToContact * conversation = [self.session conversationWithContact:contact];
     ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
     
     vc.detailDelegate = self;

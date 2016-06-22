@@ -106,7 +106,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
                                                                                    channelTypeId:self.channelTypeID
                                                                                        contactId:self.contactService.contactId
-                                                                                     toServiceId:self.contactService.serviceId
+                                                                                toContactService:self.contactService
                                                                                withMessageClient:self.messageClient];
     } else {
         self.conversation = nil;

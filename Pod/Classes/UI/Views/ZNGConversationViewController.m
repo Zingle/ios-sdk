@@ -76,6 +76,7 @@ static const uint64_t PollingIntervalSeconds = 10;
     _conversation = conversation;
     
     // TODO: Update title and collection view
+    [self.navigationItem setTitle:conversation.remoteName];
 }
 
 #pragma mark - UI properties
@@ -146,7 +147,7 @@ static const uint64_t PollingIntervalSeconds = 10;
 #pragma mark - Data source
 - (NSString *)senderId
 {
-    return [self.conversation meId];
+    return (self.conversation != nil ) ? [self.conversation meId] : @"";
 }
 
 - (NSString *)senderDisplayName

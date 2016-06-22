@@ -11,6 +11,6 @@
 @interface ZNGConversationServiceToContact : ZNGConversation
 
 - (id) initFromServiceToContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient;
-- (id) initFromServiceToContact:(ZNGContact *)aContact usingChannel:(ZNGChannel *)aChannel withMessageClient:(ZNGMessageClient *)messageClient;
+- (id) initFromServiceToContact:(ZNGContact *)aContact usingChannel:(ZNGChannel *)aChannel withMessageClient:(ZNGMessageClient *)messageClient NS_DESIGNATED_INITIALIZER;
 
 @end

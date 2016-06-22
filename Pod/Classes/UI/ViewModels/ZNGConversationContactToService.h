@@ -13,7 +13,7 @@
 - (instancetype) initFromContactChannelValue:(NSString *)aContactChannelValue
                                channelTypeId:(NSString *)aChannelTypeId
                                    contactId:(NSString *)aContactId
-                                 toServiceId:(NSString *)aServiceId
+                            toContactService:(ZNGContactService *)aContactService
                            withMessageClient:(ZNGMessageClient*)messageClient;
 
 @end

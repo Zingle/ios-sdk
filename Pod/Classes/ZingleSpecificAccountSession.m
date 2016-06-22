@@ -20,22 +20,20 @@
     __weak ZingleAccountSession * accountSession;
 }
 
-- (nonnull instancetype) initWithAccountSession:(nonnull __weak ZingleAccountSession *)anAccountSession account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service
+- (nonnull instancetype) initWithAccountSession:(nonnull __weak ZingleAccountSession *)anAccountSession serviceId:(nonnull NSString *)serviceId;
 {
     self = [super initWithToken:accountSession.token key:accountSession.key];
     
     if (self != nil) {
         accountSession = anAccountSession;
-        _account = account;
-        _service = service;
         
-        self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self serviceId:_service];
-        self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self serviceId:_service];
-        self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:_service];
-        self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:_service];
-        self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:_service];
+        self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self serviceId:serviceId];
+        self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self serviceId:serviceId];
+        self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
+        self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
+        self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
         
-        [self _registerForPushNotificationsForServiceIds:@[service.serviceId] removePreviousSubscriptions:YES];
+        [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
     }
     
     return self;

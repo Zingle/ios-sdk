@@ -44,6 +44,12 @@ extern NSString * const ZNGConversationParticipantTypeService;
 @property (nonatomic, readonly) ZNGMessageClient * messageClient;
 
 /**
+ *  The display name for the other end of this conversation.
+ *  e.g. if this is a person messaging Hotel Chicago Front Desk, "Hotel Chicago Front Desk"
+ */
+@property (nonatomic, readonly) NSString * remoteName;
+
+/**
  *  Initializing without a ZNGMessageClient is disallowed
  */
 - (id) init NS_UNAVAILABLE;

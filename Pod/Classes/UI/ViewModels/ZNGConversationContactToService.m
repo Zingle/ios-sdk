@@ -7,18 +7,19 @@
 //
 
 #import "ZNGConversationContactToService.h"
+#import "ZNGContactService.h"
 
 @implementation ZNGConversationContactToService
 {
     NSString * contactChannelValue;
     NSString * channelTypeId;
-    NSString * serviceId;
+    ZNGContactService * contactService;
 }
 
 - (instancetype) initFromContactChannelValue:(NSString *)aContactChannelValue
                                channelTypeId:(NSString *)aChannelTypeId
                                    contactId:(NSString *)aContactId
-                                 toServiceId:(NSString *)aServiceId
+                            toContactService:(ZNGContactService *)aContactService
                            withMessageClient:(ZNGMessageClient*)messageClient
 {
     self = [super initWithMessageClient:messageClient];
@@ -27,10 +28,15 @@
         contactChannelValue = aContactChannelValue;
         channelTypeId = aChannelTypeId;
         contactId = aContactId;
-        serviceId = aServiceId;
+        contactService = aContactService;
     }
     
     return self;
+}
+
+- (NSString *)remoteName
+{
+    return contactService.serviceDisplayName;
 }
 
 - (ZNGNewMessage *)freshMessage
@@ -55,7 +61,7 @@
 - (ZNGParticipant *)receiver
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
-    participant.participantId = serviceId;
+    participant.participantId = contactService.serviceId;
     return participant;
 }
 

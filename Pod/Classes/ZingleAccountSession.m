@@ -165,7 +165,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     // We now have both an account and a service selected.
     
     // Setup our proxy object to handle all requests.
-    privateSession = [[ZingleSpecificAccountSession alloc] initWithAccountSession:self account:self.account service:self.service];
+    privateSession = [[ZingleSpecificAccountSession alloc] initWithAccountSession:self serviceId:self.service.serviceId];
 }
 
 - (BOOL) shouldForwardInvocations
@@ -253,7 +253,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 {
     // Do we have a cached version of this conversation already?
-    ZNGConversation * conversation = self.conversationsByContactId[contact.contactId];
+    ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contact.contactId];
     
     if (conversation != nil) {
         // Ask the conversation to update itself as it is being delivered

@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;
 
-- (nonnull instancetype) initWithAccountSession:(nonnull __weak ZingleAccountSession *)accountSession account:(nonnull ZNGAccount *)account service:(nonnull ZNGService *)service;
+- (nonnull instancetype) initWithAccountSession:(nonnull __weak ZingleAccountSession *)accountSession serviceId:(nonnull NSString *)serviceId;
 
 // Disallowed initializers for this private subclass:
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_UNAVAILABLE;

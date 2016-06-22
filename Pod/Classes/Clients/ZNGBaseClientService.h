@@ -13,10 +13,14 @@
  */
 @interface ZNGBaseClientService : ZNGBaseClient
 
+NS_ASSUME_NONNULL_BEGIN
+
 @property (nonatomic, readonly, nonnull) NSString * serviceId;
 
-- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session serviceId:(nonnull NSString *)serviceId;
+- (instancetype) initWithSession:(__weak ZingleSession *)session serviceId:(NSString *)serviceId;
 
 - (instancetype) initWithSession:(__weak ZingleSession *)session NS_UNAVAILABLE;
+
+NS_ASSUME_NONNULL_END
 
 @end

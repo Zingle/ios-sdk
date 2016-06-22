@@ -38,7 +38,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         _token = [token copy];
         _key = [token copy];
-        NSString * urlString = DebugBaseURL;
+        NSString * urlString = [self urlOverride] ?: DebugBaseURL;
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
@@ -56,6 +56,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     return self;
+}
+
+- (NSString *) urlOverride
+{
+    return [[NSUserDefaults standardUserDefaults] valueForKey:@"zingle_server_prefix"];
 }
 
 #pragma mark - Push notifications

@@ -17,7 +17,7 @@
                           success:(void (^)(NSArray* contacts, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure;
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts", self.serviceId];
     
     [self getListWithParameters:parameters
                            path:path
@@ -30,7 +30,7 @@
               success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.service.serviceId, contactId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.serviceId, contactId];
     
     [self getWithResourcePath:path
                 responseClass:[ZNGContact class]
@@ -47,7 +47,7 @@
                                 @"channel_type_id" : channelTypeId };
     NSDictionary *params = @{ @"channels" : @[ channels ]};
     
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts?return_existing=1", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts?return_existing=1", self.serviceId];
     
     [self postWithParameters:params
                    path:path
@@ -64,7 +64,7 @@
 {
     ZNGNewContact* newContact = [[ZNGNewContact alloc] initWithContact:contact];
     
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts", self.service.serviceId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts", self.serviceId];
     
     [self postWithModel:newContact
                    path:path
@@ -79,7 +79,7 @@
                         success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/custom-field-values/%@", self.service.serviceId, contactId, contactFieldId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/custom-field-values/%@", self.serviceId, contactId, contactFieldId];
     
     [self postWithModel:contactFieldValue
                    path:path
@@ -93,7 +93,7 @@
                         success:(void (^)(ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/automations/%@", self.service.serviceId, contactId, automationId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/automations/%@", self.serviceId, contactId, automationId];
     
     [self postWithModel:nil
                    path:path
@@ -108,7 +108,7 @@
                success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/labels/%@", self.service.serviceId, contactId, labelId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/labels/%@", self.serviceId, contactId, labelId];
     
     [self postWithModel:nil
                    path:path
@@ -124,7 +124,7 @@
                     success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.service.serviceId, contactId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.serviceId, contactId];
     
     [self putWithPath:path
            parameters:parameters
@@ -139,7 +139,7 @@
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.service.serviceId, contactId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.serviceId, contactId];
     
     [self deleteWithPath:path
                  success:success
@@ -151,7 +151,7 @@
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/labels/%@", self.service.serviceId, contactId, labelId];
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/labels/%@", self.serviceId, contactId, labelId];
     
     [self deleteWithPath:path
                  success:success

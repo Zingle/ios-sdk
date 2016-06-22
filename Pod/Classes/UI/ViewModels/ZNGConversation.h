@@ -12,10 +12,15 @@
 #import "ZNGError.h"
 #import "ZNGContact.h"
 #import "ZNGService.h"
+#import "ZNGMessageClient.h"
 
 @class ZNGContact;
 @class ZNGMessage;
 @class ZingleSession;
+@class ZNGMessageClient;
+
+extern NSString * const ZNGConversationParticipantTypeContact;
+extern NSString * const ZNGConversationParticipantTypeService;
 
 @protocol ZNGConversationDelegate <NSObject>
 
@@ -25,17 +30,9 @@
 @end
 
 @interface ZNGConversation : NSObject
-
-@property (nonatomic, weak) ZingleSession * session;
-
-@property (nonatomic, strong) ZNGChannelType *channelType;
-@property (nonatomic, strong) NSString *contactChannelValue;
-@property (nonatomic, strong) NSString *serviceChannelValue;
-@property (nonatomic, strong) NSString *serviceId;
-@property (nonatomic, strong) NSString *contactId;
-@property (nonatomic, strong) ZNGContact * contact;
-
-@property (nonatomic) BOOL toService;
+{
+    NSString * contactId;
+}
 
 /**
  *  KVO compliant array of messages.  Observing this with KVO will give array insertion notifications.
@@ -43,6 +40,18 @@
 @property (nonatomic, strong) NSArray<ZNGMessage *> *messages;
 
 @property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
+
+@property (nonatomic, readonly) ZNGMessageClient * messageClient;
+
+/**
+ *  Initializing without a ZNGMessageClient is disallowed
+ */
+- (id) init NS_UNAVAILABLE;
+
+/**
+ *  Initializer.  This is intended to be subclassed and should never be called directly.
+ */
+- (id) initWithMessageClient:(ZNGMessageClient *)messageClient;
 
 - (void)updateMessages;
 - (void)markMessagesAsRead;
@@ -54,5 +63,11 @@
 - (void)sendMessageWithImage:(UIImage *)image
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure;
+
+#pragma mark - Protected methods to be overridden by subclasses
+- (ZNGNewMessage *)freshMessage;
+- (ZNGParticipant *)sender;
+- (ZNGParticipant *)receiver;
+
 
 @end

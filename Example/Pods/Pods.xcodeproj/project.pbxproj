@@ -624,6 +624,14 @@
 		9612765BD87C8C56CF2B6B45F9502579 /* JSQMessagesTimestampFormatter.m in Sources */ = {isa = PBXBuildFile; fileRef = 175C12697B285ED563434DE524C85495 /* JSQMessagesTimestampFormatter.m */; };
 		9683DE6CF1CBF84ACB2C25B947B8272E /* JSQMessagesCellTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 36EDD6862051ED10F68A54E6E6F251D4 /* JSQMessagesCellTextView.m */; };
 		969843772EE69C80E9D425672AB3E8FD /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 6561CD76BFBB36EA0F821578703C056A /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
+		96B7A74D1D19F81F002C7CCE /* ZNGConversationContactToService.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B7A74B1D19F81F002C7CCE /* ZNGConversationContactToService.h */; };
+		96B7A74E1D19F81F002C7CCE /* ZNGConversationContactToService.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B7A74B1D19F81F002C7CCE /* ZNGConversationContactToService.h */; };
+		96B7A74F1D19F81F002C7CCE /* ZNGConversationContactToService.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B7A74C1D19F81F002C7CCE /* ZNGConversationContactToService.m */; };
+		96B7A7501D19F81F002C7CCE /* ZNGConversationContactToService.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B7A74C1D19F81F002C7CCE /* ZNGConversationContactToService.m */; };
+		96B7A7531D19F830002C7CCE /* ZNGConversationServiceToContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B7A7511D19F830002C7CCE /* ZNGConversationServiceToContact.h */; };
+		96B7A7541D19F830002C7CCE /* ZNGConversationServiceToContact.h in Headers */ = {isa = PBXBuildFile; fileRef = 96B7A7511D19F830002C7CCE /* ZNGConversationServiceToContact.h */; };
+		96B7A7551D19F830002C7CCE /* ZNGConversationServiceToContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B7A7521D19F830002C7CCE /* ZNGConversationServiceToContact.m */; };
+		96B7A7561D19F830002C7CCE /* ZNGConversationServiceToContact.m in Sources */ = {isa = PBXBuildFile; fileRef = 96B7A7521D19F830002C7CCE /* ZNGConversationServiceToContact.m */; };
 		96BAFE37D7054515799A618B6A28BD78 /* DGActivityIndicatorDoubleBounceAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = 56138C634E837DA209122792EE58B0F5 /* DGActivityIndicatorDoubleBounceAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9711A6D01BD82A584B097DA36B4D4E2D /* ZNGTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 99455CB794605610924E0B5DFCD0112D /* ZNGTemplate.m */; };
 		9742CE8401F35BE0E6BBAE9967443F54 /* ZNGNewMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 8BE5889587387EF06CCFC43206D63FDE /* ZNGNewMessage.m */; };
@@ -1698,6 +1706,10 @@
 		960BF7247F12CD9A3AC1C4C5E5EF76EE /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		969A48297F7D63BB3942F9E53FB64834 /* MTLJSONAdapter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = MTLJSONAdapter.h; path = Mantle/MTLJSONAdapter.h; sourceTree = "<group>"; };
 		96A287AC3CE3660706842A75F45581AE /* ZNGBaseClientService.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGBaseClientService.h; sourceTree = "<group>"; };
+		96B7A74B1D19F81F002C7CCE /* ZNGConversationContactToService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGConversationContactToService.h; sourceTree = "<group>"; };
+		96B7A74C1D19F81F002C7CCE /* ZNGConversationContactToService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationContactToService.m; sourceTree = "<group>"; };
+		96B7A7511D19F830002C7CCE /* ZNGConversationServiceToContact.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGConversationServiceToContact.h; sourceTree = "<group>"; };
+		96B7A7521D19F830002C7CCE /* ZNGConversationServiceToContact.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGConversationServiceToContact.m; sourceTree = "<group>"; };
 		97448FF9314309726F0DFF9CF88749A4 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; name = Info.plist; path = "../AFNetworking-iOS9.3/Info.plist"; sourceTree = "<group>"; };
 		979D91FDE6F0D6EBC8713069F1852476 /* JSQMessagesCollectionViewCellOutgoing.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JSQMessagesCollectionViewCellOutgoing.h; path = JSQMessagesViewController/Views/JSQMessagesCollectionViewCellOutgoing.h; sourceTree = "<group>"; };
 		97EB105D038B1EC9EB85E4D3F0F8CBEE /* UIImage+ZingleSDK.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "UIImage+ZingleSDK.h"; sourceTree = "<group>"; };
@@ -3275,6 +3287,10 @@
 			children = (
 				1D8EBB7FC639B69747F3B9090629DAAD /* ZNGConversation.h */,
 				658922FEC3105A7B416786DDDEE873DD /* ZNGConversation.m */,
+				96B7A74B1D19F81F002C7CCE /* ZNGConversationContactToService.h */,
+				96B7A74C1D19F81F002C7CCE /* ZNGConversationContactToService.m */,
+				96B7A7511D19F830002C7CCE /* ZNGConversationServiceToContact.h */,
+				96B7A7521D19F830002C7CCE /* ZNGConversationServiceToContact.m */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -3423,7 +3439,9 @@
 				082DAD9BE815297249A2ED1CC84FE9DE /* ZNGLabelCollectionViewFlowLayout.h in Headers */,
 				C128575FD4037165D6452C0A7101BBB8 /* ZNGLogging.h in Headers */,
 				4409408E3E2CAF4A85DD870D5B862785 /* ZNGMessage.h in Headers */,
+				96B7A7541D19F830002C7CCE /* ZNGConversationServiceToContact.h in Headers */,
 				E49EBDC5800A1EF262E1ACA8E5E45335 /* ZNGMessageClient.h in Headers */,
+				96B7A74E1D19F81F002C7CCE /* ZNGConversationContactToService.h in Headers */,
 				9B5139ACE065F00B8235567C52DB3BB8 /* ZNGMessageRead.h in Headers */,
 				64FF0FB9CAE76DB161A98D17F3FEC227 /* ZNGNewChannel.h in Headers */,
 				1C9FD24519CB52F984341272CF9C9557 /* ZNGNewContact.h in Headers */,
@@ -3584,7 +3602,9 @@
 				8D922194351D2D6A41629D6DFEE45010 /* ZNGLabelCollectionViewFlowLayout.h in Headers */,
 				FECF6AEDFD3651DDABCB2DCB1527184A /* ZNGLogging.h in Headers */,
 				C9573CC8731DAD3BD177C12AAF715663 /* ZNGMessage.h in Headers */,
+				96B7A7531D19F830002C7CCE /* ZNGConversationServiceToContact.h in Headers */,
 				E8AA6090E775FB6DFA59D1DF2282FB13 /* ZNGMessageClient.h in Headers */,
+				96B7A74D1D19F81F002C7CCE /* ZNGConversationContactToService.h in Headers */,
 				44E41759953004FE7283FCF5962972A1 /* ZNGMessageRead.h in Headers */,
 				819E2439CF98C1F3C2713A53199361F7 /* ZNGNewChannel.h in Headers */,
 				758E71037DF7F43A8C15538A327FC189 /* ZNGNewContact.h in Headers */,
@@ -4671,10 +4691,12 @@
 				CE152B40E2774F3509F764D02F7A8403 /* ZNGFieldOption.m in Sources */,
 				00E3D605B81003D2A5B3EA0CB074703B /* ZNGImageViewerController.m in Sources */,
 				895E413D6E7514598DB06A41203D0C8E /* ZNGInboxDataClosed.m in Sources */,
+				96B7A7561D19F830002C7CCE /* ZNGConversationServiceToContact.m in Sources */,
 				943F8FDBA1EC0F67D000CBFF4B7D5D19 /* ZNGInboxDataConfirmed.m in Sources */,
 				3ACB21B8F1925DFA8FD25827FE1894E6 /* ZNGInboxDataLabel.m in Sources */,
 				C5FAA15789048861D1C6736622FD4B20 /* ZNGInboxDataOpen.m in Sources */,
 				AD4944639851D67AC13F7E1EFB96423A /* ZNGInboxDataSearch.m in Sources */,
+				96B7A7501D19F81F002C7CCE /* ZNGConversationContactToService.m in Sources */,
 				BA7F5A44E4DDD6EB0BFD821FE057EA06 /* ZNGInboxDataSet.m in Sources */,
 				84B28DEAF9882AF90FFC434329C6E48D /* ZNGInboxDataStarred.m in Sources */,
 				4900CE83CB3BA44FC8857D58D67BF741 /* ZNGInboxDataUnconfirmed.m in Sources */,
@@ -4908,10 +4930,12 @@
 				99E5AF3F096FCF4FFA160594EAD8214C /* ZNGFieldOption.m in Sources */,
 				09EA517C57DD476DA1A9F1BD51FF6A2E /* ZNGImageViewerController.m in Sources */,
 				5FA89C347C0D8CFA4D726C1FA20A2C62 /* ZNGInboxDataClosed.m in Sources */,
+				96B7A7551D19F830002C7CCE /* ZNGConversationServiceToContact.m in Sources */,
 				1702935EA3C857FC6A4EA9C16C4C0250 /* ZNGInboxDataConfirmed.m in Sources */,
 				11CCE047128E37851B303C9A1CB6CE29 /* ZNGInboxDataLabel.m in Sources */,
 				AF82ABEFA3AF27E449F2F7E2F8CCF541 /* ZNGInboxDataOpen.m in Sources */,
 				7EE793C47B0D2377AE3BDB8908194ED0 /* ZNGInboxDataSearch.m in Sources */,
+				96B7A74F1D19F81F002C7CCE /* ZNGConversationContactToService.m in Sources */,
 				0D5C2CE1F1A1665CE315C5FA56238EF3 /* ZNGInboxDataSet.m in Sources */,
 				ED470270B002F50B78F5082ED2B11725 /* ZNGInboxDataStarred.m in Sources */,
 				F57F9076F7C9535240AE55A5FC21D772 /* ZNGInboxDataUnconfirmed.m in Sources */,

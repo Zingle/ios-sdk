@@ -57,4 +57,9 @@
     return participant;
 }
 
+- (NSString *)meId
+{
+    return self.messageClient.serviceId;
+}
+
 @end

@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZNGContactService;
-@class ZNGConversation;
+@class ZNGConversationContactToService;
 @class ZNGError;
 
 @class ZNGAutomationClient;
@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  This is nil if no contact service has been selected.
  */
-@property (nonatomic, readonly, nullable) ZNGConversation * conversation;
+@property (nonatomic, readonly, nullable) ZNGConversationContactToService * conversation;
 
 #pragma mark - Clients used internally for connectivity
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;

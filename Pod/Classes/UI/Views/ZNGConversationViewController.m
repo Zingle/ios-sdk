@@ -146,7 +146,7 @@ static const uint64_t PollingIntervalSeconds = 10;
 #pragma mark - Data source
 - (NSString *)senderId
 {
-    return (self.conversation.toService) ? self.conversation.contactId : self.conversation.serviceId;
+    return [self.conversation meId];
 }
 
 - (NSString *)senderDisplayName

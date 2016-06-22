@@ -54,7 +54,14 @@
 
 - (ZNGParticipant *)receiver
 {
-    
+    ZNGParticipant * participant = [[ZNGParticipant alloc] init];
+    participant.participantId = serviceId;
+    return participant;
+}
+
+- (NSString *)meId
+{
+    return contactId;
 }
 
 @end

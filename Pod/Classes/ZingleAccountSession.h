@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGAccount;
 @class ZNGChannelType;
 @class ZNGContact;
-@class ZNGConversation;
+@class ZNGConversationServiceToContact;
 @class ZNGAutomationClient, ZNGContactChannelClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
 @class ZNGConversationViewController;
 
@@ -86,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param contactId The identifier for the desired contact
  */
-- (ZNGConversation *) conversationWithContact:(ZNGContact *)contact;
+- (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 
 - (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
 

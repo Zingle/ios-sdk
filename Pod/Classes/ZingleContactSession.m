@@ -15,13 +15,14 @@
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGConversationViewController.h"
+#import "ZNGConversationContactToService.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 // Override our read only array properties to get free KVO compliant setters
 @interface ZingleContactSession ()
 @property (nonatomic, strong, nullable) NSArray<ZNGContactService *> * availableContactServices;
-@property (nonatomic, strong, nullable) ZNGConversation * conversation;
+@property (nonatomic, strong, nullable) ZNGConversationContactToService * conversation;
 @property (nonatomic, strong, nullable) ZNGContact * contact;
 @end
 
@@ -77,8 +78,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self willChangeValueForKey:NSStringFromSelector(@selector(conversation))];
     _contactService = selectedContactService;
     _contact = nil;
-    _conversation = nil;
     _service = nil;
+    [self setConversationForContactService];
     [self didChangeValueForKey:NSStringFromSelector(@selector(conversation))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contact))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contactService))];
@@ -86,11 +87,29 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (selectedContactService != nil) {
         [self initializeClients];
         [self findOrCreateContactForContactService];
-        [self findChannelTypeAndSetupConversation];
     } else if (_onlyRegisterPushNotificationsForCurrentContactService) {
         // We are deselecting the current contact service and we are only maintaining push notifications for currently selected contact services.  We need to
         //  deregister for pushes.
         [self _unregisterForAllPushNotifications];
+    }
+}
+
+- (void) setConversationForContactService
+{
+    // If we already have this conversation setup (which will happen if the contact service already contained a contact ID on selection,) do nothing
+    if (self.conversation != nil) {
+        ZNGLogDebug(@"Neglecting to create a conversation object because one already exists.");
+        return;
+    }
+    
+    if (self.contactService.contactId != nil) {
+        self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
+                                                                                   channelTypeId:self.channelTypeID
+                                                                                       contactId:self.contactService.contactId
+                                                                                     toServiceId:self.contactService.serviceId
+                                                                               withMessageClient:self.messageClient];
+    } else {
+        self.conversation = nil;
     }
 }
 
@@ -112,51 +131,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         // We have a contact!  Now we need to set our header.
         self.contact = contact;
         [self setAuthorizationHeader];
+        
+        // Set the conversation up if we did not do so already
+        [self setConversationForContactService];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
-    }];
-}
-
-- (void) findChannelTypeAndSetupConversation
-{
-    NSString * serviceId = self.contactService.serviceId;
-    
-    if (serviceId == nil) {
-        return;
-    }
-    
-    [self.serviceClient serviceWithId:serviceId success:^(ZNGService *service, ZNGStatus *status) {
-        
-        _service = service;
-        ZNGChannel * serviceChannel = nil;
-        
-        for (ZNGChannel * channel in service.channels) {
-            if (channel.channelType.channelTypeId == self.channelTypeID) {
-                serviceChannel = channel;
-                break;
-            }
-        }
-        
-        if (serviceChannel == nil) {
-            ZNGLogError(@"Unable to find channel type ID %@ in the current service and its %lu channels", self.channelTypeID, (unsigned long)[service.channels count]);
-            return;
-        }
-        
-        ZNGConversation * conversation = [[ZNGConversation alloc] init];
-        conversation.session = self;
-        conversation.contact = self.contact;
-        conversation.channelType = serviceChannel.channelType;
-        conversation.contactChannelValue = self.channelValue;
-        conversation.serviceChannelValue = serviceChannel.value;
-        conversation.serviceId = self.contactService.serviceId;
-        conversation.contactId = self.contact.contactId;
-        
-        [conversation updateMessages];
-        
-        self.conversation = conversation;
-        
-    } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to find service with ID of %@.  Messaging will fail forever.", serviceId);
     }];
 }
 

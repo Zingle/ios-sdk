@@ -14,13 +14,14 @@
 #import "ZNGServiceClient.h"
 #import "ZingleSpecificAccountSession.h"
 #import "ZNGConversationViewController.h"
+#import "ZNGConversationServiceToContact.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 // Override readonly properties with strong properties to get proper KVO
 @interface ZingleAccountSession ()
 
-@property (nonatomic, strong, nullable) NSDictionary<NSString *, ZNGConversation *> * conversationsByContactId;
+@property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, ZNGConversationServiceToContact *> * conversationsByContactId;
 
 @end
 
@@ -249,44 +250,20 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 }
 
 #pragma mark - Messaging
-- (ZNGConversation *) conversationWithContact:(ZNGContact *)contact;
+- (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 {
     // Do we have a cached version of this conversation already?
     ZNGConversation * conversation = self.conversationsByContactId[contact.contactId];
     
     if (conversation != nil) {
-        // Ensure the conversation has a reference to us for communication.  This is 99% redundant and can be removed.
-        conversation.messageClient = self.messageClient;
-        
         // Ask the conversation to update itself as it is being delivered
         [conversation updateMessages];
         
         return conversation;
     }
-    
-    // We do not have this conversation locally.  It is either a brand new conversation or it has not yet been retrieved from the server.
-    // Either way, we are making a new conversation object.  It will initialize itself as empty if no communicaiton has taken place previously.
-    ZNGChannel * channel = [contact channelForFreshOutgoingMessage];
-    
-    if (channel == nil) {
-        ZNGLogWarn(@"Unable to pick a default outgoing channel for %@ (%@).  Unable to create conversation.", [contact fullName], contact.contactId);
-    }
-    
-    ZNGChannelType * channelType = channel.channelType;
-    ZNGChannel * serviceChannel = [self.service defaultChannelForType:channelType];
 
-    conversation = [[ZNGConversation alloc] init];
-    conversation.session = self;
-    conversation.contact = contact;
-    conversation.channelType = channelType;
-    conversation.contactChannelValue = channel.value;
-    conversation.serviceChannelValue = serviceChannel.value;
-    conversation.serviceId = self.service.serviceId;
-    conversation.contactId = contact.contactId;
-    conversation.toService = NO;
-    
-    [conversation updateMessages];
-    
+    conversation = [[ZNGConversationServiceToContact alloc] initFromServiceToContact:contact withMessageClient:self.messageClient];
+    self.conversationsByContactId[contact.contactId] = conversation;
     return conversation;
 }
 

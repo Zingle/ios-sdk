@@ -69,5 +69,8 @@ extern NSString * const ZNGConversationParticipantTypeService;
 - (ZNGParticipant *)sender;
 - (ZNGParticipant *)receiver;
 
+// The ID of the local user, either contact ID or service ID
+- (NSString *)meId;
+
 
 @end

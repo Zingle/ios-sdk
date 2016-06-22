@@ -12,7 +12,7 @@
 
 @implementation ZNGBaseClientService
 
-- (nonnull instancetype) initWithSession:(ZingleSession * _Nonnull __weak)session account:(nonnull ZNGAccount *)account serviceId:(nonnull NSString *)serviceId
+- (instancetype) initWithSession:(__weak ZingleSession *)session serviceId:(NSString *)serviceId;
 {
     self = [super initWithSession:session];
     

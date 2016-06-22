@@ -62,6 +62,8 @@
 #import "ZNGImageViewerController.h"
 #import "ZNGInboxViewController.h"
 #import "ZNGConversation.h"
+#import "ZNGConversationContactToService.h"
+#import "ZNGConversationServiceToContact.h"
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGContactDetailsTableViewCell.h"
 #import "ZNGContactLabelsTableViewCell.h"

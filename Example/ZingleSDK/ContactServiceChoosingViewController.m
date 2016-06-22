@@ -12,6 +12,7 @@
 #import <ZingleSDK/ZingleContactSession.h>
 #import <ZingleSDK/ZNGConversationViewController.h>
 #import <JSQMessagesViewController/JSQMessagesTimestampFormatter.h>
+#import <ZingleSDK/ZNGConversationContactToService.h>
 
 static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
@@ -75,7 +76,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
         session.contactService = selectedContactService;
         
         ZNGConversationViewController * conversationView = segue.destinationViewController;
-        ZNGConversation * conversation = session.conversation;
+        ZNGConversationContactToService * conversation = session.conversation;
         conversationView.conversation = conversation;
     }
 }

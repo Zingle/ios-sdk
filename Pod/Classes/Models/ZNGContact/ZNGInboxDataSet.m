@@ -9,6 +9,7 @@
 #import "ZNGInboxDataSet.h"
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
+#import "ZNGStatus.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 

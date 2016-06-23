@@ -136,7 +136,11 @@ static const uint64_t PollingIntervalSeconds = 10;
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    
+    [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
+        // TODO: Implement
+    } failure:^(ZNGError *error) {
+        // TODO: Implement
+    }];
 }
 
 - (void) didPressAccessoryButton:(UIButton *)sender

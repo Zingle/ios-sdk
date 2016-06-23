@@ -22,7 +22,7 @@
 
 - (nonnull instancetype) initWithAccountSession:(nonnull __weak ZingleAccountSession *)anAccountSession serviceId:(nonnull NSString *)serviceId;
 {
-    self = [super initWithToken:accountSession.token key:accountSession.key];
+    self = [super initWithToken:anAccountSession.token key:anAccountSession.key];
     
     if (self != nil) {
         accountSession = anAccountSession;

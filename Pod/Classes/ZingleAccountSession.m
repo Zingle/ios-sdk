@@ -107,7 +107,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
     [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
-    _available = (_service != nil);
+    _available = (service != nil);
     _service = service;
     [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
@@ -129,7 +129,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) updateStateForNewAccountOrService
 {
     // Do we need to select an account?
-    if (self.service == nil) {
+    if (self.account == nil) {
         if (self.availableAccounts == nil) {
             // We have no available accounts.  Go request them.
             [self retrieveAvailableAccounts];
@@ -147,7 +147,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     // Do we need to select a service?
-    if (self.account == nil) {
+    if (self.service == nil) {
         if (self.availableServices == nil) {
             // We have no available services.  Go request them.
             [self retrieveAvailableServices];
@@ -156,7 +156,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             
             // If there is anything in the list, we will ask our chooser to pick one
             if ([self.availableServices count] > 1) {
-                self.service = serviceChooser(self.availableServices);
+                [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
+                _service = serviceChooser(self.availableServices);
+                [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
             }
             
             serviceChooser = nil;
@@ -220,7 +222,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         if ([accounts count] == 0) {
             self.availableAccounts = @[];   // This ensures that we will set our list explicitly to an empty array instead of just nil if there is no data
         } else {
-        self.availableAccounts = accounts;
+            self.availableAccounts = accounts;
         }
         
         // Clear our services since we may have just picked a new account.
@@ -246,6 +248,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         if ([services count] == 1) {
             self.service = [services firstObject];
         }
+        [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
         self.availableServices = nil;
     }];

@@ -41,11 +41,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return [self initWithToken:token key:key accountChooser:nil serviceChooser:nil];
 }
 
-- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser
+- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)anAccountChooser serviceChooser:(nullable ZNGServiceChooser)aServiceChooser
 {
     self = [super initWithToken:token key:key];
     
     if (self != nil) {
+        accountChooser = anAccountChooser;
+        serviceChooser = aServiceChooser;
         _conversationsByContactId = [[NSMutableDictionary alloc] init];
         [self retrieveAvailableAccounts];
     }

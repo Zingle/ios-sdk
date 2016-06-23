@@ -18,4 +18,6 @@
  */
 - (nonnull instancetype) initWithContactClient:(nonnull ZNGContactClient *)contactClient searchTerm:(nonnull NSString *)theSearchTerm;
 
+- (nonnull instancetype) initWithContactClient:(nonnull ZNGContactClient *)contactClient NS_UNAVAILABLE;
+
 @end

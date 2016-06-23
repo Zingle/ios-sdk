@@ -18,4 +18,6 @@
  */
 - (id) initWithContactClient:(ZNGContactClient *)contactClient labelId:(NSString *)labelId;
 
+- (id) initWithContactClient:(ZNGContactClient *)contactClient NS_UNAVAILABLE;
+
 @end

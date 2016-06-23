@@ -21,7 +21,7 @@
 @property(nonatomic) BOOL isStarred;
 @property(nonatomic, strong) ZNGMessage* lastMessage;
 @property(nonatomic, strong) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel
-@property(nonatomic, strong) NSArray<ZNGContactFieldValue *> * customFieldValues; // Array of ZNGContactFieldValue
+@property(nonatomic, strong) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue.  Why do these two classes both exist?
 @property(nonatomic, strong) NSArray<ZNGLabel *> * labels; // Array of ZNGLabel
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;

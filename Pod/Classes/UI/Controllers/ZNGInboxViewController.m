@@ -137,8 +137,15 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     self.tableView.tableFooterView = [[UIView alloc] init];
     
     [self showActivityIndicator];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
-    self.data = [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
+    if (self.data == nil) {
+        self.data = [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
+    }
 }
 
 #pragma mark - Key Value Observing

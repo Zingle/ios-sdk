@@ -43,6 +43,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable) ZNGService * service;
 
+#pragma mark - Clients
+@property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
+@property (nonatomic, strong, nonnull) ZNGContactChannelClient * contactChannelClient;
+@property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
+@property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;
+
 #pragma mark - Status
 /**
  *  KVO compliant flag that indicates when the session has been fully initialized (with an account and a service) and may take requests.
@@ -89,21 +95,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 
 - (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
-
-@end
-
-#pragma mark - Clients that require a selected service
-/**
- *  The methods and property get/set methods in this category will generate a logged error and have no effect if they are called before the 'available' flag is set
- *  i.e. they cannot be called until we have a specific account and service selected
- */
-@interface ZingleAccountSession (MethodsRequiringAuthentication)
-
-@property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
-@property (nonatomic, strong, nonnull) ZNGContactChannelClient * contactChannelClient;
-@property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
-@property (nonatomic, strong, nonnull) ZNGMessageClient * messageClient;
-@property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;
 
 @end
 

@@ -12,9 +12,12 @@
 #import "ZNGService.h"
 #import "ZNGAccountClient.h"
 #import "ZNGServiceClient.h"
-#import "ZingleSpecificAccountSession.h"
 #import "ZNGConversationViewController.h"
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGAutomationClient.h"
+#import "ZNGContactClient.h"
+#import "ZNGContactChannelClient.h"
+#import "ZNGLabelClient.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -27,14 +30,14 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZingleAccountSession
 {
-    ZingleSpecificAccountSession * privateSession; // The session object that handles the actual session once the user has chosen an account and a service.
-    
     ZNGAccountChooser accountChooser;
     ZNGServiceChooser serviceChooser;
     
     ZNGAccount * _account;
     ZNGService * _service;
 }
+
+
 
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
 {
@@ -168,50 +171,20 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     // We now have both an account and a service selected.
     
-    // Setup our proxy object to handle all requests.
-    privateSession = [[ZingleSpecificAccountSession alloc] initWithAccountSession:self serviceId:self.service.serviceId];
+    [self initializeAllClients];
 }
 
-- (BOOL) shouldForwardInvocations
+- (void) initializeAllClients
 {
-    // Invocations will only be forwarded to our private proxy object if the user has selected a service and an account.
-    return ((self.service != nil) && (self.account != nil));
-}
-
-#pragma mark - Proxying
-- (BOOL) respondsToSelector:(SEL)aSelector
-{
-    if ([super respondsToSelector:aSelector]) {
-        return YES;
-    }
+    NSString * serviceId = self.service.serviceId;
     
-    return ([privateSession respondsToSelector:aSelector]);
-}
-
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector
-{
-    NSMethodSignature * signature = [privateSession methodSignatureForSelector:aSelector];
+    self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self serviceId:serviceId];
+    self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self serviceId:serviceId];
+    self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
+    self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
+    self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     
-    if (([self shouldForwardInvocations]) && (signature != nil)) {
-        return signature;
-    }
-    
-    return [super methodSignatureForSelector:aSelector];
-}
-
-- (void) forwardInvocation:(NSInvocation *)anInvocation
-{
-    if ([privateSession respondsToSelector:anInvocation.selector]) {
-        
-        if ([self shouldForwardInvocations]) {
-            [anInvocation invokeWithTarget:privateSession];
-        } else {
-            ZNGLogError(@"%@ was called on %@ before an account and/or session was selected.  Ignoring request.", NSStringFromSelector(anInvocation.selector), [self class]);
-            return;
-        }
-    } else {
-        [super forwardInvocation:anInvocation];
-    }
+    [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }
 
 #pragma mark - Account retrieval

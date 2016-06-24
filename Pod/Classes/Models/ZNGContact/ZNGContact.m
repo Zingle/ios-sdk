@@ -122,11 +122,14 @@
 - (ZNGChannel *)channelForFreshOutgoingMessage
 {
     if (self.lastMessage != nil) {
-        // We have a message to or from this person.  Let's return that same channel.
+        // We have a message to or from this person.  Let's return that same channel if we have any channel info.
         
         // Outgoing or incoming?
         ZNGCorrespondent * dude = ([self.lastMessage isOutbound]) ? self.lastMessage.recipient : self.lastMessage.sender;
-        return dude.channel;
+        
+        if (dude.channel != nil) {
+            return dude.channel;
+        }
     }
     
     

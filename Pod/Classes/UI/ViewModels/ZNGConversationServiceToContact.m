@@ -33,6 +33,11 @@
     return self;
 }
 
+- (ZNGContact *)contact
+{
+    return contact;
+}
+
 - (NSString *)remoteName
 {
     return [contact fullName];

@@ -17,12 +17,14 @@ static const uint64_t PollingIntervalSeconds = 10;
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
+@property (nonatomic, assign) BOOL isVisible;
 
 @end
 
 @implementation ZNGConversationViewController
 {
     dispatch_source_t pollingTimerSource;
+    BOOL isVisible;
 }
 
 - (void)viewDidLoad
@@ -39,22 +41,22 @@ static const uint64_t PollingIntervalSeconds = 10;
     uint64_t pollingIntervalNanoseconds = PollingIntervalSeconds * NSEC_PER_SEC;
     dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
     dispatch_source_set_event_handler(pollingTimerSource, ^{
-        if (weakSelf != nil) {
-            ZNGConversationViewController * strongSelf = weakSelf;
-            [strongSelf->_conversation updateMessages];
+        if (weakSelf.isVisible) {
+            [weakSelf.conversation updateMessages];
         }
     });
+    dispatch_resume(pollingTimerSource);
 }
 
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    dispatch_resume(pollingTimerSource);
+    isVisible = YES;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    dispatch_suspend(pollingTimerSource);
+    isVisible = NO;
     [super viewWillDisappear:animated];
 }
 

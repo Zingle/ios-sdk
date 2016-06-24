@@ -12,6 +12,8 @@
 #import "JSQMessagesBubbleImage.h"
 
 static const uint64_t PollingIntervalSeconds = 10;
+static NSString * const MessagesKVOPath = @"conversation.messages";
+static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface ZNGConversationViewController ()
 
@@ -25,6 +27,33 @@ static const uint64_t PollingIntervalSeconds = 10;
 {
     dispatch_source_t pollingTimerSource;
     BOOL isVisible;
+}
+
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    [self addObserver:self forKeyPath:MessagesKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
 }
 
 - (void)viewDidLoad
@@ -67,6 +96,8 @@ static const uint64_t PollingIntervalSeconds = 10;
 
 - (void) dealloc
 {
+    [self removeObserver:self forKeyPath:MessagesKVOPath context:ZNGConversationKVOContext];
+    
     if (pollingTimerSource != nil) {
         dispatch_source_cancel(pollingTimerSource);
     }
@@ -77,8 +108,9 @@ static const uint64_t PollingIntervalSeconds = 10;
 {
     _conversation = conversation;
     
-    // TODO: Update title and collection view
+    // Update title and collection view
     [self.navigationItem setTitle:conversation.remoteName];
+    [self.collectionView reloadData];
 }
 
 #pragma mark - UI properties
@@ -139,7 +171,7 @@ static const uint64_t PollingIntervalSeconds = 10;
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
     [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
-        // TODO: Implement
+        [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
         // TODO: Implement
     }];
@@ -148,6 +180,38 @@ static const uint64_t PollingIntervalSeconds = 10;
 - (void) didPressAccessoryButton:(UIButton *)sender
 {
     
+}
+
+#pragma mark - Data notifications
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if (context != ZNGConversationKVOContext) {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+        return;
+    }
+    
+    if ([keyPath isEqualToString:MessagesKVOPath]) {
+        [self handleMessagesChange:change];
+    }
+}
+
+- (void) handleMessagesChange:(NSDictionary<NSString *, id> *)change
+{
+    int changeType = [change[NSKeyValueChangeKindKey] intValue];
+    
+    switch (changeType)
+    {
+        case NSKeyValueChangeInsertion:
+            [self finishReceivingMessageAnimated:YES];
+            break;
+            
+        case NSKeyValueChangeRemoval:
+        case NSKeyValueChangeSetting:
+        case NSKeyValueChangeReplacement:
+        default:
+            // Any of these cases, we will be safe and reload
+            [self.collectionView reloadData];
+    }
 }
 
 #pragma mark - Data source

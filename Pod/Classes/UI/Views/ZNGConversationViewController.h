@@ -18,12 +18,6 @@
 
 @end
 
-@protocol ZNGConversationDetailDelegate <NSObject>
-
-- (void)didUpdateContact;
-
-@end
-
 
 @interface ZNGConversationViewController : JSQMessagesViewController
 
@@ -38,15 +32,6 @@
  *  that should handle dismissing the ZNGConversationViewController.
  */
 @property (weak, nonatomic, nullable) id<ZNGConversationModalDelegate> modalDelegate;
-
-/**
- *  If ZNGConversationViewController is presented with a master detail view the
- *  detailDelegate should be used to update the master view.
- *
- *  @param detailDelegate Object conforming to ZNGConversationDetailDelegate
- *  that should handle updating the master view.
- */
-@property (weak, nonatomic, nullable) id<ZNGConversationDetailDelegate> detailDelegate;
 
 /**
  * OPTIONAL UI SETTINGS

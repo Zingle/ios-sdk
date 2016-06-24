@@ -233,15 +233,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     // Do we have a cached version of this conversation already?
     ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contact.contactId];
     
-    if (conversation != nil) {
-        // Ask the conversation to update itself as it is being delivered
-        [conversation updateMessages];
-        
-        return conversation;
+    if (conversation == nil) {
+        conversation = [[ZNGConversationServiceToContact alloc] initFromServiceToContact:contact withMessageClient:self.messageClient];
+        self.conversationsByContactId[contact.contactId] = conversation;
     }
 
-    conversation = [[ZNGConversationServiceToContact alloc] initFromServiceToContact:contact withMessageClient:self.messageClient];
-    self.conversationsByContactId[contact.contactId] = conversation;
+    [conversation updateMessages];
     return conversation;
 }
 

@@ -10,6 +10,7 @@
 #import "ZNGConversation.h"
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesBubbleImage.h"
+#import "JSQMessagesBubbleImageFactory.h"
 
 static const uint64_t PollingIntervalSeconds = 10;
 static NSString * const MessagesKVOPath = @"conversation.messages";
@@ -60,8 +61,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     [super viewDidLoad];
     
+    self.collectionView.collectionViewLayout.springinessEnabled = YES;
+    
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    
+    JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
+    self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
+    self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
@@ -272,7 +279,23 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    ZNGMessage * message = self.conversation.messages[indexPath.row];
+    
+    if ([message.senderId isEqualToString:[self senderId]]) {
+        cell.textView.textColor = self.outgoingTextColor;
+    } else {
+        cell.textView.textColor = self.incomingTextColor;
+    }
+    
+    cell.textView.linkTextAttributes = @{
+                                         NSForegroundColorAttributeName : cell.textView.textColor,
+                                         NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid)
+                                         };
+    
+    cell.messageBubbleTopLabel.textColor = self.authorTextColor;
+    
+    return cell;
 }
 
 @end

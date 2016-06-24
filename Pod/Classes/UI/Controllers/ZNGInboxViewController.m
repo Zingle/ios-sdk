@@ -313,15 +313,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     ZNGConversationServiceToContact * conversation = [self.session conversationWithContact:contact];
     ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
     
-    vc.detailDelegate = self;
     [self.navigationController pushViewController:vc animated:YES];
-}
-
-#pragma mark - ZNGConversationViewControllerDelegate
-
-- (void)didUpdateContact
-{
-    [self.tableView reloadRowsAtIndexPaths:@[self.selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

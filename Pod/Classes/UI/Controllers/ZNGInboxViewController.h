@@ -13,7 +13,7 @@
 @class ZNGInboxDataSet;
 @class ZingleAccountSession;
 
-@interface ZNGInboxViewController : UIViewController <ZNGConversationDetailDelegate>
+@interface ZNGInboxViewController : UIViewController
 
 + (nonnull instancetype)inboxViewController;
 

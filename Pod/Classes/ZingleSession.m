@@ -60,7 +60,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (NSString *) urlOverride
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:@"zingle_server_prefix"];
+    NSString * prefix = [[NSUserDefaults standardUserDefaults] valueForKey:@"zingle_server_prefix"];
+    
+    if ([prefix length] == 0) {
+        return nil;
+    }
+    
+    return [NSString stringWithFormat:@"https://%@-api.zingle.me/v1/", prefix];
 }
 
 #pragma mark - Push notifications

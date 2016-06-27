@@ -60,9 +60,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.collectionView.collectionViewLayout.springinessEnabled = YES;
-    
+        
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     

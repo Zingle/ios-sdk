@@ -70,6 +70,13 @@ extern NSString * const ZNGConversationParticipantTypeService;
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure;
 
+/**
+ *  Returns the last message sent by the same type of person, meaning this will be the prior message sent by the contact
+ *   if the supplied message is sent by a contact.  If it is a service, this will likely be the prior message sent by the
+ *   same person as a service, but it may also be a different employee.
+ */
+- (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message;
+
 #pragma mark - Protected methods to be overridden by subclasses
 - (ZNGNewMessage *)freshMessage;
 - (ZNGParticipant *)sender;

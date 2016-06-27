@@ -142,6 +142,34 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     } failure:nil];
 }
 
+#pragma mark - Data retrieval
+- (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message
+{
+    NSUInteger index = [self.messages indexOfObject:message];
+    
+    if ((index == NSNotFound) || (index == 0)) {
+        // This is the first
+        return nil;
+    }
+    
+    NSString * direction = message.communicationDirection;
+    
+    NSUInteger i = index - 1;
+    
+    do {
+        ZNGMessage * testMessage = self.messages[i];
+        
+        if ([testMessage.communicationDirection isEqualToString:direction]) {
+            return testMessage;
+        }
+        
+        i--;
+    } while (i != 0);
+    
+    return nil;
+}
+
+#pragma mark - Actions
 - (void)markMessagesAsRead
 {
     NSMutableArray *messageIds = [[NSMutableArray alloc] init];

@@ -64,7 +64,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         _loading = YES;
         _loadingInitialData = YES;
         _contacts = @[];
-        pageSize = 10;  // TODO: Raise this value after initial testing to at least 20 or 25.
+        pageSize = 25;
         [self refresh];
     }
     

@@ -73,7 +73,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     _account = account;
-    [self updateStateForNewAccountOrService];
+    
+    if (_account != nil) {
+        [self updateStateForNewAccountOrService];
+    }
 }
 
 - (ZNGAccount *)account

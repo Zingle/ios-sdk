@@ -11,6 +11,7 @@
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
+#import "JSQMessagesTimestampFormatter.h"
 
 static const uint64_t PollingIntervalSeconds = 10;
 static NSString * const MessagesKVOPath = @"conversation.messages";
@@ -27,7 +28,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 @implementation ZNGConversationViewController
 {
     dispatch_source_t pollingTimerSource;
-    BOOL isVisible;
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -85,12 +85,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    isVisible = YES;
+    self.isVisible = YES;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    isVisible = NO;
+    self.isVisible = NO;
     [super viewWillDisappear:animated];
 }
 
@@ -230,14 +230,26 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return @"Me";
 }
 
+- (ZNGMessage *) messageAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSArray<ZNGMessage *> * messages = self.conversation.messages;
+    return (indexPath.row < [messages count]) ? messages[indexPath.row] : nil;
+}
+
+- (ZNGMessage *) priorMessageToIndexPath:(NSIndexPath *)indexPath
+{
+    NSIndexPath * backOne = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
+    return [self messageAtIndexPath:backOne];
+}
+
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return self.conversation.messages[indexPath.row];
+    return [self messageAtIndexPath:indexPath];
 }
 
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessage * message = self.conversation.messages[indexPath.row];
+    ZNGMessage * message = [self messageAtIndexPath:indexPath];
     
     if ([message.senderId isEqualToString:[self senderId]]) {
         return self.outgoingBubbleImageData;
@@ -252,21 +264,97 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDate * time = [self timeForMessageAtIndexPath:indexPath];
+    
+    if (time == nil) {
+        return 0.0;
+    }
+    
+    return kJSQMessagesCollectionViewCellLabelHeightDefault;
+}
+
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString * name = [self nameForMessageAtIndexPath:indexPath];
+    
+    if (name == nil) {
+        return 0.0;
+    }
+    
+    return kJSQMessagesCollectionViewCellLabelHeightDefault;
+}
+
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 0.0f;
+}
+
+// Returns nil if we do not need to show a time this soon
+- (NSDate *) timeForMessageAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGMessage * thisMessage = [self messageAtIndexPath:indexPath];
+    ZNGMessage * priorMessage = [self priorMessageToIndexPath:indexPath];
+    BOOL showTimestamp = YES;
+    NSDate * thisMessageTime = thisMessage.createdAt;
+    NSDate * priorMessageTime = priorMessage.createdAt;
+    
+    if ((thisMessageTime != nil) && (priorMessageTime != nil)) {
+        NSTimeInterval timeSinceLastMessage = [thisMessageTime timeIntervalSinceDate:priorMessageTime];
+        
+        if (![self timeBetweenMessagesBigEnoughToWarrantTimestamp:timeSinceLastMessage]) {
+            showTimestamp = NO;
+        }
+    }
+    
+    return (showTimestamp) ? thisMessageTime : nil;
+}
+
+- (BOOL) timeBetweenMessagesBigEnoughToWarrantTimestamp:(NSTimeInterval)interval
+{
+    static NSTimeInterval fiveMinutes = 5.0 * 60.0;
+    return (interval > fiveMinutes);
+}
+
+// Returns nil if displaying the name above this message is deemed unnecessary
+- (NSString *) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Are we adding a sender name to this message?
+    
+    // If this is the first message in this direction from this specific sender, then yes.
+    ZNGMessage * thisMessage = [self messageAtIndexPath:indexPath];
+    ZNGMessage * priorMessageThisDirection = [self.conversation priorMessageWithSameDirection:thisMessage];
+    
+    // We show the name if either 1) this is the first message in this direction or 2) the last message in this direction came from a different person.
+    // This one check will satisfy both conditions since in 1) priorMessageThisDirection == nil --> priorMessageThisDirection.senderId isEqualToString is always NO.
+    BOOL isNewPerson = (![priorMessageThisDirection.senderId isEqualToString:thisMessage.senderId]);
+    return isNewPerson ? thisMessage.senderDisplayName : nil;
+}
+
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Insert timestamp here?
+    NSDate * messageTime = [self timeForMessageAtIndexPath:indexPath];
+    
+    if (messageTime != nil) {
+        return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:messageTime];
+    }
+    
     return nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Insert sender name here?
-    return nil;
+    NSString * name = [self nameForMessageAtIndexPath:indexPath];
+    return (name != nil) ? [[NSAttributedString alloc] initWithString:name] : nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Insert channel type and/or value here?
+    // This is where the channel would be displayed when viewing as a service.  By default, this will not be shown.
     return nil;
 }
 
@@ -278,7 +366,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    ZNGMessage * message = self.conversation.messages[indexPath.row];
+    ZNGMessage * message = [self messageAtIndexPath:indexPath];
     
     if ([message.senderId isEqualToString:[self senderId]]) {
         cell.textView.textColor = self.outgoingTextColor;

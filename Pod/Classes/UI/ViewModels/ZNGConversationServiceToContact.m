@@ -7,17 +7,24 @@
 //
 
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGConversationServiceToContact
 {
     ZNGContact * contact;
-    ZNGChannel * channel;
     ZNGService * service;
 }
 
 - (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient
 {
     ZNGChannel * aChannel = [aContact channelForFreshOutgoingMessage];
+    
+    if (aChannel == nil) {
+        ZNGLogError(@"Unable to find a default channel for our current service.  Message sending will always fail to %@", aContact);
+    }
+    
     return [self initFromService:aService toContact:aContact usingChannel:aChannel withMessageClient:messageClient];
 }
 
@@ -29,7 +36,7 @@
         service = aService;
         contact = aContact;
         contactId = aContact.contactId;
-        channel = aChannel;
+        _channel = aChannel;
     }
     
     return self;
@@ -50,7 +57,7 @@
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];
     message.sender = [self sender];
     message.recipients = @[[self receiver]];
-    message.channelTypeIds = @[channel.channelType.channelTypeId];
+    message.channelTypeIds = @[self.channel.channelType.channelTypeId];
     message.senderType = ZNGConversationParticipantTypeService;
     message.recipientType = ZNGConversationParticipantTypeContact;
     return message;
@@ -60,14 +67,14 @@
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
     participant.participantId = self.messageClient.serviceId;
-    participant.channelValue = [[service defaultChannelForType:channel.channelType] value];
+    participant.channelValue = [[service defaultChannelForType:self.channel.channelType] value];
     return participant;
 }
 
 - (ZNGParticipant *)receiver
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
-    participant.channelValue = channel.value;
+    participant.channelValue = self.channel.value;
     return participant;
 }
 

@@ -51,7 +51,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                         success:(void (^)(id responseObject, ZNGStatus *status))success
                                         failure:(void (^)(ZNGError* error))failure
 {
-    ZNGLogDebug(@"Sending request to %@, expecting [%@] in response", path, responseClass);
+    ZNGLogDebug(@"Sending request to %@%@, expecting [%@] in response", self.session.sessionManager.baseURL, path, responseClass);
     
     return [self.session.sessionManager GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
@@ -110,7 +110,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                      success:(void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(void (^)(ZNGError* error))failure
 {
-    ZNGLogDebug(@"Sending request to %@, expecting %@ in response", path, responseClass);
+    ZNGLogDebug(@"Sending request to %@%@, expecting %@ in response", self.session.sessionManager.baseURL, path, responseClass);
     
     return [self.session.sessionManager GET:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
@@ -171,7 +171,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                              success:(void (^)(id responseObject, ZNGStatus *status))success
                              failure:(void (^)(ZNGError* error))failure
 {
-    ZNGLogDebug(@"PUTting to %@, expecting %@", path, responseClass);
+    ZNGLogDebug(@"PUTting to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
     
     return [self.session.sessionManager PUT:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
         
@@ -235,7 +235,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 {
     NSDictionary* params;
     
-    ZNGLogDebug(@"POSTing a %@ to %@, expecting %@", [model class], path, responseClass);
+    ZNGLogDebug(@"POSTing a %@ to %@%@, expecting %@", [model class], self.session.sessionManager.baseURL, path, responseClass);
     
     if (model) {
         NSError* error = nil;
@@ -309,7 +309,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                     success:(void (^)(id responseObject, ZNGStatus *status))success
                                     failure:(void (^)(ZNGError* error))failure
 {
-    ZNGLogDebug(@"POSTing to %@, expecting %@", path, responseClass);
+    ZNGLogDebug(@"POSTing to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
     
     return [self.session.sessionManager POST:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
@@ -370,7 +370,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                 success:(void (^)(ZNGStatus *status))success
                                 failure:(void (^)(ZNGError* error))failure
 {
-    ZNGLogDebug(@"Sending DELETE to %@", path);
+    ZNGLogDebug(@"Sending DELETE to %@%@", self.session.sessionManager.baseURL, path);
     
     return [self.session.sessionManager DELETE:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
         dispatch_async(self.session.jsonProcessingQueue, ^{

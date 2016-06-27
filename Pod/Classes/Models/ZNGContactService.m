@@ -16,7 +16,7 @@
         return NO;
     }
     
-    return ((self.contactId == other.contactId) && (self.serviceId == other.serviceId));
+    return (([self.contactId isEqualToString:other.contactId]) && ([self.serviceId isEqualToString:other.serviceId]));
 }
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey

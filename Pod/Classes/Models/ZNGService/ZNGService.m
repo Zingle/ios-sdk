@@ -21,7 +21,7 @@
         return NO;
     }
     
-    return (self.serviceId == other.serviceId);
+    return ([self.serviceId isEqualToString:other.serviceId]);
 }
 
 - (NSString *) description

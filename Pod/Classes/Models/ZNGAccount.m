@@ -17,7 +17,7 @@
         return NO;
     }
     
-    return (self.accountId == other.accountId);
+    return ([self.accountId isEqualToString:other.accountId]);
 }
 
 - (NSString *) description

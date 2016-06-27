@@ -197,6 +197,15 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
         
+        if (![messageId isKindOfClass:[NSString class]]) {
+            ZNGLogError(@"Message send reported success, but we did not receive a message ID in response.  Our new message will not appear in the conversation until it is refreshed elsewhere.");
+            
+            if (success) {
+                success(status);
+            }
+            return;
+        }
+        
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
             [self mergeNewMessagesAtHead:@[message]];
             

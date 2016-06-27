@@ -37,7 +37,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     if (self != nil) {
         _token = [token copy];
-        _key = [token copy];
+        _key = [key copy];
         NSString * urlString = [self urlOverride] ?: DebugBaseURL;
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);

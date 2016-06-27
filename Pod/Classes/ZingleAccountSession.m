@@ -118,7 +118,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
     
-    [self updateStateForNewAccountOrService];
+    if (_service != nil) {
+        [self updateStateForNewAccountOrService];
+    }
 }
 
 - (void) setAvailableAccounts:(NSArray<ZNGAccount *> * _Nullable)availableAccounts
@@ -162,9 +164,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             
             // If there is anything in the list, we will ask our chooser to pick one
             if ([self.availableServices count] > 1) {
-                [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
-                _service = serviceChooser(self.availableServices);
-                [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
+                self.service = serviceChooser(self.availableServices);
             }
             
             serviceChooser = nil;

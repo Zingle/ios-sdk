@@ -91,12 +91,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return self.sender.correspondentId;
 }
 
-- (NSString *) senderDisplayName
-{
-    // TODO: Implement
-    return @"TODO: a name";
-}
-
 - (NSDate *)date
 {
     return self.createdAt;

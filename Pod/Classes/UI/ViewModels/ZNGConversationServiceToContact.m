@@ -52,6 +52,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return [contact fullName];
 }
 
+- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages
+{
+    for (ZNGMessage * message in messages) {
+        if (![message isOutbound]) {
+            message.senderDisplayName = [self remoteName];
+        }
+    }
+}
+
 - (ZNGNewMessage *)freshMessage
 {
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];

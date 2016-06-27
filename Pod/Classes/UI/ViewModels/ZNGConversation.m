@@ -82,6 +82,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void) mergeNewMessagesAtHead:(NSArray<ZNGMessage *> *)messages
 {
+    [self addSenderNameToMessages:messages];
+    
     NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
 
     if ([mutableMessages count] == 0) {
@@ -111,10 +113,17 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void) appendMessages:(NSArray<ZNGMessage *> *)messages
 {
+    [self addSenderNameToMessages:messages];
+    
     NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
     NSRange range = NSMakeRange([mutableMessages count], [messages count]);
     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
-    [mutableMessages insertObjects:mutableMessages atIndexes:indexSet];
+    [mutableMessages insertObjects:messages atIndexes:indexSet];
+}
+
+- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages
+{
+    NSAssert(NO, @"Failed to implement required method: %s", __PRETTY_FUNCTION__);
 }
 
 - (void)loadNextPage:(NSInteger)page
@@ -235,7 +244,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-            [self mergeNewMessagesAtHead:@[message]];
+            [self appendMessages:@[message]];
             
             if (success) {
                 success(status);

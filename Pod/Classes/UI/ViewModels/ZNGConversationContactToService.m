@@ -39,6 +39,17 @@
     return contactService.serviceDisplayName;
 }
 
+- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages
+{
+    for (ZNGMessage * message in messages) {
+        if ([message isOutbound]) {
+            message.senderDisplayName = [self remoteName];
+        } else {
+            message.senderDisplayName = @"Me";
+        }
+    }
+}
+
 - (ZNGNewMessage *)freshMessage
 {
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];

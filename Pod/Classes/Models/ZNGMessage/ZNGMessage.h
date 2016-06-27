@@ -13,6 +13,7 @@
 
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 
+#pragma mark - JSON properties
 @property(nonatomic, strong) NSString* messageId;
 @property(nonatomic, strong) NSString* body;
 @property(nonatomic, strong) NSString* displayName;
@@ -30,6 +31,9 @@
 @property(nonatomic, strong) NSArray* attachments;
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
+
+#pragma mark - Properties added by containing Conversation
+@property (nonatomic, copy) NSString * senderDisplayName;
 
 - (BOOL) isOutbound;
 

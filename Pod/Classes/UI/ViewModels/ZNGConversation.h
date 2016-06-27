@@ -78,6 +78,7 @@ extern NSString * const ZNGConversationParticipantTypeService;
 - (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message;
 
 #pragma mark - Protected methods to be overridden by subclasses
+- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages;
 - (ZNGNewMessage *)freshMessage;
 - (ZNGParticipant *)sender;
 - (ZNGParticipant *)receiver;

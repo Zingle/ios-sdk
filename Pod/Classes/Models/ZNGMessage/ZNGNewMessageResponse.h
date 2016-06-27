@@ -8,7 +8,7 @@
 
 #import <Mantle/Mantle.h>
 
-@interface ZNGNewMessageResponse : MTLModel
+@interface ZNGNewMessageResponse : MTLModel<MTLJSONSerializing>
 
 @property (nonatomic, strong) NSArray<NSString *> * messageIds;
 

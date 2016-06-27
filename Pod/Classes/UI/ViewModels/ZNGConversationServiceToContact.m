@@ -12,19 +12,21 @@
 {
     ZNGContact * contact;
     ZNGChannel * channel;
+    ZNGService * service;
 }
 
-- (id) initFromServiceToContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient
+- (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient
 {
     ZNGChannel * aChannel = [aContact channelForFreshOutgoingMessage];
-    return [self initFromServiceToContact:aContact usingChannel:aChannel withMessageClient:messageClient];
+    return [self initFromService:aService toContact:aContact usingChannel:aChannel withMessageClient:messageClient];
 }
 
-- (id) initFromServiceToContact:(ZNGContact *)aContact usingChannel:(ZNGChannel *)aChannel withMessageClient:(ZNGMessageClient *)messageClient
+- (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact usingChannel:(ZNGChannel *)aChannel withMessageClient:(ZNGMessageClient *)messageClient
 {
     self = [super initWithMessageClient:messageClient];
     
     if (self != nil) {
+        service = aService;
         contact = aContact;
         contactId = aContact.contactId;
         channel = aChannel;
@@ -58,6 +60,7 @@
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
     participant.participantId = self.messageClient.serviceId;
+    participant.channelValue = [[service defaultChannelForType:channel.channelType] value];
     return participant;
 }
 

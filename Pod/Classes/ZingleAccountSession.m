@@ -234,7 +234,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contact.contactId];
     
     if (conversation == nil) {
-        conversation = [[ZNGConversationServiceToContact alloc] initFromServiceToContact:contact withMessageClient:self.messageClient];
+        conversation = [[ZNGConversationServiceToContact alloc] initFromService:self.service toContact:contact withMessageClient:self.messageClient];
         self.conversationsByContactId[contact.contactId] = conversation;
     }
 

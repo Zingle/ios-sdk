@@ -13,6 +13,7 @@
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGLogging.h"
+#import "ZNGImageViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 static const uint64_t PollingIntervalSeconds = 10;
@@ -64,7 +65,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-        
+    
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
@@ -473,6 +475,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return 0.0f;
+}
+
+- (void) collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGMessage * message = [self messageAtIndexPath:indexPath];
+    
+    if ((message != nil) && ([message isMediaMessage])) {
+        ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
+        imageView.image = message.image;
+        imageView.navigationItem.title = self.navigationItem.title;
+        
+        [self.navigationController pushViewController:imageView animated:YES];
+    }
 }
 
 // Returns nil if we do not need to show a time this soon

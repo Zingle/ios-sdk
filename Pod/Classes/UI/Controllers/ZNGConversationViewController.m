@@ -28,6 +28,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 @implementation ZNGConversationViewController
 {
     dispatch_source_t pollingTimerSource;
+    BOOL checkedInitialVisibleCells;
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -86,10 +87,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     [super viewDidAppear:animated];
     self.isVisible = YES;
+    
+    [self markAllVisibleMessagesAsRead];
+    checkedInitialVisibleCells = YES;
 }
 
 - (void) viewWillDisappear:(BOOL)animated
 {
+    checkedInitialVisibleCells = NO;
+    
     self.isVisible = NO;
     [super viewWillDisappear:animated];
 }
@@ -268,6 +274,59 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // No avatars
     return nil;
+}
+
+// Used to mark messages as read
+- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(nonnull UICollectionViewCell *)cell forItemAtIndexPath:(nonnull NSIndexPath *)indexPath
+{
+    // A small optimization: We will always mark all visible cells as read whenever we appear.  If we haven't done that yet, we do not need to mark messages
+    //  read one at a time.
+    if (!checkedInitialVisibleCells) {
+        return;
+    }
+    
+    ZNGMessage * message = [self messageAtIndexPath:indexPath];
+    [self markMessagesReadIfNecessary:@[message]];
+}
+
+- (void) markAllVisibleMessagesAsRead
+{
+    NSArray<NSIndexPath *> * visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
+    NSMutableArray<ZNGMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:[visibleIndexPaths count]];
+    
+    for (NSIndexPath * indexPath in visibleIndexPaths) {
+        ZNGMessage * message = [self messageAtIndexPath:indexPath];
+        
+        if (message != nil) {
+            [messages addObject:message];
+        }
+    }
+    
+    [self markMessagesReadIfNecessary:messages];
+}
+
+- (void) markMessagesReadIfNecessary:(NSArray<ZNGMessage *> *)messages
+{
+    NSMutableArray<ZNGMessage *> * unreadMessages = [[NSMutableArray alloc] initWithCapacity:[messages count]];
+    
+    for (ZNGMessage * message in messages) {
+        if ([message.senderId isEqualToString:[self senderId]]) {
+            // We sent this message; we don't need to mark it as read
+            continue;
+        }
+        
+        if (message.readAt != nil) {
+            // This message was already read
+            continue;
+        }
+        
+        // This needs to be read
+        [unreadMessages addObject:message];
+    }
+    
+    if ([unreadMessages count] > 0) {
+        [self.conversation markMessagesAsRead:unreadMessages];
+    }
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView

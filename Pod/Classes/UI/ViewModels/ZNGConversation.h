@@ -22,13 +22,6 @@
 extern NSString * const ZNGConversationParticipantTypeContact;
 extern NSString * const ZNGConversationParticipantTypeService;
 
-@protocol ZNGConversationDelegate <NSObject>
-
-- (void)messagesUpdated:(BOOL)newMessages;
-- (void)messagesMarkedAsRead:(BOOL)success;
-
-@end
-
 @interface ZNGConversation : NSObject
 {
     NSString * contactId;
@@ -38,8 +31,6 @@ extern NSString * const ZNGConversationParticipantTypeService;
  *  KVO compliant array of messages.  Observing this with KVO will give array insertion notifications.
  */
 @property (nonatomic, strong) NSArray<ZNGMessage *> *messages;
-
-@property (nonatomic,weak) id<ZNGConversationDelegate> delegate;
 
 @property (nonatomic, readonly) ZNGMessageClient * messageClient;
 

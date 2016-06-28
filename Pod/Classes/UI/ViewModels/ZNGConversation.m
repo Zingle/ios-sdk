@@ -62,7 +62,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
         
         if (status.totalRecords == self.totalMessageCount) {
-            [self.delegate messagesUpdated:NO];
+            // We have no new messages
             return;
         }
         
@@ -73,8 +73,6 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         if (self.pagesLeftToLoad > 0) {
             [self loadNextPage:status.page + 1];
             
-        } else {
-            [self.delegate messagesUpdated:YES];
         }
         
     } failure:nil];
@@ -142,9 +140,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         [self appendMessages:messages];
         self.pagesLeftToLoad--;
         
-        if (self.pagesLeftToLoad < 1) {
-            [self.delegate messagesUpdated:YES];
-        } else {
+        if (self.pagesLeftToLoad >= 1) {
             [self loadNextPage:status.page + 1];
         }
         

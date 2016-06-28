@@ -178,7 +178,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
-        // TODO: Implement
+        [self finishSendingMessageAnimated:YES];
+        
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to send" message:@"Error encountered while sending message." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
     }];
 }
 

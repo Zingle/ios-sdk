@@ -583,3 +583,27 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 @end
+
+#pragma mark - Rotation fix
+// This is a fix for a layout invalidation bug, specifically only seen so far in iPad builds inside of a split view.
+// Similar to:  https://github.com/jessesquires/JSQMessagesViewController/issues/1042 and https://github.com/jessesquires/JSQMessagesViewController/issues/881
+//
+// This will probably be pull requested or at least mentioned on the JSQMessagesViewController Github page soon.  Not done yet.
+
+@interface JSQMessagesViewController (Fix_For_iPad_Rotation)
+
+- (void)jsq_resetLayoutAndCaches;
+
+@end
+
+@implementation ZNGConversationViewController (Fix_For_iPad_Rotation)
+
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [super jsq_resetLayoutAndCaches];
+    } completion:nil];
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+}
+
+@end

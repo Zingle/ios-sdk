@@ -16,7 +16,7 @@
 #import "ZNGUserAuthorizationClient.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
-NSString * const DebugBaseURL = @"https://ci-api.zingle.me/v1/";
+NSString * const DebugBaseURL = @"https://mobile-api.zingle.me/v1/";
 
 NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
 

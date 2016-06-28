@@ -54,10 +54,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             return;
         }
         
-        UIImage * image = [[UIImage alloc] initWithData:imageData];
-        UIImageView * theImageView = [[UIImageView alloc] initWithImage:image];
+        UIImage * theImage = [[UIImage alloc] initWithData:imageData];
+        UIImageView * theImageView = [[UIImageView alloc] initWithImage:theImage];
         
         dispatch_async(dispatch_get_main_queue(), ^{
+            self.image = theImage;
             imageView = theImageView;
             [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
         });
@@ -137,7 +138,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
  */
 - (CGSize)mediaViewDisplaySize
 {
-    return (imageView.image != nil) ? imageView.image.size : mediaPlaceholder.frame.size;
+    // TODO: This should be changed to actually reflect the image.  I don't know how to solve this problem while the image data is still downloading.
+    return mediaPlaceholder.frame.size;
 }
 
 /**

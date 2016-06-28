@@ -12,7 +12,9 @@
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
+#import "ZNGLogging.h"
 
+static const int zngLogLevel = ZNGLogLevelInfo;
 static const uint64_t PollingIntervalSeconds = 10;
 static NSString * const MessagesKVOPath = @"conversation.messages";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
@@ -56,6 +58,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) commonInit
 {
     [self addObserver:self forKeyPath:MessagesKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -107,6 +110,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserver:self forKeyPath:MessagesKVOPath context:ZNGConversationKVOContext];
     
     if (pollingTimerSource != nil) {
@@ -194,11 +198,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }];
 }
 
-- (void) didPressAccessoryButton:(UIButton *)sender
-{
-    
-}
-
 #pragma mark - Data notifications
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
@@ -231,6 +230,157 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
+- (void) notifyMediaMessageMediaDownloaded:(NSNotification *)notification
+{
+    ZNGMessage * message = notification.object;
+    NSIndexPath * indexPath = [self indexPathForMessage:message];
+    
+    if (indexPath != nil) {
+        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    }
+}
+
+#pragma mark - Accessory button
+- (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton
+{
+    NSMutableArray<UIAlertAction *> * actions = [[NSMutableArray alloc] initWithCapacity:3];
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");
+    } else {
+        UIAlertAction * takePhoto = [UIAlertAction actionWithTitle:@"Take a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self showImagePickerWithCameraMode:YES];
+        }];
+        [actions addObject:takePhoto];
+    }
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        ZNGLogInfo(@"The user's photo library is currently not available or is empty.");
+    } else {
+        UIAlertAction * choosePhoto = [UIAlertAction actionWithTitle:@"Choose a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self showImagePickerWithCameraMode:NO];
+        }];
+        [actions addObject:choosePhoto];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [actions addObject:cancel];
+    
+    return actions;
+}
+
+/**
+ *  Shows an image picker.
+ *
+ *  @param cameraMode If YES, the image picker will be initialized with UIImagePickerControllerSourceTypeCamera, otherwise UIImagePickerControllerSourceTypePhotoLibrary
+ */
+- (void) showImagePickerWithCameraMode:(BOOL)cameraMode
+{
+    UIImagePickerController * picker = [[UIImagePickerController alloc] init];
+    picker.delegate = self;
+    picker.allowsEditing = YES;
+    picker.sourceType = cameraMode ? UIImagePickerControllerSourceTypeCamera : UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:picker animated:YES completion:nil];
+}
+
+- (void) didPressAccessoryButton:(UIButton *)sender
+{
+    NSArray<UIAlertAction *> * actions = [self alertActionsForAccessoryButton];
+    
+    if ([actions count] == 0) {
+        ZNGLogWarn(@"Accessory button was pressed, but we have no options with which to present the user.  Ignoring.");
+        return;
+    }
+    
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (UIAlertAction * action in actions) {
+        [alert addAction:action];
+    }
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    UIImage * image = info[UIImagePickerControllerEditedImage];
+    
+    if (image == nil) {
+        ZNGLogError(@"No image data was found after the user selected an image.");
+        return;
+    }
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        BOOL cameraMode = (picker.sourceType == UIImagePickerControllerSourceTypeCamera);
+        [self sendImage:image fromCameraMode:cameraMode];
+    }];
+}
+
+- (void) sendImage:(UIImage *)image fromCameraMode:(BOOL)cameraMode
+{
+    [self.conversation sendMessageWithImage:image success:^(ZNGStatus *status) {
+        [self finishSendingMessageAnimated:YES];
+    } failure:^(ZNGError *error) {
+        UIAlertAction * retrySameImage = [UIAlertAction actionWithTitle:@"Retry the same image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self sendImage:image fromCameraMode:cameraMode];
+        }];
+        
+        UIAlertAction * chooseAnotherImage = [UIAlertAction actionWithTitle:@"Try another image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self showImagePickerWithCameraMode:cameraMode];
+        }];
+        
+        UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Error Sending Message" message:@"Unable to attach the selected image" preferredStyle:UIAlertControllerStyleAlert];
+        [alert addAction:retrySameImage];
+        [alert addAction:chooseAnotherImage];
+        [alert addAction:cancel];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
+}
+
+#pragma mark - Message read marking
+- (void) markAllVisibleMessagesAsRead
+{
+    NSArray<NSIndexPath *> * visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
+    NSMutableArray<ZNGMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:[visibleIndexPaths count]];
+    
+    for (NSIndexPath * indexPath in visibleIndexPaths) {
+        ZNGMessage * message = [self messageAtIndexPath:indexPath];
+        
+        if (message != nil) {
+            [messages addObject:message];
+        }
+    }
+    
+    [self markMessagesReadIfNecessary:messages];
+}
+
+- (void) markMessagesReadIfNecessary:(NSArray<ZNGMessage *> *)messages
+{
+    NSMutableArray<ZNGMessage *> * unreadMessages = [[NSMutableArray alloc] initWithCapacity:[messages count]];
+    
+    for (ZNGMessage * message in messages) {
+        if ([message.senderId isEqualToString:[self senderId]]) {
+            // We sent this message; we don't need to mark it as read
+            continue;
+        }
+        
+        if (message.readAt != nil) {
+            // This message was already read
+            continue;
+        }
+        
+        // This needs to be read
+        [unreadMessages addObject:message];
+    }
+    
+    if ([unreadMessages count] > 0) {
+        [self.conversation markMessagesAsRead:unreadMessages];
+    }
+}
+
 #pragma mark - Data source
 - (NSString *)senderId
 {
@@ -246,6 +396,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     NSArray<ZNGMessage *> * messages = self.conversation.messages;
     return (indexPath.row < [messages count]) ? messages[indexPath.row] : nil;
+}
+
+- (NSIndexPath *) indexPathForMessage:(ZNGMessage *)message
+{
+    NSUInteger index = [self.conversation.messages indexOfObject:message];
+    return (index != NSNotFound) ? [NSIndexPath indexPathForRow:index inSection:0] : nil;
 }
 
 - (ZNGMessage *) priorMessageToIndexPath:(NSIndexPath *)indexPath
@@ -287,46 +443,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     ZNGMessage * message = [self messageAtIndexPath:indexPath];
     [self markMessagesReadIfNecessary:@[message]];
-}
-
-- (void) markAllVisibleMessagesAsRead
-{
-    NSArray<NSIndexPath *> * visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
-    NSMutableArray<ZNGMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:[visibleIndexPaths count]];
-    
-    for (NSIndexPath * indexPath in visibleIndexPaths) {
-        ZNGMessage * message = [self messageAtIndexPath:indexPath];
-        
-        if (message != nil) {
-            [messages addObject:message];
-        }
-    }
-    
-    [self markMessagesReadIfNecessary:messages];
-}
-
-- (void) markMessagesReadIfNecessary:(NSArray<ZNGMessage *> *)messages
-{
-    NSMutableArray<ZNGMessage *> * unreadMessages = [[NSMutableArray alloc] initWithCapacity:[messages count]];
-    
-    for (ZNGMessage * message in messages) {
-        if ([message.senderId isEqualToString:[self senderId]]) {
-            // We sent this message; we don't need to mark it as read
-            continue;
-        }
-        
-        if (message.readAt != nil) {
-            // This message was already read
-            continue;
-        }
-        
-        // This needs to be read
-        [unreadMessages addObject:message];
-    }
-    
-    if ([unreadMessages count] > 0) {
-        [self.conversation markMessagesAsRead:unreadMessages];
-    }
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
@@ -433,18 +549,20 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     ZNGMessage * message = [self messageAtIndexPath:indexPath];
     
-    if ([message.senderId isEqualToString:[self senderId]]) {
-        cell.textView.textColor = self.outgoingTextColor;
-    } else {
-        cell.textView.textColor = self.incomingTextColor;
+    if (!message.isMediaMessage) {
+        if ([message.senderId isEqualToString:[self senderId]]) {
+            cell.textView.textColor = self.outgoingTextColor;
+        } else {
+            cell.textView.textColor = self.incomingTextColor;
+        }
+        
+        cell.textView.linkTextAttributes = @{
+                                             NSForegroundColorAttributeName : cell.textView.textColor,
+                                             NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid)
+                                             };
+        
+        cell.messageBubbleTopLabel.textColor = self.authorTextColor;
     }
-    
-    cell.textView.linkTextAttributes = @{
-                                         NSForegroundColorAttributeName : cell.textView.textColor,
-                                         NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid)
-                                         };
-    
-    cell.messageBubbleTopLabel.textColor = self.authorTextColor;
     
     return cell;
 }

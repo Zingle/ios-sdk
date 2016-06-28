@@ -18,8 +18,9 @@
 
 @end
 
+NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGConversationViewController : JSQMessagesViewController
+@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate>
 
 @property (nonatomic, strong, nullable) ZNGConversation * conversation;
 
@@ -100,5 +101,13 @@
 
 - (void) refreshConversation;
 
+#pragma mark - Methods to be overridden by subclasses to add functionality
+
+/**
+ *  By default, includes "Take a photo" and "Choose a photo."  Subclasses may choose to call this super implementation or provide just their own.
+ */
+- (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton;
+
+NS_ASSUME_NONNULL_END
 
 @end

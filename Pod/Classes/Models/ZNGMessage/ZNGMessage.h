@@ -11,7 +11,10 @@
 #import "ZNGUser.h"
 #import <JSQMessagesViewController/JSQMessageData.h>
 
-@interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
+// Posted through NSNotificationCenter when media has finished downloading
+#define kZNGMessageMediaLoadedNotification  @"kZNGMessageMediaLoadedNotification"
+
+@interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData, JSQMessageMediaData>
 
 #pragma mark - JSON properties
 @property(nonatomic, strong) NSString* messageId;

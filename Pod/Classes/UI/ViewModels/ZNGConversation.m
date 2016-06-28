@@ -175,49 +175,39 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 }
 
 #pragma mark - Actions
-- (void)markMessagesAsRead
+- (void)markMessagesAsRead:(NSArray<ZNGMessage *> *)messages;
 {
     NSMutableArray *messageIds = [[NSMutableArray alloc] init];
     NSDate *readAt = [NSDate date];
     
     // Build a list of message Ids to mark as read.
-    for (ZNGMessage *message in self.messages) {
+    for (ZNGMessage *message in messages) {
         
-        if (message.readAt == nil && [message.communicationDirection isEqualToString:@"inbound"]) {
+        if (message.readAt == nil) {
         
             // Set the readAt property so we don't mark this message as read again.
             message.readAt = readAt;
             
             [messageIds addObject:message.messageId];
-            
         }
     }
     
-    if (messageIds.count > 0) {
-        
-        [self.messageClient markMessagesReadWithMessageIds:messageIds
-                                                  readAt:readAt
-                                                 success:^(ZNGStatus *status) {
-                                                     
-            if (status.statusCode == 200) {
-                NSLog(@"Messages marked as read.");
-                [self.delegate messagesMarkedAsRead:YES];
-            } else {
-                NSLog(@"Failed to mark messages marked as read. statusCode = %ld", status.statusCode);
-                [self.delegate messagesMarkedAsRead:NO];
-            }
-                                                     
-        } failure:^(ZNGError *error) {
-                NSLog(@"Error marking messages as read. Error = %@", error.localizedDescription);
-                [self.delegate messagesMarkedAsRead:NO];
-        }];
-        
-    } else {
-        
-        [self.delegate messagesMarkedAsRead:YES];
-        
+    if ([messageIds count] == 0) {
+        return;
     }
-    
+
+    [self.messageClient markMessagesReadWithMessageIds:messageIds
+                                              readAt:readAt
+                                             success:^(ZNGStatus *status) {
+        if (status.statusCode == 200) {
+            ZNGLogDebug(@"Messages marked as read.");
+        } else {
+            ZNGLogError(@"Failed to mark messages marked as read. statusCode = %ld", status.statusCode);
+        }
+                                                 
+    } failure:^(ZNGError *error) {
+            ZNGLogError(@"Error marking messages as read. Error = %@", error.localizedDescription);
+    }];
 }
 
 - (void)sendMessageWithBody:(NSString *)body

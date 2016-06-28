@@ -51,7 +51,8 @@ extern NSString * const ZNGConversationParticipantTypeService;
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient;
 
 - (void)updateMessages;
-- (void)markMessagesAsRead;
+
+- (void)markMessagesAsRead:(NSArray<ZNGMessage *> *)messages;
 
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success

@@ -59,7 +59,8 @@
 #import "UIColor+ZingleSDK.h"
 #import "UIImage+ZingleSDK.h"
 #import "ZNGContactViewController.h"
-#import "ZNGImageViewerController.h"
+#import "ZNGConversationViewController.h"
+#import "ZNGImageViewController.h"
 #import "ZNGInboxViewController.h"
 #import "ZNGConversation.h"
 #import "ZNGConversationContactToService.h"
@@ -67,7 +68,6 @@
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGContactDetailsTableViewCell.h"
 #import "ZNGContactLabelsTableViewCell.h"
-#import "ZNGConversationViewController.h"
 #import "ZNGLabelCollectionViewCell.h"
 #import "ZNGLabelCollectionViewFlowLayout.h"
 #import "ZNGTableViewCell.h"
@@ -76,7 +76,6 @@
 #import "ZingleContactSession.h"
 #import "ZingleSDK.h"
 #import "ZingleSession.h"
-#import "ZingleSpecificAccountSession.h"
 
 FOUNDATION_EXPORT double ZingleSDKVersionNumber;
 FOUNDATION_EXPORT const unsigned char ZingleSDKVersionString[];

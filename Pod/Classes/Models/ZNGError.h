@@ -17,4 +17,9 @@
 
 - (id)initWithAPIError:(NSError *)error;
 
+/**
+ *  Returns YES if this error represents a possible authentication failure
+ */
+- (BOOL) isAuthenticationFailure;
+
 @end

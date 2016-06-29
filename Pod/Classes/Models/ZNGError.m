@@ -50,4 +50,15 @@ NSString* const kZingleErrorDomain = @"ZINGLE ERROR";
     return [NSString stringWithFormat:@"Zingle Error (%lu): %@ %@", (unsigned long)self.code, self.errorText, self.errorDescription];
 }
 
+- (BOOL) isAuthenticationFailure
+{
+    switch (self.httpStatusCode) {
+        case 401:
+        case 403:
+            return YES;
+        default:
+            return NO;
+    }
+}
+
 @end

@@ -9,16 +9,13 @@
 #import "ZNGInboxDataSearch.h"
 
 @implementation ZNGInboxDataSearch
-{
-    NSString * searchTerm;
-}
 
 - (nonnull instancetype) initWithContactClient:(ZNGContactClient *)contactClient searchTerm:(nonnull NSString *)theSearchTerm;
 {
     self = [super initWithContactClient:contactClient];
     
     if (self != nil) {
-        searchTerm = theSearchTerm;
+        _searchTerm = [theSearchTerm copy];
     }
     
     return self;
@@ -28,7 +25,7 @@
 {
     NSMutableDictionary * parameters = [super parameters];
     
-    parameters[ParameterKeyQuery] = [searchTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    parameters[ParameterKeyQuery] = [_searchTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     
     return parameters;
 }

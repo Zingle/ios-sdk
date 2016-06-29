@@ -10,14 +10,20 @@
 
 @interface ZNGInboxDataSearch : ZNGInboxDataSet
 
+NS_ASSUME_NONNULL_BEGIN
+
+@property (nonatomic, readonly) NSString * searchTerm;
+
 /**
  * Designated initializer.
  *
  * @param theServiceId The service identifier string for the user's current service.
  * @param theSearchTerm The search term to be sent to the server for filtering.  See https://github.com/Zingle/rest-api-documentation/blob/master/contacts/GET_list.md
  */
-- (nonnull instancetype) initWithContactClient:(nonnull ZNGContactClient *)contactClient searchTerm:(nonnull NSString *)theSearchTerm;
+- (instancetype) initWithContactClient:(ZNGContactClient *)contactClient searchTerm:(NSString *)theSearchTerm;
 
-- (nonnull instancetype) initWithContactClient:(nonnull ZNGContactClient *)contactClient NS_UNAVAILABLE;
+- (instancetype) initWithContactClient:(ZNGContactClient *)contactClient NS_UNAVAILABLE;
+
+NS_ASSUME_NONNULL_END
 
 @end

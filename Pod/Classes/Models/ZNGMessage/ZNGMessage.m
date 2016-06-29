@@ -18,6 +18,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     UIImageView * imageView;
     JSQMessagesMediaPlaceholderView * mediaPlaceholder;
+    BOOL startedDownloadingAttachments;
 }
 
 #pragma mark - Initialization
@@ -28,15 +29,20 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         if ([self isMediaMessage]) {
             mediaPlaceholder = [JSQMessagesMediaPlaceholderView viewWithActivityIndicator];
-            [self createMediaItem];
         }
     }
     
     return self;
 }
 
-- (void) createMediaItem
+- (void) downloadAttachmentsIfNecessary
 {
+    if (startedDownloadingAttachments) {
+        return;
+    }
+    
+    startedDownloadingAttachments = YES;
+    
     // We only support images for now.
     NSString * path = [self.attachments firstObject];
     NSURL * url = [NSURL URLWithString:path];
@@ -113,6 +119,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (id<JSQMessageMediaData>)media
 {
+    [self downloadAttachmentsIfNecessary];
+    
     return self;
 }
 

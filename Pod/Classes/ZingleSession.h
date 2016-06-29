@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZingleSDK.h"
 
 @class AFHTTPSessionManager;
 @class ZNGAccountClient;
@@ -16,7 +17,7 @@
 @class ZNGNotificationsClient;
 @class ZNGServiceClient;
 @class ZNGUserAuthorizationClient;
-
+@class ZNGError;
 
 /**
  *  This abstract class represents the current session with the Zingle API.  This must be initialized with a set of API credentials.
@@ -35,6 +36,17 @@
  *  The security key/password of the current API user.  Immutable after initialization.
  */
 @property (nonatomic, readonly, nonnull) NSString * key;
+
+/**
+ *  KVO compliant property holding the most recent error.  This is not cleared except to be replaced.
+ */
+@property (nonatomic, readonly, nullable) ZNGError * mostRecentError;
+
+/**
+ *  The block automatically called upon any error.  This block is retained throughout the lifetime of the session
+ *   object, so weak references should be used.
+ */
+@property (nonatomic, copy, nullable) ZNGErrorHandler errorHandler;
 
 /**
  *  The base URL.  Can be overridden only in debug builds.  Immutable after initialization.
@@ -62,7 +74,7 @@
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
  */
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Private method used by subclasses to subscribe for push notifications.

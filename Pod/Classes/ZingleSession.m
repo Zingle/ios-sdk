@@ -28,7 +28,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 }
 
 #pragma mark - Initializers
-- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler;
 {
     NSParameterAssert(token);
     NSParameterAssert(key);
@@ -38,6 +38,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         _token = [token copy];
         _key = [key copy];
+        _errorHandler = [errorHandler copy];
         NSString * urlString = [self urlOverride] ?: DebugBaseURL;
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
@@ -67,6 +68,16 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     return [NSString stringWithFormat:@"https://%@-api.zingle.me/v1/", prefix];
+}
+
+#pragma mark - Setters
+- (void) setMostRecentError:(ZNGError * _Nullable)mostRecentError
+{
+    _mostRecentError = mostRecentError;
+    
+    if ((mostRecentError != nil) && (self.errorHandler != nil)) {
+        self.errorHandler(mostRecentError);
+    }
 }
 
 #pragma mark - Push notifications

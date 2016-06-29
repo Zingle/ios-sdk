@@ -83,13 +83,19 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
  *  @param contactServiceChooser Optional block to be used to select a contact service once we obtain the list of available contact services.  May be neglected or return nil.
  *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
+ *  @param errorHandler Optional block that is called every time an error is received.
  */
-- (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser;
+- (instancetype) initWithToken:(NSString *)token
+                           key:(NSString *)key
+                 channelTypeId:(NSString *)channelTypeId
+                  channelValue:(NSString *)channelValue
+         contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
+                  errorHandler:(nullable ZNGErrorHandler)errorHandler;
 
 /**
  *  Initializing without specifying channel info is not allowed for a contact session.
  */
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_UNAVAILABLE;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_UNAVAILABLE;
 
 
 /**

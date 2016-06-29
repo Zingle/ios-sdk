@@ -15,12 +15,12 @@
 
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue
 {
-    return [self contactSessionWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:nil];
+    return [self contactSessionWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:nil errorHandler:nil];
 }
 
-+ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
++ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser errorHandler:(ZNGErrorHandler)errorHandler
 {
-    return [[ZingleContactSession alloc] initWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:contactServiceChooser];
+    return [[ZingleContactSession alloc] initWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:contactServiceChooser errorHandler:errorHandler];
 }
 
 + (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key

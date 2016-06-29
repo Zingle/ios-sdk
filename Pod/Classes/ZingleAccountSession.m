@@ -46,7 +46,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)anAccountChooser serviceChooser:(nullable ZNGServiceChooser)aServiceChooser
 {
-    self = [super initWithToken:token key:key];
+    self = [super initWithToken:token key:key errorHandler:nil];
     
     if (self != nil) {
         accountChooser = anAccountChooser;

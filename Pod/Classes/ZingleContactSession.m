@@ -33,12 +33,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGService * _service;   // Needed for creation of conversation view controller.  This may be unnecessary with a small refactor of that view.
 }
 
-- (instancetype) initWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(ZNGContactServiceChooser)contactServiceChooser
+- (instancetype) initWithToken:(NSString *)token
+                           key:(NSString *)key
+                 channelTypeId:(NSString *)channelTypeId
+                  channelValue:(NSString *)channelValue
+         contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
+                  errorHandler:(nullable ZNGErrorHandler)errorHandler
 {
     NSParameterAssert(channelTypeId);
     NSParameterAssert(channelValue);
     
-    self = [super initWithToken:token key:key];
+    self = [super initWithToken:token key:key errorHandler:errorHandler];
     
     if (self != nil) {
         _channelTypeID = [channelTypeId copy];

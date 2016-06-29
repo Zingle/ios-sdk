@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
 typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * availableServices);
 typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> *);
+typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
 
 @interface ZingleSDK : NSObject
 
@@ -38,8 +39,8 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue;
 
 /**
- *  The initializer for a Zingle session of the Contact type.  This includes both authentication information for the API user (i.e. the develoepr) and a set of identifying
- *   information for the contact to be sending messages (channel value and channel type ID.)
+ *  The initializer for a Zingle session in the Contact domain.  This includes both authentication information for the API user (i.e. the develoepr) and a set of identifying
+ *   information for the contact to be sending messages, etc.
  *
  *  Once a list of available, matching contact services has been returned by the server, the availableContactServices array will be populated and the contactServiceChooser will
  *   be called if one was provided.
@@ -50,8 +51,9 @@ typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGCon
  *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
  *  @param contactServiceChooser Optional block to be used to select a contact service once we obtain the list of available contact services.  May be neglected or return nil.
  *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
+ *  @param errorHandler Optional block that is called every time an error is received.
  */
-+ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser;
++ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser errorHandler:(ZNGErrorHandler)errorHandler;
 
 #pragma mark - Account access
 /**

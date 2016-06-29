@@ -231,6 +231,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
             [self appendMessages:@[message]];
+            self.totalMessageCount = self.totalMessageCount + 1;
             
             if (success) {
                 success(status);
@@ -267,7 +268,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                 NSString * messageId = [[response messageIds] firstObject];
                 
                 [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-                    [self mergeNewMessagesAtHead:@[message]];
+                    [self appendMessages:@[message]];
+                    self.totalMessageCount = self.totalMessageCount + 1;
+                    
                     if (success) {
                         success(status);
                     }

@@ -12,6 +12,12 @@
 #import "ZNGService.h"
 #import "ZNGContactService.h"
 
+/**
+ *  The NSNotification name to be posted along with the appropriate userInfo dictionary for the SDK to update its data and UI
+ *   to reflect incoming push notification info.
+ */
+FOUNDATION_EXPORT NSString * _Nonnull const ZNGPushNotificationReceived;
+
 @class ZingleAccountSession;
 @class ZingleContactSession;
 

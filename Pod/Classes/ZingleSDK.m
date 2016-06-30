@@ -11,6 +11,8 @@
 #import "ZingleAccountSession.h"
 #import "ZingleContactSession.h"
 
+NSString * const ZNGPushNotificationReceived = @"ZNGPushNotificationReceived";
+
 @implementation ZingleSDK
 
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue

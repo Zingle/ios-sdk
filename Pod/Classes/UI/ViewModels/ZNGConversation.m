@@ -210,6 +210,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }];
 }
 
+- (void)markAllUnreadMessagesAsRead
+{
+    [self markMessagesAsRead:self.messages];
+}
+
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure

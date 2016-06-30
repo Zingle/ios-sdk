@@ -52,7 +52,16 @@ extern NSString * const ZNGConversationParticipantTypeService;
 
 - (void)updateMessages;
 
+/**
+ *  Marks the specified messages as read, only if they do not already have read_at dates.
+ *  Messages that have already been marked read are ignored.
+ */
 - (void)markMessagesAsRead:(NSArray<ZNGMessage *> *)messages;
+
+/**
+ *  Marks all unread messages as read.
+ */
+- (void)markAllUnreadMessagesAsRead;
 
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success

@@ -40,7 +40,7 @@
 /**
  *  KVO compliant property holding the most recent error.  This is not cleared except to be replaced.
  */
-@property (nonatomic, readonly, nullable) ZNGError * mostRecentError;
+@property (nonatomic, strong, nullable) ZNGError * mostRecentError;
 
 /**
  *  The block automatically called upon any error.  This block is retained throughout the lifetime of the session

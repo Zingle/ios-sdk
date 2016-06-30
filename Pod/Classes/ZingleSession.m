@@ -126,6 +126,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             registerForNotifications();
         } failure:^(ZNGError *error) {
             ZNGLogWarn(@"Failed to unregister for push notifications before registering for a new service ID: %@\nAttempting to register the new ID anyway...", error);
+            self.mostRecentError = error;
             registerForNotifications();
         }];
     }

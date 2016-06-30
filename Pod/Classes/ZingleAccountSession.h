@@ -70,8 +70,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param key Security key for Zingle API user
  *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
  *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
+ *  @param errorHandler Optional block that is called every time an error is received.
  */
-- (instancetype) initWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
+- (instancetype) initWithToken:(NSString *)token
+                           key:(NSString *)key
+                accountChooser:(nullable ZNGAccountChooser)accountChooser
+                serviceChooser:(nullable ZNGServiceChooser)serviceChooser
+                  errorHandler:(nullable ZNGErrorHandler)errorHandler NS_DESIGNATED_INITIALIZER;
 
 /**
  *  Initializer for a Zingle session object.  If this constructor is used to create a ZingleAccountSession, the caller is later responsible for selecting an account

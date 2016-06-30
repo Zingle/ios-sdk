@@ -28,9 +28,13 @@
     return [self accountSessionWithToken:token key:key accountChooser:nil serviceChooser:nil];
 }
 
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token
+                                               key:(NSString *)key
+                                    accountChooser:(nullable ZNGAccountChooser)accountChooser
+                                    serviceChooser:(nullable ZNGServiceChooser)serviceChooser
+                                      errorHandler:(ZNGErrorHandler)errorHandler
 {
-    return [[ZingleAccountSession alloc] initWithToken:token key:token accountChooser:accountChooser serviceChooser:serviceChooser];
+    return [[ZingleAccountSession alloc] initWithToken:token key:token accountChooser:accountChooser serviceChooser:serviceChooser errorHandler:errorHandler];
 }
 
 @end

@@ -62,6 +62,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             }
         } failure:^(ZNGError *error) {
             ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", channelValue, channelTypeId);
+            self.mostRecentError = error;
         }];
     }
     
@@ -141,6 +142,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self setConversationForContactService];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
+        self.mostRecentError = error;
     }];
 }
 
@@ -162,6 +164,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self registerForPushNotifications];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to check user authorization status.");
+        self.mostRecentError = error;
     }];
 }
 

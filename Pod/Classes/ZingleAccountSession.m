@@ -41,12 +41,16 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
 {
-    return [self initWithToken:token key:key accountChooser:nil serviceChooser:nil];
+    return [self initWithToken:token key:key accountChooser:nil serviceChooser:nil errorHandler:nil];
 }
 
-- (instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key accountChooser:(nullable ZNGAccountChooser)anAccountChooser serviceChooser:(nullable ZNGServiceChooser)aServiceChooser
+- (instancetype) initWithToken:(NSString *)token
+                           key:(NSString *)key
+                accountChooser:(nullable ZNGAccountChooser)anAccountChooser
+                serviceChooser:(nullable ZNGServiceChooser)aServiceChooser
+                  errorHandler:(nullable ZNGErrorHandler)errorHandler
 {
-    self = [super initWithToken:token key:key errorHandler:nil];
+    self = [super initWithToken:token key:key errorHandler:errorHandler];
     
     if (self != nil) {
         accountChooser = anAccountChooser;
@@ -57,7 +61,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     return self;
 }
-
 
 #pragma mark - Service/Account setters
 - (void) setAccount:(ZNGAccount *)account
@@ -208,6 +211,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     } failure:^(ZNGError *error) {
         self.availableAccounts = @[];
         self.availableServices = nil;
+        self.mostRecentError = error;
     }];
 }
 
@@ -227,6 +231,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
         self.availableServices = nil;
+        self.mostRecentError = error;
     }];
 }
 

@@ -20,7 +20,7 @@ NSString * const DebugBaseURL = @"https://mobile-api.zingle.me/v1/";
 
 NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZingleSession
 {

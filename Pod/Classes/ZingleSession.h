@@ -77,6 +77,11 @@
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_DESIGNATED_INITIALIZER;
 
 /**
+ *  Static setter for the push notification device token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.
+ */
++ (void) setPushNotificationDeviceToken:(nonnull NSData *)token;
+
+/**
  *  Private method used by subclasses to subscribe for push notifications.
  *  Has no effect if pushNotificationDeviceToken is not set.
  */

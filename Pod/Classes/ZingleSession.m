@@ -81,18 +81,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 }
 
 #pragma mark - Push notifications
-- (void) setPushNotificationDeviceToken:(NSString *)pushNotificationDeviceToken
+- (void) setPushNotificationDeviceToken:(NSData *)pushNotificationDeviceToken
 {
-    NSString * deviceToken = pushNotificationDeviceToken;
-    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@">" withString:@""];
-    deviceToken = [deviceToken stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
-    [[NSUserDefaults standardUserDefaults] setValue:deviceToken forKey:PushNotificationDeviceTokenUserDefaultsKey];
+    [[NSUserDefaults standardUserDefaults] setValue:pushNotificationDeviceToken forKey:PushNotificationDeviceTokenUserDefaultsKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
-- (NSString *) pushNotificationDeviceToken
+- (NSData *) pushNotificationDeviceToken
 {
     return [[NSUserDefaults standardUserDefaults] valueForKey:PushNotificationDeviceTokenUserDefaultsKey];
 }

@@ -8,6 +8,7 @@
 
 #import "ZNGAppDelegate.h"
 #import <ZingleSDK/ZingleSDK.h>
+#import <ZingleSDK/ZingleSession.h>
 
 @implementation ZNGAppDelegate
 {
@@ -16,7 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
+    [self registerUserNotificationsForApplication:application];
     return YES;
 }
 
@@ -37,8 +38,9 @@
     
 }
 
-- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)theDeviceToken
 {
+    [ZingleSession setPushNotificationDeviceToken:theDeviceToken];
 }
 
 - (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error

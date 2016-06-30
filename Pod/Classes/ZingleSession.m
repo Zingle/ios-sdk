@@ -108,7 +108,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         return nil;
     }
     
-    NSString * tokenString = [[NSString alloc] initWithData:tokenData encoding:NSUTF8StringEncoding];
+    NSString * tokenString = tokenData.description;
     tokenString = [tokenString stringByReplacingOccurrencesOfString:@"<" withString:@""];
     tokenString = [tokenString stringByReplacingOccurrencesOfString:@">" withString:@""];
     tokenString = [tokenString stringByReplacingOccurrencesOfString:@" " withString:@""];

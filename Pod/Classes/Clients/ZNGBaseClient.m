@@ -44,6 +44,11 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     return self;
 }
 
+- (void) propogateError:(ZNGError *)error
+{
+    self.session.mostRecentError = error;
+}
+
 #pragma mark - GET
 - (NSURLSessionDataTask *)getListWithParameters:(NSDictionary*)parameters
                                            path:(NSString*)path
@@ -80,11 +85,13 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                 ZNGLogInfo(@"Received GET response.  Unable to parse a [%@] from the result: %@", responseClass, error.localizedDescription);
                 ZNGLogDebug(@"%@", result);
                 
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failure) {
                         failure(zngError);
-                    });
-                }
+                    }
+                    
+                    [self propogateError:error];
+                });
             } else {
                 ZNGLogDebug(@"Received and parsed GET response of type [%@][%lu]", responseClass, (unsigned long)[responseObj count]);
                 
@@ -102,6 +109,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (failure) {
             failure(zngError);
         }
+        
+        [self propogateError:zngError];
     }];
 }
 
@@ -139,11 +148,14 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                 ZNGLogInfo(@"Received GET response.  Unable to parse a %@ from the result: %@", responseClass, error.localizedDescription);
                 ZNGLogDebug(@"%@", result);
                 
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failure) {
                         failure(zngError);
-                    });
-                }
+                    }
+                    
+                    [self propogateError:zngError];
+                });
+
             } else {
                 ZNGLogDebug(@"Received and parsed GET response of type %@", responseClass);
                 
@@ -161,6 +173,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (failure) {
             failure(zngError);
         }
+        
+        [self propogateError:error];
     }];
 }
 
@@ -200,11 +214,14 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                 ZNGLogInfo(@"Unable to parse %@ from %@ PUT request: %@", responseClass, path, error.localizedDescription);
                 ZNGLogDebug(@"%@", result);
                 
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failure) {
                         failure(zngError);
-                    });
-                }
+                    }
+                    
+                    [self propogateError:zngError];
+                });
+
             } else {
                 ZNGLogDebug(@"Successfully received %@ from PUT", responseClass);
                 
@@ -222,6 +239,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (failure) {
             failure(zngError);
         }
+        
+        [self propogateError:zngError];
     }];
 }
 
@@ -248,6 +267,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             if (failure) {
                 failure(zngError);
             }
+            
+            [self propogateError:zngError];
         }
     }
     
@@ -278,11 +299,13 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                 ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
                 ZNGLogDebug(@"%@", result);
                 
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failure) {
                         failure(zngError);
-                    });
-                }
+                    }
+                    
+                    [self propogateError:zngError];
+                });
             } else {
                 ZNGLogDebug(@"Successfully received %@ from POST", responseClass);
                 
@@ -300,6 +323,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (failure) {
             failure(zngError);
         }
+        
+        [self propogateError:zngError];
     }];
 }
 
@@ -338,11 +363,13 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                 ZNGLogInfo(@"Unable to parse %@ from %@ POST request: %@", responseClass, path, error.localizedDescription);
                 ZNGLogDebug(@"%@", result);
                 
-                if (failure) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (failure) {
                         failure(zngError);
-                    });
-                }
+                    }
+                    
+                    [self propogateError:zngError];
+                });
             } else {
                 ZNGLogDebug(@"Successfully received %@ from POST", responseClass);
                 
@@ -360,8 +387,9 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (failure) {
             failure(zngError);
         }
+        
+        [self propogateError:zngError];
     }];
-    
 }
 
 
@@ -393,6 +421,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         if (failure) {
             failure(zngError);
         }
+        
+        [self propogateError:zngError];
     }];
 }
 

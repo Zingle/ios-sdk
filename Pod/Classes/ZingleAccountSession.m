@@ -211,7 +211,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     } failure:^(ZNGError *error) {
         self.availableAccounts = @[];
         self.availableServices = nil;
-        self.mostRecentError = error;
     }];
 }
 
@@ -231,7 +230,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
         self.availableServices = nil;
-        self.mostRecentError = error;
     }];
 }
 

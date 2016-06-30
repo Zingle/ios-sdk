@@ -53,7 +53,7 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
  *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
  *  @param errorHandler Optional block that is called every time an error is received.
  */
-+ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser errorHandler:(ZNGErrorHandler)errorHandler;
++ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser errorHandler:(nullable ZNGErrorHandler)errorHandler;
 
 #pragma mark - Account access
 /**

@@ -45,7 +45,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
         }
         
         return nil;
-    }];
+    } errorHandler:nil];
 }
 
 #pragma mark - Table

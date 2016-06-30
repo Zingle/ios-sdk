@@ -159,16 +159,15 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     NSString * direction = message.communicationDirection;
     
-    NSUInteger i = index - 1;
+    NSUInteger i = index;
     
     do {
+        i--;
         ZNGMessage * testMessage = self.messages[i];
         
         if ([testMessage.communicationDirection isEqualToString:direction]) {
             return testMessage;
         }
-        
-        i--;
     } while (i != 0);
     
     return nil;

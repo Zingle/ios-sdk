@@ -107,12 +107,14 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     if (tokenData == nil) {
         return nil;
     }
-    
-    NSString * tokenString = tokenData.description;
-    tokenString = [tokenString stringByReplacingOccurrencesOfString:@"<" withString:@""];
-    tokenString = [tokenString stringByReplacingOccurrencesOfString:@">" withString:@""];
-    tokenString = [tokenString stringByReplacingOccurrencesOfString:@" " withString:@""];
-    
+ 
+    const uint8_t * bytes = [tokenData bytes];
+    NSUInteger length = [tokenData length];
+    NSMutableString * tokenString = [[NSMutableString alloc] initWithCapacity:(length * 2)];
+    for (NSUInteger i=0; i < length; i++) {
+        [tokenString appendString:[NSString stringWithFormat:@"%02.2hhx", bytes[i]]];
+    }
+        
     return tokenString;
 }
 

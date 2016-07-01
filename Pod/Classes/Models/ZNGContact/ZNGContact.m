@@ -28,6 +28,20 @@
              };
 }
 
+- (BOOL) isEqual:(id)other
+{
+    if (![other isKindOfClass:[ZNGContact class]]) {
+        return NO;
+    }
+    
+    return [self isEqualToContact:other];
+}
+
+- (BOOL) isEqualToContact:(ZNGContact *)other
+{
+    return ([self.contactId isEqualToString:other.contactId]);
+}
+
 + (NSValueTransformer*)lastMessageJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
@@ -186,11 +200,12 @@
 
 - (BOOL)requiresVisualRefeshSince:(ZNGContact *)old
 {
-    return ((old.lastMessage == self.lastMessage) &&
-            ([[old fullName] isEqualToString:[self fullName]]) &&
-            (old.isStarred == self.isStarred) &&
-            (old.isConfirmed == self.isConfirmed) &&
-            ([old.labels isEqualToArray:self.labels]));
+    BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);
+    BOOL sameName = ([[old fullName] isEqualToString:[self fullName]]);
+    BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));
+    BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
+    
+    return !(sameLastMessage && sameName && sameStarConfirmed && sameLabels);
 }
 
 @end

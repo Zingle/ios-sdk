@@ -47,4 +47,6 @@
  */
 - (BOOL)requiresVisualRefeshSince:(ZNGContact *)old;
 
+- (BOOL) isEqualToContact:(ZNGContact *)other;
+
 @end

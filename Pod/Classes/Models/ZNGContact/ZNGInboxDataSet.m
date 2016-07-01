@@ -299,18 +299,55 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             replacements = [replacements subarrayWithRange:NSMakeRange(0, overlapRange.length)];
         }
         
-        ZNGLogVerbose(@"We received %ld contacts, %ld of which overlap with our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
+        ZNGLogVerbose(@"We received %ld contacts, %ld of which extend past our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
         
-        // Replace the overlapping objects
-        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRange];
-        [mutableContacts replaceObjectsAtIndexes:indexSet withObjects:replacements];
+        // We have two very specific simple cases that result from refreshes.
+        //  1) Two contacts have swapped places (new message to head)
+        //  2) The top contact needs to be refreshed, but the others are all unchanged.
+        BOOL simpleReorderingOrSingleRefresh = NO;
+        if ((overflowCount == 0) && ([incomingContacts count] >= 2)){
+            NSArray<ZNGContact *> * oldPage = [mutableContacts subarrayWithRange:overlapRange];
+            
+            if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
+                // This looks like a simple new-contact-to-head move so far.  Our first object has moved down by one.
+                // If we can find our new head somewhere else, we can do a simple swap.
+                NSUInteger sourceIndexOfNewHead = [oldPage indexOfObject:[incomingContacts firstObject]];
+                
+                if (sourceIndexOfNewHead != NSNotFound) {
+                    // This looks like a simple reordering!  Hooray!
+                    simpleReorderingOrSingleRefresh = YES;
+                    ZNGLogVerbose(@"Moving contact from position %lu to head", (unsigned long)sourceIndexOfNewHead);
+                    
+                    [mutableContacts removeObjectAtIndex:sourceIndexOfNewHead];
+                    [mutableContacts insertObject:[incomingContacts firstObject] atIndex:0];
+                }
+            } else if ([oldPage isEqualToArray:incomingContacts]) {
+                simpleReorderingOrSingleRefresh = YES;
+                
+                // Our contacts are all the same.  Replace any of the ones that need refreshing.  In practice, this will only be the very first object
+                //  99% of the time.  It's technically possible for messages to be received in inbox order to cause refreshes in place for more than one.
+                [oldPage enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
+                    ZNGContact * newContact = incomingContacts[idx];
+                    if ([contact requiresVisualRefeshSince:newContact]) {
+                        ZNGLogVerbose(@"Refreshing contact at position %lu", (unsigned int)idx);
+                        [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
+                    }
+                }];
+            }
+        }
         
-        // Append any extra
-        if (overflowCount > 0) {
-            NSRange overflowRange = NSMakeRange(overlapRange.length, [incomingContacts count] - overlapRange.length);
-            NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overflowRange];
-            NSArray * overflow = [incomingContacts subarrayWithRange:overflowRange];
-            [mutableContacts insertObjects:overflow atIndexes:indexSet];    // See note above about insertObjects:AtIndexes: vs. addObjectsFromArray; re: KVO
+        if (!simpleReorderingOrSingleRefresh) {
+            // Replace the overlapping objects
+            NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRange];
+            [mutableContacts replaceObjectsAtIndexes:indexSet withObjects:replacements];
+            
+            // Append any extra
+            if (overflowCount > 0) {
+                NSRange overflowRange = NSMakeRange(overlapRange.length, [incomingContacts count] - overlapRange.length);
+                NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overflowRange];
+                NSArray * overflow = [incomingContacts subarrayWithRange:overflowRange];
+                [mutableContacts insertObjects:overflow atIndexes:indexSet];    // See note above about insertObjects:AtIndexes: vs. addObjectsFromArray; re: KVO
+            }
         }
     }
     

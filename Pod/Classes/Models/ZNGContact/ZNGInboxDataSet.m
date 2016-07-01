@@ -328,7 +328,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 //  99% of the time.  It's technically possible for messages to be received in inbox order to cause refreshes in place for more than one.
                 [oldPage enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
                     ZNGContact * newContact = incomingContacts[idx];
-                    if ([contact requiresVisualRefeshSince:newContact]) {
+                    if ([newContact requiresVisualRefeshSince:contact]) {
                         ZNGLogVerbose(@"Refreshing contact at position %lu", (unsigned int)idx);
                         [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
                     }

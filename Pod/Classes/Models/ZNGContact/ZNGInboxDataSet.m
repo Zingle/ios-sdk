@@ -302,8 +302,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         ZNGLogVerbose(@"We received %ld contacts, %ld of which extend past our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
         
         // We have two very specific simple cases that result from refreshes.
-        //  1) Two contacts have swapped places (new message to head)
-        //  2) The top contact needs to be refreshed, but the others are all unchanged.
+        //  1) One message has moved to the head
+        //  2) All messages are still in order, but one (almost always one) or more needs to be refreshed
         BOOL simpleReorderingOrSingleRefresh = NO;
         if ((overflowCount == 0) && ([incomingContacts count] >= 2)){
             NSArray<ZNGContact *> * oldPage = [mutableContacts subarrayWithRange:overlapRange];

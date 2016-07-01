@@ -304,8 +304,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         // We have two very specific simple cases that result from refreshes.
         //  1) One message has moved to the head
         //  2) All messages are still in order, but one (almost always one) or more needs to be refreshed
-        BOOL simpleReorderingOrSingleRefresh = NO;
-        if ((overflowCount == 0) && ([incomingContacts count] >= 2)){
+        BOOL simpleReorderingOrRefresh = NO;
+        if ((overflowCount == 0) && ([incomingContacts count] >= 2)) {
             NSArray<ZNGContact *> * oldPage = [mutableContacts subarrayWithRange:overlapRange];
             
             if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
@@ -315,14 +315,14 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 
                 if (sourceIndexOfNewHead != NSNotFound) {
                     // This looks like a simple reordering!  Hooray!
-                    simpleReorderingOrSingleRefresh = YES;
+                    simpleReorderingOrRefresh = YES;
                     ZNGLogVerbose(@"Moving contact from position %lu to head", (unsigned long)sourceIndexOfNewHead);
                     
                     [mutableContacts removeObjectAtIndex:sourceIndexOfNewHead];
                     [mutableContacts insertObject:[incomingContacts firstObject] atIndex:0];
                 }
             } else if ([oldPage isEqualToArray:incomingContacts]) {
-                simpleReorderingOrSingleRefresh = YES;
+                simpleReorderingOrRefresh = YES;
                 
                 // Our contacts are all the same.  Replace any of the ones that need refreshing.  In practice, this will only be the very first object
                 //  99% of the time.  It's technically possible for messages to be received in inbox order to cause refreshes in place for more than one.
@@ -336,7 +336,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             }
         }
         
-        if (!simpleReorderingOrSingleRefresh) {
+        if (!simpleReorderingOrRefresh) {
             // Replace the overlapping objects
             NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRange];
             [mutableContacts replaceObjectsAtIndexes:indexSet withObjects:replacements];

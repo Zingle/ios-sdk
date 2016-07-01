@@ -13,7 +13,7 @@
 #import "ZNGLogging.h"
 #import "ZNGNewMessageResponse.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelVerbose;
 
 NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";
@@ -68,6 +68,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
         
+        ZNGLogVerbose(@"Received message list with %ld messages.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalMessageCount);
+        
         if (status.totalRecords == self.totalMessageCount) {
             // We have no new messages
             return;
@@ -75,7 +77,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         self.totalMessageCount = status.totalRecords;
         self.pagesLeftToLoad = status.totalPages - 1;
-        [self mergeNewMessagesAtHead:messages];
+        [self mergeNewMessagesAtTail:messages];
         
         if (self.pagesLeftToLoad > 0) {
             [self loadNextPage:status.page + 1];
@@ -90,7 +92,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self updateMessages];
 }
 
-- (void) mergeNewMessagesAtHead:(NSArray<ZNGMessage *> *)messages
+- (void) mergeNewMessagesAtTail:(NSArray<ZNGMessage *> *)messages
 {
     [self addSenderNameToMessages:messages];
     
@@ -104,21 +106,21 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         return;
     }
     
-    // We make the assumption that new data will only exist ahead of our existing data
-    NSUInteger indexOfOldFirstObjectInNewData = [messages indexOfObject:[mutableMessages firstObject]];
     
-    if (indexOfOldFirstObjectInNewData == NSNotFound) {
+    NSUInteger indexOfLastOldMessageInNewMessages = [messages indexOfObject:[mutableMessages lastObject]];
+    
+    if (indexOfLastOldMessageInNewMessages == NSNotFound) {
         // We were unable to find matching data anywhere.  Blow away our old array and use this new one.
         [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
         _messages = messages;
         [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
         return;
     }
-    
-    NSRange newHeadRange = NSMakeRange(0, indexOfOldFirstObjectInNewData);
-    NSArray * messagesToInsertAtHead = [messages subarrayWithRange:newHeadRange];
-    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:newHeadRange];
-    [mutableMessages insertObjects:messagesToInsertAtHead atIndexes:indexSet];
+
+    NSArray * newTail = [messages subarrayWithRange:NSMakeRange(indexOfLastOldMessageInNewMessages + 1, [messages count] - indexOfLastOldMessageInNewMessages - 1)];
+    NSRange destinationRange = NSMakeRange([mutableMessages count], [newTail count]);
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:destinationRange];
+    [mutableMessages insertObjects:newTail atIndexes:indexSet];
 }
 
 - (void) appendMessages:(NSArray<ZNGMessage *> *)messages

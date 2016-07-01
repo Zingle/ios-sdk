@@ -47,6 +47,13 @@
  */
 - (BOOL)requiresVisualRefeshSince:(ZNGContact *)old;
 
+/**
+ *  Returns YES if a table that contains this contact should emphasize the refresh.
+ *  Changes to the message itself will cause a value of YES.
+ *  Changes to star or confirmed status will return NO.
+ */
+- (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old;
+
 - (BOOL) isEqualToContact:(ZNGContact *)other;
 
 @end

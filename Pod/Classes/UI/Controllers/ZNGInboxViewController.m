@@ -193,19 +193,36 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     {
         case NSKeyValueChangeInsertion:
             ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
-            [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationRight];
             break;
             
         case NSKeyValueChangeRemoval:
             ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
-            [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationRight];
             break;
             
         case NSKeyValueChangeReplacement:
+        {
             ZNGLogVerbose(@"Replacing %ld items", (unsigned long)[paths count]);
-            // TODO: Check for messages that have swapped locations and use move instead of reload on those rows
-            [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationAutomatic];
+            
+            NSArray<ZNGContact *> * oldContacts = change[NSKeyValueChangeOldKey];
+            __block BOOL shouldEmphasize = NO;
+            
+            [paths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
+                ZNGContact * old = oldContacts[idx];
+                ZNGContact * current = [self contactAtIndexPath:indexPath];
+                
+                if ([current visualRefreshSinceOldMessageShouldAnimate:old]) {
+                    shouldEmphasize = YES;
+                    *stop = YES;
+                }
+            }];
+            
+            UITableViewRowAnimation animation = (shouldEmphasize) ? UITableViewRowAnimationLeft : UITableViewRowAnimationFade;
+            
+            [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:animation];
             break;
+        }
             
         case NSKeyValueChangeSetting:
         default:

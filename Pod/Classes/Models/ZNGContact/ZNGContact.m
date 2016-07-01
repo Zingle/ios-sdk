@@ -208,4 +208,9 @@
     return !(sameLastMessage && sameName && sameStarConfirmed && sameLabels);
 }
 
+- (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old
+{
+    return (![old.lastMessage isEqual:self.lastMessage]);
+}
+
 @end

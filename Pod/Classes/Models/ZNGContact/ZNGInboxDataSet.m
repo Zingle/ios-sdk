@@ -110,7 +110,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) refreshDueToPushNotification:(NSNotification *)notification
 {
-    [self refreshStartingAtIndex:0 removingTail:NO];
+    // TODO: Remove this delay once the elastic cloud something is re-ordered.  Ask Nathan.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self refreshStartingAtIndex:0 removingTail:NO];
+    });
 }
 
 - (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail

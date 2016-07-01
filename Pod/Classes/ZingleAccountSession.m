@@ -248,6 +248,30 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return conversation;
 }
 
+- (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact *))completion
+{
+    // Do we have a cached version of this conversation already?
+    ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contactId];
+    
+    if (conversation != nil) {
+        completion(conversation);
+        return;
+    }
+    
+    [self.contactClient contactWithId:contactId success:^(ZNGContact *contact, ZNGStatus *status) {
+        if (contact == nil) {
+            ZNGLogWarn(@"No contact could be retrieved with the ID of %@", contactId);
+            return;
+        }
+        
+        ZNGConversationServiceToContact * conversation = [self conversationWithContact:contact];
+        completion(conversation);
+    } failure:^(ZNGError *error) {
+        ZNGLogWarn(@"Unable to retrieve contact with ID of %@.");
+        completion(nil);
+    }];
+}
+
 - (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation
 {
     if (conversation == nil) {

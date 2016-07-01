@@ -99,6 +99,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 
+/**
+ *  Asynchronous retrieval of contact information.  Using conversationWithContact: is preferred if the ZNGContact object is available.
+ *  This is used most commonly to display a conversation just after launch, in response to a push notification.
+ */
+- (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact * _Nullable))completion;
+
 - (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
 
 @end

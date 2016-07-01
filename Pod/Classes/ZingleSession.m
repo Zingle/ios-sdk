@@ -54,9 +54,16 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         self.notificationsClient = [[ZNGNotificationsClient alloc] initWithSession:self];
         self.serviceClient = [[ZNGServiceClient alloc] initWithSession:self];
         self.userAuthorizationClient = [[ZNGUserAuthorizationClient alloc] initWithSession:self];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (NSString *) urlOverride
@@ -166,6 +173,11 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [self.notificationsClient unregisterForNotificationsWithDeviceId:token success:nil failure:^(ZNGError *error) {
         ZNGLogWarn(@"Unable to unregister for push notifications: %@", error);
     }];
+}
+
+- (void) notifyPushNotificationReceived:(NSNotification *)notification
+{
+    ZNGLogInfo(@"Push notification received: %@", notification.userInfo);
 }
 
 

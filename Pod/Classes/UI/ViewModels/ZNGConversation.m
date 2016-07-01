@@ -47,9 +47,16 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     if (self != nil) {
         _messages = @[];
         _messageClient = messageClient;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)updateMessages
@@ -76,6 +83,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
     } failure:nil];
+}
+
+- (void) notifyPushNotificationReceived:(NSNotification *)notification
+{
+    [self updateMessages];
 }
 
 - (void) mergeNewMessagesAtHead:(NSArray<ZNGMessage *> *)messages

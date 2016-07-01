@@ -287,7 +287,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ((!self.data.loading) && [self shouldRequestNewDataAfterViewingIndexPath:indexPath]) {
-        [self.data refreshStartingAtIndex:indexPath.row + 10];
+        [self.data refreshStartingAtIndex:indexPath.row + 10 removingTail:YES];
     }
 }
 

@@ -74,10 +74,11 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  *   by this request will be discarded.  (e.g. If we refresh and that ends up retrieving page 4 of 10, any page 5 or later will be discarded until it is fetched
  *   again in the future.)
  *
+ *  @param index The index at which to refresh.  If there is unloaded data before this point, it will be fetched as well.
+ *
  *  @note If this data lies beyond the current range of loaded data, all missing data leading up to this value will be loaded first.
  */
-- (void) refreshStartingAtIndex:(NSUInteger)index;
-
+- (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail;
 /**
  *  Overridden by subclasses to effect filtering.
  *

@@ -10,6 +10,7 @@
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGStatus.h"
+#import "ZingleSDK.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -65,6 +66,9 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         _loadingInitialData = YES;
         _contacts = @[];
         pageSize = 25;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
+        
         [self refresh];
     }
     
@@ -74,6 +78,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 - (void) dealloc
 {
     [fetchQueue cancelAllOperations];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Filtering
@@ -100,10 +105,15 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 #pragma mark - Loading data
 - (void) refresh
 {
-    [self refreshStartingAtIndex:0];
+    [self refreshStartingAtIndex:0 removingTail:YES];
 }
 
-- (void) refreshStartingAtIndex:(NSUInteger)index
+- (void) refreshDueToPushNotification:(NSNotification *)notification
+{
+    [self refreshStartingAtIndex:0 removingTail:NO];
+}
+
+- (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail
 {
     // Calculate what page indices should be loaded in order to load some data starting at the specified index.
     
@@ -153,10 +163,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         return;
     }
     
-    [self fetchPages:[pagesToRefresh array]];
+    [self fetchPages:[pagesToRefresh array] removingTail:removeTail];
 }
 
-- (void) fetchPages:(NSArray<NSNumber *> *)pages
+- (void) fetchPages:(NSArray<NSNumber *> *)pages removingTail:(BOOL)removeTail
 {
     self.loading = YES;
     __weak ZNGInboxDataSet * weakSelf = self;
@@ -202,28 +212,30 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         [fetchQueue addOperation:operation];
     }
     
-    // Remove any data past this current refresh
-    __block NSBlockOperation * removeTailOperation = [NSBlockOperation blockOperationWithBlock:^{
-        if (removeTailOperation.cancelled) {
-            return;
-        }
-        
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * pageSize;
-            
-            if (indexAfterCurrentData < [weakSelf.contacts count]) {
-                NSMutableArray<ZNGContact *> * mutable = [weakSelf mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
-                NSRange removalRange = NSMakeRange(indexAfterCurrentData, [mutable count] - indexAfterCurrentData);
-                NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:removalRange];
-                
-                ZNGLogVerbose(@"Removing %ld objects that occur past the current refresh range.", (unsigned long)removalRange.length);
-                
-                [mutable removeObjectsAtIndexes:indexSet];
+    // Remove any data past this current refresh if appropriate
+    if (removeTail) {
+        __block NSBlockOperation * removeTailOperation = [NSBlockOperation blockOperationWithBlock:^{
+            if (removeTailOperation.cancelled) {
+                return;
             }
-        });
-    }];
-    
-    [fetchQueue addOperation:removeTailOperation];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * pageSize;
+                
+                if (indexAfterCurrentData < [weakSelf.contacts count]) {
+                    NSMutableArray<ZNGContact *> * mutable = [weakSelf mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+                    NSRange removalRange = NSMakeRange(indexAfterCurrentData, [mutable count] - indexAfterCurrentData);
+                    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:removalRange];
+                    
+                    ZNGLogVerbose(@"Removing %ld objects that occur past the current refresh range.", (unsigned long)removalRange.length);
+                    
+                    [mutable removeObjectsAtIndexes:indexSet];
+                }
+            });
+        }];
+        
+        [fetchQueue addOperation:removeTailOperation];
+    }
     
     [fetchQueue addOperationWithBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{

@@ -78,7 +78,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return NO;
     }
     
-    return (self.messageId == other.messageId);
+    return ([self.messageId isEqualToString:other.messageId]);
 }
 
 - (NSUInteger)hash

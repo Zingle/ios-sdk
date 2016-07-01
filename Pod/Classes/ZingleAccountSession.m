@@ -33,6 +33,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGAccountChooser accountChooser;
     ZNGServiceChooser serviceChooser;
     
+    dispatch_semaphore_t contactClientSemaphore;
+    
     ZNGAccount * _account;
     ZNGService * _service;
 }
@@ -53,6 +55,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self = [super initWithToken:token key:key errorHandler:errorHandler];
     
     if (self != nil) {
+        contactClientSemaphore = dispatch_semaphore_create(0);
+        
         accountChooser = anAccountChooser;
         serviceChooser = aServiceChooser;
         _conversationsByContactId = [[NSMutableDictionary alloc] init];
@@ -187,6 +191,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self serviceId:serviceId];
     self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self serviceId:serviceId];
     self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
+    dispatch_semaphore_signal(contactClientSemaphore);
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     
@@ -258,7 +263,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return;
     }
     
-    [self.contactClient contactWithId:contactId success:^(ZNGContact *contact, ZNGStatus *status) {
+    void (^success)(ZNGContact *, ZNGStatus *) = ^(ZNGContact *contact, ZNGStatus *status) {
         if (contact == nil) {
             ZNGLogWarn(@"No contact could be retrieved with the ID of %@", contactId);
             return;
@@ -266,10 +271,34 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         
         ZNGConversationServiceToContact * conversation = [self conversationWithContact:contact];
         completion(conversation);
-    } failure:^(ZNGError *error) {
+    };
+    
+    void (^failure)(ZNGError *) = ^(ZNGError *error) {
         ZNGLogWarn(@"Unable to retrieve contact with ID of %@.");
         completion(nil);
-    }];
+    };
+
+    // If we have a contact client, full steam ahead
+    if (self.contactClient != nil) {
+        [self.contactClient contactWithId:contactId success:success failure:failure];
+        return;
+    }
+    
+    // We do not yet have a contact client.  Let's hang out and wait for one.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+        dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
+        long semaphoreValue = dispatch_semaphore_wait(contactClientSemaphore, fiveSeconds);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if ((semaphoreValue) || (self.contactClient == nil)) {
+                ZNGLogWarn(@"We waited for a contact client before attempting to retrieve contact data for contact #%@, but we never got a contact client :(", contactId);
+                completion(nil);
+                return;
+            }
+            
+            [self.contactClient contactWithId:contactId success:success failure:failure];
+        });
+    });
 }
 
 - (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation

@@ -20,7 +20,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         return NO;
     }
     
-    return (self.labelId == other.labelId);
+    return ([self.labelId isEqualToString:other.labelId]);
+}
+
+- (NSUInteger) hash
+{
+    return [self.labelId hash];
 }
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey

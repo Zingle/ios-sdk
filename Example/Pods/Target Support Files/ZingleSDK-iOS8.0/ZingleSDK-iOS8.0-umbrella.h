@@ -58,6 +58,7 @@
 #import "ZNGUserAuthorization.h"
 #import "UIColor+ZingleSDK.h"
 #import "UIImage+ZingleSDK.h"
+#import "ZNGContactToServiceViewController.h"
 #import "ZNGContactViewController.h"
 #import "ZNGConversationViewController.h"
 #import "ZNGImageViewController.h"

@@ -120,6 +120,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                                                                                            contactId:self.contactService.contactId
                                                                                     toContactService:self.contactService
                                                                                    withMessageClient:self.messageClient];
+            [self.conversation updateMessages];
         };
 
         if (self.messageClient != nil) {

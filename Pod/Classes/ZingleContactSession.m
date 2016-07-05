@@ -23,7 +23,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 // Override our read only array properties to get free KVO compliant setters
 @interface ZingleContactSession ()
 @property (nonatomic, strong, nullable) NSArray<ZNGContactService *> * availableContactServices;
-@property (nonatomic, strong, nullable) ZNGContactToServiceViewController * conversation;
+@property (nonatomic, strong, nullable) ZNGConversationContactToService * conversation;
 @property (nonatomic, strong, nullable) ZNGContact * contact;
 @end
 

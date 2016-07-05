@@ -8,6 +8,9 @@
 
 #import "ZNGConversationContactToService.h"
 #import "ZNGContactService.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGConversationContactToService
 {
@@ -80,5 +83,31 @@
 {
     return contactId;
 }
+
+- (void) deleteMessage:(ZNGMessage *)message
+{
+    if (message == nil) {
+        ZNGLogError(@"Tried to delete a nil message.");
+        return;
+    }
+    
+    [self.messageClient deleteMessagesWithIds:@[message.messageId] success:^(ZNGStatus *status) {
+        NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
+        [mutableMessages removeObject:message];
+    } failure:^(ZNGError *error) {
+        ZNGLogWarn(@"Unable to delete message %@: %@", message.messageId, error);
+    }];
+}
+
+- (void) deleteAllMessages
+{
+    [self.messageClient deleteAllMessagesForContactId:contactId success:^(ZNGStatus *status) {
+        NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
+        [mutableMessages removeAllObjects];
+    } failure:^(ZNGError *error) {
+        ZNGLogWarn(@"Unable to delete messages for contact ID %@: %@", contactId, error);
+    }];
+}
+
 
 @end

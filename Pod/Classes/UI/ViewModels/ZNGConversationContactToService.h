@@ -16,4 +16,16 @@
                             toContactService:(ZNGContactService *)aContactService
                            withMessageClient:(ZNGMessageClient*)messageClient;
 
+/**
+ *  Marks the specified message as "deleted by contact"
+ *
+ *  @param message The message to be marked as deleted
+ */
+- (void) deleteMessage:(ZNGMessage *)message;
+
+/**
+ *  Marks all messages in the conversation as "deleted by contact"
+ */
+- (void) deleteAllMessages;
+
 @end

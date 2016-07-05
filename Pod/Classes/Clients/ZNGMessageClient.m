@@ -150,9 +150,9 @@
     
 }
 
-- (void)deleteMessages:(NSArray *)messageIds
-               success:(void (^)(ZNGStatus* status))success
-               failure:(void (^)(ZNGError* error))failure
+- (void)deleteMessagesWithIds:(NSArray<NSString *> *)messageIds
+                      success:(void (^)(ZNGStatus* status))success
+                      failure:(void (^)(ZNGError* error))failure
 {
     NSString *path = [NSString stringWithFormat:@"services/%@/messages/deleted_by_contact", self.serviceId];
     

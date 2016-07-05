@@ -44,9 +44,9 @@
                               success:(void (^)(ZNGStatus* status))success
                               failure:(void (^)(ZNGError* error))failure;
 
-- (void)deleteMessages:(NSArray *)messageIds
-               success:(void (^)(ZNGStatus* status))success
-               failure:(void (^)(ZNGError* error))failure;
+- (void)deleteMessagesWithIds:(NSArray<NSString *> *)messageIds
+                      success:(void (^)(ZNGStatus* status))success
+                      failure:(void (^)(ZNGError* error))failure;
 
 - (void)deleteAllMessagesForContactId:(NSString *)contactId
                               success:(void (^)(ZNGStatus* status))success

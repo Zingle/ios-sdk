@@ -14,6 +14,7 @@
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
+#import "UIImage+ZingleSDK.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 static const uint64_t PollingIntervalSeconds = 10;
@@ -70,6 +71,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
     
+    [self setupBarButtonItems];
+    
     JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
@@ -118,6 +121,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if (pollingTimerSource != nil) {
         dispatch_source_cancel(pollingTimerSource);
     }
+}
+
+- (void) setupBarButtonItems
+{
+    NSArray<UIBarButtonItem *> * barItems = [self rightBarButtonItems];
+    
+    if ([barItems count] == 0) {
+        ZNGLogDebug(@"There are no right bar button items.");
+        return;
+    }
+    
+    self.navigationItem.rightBarButtonItems = barItems;
 }
 
 #pragma mark - Data properties
@@ -269,6 +284,40 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [actions addObject:cancel];
     
     return actions;
+}
+
+- (NSArray<UIBarButtonItem *> *)rightBarButtonItems
+{
+    if ([[self alertActionsForDetailsButton] count] > 0) {
+    UIBarButtonItem * detailsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage zng_defaultTypingIndicatorImage] style:UIBarButtonItemStylePlain target:self action:@selector(detailsButtonPressed:)];
+        return @[detailsButton];
+    }
+    
+    return nil;
+}
+
+- (NSArray<UIAlertAction *> *)alertActionsForDetailsButton
+{
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    return @[cancel];
+}
+
+- (void) detailsButtonPressed:(id)sender
+{
+    NSArray<UIAlertAction *> * alertActions = [self alertActionsForDetailsButton];
+    
+    if ([alertActions count] == 0) {
+        ZNGLogDebug(@"No actions available for details button.");
+        return;
+    }
+    
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (UIAlertAction * action in alertActions) {
+        [alert addAction:action];
+    }
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 /**

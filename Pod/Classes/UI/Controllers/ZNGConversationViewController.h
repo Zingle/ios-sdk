@@ -109,6 +109,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton;
 
+/**
+ *  By default, includes "Take a photo" and "Choose a photo."  Subclasses may choose to call this super implementation or provide just their own.
+ */
+- (NSArray<UIAlertAction *> *)alertActionsForDetailsButton;
+
+/**
+ *  Bar buttons for the top right "..." button.  Subclasses may choose to call this super implementation or provide just their own.
+ */
+- (NSArray<UIBarButtonItem *> *)rightBarButtonItems;
+
 #pragma mark - Protected methods used by subclasses
 - (ZNGMessage *) messageAtIndexPath:(NSIndexPath *)indexPath;
 

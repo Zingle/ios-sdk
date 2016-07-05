@@ -18,6 +18,23 @@
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
 }
 
+#pragma mark - Details button
+- (NSArray<UIAlertAction *> *)alertActionsForDetailsButton
+{
+    NSArray<UIAlertAction *> * superActions = [super alertActionsForDetailsButton];
+    NSMutableArray<UIAlertAction *> * actions = ([superActions count] > 0) ? [superActions mutableCopy] : [[NSMutableArray alloc] init];
+    
+    UIAlertAction * deleteAllMessages = [UIAlertAction actionWithTitle:@"Delete all messages" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
+        [conversation deleteAllMessages];
+    }];
+    
+    [actions addObject:deleteAllMessages];
+    
+    return actions;
+}
+
+#pragma mark - Collection view menu actions
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender;
 {
     if (action == @selector(delete:)) {

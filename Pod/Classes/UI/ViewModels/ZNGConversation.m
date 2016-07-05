@@ -42,6 +42,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient;
 {
+    NSParameterAssert(messageClient);
+    
     self = [super init];
     
     if (self != nil) {

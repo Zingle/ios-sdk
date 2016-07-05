@@ -21,7 +21,8 @@
 static int const zngLogLevel = ZNGLogLevelInfo;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
-static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loadingInitialData";
+static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadingInitialData";
+static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loading";
 static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 @interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
@@ -82,6 +83,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void) commonInit
 {
     [self addObserver:self forKeyPath:NSStringFromSelector(@selector(data)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
+    [self addObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
 }
@@ -90,6 +92,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     [self removeObserver:self forKeyPath:ZNGKVOContactsPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingPath context:ZNGInboxKVOContext];
+    [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(data)) context:ZNGInboxKVOContext];
 }
 
@@ -155,7 +158,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(data))]) {
+    if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
+        // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
+        // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
+        if ((!self.data.loading) && (refreshControl.isRefreshing)) {
+            [refreshControl endRefreshing];
+        }
+    } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(data))]) {
         ZNGInboxDataSet * oldData = change[NSKeyValueChangeOldKey];
         
         if (![self.data isEqual:oldData]) {
@@ -163,7 +172,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             self.tableView.hidden = YES;
             [self showActivityIndicator];
         }
-    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
+    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingInitialDataPath]) {
         if (!self.data.loadingInitialData) {
             // We just finished loading
             [self hideActivityIndicator];

@@ -10,7 +10,7 @@
 #import "ContactServiceTableViewCell.h"
 #import <ZingleSDK/ZingleSDK.h>
 #import <ZingleSDK/ZingleContactSession.h>
-#import <ZingleSDK/ZNGConversationViewController.h>
+#import <ZingleSDK/ZNGContactToServiceViewController.h>
 #import <JSQMessagesViewController/JSQMessagesTimestampFormatter.h>
 #import <ZingleSDK/ZNGConversationContactToService.h>
 
@@ -25,6 +25,10 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 {
     ZingleContactSession * session;
     NSArray<ZNGContactService *> * contactServices;
+
+    __weak ZNGContactToServiceViewController * conversationView;
+    
+    BOOL waitingForConversation;
 }
 
 - (void) viewDidLoad
@@ -44,6 +48,28 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
         
         return nil;
     } errorHandler:nil];
+    
+    [session addObserver:self forKeyPath:NSStringFromSelector(@selector(conversation)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
+}
+
+- (void) dealloc
+{
+    [session removeObserver:self forKeyPath:NSStringFromSelector(@selector(conversation))];
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(conversation))]) {
+        ZNGConversationContactToService * oldConversation = change[NSKeyValueChangeOldKey];
+        ZNGConversationContactToService * conversation = change[NSKeyValueChangeNewKey];
+        
+        BOOL noOldConversation = (([oldConversation isKindOfClass:[NSNull class]]) || (oldConversation == nil));
+        BOOL newConversationExists = ((![conversation isKindOfClass:[NSNull class]]) && (conversation != nil));
+        
+        if (noOldConversation && newConversationExists) {
+            conversationView.conversation = conversation;
+        }
+    }
 }
 
 #pragma mark - Table
@@ -73,9 +99,14 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
         ZNGContactService * selectedContactService = contactServices[indexPath.row];
         session.contactService = selectedContactService;
         
-        ZNGConversationViewController * conversationView = segue.destinationViewController;
+        ZNGContactToServiceViewController * aConversationView = segue.destinationViewController;
+        conversationView = aConversationView;
         ZNGConversationContactToService * conversation = session.conversation;
-        conversationView.conversation = conversation;
+        aConversationView.conversation = conversation;
+        
+        if (conversation == nil) {
+            waitingForConversation = YES;
+        }
     }
 }
 

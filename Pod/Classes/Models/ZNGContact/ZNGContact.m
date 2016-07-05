@@ -10,9 +10,98 @@
 #import "ZingleValueTransformers.h"
 #import "ZNGContactFieldValue.h"
 #import "ZNGLabel.h"
+#import "ZNGContactClient.h"
+#import "ZNGLogging.h"
+#import "ZingleSDK.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
+
+static NSString * const ParameterNameStarred = @"is_starred";
+static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 @implementation ZNGContact
 
+- (id) initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    
+    if (self != nil) {
+        [self setupObservation];
+    }
+    
+    return self;
+}
+
+- (id) initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError *__autoreleasing *)error
+{
+    self = [super initWithDictionary:dictionaryValue error:error];
+    
+    if (self != nil) {
+        [self setupObservation];
+    }
+    
+    return self;
+}
+
+- (void) setupObservation
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+#pragma mark - Observing for changes
+-(void) notifyPushNotificationReceived:(NSNotification *)notification
+{
+    NSString * updatedContactId = notification.userInfo[@"feedId"];
+    
+    if ([self.contactId isEqualToString:updatedContactId]) {
+        // We may have been updated.
+        
+        [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
+            
+            if (![contact requiresVisualRefeshSince:self]) {
+                // Nothing significant has changed
+                return;
+            }
+            
+            if (![[self fullName] isEqualToString:[contact fullName]]) {
+                self.customFieldValues = contact.customFieldValues;
+            }
+            
+            if (![self.lastMessage isEqual:contact.lastMessage]) {
+                self.lastMessage = contact.lastMessage;
+            }
+            
+            if (![self.channels isEqualToArray:contact.channels]) {
+                self.channels = contact.channels;
+            }
+            
+            if (![self.labels isEqualToArray:contact.labels]) {
+                self.labels = contact.labels;
+            }
+            
+            if (![self.updatedAt isEqualToDate:contact.updatedAt]) {
+                self.updatedAt = contact.updatedAt;
+            }
+            
+            if (self.isConfirmed != contact.isConfirmed) {
+                self.isConfirmed = contact.isConfirmed;
+            }
+            
+            if (self.isStarred != contact.isStarred) {
+                self.isStarred = contact.isStarred;
+            }
+            
+        } failure:nil];
+        
+    }
+}
+
+#pragma mark - Mantle
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
@@ -211,6 +300,69 @@
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old
 {
     return (![old.lastMessage isEqual:self.lastMessage]);
+}
+
+#pragma mark - Mutators
+- (void) star
+{
+    [self _setStar:YES];
+}
+
+- (void) unstar
+{
+    [self _setStar:NO];
+}
+
+- (void) _setStar:(BOOL)isStarred
+{
+    // We have to explicitly use @YES/@NO instead of autoboxing with @(isStarred) because a certain very particular Jovin server explodes if it gets a 1 for a boolean
+    NSNumber * starredNumber = isStarred ? @YES : @NO;
+    NSDictionary * params = @{ ParameterNameStarred : starredNumber };
+    
+    [self.contactClient updateContactWithId:self.contactId withParameters:params
+                                    success:^(ZNGContact *contact, ZNGStatus *status) {
+                                        
+                                        if (contact.isStarred != isStarred) {
+                                            ZNGLogError(@"Our POST to set isStarred to %@ succeeded, but the contact returned by the server is still %@",
+                                                        (isStarred) ? @"YES" : @"NO",
+                                                        (contact.isStarred) ? @"starred" : @"not starred");
+                                        }
+                                        
+                                        self.isStarred = contact.isStarred;
+                                    } failure:^(ZNGError *error) {
+                                        ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
+                                    }];
+}
+
+- (void) confirm
+{
+    [self _setConfirmed:YES];
+}
+
+- (void) unconfirm
+{
+    [self _setConfirmed:NO];
+}
+
+- (void) _setConfirmed:(BOOL)isConfirmed
+{
+    // We have to explicitly use @YES/@NO instead of autoboxing with @(isStarred) because a certain very particular Jovin server explodes if it gets a 1 for a boolean
+    NSNumber * confirmedNumber = isConfirmed ? @YES : @NO;
+    NSDictionary * params = @{ ParameterNameConfirmed : confirmedNumber };
+    
+    [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+        
+        if (contact.isConfirmed != isConfirmed) {
+            ZNGLogError(@"Our POST to set isConfirmed to %@ succeeded, but the contact returned by the server is still %@",
+                        (isConfirmed) ? @"YES" : @"NO",
+                        (contact.isConfirmed) ? @"confirmed" : @"not confirmed");
+        }
+        
+        self.isConfirmed = contact.isConfirmed;
+        
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
+    }];
 }
 
 @end

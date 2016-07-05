@@ -18,7 +18,16 @@
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
 }
 
-- (void) collectionView:(JSQMessagesCollectionView *)collectionView didDeleteMessageAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender;
+{
+    if (action == @selector(delete:)) {
+        return YES;
+    }
+    
+    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+}
+
+- (void)collectionView:(JSQMessagesCollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     ZNGMessage * message = [self messageAtIndexPath:indexPath];
     ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;

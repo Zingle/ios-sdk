@@ -195,9 +195,14 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = pageNumber;
             
-            [strongContactClient contactListWithParameters:parameters success:^(NSArray *contacts, ZNGStatus *status) {
+            [strongContactClient contactListWithParameters:parameters success:^(NSArray<ZNGContact *> *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;
                 weakSelf.count = status.totalRecords;
+                
+                // Add a contact client link to all contacts
+                for (ZNGContact * contact in contacts) {
+                    contact.contactClient = strongContactClient;
+                }
                 
                 if (!(operation.cancelled)) {
                     [weakSelf mergeNewData:contacts withStatus:status];

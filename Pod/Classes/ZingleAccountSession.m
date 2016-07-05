@@ -311,7 +311,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGServiceToContactViewController * vc = [[ZNGServiceToContactViewController alloc] init];
     vc.conversation = conversation;
-    vc.contactClient = self.contactClient;
     return vc;
 }
 

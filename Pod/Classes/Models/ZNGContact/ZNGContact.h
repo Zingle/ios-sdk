@@ -13,6 +13,7 @@
 @class ZNGChannel;
 @class ZNGContactFieldValue;
 @class ZNGLabel;
+@class ZNGContactClient;
 
 @interface ZNGContact : MTLModel<MTLJSONSerializing>
 
@@ -25,6 +26,8 @@
 @property(nonatomic, strong) NSArray<ZNGLabel *> * labels; // Array of ZNGLabel
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
+
+@property (nonatomic, weak, nullable) ZNGContactClient * contactClient;
 
 -(ZNGContactFieldValue *)titleFieldValue;
 -(ZNGContactFieldValue *)firstNameFieldValue;

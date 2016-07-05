@@ -166,6 +166,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }
         
         // We have a contact!  Now we need to set our header.
+        contact.contactClient = self.contactClient;
         self.contact = contact;
         [self setAuthorizationHeader];
         

@@ -6,7 +6,7 @@
 //
 //
 
-#import <ZingleSDK/ZingleSDK.h>
+#import <ZingleSDK/ZNGConversationViewController.h>
 
 @interface ZNGServiceToContactViewController : ZNGConversationViewController
 

@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGMessageClient;
 @class ZNGTemplateClient;
 
-@class ZNGConversationViewController;
+@class ZNGContactToServiceViewController;
 
 @interface ZingleContactSession : ZingleSession
 
@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  This is nil if no contact service has been selected.
  */
-@property (nonatomic, readonly, nullable) ZNGConversationContactToService * conversation;
+@property (nonatomic, readonly, nullable) ZNGContactToServiceViewController * conversation;
 
 #pragma mark - Clients used internally for connectivity
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
@@ -104,7 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  If the selected contact service changes, this view controller will remain with the previous contact service.  The user may set the conversation property on
  *   this view controller to the new conversation or request a brand new view controller with this method.
  */
-- (ZNGConversationViewController *) conversationViewController;
+- (ZNGContactToServiceViewController *) conversationViewController;
 
 @end
 

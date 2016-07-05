@@ -11,6 +11,7 @@
 @class DGActivityIndicatorView;
 @class ZNGConversation;
 @class ZNGConversationViewController;
+@class ZNGMessage;
 
 @protocol ZNGConversationModalDelegate <NSObject>
 
@@ -107,6 +108,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  By default, includes "Take a photo" and "Choose a photo."  Subclasses may choose to call this super implementation or provide just their own.
  */
 - (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton;
+
+#pragma mark - Protected methods used by subclasses
+- (ZNGMessage *) messageAtIndexPath:(NSIndexPath *)indexPath;
 
 NS_ASSUME_NONNULL_END
 

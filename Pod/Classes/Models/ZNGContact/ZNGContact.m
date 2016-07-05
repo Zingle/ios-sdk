@@ -16,6 +16,8 @@
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
+NSString * __nonnull const ZNGContactNotificationSelfMutated = @"ZNGContactNotificationSelfMutated";
+
 static NSString * const ParameterNameStarred = @"is_starred";
 static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
@@ -329,6 +331,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
                                         }
                                         
                                         self.isStarred = contact.isStarred;
+                                        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
                                     } failure:^(ZNGError *error) {
                                         ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
                                     }];
@@ -359,7 +362,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         }
         
         self.isConfirmed = contact.isConfirmed;
-        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
     }];

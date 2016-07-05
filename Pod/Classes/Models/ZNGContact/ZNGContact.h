@@ -15,6 +15,11 @@
 @class ZNGLabel;
 @class ZNGContactClient;
 
+/**
+ *  The notification posted whenever a contact mutates itself.  The object in the NSNotification will be the updated ZNGContact
+ */
+extern NSString * __nonnull const ZNGContactNotificationSelfMutated;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZNGContact : MTLModel<MTLJSONSerializing>

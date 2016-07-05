@@ -12,7 +12,7 @@
 #import "ZNGService.h"
 #import "ZNGAccountClient.h"
 #import "ZNGServiceClient.h"
-#import "ZNGConversationViewController.h"
+#import "ZNGServiceToContactViewController.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGAutomationClient.h"
 #import "ZNGContactClient.h"
@@ -301,14 +301,14 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     });
 }
 
-- (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation
+- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation
 {
     if (conversation == nil) {
         ZNGLogError(@"Attempted to display view controller for a nil conversation.");
         return nil;
     }
     
-    ZNGConversationViewController * vc = [[ZNGConversationViewController alloc] init];
+    ZNGServiceToContactViewController * vc = [[ZNGServiceToContactViewController alloc] init];
     vc.conversation = conversation;
     return vc;
 }

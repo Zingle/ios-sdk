@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGContact;
 @class ZNGConversationServiceToContact;
 @class ZNGAutomationClient, ZNGContactChannelClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
-@class ZNGConversationViewController;
+@class ZNGServiceToContactViewController;
 
 @interface ZingleAccountSession : ZingleSession
 
@@ -105,7 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact * _Nullable))completion;
 
-- (ZNGConversationViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
+- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
 
 @end
 

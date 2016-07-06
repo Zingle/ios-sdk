@@ -16,7 +16,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     ZNGContact * contact;
     ZNGService * service;
     
-    NSString * userId;
+    NSString * myUserId;
 }
 
 - (id) initFromService:(ZNGService*)aService
@@ -31,7 +31,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         service = aService;
         contact = aContact;
         contactId = aContact.contactId;
-        userId = [theUserId copy];
+        myUserId = [theUserId copy];
         
         if (aChannel != nil) {
             _channel = aChannel;
@@ -72,7 +72,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             
             if ([userId length] > 0) {
                 // We know who sent the message.
-                if ([userId isEqualToString:userId]) {
+                if ([userId isEqualToString:myUserId]) {
                     message.senderDisplayName = @"Me";
                 } else if (sender != nil) {
                     message.senderDisplayName = [sender fullName];

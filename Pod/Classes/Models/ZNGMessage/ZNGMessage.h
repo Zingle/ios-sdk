@@ -40,6 +40,11 @@
 #pragma mark - Properties added by containing Conversation
 @property (nonatomic, copy) NSString * senderDisplayName;
 
+/**
+ *  If this message was sent from a service and has trigger-er information, that will be returned.  Otherwise, the sender ID will be returned.
+ */
+- (NSString *) triggeredByUserIdOrSenderId;
+
 - (BOOL) isOutbound;
 
 @end

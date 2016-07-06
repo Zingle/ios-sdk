@@ -18,6 +18,11 @@
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
 }
 
+- (BOOL) weAreSendingOutbound
+{
+    return NO;
+}
+
 #pragma mark - Details button
 - (NSArray<UIAlertAction *> *)alertActionsForDetailsButton
 {

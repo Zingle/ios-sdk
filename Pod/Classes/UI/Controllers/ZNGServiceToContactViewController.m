@@ -66,6 +66,11 @@ static void * KVOContext = &KVOContext;
     [self removeObserver:self forKeyPath:KVOContactStarredPath context:KVOContext];
 }
 
+- (BOOL) weAreSendingOutbound
+{
+    return YES;
+}
+
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (context == KVOContext) {

@@ -122,6 +122,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Protected methods used by subclasses
 - (ZNGMessage *) messageAtIndexPath:(NSIndexPath *)indexPath;
 
+#pragma mark - Abstract methods that must be overridden by subclasses
+- (BOOL) weAreSendingOutbound;
+
 NS_ASSUME_NONNULL_END
 
 @end

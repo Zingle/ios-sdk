@@ -18,6 +18,7 @@
 #import "ZNGContactClient.h"
 #import "ZNGContactChannelClient.h"
 #import "ZNGLabelClient.h"
+#import "ZNGUserAuthorizationClient.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -37,6 +38,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGAccount * _account;
     ZNGService * _service;
+    
+    ZNGUserAuthorization * userAuthorization;
 }
 
 
@@ -182,6 +185,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     // We now have both an account and a service selected.
     
     [self initializeAllClients];
+    [self retrieveUserObject];
 }
 
 - (void) initializeAllClients
@@ -196,6 +200,15 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
+}
+
+- (void) retrieveUserObject
+{
+    [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
+        userAuthorization = theUserAuthorization;
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to retrieve current user info from the root URL: %@", error);
+    }];
 }
 
 #pragma mark - Account retrieval

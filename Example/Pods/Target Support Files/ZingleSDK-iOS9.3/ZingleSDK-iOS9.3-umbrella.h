@@ -63,6 +63,7 @@
 #import "ZNGConversationViewController.h"
 #import "ZNGImageViewController.h"
 #import "ZNGInboxViewController.h"
+#import "ZNGServiceToContactViewController.h"
 #import "ZNGConversation.h"
 #import "ZNGConversationContactToService.h"
 #import "ZNGConversationServiceToContact.h"

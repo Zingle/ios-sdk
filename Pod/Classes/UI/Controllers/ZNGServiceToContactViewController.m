@@ -102,14 +102,16 @@ static void * KVOContext = &KVOContext;
     [confirmedButton addTarget:self action:@selector(pressedConfirmedButton:) forControlEvents:UIControlEventTouchUpInside];
     [self updateConfirmedButton];
     UIBarButtonItem * confirmBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:confirmedButton];
+    [items addObject:confirmBarButtonItem];
     
 
     starredImage = [UIImage zng_lrg_starredImage];
     notStarredImage = [UIImage zng_lrg_unstarredImage];
     starButton = [[UIBarButtonItem alloc] initWithImage:notStarredImage style:UIBarButtonItemStylePlain target:self action:@selector(pressedStarButton:)];
     [self updateStarButton];
+    [items addObject:starButton];
     
-    return @[confirmBarButtonItem, starButton];
+    return items;
 }
 
 - (NSArray<UIAlertAction *> *)alertActionsForDetailsButton

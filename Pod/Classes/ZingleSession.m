@@ -104,10 +104,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     return [[NSUserDefaults standardUserDefaults] valueForKey:PushNotificationDeviceTokenUserDefaultsKey];
 }
 
-/**
- *  Returns the device token as a string with "<" ">" and " " characters removed
- */
-- (NSString *) _pushNotificationDeviceTokenAsFilteredString
+- (NSString *) _pushNotificationDeviceTokenAsHexString
 {
     NSData * tokenData = [self pushNotificationDeviceToken];
 
@@ -139,7 +136,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         return;
     }
     
-    NSString * tokenString = [self _pushNotificationDeviceTokenAsFilteredString];
+    NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
     
     void (^registerForNotifications)() = ^{
         [self.notificationsClient registerForNotificationsWithDeviceId:tokenString withServiceIds:serviceIds success:^(ZNGStatus *status) {

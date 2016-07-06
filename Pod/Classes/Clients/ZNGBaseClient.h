@@ -36,6 +36,16 @@ NS_ASSUME_NONNULL_BEGIN
                                      success:(nullable void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(nullable void (^)(ZNGError* error))failure;
 
+/**
+ *  GET request with the ability to specify the result key.  Used when requesting the current contact info from the API root since it is
+ *   contained within an "auth" object instead of the usual "result"
+ */
+- (NSURLSessionDataTask*)getWithResourcePath:(NSString *)path
+                               responseClass:(Class)responseClass
+                             resultObjectKey:(NSString *)responseKey
+                                     success:(void (^)(id _Nonnull, ZNGStatus * _Nonnull))success
+                                     failure:(void (^)(ZNGError * _Nonnull))failure;
+
 #pragma mark - POST methods
 
 - (NSURLSessionDataTask*)postWithModel:(nullable id<MTLJSONSerializing>)model

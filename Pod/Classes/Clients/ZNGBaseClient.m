@@ -114,10 +114,11 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     }];
 }
 
-- (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
-                               responseClass:(Class)responseClass
-                                     success:(void (^)(id responseObject, ZNGStatus *status))success
-                                     failure:(void (^)(ZNGError* error))failure
+- (NSURLSessionDataTask *) getWithResourcePath:(NSString *)path
+                                 responseClass:(Class)responseClass
+                               resultObjectKey:(NSString *)responseKey
+                                       success:(void (^)(id _Nonnull, ZNGStatus * _Nonnull))success
+                                       failure:(void (^)(ZNGError * _Nonnull))failure
 {
     ZNGLogDebug(@"Sending request to %@%@, expecting %@ in response", self.session.sessionManager.baseURL, path, responseClass);
     
@@ -139,7 +140,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         
         dispatch_async(self.session.jsonProcessingQueue, ^{
             NSError * error;
-            NSDictionary* result = responseObject[kBaseClientResult];
+            NSDictionary* result = responseObject[responseKey];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
             
             if (error) {
@@ -155,7 +156,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                     
                     [self propogateError:zngError];
                 });
-
+                
             } else {
                 ZNGLogDebug(@"Received and parsed GET response of type %@", responseClass);
                 
@@ -176,6 +177,14 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         
         [self propogateError:error];
     }];
+}
+
+- (NSURLSessionDataTask*)getWithResourcePath:(NSString*)path
+                               responseClass:(Class)responseClass
+                                     success:(void (^)(id responseObject, ZNGStatus *status))success
+                                     failure:(void (^)(ZNGError* error))failure
+{
+    [self getWithResourcePath:path responseClass:responseClass resultObjectKey:kBaseClientResult success:success failure:failure];
 }
 
 #pragma mark - PUT

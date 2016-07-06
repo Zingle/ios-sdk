@@ -13,7 +13,12 @@
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"authorizationClass" : @"authorization_class"
+             @"authorizationClass" : @"authorization_class",
+             @"userId" : @"id",
+             @"email" : @"email",
+             @"firstName" : @"first_name",
+             @"lastName" : @"last_name",
+             @"title" : @"title"
              };
 }
 

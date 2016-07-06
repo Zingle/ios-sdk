@@ -14,11 +14,7 @@
 
 - (void)userAuthorizationWithSuccess:(void (^)(ZNGUserAuthorization* userAuthorization, ZNGStatus* status))success
                              failure:(void (^)(ZNGError* error))failure {
-    
-    [self getWithResourcePath:@""
-                responseClass:[ZNGUserAuthorization class]
-                      success:success
-                      failure:failure];
+    [self getWithResourcePath:@"" responseClass:[ZNGUserAuthorization class] resultObjectKey:@"auth" success:success failure:failure];
 }
 
 @end

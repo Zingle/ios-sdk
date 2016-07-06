@@ -12,8 +12,6 @@
 #import "ZNGLabelCollectionViewFlowLayout.h"
 #import "UIImage+ZingleSDK.h"
 #import "UIFont+OpenSans.h"
-#import "ZNGContactClient.h"
-#import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesTimestampFormatter.h"
 
@@ -178,21 +176,11 @@
 {
     self.starButton.enabled = NO;
 
-    NSNumber *starParam = self.contact.isStarred ? @NO : @YES;
     if (self.contact.isStarred) {
-        self.contact.isStarred = NO;
-        [self.starButton setImage:[UIImage zng_unstarredImage] forState:UIControlStateNormal];
+        [self.contact unstar];
     } else {
-        self.contact.isStarred = YES;
-        [self.starButton setImage:[UIImage zng_starredImage] forState:UIControlStateNormal];
+        [self.contact star];
     }
-    NSDictionary *params = @{@"is_starred" : starParam };
-    [self.session.contactClient updateContactWithId:self.contact.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        self.starButton.enabled = YES;
-        self.contact = contact;
-    } failure:^(ZNGError *error) {
-        self.starButton.enabled = YES;
-    }];
 }
 
 @end

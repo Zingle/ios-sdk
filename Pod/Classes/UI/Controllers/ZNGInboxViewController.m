@@ -296,7 +296,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
-        cell.session = self.session;
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         [cell.labelCollectionView reloadData];
         

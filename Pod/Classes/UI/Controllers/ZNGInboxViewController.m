@@ -86,10 +86,14 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
 }
 
 - (void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    
     [self removeObserver:self forKeyPath:ZNGKVOContactsPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath context:ZNGInboxKVOContext];
@@ -180,6 +184,16 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         }
     } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
         [self handleContactsUpdateWithChangeDictionary:change];
+    }
+}
+
+- (void) notifyContactSelfMutated:(NSNotification *)notification
+{
+    // We cannot use the normal KVO to detect this change since it occured in place within the object.
+    NSUInteger index = [self.data.contacts indexOfObject:notification.object];
+    
+    if (index != NSNotFound) {
+        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

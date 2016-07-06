@@ -15,20 +15,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     ZNGContact * contact;
     ZNGService * service;
+    
+    NSString * userId;
 }
 
-- (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient
-{
-    ZNGChannel * aChannel = [aContact channelForFreshOutgoingMessage];
-    
-    if (aChannel == nil) {
-        ZNGLogError(@"Unable to find a default channel for our current service.  Message sending will always fail to %@", aContact);
-    }
-    
-    return [self initFromService:aService toContact:aContact usingChannel:aChannel withMessageClient:messageClient];
-}
-
-- (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact usingChannel:(ZNGChannel *)aChannel withMessageClient:(ZNGMessageClient *)messageClient
+- (id) initFromService:(ZNGService*)aService
+             toContact:(ZNGContact *)aContact
+     withCurrentUserId:(NSString *)theUserId
+          usingChannel:(ZNGChannel * __nullable)aChannel
+     withMessageClient:(ZNGMessageClient *)messageClient;
 {
     self = [super initWithMessageClient:messageClient];
     
@@ -36,7 +31,18 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         service = aService;
         contact = aContact;
         contactId = aContact.contactId;
-        _channel = aChannel;
+        userId = [theUserId copy];
+        
+        if (aChannel != nil) {
+            _channel = aChannel;
+        } else {
+            _channel = [aContact channelForFreshOutgoingMessage];
+            
+            if (_channel == nil) {
+                ZNGLogError(@"Unable to find a default channel for our current service.  Message sending will always fail to %@", aContact);
+            }
+        }
+        
     }
     
     return self;
@@ -56,7 +62,22 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     for (ZNGMessage * message in messages) {
         if (![message isOutbound]) {
+            // This message is from contact to service.  The sender is the contact.
             message.senderDisplayName = [self remoteName];
+        } else {
+            // This message is from service to contact.  The sender is a Zingle user.  Hopefully we can figure out specifically who it is.
+            ZNGUser * sender = message.triggeredByUser;
+            NSString * userId = message.triggeredByUserId;
+            userId = ([userId length] > 0) ? userId : sender.userId;
+            
+            if ([userId length] > 0) {
+                // We know who sent the message.
+                if ([userId isEqualToString:userId]) {
+                    message.senderDisplayName = @"Me";
+                } else if (sender != nil) {
+                    message.senderDisplayName = [sender fullName];
+                }
+            }
         }
     }
 }

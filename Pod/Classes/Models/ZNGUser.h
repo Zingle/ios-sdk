@@ -18,4 +18,6 @@
 @property(nonatomic, strong) NSString* title;
 @property(nonatomic, strong) NSArray* serviceIds;
 
+- (NSString *) fullName;
+
 @end

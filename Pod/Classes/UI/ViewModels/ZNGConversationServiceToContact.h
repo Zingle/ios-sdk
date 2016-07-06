@@ -25,8 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable) ZNGChannel * channel;
 
-- (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact withMessageClient:(ZNGMessageClient *)messageClient;
-- (id) initFromService:(ZNGService*)aService toContact:(ZNGContact *)aContact usingChannel:(ZNGChannel * __nullable)aChannel withMessageClient:(ZNGMessageClient *)messageClient NS_DESIGNATED_INITIALIZER;
+- (id) initFromService:(ZNGService*)aService
+             toContact:(ZNGContact *)aContact
+     withCurrentUserId:(NSString *)userId
+          usingChannel:(ZNGChannel * __nullable)aChannel
+     withMessageClient:(ZNGMessageClient *)messageClient NS_DESIGNATED_INITIALIZER;
 
 NS_ASSUME_NONNULL_END
 

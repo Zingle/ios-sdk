@@ -29,7 +29,9 @@
                    path:path
           responseClass:nil
                 success:^(id responseObject, ZNGStatus *status) {
-                    success(status);
+                    if (success != nil) {
+                        success(status);
+                    }
                 }
                 failure:failure];
 }
@@ -51,7 +53,9 @@
                    path:path
           responseClass:nil
                 success:^(id responseObject, ZNGStatus *status) {
-                    success(status);
+                    if (success != nil) {
+                        success(status);
+                    }
                 } failure:failure];
 }
 

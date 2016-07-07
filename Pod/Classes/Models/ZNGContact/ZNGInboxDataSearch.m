@@ -25,7 +25,9 @@
 {
     NSMutableDictionary * parameters = [super parameters];
     
-    parameters[ParameterKeyQuery] = [_searchTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    if ([_searchTerm length] > 0) {
+        parameters[ParameterKeyQuery] = [_searchTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
     
     return parameters;
 }

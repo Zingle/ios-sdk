@@ -155,6 +155,17 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }
 }
 
+#pragma mark - Setters
+- (void) setData:(ZNGInboxDataSet *)data
+{
+    if ([data isEqual:self.data]) {
+        ZNGLogInfo(@"Neglecting to replace current %@ with %@ due to equality.", [self.data class], [data class]);
+        return;
+    }
+    
+    _data = data;
+}
+
 #pragma mark - Key Value Observing
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {

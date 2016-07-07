@@ -48,13 +48,19 @@ Conversation and Conversation View Controller objects will refresh data whenever
 
 ### Certificates and registration
 
-The user of the SDK must have a valid push notification entitlement in the app.  He is also responsible for registering the application's push notification capabilities on launch.  See  [Apple's Local and Remote Notification Programming Guide](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/Introduction.html) and [Ray Wenderlich's Push Notifications Tutorial](https://www.raywenderlich.com/123862/push-notifications-tutorial)
+The user of the SDK must have a valid push notification entitlement/certificate in the app.  He is also responsible for registering the application's push notification capabilities on launch.  See  [Apple's Local and Remote Notification Programming Guide](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/Introduction.html) and [Ray Wenderlich's Push Notifications Tutorial](https://www.raywenderlich.com/123862/push-notifications-tutorial)
 
 ### Setting the token
 
 Once the application has successfully registered for push notifications, the device token needs to be set within the ZingleSDK before a ZingleSession is created.
 
 ```swift
+    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+		// ...
+		application.registerForRemoteNotifications()
+		// ...
+	}
+
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
         ZingleSession.setPushNotificationDeviceToken(deviceToken)
     }
@@ -62,10 +68,15 @@ Once the application has successfully registered for push notifications, the dev
 
 ### Receiving push notifications
 
-Push notifications 
+Once a ZingleSession with a valid push notification entitlement and a set device token has connected through the SDK, push notifications will be sent to the device whenever new data is received.  It is up to the SDK user to post a notification so that the SDK elements can accept and react to the notification.
 
+```swift
+    func handleRemoteNotificationDictionary(userInfo: [NSObject : AnyObject], fromApplicationState state: UIApplicationState) {
+        NSNotificationCenter.defaultCenter().postNotificationName(ZNGPushNotificationReceived, object: nil, userInfo: userInfo)
+	}
+``
 
-### Integrated UI
+## Integrated UI
 
 In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI is fully customizeable to your needs, and can be used on behalf of the Contact, or on behalf of the Zingle Service.
 
@@ -105,7 +116,7 @@ vc.receiverName = @"Receiver name";
 [self presentViewController:vc animated:YES completion:nil];
 ```
 
-### Zingle Object Model
+## Zingle Object Model
 
 Model | Description
 --- | ---
@@ -128,9 +139,9 @@ ZNGConversation | Model responsible for maintaining the state of a conversation 
 ZNGConversationViewController | UI that manages the conversation between a Contact and a Service.
 ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#automation)
 
-### Examples
+## Examples
 
-#### Creating a list of conversations
+### Creating a list of conversations
 
 The example app loads the same conversation from the perspective of the contact and the service respectively. You will need to supply your own values for the following variables in [ZNGAppDelegate.m](Example/ZingleSDK/ZNGAppDelegate.m):
 ```obj-c

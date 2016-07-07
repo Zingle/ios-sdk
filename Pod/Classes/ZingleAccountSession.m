@@ -69,6 +69,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return self;
 }
 
+- (void) logout
+{
+    [self _unregisterForAllPushNotifications];
+}
+
 #pragma mark - Service/Account setters
 - (void) setAccount:(ZNGAccount *)account
 {

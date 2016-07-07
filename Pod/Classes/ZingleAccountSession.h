@@ -87,6 +87,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
 
+/**
+ *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.
+ */
+- (void) logout;
+
 #pragma mark - Messaging methods
 
 /**

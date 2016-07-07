@@ -63,30 +63,60 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void)updateMessages
 {
-    NSDictionary *params = @{kConversationPageSize : @100,
-                             kConversationContactId : contactId,
-                             kConversationPage : @1,
-                             kConversationSortField : kConversationCreatedAt};
+    BOOL alwaysFetchNewData = YES;
     
-    [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
+    void (^fetchNewData)() = ^{
+        NSDictionary *params = [self parametersForPageSize:100 pageIndex:1];
         
-        ZNGLogVerbose(@"Received message list with %ld messages.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalMessageCount);
-        
-        if (status.totalRecords == self.totalMessageCount) {
-            // We have no new messages
-            return;
-        }
-        
-        self.totalMessageCount = status.totalRecords;
-        self.pagesLeftToLoad = status.totalPages - 1;
-        [self mergeNewMessagesAtTail:messages];
-        
-        if (self.pagesLeftToLoad > 0) {
-            [self loadNextPage:status.page + 1];
+        [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
             
-        }
+            ZNGLogVerbose(@"Received message list with %ld messages.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalMessageCount);
+            
+            if (status.totalRecords == self.totalMessageCount) {
+                // We have no new messages
+                return;
+            }
+            
+            self.totalMessageCount = status.totalRecords;
+            self.pagesLeftToLoad = status.totalPages - 1;
+            [self mergeNewMessagesAtTail:messages];
+            
+            if (self.pagesLeftToLoad > 0) {
+                [self loadNextPage:status.page + 1];
+                
+            }
+            
+        } failure:nil];
+    };
+    
+    // If we already have some data, we will request a page size of 0 first to check if we even have new data
+    if (self.totalMessageCount > 0) {
+        NSDictionary * params = [self parametersForPageSize:0 pageIndex:1];
         
-    } failure:nil];
+        [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus *status) {
+            ZNGLogDebug(@"There are %ld total messages available.  We currently have %ld.", (long)status.totalRecords, (long)self.totalMessageCount);
+            
+            if (status.totalRecords > self.totalMessageCount) {
+                ZNGLogDebug(@"Requesting new data.");
+                fetchNewData();
+            }
+        } failure:^(ZNGError *error) {
+            ZNGLogError(@"Unable to retrieve status from empty message request.  Loading all data, since we cannot tell if we have any new data.");
+            fetchNewData();
+        }];
+    } else {
+        fetchNewData();
+    }
+}
+
+- (NSDictionary *) parametersForPageSize:(NSUInteger)pageSize pageIndex:(NSUInteger)pageIndex
+{
+    return @{
+             kConversationPageSize : @(pageSize),
+             kConversationContactId : contactId,
+             kConversationPage: @(pageIndex),
+             kConversationSortField : kConversationCreatedAt
+             };
 }
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
@@ -147,10 +177,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         return;
     }
     
-    NSDictionary *params = @{kConversationPageSize : @100,
-                             kConversationContactId : contactId,
-                             kConversationPage : @(page),
-                             kConversationSortField : kConversationCreatedAt};
+    NSDictionary * params = [self parametersForPageSize:100 pageIndex:page];
 
     [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
         [self appendMessages:messages];

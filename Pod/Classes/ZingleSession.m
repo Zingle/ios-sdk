@@ -160,14 +160,14 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 - (void) _unregisterForAllPushNotifications
 {
-    NSString * token = [self pushNotificationDeviceToken];
+    NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
 
-    if (token == nil) {
+    if ([tokenString length] == 0) {
         ZNGLogDebug(@"Not unregistering for push notifications because no device token has been set.");
         return;
     }
     
-    [self.notificationsClient unregisterForNotificationsWithDeviceId:token success:nil failure:^(ZNGError *error) {
+    [self.notificationsClient unregisterForNotificationsWithDeviceId:tokenString success:nil failure:^(ZNGError *error) {
         ZNGLogWarn(@"Unable to unregister for push notifications: %@", error);
     }];
 }

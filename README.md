@@ -40,6 +40,31 @@ Import the SDK header file where needed:
 #import <ZingleSDK/ZingleSDK.h>
 ```
 
+# Push Notifications
+
+Conversation and Conversation View Controller objects will refresh data whenever a push notification is received and sent to the SDK via NSNotification.
+
+## Preparing to receive push notifications
+
+### Certificates and registration
+
+The user of the SDK must have a valid push notification entitlement in the app.  He is also responsible for registering the application's push notification capabilities on launch.  See  [Apple's Local and Remote Notification Programming Guide](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/Introduction.html) and [Ray Wenderlich's Push Notifications Tutorial](https://www.raywenderlich.com/123862/push-notifications-tutorial)
+
+### Setting the token
+
+Once the application has successfully registered for push notifications, the device token needs to be set within the ZingleSDK before a ZingleSession is created.
+
+```swift
+    func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
+        ZingleSession.setPushNotificationDeviceToken(deviceToken)
+    }
+```
+
+### Receiving push notifications
+
+Push notifications 
+
+
 ### Integrated UI
 
 In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI is fully customizeable to your needs, and can be used on behalf of the Contact, or on behalf of the Zingle Service.
@@ -48,8 +73,7 @@ In addition to the standard API conveniences, the iOS SDK also provides an easy 
 
 UI Examples
 
-```obj-c
-
+```objective-c
 // Initialize basic auth for connecting to API.
 [[ZingleSDK sharedSDK] setToken:token andKey:key];
 

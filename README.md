@@ -40,17 +40,17 @@ Import the SDK header file where needed:
 #import <ZingleSDK/ZingleSDK.h>
 ```
 
-# Push Notifications
+## Push Notifications
 
 Conversation objects and Conversation View Controller objects will refresh data whenever a push notification is received and sent to the SDK via NSNotification (see Receiving push notifications below)
 
-## Preparing to receive push notifications
+### Preparing to receive push notifications
 
-### Certificates and registration
+#### Certificates and registration
 
-The user of the SDK must have a valid push notification entitlement/certificate in the app.  He is also responsible for registering the application's push notification capabilities on launch.  See  [Apple's Local and Remote Notification Programming Guide](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/Introduction.html) and [Ray Wenderlich's Push Notifications Tutorial](https://www.raywenderlich.com/123862/push-notifications-tutorial)
+The user of the SDK must have a valid push notification entitlement/certificate in the app.  He is also responsible for registering the application's push notification capabilities on launch.  See  [Apple's Local and Remote Notification Programming Guide](https://developer.apple.com/library/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/Introduction.html) and [Ray Wenderlich's Push Notifications Tutorial](https://www.raywenderlich.com/123862/push-notifications-tutorial).
 
-### Setting the token
+#### Setting the token
 
 Once the application has successfully registered for push notifications, the device token needs to be set within the ZingleSDK before a ZingleSession is created.
 
@@ -89,7 +89,7 @@ All ZingleSDK push notifications should include the Category value of ZingleSDK.
     func handleRemoteNotificationDictionary(userInfo: [NSObject : AnyObject], fromApplicationState state: UIApplicationState) {
         NSNotificationCenter.defaultCenter().postNotificationName(ZNGPushNotificationReceived, object: nil, userInfo: userInfo)
 	}
-``
+```
 
 ## Integrated UI
 

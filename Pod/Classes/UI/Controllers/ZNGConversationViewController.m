@@ -413,7 +413,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSMutableArray<ZNGMessage *> * unreadMessages = [[NSMutableArray alloc] initWithCapacity:[messages count]];
     
     for (ZNGMessage * message in messages) {
-        if ([message.senderId isEqualToString:[self senderId]]) {
+        if ([self weAreSendingOutbound] == [message isOutbound]) {
             // We sent this message; we don't need to mark it as read
             continue;
         }

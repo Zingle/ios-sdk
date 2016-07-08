@@ -26,7 +26,7 @@ To integrate the ZingleSDK into your Xcode project using CocoaPods, specify it i
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'ZingleSDK', '~> 0.2'
+pod 'ZingleSDK'
 ```
 
 Then, run the following command:
@@ -42,7 +42,7 @@ Import the SDK header file where needed:
 
 # Push Notifications
 
-Conversation and Conversation View Controller objects will refresh data whenever a push notification is received and sent to the SDK via NSNotification.
+Conversation objects and Conversation View Controller objects will refresh data whenever a push notification is received and sent to the SDK via NSNotification (see Receiving push notifications below)
 
 ## Preparing to receive push notifications
 
@@ -68,7 +68,22 @@ Once the application has successfully registered for push notifications, the dev
 
 ### Receiving push notifications
 
-Once a ZingleSession with a valid push notification entitlement and a set device token has connected through the SDK, push notifications will be sent to the device whenever new data is received.  It is up to the SDK user to post a notification so that the SDK elements can accept and react to the notification.
+Once a ZingleSession with a valid push notification entitlement and a set device token has connected through the SDK, push notifications will be sent to the device whenever new data is received.  It is up to the SDK user to post an NSNotification so that the SDK elements can accept and react to the notification.
+
+All ZingleSDK push notifications should include the Category value of ZingleSDK.  A push notification regarding a message will also include the contact service ID of the sender of the message as 'feedId.'  Following is a sample push notification dictionary and the Swift code to post an NSNotificationCenter notification to allow ZingleSDK elements to react to the new data.
+
+```
+{
+    aps =     {
+        alert =         {
+            body = " Jason Nobody \nThis is the message body.";
+        };
+        sound = default;
+    };
+    feedId = "28e02b1d-a38e-4e6b-85d1-95fe29983a7d";
+	category = "ZingleSDK";
+}
+```
 
 ```swift
     func handleRemoteNotificationDictionary(userInfo: [NSObject : AnyObject], fromApplicationState state: UIApplicationState) {

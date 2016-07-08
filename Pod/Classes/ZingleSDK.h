@@ -70,8 +70,9 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
  *
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
+ *  @param errorHandler Optional block that is called every time an error is received.
  */
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key;
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key errorHandler:(ZNGErrorHandler)errorHandler;
 
 /**
  *  Provides a session object with the provided API credentials.  This is an account type session that is used by a specific service.
@@ -83,8 +84,12 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
  *  @param key Security key for Zingle API user
  *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
  *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
+ *  @param errorHandler Optional block that is called every time an error is received.
  */
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key accountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser;
-
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token
+                                               key:(NSString *)key
+                                    accountChooser:(nullable ZNGAccountChooser)accountChooser
+                                    serviceChooser:(nullable ZNGServiceChooser)serviceChooser
+                                      errorHandler:(ZNGErrorHandler)errorHandler;
 @end
 NS_ASSUME_NONNULL_END

@@ -337,7 +337,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 [oldPage enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
                     ZNGContact * newContact = incomingContacts[idx];
                     if ([newContact requiresVisualRefeshSince:contact]) {
-                        ZNGLogVerbose(@"Refreshing contact at position %lu", (unsigned int)idx);
+                        ZNGLogVerbose(@"Refreshing contact at position %lu", (unsigned long)idx);
                         [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
                     }
                 }];

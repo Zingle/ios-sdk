@@ -90,7 +90,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                         failure(zngError);
                     }
                     
-                    [self propogateError:error];
+                    [self propogateError:zngError];
                 });
             } else {
                 ZNGLogDebug(@"Received and parsed GET response of type [%@][%lu]", responseClass, (unsigned long)[responseObj count]);
@@ -175,7 +175,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             failure(zngError);
         }
         
-        [self propogateError:error];
+        [self propogateError:zngError];
     }];
 }
 
@@ -184,7 +184,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                      success:(void (^)(id responseObject, ZNGStatus *status))success
                                      failure:(void (^)(ZNGError* error))failure
 {
-    [self getWithResourcePath:path responseClass:responseClass resultObjectKey:kBaseClientResult success:success failure:failure];
+    return [self getWithResourcePath:path responseClass:responseClass resultObjectKey:kBaseClientResult success:success failure:failure];
 }
 
 #pragma mark - PUT

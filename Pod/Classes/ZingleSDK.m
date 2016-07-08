@@ -25,9 +25,9 @@ NSString * const ZNGPushNotificationReceived = @"ZNGPushNotificationReceived";
     return [[ZingleContactSession alloc] initWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:contactServiceChooser errorHandler:errorHandler];
 }
 
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key errorHandler:(ZNGErrorHandler)errorHandler
 {
-    return [self accountSessionWithToken:token key:key accountChooser:nil serviceChooser:nil];
+    return [self accountSessionWithToken:token key:key accountChooser:nil serviceChooser:nil errorHandler:errorHandler];
 }
 
 + (ZingleAccountSession *) accountSessionWithToken:(NSString *)token

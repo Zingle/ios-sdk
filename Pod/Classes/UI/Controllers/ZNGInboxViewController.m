@@ -17,6 +17,7 @@
 #import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGServiceToContactViewController.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 

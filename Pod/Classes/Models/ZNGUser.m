@@ -25,7 +25,7 @@
 
 - (NSString *) fullName
 {
-    NSMutableString * name = nil;
+    NSString * name = nil;
     
     if (([self.firstName length] > 0) && ([self.lastName length] > 0)) {
         name = [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];

@@ -78,14 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
                 serviceChooser:(nullable ZNGServiceChooser)serviceChooser
                   errorHandler:(nullable ZNGErrorHandler)errorHandler NS_DESIGNATED_INITIALIZER;
 
-/**
- *  Initializer for a Zingle session object.  If this constructor is used to create a ZingleAccountSession, the caller is later responsible for selecting an account
- *   and service if two or more of either exist for this account.  They will be available in the availableAccounts and availableServices KVO-compliant properties.
- *
- *  @param token Token for Zingle API user
- *  @param key Security key for Zingle API user
- */
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_UNAVAILABLE;
 
 /**
  *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.

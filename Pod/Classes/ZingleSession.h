@@ -68,6 +68,8 @@
 @property (nonatomic, readonly, nonnull) AFHTTPSessionManager * sessionManager;
 @property (nonatomic, readonly, nonnull) dispatch_queue_t jsonProcessingQueue;
 
+- (nonnull id) init NS_UNAVAILABLE;
+
 /**
  *  Initializer for a Zingle session object.
  *

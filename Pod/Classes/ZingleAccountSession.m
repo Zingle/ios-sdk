@@ -293,7 +293,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     };
     
     void (^failure)(ZNGError *) = ^(ZNGError *error) {
-        ZNGLogWarn(@"Unable to retrieve contact with ID of %@.");
+        ZNGLogWarn(@"Unable to retrieve contact with ID of %@.", contactId);
         completion(nil);
     };
 

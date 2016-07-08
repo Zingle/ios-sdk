@@ -15,8 +15,6 @@
 #import "ZNGContactClient.h"
 #import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
-
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
@@ -41,6 +39,8 @@ static void * KVOContext = &KVOContext;
     if (self != nil) {
         [self setupKVO];
     }
+    
+    return self;
 }
 
 - (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -94,11 +94,6 @@ static void * KVOContext = &KVOContext;
 {
     NSArray<UIBarButtonItem *> * superButtonItems = [super rightBarButtonItems];
     NSMutableArray<UIBarButtonItem *> * items = ([superButtonItems count] > 0) ? [superButtonItems mutableCopy] : [[NSMutableArray alloc] init];
-    
-    ZNGContact * contact = [self contact];
-    
-    UIColor * color;
-    NSString * text;
     
     confirmedButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 100.0, 40.0)];
     confirmedButton.layer.cornerRadius = 5.0;
@@ -159,7 +154,7 @@ static void * KVOContext = &KVOContext;
 - (void) pressedEditContact
 {
     ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.conversation;
-    ZNGContactViewController * contactView = [ZNGContactViewController withContact:conversation.contact session:conversation.messageClient.session];
+    ZNGContactViewController * contactView = [ZNGContactViewController withContact:conversation.contact session:(ZingleAccountSession *)conversation.messageClient.session];
     [self.navigationController pushViewController:contactView animated:YES];
 }
 

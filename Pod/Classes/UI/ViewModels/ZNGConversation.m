@@ -62,9 +62,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 }
 
 - (void)updateMessages
-{
-    BOOL alwaysFetchNewData = YES;
-    
+{   
     void (^fetchNewData)() = ^{
         NSDictionary *params = [self parametersForPageSize:100 pageIndex:1];
         

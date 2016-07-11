@@ -7,6 +7,8 @@
 //
 
 #import "ZNGConversation.h"
+#import "ZNGEvent.h"
+#import "ZNGEventClient.h"
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
 #import "ZingleSession.h"
@@ -20,7 +22,7 @@ NSString * const ZNGConversationParticipantTypeService = @"service";
 
 @interface ZNGConversation ()
 
-@property (nonatomic) NSInteger totalMessageCount;
+@property (nonatomic) NSInteger totalEventCount;
 @property (nonatomic) NSInteger pagesLeftToLoad;
 
 @end
@@ -32,6 +34,7 @@ NSString *const kConversationPageSize = @"page_size";
 NSString *const kConversationContactId = @"contact_id";
 NSString *const kConversationSortField = @"sort_field";
 NSString *const kConversationCreatedAt = @"created_at";
+NSString *const kConversationEventType = @"event_type";
 NSString *const kAttachementContentTypeKey = @"content_type";
 NSString *const kAttachementContentTypeParam = @"image/png";
 NSString *const kAttachementBase64 = @"base64";
@@ -40,15 +43,17 @@ NSString *const kConversationContact = @"contact";
 NSString *const kMessageDirectionInbound = @"inbound";
 NSString *const kMessageDirectionOutbound = @"outbound";
 
-- (id) initWithMessageClient:(ZNGMessageClient *)messageClient;
+- (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient
 {
     NSParameterAssert(messageClient);
+    NSParameterAssert(eventClient);
     
     self = [super init];
     
     if (self != nil) {
-        _messages = @[];
+        _events = @[];
         _messageClient = messageClient;
+        _eventClient = eventClient;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
@@ -61,45 +66,43 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)updateMessages
+- (void)updateEvents
 {   
     void (^fetchNewData)() = ^{
         NSDictionary *params = [self parametersForPageSize:100 pageIndex:1];
         
-        [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
-            
-            ZNGLogVerbose(@"Received message list with %ld messages.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalMessageCount);
-            
-            if (status.totalRecords == self.totalMessageCount) {
+        [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+            ZNGLogVerbose(@"Received event list with %ld events.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalEventCount);
+
+            if (status.totalRecords == self.totalEventCount) {
                 // We have no new messages
                 return;
             }
             
-            self.totalMessageCount = status.totalRecords;
+            self.totalEventCount = status.totalRecords;
             self.pagesLeftToLoad = status.totalPages - 1;
-            [self mergeNewMessagesAtTail:messages];
+            [self mergeNewEventsAtTail:events];
             
             if (self.pagesLeftToLoad > 0) {
                 [self loadNextPage:status.page + 1];
-                
             }
             
         } failure:nil];
     };
     
     // If we already have some data, we will request a page size of 0 first to check if we even have new data
-    if (self.totalMessageCount > 0) {
+    if (self.totalEventCount > 0) {
         NSDictionary * params = [self parametersForPageSize:0 pageIndex:1];
         
-        [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus *status) {
-            ZNGLogDebug(@"There are %ld total messages available.  We currently have %ld.", (long)status.totalRecords, (long)self.totalMessageCount);
+        [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+            ZNGLogDebug(@"There are %ld total events available.  We currently have %ld.", (long)status.totalRecords, (long)self.totalEventCount);
             
-            if (status.totalRecords > self.totalMessageCount) {
+            if (status.totalRecords > self.totalEventCount) {
                 ZNGLogDebug(@"Requesting new data.");
                 fetchNewData();
             }
         } failure:^(ZNGError *error) {
-            ZNGLogError(@"Unable to retrieve status from empty message request.  Loading all data, since we cannot tell if we have any new data.");
+            ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
             fetchNewData();
         }];
     } else {
@@ -109,61 +112,75 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (NSDictionary *) parametersForPageSize:(NSUInteger)pageSize pageIndex:(NSUInteger)pageIndex
 {
-    return @{
-             kConversationPageSize : @(pageSize),
-             kConversationContactId : contactId,
-             kConversationPage: @(pageIndex),
-             kConversationSortField : kConversationCreatedAt
-             };
+    NSArray<NSString *> * eventTypes = [self eventTypes];
+    
+    NSMutableDictionary * params = [@{
+                                     kConversationPageSize : @(pageSize),
+                                     kConversationContactId : contactId,
+                                     kConversationPage: @(pageIndex),
+                                     kConversationSortField : kConversationCreatedAt,
+                                     } mutableCopy];
+    
+    if ([eventTypes count] > 0) {
+        params[kConversationEventType] = eventTypes;
+    }
+    
+    return params;
+}
+
+- (NSArray<NSString *> *)eventTypes
+{
+    // Default implementation is just messages
+    return @[@"messages"];
 }
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    [self updateMessages];
+    [self updateEvents];
 }
 
-- (void) mergeNewMessagesAtTail:(NSArray<ZNGMessage *> *)messages
+- (void) mergeNewEventsAtTail:(NSArray<ZNGEvent *> *)events
 {
-    [self addSenderNameToMessages:messages];
+    [self addSenderNameToMessageEvents:events];
     
-    NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
+    NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
 
-    if ([mutableMessages count] == 0) {
+    if ([mutableEvents count] == 0) {
         // We need to append this data
-        NSRange newMessageRange = NSMakeRange([mutableMessages count], [messages count]);
-        NSIndexSet * indexSet = [[NSIndexSet alloc] initWithIndexesInRange:newMessageRange];
-        [mutableMessages insertObjects:messages atIndexes:indexSet];
+        NSRange newEventRange = NSMakeRange([mutableEvents count], [events count]);
+        NSIndexSet * indexSet = [[NSIndexSet alloc] initWithIndexesInRange:newEventRange];
+        [mutableEvents insertObjects:events atIndexes:indexSet];
         return;
     }
     
     
-    NSUInteger indexOfLastOldMessageInNewMessages = [messages indexOfObject:[mutableMessages lastObject]];
+    NSUInteger indexOfLastOldEventInNewEvents = [events indexOfObject:[mutableEvents lastObject]];
     
-    if (indexOfLastOldMessageInNewMessages == NSNotFound) {
+    if (indexOfLastOldEventInNewEvents == NSNotFound) {
         // We were unable to find matching data anywhere.  Blow away our old array and use this new one.
-        [self willChangeValueForKey:NSStringFromSelector(@selector(messages))];
-        _messages = messages;
-        [self didChangeValueForKey:NSStringFromSelector(@selector(messages))];
+        [self willChangeValueForKey:NSStringFromSelector(@selector(events))];
+        _events = events;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(events))];
         return;
     }
 
-    NSArray * newTail = [messages subarrayWithRange:NSMakeRange(indexOfLastOldMessageInNewMessages + 1, [messages count] - indexOfLastOldMessageInNewMessages - 1)];
-    NSRange destinationRange = NSMakeRange([mutableMessages count], [newTail count]);
+    NSArray * newTail = [events subarrayWithRange:NSMakeRange(indexOfLastOldEventInNewEvents + 1, [events count] - indexOfLastOldEventInNewEvents - 1)];
+    NSRange destinationRange = NSMakeRange([mutableEvents count], [newTail count]);
     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:destinationRange];
-    [mutableMessages insertObjects:newTail atIndexes:indexSet];
+    [mutableEvents insertObjects:newTail atIndexes:indexSet];
 }
 
-- (void) appendMessages:(NSArray<ZNGMessage *> *)messages
+- (void) appendEvents:(NSArray<ZNGEvent *> *)events
 {
-    [self addSenderNameToMessages:messages];
+    [self addSenderNameToMessageEvents:events];
     
-    NSMutableArray * mutableMessages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(messages))];
-    NSRange range = NSMakeRange([mutableMessages count], [messages count]);
+    NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+    NSRange range = NSMakeRange([mutableEvents count], [events count]);
     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
-    [mutableMessages insertObjects:messages atIndexes:indexSet];
+    [mutableEvents insertObjects:events atIndexes:indexSet];
 }
 
-- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages
+- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
 {
     NSAssert(NO, @"Failed to implement required method: %s", __PRETTY_FUNCTION__);
 }
@@ -176,22 +193,23 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
     
     NSDictionary * params = [self parametersForPageSize:100 pageIndex:page];
-
-    [self.messageClient messageListWithParameters:params success:^(NSArray *messages, ZNGStatus* status) {
-        [self appendMessages:messages];
+    
+    [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+        [self appendEvents:events];
         self.pagesLeftToLoad--;
         
         if (self.pagesLeftToLoad >= 1) {
             [self loadNextPage:status.page + 1];
         }
-        
     } failure:nil];
 }
 
 #pragma mark - Data retrieval
 - (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message
 {
-    NSUInteger index = [self.messages indexOfObject:message];
+    NSUInteger index = [self.events indexOfObjectPassingTest:^BOOL(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
+        return ([event.message isEqual:message]);
+    }];
     
     if ((index == NSNotFound) || (index == 0)) {
         // This is the first
@@ -204,10 +222,10 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     do {
         i--;
-        ZNGMessage * testMessage = self.messages[i];
+        ZNGEvent * testEvent = self.events[i];
         
-        if ([testMessage.communicationDirection isEqualToString:direction]) {
-            return testMessage;
+        if ([testEvent.message.communicationDirection isEqualToString:direction]) {
+            return testEvent.message;
         }
     } while (i != 0);
     
@@ -252,7 +270,15 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void)markAllUnreadMessagesAsRead
 {
-    [self markMessagesAsRead:self.messages];
+    NSMutableArray<ZNGMessage *> * allMessages = [[NSMutableArray alloc] init];
+    
+    for (ZNGEvent * event in self.events) {
+        if (event.message != nil) {
+            [allMessages addObject:event.message];
+        }
+    }
+    
+    [self markMessagesAsRead:allMessages];
 }
 
 - (void)sendMessageWithBody:(NSString *)body
@@ -275,8 +301,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-            [self appendMessages:@[message]];
-            self.totalMessageCount = self.totalMessageCount + 1;
+            [self appendEvents:@[[ZNGEvent eventForNewMessage:message]]];
+            self.totalEventCount = self.totalEventCount + 1;
             
             if (success) {
                 success(status);
@@ -313,8 +339,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                 NSString * messageId = [[response messageIds] firstObject];
                 
                 [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-                    [self appendMessages:@[message]];
-                    self.totalMessageCount = self.totalMessageCount + 1;
+                    [self appendEvents:@[[ZNGEvent eventForNewMessage:message]]];
+                    self.totalEventCount = self.totalEventCount + 1;
                     
                     if (success) {
                         success(status);

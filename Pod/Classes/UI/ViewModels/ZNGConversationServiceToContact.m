@@ -8,6 +8,7 @@
 
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGLogging.h"
+#import "ZNGEvent.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -23,9 +24,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
              toContact:(ZNGContact *)aContact
      withCurrentUserId:(NSString *)theUserId
           usingChannel:(ZNGChannel * __nullable)aChannel
-     withMessageClient:(ZNGMessageClient *)messageClient;
+     withMessageClient:(ZNGMessageClient *)messageClient
+       withEventClient:(ZNGEventClient *)eventClient
 {
-    self = [super initWithMessageClient:messageClient];
+    self = [super initWithMessageClient:messageClient eventClient:eventClient];
     
     if (self != nil) {
         service = aService;
@@ -58,9 +60,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return [contact fullName];
 }
 
-- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages
+- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
 {
-    for (ZNGMessage * message in messages) {
+    for (ZNGEvent * event in events) {
+        ZNGMessage * message = event.message;
+        
+        if (message == nil) {
+            continue;
+        }
+        
         if (![message isOutbound]) {
             // This message is from contact to service.  The sender is the contact.
             message.senderDisplayName = [self remoteName];
@@ -79,6 +87,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                 }
             }
         }
+        
     }
 }
 

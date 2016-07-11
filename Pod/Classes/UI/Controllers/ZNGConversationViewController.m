@@ -85,7 +85,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
     dispatch_source_set_event_handler(pollingTimerSource, ^{
         if (weakSelf.isVisible) {
-            [weakSelf.conversation updateMessages];
+            [weakSelf.conversation updateEvents];
         }
     });
     dispatch_resume(pollingTimerSource);

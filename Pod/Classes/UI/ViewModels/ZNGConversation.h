@@ -15,9 +15,9 @@
 #import "ZNGMessageClient.h"
 
 @class ZNGContact;
-@class ZNGMessage;
+@class ZNGEvent;
 @class ZingleSession;
-@class ZNGMessageClient;
+@class ZNGEventClient;
 
 extern NSString * const ZNGConversationParticipantTypeContact;
 extern NSString * const ZNGConversationParticipantTypeService;
@@ -28,11 +28,15 @@ extern NSString * const ZNGConversationParticipantTypeService;
 }
 
 /**
- *  KVO compliant array of messages.  Observing this with KVO will give array insertion notifications.
+ *  KVO compliant array of events.  Observing this with KVO will give array insertion notifications.
+ *
+ *  Depending on the concrete subclass, this array may contain only messages, messages and notes, all events,
+ *   or something different depending on the implementation of eventTypes.
  */
-@property (nonatomic, strong) NSArray<ZNGMessage *> *messages;
+@property (nonatomic, strong) NSArray<ZNGEvent *> * events;
 
 @property (nonatomic, readonly) ZNGMessageClient * messageClient;
+@property (nonatomic, readonly) ZNGEventClient * eventClient;
 
 /**
  *  The display name for the other end of this conversation.
@@ -48,9 +52,9 @@ extern NSString * const ZNGConversationParticipantTypeService;
 /**
  *  Initializer.  This is intended to be subclassed and should never be called directly.
  */
-- (id) initWithMessageClient:(ZNGMessageClient *)messageClient;
+- (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient;
 
-- (void)updateMessages;
+- (void)updateEvents;
 
 /**
  *  Marks the specified messages as read, only if they do not already have read_at dates.
@@ -79,7 +83,16 @@ extern NSString * const ZNGConversationParticipantTypeService;
 - (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message;
 
 #pragma mark - Protected methods to be overridden by subclasses
-- (void) addSenderNameToMessages:(NSArray<ZNGMessage *> *)messages;
+
+/**
+ *  Array of event types as strings.  (e.g. "messages")
+ *  Returning nil will result in all events being fetched.
+ *
+ *  Default implementation returns @[@"messages"]
+ */
+- (NSArray<NSString *> *)eventTypes;
+
+- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events;
 - (ZNGNewMessage *)freshMessage;
 - (ZNGParticipant *)sender;
 - (ZNGParticipant *)receiver;

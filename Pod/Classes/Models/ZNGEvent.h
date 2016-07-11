@@ -22,4 +22,9 @@
 @property(nonatomic, strong) ZNGAutomation* automation;
 @property(nonatomic, strong) ZNGMessage* message;
 
++ (instancetype) eventForNewMessage:(ZNGMessage *)message;
+
+- (BOOL) isMessage;
+- (BOOL) isNote;
+
 @end

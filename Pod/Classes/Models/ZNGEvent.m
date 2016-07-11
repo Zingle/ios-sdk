@@ -9,6 +9,9 @@
 #import "ZNGEvent.h"
 #import "ZingleValueTransformers.h"
 
+static NSString * const ZNGEventTypeMessage = @"message";
+static NSString * const ZNGEventTypeNote = @"note";
+
 @implementation ZNGEvent
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey
@@ -43,6 +46,26 @@
 + (NSValueTransformer*)messageJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
+}
+
++ (instancetype) eventForNewMessage:(ZNGMessage *)message
+{
+    ZNGEvent * event = [[ZNGEvent alloc] init];
+    event.message = message;
+    event.eventId = message.messageId;
+    event.body = message.body;
+    event.eventType = ZNGEventTypeMessage;
+    return event;
+}
+
+- (BOOL) isMessage
+{
+    return [self.eventType isEqualToString:ZNGEventTypeMessage];
+}
+
+- (BOOL) isNote
+{
+    return [self.eventType isEqualToString:ZNGEventTypeNote];
 }
 
 @end

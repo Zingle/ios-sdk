@@ -11,6 +11,7 @@
 #import "ZNGAccount.h"
 #import "ZNGService.h"
 #import "ZNGAccountClient.h"
+#import "ZNGEventClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGServiceToContactViewController.h"
 #import "ZNGConversationServiceToContact.h"
@@ -202,6 +203,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
     dispatch_semaphore_signal(contactClientSemaphore);
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
+    self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
@@ -263,11 +265,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contact.contactId];
     
     if (conversation == nil) {
-        conversation = [[ZNGConversationServiceToContact alloc] initFromService:self.service toContact:contact withCurrentUserId:userAuthorization.userId usingChannel:nil withMessageClient:self.messageClient];
+        conversation = [[ZNGConversationServiceToContact alloc] initFromService:self.service
+                                                                      toContact:contact
+                                                              withCurrentUserId:userAuthorization.userId
+                                                                   usingChannel:nil
+                                                              withMessageClient:self.messageClient
+                                                                withEventClient:self.eventClient];
+        
         self.conversationsByContactId[contact.contactId] = conversation;
     }
 
-    [conversation updateMessages];
+    [conversation updateEvents];
     return conversation;
 }
 

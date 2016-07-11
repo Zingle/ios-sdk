@@ -113,7 +113,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (NSDictionary *) parametersForPageSize:(NSUInteger)pageSize pageIndex:(NSUInteger)pageIndex
 {
     NSArray<NSString *> * eventTypes = [self eventTypes];
-    
+
     NSMutableDictionary * params = [@{
                                      kConversationPageSize : @(pageSize),
                                      kConversationContactId : contactId,
@@ -131,7 +131,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (NSArray<NSString *> *)eventTypes
 {
     // Default implementation is just messages
-    return @[@"messages"];
+    return @[@"message"];
 }
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification

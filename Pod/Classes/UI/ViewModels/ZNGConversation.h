@@ -85,10 +85,10 @@ extern NSString * const ZNGConversationParticipantTypeService;
 #pragma mark - Protected methods to be overridden by subclasses
 
 /**
- *  Array of event types as strings.  (e.g. "messages")
+ *  Array of event types as strings.  (e.g. "message")
  *  Returning nil will result in all events being fetched.
  *
- *  Default implementation returns @[@"messages"]
+ *  Default implementation returns @[@"message"]
  */
 - (NSArray<NSString *> *)eventTypes;
 

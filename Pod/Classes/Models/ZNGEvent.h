@@ -11,7 +11,7 @@
 #import "ZNGAutomation.h"
 #import "ZNGMessage.h"
 
-@interface ZNGEvent : MTLModel<MTLJSONSerializing>
+@interface ZNGEvent : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 @property(nonatomic, strong) NSString* eventId;
 @property(nonatomic, strong) NSString* contactId;

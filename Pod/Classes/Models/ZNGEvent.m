@@ -68,4 +68,47 @@ static NSString * const ZNGEventTypeNote = @"note";
     return [self.eventType isEqualToString:ZNGEventTypeNote];
 }
 
+#pragma mark - Message data for <JSQMessageData>
+- (NSString *)senderId
+{
+    return self.message.sender.correspondentId;
+}
+
+- (NSString *)senderDisplayName
+{
+    NSString * messageSenderName = [self.message senderDisplayName];
+    
+    if (messageSenderName == nil) {
+        messageSenderName = [self.triggeredByUser fullName];
+    }
+    
+    return messageSenderName;
+}
+
+- (NSDate *)date
+{
+    return self.createdAt;
+}
+
+- (BOOL) isMediaMessage
+{
+    return ([self.message.attachments count] > 0);
+}
+
+- (NSUInteger)messageHash
+{
+    return [self.eventId hash];
+}
+
+- (NSString *)text
+{
+    return self.body;
+}
+
+- (id<JSQMessageMediaData>)media
+{
+    [self.message downloadAttachmentsIfNecessary];
+    return self.message;
+}
+
 @end

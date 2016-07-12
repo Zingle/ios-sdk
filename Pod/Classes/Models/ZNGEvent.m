@@ -48,6 +48,19 @@ static NSString * const ZNGEventTypeNote = @"note";
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
 }
 
+- (BOOL) isEqual:(ZNGEvent *)other {
+    if (![other isKindOfClass:[ZNGEvent class]]) {
+        return NO;
+    }
+    
+    return [self.eventId isEqualToString:other.eventId];
+}
+
+- (NSUInteger) hash
+{
+    return [self.eventId hash];
+}
+
 + (instancetype) eventForNewMessage:(ZNGMessage *)message
 {
     ZNGEvent * event = [[ZNGEvent alloc] init];
@@ -97,7 +110,7 @@ static NSString * const ZNGEventTypeNote = @"note";
 
 - (NSUInteger)messageHash
 {
-    return [self.eventId hash];
+    return [self.body hash];
 }
 
 - (NSString *)text

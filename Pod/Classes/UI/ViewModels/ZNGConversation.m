@@ -87,7 +87,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                 [self loadNextPage:status.page + 1];
             }
             
-        } failure:nil];
+        } failure:^(ZNGError *error) {
+            ZNGLogError(@"Event client failed to retrieve events: %@", error);
+        }];
     };
     
     // If we already have some data, we will request a page size of 0 first to check if we even have new data

@@ -11,6 +11,7 @@
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"
+#import "ZNGEventClient.h"
 #import "ZNGNotificationsClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGServiceClient.h"
@@ -31,7 +32,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     BOOL _onlyRegisterPushNotificationsForCurrentContactService;    // Flag that will be tied to support for multiple push notification registrations in the future
     
-    dispatch_semaphore_t messageClientSemaphore;
+    dispatch_semaphore_t messageAndEventClientSemaphore;
+    dispatch_semaphore_t userHeaderSetSemaphore;
     
     ZNGService * _service;   // Needed for creation of conversation view controller.  This may be unnecessary with a small refactor of that view.
 }
@@ -49,7 +51,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self = [super initWithToken:token key:key errorHandler:errorHandler];
     
     if (self != nil) {
-        messageClientSemaphore = dispatch_semaphore_create(1);
+        messageAndEventClientSemaphore = dispatch_semaphore_create(0);
+        userHeaderSetSemaphore = dispatch_semaphore_create(0);
         
         _channelTypeID = [channelTypeId copy];
         _channelValue = [channelValue copy];
@@ -113,36 +116,29 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     if (self.contactService.contactId != nil) {
-        
-        void (^setupConversation)() = ^{
-            self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
-                                                                                       channelTypeId:self.channelTypeID
-                                                                                           contactId:self.contactService.contactId
-                                                                                    toContactService:self.contactService
-                                                                                   withMessageClient:self.messageClient];
-            [self.conversation updateMessages];
-        };
-
-        if (self.messageClient != nil) {
-            ZNGLogDebug(@"Instantly creating conversation object.");
-            setupConversation();
-        } else {
-            // We do not yet have a message client.  We will wait up to five seconds for the message client to be set and the semaphore to be signaled.
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+            dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
+            long success = dispatch_semaphore_wait(messageAndEventClientSemaphore, fiveSeconds);
             
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-                dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
-                long success = dispatch_semaphore_wait(messageClientSemaphore, fiveSeconds);
-                
-                if (success == 0) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        ZNGLogDebug(@"Creating conversation object after briefly waiting for a message client.");
-                        setupConversation();
-                    });
-                } else {
-                    ZNGLogError(@"No message client was ever created.  We are unable to setup our conversation object.");
-                }
-            });
-        }
+            if (success == 0) {
+                success = dispatch_semaphore_wait(userHeaderSetSemaphore, fiveSeconds);
+            }
+            
+            if (success == 0) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ZNGLogDebug(@"Creating conversation object.");
+                    self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
+                                                                                               channelTypeId:self.channelTypeID
+                                                                                                   contactId:self.contactService.contactId
+                                                                                            toContactService:self.contactService
+                                                                                           withMessageClient:self.messageClient
+                                                                                                 eventClient:self.eventClient];
+                    [self.conversation updateEvents];
+                });
+            } else {
+                ZNGLogError(@"No message client was ever created.  We are unable to setup our conversation object.");
+            }
+        });
 
     } else {
         self.conversation = nil;
@@ -153,7 +149,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     NSString * serviceId = self.contactService.serviceId;
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
-    dispatch_semaphore_signal(messageClientSemaphore);
+    self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
+    dispatch_semaphore_signal(messageAndEventClientSemaphore);
     self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
 }
 
@@ -193,8 +190,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }
         
         [self registerForPushNotifications];
+        
+        dispatch_semaphore_signal(userHeaderSetSemaphore);
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to check user authorization status.");
+        
+        // Even though we failed, we will still signal the semaphore since we never expect to recover while anyone is waiting on it
+        dispatch_semaphore_signal(userHeaderSetSemaphore);
     }];
 }
 

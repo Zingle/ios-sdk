@@ -50,6 +50,20 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return self;
 }
 
+- (BOOL) isEqual:(ZNGConversationServiceToContact *)other
+{
+    if (![other isKindOfClass:[ZNGConversationServiceToContact class]]) {
+        return NO;
+    }
+    
+    return ([super isEqual:other]);
+}
+
+- (NSArray<NSString *> *)eventTypes
+{
+    return @[@"message", @"note"];
+}
+
 - (ZNGContact *)contact
 {
     return contact;

@@ -66,6 +66,20 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+- (BOOL) isEqual:(ZNGConversation *)other
+{
+    if (![other isKindOfClass:[ZNGConversation class]]) {
+        return NO;
+    }
+    
+    return [[self eventTypes] isEqualToArray:[other eventTypes]];
+}
+
+- (NSUInteger) hash
+{
+    return [[self eventTypes] hash];
+}
+
 - (void)updateEvents
 {   
     void (^fetchNewData)() = ^{

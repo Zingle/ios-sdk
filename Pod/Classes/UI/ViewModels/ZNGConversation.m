@@ -142,6 +142,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void) mergeNewEventsAtTail:(NSArray<ZNGEvent *> *)events
 {
     [self addSenderNameToMessageEvents:events];
+    [self addMissingMessageIdsToMessageEvents:events];
     
     NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
 
@@ -173,6 +174,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void) appendEvents:(NSArray<ZNGEvent *> *)events
 {
     [self addSenderNameToMessageEvents:events];
+    [self addMissingMessageIdsToMessageEvents:events];
     
     NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
     NSRange range = NSMakeRange([mutableEvents count], [events count]);
@@ -183,6 +185,15 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
 {
     NSAssert(NO, @"Failed to implement required method: %s", __PRETTY_FUNCTION__);
+}
+
+- (void) addMissingMessageIdsToMessageEvents:(NSArray <ZNGEvent *> *)events
+{
+    for (ZNGEvent * event in events) {
+        if (([event isMessage]) && (event.message.messageId == nil)) {
+            event.message.messageId = event.eventId;
+        }
+    }
 }
 
 - (void)loadNextPage:(NSInteger)page
@@ -216,16 +227,17 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         return nil;
     }
     
-    NSString * direction = message.communicationDirection;
+    BOOL isOutbound = [message isOutbound];
     
     NSUInteger i = index;
     
     do {
         i--;
         ZNGEvent * testEvent = self.events[i];
+        ZNGMessage * testMessage = testEvent.message;
         
-        if ([testEvent.message.communicationDirection isEqualToString:direction]) {
-            return testEvent.message;
+        if ((testMessage != nil) && ([testMessage isOutbound] == isOutbound)) {
+            return testMessage;
         }
     } while (i != 0);
     

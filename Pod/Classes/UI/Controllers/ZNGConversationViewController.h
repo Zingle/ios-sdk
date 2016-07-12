@@ -12,6 +12,7 @@
 @class ZNGConversation;
 @class ZNGConversationViewController;
 @class ZNGMessage;
+@class ZNGEvent;
 
 @protocol ZNGConversationModalDelegate <NSObject>
 
@@ -120,7 +121,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems;
 
 #pragma mark - Protected methods used by subclasses
-- (ZNGMessage *) messageAtIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark - Abstract methods that must be overridden by subclasses
 - (BOOL) weAreSendingOutbound;

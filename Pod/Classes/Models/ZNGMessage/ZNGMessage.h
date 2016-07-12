@@ -47,4 +47,6 @@
 
 - (BOOL) isOutbound;
 
+- (void) downloadAttachmentsIfNecessary;
+
 @end

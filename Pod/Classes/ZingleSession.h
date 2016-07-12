@@ -13,6 +13,7 @@
 @class ZNGAccountClient;
 @class ZNGContactClient;
 @class ZNGContactServiceClient;
+@class ZNGEventClient;
 @class ZNGMessageClient;
 @class ZNGNotificationsClient;
 @class ZNGServiceClient;
@@ -59,6 +60,7 @@
 @property (nonatomic, strong, nullable) ZNGAccountClient * accountClient;
 @property (nonatomic, strong, nullable) ZNGContactClient * contactClient;
 @property (nonatomic, strong, nullable) ZNGContactServiceClient * contactServiceClient;
+@property (nonatomic, strong, nullable) ZNGEventClient * eventClient;
 @property (nonatomic, strong, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, strong, nullable) ZNGNotificationsClient * notificationsClient;
 @property (nonatomic, strong, nullable) ZNGServiceClient * serviceClient;

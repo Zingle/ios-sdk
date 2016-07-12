@@ -9,6 +9,7 @@
 #import "ZNGContactToServiceViewController.h"
 #import <JSQMessagesViewController/JSQMessagesCollectionViewCell.h>
 #import "ZNGConversationContactToService.h"
+#import "ZNGEvent.h"
 
 @implementation ZNGContactToServiceViewController
 
@@ -51,9 +52,12 @@
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    ZNGMessage * message = [self messageAtIndexPath:indexPath];
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
     ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
-    [conversation deleteMessage:message];
+    
+    if (event.message != nil) {
+        [conversation deleteMessage:event.message];
+    }
 }
 
 @end

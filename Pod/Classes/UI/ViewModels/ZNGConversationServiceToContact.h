@@ -29,7 +29,10 @@ NS_ASSUME_NONNULL_BEGIN
              toContact:(ZNGContact *)aContact
      withCurrentUserId:(NSString *)userId
           usingChannel:(ZNGChannel * __nullable)aChannel
-     withMessageClient:(ZNGMessageClient *)messageClient NS_DESIGNATED_INITIALIZER;
+     withMessageClient:(ZNGMessageClient *)messageClient
+       withEventClient:(ZNGEventClient *)eventClient NS_DESIGNATED_INITIALIZER;
+
+- (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient NS_UNAVAILABLE;
 
 NS_ASSUME_NONNULL_END
 

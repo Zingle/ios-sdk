@@ -8,6 +8,7 @@
 
 #import "ZNGConversationViewController.h"
 #import "ZNGConversation.h"
+#import "ZNGEvent.h"
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
@@ -18,7 +19,7 @@
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 static const uint64_t PollingIntervalSeconds = 10;
-static NSString * const MessagesKVOPath = @"conversation.messages";
+static NSString * const EventsKVOPath = @"conversation.events";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface ZNGConversationViewController ()
@@ -59,7 +60,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) commonInit
 {
-    [self addObserver:self forKeyPath:MessagesKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
+    [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
 }
 
@@ -85,7 +86,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
     dispatch_source_set_event_handler(pollingTimerSource, ^{
         if (weakSelf.isVisible) {
-            [weakSelf.conversation updateMessages];
+            [weakSelf.conversation updateEvents];
         }
     });
     dispatch_resume(pollingTimerSource);
@@ -116,7 +117,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
-    [self removeObserver:self forKeyPath:MessagesKVOPath context:ZNGConversationKVOContext];
+    [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];
     
     if (pollingTimerSource != nil) {
         dispatch_source_cancel(pollingTimerSource);
@@ -223,12 +224,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    if ([keyPath isEqualToString:MessagesKVOPath]) {
-        [self handleMessagesChange:change];
+    if ([keyPath isEqualToString:EventsKVOPath]) {
+        [self handleEventsChange:change];
     }
 }
 
-- (void) handleMessagesChange:(NSDictionary<NSString *, id> *)change
+- (void) handleEventsChange:(NSDictionary<NSString *, id> *)change
 {
     int changeType = [change[NSKeyValueChangeKindKey] intValue];
     
@@ -250,7 +251,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) notifyMediaMessageMediaDownloaded:(NSNotification *)notification
 {
     ZNGMessage * message = notification.object;
-    NSIndexPath * indexPath = [self indexPathForMessage:message];
+    NSIndexPath * indexPath = [self indexPathForEventWithId:message.messageId];
     
     if (indexPath != nil) {
         [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
@@ -398,10 +399,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSMutableArray<ZNGMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:[visibleIndexPaths count]];
     
     for (NSIndexPath * indexPath in visibleIndexPaths) {
-        ZNGMessage * message = [self messageAtIndexPath:indexPath];
+        ZNGEvent * event = [self eventAtIndexPath:indexPath];
         
-        if (message != nil) {
-            [messages addObject:message];
+        if (event.message != nil) {
+            [messages addObject:event.message];
         }
     }
     
@@ -443,34 +444,41 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return @"Me";
 }
 
-- (ZNGMessage *) messageAtIndexPath:(NSIndexPath *)indexPath
+- (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray<ZNGMessage *> * messages = self.conversation.messages;
-    return (indexPath.row < [messages count]) ? messages[indexPath.row] : nil;
+    NSArray<ZNGEvent *> * events = self.conversation.events;
+    return (indexPath.row < [events count]) ? events[indexPath.row] : nil;
 }
 
-- (NSIndexPath *) indexPathForMessage:(ZNGMessage *)message
+- (NSIndexPath *) indexPathForEventWithId:(NSString *)eventId
 {
-    NSUInteger index = [self.conversation.messages indexOfObject:message];
+    NSUInteger index = [self.conversation.events indexOfObjectPassingTest:^BOOL(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [event.eventId isEqualToString:eventId];
+    }];
     return (index != NSNotFound) ? [NSIndexPath indexPathForRow:index inSection:0] : nil;
 }
 
-- (ZNGMessage *) priorMessageToIndexPath:(NSIndexPath *)indexPath
+- (NSIndexPath *) indexPathForEvent:(ZNGEvent *)event
+{
+    return [self indexPathForEventWithId:event.eventId];
+}
+
+- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath
 {
     NSIndexPath * backOne = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    return [self messageAtIndexPath:backOne];
+    return [self eventAtIndexPath:backOne];
 }
 
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self messageAtIndexPath:indexPath];
+    return [self eventAtIndexPath:indexPath];
 }
 
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessage * message = [self messageAtIndexPath:indexPath];
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
  
-    if ([message isOutbound] == [self weAreSendingOutbound]) {
+    if ([event.message isOutbound] == [self weAreSendingOutbound]) {
         return self.outgoingBubbleImageData;
     }
     
@@ -492,14 +500,17 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    ZNGMessage * message = [self messageAtIndexPath:indexPath];
-    [self markMessagesReadIfNecessary:@[message]];
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if (event.message != nil) {
+        [self markMessagesReadIfNecessary:@[event.message]];
+    }
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDate * time = [self timeForMessageAtIndexPath:indexPath];
+    NSDate * time = [self timeForEventAtIndexPath:indexPath];
     
     if (time == nil) {
         return 0.0;
@@ -528,11 +539,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessage * message = [self messageAtIndexPath:indexPath];
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
     
-    if ((message != nil) && ([message isMediaMessage])) {
+    if ([event.message isMediaMessage]) {
         ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
-        imageView.image = message.image;
+        imageView.image = event.message.image;
         imageView.navigationItem.title = self.navigationItem.title;
         
         [self.navigationController pushViewController:imageView animated:YES];
@@ -540,26 +551,26 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 // Returns nil if we do not need to show a time this soon
-- (NSDate *) timeForMessageAtIndexPath:(NSIndexPath *)indexPath
+- (NSDate *) timeForEventAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGMessage * thisMessage = [self messageAtIndexPath:indexPath];
-    ZNGMessage * priorMessage = [self priorMessageToIndexPath:indexPath];
+    ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
+    ZNGEvent * priorEvent = [self priorEventToIndexPath:indexPath];
     BOOL showTimestamp = YES;
-    NSDate * thisMessageTime = thisMessage.createdAt;
-    NSDate * priorMessageTime = priorMessage.createdAt;
+    NSDate * thisEventTime = thisEvent.createdAt;
+    NSDate * priorEventTime = priorEvent.createdAt;
     
-    if ((thisMessageTime != nil) && (priorMessageTime != nil)) {
-        NSTimeInterval timeSinceLastMessage = [thisMessageTime timeIntervalSinceDate:priorMessageTime];
+    if ((thisEventTime != nil) && (priorEventTime != nil)) {
+        NSTimeInterval timeSinceLastEvent = [thisEventTime timeIntervalSinceDate:priorEventTime];
         
-        if (![self timeBetweenMessagesBigEnoughToWarrantTimestamp:timeSinceLastMessage]) {
+        if (![self timeBetweenEventsBigEnoughToWarrantTimestamp:timeSinceLastEvent]) {
             showTimestamp = NO;
         }
     }
     
-    return (showTimestamp) ? thisMessageTime : nil;
+    return (showTimestamp) ? thisEventTime : nil;
 }
 
-- (BOOL) timeBetweenMessagesBigEnoughToWarrantTimestamp:(NSTimeInterval)interval
+- (BOOL) timeBetweenEventsBigEnoughToWarrantTimestamp:(NSTimeInterval)interval
 {
     static NSTimeInterval fiveMinutes = 5.0 * 60.0;
     return (interval > fiveMinutes);
@@ -571,18 +582,22 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // Are we adding a sender name to this message?
     
     // If this is the first message in this direction from this specific sender, then yes.
-    ZNGMessage * thisMessage = [self messageAtIndexPath:indexPath];
-    ZNGMessage * priorMessageThisDirection = [self.conversation priorMessageWithSameDirection:thisMessage];
+    ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
+    ZNGMessage * priorMessageThisDirection = nil;
+    
+    if ([thisEvent isMessage]) {
+        priorMessageThisDirection = [self.conversation priorMessageWithSameDirection:thisEvent.message];
+    }
     
     // We show the name if either 1) this is the first message in this direction or 2) the last message in this direction came from a different person.
     // This one check will satisfy both conditions since in 1) priorMessageThisDirection == nil --> priorMessageThisDirection.senderId isEqualToString is always NO.
-    BOOL isNewPerson = (![[priorMessageThisDirection triggeredByUserIdOrSenderId] isEqualToString:[thisMessage triggeredByUserIdOrSenderId]]);
-    return isNewPerson ? thisMessage.senderDisplayName : nil;
+    BOOL isNewPerson = (![[priorMessageThisDirection triggeredByUserIdOrSenderId] isEqualToString:[thisEvent.message triggeredByUserIdOrSenderId]]);
+    return isNewPerson ? thisEvent.senderDisplayName : nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDate * messageTime = [self timeForMessageAtIndexPath:indexPath];
+    NSDate * messageTime = [self timeForEventAtIndexPath:indexPath];
     
     if (messageTime != nil) {
         return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:messageTime];
@@ -605,27 +620,31 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self.conversation.messages count];
+    return [self.conversation.events count];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    ZNGMessage * message = [self messageAtIndexPath:indexPath];
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
     
-    if (!message.isMediaMessage) {
-        if ([self weAreSendingOutbound] == [message isOutbound]) {
-            cell.textView.textColor = self.outgoingTextColor;
-        } else {
-            cell.textView.textColor = self.incomingTextColor;
+    if ([event isMessage]) {
+        if (!event.message.isMediaMessage) {
+            if ([self weAreSendingOutbound] == [event.message isOutbound]) {
+                cell.textView.textColor = self.outgoingTextColor;
+            } else {
+                cell.textView.textColor = self.incomingTextColor;
+            }
+            
+            cell.textView.linkTextAttributes = @{
+                                                 NSForegroundColorAttributeName : cell.textView.textColor,
+                                                 NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid)
+                                                 };
+            
+            cell.messageBubbleTopLabel.textColor = self.authorTextColor;
         }
-        
-        cell.textView.linkTextAttributes = @{
-                                             NSForegroundColorAttributeName : cell.textView.textColor,
-                                             NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid)
-                                             };
-        
-        cell.messageBubbleTopLabel.textColor = self.authorTextColor;
+    } else {
+        ZNGLogError(@"Attempting to display a non-message (%@) event.  We cannot yet handle this!!  Panic!!!", event.eventType);
     }
     
     return cell;

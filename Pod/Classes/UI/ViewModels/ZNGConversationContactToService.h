@@ -14,7 +14,10 @@
                                channelTypeId:(NSString *)aChannelTypeId
                                    contactId:(NSString *)aContactId
                             toContactService:(ZNGContactService *)aContactService
-                           withMessageClient:(ZNGMessageClient*)messageClient;
+                           withMessageClient:(ZNGMessageClient*)messageClient
+                                 eventClient:(ZNGEventClient *)eventClient;
+
+- (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient NS_UNAVAILABLE;
 
 /**
  *  Marks the specified message as "deleted by contact"

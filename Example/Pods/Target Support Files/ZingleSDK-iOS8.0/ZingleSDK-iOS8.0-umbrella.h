@@ -7,6 +7,7 @@
 #import "ZNGContactChannelClient.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"
+#import "ZNGEventClient.h"
 #import "ZNGLabelClient.h"
 #import "ZNGMessageClient.h"
 #import "ZNGNotificationsClient.h"

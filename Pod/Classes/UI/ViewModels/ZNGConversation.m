@@ -190,8 +190,14 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void) addMissingMessageIdsToMessageEvents:(NSArray <ZNGEvent *> *)events
 {
     for (ZNGEvent * event in events) {
-        if (([event isMessage]) && (event.message.messageId == nil)) {
-            event.message.messageId = event.eventId;
+        if ([event isMessage]) {
+            if ([event.message.messageId length] == 0) {
+                event.message.messageId = event.eventId;
+            }
+            
+            if (event.message.triggeredByUser == nil) {
+                event.message.triggeredByUser = event.triggeredByUser;
+            }
         }
     }
 }

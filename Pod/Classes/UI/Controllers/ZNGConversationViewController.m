@@ -592,7 +592,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // We show the name if either 1) this is the first message in this direction or 2) the last message in this direction came from a different person.
     // This one check will satisfy both conditions since in 1) priorMessageThisDirection == nil --> priorMessageThisDirection.senderId isEqualToString is always NO.
     BOOL isNewPerson = (![[priorMessageThisDirection triggeredByUserIdOrSenderId] isEqualToString:[thisEvent.message triggeredByUserIdOrSenderId]]);
-    return isNewPerson ? thisEvent.message.senderDisplayName : nil;
+    return isNewPerson ? thisEvent.senderDisplayName : nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath

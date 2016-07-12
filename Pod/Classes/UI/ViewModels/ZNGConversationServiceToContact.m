@@ -84,6 +84,19 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (ZNGNewMessage *)freshMessage
 {
+    ZNGParticipant * recipient = [self receiver];
+    NSString * channelTypeId = self.channel.channelType.channelTypeId;
+    
+    if (recipient == nil) {
+        ZNGLogError(@"Recipient is nil.  Unable to send message.");
+        return nil;
+    }
+    
+    if (channelTypeId == nil) {
+        ZNGLogError(@"Channel type is nil.  Unable to send message.");
+        return nil;
+    }
+    
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];
     message.sender = [self sender];
     message.recipients = @[[self receiver]];

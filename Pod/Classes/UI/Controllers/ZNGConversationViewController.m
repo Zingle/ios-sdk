@@ -502,7 +502,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
     
-    if (event.message != nil) {
+    if ([event isMessage]) {
         [self markMessagesReadIfNecessary:@[event.message]];
     }
 }

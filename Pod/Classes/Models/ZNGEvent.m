@@ -11,6 +11,9 @@
 
 static NSString * const ZNGEventTypeMessage = @"message";
 static NSString * const ZNGEventTypeNote = @"note";
+static NSString * const ZNGEventMarkConfirmed = @"mark_confirmed";
+static NSString * const ZNGEventMarkUnconfirmed = @"mark_unconfirmed";
+static NSString * const ZNGEventContactCreated = @"contact_created";
 
 @implementation ZNGEvent
 
@@ -110,12 +113,24 @@ static NSString * const ZNGEventTypeNote = @"note";
 
 - (NSUInteger)messageHash
 {
-    return [self.body hash];
+    return [self.eventId hash];
 }
 
 - (NSString *)text
 {
-    return self.body;
+    if (([self isMessage]) || ([self isNote])) {
+        return self.body;
+    }
+    
+    if ([self.eventType isEqualToString:ZNGEventMarkConfirmed]) {
+        return @"Confirmed";
+    } else if ([self.eventType isEqualToString:ZNGEventMarkUnconfirmed]) {
+        return @"Unconfirmed";
+    } else if ([self.eventType isEqualToString:ZNGEventContactCreated]) {
+        return @"Contact created";
+    }
+    
+    return @"Unknown event";
 }
 
 - (id<JSQMessageMediaData>)media

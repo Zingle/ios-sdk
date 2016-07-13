@@ -9,12 +9,16 @@
 #import "ZNGServiceToContactViewController.h"
 #import "ZNGContactViewController.h"
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGEvent.h"
 #import "UIFont+OpenSans.h"
 #import "UIImage+ZingleSDK.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGContactClient.h"
 #import "ZNGLogging.h"
 #import "ZNGConversationDetailedEvents.h"
+#import "ZNGEventCollectionViewCell.h"
+
+static NSString * const EventCellIdentifier = @"EventCell";
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -65,6 +69,15 @@ static void * KVOContext = &KVOContext;
 {
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactStarredPath context:KVOContext];
+}
+
+- (void) viewDidLoad
+{
+    [super viewDidLoad];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UINib * nib = [UINib nibWithNibName:NSStringFromClass([ZNGEventCollectionViewCell class]) bundle:bundle];
+    [self.collectionView registerNib:nib forCellWithReuseIdentifier:EventCellIdentifier];
 }
 
 - (BOOL) weAreSendingOutbound
@@ -160,6 +173,42 @@ static void * KVOContext = &KVOContext;
     starButton.image = image;
     starButton.tintColor = tintColor;
     starButton.enabled = YES;
+}
+
+#pragma mark - JSQMessagesViewController collection view shenanigans
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if ([event isMessage]) {
+        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
+    
+    ZNGEventCollectionViewCell * cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:EventCellIdentifier forIndexPath:indexPath];
+    cell.textLabel.text = event.body;
+    return cell;
+}
+
+- (BOOL)collectionView:(JSQMessagesCollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if ([event isMessage]) {
+        return [super collectionView:collectionView shouldShowMenuForItemAtIndexPath:indexPath];
+    }
+    
+    return NO;
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if ([event isMessage]) {
+        return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+    }
+    
+    return NO;
 }
 
 #pragma mark - Actions

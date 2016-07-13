@@ -401,7 +401,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     for (NSIndexPath * indexPath in visibleIndexPaths) {
         ZNGEvent * event = [self eventAtIndexPath:indexPath];
         
-        if (event.message != nil) {
+        if ([event isMessage]) {
             [messages addObject:event.message];
         }
     }

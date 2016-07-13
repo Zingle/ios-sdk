@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="235" height="34"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZi-5b-pax">
-                        <rect key="frame" x="36" y="8" width="151" height="18"/>
+                        <rect key="frame" x="42" y="8" width="151" height="18"/>
                         <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="0.15613918439716312" colorSpace="calibratedRGB"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -27,8 +27,8 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gZi-5b-pax" secondAttribute="bottom" constant="8" id="2JB-p2-3sd"/>
                 <constraint firstItem="gZi-5b-pax" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="5pN-sW-UvH"/>
-                <constraint firstItem="gZi-5b-pax" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="36" id="YS1-5R-aq8"/>
-                <constraint firstAttribute="trailing" secondItem="gZi-5b-pax" secondAttribute="trailing" constant="48" id="t67-aK-ZKh"/>
+                <constraint firstItem="gZi-5b-pax" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="42" id="YS1-5R-aq8"/>
+                <constraint firstAttribute="trailing" secondItem="gZi-5b-pax" secondAttribute="trailing" constant="42" id="t67-aK-ZKh"/>
             </constraints>
             <size key="customSize" width="235" height="34"/>
             <connections>

@@ -16,8 +16,12 @@
 #import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
+#import "ZNGEventCollectionViewCell.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
+
+static NSString * const EventCellIdentifier = @"EventCell";
+
 static const uint64_t PollingIntervalSeconds = 10;
 static NSString * const EventsKVOPath = @"conversation.events";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
@@ -34,6 +38,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     dispatch_source_t pollingTimerSource;
     BOOL checkedInitialVisibleCells;
+}
+
++ (UINib *)nib
+{
+    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
+                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
+}
+
++ (instancetype)messagesViewController
+{
+    return [[[self class] alloc] initWithNibName:NSStringFromClass([ZNGConversationViewController class])
+                                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
 }
 
 - (id) initWithCoder:(NSCoder *)aDecoder
@@ -71,6 +87,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UINib * nib = [UINib nibWithNibName:NSStringFromClass([ZNGEventCollectionViewCell class]) bundle:bundle];
+    [self.collectionView registerNib:nib forCellWithReuseIdentifier:EventCellIdentifier];
     
     [self setupBarButtonItems];
     
@@ -507,6 +527,30 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
+#pragma mark - JSQMessagesViewController collection view shenanigans
+
+- (BOOL)collectionView:(JSQMessagesCollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if ([event isMessage]) {
+        return [super collectionView:collectionView shouldShowMenuForItemAtIndexPath:indexPath];
+    }
+    
+    return NO;
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if ([event isMessage]) {
+        return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+    }
+    
+    return NO;
+}
+
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -625,10 +669,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
     
     if ([event isMessage]) {
+        JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+        
         if (!event.message.isMediaMessage) {
             if ([self weAreSendingOutbound] == [event.message isOutbound]) {
                 cell.textView.textColor = self.outgoingTextColor;
@@ -643,10 +688,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             
             cell.messageBubbleTopLabel.textColor = self.authorTextColor;
         }
-    } else {
-        ZNGLogError(@"Attempting to display a non-message (%@) event.  We cannot yet handle this!!  Panic!!!", event.eventType);
+        
+        return cell;
     }
     
+    // else this is a non-message event
+    ZNGEventCollectionViewCell * cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:EventCellIdentifier forIndexPath:indexPath];
+    cell.textLabel.text = [event text];
     return cell;
 }
 

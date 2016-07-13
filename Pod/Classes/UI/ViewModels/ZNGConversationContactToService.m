@@ -14,11 +14,6 @@
 static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGConversationContactToService
-{
-    NSString * contactChannelValue;
-    NSString * channelTypeId;
-    ZNGContactService * contactService;
-}
 
 - (instancetype) initFromContactChannelValue:(NSString *)aContactChannelValue
                                channelTypeId:(NSString *)aChannelTypeId
@@ -30,18 +25,23 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self = [super initWithMessageClient:messageClient eventClient:eventClient];
     
     if (self != nil) {
-        contactChannelValue = aContactChannelValue;
-        channelTypeId = aChannelTypeId;
+        _contactChannelValue = aContactChannelValue;
+        _channelTypeId = aChannelTypeId;
         contactId = aContactId;
-        contactService = aContactService;
+        _contactService = aContactService;
     }
     
     return self;
 }
 
+- (id) initWithConversation:(ZNGConversationContactToService *)conversation
+{
+    return [self initFromContactChannelValue:conversation.contactChannelValue channelTypeId:conversation.channelTypeId contactId:conversation->contactId toContactService:conversation.contactService withMessageClient:conversation.messageClient eventClient:conversation.eventClient];
+}
+
 - (NSString *)remoteName
 {
-    return contactService.serviceDisplayName;
+    return _contactService.serviceDisplayName;
 }
 
 - (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events;
@@ -64,7 +64,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];
     message.sender = [self sender];
     message.recipients = @[[self receiver]];
-    message.channelTypeIds = @[channelTypeId];
+    message.channelTypeIds = @[_channelTypeId];
     message.senderType = ZNGConversationParticipantTypeContact;
     message.recipientType = ZNGConversationParticipantTypeService;
     return message;
@@ -74,14 +74,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
     participant.participantId = contactId;
-    participant.channelValue = contactChannelValue;
+    participant.channelValue = _contactChannelValue;
     return participant;
 }
 
 - (ZNGParticipant *)receiver
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
-    participant.participantId = contactService.serviceId;
+    participant.participantId = _contactService.serviceId;
     return participant;
 }
 

@@ -13,12 +13,6 @@
 static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGConversationServiceToContact
-{
-    ZNGContact * contact;
-    ZNGService * service;
-    
-    NSString * myUserId;
-}
 
 - (id) initFromService:(ZNGService*)aService
              toContact:(ZNGContact *)aContact
@@ -30,10 +24,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self = [super initWithMessageClient:messageClient eventClient:eventClient];
     
     if (self != nil) {
-        service = aService;
-        contact = aContact;
+        _service = aService;
+        _contact = aContact;
         contactId = aContact.contactId;
-        myUserId = [theUserId copy];
+        _myUserId = [theUserId copy];
         
         if (aChannel != nil) {
             _channel = aChannel;
@@ -50,6 +44,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return self;
 }
 
+- (id) initWithConversation:(ZNGConversationServiceToContact *)conversation
+{
+    return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient withEventClient:conversation.eventClient];
+}
+
 - (BOOL) isEqual:(ZNGConversationServiceToContact *)other
 {
     if (![other isKindOfClass:[ZNGConversationServiceToContact class]]) {
@@ -59,19 +58,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return ([super isEqual:other]);
 }
 
-- (NSArray<NSString *> *)eventTypes
-{
-    return @[@"message", @"note"];
-}
-
-- (ZNGContact *)contact
-{
-    return contact;
-}
+// TODO: Restore this once the server starts accepting arrays of event types.
+//- (NSArray<NSString *> *)eventTypes
+//{
+//    return @[@"message", @"note"];
+//}
 
 - (NSString *)remoteName
 {
-    return [contact fullName];
+    return [_contact fullName];
 }
 
 - (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
@@ -94,7 +89,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             
             if ([userId length] > 0) {
                 // We know who sent the message.
-                if ([userId isEqualToString:myUserId]) {
+                if ([userId isEqualToString:_myUserId]) {
                     message.senderDisplayName = @"Me";
                 } else if (sender != nil) {
                     message.senderDisplayName = [sender fullName];
@@ -133,7 +128,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
     participant.participantId = self.messageClient.serviceId;
-    participant.channelValue = [[service defaultChannelForType:self.channel.channelType] value];
+    participant.channelValue = [[_service defaultChannelForType:self.channel.channelType] value];
     return participant;
 }
 

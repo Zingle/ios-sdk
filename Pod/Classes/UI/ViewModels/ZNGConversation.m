@@ -61,6 +61,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     return self;
 }
 
+- (id) initWithConversation:(ZNGConversation *)conversation
+{
+    return [self initWithMessageClient:conversation.messageClient eventClient:conversation.eventClient];
+}
+
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];

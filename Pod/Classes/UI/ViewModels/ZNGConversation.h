@@ -54,6 +54,11 @@ extern NSString * const ZNGConversationParticipantTypeService;
  */
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient;
 
+/**
+ *  Initializer to copy details from an existing conversation.  This is used for convenience to switch to and from detailed event conversations.
+ */
+- (id) initWithConversation:(ZNGConversation *)conversation;
+
 - (void)updateEvents;
 
 /**

@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  The receiving contact.  This is set on initialization and cannot be changed.
  */
 @property (nonatomic, readonly) ZNGContact * contact;
+@property (nonatomic, readonly) ZNGService * service;
+@property (nonatomic, readonly) NSString * myUserId;
 
 /**
  *  The receiving channel.  This value can be changed after initialization.  Outgoing messages will leave on the default channel for this

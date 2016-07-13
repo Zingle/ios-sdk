@@ -14,6 +14,7 @@
 #import "UIColor+ZingleSDK.h"
 #import "ZNGContactClient.h"
 #import "ZNGLogging.h"
+#import "ZNGConversationDetailedEvents.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -122,8 +123,19 @@ static void * KVOContext = &KVOContext;
     UIAlertAction * editContact = [UIAlertAction actionWithTitle:@"Edit contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self pressedEditContact];
     }];
-    
     [actions addObject:editContact];
+    
+    BOOL alreadyShowingDetailedEvents = [self.conversation isKindOfClass:[ZNGConversationDetailedEvents class]];
+    NSString * detailedEventsText = (alreadyShowingDetailedEvents) ? @"Hide detailed events" : @"Show detailed events";
+    UIAlertAction * toggleDetailedEvents = [UIAlertAction actionWithTitle:detailedEventsText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (alreadyShowingDetailedEvents) {
+            self.conversation = [[ZNGConversationServiceToContact alloc] initWithConversation:self.conversation];
+        } else {
+            self.conversation = [[ZNGConversationDetailedEvents alloc] initWithConversation:self.conversation];
+        }
+    }];
+    [actions addObject:toggleDetailedEvents];
+    
     
     return actions;
 }

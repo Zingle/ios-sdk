@@ -10,6 +10,10 @@
 
 @interface ZNGConversationContactToService : ZNGConversation
 
+@property (nonatomic, readonly) NSString * contactChannelValue;
+@property (nonatomic, readonly) NSString * channelTypeId;
+@property (nonatomic, readonly) ZNGContactService * contactService;
+
 - (instancetype) initFromContactChannelValue:(NSString *)aContactChannelValue
                                channelTypeId:(NSString *)aChannelTypeId
                                    contactId:(NSString *)aContactId

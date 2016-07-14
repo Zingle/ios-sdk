@@ -10,6 +10,16 @@ Zingle is a multi-channel communications platform that allows the sending, recei
 
 To view the latest API documentation, please refer to: https://github.com/Zingle/rest-api/
 
+## Contact vs. Account class sessions
+
+### Contact session
+
+A contact session represents someone such as a hotel guest.  This session is used by user of a third party application that uses the Zingle API to communicate with a service, such as a hotel front desk, on behalf of the user.
+
+### Account session
+
+An account session represents a Zingle customer using the API to communicate with their own guests or customers.
+
 ## Installation with CocoaPods
 
 [CocoaPods](http://cocoapods.org) is a dependency manager for Objective-C, which automates and simplifies the process of using 3rd-party libraries like the ZingleSDK in your projects. You can install it with the following command:
@@ -39,6 +49,65 @@ Import the SDK header file where needed:
 ```objective-c
 #import <ZingleSDK/ZingleSDK.h>
 ```
+
+## Session creation
+
+### Contact class session
+
+Several pieces of data will be required to initialize a contact class session.
+1. The Zingle API user's token
+2. The Zingle API user's security key
+3. The channel type UUID representing the custom chat type of the API user
+4. The channel value, such as the user name of the current third party app user within the custom chat type
+
+#### Initialization
+
+##### Using contact selection and error handling blocks
+```objective-c
+session = [ZingleSDK contactSessionWithToken:myToken
+					 	   			     key:myKey
+							   channelTypeId:channelId
+							    channelValue:username
+					   contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+							// Present UI to the user to choose a service from availableContactServices
+							// Alternatively: If a contact service has been pre-selected and is in the provided availableContactServices array,
+							//  return it from this block
+							return nil;
+						} errorHandler:^(ZNGError * _Nonnull error) {
+							// Handle an error
+						}];
+```
+
+##### Using KVO
+```objective-c
+session = [ZingleSDK contactSessionWithToken:myToken
+					 	   			     key:myKey
+							   channelTypeId:channelId
+							    channelValue:username];
+[session addObserver:self forKeyPath:@"availableContactServices" options:nil context:NULL];
+[session addObserver:self forKeyPath:@"mostRecentError" options:nil context:NULL];								
+```
+
+#### Choosing a contact service
+
+```objective-c
+session.contactService = session.availableContactServices[userSelectionIndex];
+```
+
+## Conversation UI
+
+In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.
+
+### Contact user
+
+Once a ZingleContactSession has been initialized and a ZNGContactService has been chosen, a view controller representing the current conversation may be requested from the SDK.
+
+```objective-c
+ZNGConversationViewController * conversationViewController = [myContactSession conversationViewController];
+[self presentViewController:conversationViewController animated:YES completion:nil];
+```
+
+The conversation object will be of the concrete class ZNGConversationContactToService, and the conversation view controller will be of the concrete class ZNGContactToServiceViewController.
 
 ## Push Notifications
 
@@ -91,51 +160,14 @@ All ZingleSDK push notifications should include the Category value of ZingleSDK.
 	}
 ```
 
-## Integrated UI
-
-In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.  The UI is fully customizeable to your needs, and can be used on behalf of the Contact, or on behalf of the Zingle Service.
-
-![](https://github.com/Zingle/ios-sdk/blob/master/Assets/message_layout.png)
-
-UI Examples
-
-```objective-c
-// Initialize basic auth for connecting to API.
-[[ZingleSDK sharedSDK] setToken:token andKey:key];
-
-// Registers a new conversation in ZingleSDK.
-[[ZingleSDK sharedSDK] addConversationFromContactId:contactId 
-										toServiceId:serviceId 
-								contactChannelValue:contactChannelValue 
-								            success:^(ZNGConversation *conversation) {
-    
-    // Returns a new conversation view controller for the specified conversation.
-    ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-    [self presentViewController:vc animated:YES completion:nil];
-
-} failure:^(ZNGError *error) {
-    // handle failure
-}];
-
-// OPTIONAL UI SETTINGS
-ZNGConversationViewController *vc = [[ZingleSDK sharedSDK] conversationViewControllerForConversation:conversation];
-
-vc.incomingBubbleColor = [UIColor orangeColor];
-vc.outgoingBubbleColor = [UIColor blueColor];
-vc.incomingTextColor = [UIColor blackColor];
-vc.outgoingTextColor = [UIColor whiteColor];
-vc.authorTextColor = [UIColor blackColor];
-vc.senderName = @"Sender name";
-vc.receiverName = @"Receiver name";
-
-[self presentViewController:vc animated:YES completion:nil];
-```
-
 ## Zingle Object Model
 
 Model | Description
 --- | ---
-ZingleSDK | A singleton master object that holds the credentials, stateful information, and the distribution of notifications in the ZingleSDK.
+ZingleSDK | Static class that provides convenience constructors for Zingle session objects
+ZingleSession | Abstract class that represents a connection to the Zingle API
+ZingleContactSession | Concrete subclass of ZingleSession that represents a connection to the Zingle API as a contact class user (e.g. a Hotel guest communicating with the front desk)
+ZingleAccountSession | Concrete subclass of ZingleSession that represents a connection to the Zingle API as an account class user (e.g. a hotel employee)
 ZNGAccount | [See Zingle Resource Overview - Account](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#account)
 ZNGService | [See Zingle Resource Overview - Service](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#service)
 ZNGPlan | [See Zingle Resource Overview - Plan](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#plan)

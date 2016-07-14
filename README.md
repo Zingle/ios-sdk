@@ -1,5 +1,4 @@
 # Zingle iOS SDK
-[![Build Status](https://www.bitrise.io/app/6a6bfbbee7abf3f2.svg?token=lQNKTWPV2_fOj5NVc6pFPA&branch=master)](https://www.bitrise.io/app/6a6bfbbee7abf3f2)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/ZingleSDK.svg)](https://img.shields.io/cocoapods/v/ZingleSDK.svg)
 [![Platform](https://img.shields.io/cocoapods/p/ZingleSDK.svg?style=flat)](http://cocoadocs.org/docsets/ZingleSDK)
 [![Twitter](https://img.shields.io/badge/twitter-@zingleme-blue.svg?style=flat)](https://twitter.com/zingleme)

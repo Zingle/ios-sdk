@@ -15,9 +15,13 @@ To view the latest API documentation, please refer to: https://github.com/Zingle
 
 A contact session represents someone such as a hotel guest.  This session is used by user of a third party application that uses the Zingle API to communicate with a service, such as a hotel front desk, on behalf of the user.
 
+> All usage examples in this README will address contact class usage.
+
 ### Account session
 
 An account session represents a Zingle customer using the API to communicate with their own guests or customers.
+
+For further information regarding account class usage, see [Using the SDK as an Account Class User](Documentation/AccountUsage.md).
 
 ## Installation with CocoaPods
 
@@ -51,8 +55,6 @@ Import the SDK header file where needed:
 
 ## Session creation
 
-### Contact class session
-
 Several pieces of data will be required to initialize a contact class session.
 
 1. The Zingle API user's token
@@ -60,10 +62,11 @@ Several pieces of data will be required to initialize a contact class session.
 3. The channel type UUID representing the custom chat type of the API user
 4. The channel value, such as the user name of the current third party app user within the custom chat type
 
-#### Initialization
+### Initialization
 
-##### Using contact selection and error handling blocks
+#### Using contact selection and error handling blocks
 ```objective-c
+// Initialize the session object.  This will send off a request for all available contact services.
 session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
 							   channelTypeId:channelId
@@ -78,7 +81,23 @@ session = [ZingleSDK contactSessionWithToken:myToken
 						}];
 ```
 
-##### Using KVO
+```objective-c
+void userDidSelectContactService:(ZNGContactService *)selectedContactService
+{
+	// Select a contact service.  As long as this contact service exists in the availableContactServices array,
+	//  the session object will immediately be ready to go.
+	session.contactService = selectedContactService;
+
+	// If you would like to access the data directly, you may grab a conversation object.
+    ZNGConversation * conversation = session.conversation;
+
+	// You may also grab a view controller that will handle message displaying and sending messages.
+	ZNGConversationViewController * conversationViewController = session.conversationViewController;
+	[self presentViewController:conversationViewController animated:YES completion:nil];
+}
+```
+
+#### Using KVO
 ```objective-c
 session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
@@ -88,26 +107,49 @@ session = [ZingleSDK contactSessionWithToken:myToken
 [session addObserver:self forKeyPath:@"mostRecentError" options:0 context:NULL];								
 ```
 
-#### Choosing a contact service
-
 ```objective-c
-session.contactService = session.availableContactServices[userSelectionIndex];
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+	if ([keyPath isEqualToString:@"availableContactServices"]) {
+		// Present UI to the user to select a contact service
+	}
+}
 ```
 
-## Conversation UI
-
-In addition to the standard API conveniences, the iOS SDK also provides an easy to use User Interface to automate the conversation between a Contact and a Service.
-
-### Contact user
-
-Once a ZingleContactSession has been initialized and a ZNGContactService has been chosen, a view controller representing the current conversation may be requested from the SDK.
-
 ```objective-c
-ZNGConversationViewController * conversationViewController = [myContactSession conversationViewController];
-[self presentViewController:conversationViewController animated:YES completion:nil];
+void userDidSelectContactService:(ZNGContactService *)selectedContactService
+{
+	// Select a contact service.  As long as this contact service exists in the availableContactServices array,
+	//  the session object will immediately be ready to go.
+	session.contactService = selectedContactService;
+
+	// If you would like to access the data directly, you may grab a conversation object.
+    ZNGConversation * conversation = session.conversation;
+
+	// You may also grab a view controller that will handle message displaying and sending messages.
+	ZNGConversationViewController * conversationViewController = session.conversationViewController;
+	[self presentViewController:conversationViewController animated:YES completion:nil];
+}
 ```
 
-The conversation object will be of the concrete class ZNGConversationContactToService, and the conversation view controller will be of the concrete class ZNGContactToServiceViewController.
+#### Using a pre-selected contact service
+
+You may wish to immediately select a contact service on login.
+
+```objective-c
+// Initialize the session object.  This will send off a request for all available contact services.
+session = [ZingleSDK contactSessionWithToken:myToken
+					 	   			     key:myKey
+							   channelTypeId:channelId
+							    channelValue:username
+					   contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+							return preselectedContactService;
+						} errorHandler:^(ZNGError * _Nonnull error) {
+							// Handle an error
+						}];
+```
+
+Assuming preselectedContactService is present in the availableContactServices array, the session object will now immediately be ready for use.
 
 ## Push Notifications
 
@@ -185,17 +227,3 @@ ZNGMessageAttachment | Message Attachments provide the ability to add binary dat
 ZNGConversation | Model responsible for maintaining the state of a conversation between a Contact and a Service.
 ZNGConversationViewController | UI that manages the conversation between a Contact and a Service.
 ZNGAutomation | [See Zingle Resource Overview - Automation](https://github.com/Zingle/rest-api/blob/master/resource_overview.md#automation)
-
-## Examples
-
-### Creating a list of conversations
-
-The example app loads the same conversation from the perspective of the contact and the service respectively. You will need to supply your own values for the following variables in [ZNGAppDelegate.m](Example/ZingleSDK/ZNGAppDelegate.m):
-```obj-c
-NSString *token = @“TOKEN”;
-NSString *key = @“KEY”;
-NSString *contactChannelValue = @“test.app”;
-NSString *contactId = @“CONTACT ID”;
-NSString *serviceId = @“SERVICE ID”;
-```
-Please direct any inquiries about the SDK and examples to devsupport@zingleme.com or your account manager.

@@ -97,6 +97,9 @@ void userDidSelectContactService:(ZNGContactService *)selectedContactService
 ```
 
 #### Using KVO
+
+You may instead wish to use KVO to determine when the availableContactServices array has been populated and to handle any errors.
+
 ```objective-c
 session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
@@ -111,6 +114,8 @@ session = [ZingleSDK contactSessionWithToken:myToken
 {
 	if ([keyPath isEqualToString:@"availableContactServices"]) {
 		// Present UI to the user to select a contact service
+	} else if ([keyPath isEqualToString:@"mostRecentError"]) {
+		// Handle an error
 	}
 }
 ```

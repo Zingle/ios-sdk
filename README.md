@@ -54,6 +54,7 @@ Import the SDK header file where needed:
 ### Contact class session
 
 Several pieces of data will be required to initialize a contact class session.
+
 1. The Zingle API user's token
 2. The Zingle API user's security key
 3. The channel type UUID representing the custom chat type of the API user

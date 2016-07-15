@@ -15,6 +15,11 @@ NSString * const ZNGPushNotificationReceived = @"ZNGPushNotificationReceived";
 
 @implementation ZingleSDK
 
++ (void) setPushNotificationDeviceToken:(nonnull NSData *)token
+{
+    [ZingleSession setPushNotificationDeviceToken:token];
+}
+
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue
 {
     return [self contactSessionWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:nil errorHandler:nil];

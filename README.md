@@ -177,7 +177,7 @@ Once the application has successfully registered for push notifications, the dev
 	}
 
     func application(application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: NSData) {
-        ZingleSession.setPushNotificationDeviceToken(deviceToken)
+        ZingleSDK.setPushNotificationDeviceToken(deviceToken)
     }
 ```
 

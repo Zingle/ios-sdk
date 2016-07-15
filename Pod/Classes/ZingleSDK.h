@@ -30,6 +30,12 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
 
 @interface ZingleSDK : NSObject
 
+#pragma mark - Push notifications
+/**
+ *  Static setter for the push notification device token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.
+ */
++ (void) setPushNotificationDeviceToken:(nonnull NSData *)token;
+
 #pragma mark - Contact access
 
 /**

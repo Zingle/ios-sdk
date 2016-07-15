@@ -84,8 +84,8 @@ session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
 							   channelTypeId:channelId
 							    channelValue:username];
-[session addObserver:self forKeyPath:@"availableContactServices" options:nil context:NULL];
-[session addObserver:self forKeyPath:@"mostRecentError" options:nil context:NULL];								
+[session addObserver:self forKeyPath:@"availableContactServices" options:0 context:NULL];
+[session addObserver:self forKeyPath:@"mostRecentError" options:0 context:NULL];								
 ```
 
 #### Choosing a contact service

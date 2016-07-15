@@ -74,6 +74,7 @@ session = [ZingleSDK contactSessionWithToken:myToken
 					   contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
 							// Present UI to the user to choose a service from availableContactServices
 							// ...
+							// Return nil from this block since we are waiting for user input and do not yet have a selected contact service.
 							return nil;
 						} errorHandler:^(ZNGError * _Nonnull error) {
 							// Handle an error

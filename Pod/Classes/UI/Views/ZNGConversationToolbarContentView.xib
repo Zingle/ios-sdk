@@ -139,11 +139,11 @@
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="we1-V9-coM" secondAttribute="bottom" constant="6" id="0Ho-6D-8dy"/>
-                <constraint firstItem="Myo-1S-Vg1" firstAttribute="top" secondItem="dm4-NT-mvr" secondAttribute="top" id="0V5-LF-1oH"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="8" id="300-lg-SM8"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="8" id="7Ld-5r-Hp3"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="7" id="9Tz-Wq-xIf"/>
-                <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" id="VBt-ph-ej0"/>
+                <constraint firstItem="Myo-1S-Vg1" firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" id="HeZ-J5-fvv"/>
+                <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" priority="900" id="VBt-ph-ej0"/>
                 <constraint firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="width" secondItem="dm4-NT-mvr" secondAttribute="width" priority="900" id="hxV-cl-yYM"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="leading" id="lMW-I1-EWO"/>

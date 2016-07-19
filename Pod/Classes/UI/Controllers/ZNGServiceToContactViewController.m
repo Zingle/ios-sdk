@@ -14,6 +14,7 @@
 #import "UIImage+ZingleSDK.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGContactClient.h"
+#import "ZNGContactField.h"
 #import "ZNGLogging.h"
 #import "ZNGConversationDetailedEvents.h"
 #import "ZNGEventCollectionViewCell.h"
@@ -170,6 +171,32 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Actions
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a custom field to insert" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (ZNGContactField * customField in self.conversation.service.contactCustomFields) {
+        UIAlertAction * action = [UIAlertAction actionWithTitle:customField.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self insertCustomField:customField];
+        }];
+        [alert addAction:action];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) insertCustomField:(ZNGContactField *)customField
+{
+    // TODO: Once the server starts giving us replacement values
+    // See: http://jira.zinglecorp.com:8080/browse/TECH-1940
+    NSString * replacementValue = @"{PLACEHOLDER}";
+    
+    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:replacementValue];
+}
+
 - (void) pressedEditContact
 {
     ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.conversation;

@@ -13,6 +13,8 @@
 
 @implementation ZNGContactToServiceViewController
 
+@dynamic conversation;
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];

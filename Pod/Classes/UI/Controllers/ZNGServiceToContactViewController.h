@@ -7,7 +7,10 @@
 //
 
 #import <ZingleSDK/ZNGConversationViewController.h>
+#import "ZNGConversationServiceToContact.h"
 
 @interface ZNGServiceToContactViewController : ZNGConversationViewController
+
+@property (nonatomic, strong, nullable) ZNGConversationServiceToContact * conversation;
 
 @end

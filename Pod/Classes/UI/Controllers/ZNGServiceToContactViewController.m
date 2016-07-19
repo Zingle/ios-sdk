@@ -36,6 +36,8 @@ static void * KVOContext = &KVOContext;
     UIImage * notStarredImage;
 }
 
+@dynamic conversation;
+
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

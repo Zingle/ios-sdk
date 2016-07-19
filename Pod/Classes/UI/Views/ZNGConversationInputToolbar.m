@@ -43,4 +43,9 @@
     [self.delegate inputToolbar:self didPressTriggerAutomationButton:sender];
 }
 
+- (IBAction)didPressAttachImage:(id)sender
+{
+    [self.delegate inputToolbar:self didPressAttachImageButton:sender];
+}
+
 @end

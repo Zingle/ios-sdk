@@ -48,4 +48,9 @@
     [self.delegate inputToolbar:self didPressAttachImageButton:sender];
 }
 
+- (IBAction)didPressAddNote:(id)sender
+{
+    [self.delegate inputToolbar:self didPressAddInternalNoteButton:sender];
+}
+
 @end

@@ -28,5 +28,6 @@
 - (IBAction)didPressInsertCustomField:(id)sender;
 - (IBAction)didPressTriggerAutomation:(id)sender;
 - (IBAction)didPressAttachImage:(id)sender;
+- (IBAction)didPressAddNote:(id)sender;
 
 @end

@@ -32,30 +32,30 @@
                         <action selector="didPressUseTemplate:" destination="-2" eventType="touchUpInside" id="BB7-cd-xWS"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bg-GI-YXL">
-                    <rect key="frame" x="46" y="48" width="26" height="26"/>
-                    <state key="normal" image="insertCustomField"/>
-                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
-                    <rect key="frame" x="84" y="48" width="26" height="26"/>
+                    <rect key="frame" x="111" y="46" width="30" height="30"/>
                     <state key="normal" image="triggerAutomation"/>
                     <connections>
                         <action selector="didPressTriggerAutomation:" destination="-2" eventType="touchUpInside" id="NbD-wf-Ekp"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EBX-4C-zka">
-                    <rect key="frame" x="125" y="48" width="26" height="26"/>
+                    <rect key="frame" x="168" y="49" width="24" height="24"/>
                     <state key="normal" image="attachImage"/>
                     <connections>
                         <action selector="didPressAttachImage:" destination="-2" eventType="touchUpInside" id="HDM-LU-3uL"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Udp-Uc-I4X">
-                    <rect key="frame" x="170" y="48" width="26" height="26"/>
+                    <rect key="frame" x="220" y="48" width="26" height="26"/>
                     <state key="normal" image="addNote"/>
                     <connections>
                         <action selector="didPressAddNote:" destination="-2" eventType="touchUpInside" id="a9F-nl-MhI"/>
                     </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bg-GI-YXL">
+                    <rect key="frame" x="58" y="48" width="28" height="28"/>
+                    <state key="normal" image="insertCustomField"/>
                 </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -80,9 +80,9 @@
     </objects>
     <resources>
         <image name="addNote" width="26" height="26"/>
-        <image name="attachImage" width="26" height="26"/>
+        <image name="attachImage" width="24" height="24"/>
         <image name="insertCustomField" width="26" height="26"/>
-        <image name="insertTemplate" width="26" height="26"/>
-        <image name="triggerAutomation" width="26" height="26"/>
+        <image name="insertTemplate" width="28" height="28"/>
+        <image name="triggerAutomation" width="30" height="30"/>
     </resources>
 </document>

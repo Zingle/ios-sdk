@@ -25,5 +25,6 @@
 @property (weak, nonatomic) id<ZNGConversationInputToolbarDelegate> delegate;
 
 - (IBAction)didPressUseTemplate:(id)sender;
+- (IBAction)didPressInsertCustomField:(id)sender;
 
 @end

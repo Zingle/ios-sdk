@@ -32,6 +32,10 @@
                         <action selector="didPressUseTemplate:" destination="-2" eventType="touchUpInside" id="BB7-cd-xWS"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bg-GI-YXL">
+                    <rect key="frame" x="46" y="44" width="26" height="26"/>
+                    <state key="normal" image="insertCustomField"/>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -54,6 +58,7 @@
         </view>
     </objects>
     <resources>
+        <image name="insertCustomField" width="26" height="26"/>
         <image name="insertTemplate" width="26" height="26"/>
     </resources>
 </document>

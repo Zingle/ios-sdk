@@ -33,5 +33,9 @@
     [self.delegate inputToolbar:self didPressUseTemplateButton:sender];
 }
 
+- (IBAction)didPressInsertCustomField:(id)sender
+{
+    [self.delegate inputToolbar:self didPressInsertCustomFieldButton:sender];
+}
 
 @end

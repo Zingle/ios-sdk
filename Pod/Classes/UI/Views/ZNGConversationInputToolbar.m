@@ -16,7 +16,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 80.0;
+    self.preferredDefaultHeight = 88.0;
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView

@@ -11,6 +11,14 @@
 
 @implementation ZNGConversationInputToolbar
 
+@dynamic delegate;
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    self.preferredDefaultHeight = 80.0;
+}
+
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
 {
     NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:NSStringFromClass([ZNGConversationToolbarContentView class])
@@ -18,5 +26,12 @@
                                                                                         options:nil];
     return nibViews.firstObject;
 }
+
+#pragma mark - IBActions
+- (IBAction)didPressUseTemplate:(id)sender
+{
+    [self.delegate inputToolbar:self didPressUseTemplateButton:sender];
+}
+
 
 @end

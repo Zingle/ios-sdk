@@ -286,7 +286,30 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
+    UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
+        ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");
+    } else {
+        UIAlertAction * takePhoto = [UIAlertAction actionWithTitle:@"Take a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self showImagePickerWithCameraMode:YES];
+        }];
+        [alert addAction:takePhoto];
+    }
+    
+    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+        ZNGLogInfo(@"The user's photo library is currently not available or is empty.");
+    } else {
+        UIAlertAction * choosePhoto = [UIAlertAction actionWithTitle:@"Choose a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self showImagePickerWithCameraMode:NO];
+        }];
+        [alert addAction:choosePhoto];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
@@ -302,34 +325,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
 {
     
-}
-
-- (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton
-{
-    NSMutableArray<UIAlertAction *> * actions = [[NSMutableArray alloc] initWithCapacity:3];
-    
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");
-    } else {
-        UIAlertAction * takePhoto = [UIAlertAction actionWithTitle:@"Take a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self showImagePickerWithCameraMode:YES];
-        }];
-        [actions addObject:takePhoto];
-    }
-    
-    if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        ZNGLogInfo(@"The user's photo library is currently not available or is empty.");
-    } else {
-        UIAlertAction * choosePhoto = [UIAlertAction actionWithTitle:@"Choose a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self showImagePickerWithCameraMode:NO];
-        }];
-        [actions addObject:choosePhoto];
-    }
-    
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [actions addObject:cancel];
-    
-    return actions;
 }
 
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems

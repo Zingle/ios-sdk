@@ -25,12 +25,16 @@
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZv-vI-ArA">
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZv-vI-ArA" userLabel="Template Button">
                     <rect key="frame" x="9" y="48" width="26" height="26"/>
                     <state key="normal" image="insertTemplate"/>
                     <connections>
                         <action selector="didPressUseTemplate:" destination="-2" eventType="touchUpInside" id="BB7-cd-xWS"/>
                     </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bg-GI-YXL">
+                    <rect key="frame" x="58" y="48" width="28" height="28"/>
+                    <state key="normal" image="insertCustomField"/>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
                     <rect key="frame" x="111" y="46" width="30" height="30"/>
@@ -53,10 +57,6 @@
                         <action selector="didPressAddNote:" destination="-2" eventType="touchUpInside" id="a9F-nl-MhI"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bg-GI-YXL">
-                    <rect key="frame" x="58" y="48" width="28" height="28"/>
-                    <state key="normal" image="insertCustomField"/>
-                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -70,9 +70,14 @@
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
+                <outlet property="customFieldButton" destination="4bg-GI-YXL" id="Wt7-8e-0wI"/>
+                <outlet property="imageButton" destination="EBX-4C-zka" id="ViF-hY-8T6"/>
+                <outlet property="noteButton" destination="Udp-Uc-I4X" id="Daz-tM-9cZ"/>
                 <outlet property="rightBarButtonContainerView" destination="Myo-1S-Vg1" id="0SR-cw-EkD"/>
                 <outlet property="rightBarButtonContainerViewWidthConstraint" destination="yde-S9-dHe" id="WGu-df-M3L"/>
                 <outlet property="rightHorizontalSpacingConstraint" destination="ds6-61-GNv" id="ZQh-8M-QFs"/>
+                <outlet property="templateButton" destination="yZv-vI-ArA" id="f46-DX-oig"/>
                 <outlet property="textView" destination="dm4-NT-mvr" id="PFw-HO-oT8"/>
             </connections>
             <point key="canvasLocation" x="268" y="570"/>

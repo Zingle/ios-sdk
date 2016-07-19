@@ -278,7 +278,32 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
-#pragma mark - Accessory button
+#pragma mark - Buttons
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender
+{
+    
+}
+
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
+{
+    
+}
+
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
+{
+    
+}
+
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
+{
+    
+}
+
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
+{
+    
+}
+
 - (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton
 {
     NSMutableArray<UIAlertAction *> * actions = [[NSMutableArray alloc] initWithCapacity:3];

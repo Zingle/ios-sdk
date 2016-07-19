@@ -7,6 +7,7 @@
 //
 
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
+#import "ZNGConversationInputToolbar.h"
 
 @class DGActivityIndicatorView;
 @class ZNGConversation;
@@ -22,7 +23,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGConversationInputToolbarDelegate>
 
 @property (nonatomic, strong, nullable) ZNGConversation * conversation;
 

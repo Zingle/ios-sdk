@@ -49,6 +49,9 @@
                                 <constraint firstAttribute="width" constant="28" id="hqR-Sh-Dz3"/>
                             </constraints>
                             <state key="normal" image="insertCustomField"/>
+                            <connections>
+                                <action selector="didPressInsertCustomField:" destination="-2" eventType="touchUpInside" id="zYg-Fl-9VK"/>
+                            </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
                             <rect key="frame" x="110" y="-1" width="30" height="30"/>

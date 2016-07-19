@@ -279,11 +279,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 #pragma mark - Buttons
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender
-{
-    
-}
-
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -310,21 +305,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [alert addAction:cancel];
     
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
-{
-    
-}
-
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
-{
-    
-}
-
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
-{
-    
 }
 
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems

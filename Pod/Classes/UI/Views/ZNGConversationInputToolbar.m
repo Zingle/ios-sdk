@@ -30,27 +30,37 @@
 #pragma mark - IBActions
 - (IBAction)didPressUseTemplate:(id)sender
 {
-    [self.delegate inputToolbar:self didPressUseTemplateButton:sender];
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressUseTemplateButton:)]) {
+        [self.delegate inputToolbar:self didPressUseTemplateButton:sender];
+    }
 }
 
 - (IBAction)didPressInsertCustomField:(id)sender
 {
-    [self.delegate inputToolbar:self didPressInsertCustomFieldButton:sender];
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressInsertCustomFieldButton:)]) {
+        [self.delegate inputToolbar:self didPressInsertCustomFieldButton:sender];
+    }
 }
 
 - (IBAction)didPressTriggerAutomation:(id)sender
 {
-    [self.delegate inputToolbar:self didPressTriggerAutomationButton:sender];
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressTriggerAutomationButton:)]) {
+        [self.delegate inputToolbar:self didPressTriggerAutomationButton:sender];
+    }
 }
 
 - (IBAction)didPressAttachImage:(id)sender
 {
-    [self.delegate inputToolbar:self didPressAttachImageButton:sender];
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressAttachImageButton:)]) {
+        [self.delegate inputToolbar:self didPressAttachImageButton:sender];
+    }
 }
 
 - (IBAction)didPressAddNote:(id)sender
 {
-    [self.delegate inputToolbar:self didPressAddInternalNoteButton:sender];
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressAddInternalNoteButton:)]) {
+        [self.delegate inputToolbar:self didPressAddInternalNoteButton:sender];
+    }
 }
 
 @end

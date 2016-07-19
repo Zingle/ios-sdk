@@ -12,6 +12,7 @@
 
 @protocol ZNGConversationInputToolbarDelegate <JSQMessagesInputToolbarDelegate>
 
+@optional
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;

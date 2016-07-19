@@ -116,6 +116,7 @@
                         <constraint firstItem="Udp-Uc-I4X" firstAttribute="centerY" secondItem="we1-V9-coM" secondAttribute="centerY" constant="-1" id="DoJ-NY-nlY"/>
                         <constraint firstItem="R6g-GM-R7A" firstAttribute="centerY" secondItem="we1-V9-coM" secondAttribute="centerY" id="HaY-up-h2O"/>
                         <constraint firstItem="R6g-GM-R7A" firstAttribute="leading" secondItem="4bg-GI-YXL" secondAttribute="trailing" id="JFu-0q-vcG"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="310" id="Jt5-s7-VUI"/>
                         <constraint firstItem="0Vj-kn-BCu" firstAttribute="leading" secondItem="0Mh-pU-v2i" secondAttribute="trailing" id="MX9-hS-1zy"/>
                         <constraint firstItem="R6g-GM-R7A" firstAttribute="width" secondItem="Q2A-Hj-kfl" secondAttribute="width" id="O48-XK-i3H"/>
                         <constraint firstItem="EBX-4C-zka" firstAttribute="centerY" secondItem="we1-V9-coM" secondAttribute="centerY" id="Txi-ZV-BSj"/>
@@ -143,7 +144,7 @@
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="7" id="9Tz-Wq-xIf"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" id="VBt-ph-ej0"/>
                 <constraint firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
-                <constraint firstItem="we1-V9-coM" firstAttribute="trailing" secondItem="dm4-NT-mvr" secondAttribute="trailing" id="fLK-5q-VWu"/>
+                <constraint firstItem="we1-V9-coM" firstAttribute="width" secondItem="dm4-NT-mvr" secondAttribute="width" priority="900" id="hxV-cl-yYM"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="leading" id="lMW-I1-EWO"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="top" secondItem="dm4-NT-mvr" secondAttribute="bottom" constant="6" id="v85-1Y-ssj"/>
             </constraints>

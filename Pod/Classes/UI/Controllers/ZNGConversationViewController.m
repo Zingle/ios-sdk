@@ -278,6 +278,34 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
+#pragma mark - Text view delegate
+- (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    // We want to detect if they are starting to delete a custom field such as {FIRST_NAME}.
+    // If they delete the right brace, it should delete the entire placeholder.
+    
+    // Detect a backspace
+    if ((range.length == 1) && ([text isEqualToString:@""])) {
+        // This is a backspace.  Are they deleting a }?
+        char deletingChar = [textView.text characterAtIndex:range.location];
+        
+        if (deletingChar == '}') {
+            // Can we find a matching {?
+            NSString * earlierText = [textView.text substringToIndex:range.location];
+            NSRange openingBraceRange = [textView.text rangeOfString:@"{" options:NSBackwardsSearch];
+            
+            if (openingBraceRange.location != NSNotFound) {
+                // We found a template to delete.  Delete it.
+                NSRange customFieldRange = NSMakeRange(openingBraceRange.location, range.location-openingBraceRange.location+1);
+                textView.text = [textView.text stringByReplacingCharactersInRange:customFieldRange withString:@""];
+                return NO;
+            }
+        }
+    }
+    
+    return YES;
+}
+
 #pragma mark - Buttons
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {

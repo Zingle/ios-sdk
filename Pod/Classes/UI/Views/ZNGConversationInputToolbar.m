@@ -38,4 +38,9 @@
     [self.delegate inputToolbar:self didPressInsertCustomFieldButton:sender];
 }
 
+- (IBAction)didPressTriggerAutomation:(id)sender
+{
+    [self.delegate inputToolbar:self didPressTriggerAutomationButton:sender];
+}
+
 @end

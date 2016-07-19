@@ -26,5 +26,6 @@
 
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;
+- (IBAction)didPressTriggerAutomation:(id)sender;
 
 @end

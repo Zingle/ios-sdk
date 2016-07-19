@@ -36,6 +36,13 @@
                     <rect key="frame" x="46" y="44" width="26" height="26"/>
                     <state key="normal" image="insertCustomField"/>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
+                    <rect key="frame" x="84" y="44" width="26" height="26"/>
+                    <state key="normal" image="triggerAutomation"/>
+                    <connections>
+                        <action selector="didPressTriggerAutomation:" destination="-2" eventType="touchUpInside" id="NbD-wf-Ekp"/>
+                    </connections>
+                </button>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
@@ -60,5 +67,6 @@
     <resources>
         <image name="insertCustomField" width="26" height="26"/>
         <image name="insertTemplate" width="26" height="26"/>
+        <image name="triggerAutomation" width="26" height="26"/>
     </resources>
 </document>

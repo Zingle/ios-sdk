@@ -303,6 +303,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
     }
     
+    if ([[ZNGConversationViewController superclass] instancesRespondToSelector:@selector(textView:shouldChangeTextInRange:replacementText:)]) {
+        return [super textView:textView shouldChangeTextInRange:range replacementText:text];
+    }
+    
     return YES;
 }
 

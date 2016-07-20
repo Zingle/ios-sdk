@@ -74,6 +74,7 @@
 {
     _isPulsating = NO;
     [pulsateView.layer removeAllAnimations];
+    pulsateView.alpha = 0.0;
 }
 
 @end

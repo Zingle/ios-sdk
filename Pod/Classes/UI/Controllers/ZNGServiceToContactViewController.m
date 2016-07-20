@@ -23,7 +23,6 @@
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
-static NSString * const KVOContactStarredPath = @"conversation.contact.isStarred";
 static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
 
 static void * KVOContext = &KVOContext;
@@ -63,14 +62,12 @@ static void * KVOContext = &KVOContext;
 
 - (void) setupKVO
 {
-    [self addObserver:self forKeyPath:KVOContactStarredPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
 - (void) dealloc
 {
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
-    [self removeObserver:self forKeyPath:KVOContactStarredPath context:KVOContext];
 }
 
 - (BOOL) weAreSendingOutbound
@@ -81,9 +78,7 @@ static void * KVOContext = &KVOContext;
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (context == KVOContext) {
-        if ([keyPath isEqualToString:KVOContactStarredPath]) {
-            [self updateStarButton];
-        } else if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
+        if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
             [self updateConfirmedButton];
         }
     } else {
@@ -111,13 +106,6 @@ static void * KVOContext = &KVOContext;
     UIBarButtonItem * confirmBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:confirmedButton];
     [items addObject:confirmBarButtonItem];
     
-
-    starredImage = [UIImage zng_lrg_starredImage];
-    notStarredImage = [UIImage zng_lrg_unstarredImage];
-    starButton = [[UIBarButtonItem alloc] initWithImage:notStarredImage style:UIBarButtonItemStylePlain target:self action:@selector(pressedStarButton:)];
-    [self updateStarButton];
-    [items addObject:starButton];
-    
     return items;
 }
 
@@ -144,6 +132,17 @@ static void * KVOContext = &KVOContext;
     }];
     [actions addObject:toggleDetailedEvents];
     
+    ZNGContact * contact = self.conversation.contact;
+    BOOL isStarred = [self.conversation.contact isStarred];
+    NSString * starText = isStarred ? @"Unstar conversation" : @"Star conversation";
+    UIAlertAction * toggleStarred = [UIAlertAction actionWithTitle:starText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (isStarred) {
+            [contact unstar];
+        } else {
+            [contact star];
+        }
+    }];
+    [actions addObject:toggleStarred];
     
     return actions;
 }
@@ -158,16 +157,6 @@ static void * KVOContext = &KVOContext;
     [confirmedButton setTitle:text forState:UIControlStateNormal];
     [confirmedButton sizeToFit];
     confirmedButton.enabled = YES;
-}
-
-- (void) updateStarButton
-{
-    BOOL isStarred = [[self contact] isStarred];
-    UIImage * image = (isStarred) ? starredImage : notStarredImage;
-    UIColor * tintColor = (isStarred) ? [UIColor zng_yellow] : [UIColor zng_gray];
-    starButton.image = image;
-    starButton.tintColor = tintColor;
-    starButton.enabled = YES;
 }
 
 #pragma mark - Actions

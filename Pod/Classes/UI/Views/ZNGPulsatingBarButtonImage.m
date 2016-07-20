@@ -25,7 +25,7 @@
     self = [super initWithCustomView:view];
     
     if (self != nil) {
-        _pulsateDuration = 1.0;
+        _pulsateDuration = 2.0;
         
         UIImage * templateImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIButton * button = [[UIButton alloc] initWithFrame:frame];
@@ -48,11 +48,6 @@
     return self;
 }
 
-- (void) dealloc
-{
-    NSLog(@"Deallocated %@ (%p)", [self class], self);
-}
-
 - (void) startPulsating
 {
     // Do nothing if we are already pulsating
@@ -60,11 +55,9 @@
         return;
     }
     
-    NSTimeInterval halfInterval = self.pulsateDuration / 2.0;
-    
     _isPulsating = YES;
     [UIView animateKeyframesWithDuration:self.pulsateDuration delay:0.0 options:UIViewKeyframeAnimationOptionRepeat|UIViewKeyframeAnimationOptionAutoreverse animations:^{
-        [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:halfInterval animations:^{
+        [UIView addKeyframeWithRelativeStartTime:0.0 relativeDuration:1.0 animations:^{
             pulsateView.alpha = 1.0;
         }];
     } completion:nil];

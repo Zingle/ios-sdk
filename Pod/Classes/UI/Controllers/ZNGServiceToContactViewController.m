@@ -31,6 +31,7 @@ static void * KVOContext = &KVOContext;
 @implementation ZNGServiceToContactViewController
 {
     ZNGPulsatingBarButtonImage * confirmButton;
+    UIView * bannerContainer;
 }
 
 @dynamic conversation;
@@ -76,6 +77,7 @@ static void * KVOContext = &KVOContext;
 {
     [super viewDidLoad];
     [self updateConfirmedButton];
+    [self setupBannerContainer];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
@@ -162,9 +164,59 @@ static void * KVOContext = &KVOContext;
     
     if (contact.isConfirmed) {
         [contact unconfirm];
+        [self showBannerWithText:@"UNCONFIRMED"];
     } else {
         [contact confirm];
+        [self showBannerWithText:@"CONFIRMED"];
     }
+}
+
+#pragma mark - Confirmed banner
+- (void) setupBannerContainer
+{
+    bannerContainer = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 30.0)];
+    bannerContainer.translatesAutoresizingMaskIntoConstraints = NO;
+    bannerContainer.layer.masksToBounds = YES;
+    
+    NSLayoutConstraint * top = [NSLayoutConstraint constraintWithItem:bannerContainer attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:bannerContainer attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:bannerContainer attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:bannerContainer attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:nil multiplier:1.0 constant:30.0];
+    
+    [self.view addSubview:bannerContainer];
+    [self.view addConstraints:@[top, width, left, height]];
+}
+
+- (void) showBannerWithText:(NSString *)text
+{
+    CGRect onScreenRect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
+    CGRect offScreenRect = CGRectMake(0.0, -bannerContainer.frame.size.height, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
+    UIView * bannerContent = [[UIView alloc] initWithFrame:offScreenRect];
+    bannerContent.backgroundColor = [UIColor zng_blue];
+    
+    UILabel * textLabel = [[UILabel alloc] initWithFrame:onScreenRect];
+    textLabel.textAlignment = NSTextAlignmentCenter;
+    textLabel.font = [UIFont openSansBoldFontOfSize:15.0];
+    textLabel.textColor = [UIColor whiteColor];
+    textLabel.text = text;
+    [bannerContent addSubview:textLabel];
+    
+    // Add off-screen
+    [bannerContainer addSubview:bannerContent];
+    
+    // Animate on screen
+    [UIView animateWithDuration:0.5 animations:^{
+        bannerContent.frame = onScreenRect;
+    } completion:^(BOOL finished) {
+        // Animate back off screen
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [UIView animateWithDuration:0.5 animations:^{
+                bannerContent.frame = offScreenRect;
+            } completion:^(BOOL finished) {
+                [bannerContent removeFromSuperview];
+            }];
+        });
+    }];
 }
 
 #pragma mark - Actions

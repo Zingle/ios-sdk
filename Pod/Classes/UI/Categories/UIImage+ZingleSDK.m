@@ -109,11 +109,6 @@
     return [UIImage zng_bubbleImageFromBundleWithName:@"lrg_unstarred"];
 }
 
-+ (UIImage *)zng_confirmedImage
-{
-    return [UIImage zng_bubbleImageFromBundleWithName:@"confirmed"];
-}
-
 + (UIImage *)zng_unconfirmedImage
 {
     return [UIImage zng_bubbleImageFromBundleWithName:@"unconfirmed"];

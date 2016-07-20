@@ -146,13 +146,24 @@ static void * KVOContext = &KVOContext;
     return actions;
 }
 
-#pragma mark - Star/confirmed updates
+#pragma mark - Confirmed button
 - (void) updateConfirmedButton
 {
     if ([self.conversation.contact isConfirmed]) {
         [confirmButton stopPulsating];
     } else {
         [confirmButton startPulsating];
+    }
+}
+
+- (void) pressedConfirmedButton:(id)sender
+{
+    ZNGContact * contact = [self contact];
+    
+    if (contact.isConfirmed) {
+        [contact unconfirm];
+    } else {
+        [contact confirm];
     }
 }
 
@@ -188,17 +199,6 @@ static void * KVOContext = &KVOContext;
     ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.conversation;
     ZNGContactViewController * contactView = [ZNGContactViewController withContact:conversation.contact session:(ZingleAccountSession *)conversation.messageClient.session];
     [self.navigationController pushViewController:contactView animated:YES];
-}
-
-- (void) pressedConfirmedButton:(id)sender
-{
-    ZNGContact * contact = [self contact];
-    
-    if (contact.isConfirmed) {
-        [contact unconfirm];
-    } else {
-        [contact confirm];
-    }
 }
 
 @end

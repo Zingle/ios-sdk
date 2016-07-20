@@ -113,7 +113,8 @@ static void * KVOContext = &KVOContext;
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UIImage * confirmImage = [UIImage imageNamed:@"confirmButton" inBundle:bundle compatibleWithTraitCollection:nil];
     UIImage * highlightImage = [UIImage imageNamed:@"confirmButtonCircle" inBundle:bundle compatibleWithTraitCollection:nil];
-    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedBackgroundImage:highlightImage tintColor:[UIColor whiteColor] pulsateColor:[UIColor zng_green] selectedColor:[UIColor zng_lightBlue] target:self action:@selector(pressedConfirmedButton:)];
+    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedBackgroundImage:highlightImage tintColor:[UIColor whiteColor] selectedColor:[UIColor zng_lightBlue] target:self action:@selector(pressedConfirmedButton:)];
+    confirmButton.emphasisImage = [UIImage imageNamed:@"confirmButtonEmptyCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     [items addObject:confirmButton];
     
     return items;
@@ -161,10 +162,8 @@ static void * KVOContext = &KVOContext;
 - (void) updateConfirmedButton
 {
     if ([self.conversation.contact isConfirmed]) {
-        [confirmButton stopPulsating];
         confirmButton.selected = YES;
     } else {
-        [confirmButton startPulsating];
         confirmButton.selected = NO;
     }
 }

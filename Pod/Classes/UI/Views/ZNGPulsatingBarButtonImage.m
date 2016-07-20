@@ -11,9 +11,10 @@
 @implementation ZNGPulsatingBarButtonImage
 {
     UIImageView * pulsateView;
+    UIImageView * highlightView;
 }
 
-- (id) initWithImage:(UIImage *)image tintColor:(UIColor *)tintColor pulsateColor:(UIColor *)pulsateColor target:(id)target action:(SEL)action
+- (id) initWithImage:(UIImage *)image selectedBackgroundImage:(UIImage * _Nullable)highlightImage tintColor:(UIColor *)tintColor pulsateColor:(UIColor * _Nullable)pulsateColor selectedColor:(UIColor * _Nullable)selectedColor target:(id)target action:(SEL)action
 {
     if (image == nil) {
         return nil;
@@ -26,6 +27,15 @@
     
     if (self != nil) {
         _pulsateDuration = 2.0;
+        
+        if ((highlightImage != nil) && (selectedColor != nil)) {
+            UIImage * highlightTemplateImage = [highlightImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            highlightView = [[UIImageView alloc] initWithFrame:frame];
+            highlightView.image = highlightTemplateImage;
+            highlightView.tintColor = selectedColor;
+            highlightView.alpha = 0.0;
+            [view addSubview:highlightView];
+        }
         
         UIImage * templateImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIButton * button = [[UIButton alloc] initWithFrame:frame];
@@ -46,6 +56,12 @@
     }
     
     return self;
+}
+
+- (void) setSelected:(BOOL)selected
+{
+    _selected = selected;
+    highlightView.alpha = selected ? 1.0 : 0.0;
 }
 
 - (void) startPulsating

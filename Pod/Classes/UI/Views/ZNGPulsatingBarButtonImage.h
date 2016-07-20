@@ -10,10 +10,12 @@
 
 @interface ZNGPulsatingBarButtonImage : UIBarButtonItem
 
-- (id) initWithImage:(UIImage *)image tintColor:(UIColor *)tintColor pulsateColor:(UIColor *)pulsateColor target:(id)target action:(SEL)action;
+- (id) initWithImage:(UIImage *)image selectedBackgroundImage:(UIImage * _Nullable)highlightImage tintColor:(UIColor *)tintColor pulsateColor:(UIColor * _Nullable)pulsateColor selectedColor:(UIColor * _Nullable)selectedColor target:(id)target action:(SEL)action;
 
 - (void) startPulsating;
 - (void) stopPulsating;
+
+@property (nonatomic, assign) BOOL selected;
 
 @property (nonatomic, assign) NSTimeInterval pulsateDuration;
 @property (nonatomic, readonly) BOOL isPulsating;

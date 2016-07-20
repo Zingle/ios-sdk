@@ -104,7 +104,8 @@ static void * KVOContext = &KVOContext;
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UIImage * confirmImage = [UIImage imageNamed:@"confirmButton" inBundle:bundle compatibleWithTraitCollection:nil];
-    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage tintColor:[UIColor whiteColor] pulsateColor:[UIColor zng_green] target:self action:@selector(pressedConfirmedButton:)];
+    UIImage * highlightImage = [UIImage imageNamed:@"confirmButtonCircle" inBundle:bundle compatibleWithTraitCollection:nil];
+    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedBackgroundImage:highlightImage tintColor:[UIColor whiteColor] pulsateColor:[UIColor zng_green] selectedColor:[UIColor zng_lightBlue] target:self action:@selector(pressedConfirmedButton:)];
     [items addObject:confirmButton];
     
     return items;
@@ -153,8 +154,10 @@ static void * KVOContext = &KVOContext;
 {
     if ([self.conversation.contact isConfirmed]) {
         [confirmButton stopPulsating];
+        confirmButton.selected = YES;
     } else {
         [confirmButton startPulsating];
+        confirmButton.selected = NO;
     }
 }
 
@@ -164,9 +167,11 @@ static void * KVOContext = &KVOContext;
     
     if (contact.isConfirmed) {
         [contact unconfirm];
+        confirmButton.selected = NO;
         [self showBannerWithText:@"UNCONFIRMED"];
     } else {
         [contact confirm];
+        confirmButton.selected = YES;
         [self showBannerWithText:@"CONFIRMED"];
     }
 }

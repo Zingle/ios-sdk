@@ -15,6 +15,8 @@
 - (void) startPulsating;
 - (void) stopPulsating;
 
+- (void) emphasize;
+
 @property (nonatomic, assign) BOOL selected;
 
 @property (nonatomic, assign) NSTimeInterval pulsateDuration;

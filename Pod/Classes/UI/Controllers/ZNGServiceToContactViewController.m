@@ -32,6 +32,8 @@ static void * KVOContext = &KVOContext;
 {
     ZNGPulsatingBarButtonImage * confirmButton;
     UIView * bannerContainer;
+    
+    dispatch_source_t emphasizeTimer;
 }
 
 @dynamic conversation;
@@ -65,6 +67,10 @@ static void * KVOContext = &KVOContext;
 
 - (void) dealloc
 {
+    if (emphasizeTimer != nil) {
+        dispatch_source_cancel(emphasizeTimer);
+    }
+    
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
 }
 
@@ -78,6 +84,8 @@ static void * KVOContext = &KVOContext;
     [super viewDidLoad];
     [self updateConfirmedButton];
     [self setupBannerContainer];
+    
+    [self startEmphasisTimer];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
@@ -173,6 +181,32 @@ static void * KVOContext = &KVOContext;
         [contact confirm];
         confirmButton.selected = YES;
         [self showBannerWithText:@"CONFIRMED"];
+    }
+}
+
+- (void) startEmphasisTimer
+{
+    if (emphasizeTimer != nil) {
+        return;
+    }
+    
+    emphasizeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
+    
+    if (emphasizeTimer != nil) {
+        uint64_t interval = 3 * NSEC_PER_SEC;
+        dispatch_source_set_timer(emphasizeTimer, DISPATCH_TIME_NOW, interval, (uint64_t)(0.1 * NSEC_PER_SEC));
+        __weak ZNGServiceToContactViewController * weakSelf = self;
+        dispatch_source_set_event_handler(emphasizeTimer, ^{
+            [weakSelf emphasizeConfirmButtonIfAppropriate];
+        });
+        dispatch_resume(emphasizeTimer);
+    }
+}
+
+- (void) emphasizeConfirmButtonIfAppropriate
+{
+    if ((self.conversation.contact != nil) && (![self.conversation.contact isConfirmed])) {
+        [confirmButton emphasize];
     }
 }
 

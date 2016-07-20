@@ -10,8 +10,10 @@
 
 @implementation ZNGPulsatingBarButtonImage
 {
+    UIView * containerView;
     UIImageView * pulsateView;
     UIImageView * highlightView;
+    CGRect frame;
 }
 
 - (id) initWithImage:(UIImage *)image selectedBackgroundImage:(UIImage * _Nullable)highlightImage tintColor:(UIColor *)tintColor pulsateColor:(UIColor * _Nullable)pulsateColor selectedColor:(UIColor * _Nullable)selectedColor target:(id)target action:(SEL)action
@@ -20,10 +22,10 @@
         return nil;
     }
     
-    CGRect frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
-    UIView * view = [[UIView alloc] initWithFrame:frame];
+    frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
+    containerView = [[UIView alloc] initWithFrame:frame];
     
-    self = [super initWithCustomView:view];
+    self = [super initWithCustomView:containerView];
     
     if (self != nil) {
         _pulsateDuration = 2.0;
@@ -34,7 +36,7 @@
             highlightView.image = highlightTemplateImage;
             highlightView.tintColor = selectedColor;
             highlightView.alpha = 0.0;
-            [view addSubview:highlightView];
+            [containerView addSubview:highlightView];
         }
         
         UIImage * templateImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -42,7 +44,7 @@
         [button setImage:templateImage forState:UIControlStateNormal];
         button.tintColor = tintColor;
         [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-        [view addSubview:button];
+        [containerView addSubview:button];
         
         if (pulsateColor != nil) {
             pulsateView = [[UIImageView alloc] initWithFrame:frame];
@@ -50,7 +52,7 @@
             pulsateView.tintColor = pulsateColor;
             pulsateView.userInteractionEnabled = NO;
             pulsateView.alpha = 0.0;
-            [view addSubview:pulsateView];
+            [containerView addSubview:pulsateView];
         }
         
     }
@@ -84,6 +86,21 @@
     _isPulsating = NO;
     [pulsateView.layer removeAllAnimations];
     pulsateView.alpha = 0.0;
+}
+
+- (void) emphasize
+{
+    UIImageView * emphasisView = [[UIImageView alloc] initWithImage:pulsateView.image];
+    emphasisView.frame = pulsateView.frame;
+    emphasisView.tintColor = [UIColor whiteColor];
+    
+    [containerView addSubview:emphasisView];
+    [UIView animateWithDuration:1.0 animations:^{
+        emphasisView.transform = CGAffineTransformMakeScale(2.5, 2.5);
+        emphasisView.alpha = 0.0;
+    } completion:^(BOOL finished) {
+        [emphasisView removeFromSuperview];
+    }];
 }
 
 @end

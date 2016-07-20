@@ -189,29 +189,46 @@ static void * KVOContext = &KVOContext;
 
 - (void) showBannerWithText:(NSString *)text
 {
-    CGRect onScreenRect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
-    CGRect offScreenRect = CGRectMake(0.0, -bannerContainer.frame.size.height, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
-    UIView * bannerContent = [[UIView alloc] initWithFrame:offScreenRect];
+    CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
+    UIView * bannerContent = [[UIView alloc] initWithFrame:rect];
+    bannerContent.translatesAutoresizingMaskIntoConstraints = NO;
     bannerContent.backgroundColor = [UIColor zng_blue];
+    NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * offScreenY = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * onScreenY = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+    [bannerContainer addSubview:bannerContent];
+    [bannerContainer addConstraints:@[height, width, left, offScreenY]];
     
-    UILabel * textLabel = [[UILabel alloc] initWithFrame:onScreenRect];
+    UILabel * textLabel = [[UILabel alloc] initWithFrame:rect];
     textLabel.textAlignment = NSTextAlignmentCenter;
     textLabel.font = [UIFont openSansBoldFontOfSize:15.0];
     textLabel.textColor = [UIColor whiteColor];
     textLabel.text = text;
+    textLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
     [bannerContent addSubview:textLabel];
-    
-    // Add off-screen
-    [bannerContainer addSubview:bannerContent];
+    [bannerContent addConstraints:@[centerX, centerY]];
+
     
     // Animate on screen
+    [bannerContainer layoutIfNeeded];
+    
     [UIView animateWithDuration:0.5 animations:^{
-        bannerContent.frame = onScreenRect;
+        [bannerContainer removeConstraint:offScreenY];
+        [bannerContainer addConstraint:onScreenY];
+        [bannerContainer layoutIfNeeded];
     } completion:^(BOOL finished) {
         // Animate back off screen
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [bannerContainer layoutIfNeeded];
+            
             [UIView animateWithDuration:0.5 animations:^{
-                bannerContent.frame = offScreenRect;
+                [bannerContainer removeConstraint:onScreenY];
+                [bannerContainer addConstraint:offScreenY];
+                [bannerContainer layoutIfNeeded];
             } completion:^(BOOL finished) {
                 [bannerContent removeFromSuperview];
             }];

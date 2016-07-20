@@ -342,7 +342,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems
 {
     if ([[self alertActionsForDetailsButton] count] > 0) {
-    UIBarButtonItem * detailsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage zng_defaultTypingIndicatorImage] style:UIBarButtonItemStylePlain target:self action:@selector(detailsButtonPressed:)];
+        NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+        UIImage * detailsImage = [UIImage imageNamed:@"detailsButton" inBundle:bundle compatibleWithTraitCollection:nil];
+        UIBarButtonItem * detailsButton = [[UIBarButtonItem alloc] initWithImage:detailsImage style:UIBarButtonItemStylePlain target:self action:@selector(detailsButtonPressed:)];
         return @[detailsButton];
     }
     

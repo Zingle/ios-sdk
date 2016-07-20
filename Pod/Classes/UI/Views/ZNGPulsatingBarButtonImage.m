@@ -29,6 +29,7 @@
         
         UIImage * templateImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIButton * button = [[UIButton alloc] initWithFrame:frame];
+        [button setImage:templateImage forState:UIControlStateNormal];
         button.tintColor = tintColor;
         [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         [view addSubview:button];

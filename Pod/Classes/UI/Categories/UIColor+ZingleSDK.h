@@ -27,6 +27,10 @@
  */
 + (UIColor *)zng_messageBubbleRedColor;
 
++ (UIColor *)zng_unconfirmedMessageGreen;
+
++ (UIColor *)zng_unconfirmedMessageRed;
+
 /**
  *  @return A color object containing HSB values similar to the Zingle dashboard light gray bubble color.
  */

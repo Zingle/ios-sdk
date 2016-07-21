@@ -99,9 +99,9 @@
             if (self.contact.lastMessage.createdAt) {
                 NSTimeInterval distanceBetweenDates = [self.contact.lastMessage.createdAt timeIntervalSinceNow];
                 if (distanceBetweenDates < -500) {
-                    self.confirmedView.backgroundColor = [UIColor zng_messageBubbleRedColor];
+                    self.confirmedView.backgroundColor = [UIColor zng_unconfirmedMessageRed];
                 } else {
-                    self.confirmedView.backgroundColor = [UIColor zng_green];
+                    self.confirmedView.backgroundColor = [UIColor zng_unconfirmedMessageGreen];
                 }
             }
             

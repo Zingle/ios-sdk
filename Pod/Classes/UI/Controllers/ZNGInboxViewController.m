@@ -228,12 +228,12 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     {
         case NSKeyValueChangeInsertion:
             ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
-            [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationRight];
+            [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationMiddle];
             break;
             
         case NSKeyValueChangeRemoval:
             ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
-            [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationRight];
+            [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationMiddle];
             break;
             
         case NSKeyValueChangeReplacement:
@@ -253,7 +253,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
                 }
             }];
             
-            UITableViewRowAnimation animation = (shouldEmphasize) ? UITableViewRowAnimationLeft : UITableViewRowAnimationFade;
+            UITableViewRowAnimation animation = (shouldEmphasize) ? UITableViewRowAnimationMiddle : UITableViewRowAnimationFade;
             
             [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:animation];
             break;

@@ -37,6 +37,16 @@
                            alpha:1.0f];
 }
 
++ (UIColor *)zng_unconfirmedMessageGreen
+{
+    return [UIColor colorFromHexString:@"#6CDB9B"];
+}
+
++ (UIColor *)zng_unconfirmedMessageRed
+{
+    return [UIColor colorFromHexString:@"#EE8176"];
+}
+
 + (UIColor *)zng_blue
 {
     return [UIColor colorFromHexString:@"#285C8C"];

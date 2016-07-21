@@ -85,6 +85,8 @@ static void * KVOContext = &KVOContext;
     [self updateConfirmedButton];
     [self setupBannerContainer];
     
+    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
+    
     [self startEmphasisTimer];
 }
 

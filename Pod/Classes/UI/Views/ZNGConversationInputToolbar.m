@@ -8,6 +8,7 @@
 
 #import "ZNGConversationInputToolbar.h"
 #import "ZNGConversationToolbarContentView.h"
+#import "UIColor+ZingleSDK.h"
 
 @implementation ZNGConversationInputToolbar
 
@@ -17,7 +18,14 @@
 {
     [super awakeFromNib];
     self.preferredDefaultHeight = 79.0;
+    
     self.barTintColor = [UIColor whiteColor];
+    
+    UIButton * sendButton = self.contentView.rightBarButtonItem;
+    [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
+    [sendButton setTitleColor:[UIColor zng_green] forState:UIControlStateNormal];
+    [sendButton setTitleColor:[[UIColor zng_green] zng_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
+    sendButton.tintColor = [UIColor zng_green];
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView

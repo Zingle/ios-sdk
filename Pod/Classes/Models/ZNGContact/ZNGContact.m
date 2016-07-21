@@ -23,84 +23,48 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 @implementation ZNGContact
 
-- (id) initWithCoder:(NSCoder *)coder
-{
-    self = [super initWithCoder:coder];
-    
-    if (self != nil) {
-        [self setupObservation];
-    }
-    
-    return self;
-}
 
-- (id) initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError *__autoreleasing *)error
-{
-    self = [super initWithDictionary:dictionaryValue error:error];
-    
-    if (self != nil) {
-        [self setupObservation];
-    }
-    
-    return self;
-}
 
-- (void) setupObservation
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
-}
 
-- (void) dealloc
+#pragma mark - Updating for changes
+- (void) updateRemotely
 {
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
-
-#pragma mark - Observing for changes
--(void) notifyPushNotificationReceived:(NSNotification *)notification
-{
-    NSString * updatedContactId = notification.userInfo[@"feedId"];
-    
-    if ([self.contactId isEqualToString:updatedContactId]) {
-        // We may have been updated.
+    [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
         
-        [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-            
-            if (![contact requiresVisualRefeshSince:self]) {
-                // Nothing significant has changed
-                return;
-            }
-            
-            if (![[self fullName] isEqualToString:[contact fullName]]) {
-                self.customFieldValues = contact.customFieldValues;
-            }
-            
-            if (![self.lastMessage isEqual:contact.lastMessage]) {
-                self.lastMessage = contact.lastMessage;
-            }
-            
-            if (![self.channels isEqualToArray:contact.channels]) {
-                self.channels = contact.channels;
-            }
-            
-            if (![self.labels isEqualToArray:contact.labels]) {
-                self.labels = contact.labels;
-            }
-            
-            if (![self.updatedAt isEqualToDate:contact.updatedAt]) {
-                self.updatedAt = contact.updatedAt;
-            }
-            
-            if (self.isConfirmed != contact.isConfirmed) {
-                self.isConfirmed = contact.isConfirmed;
-            }
-            
-            if (self.isStarred != contact.isStarred) {
-                self.isStarred = contact.isStarred;
-            }
-            
-        } failure:nil];
+        if (![contact requiresVisualRefeshSince:self]) {
+            // Nothing significant has changed
+            return;
+        }
         
-    }
+        if (![[self fullName] isEqualToString:[contact fullName]]) {
+            self.customFieldValues = contact.customFieldValues;
+        }
+        
+        if (![self.lastMessage isEqual:contact.lastMessage]) {
+            self.lastMessage = contact.lastMessage;
+        }
+        
+        if (![self.channels isEqualToArray:contact.channels]) {
+            self.channels = contact.channels;
+        }
+        
+        if (![self.labels isEqualToArray:contact.labels]) {
+            self.labels = contact.labels;
+        }
+        
+        if (![self.updatedAt isEqualToDate:contact.updatedAt]) {
+            self.updatedAt = contact.updatedAt;
+        }
+        
+        if (self.isConfirmed != contact.isConfirmed) {
+            self.isConfirmed = contact.isConfirmed;
+        }
+        
+        if (self.isStarred != contact.isStarred) {
+            self.isStarred = contact.isStarred;
+        }
+        
+    } failure:nil];
 }
 
 #pragma mark - Mantle

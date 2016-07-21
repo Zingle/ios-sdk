@@ -25,7 +25,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     if (self != nil) {
         _service = aService;
-        _contact = aContact;
+        _contact = [aContact copy]; // A copy so that we can update this contact object from push notifications
         contactId = aContact.contactId;
         _myUserId = [theUserId copy];
         
@@ -39,6 +39,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             }
         }
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
     
     return self;
@@ -47,6 +48,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (id) initWithConversation:(ZNGConversationServiceToContact *)conversation
 {
     return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient withEventClient:conversation.eventClient];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL) isEqual:(ZNGConversationServiceToContact *)other
@@ -67,6 +73,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (NSString *)remoteName
 {
     return [_contact fullName];
+}
+
+- (void) notifyPushNotificationReceived:(NSNotification *)notification
+{
+    [self.contact updateRemotely];
 }
 
 - (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events

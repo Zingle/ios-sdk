@@ -42,10 +42,9 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ZNGChannel *)phoneNumberChannel;
 
 /**
- *  Causes the contac to go refresh its own data in place.
+ *  Causes the contact to go refresh its own data in place.
  */
 - (void) updateRemotely;
-
 
 /*
  *  Differs slightly from the phoneNumberChannel method in that this also checks if the contact has a recently used channel, then checks

@@ -16,4 +16,6 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * imageButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
 
+@property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
+
 @end

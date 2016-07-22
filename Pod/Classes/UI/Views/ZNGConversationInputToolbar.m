@@ -9,9 +9,12 @@
 #import "ZNGConversationInputToolbar.h"
 #import "ZNGConversationToolbarContentView.h"
 #import "UIColor+ZingleSDK.h"
+#import "ZNGChannel.h"
+#import "UIFont+OpenSans.h"
 
 @implementation ZNGConversationInputToolbar
 
+@dynamic contentView;
 @dynamic delegate;
 
 - (void) awakeFromNib
@@ -29,6 +32,8 @@
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
     
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
+    
+    self.currentChannel = nil;
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
@@ -37,6 +42,32 @@
                                                                                           owner:nil
                                                                                         options:nil];
     return nibViews.firstObject;
+}
+
+- (void) setCurrentChannel:(ZNGChannel *)currentChannel
+{
+    _currentChannel = currentChannel;
+    
+    NSAttributedString * title = [self attributedStringForChannelSelectButton:currentChannel];
+    [self.contentView.channelSelectButton setAttributedTitle:title forState:UIControlStateNormal];
+    [self.contentView.channelSelectButton sizeToFit];
+}
+
+- (NSAttributedString *) attributedStringForChannelSelectButton:(ZNGChannel *)channel
+{
+    CGFloat fontPointSize = self.contentView.channelSelectButton.titleLabel.font.pointSize;
+    UIFont * boldFont = [UIFont openSansBoldFontOfSize:fontPointSize];
+    UIFont * font = [UIFont openSansFontOfSize:fontPointSize];
+    
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to: " attributes:@{ NSFontAttributeName : boldFont }];
+    NSString * valueString = channel.formattedValue;
+    
+    if (valueString != nil) {
+        NSAttributedString * attributedValueString = [[NSAttributedString alloc] initWithString:channel.formattedValue attributes:@{ NSFontAttributeName : font }];
+        [string appendAttributedString:attributedValueString];
+    }
+    
+    return string;
 }
 
 #pragma mark - IBActions
@@ -73,6 +104,11 @@
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressAddInternalNoteButton:)]) {
         [self.delegate inputToolbar:self didPressAddInternalNoteButton:sender];
     }
+}
+
+- (IBAction)didPressChannelSelectButton:(id)sender
+{
+    
 }
 
 @end

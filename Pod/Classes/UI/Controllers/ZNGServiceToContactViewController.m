@@ -25,6 +25,7 @@ static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
 static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
+static NSString * const KVOChannelPath = @"conversation.channel";
 
 static void * KVOContext = &KVOContext;
 
@@ -63,6 +64,7 @@ static void * KVOContext = &KVOContext;
 - (void) setupKVO
 {
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
 - (void) dealloc
@@ -71,6 +73,7 @@ static void * KVOContext = &KVOContext;
         dispatch_source_cancel(emphasizeTimer);
     }
     
+    [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
 }
 
@@ -95,10 +98,18 @@ static void * KVOContext = &KVOContext;
     if (context == KVOContext) {
         if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
             [self updateConfirmedButton];
+        } else if ([keyPath isEqualToString:KVOChannelPath]) {
+            self.inputToolbar.currentChannel = self.conversation.channel;
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void) setConversation:(ZNGConversationServiceToContact *)conversation
+{
+    [super setConversation:conversation];
+    self.inputToolbar.currentChannel = conversation.channel;
 }
 
 - (ZNGContact *) contact
@@ -284,6 +295,24 @@ static void * KVOContext = &KVOContext;
     for (ZNGContactField * customField in self.conversation.service.contactCustomFields) {
         UIAlertAction * action = [UIAlertAction actionWithTitle:customField.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self insertCustomField:customField];
+        }];
+        [alert addAction:action];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a channel" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (ZNGChannel * channel in self.conversation.contact.channels) {
+        NSString * channelDescription = [NSString stringWithFormat:@"%@: %@", [channel channelTypeDescription], channel.formattedValue];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:channelDescription style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            self.conversation.channel = channel;
         }];
         [alert addAction:action];
     }

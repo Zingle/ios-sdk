@@ -11,6 +11,9 @@
 #import "UIColor+ZingleSDK.h"
 #import "ZNGChannel.h"
 #import "UIFont+OpenSans.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZNGConversationInputToolbar
 
@@ -108,7 +111,9 @@
 
 - (IBAction)didPressChannelSelectButton:(id)sender
 {
-    
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressChooseChannelButton:)]) {
+        [self.delegate inputToolbar:self didPressChooseChannelButton:sender];
+    }
 }
 
 @end

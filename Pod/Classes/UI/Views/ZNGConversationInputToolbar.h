@@ -7,12 +7,14 @@
 //
 
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
+#import "ZNGConversationToolbarContentView.h"
 
 @class ZNGChannel;
 @class ZNGConversationInputToolbar;
-@class ZNGConversationToolbarContentView;
 
 @protocol ZNGConversationInputToolbarDelegate <JSQMessagesInputToolbarDelegate>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
@@ -20,21 +22,20 @@
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender;
-
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didSelectChannel:(ZNGChannel *)channel;
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender;
 
 @end
 
 @interface ZNGConversationInputToolbar : JSQMessagesInputToolbar
 
-@property (weak, nonatomic) id<ZNGConversationInputToolbarDelegate> delegate;
+@property (weak, nonatomic, nullable) id<ZNGConversationInputToolbarDelegate> delegate;
 
 @property (weak, nonatomic, readonly) ZNGConversationToolbarContentView * contentView;
 
 /**
- *  The currently selected channel.  Setting this will update the UI.  This property is KVO compliant when the user selects a channel.
+ *  The currently selected channel.  Setting this will update the UI.
  */
-@property (nonatomic, strong, nullable) ZNGChannel * currentChannel;
+@property (nonatomic, weak, nullable) ZNGChannel * currentChannel;
 
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;
@@ -43,5 +44,7 @@
 - (IBAction)didPressAddNote:(id)sender;
 
 - (IBAction)didPressChannelSelectButton:(id)sender;
+
+NS_ASSUME_NONNULL_END
 
 @end

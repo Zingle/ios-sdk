@@ -16,6 +16,7 @@
 @property(nonatomic, strong) NSString* value;
 @property(nonatomic, strong) NSString* formattedValue;
 @property(nonatomic, strong) NSString* country;
+@property(nonatomic) BOOL isDefault;
 @property(nonatomic) BOOL isDefaultForType;
 @property(nonatomic, strong) ZNGChannelType* channelType;
 

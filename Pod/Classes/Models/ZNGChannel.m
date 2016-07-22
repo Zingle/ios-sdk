@@ -18,6 +18,7 @@
              @"value" : @"value",
              @"formattedValue" : @"formatted_value",
              @"country" : @"country",
+             @"isDefault" : @"is_default",
              @"isDefaultForType" : @"is_default_for_type",
              @"channelType" : @"channel_type"
              };

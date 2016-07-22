@@ -309,6 +309,10 @@ static void * KVOContext = &KVOContext;
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a channel" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    if ([self.conversation.contact.channels count] == 0) {
+        alert.title = @"No available channels";
+    }
+
     for (ZNGChannel * channel in self.conversation.contact.channels) {
         NSString * channelDescription = [NSString stringWithFormat:@"%@: %@", [channel channelTypeDescription], channel.formattedValue];
         UIAlertAction * action = [UIAlertAction actionWithTitle:channelDescription style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

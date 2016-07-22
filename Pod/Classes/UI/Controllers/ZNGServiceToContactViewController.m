@@ -89,6 +89,7 @@ static void * KVOContext = &KVOContext;
     [self setupBannerContainer];
     
     self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
+    [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
     [self startEmphasisTimer];
 }

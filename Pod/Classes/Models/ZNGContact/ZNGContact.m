@@ -190,6 +190,12 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 - (ZNGChannel *)channelForFreshOutgoingMessage
 {
+    // If they only have one (or zero) channel, this is an easy decision!
+    if ([self.channels count] <= 1) {
+        return [self.channels firstObject];
+    }
+    
+    // -First- we look for a recent message
     if (self.lastMessage != nil) {
         // We have a message to or from this person.  Let's return that same channel if we have any channel info.
         
@@ -198,6 +204,14 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         
         if (dude.channel != nil) {
             return dude.channel;
+        }
+    }
+    
+    
+    // Is there a default channel?
+    for (ZNGChannel * channel in self.channels) {
+        if (channel.isDefault) {
+            return channel;
         }
     }
     

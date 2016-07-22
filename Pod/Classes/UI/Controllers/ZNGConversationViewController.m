@@ -40,6 +40,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     BOOL checkedInitialVisibleCells;
 }
 
+@dynamic inputToolbar;
+
 + (UINib *)nib
 {
     return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])

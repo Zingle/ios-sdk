@@ -38,6 +38,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic, nullable) id<ZNGConversationModalDelegate> modalDelegate;
 
 /**
+ *  Returns the input toolbar view object managed by this view controller.
+ *  This view controller is the toolbar's delegate.
+ */
+@property (weak, nonatomic, readonly) ZNGConversationInputToolbar * inputToolbar;
+
+/**
  * OPTIONAL UI SETTINGS
  */
 

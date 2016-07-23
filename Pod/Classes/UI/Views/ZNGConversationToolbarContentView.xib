@@ -11,6 +11,20 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="106"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UUf-uA-RfU">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="33"/>
+                    <color key="backgroundColor" white="0.92171336206896548" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="33" id="kAd-Ud-86t"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yAc-fE-ozc">
+                    <rect key="frame" x="0.0" y="31" width="320" height="1"/>
+                    <color key="backgroundColor" white="0.70242456896551719" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="1" id="B6Z-Rc-2UG"/>
+                    </constraints>
+                </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Myo-1S-Vg1" userLabel="Right button container">
                     <rect key="frame" x="262" y="34" width="50" height="30"/>
                     <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
@@ -136,7 +150,7 @@
                     </constraints>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppu-y2-IOa">
-                    <rect key="frame" x="12" y="4" width="162" height="29"/>
+                    <rect key="frame" x="12" y="2" width="162" height="29"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="Reply to: (804) 555-1212">
                         <color key="titleColor" white="0.3461206896551724" alpha="1" colorSpace="calibratedWhite"/>
@@ -146,7 +160,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-oP-Tqy">
-                    <rect key="frame" x="190" y="7" width="18" height="22"/>
+                    <rect key="frame" x="190" y="5" width="18" height="22"/>
                     <color key="tintColor" white="0.69999999999999996" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" image="chevronUp"/>
                     <connections>
@@ -160,15 +174,21 @@
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="34" id="1XA-2D-nMZ"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="4" id="300-lg-SM8"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="8" id="7Ld-5r-Hp3"/>
+                <constraint firstAttribute="trailing" secondItem="UUf-uA-RfU" secondAttribute="trailing" id="8cJ-41-U1S"/>
                 <constraint firstItem="iTt-oP-Tqy" firstAttribute="leading" secondItem="Ppu-y2-IOa" secondAttribute="trailing" constant="16" id="Atl-XI-hGP"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" id="HeZ-J5-fvv"/>
+                <constraint firstItem="UUf-uA-RfU" firstAttribute="top" secondItem="1" secondAttribute="top" id="L3l-C0-jVd"/>
+                <constraint firstItem="yAc-fE-ozc" firstAttribute="top" secondItem="Ppu-y2-IOa" secondAttribute="bottom" id="LPm-pf-52w"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" priority="900" id="VBt-ph-ej0"/>
                 <constraint firstItem="iTt-oP-Tqy" firstAttribute="centerY" secondItem="Ppu-y2-IOa" secondAttribute="centerY" id="Wzl-io-vIm"/>
+                <constraint firstItem="UUf-uA-RfU" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bTQ-bh-h0p"/>
                 <constraint firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="width" secondItem="dm4-NT-mvr" secondAttribute="width" priority="900" id="hxV-cl-yYM"/>
+                <constraint firstAttribute="trailing" secondItem="yAc-fE-ozc" secondAttribute="trailing" id="lCS-2b-9LN"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="leading" id="lMW-I1-EWO"/>
                 <constraint firstItem="Ppu-y2-IOa" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="12" id="m8Q-vb-OWp"/>
-                <constraint firstItem="Ppu-y2-IOa" firstAttribute="top" secondItem="1" secondAttribute="top" constant="4" id="u1E-ZG-4JK"/>
+                <constraint firstItem="yAc-fE-ozc" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="tU2-qf-QIE"/>
+                <constraint firstItem="Ppu-y2-IOa" firstAttribute="top" secondItem="1" secondAttribute="top" constant="2" id="u1E-ZG-4JK"/>
                 <constraint firstItem="we1-V9-coM" firstAttribute="top" secondItem="dm4-NT-mvr" secondAttribute="bottom" constant="6" id="v85-1Y-ssj"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
@@ -185,7 +205,7 @@
                 <outlet property="templateButton" destination="yZv-vI-ArA" id="f46-DX-oig"/>
                 <outlet property="textView" destination="dm4-NT-mvr" id="PFw-HO-oT8"/>
             </connections>
-            <point key="canvasLocation" x="268" y="555.5"/>
+            <point key="canvasLocation" x="268" y="555"/>
         </view>
     </objects>
     <resources>

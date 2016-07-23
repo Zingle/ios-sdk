@@ -26,9 +26,9 @@
                     <cells/>
                 </collectionView>
                 <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoD-Az-3DM" customClass="ZNGConversationInputToolbar">
-                    <rect key="frame" x="0.0" y="462" width="320" height="106"/>
+                    <rect key="frame" x="0.0" y="455" width="320" height="113"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="106" id="HIk-02-qcW"/>
+                        <constraint firstAttribute="height" constant="113" id="HIk-02-qcW"/>
                     </constraints>
                     <items/>
                 </toolbar>

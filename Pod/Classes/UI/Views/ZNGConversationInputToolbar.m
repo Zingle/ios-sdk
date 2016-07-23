@@ -23,7 +23,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 106.0;
+    self.preferredDefaultHeight = 113.0;
     
     self.barTintColor = [UIColor whiteColor];
     

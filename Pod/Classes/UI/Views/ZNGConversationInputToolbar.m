@@ -50,8 +50,18 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel
 {
     _currentChannel = currentChannel;
-    
-    NSAttributedString * title = [self attributedStringForChannelSelectButton:currentChannel];
+    [self updateDisplayForCurrentChannel];
+}
+
+- (void) setNoSelectedChannelText:(NSString *)noSelectedChannelText
+{
+    _noSelectedChannelText = [noSelectedChannelText copy];
+    [self updateDisplayForCurrentChannel];
+}
+
+- (void) updateDisplayForCurrentChannel
+{
+    NSAttributedString * title = [self attributedStringForChannelSelectButton:self.currentChannel];
     [self.contentView.channelSelectButton setAttributedTitle:title forState:UIControlStateNormal];
     [self.contentView.channelSelectButton sizeToFit];
 }

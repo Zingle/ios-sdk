@@ -7,6 +7,7 @@
 //
 
 #import "ZNGEvent.h"
+#import "ZNGContact.h"
 #import "ZingleValueTransformers.h"
 
 static NSString * const ZNGEventTypeMessage = @"message";
@@ -71,6 +72,15 @@ static NSString * const ZNGEventContactCreated = @"contact_created";
     event.eventId = message.messageId;
     event.body = message.body;
     event.eventType = ZNGEventTypeMessage;
+    return event;
+}
+
++ (instancetype) eventForNewNote:(NSString *)note toContact:(ZNGContact *)contact
+{
+    ZNGEvent * event = [[ZNGEvent alloc] init];
+    event.body = note;
+    event.eventType = ZNGEventTypeNote;
+    event.contactId = contact.contactId;
     return event;
 }
 

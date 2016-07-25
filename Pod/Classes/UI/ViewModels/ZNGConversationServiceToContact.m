@@ -9,6 +9,7 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGLogging.h"
 #import "ZNGEvent.h"
+#import "ZNGEventClient.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -199,6 +200,25 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     // Ummm I really don't know what channel to pick at this point.  Pick the first one!
     return [self.contact.channels firstObject];
+}
+
+- (void) addInternalNote:(NSString *)note
+                 success:(void (^)(ZNGStatus* status))success
+                 failure:(void (^) (ZNGError *error))failure
+{
+    [self.eventClient postInternalNote:note toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+        [self appendEvents:@[note]];
+        self.totalEventCount = self.totalEventCount + 1;
+        
+        if (success != nil) {
+            success(status);
+        }
+    } failure:^(ZNGError *error) {
+        
+        if (failure != nil) {
+            failure(error);
+        }
+    }];
 }
 
 @end

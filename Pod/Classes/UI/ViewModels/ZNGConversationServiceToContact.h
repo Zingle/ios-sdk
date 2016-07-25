@@ -45,6 +45,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (ZNGChannel *) defaultChannelForContact;
 
+- (void) addInternalNote:(NSString *)note
+                 success:(void (^)(ZNGStatus* status))success
+                 failure:(void (^) (ZNGError *error))failure;
+
 NS_ASSUME_NONNULL_END
 
 @end

@@ -22,7 +22,6 @@ NSString * const ZNGConversationParticipantTypeService = @"service";
 
 @interface ZNGConversation ()
 
-@property (nonatomic) NSInteger totalEventCount;
 @property (nonatomic) NSInteger pagesLeftToLoad;
 
 @end

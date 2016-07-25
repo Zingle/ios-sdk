@@ -35,6 +35,8 @@ extern NSString * const ZNGConversationParticipantTypeService;
  */
 @property (nonatomic, strong) NSArray<ZNGEvent *> * events;
 
+@property (nonatomic) NSInteger totalEventCount;
+
 @property (nonatomic, readonly) ZNGMessageClient * messageClient;
 @property (nonatomic, readonly) ZNGEventClient * eventClient;
 
@@ -96,6 +98,9 @@ extern NSString * const ZNGConversationParticipantTypeService;
  *  @returns The most recent message in either direction
  */
 - (ZNGMessage *) mostRecentMessage;
+
+#pragma mark - Protected methods that can be called by subclasses
+- (void) appendEvents:(NSArray<ZNGEvent *> *)events;
 
 #pragma mark - Protected methods to be overridden by subclasses
 

@@ -18,4 +18,9 @@
             success:(void (^)(ZNGEvent * event, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
 
+- (void)postInternalNote:(NSString *)note
+               toContact:(ZNGContact *)contact
+                 success:(void (^)(ZNGEvent * note, ZNGStatus * status))success
+                 failure:(void (^)(ZNGError * error))failure;
+
 @end

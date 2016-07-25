@@ -29,4 +29,19 @@
     [self getWithResourcePath:path responseClass:[ZNGEvent class] success:success failure:failure];
 }
 
+- (void)postInternalNote:(NSString *)note
+               toContact:(ZNGContact *)contact
+                 success:(void (^)(ZNGEvent * note, ZNGStatus * status))success
+                 failure:(void (^)(ZNGError * error))failure
+{
+    NSParameterAssert(note);
+    NSParameterAssert(contact);
+    
+    NSString * path = [NSString stringWithFormat:@"services/%@/events", self.serviceId];
+    
+    ZNGEvent * event = [ZNGEvent eventForNewNote:note toContact:contact];
+    
+    [self postWithModel:event path:path responseClass:[ZNGEvent class] success:success failure:failure];
+}
+
 @end

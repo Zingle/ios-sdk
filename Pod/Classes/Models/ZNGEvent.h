@@ -11,6 +11,8 @@
 #import "ZNGAutomation.h"
 #import "ZNGMessage.h"
 
+@class ZNGContact;
+
 @interface ZNGEvent : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 @property(nonatomic, strong) NSString* eventId;
@@ -23,6 +25,7 @@
 @property(nonatomic, strong) ZNGMessage* message;
 
 + (instancetype) eventForNewMessage:(ZNGMessage *)message;
++ (instancetype) eventForNewNote:(NSString *)note toContact:(ZNGContact *)contact;
 
 - (BOOL) isMessage;
 - (BOOL) isNote;

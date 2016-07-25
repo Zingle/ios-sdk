@@ -153,7 +153,7 @@
                     <rect key="frame" x="12" y="1" width="162" height="29"/>
                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                     <state key="normal" title="Reply to: (804) 555-1212">
-                        <color key="titleColor" white="0.3461206896551724" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="titleColor" white="0.39207974137931034" alpha="1" colorSpace="calibratedWhite"/>
                     </state>
                     <connections>
                         <action selector="didPressChannelSelectButton:" destination="-2" eventType="touchUpInside" id="onQ-Oe-AQg"/>

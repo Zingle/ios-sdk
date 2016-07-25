@@ -140,7 +140,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     void (^registerForNotifications)() = ^{
         [self.notificationsClient registerForNotificationsWithDeviceId:tokenString withServiceIds:serviceIds success:^(ZNGStatus *status) {
-            ZNGLogDebug(@"Registered for push notifications successfully.");
+            ZNGLogDebug(@"Registered for push notifications successfully as %@", tokenString);
         } failure:^(ZNGError *error) {
             ZNGLogWarn(@"Failed to register for push notifications: %@", error);
         }];

@@ -345,6 +345,37 @@ static void * KVOContext = &KVOContext;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Enter an internal note" message:nil preferredStyle:UIAlertControllerStyleAlert];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"Internal note";
+    }];
+    UIAlertAction * addNote = [UIAlertAction actionWithTitle:@"Add note" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UITextField * noteField = [alert.textFields firstObject];
+        NSString * note = noteField.text;
+        
+        if ([note length] > 0) {
+            [self addInternalNote:note];
+        }
+    }];
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    [alert addAction:addNote];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) addInternalNote:(NSString *)note
+{
+    [self.conversation addInternalNote:note success:nil failure:^(ZNGError * _Nonnull error) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Failed to add note" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
+}
+
 - (void) insertCustomField:(ZNGContactField *)customField
 {
     // TODO: Once the server starts giving us replacement values

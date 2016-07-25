@@ -17,6 +17,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @optional
+- (NSString *)displayNameForChannel:(ZNGChannel *)channel;
+
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;

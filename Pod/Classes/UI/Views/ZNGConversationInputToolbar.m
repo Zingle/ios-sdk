@@ -63,7 +63,15 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     UIFont * font = [UIFont openSansFontOfSize:fontPointSize];
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to: " attributes:@{ NSFontAttributeName : boldFont }];
-    NSString * valueString = channel.formattedValue;
+    NSString * valueString;
+    
+    if (channel != nil) {
+        if ([self.delegate respondsToSelector:@selector(displayNameForChannel:)]) {
+            valueString = [self.delegate displayNameForChannel:channel];
+        } else {
+            valueString = channel.formattedValue;
+        }
+    }
     
     if (valueString != nil) {
         NSAttributedString * attributedValueString = [[NSAttributedString alloc] initWithString:channel.formattedValue attributes:@{ NSFontAttributeName : font }];

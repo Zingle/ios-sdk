@@ -283,6 +283,11 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Actions
+- (NSString *)displayNameForChannel:(ZNGChannel *)channel
+{
+    return [self.conversation.service displayNameForChannel:channel];
+}
+
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a custom field to insert" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -309,7 +314,8 @@ static void * KVOContext = &KVOContext;
     }
 
     for (ZNGChannel * channel in self.conversation.contact.channels) {
-        UIAlertAction * action = [UIAlertAction actionWithTitle:channel.formattedValue style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        NSString * displayName = [self.conversation.service displayNameForChannel:channel];
+        UIAlertAction * action = [UIAlertAction actionWithTitle:displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             self.conversation.channel = channel;
         }];
         [alert addAction:action];

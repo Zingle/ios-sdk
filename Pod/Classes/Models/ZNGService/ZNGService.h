@@ -39,4 +39,10 @@
 
 - (ZNGChannel *)defaultChannelForType:(ZNGChannelType *)channelType;
 
+/**
+ *  Thanks to http://jira.zinglecorp.com:8080/browse/TECH-1970, there is logic for displaying a channel
+ *   that depends on the country code for the channel vs. the service.  This is gross and I hate it.
+ */
+- (NSString *) displayNameForChannel:(ZNGChannel *)channel;
+
 @end

@@ -34,17 +34,4 @@
     return ([self.channelType.typeClass isEqualToString:@"PhoneNumber"]);
 }
 
-- (NSString *) channelTypeDescription
-{
-    if ([self.displayName length] > 0) {
-        return self.displayName;
-    }
-    
-    if (self.channelType.displayName != nil) {
-        return self.channelType.displayName;
-    }
-    
-    return @"";
-}
-
 @end

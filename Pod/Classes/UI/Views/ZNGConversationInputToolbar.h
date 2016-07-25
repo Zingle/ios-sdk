@@ -35,9 +35,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (weak, nonatomic, readonly) ZNGConversationToolbarContentView * contentView;
 
 /**
+ *  Defaults to an empty string.  Can be set to something like "No available channels".
+ *  This value is ignored if self.currentChannel is non nil.
+ */
+@property (nonatomic, copy, nullable) NSString * noSelectedChannelText;
+
+/**
  *  The currently selected channel.  Setting this will update the UI.
  */
 @property (nonatomic, weak, nullable) ZNGChannel * currentChannel;
+
+- (void) disableInput;
+- (void) enableInput;
 
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;

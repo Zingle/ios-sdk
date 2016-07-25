@@ -24,6 +24,7 @@
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
+static NSString * const KVOContactChannelsPath = @"conversation.contact.channels";
 static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
 static NSString * const KVOChannelPath = @"conversation.channel";
 
@@ -63,6 +64,7 @@ static void * KVOContext = &KVOContext;
 
 - (void) setupKVO
 {
+    [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
@@ -75,6 +77,7 @@ static void * KVOContext = &KVOContext;
     
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
+    [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
 }
 
 - (BOOL) weAreSendingOutbound
@@ -91,6 +94,8 @@ static void * KVOContext = &KVOContext;
     self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
+    [self updateUIForAvailableChannels];
+    
     [self startEmphasisTimer];
 }
 
@@ -101,9 +106,22 @@ static void * KVOContext = &KVOContext;
             [self updateConfirmedButton];
         } else if ([keyPath isEqualToString:KVOChannelPath]) {
             self.inputToolbar.currentChannel = self.conversation.channel;
+        } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
+            [self updateUIForAvailableChannels];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void) updateUIForAvailableChannels
+{
+    if ([self.conversation.contact.channels count] == 0) {
+        self.inputToolbar.noSelectedChannelText = @"No channels available";
+        [self.inputToolbar disableInput];
+    } else {
+        self.inputToolbar.noSelectedChannelText = nil;
+        [self.inputToolbar enableInput];
     }
 }
 

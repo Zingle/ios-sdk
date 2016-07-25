@@ -71,14 +71,38 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         } else {
             valueString = channel.formattedValue;
         }
+    } else if (self.noSelectedChannelText != nil) {
+        valueString = self.noSelectedChannelText;
     }
     
     if (valueString != nil) {
-        NSAttributedString * attributedValueString = [[NSAttributedString alloc] initWithString:channel.formattedValue attributes:@{ NSFontAttributeName : font }];
+        NSAttributedString * attributedValueString = [[NSAttributedString alloc] initWithString:valueString attributes:@{ NSFontAttributeName : font }];
         [string appendAttributedString:attributedValueString];
     }
     
     return string;
+}
+
+- (UIButton *) _sendButton
+{
+    if (self.sendButtonOnRight) {
+        return self.contentView.rightBarButtonItem;
+    }
+    
+    return self.contentView.leftBarButtonItem;
+}
+
+- (void) disableInput
+{
+    self.contentView.textView.text = @"";
+    self.contentView.textView.editable = NO;
+    [[self _sendButton] setEnabled:NO];
+}
+
+- (void) enableInput
+{
+    self.contentView.textView.editable = YES;
+    [[self _sendButton] setEnabled:YES];
 }
 
 #pragma mark - IBActions

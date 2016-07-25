@@ -309,8 +309,7 @@ static void * KVOContext = &KVOContext;
     }
 
     for (ZNGChannel * channel in self.conversation.contact.channels) {
-        NSString * channelDescription = [NSString stringWithFormat:@"%@: %@", [channel channelTypeDescription], channel.formattedValue];
-        UIAlertAction * action = [UIAlertAction actionWithTitle:channelDescription style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction * action = [UIAlertAction actionWithTitle:channel.formattedValue style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             self.conversation.channel = channel;
         }];
         [alert addAction:action];

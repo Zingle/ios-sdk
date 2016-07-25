@@ -36,6 +36,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient NS_UNAVAILABLE;
 
+/**
+ *  If the contact has a default channel set, this will return that value.
+ *  If no default is set, this will attempt to find the most recently used channel or, failing that, a default or sole phone number.
+ *
+ *  If conversation data has not yet been loaded, this will return the default using contact information.  (If at all possible, this
+ *   should not be called until conversation data has loaded.
+ */
+- (ZNGChannel *) defaultChannelForContact;
+
 NS_ASSUME_NONNULL_END
 
 @end

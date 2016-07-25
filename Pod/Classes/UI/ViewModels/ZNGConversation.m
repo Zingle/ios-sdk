@@ -271,6 +271,26 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     return nil;
 }
 
+- (ZNGMessage *) mostRecentInboundMessage
+{
+    for (ZNGEvent * event in self.events) {
+        if (([event isMessage]) && (event.message) != nil && (![event.message isOutbound])) {
+            return event.message;
+        }
+    }
+    
+    return nil;
+}
+
+- (ZNGMessage *) mostRecentMessage
+{
+    for (ZNGEvent * event in self.events) {
+        if ([event isMessage]) {
+            return event.message;
+        }
+    }
+}
+
 #pragma mark - Actions
 - (void)markMessagesAsRead:(NSArray<ZNGMessage *> *)messages;
 {

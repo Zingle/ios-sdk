@@ -87,6 +87,16 @@ extern NSString * const ZNGConversationParticipantTypeService;
  */
 - (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message;
 
+/**
+ *  @returns The most recent message sent from the contact to a service
+ */
+- (ZNGMessage *) mostRecentInboundMessage;
+
+/**
+ *  @returns The most recent message in either direction
+ */
+- (ZNGMessage *) mostRecentMessage;
+
 #pragma mark - Protected methods to be overridden by subclasses
 
 /**

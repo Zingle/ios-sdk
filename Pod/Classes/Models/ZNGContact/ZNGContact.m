@@ -180,33 +180,28 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 -(ZNGChannel *)phoneNumberChannel
 {
-    for (ZNGChannel *channel in self.channels) {
-        if ([channel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
-            return channel;
+    ZNGChannel * channel = nil;
+    
+    // Attempt to find a default phone number channel.  If that fails, we will return the first phone number.
+    for (ZNGChannel * testChannel in [self.channels reverseObjectEnumerator]) {
+        if ([testChannel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
+            channel = testChannel;
+            
+            if (testChannel.isDefaultForType) {
+                return testChannel;
+            }
         }
     }
-    return nil;
+
+    return channel;
 }
 
-- (ZNGChannel *)channelForFreshOutgoingMessage
+- (nullable ZNGChannel *)defaultChannel
 {
     // If they only have one (or zero) channel, this is an easy decision!
     if ([self.channels count] <= 1) {
         return [self.channels firstObject];
     }
-    
-    // -First- we look for a recent message
-    if (self.lastMessage != nil) {
-        // We have a message to or from this person.  Let's return that same channel if we have any channel info.
-        
-        // Outgoing or incoming?
-        ZNGCorrespondent * dude = ([self.lastMessage isOutbound]) ? self.lastMessage.recipient : self.lastMessage.sender;
-        
-        if (dude.channel != nil) {
-            return dude.channel;
-        }
-    }
-    
     
     // Is there a default channel?
     for (ZNGChannel * channel in self.channels) {
@@ -215,21 +210,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         }
     }
     
-    
-    // We resort to finding a phone number channel if possible
-    ZNGChannel * phoneChannel = nil;
-    
-    for (ZNGChannel * channel in self.channels) {
-        if ([channel.channelType.typeClass isEqualToString:@"PhoneNumber"]) {
-            phoneChannel = channel;
-            
-            if (phoneChannel.isDefaultForType) {
-                return phoneChannel;
-            }
-        }
-    }
-    
-    return phoneChannel;
+    return nil;
 }
 
 - (NSString *)fullName

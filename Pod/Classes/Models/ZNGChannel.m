@@ -29,6 +29,11 @@
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGChannelType.class];
 }
 
+- (BOOL) isPhoneNumber
+{
+    return ([self.channelType.typeClass isEqualToString:@"PhoneNumber"]);
+}
+
 - (NSString *) channelTypeDescription
 {
     if ([self.displayName length] > 0) {

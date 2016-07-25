@@ -28,17 +28,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         _contact = [aContact copy]; // A copy so that we can update this contact object from push notifications
         contactId = aContact.contactId;
         _myUserId = [theUserId copy];
-        
-        if (aChannel != nil) {
-            _channel = aChannel;
-        } else {
-            _channel = [aContact channelForFreshOutgoingMessage];
-            
-            if (_channel == nil) {
-                ZNGLogError(@"Unable to find a default channel for our current service.  Message sending will always fail to %@", aContact);
-            }
-        }
-        
+        _channel = aChannel;
+
+        [self addObserver:self forKeyPath:NSStringFromSelector(@selector(events)) options:NSKeyValueObservingOptionNew context:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
     
@@ -52,6 +44,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) dealloc
 {
+    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(events))];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -62,6 +55,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     return ([super isEqual:other]);
+}
+
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:NSStringFromSelector(@selector(events))]) {
+        if ((self.channel == nil) && ([self.events count] > 0)) {
+            self.channel = [self defaultChannelForContact];
+        }
+    }
 }
 
 // TODO: Restore this once the server starts accepting arrays of event types.
@@ -158,6 +160,45 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (NSString *)meId
 {
     return self.messageClient.serviceId;
+}
+
+- (ZNGChannel *) defaultChannelForContact
+{
+    if ([self.contact.channels count] == 0) {
+        return nil;
+    }
+    
+    // Check for an explicitly default channel
+    ZNGChannel * channel = [self.contact defaultChannel];
+    
+    if (channel != nil) {
+        return channel;
+    }
+    
+    // There is not an explicit default.  Check for the most recent message.
+    ZNGMessage * message = [self mostRecentInboundMessage];
+    
+    if ([self.contact.channels containsObject:message.sender.channel]) {
+        return message.sender.channel;
+    }
+    
+    // We are getting into a muddy area.  Check for a message in either direction.
+    message = [self mostRecentMessage];
+    channel = ([message isOutbound]) ? message.recipient.channel : message.sender.channel;
+    
+    if (channel != nil) {
+        return channel;
+    }
+    
+    // Things are even muddier.  There appears to be no message history with a relevant channel.  Look for a phone number channel.
+    channel = [self.contact phoneNumberChannel];
+    
+    if (channel != nil) {
+        return channel;
+    }
+    
+    // Ummm I really don't know what channel to pick at this point.  Pick the first one!
+    return [self.contact.channels firstObject];
 }
 
 @end

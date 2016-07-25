@@ -107,12 +107,6 @@ static void * KVOContext = &KVOContext;
     }
 }
 
-- (void) setConversation:(ZNGConversationServiceToContact *)conversation
-{
-    [super setConversation:conversation];
-    self.inputToolbar.currentChannel = conversation.channel;
-}
-
 - (ZNGContact *) contact
 {
     ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.conversation;

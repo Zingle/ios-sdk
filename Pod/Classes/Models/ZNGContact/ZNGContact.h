@@ -39,6 +39,10 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ZNGContactFieldValue *)titleFieldValue;
 -(nullable ZNGContactFieldValue *)firstNameFieldValue;
 -(nullable ZNGContactFieldValue *)lastNameFieldValue;
+
+/**
+ *  If there is a default phone number channel, this will return that channel.  Otherwise, it will return the first available phone number channel.
+ */
 -(nullable ZNGChannel *)phoneNumberChannel;
 
 /**
@@ -46,11 +50,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) updateRemotely;
 
-/*
- *  Differs slightly from the phoneNumberChannel method in that this also checks if the contact has a recently used channel, then checks
- *   for a default phone number if there are multiples.
+/**
+ *  Returns a default channel if available.  Returns the only channel if only one exists.
  */
-- (nullable ZNGChannel *)channelForFreshOutgoingMessage;
+- (nullable ZNGChannel *)defaultChannel;
 
 - (nullable NSString *)fullName;
 

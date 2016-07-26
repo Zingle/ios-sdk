@@ -12,11 +12,13 @@
 #import "ZNGServiceAddress.h"
 #import "ZNGChannelType.h"
 
+@class ZNGAutomation;
 @class ZNGChannel;
 @class ZNGChannelType;
 @class ZNGLabel;
 @class ZNGContactField;
 @class ZNGSetting;
+@class ZNGTemplate;
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -31,6 +33,8 @@
 @property(nonatomic, strong) NSArray<ZNGLabel *> * contactLabels;
 @property(nonatomic, strong) NSArray<ZNGContactField *> * contactCustomFields;
 @property(nonatomic, strong) NSArray<ZNGSetting *> * settings;
+@property(nonatomic, strong) NSArray<ZNGAutomation *> * automations;
+@property(nonatomic, strong) NSArray<ZNGTemplate *> * templates;
 @property(nonatomic, strong) ZNGServiceAddress* serviceAddress;
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;

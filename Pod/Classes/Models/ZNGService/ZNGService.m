@@ -43,6 +43,8 @@
              @"contactLabels" : @"contact_labels",
              @"contactCustomFields" : @"contact_custom_fields",
              @"settings" : @"settings",
+             @"automations" : @"automations",
+             @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
              @"createdAt" : @"created_at",
              @"updatedAt" : @"updated_at"

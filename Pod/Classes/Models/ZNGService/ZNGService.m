@@ -12,6 +12,8 @@
 #import "ZNGLabel.h"
 #import "ZNGContactField.h"
 #import "ZNGSetting.h"
+#import "ZNGAutomation.h"
+#import "ZNGTemplate.h"
 
 @implementation ZNGService
 
@@ -84,6 +86,16 @@
 + (NSValueTransformer*)settingsJSONTransformer
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGSetting.class];
+}
+
++ (NSValueTransformer *)automationsJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGAutomation class]];
+}
+
++ (NSValueTransformer *)templatesJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGTemplate class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer

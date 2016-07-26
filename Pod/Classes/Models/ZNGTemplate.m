@@ -16,7 +16,7 @@
              @"templateId" : @"id",
              @"displayName" : @"display_name",
              @"subject" : @"subject",
-             @"templateTypeCode" : @"templateTypeCode",
+             @"type" : @"type",
              @"body" : @"body",
              @"isGlobal" : @"is_global"
              };

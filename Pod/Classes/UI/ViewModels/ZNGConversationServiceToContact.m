@@ -10,6 +10,7 @@
 #import "ZNGLogging.h"
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
+#import "ZNGContactClient.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -220,6 +221,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         if (failure != nil) {
             failure(error);
         }
+    }];
+}
+
+- (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion
+{
+    [self.contactClient triggerAutomationWithId:automation.automationId withContactId:self.contact.contactId success:^(ZNGStatus *status) {
+        completion(YES);
+    } failure:^(ZNGError *error) {
+        completion(NO);
     }];
 }
 

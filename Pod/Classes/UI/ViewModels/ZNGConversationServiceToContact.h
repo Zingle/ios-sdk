@@ -44,13 +44,15 @@ NS_ASSUME_NONNULL_BEGIN
  *  If no default is set, this will attempt to find the most recently used channel or, failing that, a default or sole phone number.
  *
  *  If conversation data has not yet been loaded, this will return the default using contact information.  (If at all possible, this
- *   should not be called until conversation data has loaded.
+ *   should not be called until conversation data has loaded.)
  */
 - (ZNGChannel *) defaultChannelForContact;
 
 - (void) addInternalNote:(NSString *)note
                  success:(void (^)(ZNGStatus* status))success
                  failure:(void (^) (ZNGError *error))failure;
+
+- (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion;
 
 NS_ASSUME_NONNULL_END
 

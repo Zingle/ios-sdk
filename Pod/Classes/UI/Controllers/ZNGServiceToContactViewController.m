@@ -400,7 +400,7 @@ static void * KVOContext = &KVOContext;
     // See: http://jira.zinglecorp.com:8080/browse/TECH-1940
     NSString * replacementValue = @"{PLACEHOLDER}";
     
-    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:replacementValue];
+    [self appendStringToMessageInput:replacementValue];
 }
 
 - (void) insertTemplate:(ZNGTemplate *)template
@@ -409,7 +409,31 @@ static void * KVOContext = &KVOContext;
         return;
     }
     
-    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:template.body];
+    if ([template requiresResponseTime]) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a response time" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+        NSArray<NSString *> * responseTimes = [template responseTimeChoices];
+        
+        for (NSString * time in responseTimes) {
+            UIAlertAction * action = [UIAlertAction actionWithTitle:time style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                NSString * body = [template bodyWithResponseTime:time];
+                [self appendStringToMessageInput:body];
+            }];
+            [alert addAction:action];
+        }
+        
+        UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:cancel];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [self appendStringToMessageInput:template.body];
+    }
+}
+
+- (void) appendStringToMessageInput:(NSString *)text
+{
+    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
+
 }
 
 - (void) pressedEditContact

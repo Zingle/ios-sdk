@@ -70,11 +70,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
 }
 
-// TODO: Restore this once the server starts accepting arrays of event types.
-//- (NSArray<NSString *> *)eventTypes
-//{
-//    return @[@"message", @"note"];
-//}
+- (NSArray<NSString *> *)eventTypes
+{
+    return @[@"message", @"note"];
+}
 
 - (NSString *)remoteName
 {

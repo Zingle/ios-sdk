@@ -127,10 +127,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
     }
     
+    NSUInteger serviceIndex = [self.availableServices indexOfObject:service];
+    
+    if (serviceIndex == NSNotFound) {
+        ZNGLogError(@"setService was called with service ID %@, but it does not exist within our %lld available services.  Ignoring.", service.serviceId, (unsigned long long)[self.availableServices count]);
+        return;
+    }
+    
     [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
     [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
     _available = (service != nil);
-    _service = service;
+    _service = self.availableServices[serviceIndex];
     [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
     

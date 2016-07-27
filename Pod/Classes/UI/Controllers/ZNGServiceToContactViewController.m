@@ -20,6 +20,7 @@
 #import "ZNGEventCollectionViewCell.h"
 #import "ZNGConversationFlowLayout.h"
 #import "ZNGPulsatingBarButtonImage.h"
+#import "ZNGTemplate.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -323,6 +324,23 @@ static void * KVOContext = &KVOContext;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a template" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (ZNGTemplate * template in self.conversation.service.templates) {
+        UIAlertAction * action = [UIAlertAction actionWithTitle:template.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self insertTemplate:template];
+        }];
+        [alert addAction:action];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a channel" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -383,6 +401,15 @@ static void * KVOContext = &KVOContext;
     NSString * replacementValue = @"{PLACEHOLDER}";
     
     self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:replacementValue];
+}
+
+- (void) insertTemplate:(ZNGTemplate *)template
+{
+    if ([template.body length] == 0) {
+        return;
+    }
+    
+    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:template.body];
 }
 
 - (void) pressedEditContact

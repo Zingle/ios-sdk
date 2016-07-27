@@ -8,6 +8,8 @@
 
 #import "ZNGTemplate.h"
 
+static NSString * const ResponseTimeMagicString = @"{response_time}";
+
 @implementation ZNGTemplate
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
@@ -20,6 +22,31 @@
              @"body" : @"body",
              @"isGlobal" : @"is_global"
              };
+}
+
+- (BOOL) requiresResponseTime
+{
+    return [self.body containsString:ResponseTimeMagicString];
+}
+
+- (NSArray<NSString *> *) responseTimeChoices
+{
+    return @[
+             @"5 minutes",
+             @"7 minutes",
+             @"10 minutes",
+             @"15 minutes",
+             @"30 minutes"
+             ];
+}
+
+- (NSString *) bodyWithResponseTime:(NSString *)responseTimeString
+{
+    if (responseTimeString == nil) {
+        return self.body;
+    }
+    
+    return [self.body stringByReplacingOccurrencesOfString:ResponseTimeMagicString withString:responseTimeString];
 }
 
 @end

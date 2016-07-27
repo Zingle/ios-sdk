@@ -17,4 +17,19 @@
 @property (nonatomic, strong) NSString *body;
 @property (nonatomic) BOOL isGlobal;
 
+/**
+ *  Returns YES if this template contains a placeholder string for a response time
+ */
+- (BOOL) requiresResponseTime;
+
+/**
+ *  All values allowed as replacements for response_time
+ */
+- (NSArray<NSString *> *) responseTimeChoices;
+
+/**
+ *  Returns this template's body, having replaced all placeholders for response time with the specified string.
+ */
+- (NSString *) bodyWithResponseTime:(NSString *)responseTimeString;
+
 @end

@@ -20,7 +20,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
      withCurrentUserId:(NSString *)theUserId
           usingChannel:(ZNGChannel * __nullable)aChannel
      withMessageClient:(ZNGMessageClient *)messageClient
-       withEventClient:(ZNGEventClient *)eventClient
+           eventClient:(ZNGEventClient *)eventClient
+         contactClient:(ZNGContactClient *)contactClient
 {
     self = [super initWithMessageClient:messageClient eventClient:eventClient];
     
@@ -30,6 +31,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         contactId = aContact.contactId;
         _myUserId = [theUserId copy];
         _channel = aChannel;
+        _contactClient = contactClient;
 
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(events)) options:NSKeyValueObservingOptionNew context:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
@@ -40,7 +42,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (id) initWithConversation:(ZNGConversationServiceToContact *)conversation
 {
-    return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient withEventClient:conversation.eventClient];
+    return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient eventClient:conversation.eventClient contactClient:conversation.contactClient];
 }
 
 - (void) dealloc

@@ -277,7 +277,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                                                               withCurrentUserId:userAuthorization.userId
                                                                    usingChannel:nil
                                                               withMessageClient:self.messageClient
-                                                                withEventClient:self.eventClient];
+                                                                    eventClient:self.eventClient
+                                                                  contactClient:self.contactClient];
         
         self.conversationsByContactId[contact.contactId] = conversation;
     }

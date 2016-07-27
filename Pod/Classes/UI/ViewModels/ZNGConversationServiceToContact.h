@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) ZNGService * service;
 @property (nonatomic, readonly) NSString * myUserId;
 
+@property (nonnull, strong) ZNGContactClient * contactClient;
+
 /**
  *  The receiving channel.  This value can be changed after initialization.  Outgoing messages will leave on the default channel for this
  *   channel type.
@@ -32,7 +34,8 @@ NS_ASSUME_NONNULL_BEGIN
      withCurrentUserId:(NSString *)userId
           usingChannel:(ZNGChannel * __nullable)aChannel
      withMessageClient:(ZNGMessageClient *)messageClient
-       withEventClient:(ZNGEventClient *)eventClient NS_DESIGNATED_INITIALIZER;
+           eventClient:(ZNGEventClient *)eventClient
+         contactClient:(ZNGContactClient *)contactClient NS_DESIGNATED_INITIALIZER;
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient NS_UNAVAILABLE;
 

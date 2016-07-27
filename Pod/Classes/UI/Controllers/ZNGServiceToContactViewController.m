@@ -385,6 +385,42 @@ static void * KVOContext = &KVOContext;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select an automation" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    NSUInteger automationCount = 0;
+    
+    for (ZNGAutomation * automation in self.conversation.service.automations) {
+        if ([automation canBeTriggedOnAContact]) {
+            UIAlertAction * action = [UIAlertAction actionWithTitle:automation.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                [self triggerAutomation:automation];
+            }];
+            [alert addAction:action];
+            automationCount++;
+        }
+    }
+    
+    if (automationCount == 0) {
+        alert.message = @"No automations are available.";
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) triggerAutomation:(ZNGAutomation *)automation
+{
+    [self.conversation triggerAutomation:automation completion:^(BOOL success) {
+        if (!success) {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to trigger automation" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+    }];
+}
+
 - (void) addInternalNote:(NSString *)note
 {
     [self.conversation addInternalNote:note success:nil failure:^(ZNGError * _Nonnull error) {

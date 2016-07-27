@@ -16,4 +16,9 @@
 @property (nonatomic, strong) NSString *status;
 @property (nonatomic) BOOL isGlobal;
 
+/**
+ *  Returns YES if this automation can be manually triggered on a contact
+ */
+- (BOOL) canBeTriggedOnAContact;
+
 @end

@@ -19,4 +19,6 @@
 - (UIColor *)textUIColor;
 - (UIColor *)backgroundUIColor;
 
+- (BOOL) matchesSearchTerm:(NSString *)term;
+
 @end

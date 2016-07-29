@@ -63,4 +63,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return [UIColor colorFromHexString:colorString];
 }
 
+- (BOOL) matchesSearchTerm:(NSString *)term
+{
+    NSString * lowerTerm = [term lowercaseString];
+    return ([[self.displayName lowercaseString] containsString:lowerTerm]);
+}
+
 @end

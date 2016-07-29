@@ -37,7 +37,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4bg-GI-YXL">
-                    <rect key="frame" x="48" y="43" width="28" height="28"/>
+                    <rect key="frame" x="48" y="44" width="28" height="28"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="28" id="fXb-3J-zvz"/>
                         <constraint firstAttribute="width" constant="28" id="hqR-Sh-Dz3"/>
@@ -53,7 +53,7 @@
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="6" id="1XA-2D-nMZ"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="4" id="300-lg-SM8"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="8" id="7Ld-5r-Hp3"/>
-                <constraint firstItem="4bg-GI-YXL" firstAttribute="centerY" secondItem="yZv-vI-ArA" secondAttribute="centerY" id="8Ca-Dj-oxJ"/>
+                <constraint firstItem="4bg-GI-YXL" firstAttribute="centerY" secondItem="yZv-vI-ArA" secondAttribute="centerY" constant="1" id="8Ca-Dj-oxJ"/>
                 <constraint firstItem="4bg-GI-YXL" firstAttribute="leading" secondItem="yZv-vI-ArA" secondAttribute="trailing" constant="14" id="Fky-9l-J56"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" id="HeZ-J5-fvv"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" priority="900" id="VBt-ph-ej0"/>

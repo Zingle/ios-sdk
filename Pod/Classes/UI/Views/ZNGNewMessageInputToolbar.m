@@ -10,6 +10,14 @@
 
 @implementation ZNGNewMessageInputToolbar
 
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    UIButton * sendButton = self.contentView.rightBarButtonItem;
+    [sendButton setTitle:@"Send" forState:UIControlStateNormal];
+}
+
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
 {
     NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:@"ZNGNewMessageToolbarContentView"

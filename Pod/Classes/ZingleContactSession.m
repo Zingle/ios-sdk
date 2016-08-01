@@ -109,15 +109,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) setConversationForContactService
 {
-    // If we already have this conversation setup (which will happen if the contact service already contained a contact ID on selection,) do nothing
-    if (self.conversation != nil) {
-        ZNGLogDebug(@"Neglecting to create a conversation object because one already exists.");
-        return;
-    }
-    
     if (self.contactService.contactId != nil) {
+        _conversation = nil;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
+            
             long success = dispatch_semaphore_wait(messageAndEventClientSemaphore, fiveSeconds);
             
             if (success == 0) {

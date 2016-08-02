@@ -102,6 +102,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return self.contentView.leftBarButtonItem;
 }
 
+- (void) setSendButtonEnabled:(BOOL)enabled {
+    [[self _sendButton] setEnabled:enabled];
+}
+
 - (void) disableInput
 {
     self.contentView.textView.text = @"";

@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) disableInput;
 - (void) enableInput;
+- (void) setSendButtonEnabled:(BOOL)enabled;
 
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;

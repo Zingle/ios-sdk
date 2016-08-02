@@ -244,7 +244,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         {
             name = [name stringByAppendingString:lastName];
         }
-        return name;
+        return [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
 }
 

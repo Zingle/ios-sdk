@@ -118,6 +118,19 @@
     return self.serviceId;
 }
 
+- (ZNGChannelType *)phoneNumberChannelType
+{
+    NSUInteger index = [self.channelTypes indexOfObjectPassingTest:^BOOL(ZNGChannelType * _Nonnull channelType, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [channelType isPhoneNumberType];
+    }];
+    
+    if (index == NSNotFound) {
+        return nil;
+    }
+    
+    return self.channelTypes[index];
+}
+
 - (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName
 {
     for (ZNGChannelType *channelType in self.channelTypes) {
@@ -126,6 +139,11 @@
         }
     }
     return nil;
+}
+
+- (ZNGChannel *)defaultPhoneNumberChannel
+{
+    return [self defaultChannelForType:[self phoneNumberChannelType]];
 }
 
 - (ZNGChannel *)defaultChannelForType:(ZNGChannelType *)channelType

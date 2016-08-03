@@ -39,8 +39,11 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
 
+
+- (ZNGChannelType *)phoneNumberChannelType;
 - (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName;
 
+- (ZNGChannel *)defaultPhoneNumberChannel;
 - (ZNGChannel *)defaultChannelForType:(ZNGChannelType *)channelType;
 
 /**

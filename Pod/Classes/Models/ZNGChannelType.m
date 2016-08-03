@@ -8,6 +8,12 @@
 
 #import "ZNGChannelType.h"
 
+static NSString * const ZNGChannelTypeClassPhoneNumber = @"PhoneNumber";
+static NSString * const ZNGChannelTypeClassEmail = @"EmailAddress";
+static NSString * const ZNGChannelTypeClassFacebook = @"FacebookChannel";
+static NSString * const ZNGChannelTypeClassTwitter = @"TwitterChannel";
+static NSString * const ZNGChannelTypeClassUserDefined = @"UserDefinedChannel";
+
 @implementation ZNGChannelType
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey
@@ -21,6 +27,11 @@
              @"allowCommunications" : @"allow_communications",
              @"isGlobal" : @"is_global"
              };
+}
+
+- (BOOL) isPhoneNumberType
+{
+    return [self.typeClass isEqualToString:ZNGChannelTypeClassPhoneNumber];
 }
 
 @end

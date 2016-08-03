@@ -18,4 +18,6 @@
 @property(nonatomic) BOOL allowCommunications;
 @property(nonatomic) BOOL isGlobal;
 
+- (BOOL) isPhoneNumberType;
+
 @end

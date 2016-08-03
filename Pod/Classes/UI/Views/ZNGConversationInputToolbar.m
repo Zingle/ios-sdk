@@ -13,8 +13,6 @@
 #import "UIFont+OpenSans.h"
 #import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
-
 @implementation ZNGConversationInputToolbar
 
 @dynamic contentView;

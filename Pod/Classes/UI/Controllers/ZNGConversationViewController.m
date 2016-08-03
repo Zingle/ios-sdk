@@ -223,6 +223,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // TODO: Implement
 }
 
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender { /* unused */ }
+
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
     [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {

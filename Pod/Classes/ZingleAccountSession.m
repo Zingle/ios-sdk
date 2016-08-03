@@ -453,7 +453,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
         recipient.participantId = contact.contactId;
         recipient.channelValue = channel.value;
-        recipient.channelType = channel.channelType;
         
         [recipients addObject:recipient];
     }
@@ -471,7 +470,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     for (ZNGLabel * label in labels) {
         ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
         recipient.participantId = label.labelId;
-        [recipients addObject:label];
+        [recipients addObject:recipient];
     }
     
     message.recipients = recipients;

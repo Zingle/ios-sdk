@@ -111,12 +111,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) refreshConversation;
 
 #pragma mark - Methods to be overridden by subclasses to add functionality
-
-/**
- *  By default, includes "Take a photo" and "Choose a photo."  Subclasses may choose to call this super implementation or provide just their own.
- */
-- (NSArray<UIAlertAction *> *)alertActionsForAccessoryButton;
-
 /**
  *  By default, includes "Take a photo" and "Choose a photo."  Subclasses may choose to call this super implementation or provide just their own.
  */

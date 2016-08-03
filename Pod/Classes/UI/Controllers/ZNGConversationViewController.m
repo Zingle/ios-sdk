@@ -393,22 +393,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 - (void) didPressAccessoryButton:(UIButton *)sender
-{
-    NSArray<UIAlertAction *> * actions = [self alertActionsForAccessoryButton];
-    
-    if ([actions count] == 0) {
-        ZNGLogWarn(@"Accessory button was pressed, but we have no options with which to present the user.  Ignoring.");
-        return;
-    }
-    
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    for (UIAlertAction * action in actions) {
-        [alert addAction:action];
-    }
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
+{ /* unused */ }
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {

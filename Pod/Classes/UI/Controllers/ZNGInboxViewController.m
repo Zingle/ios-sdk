@@ -28,9 +28,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 @interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
 
-@property (strong, nonatomic) NSMutableDictionary *dataLoadingOperations;
-@property (strong, nonatomic) DGActivityIndicatorView *activityIndicator;
-
 @end
 
 @implementation ZNGInboxViewController
@@ -116,10 +113,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [super viewDidLoad];
     
     self.tableView.hidden = YES;
-    
-    self.activityIndicator = [[DGActivityIndicatorView alloc] initWithType:DGActivityIndicatorAnimationTypeBallPulseSync tintColor:[UIColor zng_lightBlue] size:30.0f];
-    self.activityIndicator.frame = CGRectMake((self.navigationController.navigationBar.bounds.size.width)/2 - 15, (self.view.bounds.size.height)/2 - 15, 30, 30);
-    [self.view addSubview:self.activityIndicator];
     
     refreshControl = [[UIRefreshControl alloc] init];
     [refreshControl setBackgroundColor:[UIColor whiteColor]];
@@ -280,14 +273,12 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void)showActivityIndicator
 {
-    [self.activityIndicator startAnimating];
-    self.activityIndicator.hidden = NO;
+    // Empty, abstract implementation
 }
 
 - (void)hideActivityIndicator
 {
-    self.activityIndicator.hidden = YES;
-    [self.activityIndicator stopAnimating];
+    // Empty, abstract implementation
 }
 
 #pragma mark - UITableViewDataSource

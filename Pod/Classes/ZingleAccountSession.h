@@ -105,6 +105,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
 
+/**
+ *  Send a message to multiple recipients.  This can be used to send to a single recipient, but it is prefered to use a ZNGConversation object in order to 
+ *   track and display messages in UI.
+ *
+ *  At least one value must be present in the contacts, labels, or phoneNumbers arrays.
+ */
+- (void) sendMessage:(NSString *)body toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END

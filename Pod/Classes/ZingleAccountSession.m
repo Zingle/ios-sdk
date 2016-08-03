@@ -348,4 +348,150 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return vc;
 }
 
+- (void) sendMessage:(NSString *)body toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion
+{
+    NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[phoneNumbers count];
+    
+    if (typeCount == 0) {
+        ZNGLogError(@"No recipients provided to sendMessage:.  Ignoring.");
+        completion(NO);
+        return;
+    }
+    
+    // Since message PUT requires a recipient type for the entire message (contact vs. label,) we will have to send
+    //  multiple messages if we have multiple recipient types.
+    NSMutableArray<ZNGNewMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:typeCount];
+    
+    if ([contacts count] > 0) {
+        [messages addObject:[self _messageToContacts:contacts]];
+    }
+    
+    if ([labels count] > 0) {
+        [messages addObject:[self _messageToLabels:labels]];
+    }
+    
+    if ([phoneNumbers count] > 0) {
+        [messages addObject:[self _messageToPhoneNumbers:phoneNumbers]];
+    }
+    
+    int64_t tenSeconds = 10 * NSEC_PER_SEC;
+    
+    // Loop through the sending of each message on a background thread, using a semaphore to wait for success between each message.
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        __block BOOL failed = NO;
+
+        for (ZNGNewMessage * message in messages) {
+            message.body = body;
+            
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self.messageClient sendMessage:message success:^(ZNGNewMessageResponse *message, ZNGStatus *status) {
+                    // This one sent.  Cool.
+                    dispatch_semaphore_signal(semaphore);
+                } failure:^(ZNGError *error) {
+                    ZNGLogError(@"Failed to send message: %@", error);
+                
+                    failed = YES;
+                    dispatch_semaphore_signal(semaphore);
+                }];
+            });
+            
+            NSDate * date = [NSDate date];
+            dispatch_time_t tenSecondsFromNow = dispatch_time(DISPATCH_TIME_NOW, tenSeconds);
+            long returnValue = dispatch_semaphore_wait(semaphore, tenSecondsFromNow);
+            
+            if (returnValue != 0) {
+                ZNGLogError(@"Timed out after %.0f seconds waiting for response from message send.", [[NSDate date] timeIntervalSinceDate:date]);
+                failed = YES;
+            }
+            
+            if (failed) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion(NO);
+                });
+                return;
+            }
+        }
+        
+        completion(YES);
+    });
+}
+
+- (ZNGNewMessage *) _freshOutgoingMessage
+{
+    ZNGNewMessage * message = [[ZNGNewMessage alloc] init];
+    
+    ZNGChannelType * phoneNumberChannelType = [self.service phoneNumberChannelType];
+    ZNGChannel * phoneNumberChannel = [self.service defaultPhoneNumberChannel];
+    message.channelTypeIds = @[phoneNumberChannelType.channelTypeId];
+    
+    ZNGParticipant * sender = [[ZNGParticipant alloc] init];
+    sender.participantId = self.service.serviceId;
+    sender.channelValue = phoneNumberChannel.value;
+
+    message.sender = sender;
+    message.senderType = ZNGConversationParticipantTypeService;
+    
+    return message;
+}
+
+- (ZNGNewMessage *) _messageToContacts:(NSArray<ZNGContact *> *)contacts
+{
+    ZNGNewMessage * message = [self _freshOutgoingMessage];
+    message.recipientType = ZNGConversationParticipantTypeContact;
+    
+    NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[contacts count]];
+    for (ZNGContact * contact in contacts) {
+        ZNGChannel * channel = [contact defaultChannel] ?: [contact phoneNumberChannel];
+        
+        if (channel == nil) {
+            ZNGLogError(@"Unable to find a default outgoing channel for %@ (%@).", [contact fullName], contact.contactId);
+            continue;
+        }
+        
+        ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
+        recipient.participantId = contact.contactId;
+        recipient.channelValue = channel.value;
+        recipient.channelType = channel.channelType;
+        
+        [recipients addObject:recipient];
+    }
+    
+    message.recipients = recipients;
+    return message;
+}
+
+- (ZNGNewMessage *) _messageToLabels:(NSArray<ZNGLabel *> *)labels
+{
+    ZNGNewMessage * message = [self _freshOutgoingMessage];
+    message.recipientType = ZNGConversationParticipantTypeLabel;
+    
+    NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[labels count]];
+    for (ZNGLabel * label in labels) {
+        ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
+        recipient.participantId = label.labelId;
+        [recipients addObject:label];
+    }
+    
+    message.recipients = recipients;
+    return message;
+}
+
+- (ZNGNewMessage *) _messageToPhoneNumbers:(NSArray<NSString *> *)phoneNumbers
+{
+    ZNGNewMessage * message = [self _freshOutgoingMessage];
+    message.recipientType = ZNGConversationParticipantTypeContact;
+    
+    NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[phoneNumbers count]];
+    for (NSString * phoneNumber in phoneNumbers) {
+        ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
+        recipient.channelValue = phoneNumber;
+        [recipients addObject:recipient];
+    }
+    
+    message.recipients = recipients;
+    return message;
+}
+
 @end

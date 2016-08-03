@@ -295,7 +295,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         if (deletingChar == '}') {
             // Can we find a matching {?
-            NSString * earlierText = [textView.text substringToIndex:range.location];
             NSRange openingBraceRange = [textView.text rangeOfString:@"{" options:NSBackwardsSearch];
             
             if (openingBraceRange.location != NSNotFound) {

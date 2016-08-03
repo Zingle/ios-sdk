@@ -19,6 +19,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
 
 NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";
+NSString * const ZNGConversationParticipantTypeLabel = @"label";
 
 @interface ZNGConversation ()
 

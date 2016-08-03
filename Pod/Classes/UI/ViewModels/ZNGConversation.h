@@ -21,6 +21,7 @@
 
 extern NSString * const ZNGConversationParticipantTypeContact;
 extern NSString * const ZNGConversationParticipantTypeService;
+extern NSString * const ZNGConversationParticipantTypeLabel;
 
 @interface ZNGConversation : NSObject
 {

@@ -26,6 +26,14 @@ static const uint64_t PollingIntervalSeconds = 10;
 static NSString * const EventsKVOPath = @"conversation.events";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
+@interface JSQMessagesViewController ()
+
+// Public declarations of methods required by our input toolbar delegate protocol that are already implemented by the base JSQMessagesViewController privately
+- (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender;
+- (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender;
+
+@end
+
 @interface ZNGConversationViewController ()
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;

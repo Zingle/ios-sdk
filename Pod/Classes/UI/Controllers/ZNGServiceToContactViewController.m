@@ -423,11 +423,13 @@ static void * KVOContext = &KVOContext;
 
 - (void) addInternalNote:(NSString *)note
 {
+    __weak ZNGServiceToContactViewController * weakSelf = self;
+    
     [self.conversation addInternalNote:note success:nil failure:^(ZNGError * _Nonnull error) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Failed to add note" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:ok];
-        [self presentViewController:alert animated:YES completion:nil];
+        [weakSelf presentViewController:alert animated:YES completion:nil];
     }];
 }
 

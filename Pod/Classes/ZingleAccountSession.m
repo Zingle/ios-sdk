@@ -336,7 +336,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     });
 }
 
-- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation
+- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation
 {
     if (conversation == nil) {
         ZNGLogError(@"Attempted to display view controller for a nil conversation.");

@@ -82,8 +82,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    NSString * contactId = notification.userInfo[@"feedId"];
-    BOOL thisPushRegardingSomeOtherContact = (([contactId length] > 0) && (![contactId isEqualToString:self.contact.contactId]));
+    NSString * thisContactId = notification.userInfo[@"feedId"];
+    BOOL thisPushRegardingSomeOtherContact = (([thisContactId length] > 0) && (![thisContactId isEqualToString:self.contact.contactId]));
     
     if (!thisPushRegardingSomeOtherContact) {
         [self.contact updateRemotely];

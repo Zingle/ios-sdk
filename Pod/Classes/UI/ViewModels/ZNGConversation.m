@@ -288,6 +288,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             return event.message;
         }
     }
+    
+    return nil;
 }
 
 #pragma mark - Actions

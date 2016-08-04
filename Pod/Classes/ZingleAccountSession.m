@@ -167,8 +167,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         } else if (accountChooser != nil) {
             // We have just gotten a list of available accounts.
             
-            // If there is anything in the list, we will ask our chooser to pick one
-            if ([self.availableAccounts count] > 1) {
+            // If there is anything in the list (other than the obvious case of a single available account,) we will ask our chooser to pick one
+            if ([self.availableAccounts count] != 1) {
                 self.account = accountChooser(self.availableAccounts);
             }
             
@@ -185,8 +185,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         } else if (serviceChooser != nil) {
             // We have just gotten a list of services
             
-            // If there is anything in the list, we will ask our chooser to pick one
-            if ([self.availableServices count] > 1) {
+            // If there is anything in the list (other than the obvious case of a single available service,) we will ask our chooser to pick one
+            if ([self.availableServices count] != 1) {
                 self.service = serviceChooser(self.availableServices);
             }
             

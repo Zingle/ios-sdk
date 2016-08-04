@@ -68,8 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
- *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
- *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
+ *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple (or zero) accounts are available to this user
+ *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple (or zero) services are available to this user
  *  @param errorHandler Optional block that is called every time an error is received.
  */
 - (instancetype) initWithToken:(NSString *)token

@@ -312,7 +312,11 @@ static void * KVOContext = &KVOContext;
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a custom field to insert" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    for (ZNGContactField * customField in self.conversation.service.contactCustomFields) {
+    NSArray<ZNGContactField *> * alphabeticalCustomFields = [self.conversation.service.contactCustomFields sortedArrayUsingComparator:^NSComparisonResult(ZNGContactField * _Nonnull obj1, ZNGContactField * _Nonnull obj2) {
+        return [obj1.displayName compare:obj2.displayName options:NSCaseInsensitiveSearch];
+    }];
+    
+    for (ZNGContactField * customField in alphabeticalCustomFields) {
         UIAlertAction * action = [UIAlertAction actionWithTitle:customField.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self insertCustomField:customField];
         }];

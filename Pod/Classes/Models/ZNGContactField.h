@@ -15,5 +15,6 @@
 @property(nonatomic, strong) NSString* dataType;
 @property(nonatomic) BOOL isGlobal;
 @property(nonatomic, strong) NSArray* options;// Array of ZNGFieldOption
+@property(nonatomic, strong) NSString * replacementVariable;    // The value to be put within { } to be magically replaced by the server.
 
 @end

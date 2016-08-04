@@ -18,7 +18,8 @@
              @"displayName" : @"display_name",
              @"dataType" : @"data_type",
              @"isGlobal" : @"is_global",
-             @"options" : @"options"
+             @"options" : @"options",
+             @"replacementVariable" : @"replacement_variable"
              };
 }
 

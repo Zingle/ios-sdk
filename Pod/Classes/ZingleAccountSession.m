@@ -261,7 +261,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
-        self.availableServices = nil;
+        self.availableServices = @[];
     }];
 }
 

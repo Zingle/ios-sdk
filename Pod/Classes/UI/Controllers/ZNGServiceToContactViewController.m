@@ -21,6 +21,7 @@
 #import "ZNGConversationFlowLayout.h"
 #import "ZNGPulsatingBarButtonImage.h"
 #import "ZNGTemplate.h"
+#import "UIViewController+ZNGSelectTemplate.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -326,19 +327,11 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
 {
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a template" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    for (ZNGTemplate * template in self.conversation.service.templates) {
-        UIAlertAction * action = [UIAlertAction actionWithTitle:template.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self insertTemplate:template];
-        }];
-        [alert addAction:action];
-    }
-    
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [alert addAction:cancel];
-    
-    [self presentViewController:alert animated:YES completion:nil];
+    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * _Nullable selectedTemplateBody) {
+        if (selectedTemplateBody != nil) {
+            [self appendStringToMessageInput:selectedTemplateBody];
+        }
+    }];
 }
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender
@@ -440,33 +433,6 @@ static void * KVOContext = &KVOContext;
     NSString * replacementValue = @"{PLACEHOLDER}";
     
     [self appendStringToMessageInput:replacementValue];
-}
-
-- (void) insertTemplate:(ZNGTemplate *)template
-{
-    if ([template.body length] == 0) {
-        return;
-    }
-    
-    if ([template requiresResponseTime]) {
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a response time" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-        NSArray<NSString *> * responseTimes = [template responseTimeChoices];
-        
-        for (NSString * time in responseTimes) {
-            UIAlertAction * action = [UIAlertAction actionWithTitle:time style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                NSString * body = [template bodyWithResponseTime:time];
-                [self appendStringToMessageInput:body];
-            }];
-            [alert addAction:action];
-        }
-        
-        UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-        [alert addAction:cancel];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-    } else {
-        [self appendStringToMessageInput:template.body];
-    }
 }
 
 - (void) appendStringToMessageInput:(NSString *)text

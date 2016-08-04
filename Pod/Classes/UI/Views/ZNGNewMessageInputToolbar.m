@@ -16,6 +16,9 @@
     
     UIButton * sendButton = self.contentView.rightBarButtonItem;
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
+    
+    [self.contentView.templateButton addTarget:self action:@selector(didPressUseTemplate:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.customFieldButton addTarget:self action:@selector(didPressInsertCustomField:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView

@@ -11,7 +11,6 @@
 #import "ZNGLabelCollectionViewCell.h"
 #import "ZNGLabelCollectionViewFlowLayout.h"
 #import "UIImage+ZingleSDK.h"
-#import "UIFont+OpenSans.h"
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesTimestampFormatter.h"
 
@@ -49,10 +48,7 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     
     self.contactName.textColor = [UIColor colorFromHexString:@"#333333"];
-    self.contactName.font = [UIFont openSansBoldFontOfSize:15.0f];
-    
     self.lastMessage.textColor = [UIColor colorFromHexString:@"#595959"];
-    self.lastMessage.font = [UIFont openSansFontOfSize:13.0f];
     
     self.labelCollectionView.collectionViewLayout = [[ZNGLabelCollectionViewFlowLayout alloc] init];
     ZNGLabelCollectionViewFlowLayout *flow = (ZNGLabelCollectionViewFlowLayout *)self.labelCollectionView.collectionViewLayout;

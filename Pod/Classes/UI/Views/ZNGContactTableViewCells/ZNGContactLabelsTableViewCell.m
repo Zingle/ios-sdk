@@ -8,7 +8,6 @@
 
 #import "ZNGContactLabelsTableViewCell.h"
 #import "UIColor+ZingleSDK.h"
-#import "UIFont+OpenSans.h"
 
 @interface ZNGContactLabelsTableViewCell ()
 
@@ -32,7 +31,6 @@
 {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.label.font = [UIFont openSansSemiboldFontOfSize:16.0f];
 }
 
 - (void)configureDeleteContactLabel

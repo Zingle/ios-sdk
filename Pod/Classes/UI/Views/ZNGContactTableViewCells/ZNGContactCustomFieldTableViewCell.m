@@ -8,7 +8,6 @@
 
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "UIColor+ZingleSDK.h"
-#import "UIFont+OpenSans.h"
 
 @interface ZNGContactCustomFieldTableViewCell ()
 
@@ -33,8 +32,6 @@
 {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.label.font = [UIFont openSansSemiboldFontOfSize:16.0f];
-    self.textField.font = [UIFont openSansSemiboldFontOfSize:16.0f];
     self.label.textColor = [UIColor zng_blue];
     self.textField.textColor = [UIColor zng_lightBlue];
 }

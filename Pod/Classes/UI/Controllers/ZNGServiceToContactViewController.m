@@ -10,7 +10,7 @@
 #import "ZNGContactViewController.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGEvent.h"
-#import "UIFont+OpenSans.h"
+#import "UIFont+Lato.h"
 #import "UIImage+ZingleSDK.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGContactClient.h"
@@ -269,7 +269,7 @@ static void * KVOContext = &KVOContext;
     
     UILabel * textLabel = [[UILabel alloc] initWithFrame:rect];
     textLabel.textAlignment = NSTextAlignmentCenter;
-    textLabel.font = [UIFont openSansBoldFontOfSize:15.0];
+    textLabel.font = [UIFont latoBoldFontOfSize:15.0];
     textLabel.textColor = [UIColor whiteColor];
     textLabel.text = text;
     textLabel.translatesAutoresizingMaskIntoConstraints = NO;

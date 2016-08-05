@@ -7,7 +7,6 @@
 //
 
 #import "ZNGContactDetailsTableViewCell.h"
-#import "UIFont+OpenSans.h"
 
 @interface ZNGContactDetailsTableViewCell ()
 
@@ -31,7 +30,6 @@
 {
     [super awakeFromNib];
     self.selectionStyle = UITableViewCellSelectionStyleNone;
-    self.textField.font = [UIFont openSansSemiboldFontOfSize:16.0f];
 }
 
 - (void)configureCellWithField:(NSString *)field

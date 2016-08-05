@@ -10,7 +10,7 @@
 #import "ZNGConversationToolbarContentView.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGChannel.h"
-#import "UIFont+OpenSans.h"
+#import "UIFont+Lato.h"
 #import "ZNGLogging.h"
 
 @implementation ZNGConversationInputToolbar
@@ -67,8 +67,11 @@
 - (NSAttributedString *) attributedStringForChannelSelectButton:(ZNGChannel *)channel
 {
     CGFloat fontPointSize = self.contentView.channelSelectButton.titleLabel.font.pointSize;
-    UIFont * boldFont = [UIFont openSansBoldFontOfSize:fontPointSize];
-    UIFont * font = [UIFont openSansFontOfSize:fontPointSize];
+    
+    // Use Lato if available in the bundle
+    UIFont * boldFont = [UIFont latoBoldFontOfSize:fontPointSize];
+    UIFont * font = [UIFont latoFontOfSize:fontPointSize];
+
     
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to: " attributes:@{ NSFontAttributeName : boldFont }];
     NSString * valueString;

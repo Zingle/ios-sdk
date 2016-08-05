@@ -8,6 +8,7 @@
 
 #import "ZNGConversationToolbarContentView.h"
 #import "UIColor+ZingleSDK.h"
+#import "UIFont+Lato.h"
 
 @implementation ZNGConversationToolbarContentView
 
@@ -21,6 +22,8 @@
     self.automationButton.tintColor = gray;
     self.imageButton.tintColor = gray;
     self.noteButton.tintColor = gray;
+    
+    self.rightBarButtonItem.titleLabel.font = [UIFont latoFontOfSize:self.rightBarButtonItem.titleLabel.font.pointSize];
 }
 
 @end

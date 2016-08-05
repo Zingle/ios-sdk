@@ -693,7 +693,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     NSString * name = [self nameForMessageAtIndexPath:indexPath];
-    return (name != nil) ? [[NSAttributedString alloc] initWithString:name] : nil;
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    return (name != nil) ? [[NSAttributedString alloc] initWithString:name attributes:attributes] : nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath

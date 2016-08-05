@@ -17,6 +17,7 @@
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
 #import "ZNGEventCollectionViewCell.h"
+#import "UIFont+Lato.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -97,6 +98,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont latoFontOfSize:17.0];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UINib * nib = [UINib nibWithNibName:NSStringFromClass([ZNGEventCollectionViewCell class]) bundle:bundle];

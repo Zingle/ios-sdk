@@ -30,7 +30,10 @@
     [sendButton setTitleColor:[UIColor zng_green] forState:UIControlStateNormal];
     [sendButton setTitleColor:[[UIColor zng_green] zng_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
     sendButton.tintColor = [UIColor zng_green];
+    sendButton.titleLabel.font = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
+    
+    self.contentView.textView.font = [UIFont latoFontOfSize:16.0];
     
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
     

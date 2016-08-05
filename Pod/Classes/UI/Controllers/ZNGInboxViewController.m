@@ -18,6 +18,8 @@
 #import "UIColor+ZingleSDK.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGServiceToContactViewController.h"
+#import "UIFont+Lato.h"
+#import "JSQMessagesTimestampFormatter.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -128,6 +130,14 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     // Adding the view below the refresh control
     [self.tableView insertSubview:bgView atIndex:0];
+    
+    // Adjust time fonts
+    NSMutableDictionary * dateAttributes = [[[JSQMessagesTimestampFormatter sharedFormatter] dateTextAttributes] mutableCopy];
+    NSMutableDictionary * timeAttributes = [[[JSQMessagesTimestampFormatter sharedFormatter] timeTextAttributes] mutableCopy];
+    dateAttributes[NSFontAttributeName] = [UIFont latoBoldFontOfSize:12.0];
+    timeAttributes[NSFontAttributeName] = [UIFont latoFontOfSize:12.0];
+    [[JSQMessagesTimestampFormatter sharedFormatter] setDateTextAttributes:dateAttributes];
+    [[JSQMessagesTimestampFormatter sharedFormatter] setTimeTextAttributes:timeAttributes];
     
     self.title = @"Inbox";
     self.tableView.delegate = self;

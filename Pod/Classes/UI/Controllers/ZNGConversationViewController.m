@@ -110,6 +110,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     
+    // Adjust time fonts
+    NSMutableDictionary * dateAttributes = [[[JSQMessagesTimestampFormatter sharedFormatter] dateTextAttributes] mutableCopy];
+    NSMutableDictionary * timeAttributes = [[[JSQMessagesTimestampFormatter sharedFormatter] timeTextAttributes] mutableCopy];
+    dateAttributes[NSFontAttributeName] = [UIFont latoBoldFontOfSize:12.0];
+    timeAttributes[NSFontAttributeName] = [UIFont latoFontOfSize:12.0];
+    [[JSQMessagesTimestampFormatter sharedFormatter] setDateTextAttributes:dateAttributes];
+    [[JSQMessagesTimestampFormatter sharedFormatter] setTimeTextAttributes:timeAttributes];
+    
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
     __weak ZNGConversationViewController * weakSelf = self;

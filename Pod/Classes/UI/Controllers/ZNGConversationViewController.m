@@ -54,6 +54,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     dispatch_source_t pollingTimerSource;
     BOOL checkedInitialVisibleCells;
+    
+    NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
 }
 
 @dynamic inputToolbar;
@@ -272,21 +274,75 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) handleEventsChange:(NSDictionary<NSString *, id> *)change
 {
+    BOOL moreEventsExist = (self.conversation.events != 0) && ([self.conversation.events count] < self.conversation.totalEventCount);
+    self.showLoadEarlierMessagesHeader = moreEventsExist;
+    
     int changeType = [change[NSKeyValueChangeKindKey] intValue];
     
     switch (changeType)
     {
         case NSKeyValueChangeInsertion:
+        {
+            NSArray * insertions = [change[NSKeyValueChangeNewKey] isKindOfClass:[NSArray class]] ? change[NSKeyValueChangeNewKey] : nil;
+                        
+            // Check for the special case of messages being inserted at the head of our data
+            BOOL newDataIsAtHead = [[self.conversation.events firstObject] isEqual:[insertions firstObject]];
+            BOOL someDataAlreadyExisted = (([self.conversation.events count] - [insertions count]) > 0);
+            if (newDataIsAtHead && someDataAlreadyExisted) {
+                NSIndexSet * indexes = [change[NSKeyValueChangeIndexesKey] isKindOfClass:[NSIndexSet class]] ? change[NSKeyValueChangeIndexesKey] : nil;
+                
+                if (indexes != nil) {
+                    NSMutableArray * indexPaths = [[NSMutableArray alloc] initWithCapacity:[indexes count]];
+                    [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                        [indexPaths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+                    }];
+                    
+                    // If we successfully get here, we will tell the collection view to insert the items and then return before calling finishReceivingMessageAnimated:
+                    ZNGLogVerbose(@"Inserting %llu events into collection view to bring total to %llu", (unsigned long long)[insertions count], (unsigned long long)[self.conversation.events count]);
+                    [self insertEventsAtIndexesWithoutScrolling:indexPaths];
+                    return;
+                }
+            }
+            
+            ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self finishReceivingMessageAnimated:YES];
             break;
+        }
             
         case NSKeyValueChangeRemoval:
         case NSKeyValueChangeSetting:
         case NSKeyValueChangeReplacement:
         default:
             // Any of these cases, we will be safe and reload
+            ZNGLogVerbose(@"Reloading collection view with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self.collectionView reloadData];
     }
+}
+
+// Remove after temporary debugging
+- (void)finishReceivingMessageAnimated:(BOOL)animated {
+    
+    ZNGLogVerbose(@"Finish receiving messages called with %llu items", (unsigned long long)[self collectionView:self.collectionView numberOfItemsInSection:0]);
+    
+    [super finishReceivingMessageAnimated:animated];
+}
+
+// Using method stolen from http://stackoverflow.com/a/26401767/3470757 to insert at head without scrolling
+- (void) insertEventsAtIndexesWithoutScrolling:(NSArray<NSIndexPath *> *)indexes
+{
+    CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y;
+    pendingInsertionCount = [indexes count];
+    
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+    
+    [self.collectionView performBatchUpdates:^{
+        [self.collectionView insertItemsAtIndexPaths:indexes];
+        pendingInsertionCount = 0;
+    } completion:^(BOOL finished) {
+        self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentSize.height - bottomOffset);
+        [CATransaction commit];
+    }];
 }
 
 - (void) notifyMediaMessageMediaDownloaded:(NSNotification *)notification
@@ -709,7 +765,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self.conversation.events count];
+    return [self.conversation.events count] - pendingInsertionCount;
 }
 
 - (UICollectionReusableView *)collectionView:(JSQMessagesCollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath

@@ -149,22 +149,20 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self addSenderNameToMessageEvents:incomingEvents];
     [self addMissingMessageIdsToMessageEvents:incomingEvents];
     
-    NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
-    
     // If we have no existing data, this is pretty simple!
     if ([self.events count] == 0) {
-        [mutableEvents addObjectsFromArray:incomingEvents];
+        [self appendEvents:incomingEvents];
         return;
     }
     
     // We have new data for page 1 and some existing data.  We expect some overlap.
     // First we will find the index of the previous last object in this new data.
-    NSUInteger previousNewestEventIndexInNewData = [incomingEvents indexOfObject:[mutableEvents lastObject]];
+    NSUInteger previousNewestEventIndexInNewData = [incomingEvents indexOfObject:[self.events lastObject]];
     
     if (previousNewestEventIndexInNewData == NSNotFound) {
         // We could not find our previous newest even in this new data.  We will append all of this data to our tail.
         ZNGLogInfo(@"Received %llu new events but were unable to find any overlap.  There is likely missing data inbetween these pages.", (unsigned long long)[incomingEvents count]);
-        [mutableEvents addObjectsFromArray:incomingEvents];
+        [self appendEvents:incomingEvents];
         return;
     }
     
@@ -176,7 +174,15 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     NSRange incomingEventsFreshDataRange = NSMakeRange(previousNewestEventIndexInNewData + 1, [incomingEvents count] - previousNewestEventIndexInNewData - 1);
     NSArray<ZNGEvent *> * nonOverlappingIncomingEvents = [incomingEvents subarrayWithRange:incomingEventsFreshDataRange];
-    [mutableEvents addObjectsFromArray:nonOverlappingIncomingEvents];
+    [self appendEvents:nonOverlappingIncomingEvents];
+}
+
+- (void) appendEvents:(NSArray<ZNGEvent *> *)events
+{
+    // Use insertion instead of addObjectsFromArray to get one batched KVO update
+    NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([mutableEvents count], [events count])];
+    [mutableEvents insertObjects:events atIndexes:indexSet];
 }
 
 #pragma mark - Grabbing older data
@@ -193,11 +199,12 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         return;
     }
     
-    NSUInteger lastPageAlreadyFetched = ([self.events count] / self.pageSize) + 1;
+    NSUInteger lastPageAlreadyFetched = [self.events count] / self.pageSize;
     NSUInteger nextPageToFetch = lastPageAlreadyFetched + 1;
     
     if (([self.events count] % self.pageSize) != 0) {
         ZNGLogWarn(@"Our current event data does not fall on page boundaries.  The older data loaded will not fill an entire page.");
+        nextPageToFetch++;
     }
     
     NSDictionary * parameters = [self parametersForPageSize:self.pageSize pageIndex:nextPageToFetch];
@@ -205,6 +212,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
         
         self.totalEventCount = status.totalRecords;
+        
+        ZNGLogDebug(@"Loaded %llu more events", (unsigned long long)[events count]);
         
         NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
         [self mergeNewDataAtHead:sortedEvents];
@@ -218,14 +227,13 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self addSenderNameToMessageEvents:incomingEvents];
     [self addMissingMessageIdsToMessageEvents:incomingEvents];
     
-    NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
-    
     if ([self.events count] == 0) {
         ZNGLogWarn(@"mergeNewDataAtHead: called without any existing data.  This was probably accidental.");
-        [mutableEvents addObjectsFromArray:incomingEvents];
+        [self appendEvents:incomingEvents];
         return;
     }
     
+    NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
     NSUInteger indexOfOldHeadInNewData = [incomingEvents indexOfObject:[self.events firstObject]];
     NSArray<ZNGEvent *> * incomingEventsMinusOverlap = incomingEvents;
     
@@ -233,6 +241,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     if (indexOfOldHeadInNewData != NSNotFound) {
         NSRange nonOverlapRange = NSMakeRange(0, indexOfOldHeadInNewData);
         incomingEventsMinusOverlap = [incomingEvents subarrayWithRange:nonOverlapRange];
+    }
+    
+    // Do nothing if we have no data!
+    if ([incomingEventsMinusOverlap count] == 0) {
+        return;
     }
     
     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [incomingEventsMinusOverlap count])];

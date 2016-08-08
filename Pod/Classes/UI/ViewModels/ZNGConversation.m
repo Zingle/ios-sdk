@@ -17,15 +17,11 @@
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
+static const NSUInteger kDefaultPageSize;
+
 NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";
 NSString * const ZNGConversationParticipantTypeLabel = @"label";
-
-@interface ZNGConversation ()
-
-@property (nonatomic) NSInteger pagesLeftToLoad;
-
-@end
 
 @implementation ZNGConversation
 
@@ -33,6 +29,9 @@ NSString *const kConversationPage = @"page";
 NSString *const kConversationPageSize = @"page_size";
 NSString *const kConversationContactId = @"contact_id";
 NSString *const kConversationSortField = @"sort_field";
+NSString *const kConversationSortDirection = @"sort_direction";
+NSString *const kConversationSortDirectionAscending = @"asc";
+NSString *const kConversationSortDirectionDescending = @"desc";
 NSString *const kConversationCreatedAt = @"created_at";
 NSString *const kConversationEventType = @"event_type";
 NSString *const kAttachementContentTypeKey = @"content_type";
@@ -54,6 +53,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         _events = @[];
         _messageClient = messageClient;
         _eventClient = eventClient;
+        _pageSize = kDefaultPageSize;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
@@ -80,66 +80,173 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     return [[self eventTypes] isEqualToArray:[other eventTypes]];
 }
 
+- (void) setPageSize:(NSUInteger)pageSize
+{
+    if (pageSize == 0) {
+        ZNGLogError(@"Page size must be non-zero.  Ignoring new value.");
+        return;
+    }
+    
+    _pageSize = pageSize;
+}
+
 - (NSUInteger) hash
 {
     return [[self eventTypes] hash];
 }
 
-- (void)updateEvents
-{   
-    void (^fetchNewData)() = ^{
-        NSDictionary *params = [self parametersForPageSize:100 pageIndex:1];
+#pragma mark - Refreshing latest data
+- (void)loadRecentEventsErasingOlderData:(BOOL)replace
+{
+    // If we already have some data, and the caller does not wish old data blown away, we will first fetch a page size of 0 to see if we have more data
+    if ((!replace) && (self.totalEventCount > 0)) {
+        NSDictionary * parameters = [self parametersForPageSize:0 pageIndex:1];
         
-        [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-            ZNGLogVerbose(@"Received event list with %ld events.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalEventCount);
-
-            if (status.totalRecords == self.totalEventCount) {
-                // We have no new messages
-                return;
+        [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+            
+            if (status.totalRecords != self.totalEventCount) {
+                self.totalEventCount = status.totalRecords;
+                [self _loadRecentEventsErasing:replace];
             }
             
-            self.totalEventCount = status.totalRecords;
-            self.pagesLeftToLoad = status.totalPages - 1;
-            [self mergeNewEventsAtTail:events];
-            
-            if (self.pagesLeftToLoad > 0) {
-                [self loadNextPage:status.page + 1];
-            }
-            
-        } failure:^(ZNGError *error) {
-            ZNGLogError(@"Event client failed to retrieve events: %@", error);
-        }];
-    };
-    
-    // If we already have some data, we will request a page size of 0 first to check if we even have new data
-    if (self.totalEventCount > 0) {
-        NSDictionary * params = [self parametersForPageSize:0 pageIndex:1];
-        
-        [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-            ZNGLogDebug(@"There are %ld total events available.  We currently have %ld.", (long)status.totalRecords, (long)self.totalEventCount);
-            
-            if (status.totalRecords > self.totalEventCount) {
-                ZNGLogDebug(@"Requesting new data.");
-                fetchNewData();
-            }
         } failure:^(ZNGError *error) {
             ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
-            fetchNewData();
+            [self _loadRecentEventsErasing:replace];
         }];
     } else {
-        fetchNewData();
+        // We have no special logic for this case.  Go get the data.
+        [self _loadRecentEventsErasing:replace];
     }
+}
+
+- (void)_loadRecentEventsErasing:(BOOL)replace
+{
+    NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
+    
+    [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+        
+        self.totalEventCount = status.totalRecords;
+        
+        // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
+        NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
+        
+        if (replace) {
+            NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+            [mutableEvents removeAllObjects];
+        }
+        
+        [self mergeNewDataAtTail:sortedEvents];
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to load events: %@", error);
+    }];
+}
+
+- (void)mergeNewDataAtTail:(NSArray<ZNGEvent *> *)incomingEvents
+{
+    [self addSenderNameToMessageEvents:incomingEvents];
+    [self addMissingMessageIdsToMessageEvents:incomingEvents];
+    
+    NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+    
+    // If we have no existing data, this is pretty simple!
+    if ([self.events count] == 0) {
+        [mutableEvents addObjectsFromArray:incomingEvents];
+        return;
+    }
+    
+    // We have new data for page 1 and some existing data.  We expect some overlap.
+    // First we will find the index of the previous last object in this new data.
+    NSUInteger previousNewestEventIndexInNewData = [incomingEvents indexOfObject:[mutableEvents lastObject]];
+    
+    if (previousNewestEventIndexInNewData == NSNotFound) {
+        // We could not find our previous newest even in this new data.  We will append all of this data to our tail.
+        ZNGLogInfo(@"Received %llu new events but were unable to find any overlap.  There is likely missing data inbetween these pages.", (unsigned long long)[incomingEvents count]);
+        [mutableEvents addObjectsFromArray:incomingEvents];
+        return;
+    }
+    
+    // Ensure we actually have some new data.  Things have gone kooky somewhere earlier if this sanity test fails.
+    if ([incomingEvents count] <= previousNewestEventIndexInNewData + 1) {
+        ZNGLogWarn(@"We received %llu new events, but there appears to be no new data to append.", (unsigned long long)[incomingEvents count]);
+        return;
+    }
+    
+    NSRange incomingEventsFreshDataRange = NSMakeRange(previousNewestEventIndexInNewData + 1, [incomingEvents count] - previousNewestEventIndexInNewData - 1);
+    NSArray<ZNGEvent *> * nonOverlappingIncomingEvents = [incomingEvents subarrayWithRange:incomingEventsFreshDataRange];
+    [mutableEvents addObjectsFromArray:nonOverlappingIncomingEvents];
+}
+
+#pragma mark - Grabbing older data
+- (void) loadOlderData
+{
+    if (self.totalEventCount == 0) {
+        ZNGLogInfo(@"loadOlderData called with no existing data.  Fetching initial data...");
+        [self loadRecentEventsErasingOlderData:NO];
+        return;
+    }
+    
+    if ([self.events count] >= self.totalEventCount) {
+        ZNGLogInfo(@"loadOlderData called, but there is no data available beyond our current %llu items.", (unsigned long long)[self.events count]);
+        return;
+    }
+    
+    NSUInteger lastPageAlreadyFetched = ([self.events count] / self.pageSize) + 1;
+    NSUInteger nextPageToFetch = lastPageAlreadyFetched + 1;
+    
+    if (([self.events count] % self.pageSize) != 0) {
+        ZNGLogWarn(@"Our current event data does not fall on page boundaries.  The older data loaded will not fill an entire page.");
+    }
+    
+    NSDictionary * parameters = [self parametersForPageSize:self.pageSize pageIndex:nextPageToFetch];
+    
+    [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+        
+        self.totalEventCount = status.totalRecords;
+        
+        NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
+        [self mergeNewDataAtHead:sortedEvents];
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to load older event data: %@", error);
+    }];
+}
+
+- (void) mergeNewDataAtHead:(NSArray<ZNGEvent *> *)incomingEvents
+{
+    [self addSenderNameToMessageEvents:incomingEvents];
+    [self addMissingMessageIdsToMessageEvents:incomingEvents];
+    
+    NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+    
+    if ([self.events count] == 0) {
+        ZNGLogWarn(@"mergeNewDataAtHead: called without any existing data.  This was probably accidental.");
+        [mutableEvents addObjectsFromArray:incomingEvents];
+        return;
+    }
+    
+    NSUInteger indexOfOldHeadInNewData = [incomingEvents indexOfObject:[self.events firstObject]];
+    NSArray<ZNGEvent *> * incomingEventsMinusOverlap = incomingEvents;
+    
+    // If we have overlap, crop our incoming data to only include the new stuff
+    if (indexOfOldHeadInNewData != NSNotFound) {
+        NSRange nonOverlapRange = NSMakeRange(0, indexOfOldHeadInNewData);
+        incomingEventsMinusOverlap = [incomingEvents subarrayWithRange:nonOverlapRange];
+    }
+    
+    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [incomingEventsMinusOverlap count])];
+    [mutableEvents insertObjects:incomingEventsMinusOverlap atIndexes:indexSet];
 }
 
 - (NSDictionary *) parametersForPageSize:(NSUInteger)pageSize pageIndex:(NSUInteger)pageIndex
 {
     NSArray<NSString *> * eventTypes = [self eventTypes];
 
+    // Note that sort order is set to descending so page 1 has most recent messages.  This data will then be reversed upon receipt.
     NSMutableDictionary * params = [@{
                                      kConversationPageSize : @(pageSize),
                                      kConversationContactId : contactId,
                                      kConversationPage: @(pageIndex),
                                      kConversationSortField : kConversationCreatedAt,
+                                     kConversationSortDirection : kConversationSortDirectionDescending
                                      } mutableCopy];
     
     if ([eventTypes count] > 0) {
@@ -157,50 +264,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    [self updateEvents];
-}
-
-- (void) mergeNewEventsAtTail:(NSArray<ZNGEvent *> *)events
-{
-    [self addSenderNameToMessageEvents:events];
-    [self addMissingMessageIdsToMessageEvents:events];
-    
-    NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
-
-    if ([mutableEvents count] == 0) {
-        // We need to append this data
-        NSRange newEventRange = NSMakeRange([mutableEvents count], [events count]);
-        NSIndexSet * indexSet = [[NSIndexSet alloc] initWithIndexesInRange:newEventRange];
-        [mutableEvents insertObjects:events atIndexes:indexSet];
-        return;
-    }
-    
-    
-    NSUInteger indexOfLastOldEventInNewEvents = [events indexOfObject:[mutableEvents lastObject]];
-    
-    if (indexOfLastOldEventInNewEvents == NSNotFound) {
-        // We were unable to find matching data anywhere.  Blow away our old array and use this new one.
-        [self willChangeValueForKey:NSStringFromSelector(@selector(events))];
-        _events = events;
-        [self didChangeValueForKey:NSStringFromSelector(@selector(events))];
-        return;
-    }
-
-    NSArray * newTail = [events subarrayWithRange:NSMakeRange(indexOfLastOldEventInNewEvents + 1, [events count] - indexOfLastOldEventInNewEvents - 1)];
-    NSRange destinationRange = NSMakeRange([mutableEvents count], [newTail count]);
-    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:destinationRange];
-    [mutableEvents insertObjects:newTail atIndexes:indexSet];
-}
-
-- (void) appendEvents:(NSArray<ZNGEvent *> *)events
-{
-    [self addSenderNameToMessageEvents:events];
-    [self addMissingMessageIdsToMessageEvents:events];
-    
-    NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
-    NSRange range = NSMakeRange([mutableEvents count], [events count]);
-    NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:range];
-    [mutableEvents insertObjects:events atIndexes:indexSet];
+    [self loadRecentEventsErasingOlderData:NO];
 }
 
 - (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
@@ -221,25 +285,6 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             }
         }
     }
-}
-
-- (void)loadNextPage:(NSInteger)page
-{
-    if (page < 1) {
-        ZNGLogError(@"loadNextPage called with invalid page number of %ld", (long)page);
-        return;
-    }
-    
-    NSDictionary * params = [self parametersForPageSize:100 pageIndex:page];
-    
-    [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-        [self appendEvents:events];
-        self.pagesLeftToLoad--;
-        
-        if (self.pagesLeftToLoad >= 1) {
-            [self loadNextPage:status.page + 1];
-        }
-    } failure:nil];
 }
 
 #pragma mark - Data retrieval

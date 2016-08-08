@@ -38,6 +38,11 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
 
 @property (nonatomic) NSInteger totalEventCount;
 
+/**
+ *  How many events to load in initial data and in each subsequent call to loadOlderData.  Defaults to 100.
+ */
+@property (nonatomic) NSUInteger pageSize;
+
 @property (nonatomic, readonly) ZNGMessageClient * messageClient;
 @property (nonatomic, readonly) ZNGEventClient * eventClient;
 
@@ -62,7 +67,15 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  */
 - (id) initWithConversation:(ZNGConversation *)conversation;
 
-- (void)updateEvents;
+/**
+ *  Populates the events array with the most recent data.
+ */
+- (void)loadRecentEventsErasingOlderData:(BOOL)replace;
+
+/**
+ *  Fetches one more page of older data if available.
+ */
+- (void)loadOlderData;
 
 /**
  *  Marks the specified messages as read, only if they do not already have read_at dates.

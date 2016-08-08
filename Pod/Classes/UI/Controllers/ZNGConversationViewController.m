@@ -330,6 +330,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 #pragma mark - Buttons
+- (void) collectionView:(JSQMessagesCollectionView *)collectionView header:(JSQMessagesLoadEarlierHeaderView *)headerView didTapLoadEarlierMessagesButton:(UIButton *)sender
+{
+    [self.conversation loadOlderData];
+}
+
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];

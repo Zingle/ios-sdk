@@ -23,7 +23,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const EventCellIdentifier = @"EventCell";
 
+// We will use a more aggressive polling interval when testing on a simulator (that cannot support push notifications)
+#if TARGET_IPHONE_SIMULATOR
 static const uint64_t PollingIntervalSeconds = 10;
+#else
+static const uint64_t PollingIntervalSeconds = 30;
+#endif
+
 static NSString * const EventsKVOPath = @"conversation.events";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 

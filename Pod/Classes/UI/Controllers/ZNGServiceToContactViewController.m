@@ -167,7 +167,7 @@ static void * KVOContext = &KVOContext;
             self.conversation = [[ZNGConversationDetailedEvents alloc] initWithConversation:self.conversation];
         }
         
-        [self.conversation updateEvents];
+        [self.conversation loadRecentEventsErasingOlderData:YES];
     }];
     [actions addObject:toggleDetailedEvents];
     

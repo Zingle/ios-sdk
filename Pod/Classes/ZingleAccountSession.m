@@ -283,7 +283,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         self.conversationsByContactId[contact.contactId] = conversation;
     }
 
-    [conversation updateEvents];
+    [conversation loadRecentEventsErasingOlderData:YES];
     return conversation;
 }
 

@@ -105,8 +105,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
             
             if (status.totalRecords != self.totalEventCount) {
+                ZNGLogDebug(@"There appears to be more event data available.  Fetching...");
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
+            } else {
+                ZNGLogDebug(@"There are still only %llu events available.  We already have %llu.", (unsigned long long)status.totalRecords, (unsigned long long)[self.events count]);
             }
             
         } failure:^(ZNGError *error) {
@@ -236,6 +239,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [mutableEvents insertObjects:incomingEventsMinusOverlap atIndexes:indexSet];
 }
 
+#pragma mark - Parameters/Settings
 - (NSDictionary *) parametersForPageSize:(NSUInteger)pageSize pageIndex:(NSUInteger)pageIndex
 {
     NSArray<NSString *> * eventTypes = [self eventTypes];

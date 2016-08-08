@@ -18,6 +18,7 @@
 #import "UIImage+ZingleSDK.h"
 #import "ZNGEventCollectionViewCell.h"
 #import "UIFont+Lato.h"
+#import "JSQMessagesLoadEarlierHeaderView.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -709,6 +710,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.conversation.events count];
+}
+
+- (UICollectionReusableView *)collectionView:(JSQMessagesCollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    // Set the font in the 'load earlier messages' view
+    UICollectionReusableView * supplementaryView = [super collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];
+    
+    if ([supplementaryView isKindOfClass:[JSQMessagesLoadEarlierHeaderView class]]) {
+        JSQMessagesLoadEarlierHeaderView * loadEarlier = supplementaryView;
+        loadEarlier.loadButton.titleLabel.font = [UIFont latoFontOfSize:17.0];
+    }
+    
+    return supplementaryView;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

@@ -140,6 +140,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self markAllVisibleMessagesAsRead];
     checkedInitialVisibleCells = YES;
+    
+    [self showOrHideLoadEarlierMessagesButton];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -272,10 +274,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
-- (void) handleEventsChange:(NSDictionary<NSString *, id> *)change
+- (void) showOrHideLoadEarlierMessagesButton
 {
     BOOL moreEventsExist = (self.conversation.events != 0) && ([self.conversation.events count] < self.conversation.totalEventCount);
     self.showLoadEarlierMessagesHeader = moreEventsExist;
+}
+
+- (void) handleEventsChange:(NSDictionary<NSString *, id> *)change
+{
+    [self showOrHideLoadEarlierMessagesButton];
     
     int changeType = [change[NSKeyValueChangeKindKey] intValue];
     

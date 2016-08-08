@@ -17,7 +17,7 @@
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
-static const NSUInteger kDefaultPageSize;
+static const NSUInteger kDefaultPageSize = 100;
 
 NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";

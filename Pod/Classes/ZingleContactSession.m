@@ -129,7 +129,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                                                                                             toContactService:self.contactService
                                                                                            withMessageClient:self.messageClient
                                                                                                  eventClient:self.eventClient];
-                    [self.conversation loadRecentEventsErasingOlderData:YES];
+                    [self.conversation loadRecentEventsErasingOlderData:NO];
                 });
             } else {
                 ZNGLogError(@"No message client was ever created.  We are unable to setup our conversation object.");

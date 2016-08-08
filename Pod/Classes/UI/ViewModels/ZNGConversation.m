@@ -102,6 +102,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     if ((!replace) && (self.totalEventCount > 0)) {
         NSDictionary * parameters = [self parametersForPageSize:0 pageIndex:1];
         
+        self.loading = YES;
         [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
             
             if (status.totalRecords != self.totalEventCount) {
@@ -110,6 +111,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                 [self _loadRecentEventsErasing:replace];
             } else {
                 ZNGLogDebug(@"There are still only %llu events available.", (unsigned long long)status.totalRecords);
+                self.loading = NO;
             }
             
         } failure:^(ZNGError *error) {
@@ -125,6 +127,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void)_loadRecentEventsErasing:(BOOL)replace
 {
     NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
+    self.loading = YES;
     
     [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
         
@@ -139,8 +142,10 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         [self mergeNewDataAtTail:sortedEvents];
+        self.loading = NO;
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to load events: %@", error);
+        self.loading = NO;
     }];
 }
 
@@ -209,6 +214,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     NSDictionary * parameters = [self parametersForPageSize:self.pageSize pageIndex:nextPageToFetch];
     
+    self.loading = YES;
+    
     [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
         
         self.totalEventCount = status.totalRecords;
@@ -217,8 +224,10 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
         [self mergeNewDataAtHead:sortedEvents];
+        self.loading = NO;
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to load older event data: %@", error);
+        self.loading = NO;
     }];
 }
 

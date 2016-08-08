@@ -39,6 +39,11 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
 @property (nonatomic) NSInteger totalEventCount;
 
 /**
+ *  Flag that is set whenever there is a pending network request
+ */
+@property (nonatomic) BOOL loading;
+
+/**
  *  How many events to load in initial data and in each subsequent call to loadOlderData.  Defaults to 100.
  */
 @property (nonatomic) NSUInteger pageSize;

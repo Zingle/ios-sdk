@@ -109,7 +109,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
             } else {
-                ZNGLogDebug(@"There are still only %llu events available.  We already have %llu.", (unsigned long long)status.totalRecords, (unsigned long long)[self.events count]);
+                ZNGLogDebug(@"There are still only %llu events available.", (unsigned long long)status.totalRecords);
             }
             
         } failure:^(ZNGError *error) {

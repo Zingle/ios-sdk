@@ -26,7 +26,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 // Override readonly properties with strong properties to get proper KVO
 @interface ZingleAccountSession ()
 
-@property (nonatomic, strong, nullable) NSMutableDictionary<NSString *, ZNGConversationServiceToContact *> * conversationsByContactId;
+@property (nonatomic, strong, nonnull) NSCache<NSString *, ZNGConversationServiceToContact *> * conversationCache;
 
 @end
 
@@ -61,9 +61,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         contactClientSemaphore = dispatch_semaphore_create(0);
         
+        _conversationCache = [[NSCache alloc] init];
+        _conversationCache.countLimit = 10;
+        
         accountChooser = anAccountChooser;
         serviceChooser = aServiceChooser;
-        _conversationsByContactId = [[NSMutableDictionary alloc] init];
         [self retrieveAvailableAccounts];
     }
     
@@ -269,7 +271,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 {
     // Do we have a cached version of this conversation already?
-    ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contact.contactId];
+    ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:contact.contactId];
     
     if (conversation == nil) {
         conversation = [[ZNGConversationServiceToContact alloc] initFromService:self.service
@@ -280,7 +282,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                                                                     eventClient:self.eventClient
                                                                   contactClient:self.contactClient];
         
-        self.conversationsByContactId[contact.contactId] = conversation;
+        [self.conversationCache setObject:conversation forKey:contact.contactId];
     }
 
     [conversation loadRecentEventsErasingOlderData:NO];
@@ -290,7 +292,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact *))completion
 {
     // Do we have a cached version of this conversation already?
-    ZNGConversationServiceToContact * conversation = self.conversationsByContactId[contactId];
+    ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:contactId];
+
     
     if (conversation != nil) {
         completion(conversation);

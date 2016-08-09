@@ -293,9 +293,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     // Do we have a cached version of this conversation already?
     ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:contactId];
-
     
     if (conversation != nil) {
+        [conversation loadRecentEventsErasingOlderData:NO];
         completion(conversation);
         return;
     }

@@ -10,7 +10,8 @@ import UIKit
 
 let animationKey = "movingGradientAnimation"
 
-let colorLocations = [-1.2, -1.0, -0.8, -0.2, 0.0, 0.2, 0.8, 1.0, 1.2]
+let colorLocations = [-1.0, -0.8, -0.2, 0.0, 0.2, 0.8, 1.0]
+
 
 @IBDesignable
 @objc public class GradientLoadingView: UIView {
@@ -99,7 +100,7 @@ let colorLocations = [-1.2, -1.0, -0.8, -0.2, 0.0, 0.2, 0.8, 1.0, 1.2]
         layer.endPoint = CGPointMake(1.0, 0.5)
         let edgeCGColor = edgeColor.CGColor
         let centerCGColor = centerColor.CGColor
-        layer.colors = [edgeCGColor, centerCGColor, edgeCGColor, edgeCGColor, centerCGColor, edgeCGColor, edgeCGColor, centerCGColor, edgeCGColor]
+        layer.colors = [centerCGColor, edgeCGColor, edgeCGColor, centerCGColor, edgeCGColor, edgeCGColor, centerCGColor]
         layer.locations = colorLocations
     }
 }

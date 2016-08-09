@@ -56,7 +56,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     dispatch_source_t pollingTimerSource;
     BOOL checkedInitialVisibleCells;
+    
     BOOL moreMessagesAvailableRemotely;
+    BOOL hasDisplayedInitialData;
     
     GradientLoadingView * loadingGradient;
     
@@ -211,6 +213,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) setConversation:(ZNGConversation *)conversation
 {
     _conversation = conversation;
+    hasDisplayedInitialData = NO;
     
     // Update title and collection view
     [self.navigationItem setTitle:conversation.remoteName];
@@ -320,6 +323,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) handleEventsChange:(NSDictionary<NSString *, id> *)change
 {
     [self checkForMoreRemoteMessagesAvailable];
+    
+    if (!hasDisplayedInitialData) {
+        // Delay the setting of this flag to allow the view to scroll to this new data.  This delay could probably be less than one second, but that
+        //  is fine for the current use of this flag (loading older data when scrolling back to the top.)
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            hasDisplayedInitialData = YES;
+        });
+    }
     
     int changeType = [change[NSKeyValueChangeKindKey] intValue];
     
@@ -660,7 +671,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // If we are nearing the top of our loaded data and more data exists, go grab it
     NSUInteger proximityToTopOfDataToTriggerMoreDataLoad = 5;
-    if ((moreMessagesAvailableRemotely) && (!self.conversation.loading) && (indexPath.row <= proximityToTopOfDataToTriggerMoreDataLoad)) {
+    if ((hasDisplayedInitialData) && (moreMessagesAvailableRemotely) && (!self.conversation.loading) && (indexPath.row <= proximityToTopOfDataToTriggerMoreDataLoad)) {
         ZNGLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
         [self.conversation loadOlderData];
     }

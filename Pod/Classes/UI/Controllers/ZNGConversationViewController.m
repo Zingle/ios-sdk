@@ -19,6 +19,7 @@
 #import "ZNGEventCollectionViewCell.h"
 #import "UIFont+Lato.h"
 #import "JSQMessagesLoadEarlierHeaderView.h"
+#import "ZingleSDK/ZingleSDK-Swift.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -32,6 +33,7 @@ static const uint64_t PollingIntervalSeconds = 30;
 #endif
 
 static NSString * const EventsKVOPath = @"conversation.events";
+static NSString * const LoadingKVOPath = @"conversation.loading";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface JSQMessagesViewController ()
@@ -54,6 +56,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     dispatch_source_t pollingTimerSource;
     BOOL checkedInitialVisibleCells;
+    
+    GradientLoadingView * loadingGradient;
     
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
 }
@@ -97,12 +101,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) commonInit
 {
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
+    [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    [self setupLoadingGradient];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
@@ -133,6 +140,25 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     dispatch_resume(pollingTimerSource);
 }
 
+- (void) setupLoadingGradient
+{
+    loadingGradient = [[GradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
+    loadingGradient.hidesWhenStopped = YES;
+    loadingGradient.centerColor = [UIColor zng_lighterBlue];
+    loadingGradient.edgeColor = [UIColor zng_lightBlue];
+    
+    loadingGradient.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self.view addSubview:loadingGradient];
+    
+    NSLayoutConstraint * top = [NSLayoutConstraint constraintWithItem:loadingGradient attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:loadingGradient attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:6.0];
+    NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:loadingGradient attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * right = [NSLayoutConstraint constraintWithItem:loadingGradient attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
+    
+    [self.view addConstraints:@[top, height, left, right]];
+}
+
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
@@ -160,6 +186,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];
     
     if (pollingTimerSource != nil) {
@@ -271,6 +298,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     if ([keyPath isEqualToString:EventsKVOPath]) {
         [self handleEventsChange:change];
+    } else if ([keyPath isEqualToString:LoadingKVOPath]) {
+        BOOL wasLoading = ([change[NSKeyValueChangeOldKey] isKindOfClass:[NSNumber class]]) ? [change[NSKeyValueChangeOldKey] boolValue] : NO;
+        BOOL isLoading = ([change[NSKeyValueChangeNewKey] isKindOfClass:[NSNumber class]]) ? [change[NSKeyValueChangeNewKey] boolValue] : NO;
+        
+        if ((!wasLoading) && (isLoading)) {
+            [loadingGradient startAnimating];
+        } else if ((wasLoading) && (!isLoading)) {
+            [loadingGradient stopAnimating];
+        }
     }
 }
 

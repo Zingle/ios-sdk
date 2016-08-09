@@ -56,6 +56,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     dispatch_source_t pollingTimerSource;
     BOOL checkedInitialVisibleCells;
+    BOOL moreMessagesAvailableRemotely;
     
     GradientLoadingView * loadingGradient;
     
@@ -167,7 +168,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self markAllVisibleMessagesAsRead];
     checkedInitialVisibleCells = YES;
     
-    [self showOrHideLoadEarlierMessagesButton];
+    [self checkForMoreRemoteMessagesAvailable];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -214,6 +215,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // Update title and collection view
     [self.navigationItem setTitle:conversation.remoteName];
     [self.collectionView reloadData];
+}
+
+- (void) checkForMoreRemoteMessagesAvailable
+{
+    moreMessagesAvailableRemotely = (self.conversation.totalEventCount > [self.conversation.events count]);
 }
 
 #pragma mark - UI properties
@@ -266,11 +272,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 #pragma mark - Actions
-- (void) refreshConversation
-{
-    // TODO: Implement
-}
-
 - (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender { /* unused */ }
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
@@ -318,7 +319,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) handleEventsChange:(NSDictionary<NSString *, id> *)change
 {
-    [self showOrHideLoadEarlierMessagesButton];
+    [self checkForMoreRemoteMessagesAvailable];
     
     int changeType = [change[NSKeyValueChangeKindKey] intValue];
     
@@ -657,6 +658,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 // Used to mark messages as read
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(nonnull UICollectionViewCell *)cell forItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
+    // If we are nearing the top of our loaded data and more data exists, go grab it
+    NSUInteger proximityToTopOfDataToTriggerMoreDataLoad = 5;
+    if ((moreMessagesAvailableRemotely) && (!self.conversation.loading) && (indexPath.row <= proximityToTopOfDataToTriggerMoreDataLoad)) {
+        ZNGLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
+        [self.conversation loadOlderData];
+    }
+    
+    
+    // Now for marking messages read logic:
+    
     // A small optimization: We will always mark all visible cells as read whenever we appear.  If we haven't done that yet, we do not need to mark messages
     //  read one at a time.
     if (!checkedInitialVisibleCells) {
@@ -809,19 +820,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.conversation.events count] - pendingInsertionCount;
-}
-
-- (UICollectionReusableView *)collectionView:(JSQMessagesCollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    // Set the font in the 'load earlier messages' view
-    UICollectionReusableView * supplementaryView = [super collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];
-    
-    if ([supplementaryView isKindOfClass:[JSQMessagesLoadEarlierHeaderView class]]) {
-        JSQMessagesLoadEarlierHeaderView * loadEarlier = supplementaryView;
-        loadEarlier.loadButton.titleLabel.font = [UIFont latoFontOfSize:17.0];
-    }
-    
-    return supplementaryView;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

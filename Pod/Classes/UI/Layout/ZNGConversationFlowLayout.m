@@ -27,7 +27,7 @@
     UIFont * font = [UIFont systemFontOfSize:15.0];
     NSDictionary * attributes = @{ NSFontAttributeName : font };
     CGFloat width = [self itemWidth];
-    CGSize constraintSize = CGSizeMake(width - 16.0 /* Default UILabel margins */ - 84.0 /* margin between edge of cell and UILabel */, CGFLOAT_MAX);
+    CGSize constraintSize = CGSizeMake(width - 16.0 /* Default UILabel margins */ - 64.0 /* margin between edge of cell and UILabel */, CGFLOAT_MAX);
     CGRect rect = [text boundingRectWithSize:constraintSize
                                      options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                   attributes:attributes

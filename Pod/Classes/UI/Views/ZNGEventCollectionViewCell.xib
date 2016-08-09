@@ -18,11 +18,11 @@
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="235" height="34"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZi-5b-pax">
-                        <rect key="frame" x="42" y="8" width="151" height="18"/>
-                        <color key="backgroundColor" red="0.86386071116928442" green="0.86386071116928442" blue="0.86386071116928442" alpha="1" colorSpace="calibratedRGB"/>
-                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
-                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="An event" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gZi-5b-pax">
+                        <rect key="frame" x="32" y="8" width="171" height="18"/>
+                        <color key="backgroundColor" white="0.94999999999999996" alpha="1" colorSpace="calibratedWhite"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="12"/>
+                        <color key="textColor" white="0.27723599137931032" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
@@ -31,8 +31,8 @@
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="gZi-5b-pax" secondAttribute="bottom" constant="8" id="2JB-p2-3sd"/>
                 <constraint firstItem="gZi-5b-pax" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="8" id="5pN-sW-UvH"/>
-                <constraint firstItem="gZi-5b-pax" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="42" id="YS1-5R-aq8"/>
-                <constraint firstAttribute="trailing" secondItem="gZi-5b-pax" secondAttribute="trailing" constant="42" id="t67-aK-ZKh"/>
+                <constraint firstItem="gZi-5b-pax" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="32" id="YS1-5R-aq8"/>
+                <constraint firstAttribute="trailing" secondItem="gZi-5b-pax" secondAttribute="trailing" constant="32" id="t67-aK-ZKh"/>
             </constraints>
             <size key="customSize" width="235" height="34"/>
             <connections>

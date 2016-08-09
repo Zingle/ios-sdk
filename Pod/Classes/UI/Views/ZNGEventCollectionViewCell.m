@@ -12,7 +12,9 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
+    
+    self.textLabel.clipsToBounds = YES; // clips to bounds must be set for the below corner radius to work
+    self.textLabel.layer.cornerRadius = 6.0;
 }
 
 @end

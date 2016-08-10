@@ -10,17 +10,14 @@
 
 @implementation ZNGPulsatingBarButtonImage
 {
-    UIImage * templateImage;
     UIView * containerView;
-    UIImageView * highlightView;
+    UIButton * button;
     CGRect frame;
 }
 
-- (id) initWithImage:(UIImage *)image selectedBackgroundImage:(UIImage * _Nullable)highlightImage tintColor:(UIColor *)tintColor selectedColor:(UIColor * _Nullable)selectedColor target:(id)target action:(SEL)action
+- (id) initWithImage:(UIImage *)image selectedImage:(UIImage * _Nullable)highlightImage target:(id)target action:(SEL)action
 {
-    if (image == nil) {
-        return nil;
-    }
+    NSParameterAssert(image);
     
     frame = CGRectMake(0.0, 0.0, image.size.width, image.size.height);
     containerView = [[UIView alloc] initWithFrame:frame];
@@ -30,20 +27,14 @@
     if (self != nil) {
         _pulsateDuration = 2.0;
         
-        if ((highlightImage != nil) && (selectedColor != nil)) {
-            UIImage * highlightTemplateImage = [highlightImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            highlightView = [[UIImageView alloc] initWithFrame:frame];
-            highlightView.image = highlightTemplateImage;
-            highlightView.tintColor = selectedColor;
-            highlightView.alpha = 0.0;
-            [containerView addSubview:highlightView];
+        button = [[UIButton alloc] initWithFrame:frame];
+        [button setImage:image forState:UIControlStateNormal];
+        [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+        
+        if (highlightImage != nil)  {
+            [button setImage:highlightImage forState:UIControlStateSelected];
         }
         
-        templateImage = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        UIButton * button = [[UIButton alloc] initWithFrame:frame];
-        [button setImage:templateImage forState:UIControlStateNormal];
-        button.tintColor = tintColor;
-        [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         [containerView addSubview:button];
     }
     
@@ -53,7 +44,7 @@
 - (void) setSelected:(BOOL)selected
 {
     _selected = selected;
-    highlightView.alpha = selected ? 1.0 : 0.0;
+    button.selected = selected;
 }
 
 - (void) setEmphasisImage:(UIImage *)emphasisImage
@@ -63,7 +54,7 @@
 
 - (void) emphasize
 {
-    UIImage * emphasisImage = (self.emphasisImage == nil) ? templateImage : self.emphasisImage;
+    UIImage * emphasisImage = (self.emphasisImage == nil) ? button.currentImage : self.emphasisImage;
     emphasisImage = [emphasisImage imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     
     UIImageView * emphasisView = [[UIImageView alloc] initWithImage:emphasisImage];

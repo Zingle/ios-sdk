@@ -140,8 +140,8 @@ static void * KVOContext = &KVOContext;
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UIImage * confirmImage = [UIImage imageNamed:@"confirmButton" inBundle:bundle compatibleWithTraitCollection:nil];
-    UIImage * highlightImage = [UIImage imageNamed:@"confirmButtonCircle" inBundle:bundle compatibleWithTraitCollection:nil];
-    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedBackgroundImage:highlightImage tintColor:[UIColor whiteColor] selectedColor:[UIColor zng_lightBlue] target:self action:@selector(pressedConfirmedButton:)];
+    UIImage * selectedImage = [UIImage imageNamed:@"confirmButtonSelected" inBundle:bundle compatibleWithTraitCollection:nil];
+    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedImage:selectedImage target:self action:@selector(pressedConfirmedButton:)];
     confirmButton.emphasisImage = [UIImage imageNamed:@"confirmButtonEmptyCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     [items addObject:confirmButton];
     

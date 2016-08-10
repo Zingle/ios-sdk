@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-- (id) initWithImage:(UIImage *)image selectedBackgroundImage:(UIImage * _Nullable)highlightImage tintColor:(UIColor * _Nullable)tintColor selectedColor:(UIColor * _Nullable)selectedColor target:(id)target action:(SEL)action;
+- (id) initWithImage:(UIImage *)image selectedImage:(UIImage * _Nullable)highlightImage target:(id)target action:(SEL)action;
 
 - (void) emphasize;
 

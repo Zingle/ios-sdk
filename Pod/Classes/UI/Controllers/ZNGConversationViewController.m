@@ -789,23 +789,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return (interval > fiveMinutes);
 }
 
-// Returns nil if displaying the name above this message is deemed unnecessary
 - (NSString *) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Are we adding a sender name to this message?
-    
-    // If this is the first message in this direction from this specific sender, then yes.
-    ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
-    ZNGMessage * priorMessageThisDirection = nil;
-    
-    if ([thisEvent isMessage]) {
-        priorMessageThisDirection = [self.conversation priorMessageWithSameDirection:thisEvent.message];
-    }
-    
-    // We show the name if either 1) this is the first message in this direction or 2) the last message in this direction came from a different person.
-    // This one check will satisfy both conditions since in 1) priorMessageThisDirection == nil --> priorMessageThisDirection.senderId isEqualToString is always NO.
-    BOOL isNewPerson = (![[priorMessageThisDirection triggeredByUserIdOrSenderId] isEqualToString:[thisEvent.message triggeredByUserIdOrSenderId]]);
-    return isNewPerson ? thisEvent.senderDisplayName : nil;
+    return nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath

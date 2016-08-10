@@ -186,6 +186,22 @@ static void * KVOContext = &KVOContext;
     return actions;
 }
 
+- (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    BOOL isOutboundMessage = ([event isMessage] && [event.message isOutbound]);
+    BOOL isInternalNote = [event isNote];
+    
+    // We will show an employee name for every outbound message and note
+    if (isOutboundMessage || isInternalNote) {
+        return event.senderDisplayName;
+    }
+    
+    // This is probably an incoming message.  The contact's name is in the title bar; we do not need one above message bubbles.
+    return nil;
+}
+
 #pragma mark - Confirmed button
 - (void) updateConfirmedButton
 {

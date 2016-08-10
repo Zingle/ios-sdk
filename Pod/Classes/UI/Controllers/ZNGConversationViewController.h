@@ -119,6 +119,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems;
 
+/**
+ *  Returns the NSString to be used for the sender name for a message.  Nil will not show a name.
+ *  Defaults to nil.
+ */
+- (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath;
+
 #pragma mark - Protected methods used by subclasses
 - (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath;
 

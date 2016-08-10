@@ -24,6 +24,9 @@
 @property(nonatomic, strong) ZNGAutomation* automation;
 @property(nonatomic, strong) ZNGMessage* message;
 
+// Added after parsing:
+@property (nonatomic, copy) NSString * senderDisplayName;
+
 + (instancetype) eventForNewMessage:(ZNGMessage *)message;
 + (instancetype) eventForNewNote:(NSString *)note toContact:(ZNGContact *)contact;
 

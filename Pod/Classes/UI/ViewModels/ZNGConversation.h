@@ -131,7 +131,7 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  */
 - (NSArray<NSString *> *)eventTypes;
 
-- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events;
+- (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events;
 - (ZNGNewMessage *)freshMessage;
 - (ZNGParticipant *)sender;
 - (ZNGParticipant *)receiver;

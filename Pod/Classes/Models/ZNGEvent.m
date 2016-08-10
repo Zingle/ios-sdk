@@ -102,6 +102,10 @@ static NSString * const ZNGEventContactCreated = @"contact_created";
 
 - (NSString *)senderDisplayName
 {
+    if (_senderDisplayName != nil) {
+        return _senderDisplayName;
+    }
+    
     NSString * messageSenderName = [self.message senderDisplayName];
     
     if (messageSenderName == nil) {

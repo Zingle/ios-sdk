@@ -44,7 +44,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return _contactService.serviceDisplayName;
 }
 
-- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events;
+- (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events;
 {
     for (ZNGEvent * event in events) {
         if (![event isMessage]) {

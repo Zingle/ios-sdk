@@ -151,7 +151,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void)mergeNewDataAtTail:(NSArray<ZNGEvent *> *)incomingEvents
 {
-    [self addSenderNameToMessageEvents:incomingEvents];
+    [self addSenderNameToEvents:incomingEvents];
     [self addMissingMessageIdsToMessageEvents:incomingEvents];
     
     // If we have no existing data, this is pretty simple!
@@ -233,7 +233,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void) mergeNewDataAtHead:(NSArray<ZNGEvent *> *)incomingEvents
 {
-    [self addSenderNameToMessageEvents:incomingEvents];
+    [self addSenderNameToEvents:incomingEvents];
     [self addMissingMessageIdsToMessageEvents:incomingEvents];
     
     if ([self.events count] == 0) {
@@ -293,7 +293,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self loadRecentEventsErasingOlderData:NO];
 }
 
-- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
+- (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events
 {
     NSAssert(NO, @"Failed to implement required method: %s", __PRETTY_FUNCTION__);
 }
@@ -439,7 +439,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-            [self appendEvents:@[[ZNGEvent eventForNewMessage:message]]];
+            ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
+            [self addSenderNameToEvents:@[event]];
+            [self appendEvents:@[event]];
             self.totalEventCount = self.totalEventCount + 1;
             self.loading = NO;
             

@@ -90,34 +90,31 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
 }
 
-- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
+- (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events
 {
     for (ZNGEvent * event in events) {
-        ZNGMessage * message = event.message;
-        
-        if (message == nil) {
+        if ((![event isMessage]) && (![event isNote])) {
+            // This is not a message or a note.  We do not need to attach a sender name.
             continue;
         }
         
-        if (![message isOutbound]) {
-            // This message is from contact to service.  The sender is the contact.
-            message.senderDisplayName = [self remoteName];
-        } else {
-            // This message is from service to contact.  The sender is a Zingle user.  Hopefully we can figure out specifically who it is.
-            ZNGUser * sender = message.triggeredByUser;
-            NSString * userId = message.triggeredByUserId;
-            userId = ([userId length] > 0) ? userId : sender.userId;
-            
-            if ([userId length] > 0) {
-                // We know who sent the message.
-                if ([userId isEqualToString:_myUserId]) {
-                    message.senderDisplayName = @"Me";
-                } else if (sender != nil) {
-                    message.senderDisplayName = [sender fullName];
-                }
-            }
+        if (([event isMessage]) && (![event.message isOutbound])) {
+            // This is an incoming message.  The contact is the sender.
+            event.message.senderDisplayName = [self remoteName];
+            continue;
         }
         
+        ZNGUser * sender = event.triggeredByUser ?: event.message.triggeredByUser;
+        NSString * userId = event.message.triggeredByUserId ?: sender.userId;
+        
+        if ([userId length] > 0) {
+            // We know who sent the message/note.
+            if ([userId isEqualToString:_myUserId]) {
+                event.senderDisplayName = @"Me";
+            } else if (sender != nil) {
+                event.senderDisplayName = [sender fullName];
+            }
+        }
     }
 }
 

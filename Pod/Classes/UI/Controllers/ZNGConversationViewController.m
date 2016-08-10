@@ -364,7 +364,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             }
             
             ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events.", (unsigned long long)[self.conversation.events count]);
-            [self finishReceivingMessageAnimated:YES];
+            [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             break;
         }
             

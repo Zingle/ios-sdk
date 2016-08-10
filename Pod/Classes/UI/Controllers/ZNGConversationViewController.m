@@ -544,9 +544,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) sendImage:(UIImage *)image fromCameraMode:(BOOL)cameraMode
 {
+    [self.inputToolbar disableInput];
+    
     [self.conversation sendMessageWithImage:image success:^(ZNGStatus *status) {
+        [self.inputToolbar enableInput];
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
+        [self.inputToolbar enableInput];
+        
         UIAlertAction * retrySameImage = [UIAlertAction actionWithTitle:@"Retry the same image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self sendImage:image fromCameraMode:cameraMode];
         }];

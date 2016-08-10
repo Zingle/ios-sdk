@@ -419,6 +419,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 {
     ZNGNewMessage *newMessage = [self freshMessage];
     newMessage.body = body;
+    
+    self.loading = YES;
+    
     [self.messageClient sendMessage:newMessage success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
         
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
@@ -426,15 +429,19 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         if (![messageId isKindOfClass:[NSString class]]) {
             ZNGLogError(@"Message send reported success, but we did not receive a message ID in response.  Our new message will not appear in the conversation until it is refreshed elsewhere.");
             
+            self.loading = NO;
+            
             if (success) {
                 success(status);
             }
+            
             return;
         }
         
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
             [self appendEvents:@[[ZNGEvent eventForNewMessage:message]]];
             self.totalEventCount = self.totalEventCount + 1;
+            self.loading = NO;
             
             if (success) {
                 success(status);
@@ -442,17 +449,27 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         } failure:^(ZNGError *error) {
             ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
             
+            self.loading = NO;
+            
             if (failure) {
                 failure(error);
             }
         }];
-    } failure:failure];
+    } failure:^(ZNGError *error) {
+        self.loading = NO;
+        
+        if (failure != nil) {
+            failure(error);
+        }
+    }];
 }
 
 - (void)sendMessageWithImage:(UIImage *)image
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure
 {
+    self.loading = YES;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         UIImage *imageForUpload = [self resizeImage:image];
         
@@ -474,17 +491,27 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     [self appendEvents:@[[ZNGEvent eventForNewMessage:message]]];
                     self.totalEventCount = self.totalEventCount + 1;
                     
+                    self.loading = NO;
+                    
                     if (success) {
                         success(status);
                     }
                 } failure:^(ZNGError *error) {
                     ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
                     
+                    self.loading = NO;
+                    
                     if (failure) {
                         failure(error);
                     }
                 }];
-            } failure:failure];
+            } failure:^(ZNGError *error) {
+                self.loading = NO;
+                
+                if (failure != nil) {
+                    failure(error);
+                }
+            }];
         });
     });
 }

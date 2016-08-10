@@ -72,6 +72,7 @@ static NSString * const ZNGEventContactCreated = @"contact_created";
     event.eventId = message.messageId;
     event.body = message.body;
     event.eventType = ZNGEventTypeMessage;
+    event.createdAt = [NSDate date];
     return event;
 }
 
@@ -81,6 +82,8 @@ static NSString * const ZNGEventContactCreated = @"contact_created";
     event.body = note;
     event.eventType = ZNGEventTypeNote;
     event.contactId = contact.contactId;
+    event.createdAt = [NSDate date];
+    event.senderDisplayName = @"Me";
     return event;
 }
 

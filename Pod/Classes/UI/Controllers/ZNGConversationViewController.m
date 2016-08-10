@@ -279,9 +279,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
+    [self.inputToolbar disableInput];
+    
     [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
+        [self.inputToolbar enableInput];
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
+        [self.inputToolbar enableInput];
         [self finishSendingMessageAnimated:YES];
         
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to send" message:@"Error encountered while sending message." preferredStyle:UIAlertControllerStyleAlert];

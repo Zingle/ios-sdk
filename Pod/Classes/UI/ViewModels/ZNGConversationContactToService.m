@@ -52,10 +52,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
         
         if ([event.message isOutbound]) {
-            event.message.senderDisplayName = [self remoteName];
-        } else {
-            event.message.senderDisplayName = @"Me";
+            // If we have an employee name in the message data, we will show that.  If not, we will show the service name again.
+            event.message.senderDisplayName = [event.triggeredByUser fullName] ?: [self remoteName];
+            continue;
         }
+        
+        // We do not need to see "Me" when this could only possibly be from us.
     }
 }
 

@@ -433,8 +433,6 @@ static void * KVOContext = &KVOContext;
 
 - (void) insertCustomField:(ZNGContactField *)customField
 {
-    // TODO: Once the server starts giving us replacement values
-    // See: http://jira.zinglecorp.com:8080/browse/TECH-1940
     NSString * replacementValue = [NSString stringWithFormat:@"{%@}", customField.replacementVariable];
     
     [self appendStringToMessageInput:replacementValue];

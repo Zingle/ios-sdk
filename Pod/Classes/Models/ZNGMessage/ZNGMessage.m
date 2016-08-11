@@ -96,6 +96,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return ([self.triggeredByUser.userId length] > 0) ? self.triggeredByUser.userId : self.sender.correspondentId;
 }
 
+- (ZNGCorrespondent *) contactCorrespondent
+{
+    return ([self isOutbound]) ? self.recipient : self.sender;
+}
+
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {

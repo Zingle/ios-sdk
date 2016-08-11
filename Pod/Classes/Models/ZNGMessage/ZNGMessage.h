@@ -49,4 +49,9 @@
 
 - (void) downloadAttachmentsIfNecessary;
 
+/**
+ *  The sender or receiver, whichever corresponds to a contact.
+ */
+- (ZNGCorrespondent *) contactCorrespondent;
+
 @end

@@ -314,6 +314,17 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 }
 
 #pragma mark - Data retrieval
+- (ZNGEvent *) priorEvent:(ZNGEvent *)event
+{
+    NSUInteger index = [self.events indexOfObject:event];
+    
+    if ((index != NSNotFound) && (index > 0)) {
+        return self.events[index - 1];
+    }
+    
+    return nil;
+}
+
 - (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message
 {
     NSUInteger index = [self.events indexOfObjectPassingTest:^BOOL(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {

@@ -101,6 +101,8 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure;
 
+- (ZNGEvent *) priorEvent:(ZNGEvent *)event;
+
 /**
  *  Returns the last message sent by the same type of person, meaning this will be the prior message sent by the contact
  *   if the supplied message is sent by a contact.  If it is a service, this will likely be the prior message sent by the

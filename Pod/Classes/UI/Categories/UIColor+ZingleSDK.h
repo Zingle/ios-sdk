@@ -47,7 +47,11 @@
 
 + (UIColor *)zng_gray;
 
++ (UIColor *)zng_text_gray;
+
 + (UIColor *)zng_yellow;
+
++ (UIColor *)zng_note_yellow;
 
 /**
  *  Creates and returns a new color object from a hex color value.

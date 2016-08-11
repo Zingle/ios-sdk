@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "ZNGContact.h"
 
+@class JSQMessagesTimestampFormatter;
 @class ZNGTableViewCell;
+
 /**
  *  The `ZNGTableViewCellDelegate` protocol defines methods that allow you to manage
  *  additional interactions within the table view cell.
@@ -34,5 +36,7 @@
 @property (weak, nonatomic) id<ZNGTableViewCellDelegate> delegate;
 
 @property (weak, nonatomic) IBOutlet UICollectionView *labelCollectionView;
+
+@property (nonatomic, strong) JSQMessagesTimestampFormatter * timestampFormatter;
 
 @end

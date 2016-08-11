@@ -56,6 +56,15 @@
     [self.labelCollectionView setScrollEnabled:NO];
 }
 
+- (JSQMessagesTimestampFormatter *) timestampFormatter
+{
+    if (_timestampFormatter == nil) {
+        return [JSQMessagesTimestampFormatter sharedFormatter];
+    }
+    
+    return _timestampFormatter;
+}
+
 - (CGSize)systemLayoutSizeFittingSize:(CGSize)targetSize withHorizontalFittingPriority:(UILayoutPriority)horizontalFittingPriority verticalFittingPriority:(UILayoutPriority)verticalFittingPriority {
     
     self.labelCollectionView.frame = CGRectMake(0, 0, targetSize.width, MAXFLOAT);
@@ -82,7 +91,7 @@
         
         if (self.contact.lastMessage.body.length > 0) {
             self.lastMessage.text = self.contact.lastMessage.body;
-            self.dateLabel.attributedText = [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:self.contact.lastMessage.createdAt];
+            self.dateLabel.attributedText = [self.timestampFormatter attributedTimestampForDate:self.contact.lastMessage.createdAt];
             self.dateLabel.textColor = [UIColor zng_lightBlue];
         } else {
             self.lastMessage.text = @" ";

@@ -35,6 +35,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 @implementation ZNGInboxViewController
 {
     UIRefreshControl * refreshControl;
+    JSQMessagesTimestampFormatter * timestampFormatter;
 }
 
 #pragma mark - Life cycle
@@ -132,12 +133,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self.tableView insertSubview:bgView atIndex:0];
     
     // Adjust time fonts
-    NSMutableDictionary * dateAttributes = [[[JSQMessagesTimestampFormatter sharedFormatter] dateTextAttributes] mutableCopy];
-    NSMutableDictionary * timeAttributes = [[[JSQMessagesTimestampFormatter sharedFormatter] timeTextAttributes] mutableCopy];
+    timestampFormatter = [[JSQMessagesTimestampFormatter alloc] init];
+    NSMutableDictionary * dateAttributes = [timestampFormatter.dateTextAttributes mutableCopy];
+    NSMutableDictionary * timeAttributes = [timestampFormatter.timeTextAttributes mutableCopy];
     dateAttributes[NSFontAttributeName] = [UIFont latoBoldFontOfSize:12.0];
     timeAttributes[NSFontAttributeName] = [UIFont latoFontOfSize:12.0];
-    [[JSQMessagesTimestampFormatter sharedFormatter] setDateTextAttributes:dateAttributes];
-    [[JSQMessagesTimestampFormatter sharedFormatter] setTimeTextAttributes:timeAttributes];
+    timestampFormatter.dateTextAttributes = dateAttributes;
+    timestampFormatter.timeTextAttributes = timeAttributes;
     
     self.title = @"Inbox";
     self.tableView.delegate = self;
@@ -309,6 +311,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+        cell.timestampFormatter = timestampFormatter;
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         [cell.labelCollectionView reloadData];
         

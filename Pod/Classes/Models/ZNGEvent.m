@@ -100,7 +100,7 @@ static NSString * const ZNGEventContactCreated = @"contact_created";
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {
-    return self.message.sender.correspondentId;
+    return self.message.sender.correspondentId ?: self.triggeredByUser.userId;
 }
 
 - (NSString *)senderDisplayName

@@ -125,6 +125,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath;
 
+/**
+ *  If this method returns YES, a timestamp will be displayed above the current message.
+ *  The default implementation returns YES if more than five minutes has passed since the previous message.
+ */
+- (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath;
+
 #pragma mark - Protected methods used by subclasses
 - (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath;
 

@@ -763,24 +763,30 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
-// Returns nil if we do not need to show a time this soon
-- (NSDate *) timeForEventAtIndexPath:(NSIndexPath *)indexPath
+- (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
     ZNGEvent * priorEvent = [self priorEventToIndexPath:indexPath];
-    BOOL showTimestamp = YES;
     NSDate * thisEventTime = thisEvent.createdAt;
     NSDate * priorEventTime = priorEvent.createdAt;
     
     if ((thisEventTime != nil) && (priorEventTime != nil)) {
         NSTimeInterval timeSinceLastEvent = [thisEventTime timeIntervalSinceDate:priorEventTime];
         
-        if (![self timeBetweenEventsBigEnoughToWarrantTimestamp:timeSinceLastEvent]) {
-            showTimestamp = NO;
+        if ([self timeBetweenEventsBigEnoughToWarrantTimestamp:timeSinceLastEvent]) {
+            return YES;
         }
     }
     
-    return (showTimestamp) ? thisEventTime : nil;
+    return NO;
+}
+
+// Returns nil if we do not need to show a time this soon
+- (NSDate *) timeForEventAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
+    NSDate * thisEventTime = thisEvent.createdAt;
+    return thisEventTime;
 }
 
 - (BOOL) timeBetweenEventsBigEnoughToWarrantTimestamp:(NSTimeInterval)interval
@@ -796,10 +802,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSDate * messageTime = [self timeForEventAtIndexPath:indexPath];
-    
-    if (messageTime != nil) {
-        return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:messageTime];
+    if ([self shouldShowTimestampAboveIndexPath:indexPath]) {
+        NSDate * messageTime = [self timeForEventAtIndexPath:indexPath];
+        
+        if (messageTime != nil) {
+            return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:messageTime];
+        }
     }
     
     return nil;
@@ -814,7 +822,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    // This is where the channel would be displayed when viewing as a service.  By default, this will not be shown.
     return nil;
 }
 
@@ -829,6 +836,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     if ([event isMessage]) {
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+        cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
         if (!event.message.isMediaMessage) {
             if ([self weAreSendingOutbound] == [event.message isOutbound]) {

@@ -43,6 +43,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender;
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender;
 
+// Avoiding overriding this private method is an exercise in frustration.  Why is this not part of JSQMessageData??!?  View controllers should do literally everything!
+- (BOOL)isOutgoingMessage:(id<JSQMessageData>)messageItem;
+
 @end
 
 @interface ZNGConversationViewController ()
@@ -640,6 +643,23 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSString *)senderDisplayName
 {
     return @"Me";
+}
+
+- (BOOL)isOutgoingMessage:(id<JSQMessageData>)messageItem
+{
+    ZNGEvent * event = (ZNGEvent *)messageItem;
+    
+    if ([event isKindOfClass:[ZNGEvent class]]) {
+        if ([event isNote]) {
+            return YES;
+        }
+        
+        if ([event isMessage]) {
+            return ([self weAreSendingOutbound] == [event.message isOutbound]);
+        }
+    }
+    
+    return [super isOutgoingMessage:messageItem];
 }
 
 - (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath

@@ -21,8 +21,6 @@
     }
     
     // We have a non-message ZNGEvent
-    
-    // TODO: Replace this horrible temporary code
     NSString * text = [event text];
     UIFont * font = [UIFont systemFontOfSize:15.0];
     NSDictionary * attributes = @{ NSFontAttributeName : font };

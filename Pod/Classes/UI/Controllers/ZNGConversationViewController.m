@@ -243,10 +243,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     return _incomingBubbleColor;
 }
+
+-(UIColor *)internalNoteColor
+{
+    if (_internalNoteColor == nil) {
+        _internalNoteColor = [UIColor zng_note_yellow];
+    }
+    return _internalNoteColor;
+}
+
 - (UIColor *)incomingTextColor
 {
     if (_incomingTextColor == nil) {
-        _incomingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+        _incomingTextColor = [UIColor zng_text_gray];
     }
     return _incomingTextColor;
 }
@@ -254,9 +263,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 -(UIColor *)outgoingTextColor
 {
     if (_outgoingTextColor == nil) {
-        _outgoingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+        _outgoingTextColor = [UIColor zng_text_gray];
     }
     return _outgoingTextColor;
+}
+
+- (UIColor *)internalNoteTextColor
+{
+    if (_internalNoteTextColor == nil) {
+        _internalNoteTextColor = [UIColor zng_text_gray];
+    }
+    
+    return _internalNoteTextColor;
 }
 
 -(UIColor *)authorTextColor

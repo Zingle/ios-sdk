@@ -62,6 +62,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) UIColor *outgoingBubbleColor;
 
 /**
+ *  Sets the background color of internal note bubbles.
+ *
+ *  @param internalNoteColor will use default zng_note_yellow if not set.
+ */
+@property (nonatomic, strong, nullable) UIColor * internalNoteColor;
+
+/**
  *  Sets the text color of the incoming message text.
  *
  *  @param incomingTextColor Will use default Zingle gray text color if not set.
@@ -74,6 +81,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param outgoingTextColor Will use default Zingle gray text color if not set.
  */
 @property (nonatomic ,strong, nullable) UIColor *outgoingTextColor;
+
+/**
+ *  Sets the text color of internal notes.
+ *
+ *  @param internalNoteTextColor will use default Zingle gray text color if not set.
+ */
+@property (nonatomic, strong, nullable) UIColor * internalNoteTextColor;
 
 /**
  *  Sets the text color of the label on top of the message bubble.

@@ -34,4 +34,18 @@
     return ([self.channelType.typeClass isEqualToString:@"PhoneNumber"]);
 }
 
+- (BOOL) isEqual:(ZNGChannel *)other
+{
+    if (![other isKindOfClass:[ZNGChannel class]]) {
+        return NO;
+    }
+    
+    return ([self.channelId isEqualToString:other.channelId]);
+}
+
+- (NSUInteger) hash
+{
+    return [self.channelId hash];
+}
+
 @end

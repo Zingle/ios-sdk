@@ -345,7 +345,7 @@ static void * KVOContext = &KVOContext;
     
     // Have channels changed?
     ZNGChannel * thisChannel = [[event.message contactCorrespondent] channel];
-    ZNGChannel * priorChannel = [[event.message contactCorrespondent] channel];
+    ZNGChannel * priorChannel = [[priorEvent.message contactCorrespondent] channel];
     
     if ((thisChannel != nil) && (priorChannel != nil) && (![thisChannel isEqual:priorChannel])) {
         // The channel has changed!

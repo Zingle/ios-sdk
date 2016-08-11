@@ -366,7 +366,7 @@ static void * KVOContext = &KVOContext;
         
         if (channel != nil) {
             NSString * channelString = [NSString stringWithFormat:@"\n%@: %@", channel.displayName, [self.conversation.service displayNameForChannel:channel]];
-            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:9.0] };
+            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:11.0] };
             NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:channelString attributes:attributes];
             NSMutableAttributedString * mutableString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
             [mutableString appendAttributedString:attributedChannelString];
@@ -382,7 +382,7 @@ static void * KVOContext = &KVOContext;
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
-        height += 14.0;
+        height += 18.0;
     }
     
     return height;

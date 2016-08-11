@@ -366,7 +366,7 @@ static void * KVOContext = &KVOContext;
         
         if (channel != nil) {
             NSString * channelString = [NSString stringWithFormat:@"\n%@: %@", channel.displayName, [self.conversation.service displayNameForChannel:channel]];
-            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:11.0] };
+            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:12.0] };
             NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:channelString attributes:attributes];
             NSMutableAttributedString * mutableString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
             [mutableString appendAttributedString:attributedChannelString];

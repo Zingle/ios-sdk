@@ -319,6 +319,80 @@ static void * KVOContext = &KVOContext;
     }];
 }
 
+#pragma mark - Collection view shenanigans
+- (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
+{
+    BOOL shouldShowTimestamp = [super shouldShowTimestampAboveIndexPath:indexPath];
+    
+    if (!shouldShowTimestamp) {
+        // Our super implementation does not require a timestamp here (i.e. it has been less than five minutes since the last message.)
+        // We will still wish to do so if message channels have changed.
+        shouldShowTimestamp = [self contactChannelAtIndexPathChangedSincePriorMessage:indexPath];
+    }
+    
+    return shouldShowTimestamp;
+}
+
+- (BOOL) shouldShowChannelInfoUnderTimestamps
+{
+    return ([self.conversation.contact.channels count] > 1);
+}
+
+- (BOOL) contactChannelAtIndexPathChangedSincePriorMessage:(NSIndexPath *)indexPath
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * priorEvent = [self.conversation priorEvent:event];
+    
+    // Have channels changed?
+    ZNGChannel * thisChannel = [[event.message contactCorrespondent] channel];
+    ZNGChannel * priorChannel = [[event.message contactCorrespondent] channel];
+    
+    if ((thisChannel != nil) && (priorChannel != nil) && (![thisChannel isEqual:priorChannel])) {
+        // The channel has changed!
+        return YES;
+    }
+    
+    return NO;
+}
+
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSAttributedString * attributedString = [super collectionView:collectionView attributedTextForCellTopLabelAtIndexPath:indexPath];
+    
+    // Check if we are showing a timestamp (i.e. super returned a string) and we want to display channel info (i.e. this user has more than one channel available)
+    if (([attributedString length] > 0) && ([self shouldShowChannelInfoUnderTimestamps])) {
+        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        ZNGChannel * channel = [[event.message contactCorrespondent] channel];
+        
+        if (channel != nil) {
+            NSString * channelString = [NSString stringWithFormat:@"\n%@: %@", channel.displayName, [self.conversation.service displayNameForChannel:channel]];
+            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:9.0] };
+            NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:channelString attributes:attributes];
+            NSMutableAttributedString * mutableString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
+            [mutableString appendAttributedString:attributedChannelString];
+            attributedString = mutableString;
+        }
+    }
+    
+    return attributedString;
+}
+
+- (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
+    
+    if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
+        height += 14.0;
+    }
+    
+    return height;
+}
+
+- (BOOL) shouldShowChannelInfo
+{
+    return ([self.conversation.contact.channels count] > 1);
+}
+
 #pragma mark - Actions
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel
 {

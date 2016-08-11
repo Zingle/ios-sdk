@@ -43,12 +43,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender;
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender;
 
+// Avoiding overriding this private method is an exercise in frustration.  Why is this not part of JSQMessageData??!?  View controllers should do literally everything!
+- (BOOL)isOutgoingMessage:(id<JSQMessageData>)messageItem;
+
 @end
 
 @interface ZNGConversationViewController ()
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
 @end
@@ -129,6 +133,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
+    self.internalNoteColor = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
     
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
@@ -243,10 +248,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     return _incomingBubbleColor;
 }
+
+-(UIColor *)internalNoteColor
+{
+    if (_internalNoteColor == nil) {
+        _internalNoteColor = [UIColor zng_note_yellow];
+    }
+    return _internalNoteColor;
+}
+
 - (UIColor *)incomingTextColor
 {
     if (_incomingTextColor == nil) {
-        _incomingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+        _incomingTextColor = [UIColor zng_text_gray];
     }
     return _incomingTextColor;
 }
@@ -254,9 +268,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 -(UIColor *)outgoingTextColor
 {
     if (_outgoingTextColor == nil) {
-        _outgoingTextColor = [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
+        _outgoingTextColor = [UIColor zng_text_gray];
     }
     return _outgoingTextColor;
+}
+
+- (UIColor *)internalNoteTextColor
+{
+    if (_internalNoteTextColor == nil) {
+        _internalNoteTextColor = [UIColor zng_text_gray];
+    }
+    
+    return _internalNoteTextColor;
 }
 
 -(UIColor *)authorTextColor
@@ -624,6 +647,23 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return @"Me";
 }
 
+- (BOOL)isOutgoingMessage:(id<JSQMessageData>)messageItem
+{
+    ZNGEvent * event = (ZNGEvent *)messageItem;
+    
+    if ([event isKindOfClass:[ZNGEvent class]]) {
+        if ([event isNote]) {
+            return YES;
+        }
+        
+        if ([event isMessage]) {
+            return ([self weAreSendingOutbound] == [event.message isOutbound]);
+        }
+    }
+    
+    return [super isOutgoingMessage:messageItem];
+}
+
 - (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath
 {
     NSArray<ZNGEvent *> * events = self.conversation.events;
@@ -660,6 +700,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
  
     if ([event.message isOutbound] == [self weAreSendingOutbound]) {
         return self.outgoingBubbleImageData;
+    }
+    
+    if ([event isNote]) {
+        return self.internalNoteColor;
     }
     
     return self.incomingBubbleImageData;
@@ -829,12 +873,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
     
-    if ([event isMessage]) {
+    if ([event isMessage] || [event isNote]) {
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
         if (!event.message.isMediaMessage) {
-            if ([self weAreSendingOutbound] == [event.message isOutbound]) {
+            
+            if ([event isNote]) {
+                cell.textView.textColor = self.internalNoteTextColor;
+            } else if ([self weAreSendingOutbound] == [event.message isOutbound]) {
                 cell.textView.textColor = self.outgoingTextColor;
             } else {
                 cell.textView.textColor = self.incomingTextColor;

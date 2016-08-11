@@ -104,7 +104,7 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {
-    return self.message.sender.correspondentId;
+    return self.message.sender.correspondentId ?: self.triggeredByUser.userId;
 }
 
 - (NSString *)senderDisplayName

@@ -52,6 +52,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
 @end
@@ -132,6 +133,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
+    self.internalNoteColor = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
     
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
@@ -700,6 +702,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return self.outgoingBubbleImageData;
     }
     
+    if ([event isNote]) {
+        return self.internalNoteColor;
+    }
+    
     return self.incomingBubbleImageData;
 }
 
@@ -867,12 +873,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
     
-    if ([event isMessage]) {
+    if ([event isMessage] || [event isNote]) {
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
         if (!event.message.isMediaMessage) {
-            if ([self weAreSendingOutbound] == [event.message isOutbound]) {
+            
+            if ([event isNote]) {
+                cell.textView.textColor = self.internalNoteTextColor;
+            } else if ([self weAreSendingOutbound] == [event.message isOutbound]) {
                 cell.textView.textColor = self.outgoingTextColor;
             } else {
                 cell.textView.textColor = self.incomingTextColor;

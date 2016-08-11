@@ -20,6 +20,7 @@
 #import "UIFont+Lato.h"
 #import "JSQMessagesLoadEarlierHeaderView.h"
 #import "ZingleSDK/ZingleSDK-Swift.h"
+#import "ZNGConversationTimestampFormatter.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -800,7 +801,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         NSDate * messageTime = [self timeForEventAtIndexPath:indexPath];
         
         if (messageTime != nil) {
-            return [[JSQMessagesTimestampFormatter sharedFormatter] attributedTimestampForDate:messageTime];
+            return [[ZNGConversationTimestampFormatter sharedFormatter] attributedTimestampForDate:messageTime];
         }
     }
     

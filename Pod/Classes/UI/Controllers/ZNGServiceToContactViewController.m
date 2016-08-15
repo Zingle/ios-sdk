@@ -41,6 +41,18 @@ static void * KVOContext = &KVOContext;
 
 @dynamic conversation;
 
++ (UINib *)nib
+{
+    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
+                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
+}
+
++ (instancetype)messagesViewController
+{
+    return [[[self class] alloc] initWithNibName:NSStringFromClass([ZNGConversationViewController class])
+                                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
+}
+
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];

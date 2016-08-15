@@ -42,18 +42,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @dynamic inputToolbar;
 
-+ (UINib *)nib
-{
-    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
-                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
-}
-
-+ (instancetype)messagesViewController
-{
-    return [[[self class] alloc] initWithNibName:NSStringFromClass([ZNGConversationViewController class])
-                                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
-}
-
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -393,20 +381,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressAccessoryButton:(UIButton *)sender
 {
-    NSArray<UIAlertAction *> * actions = [self alertActionsForAccessoryButton];
-    
-    if ([actions count] == 0) {
-        ZNGLogWarn(@"Accessory button was pressed, but we have no options with which to present the user.  Ignoring.");
-        return;
-    }
-    
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    for (UIAlertAction * action in actions) {
-        [alert addAction:action];
-    }
-    
-    [self presentViewController:alert animated:YES completion:nil];
+    [self inputToolbar:nil didPressAttachImageButton:nil];
 }
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info

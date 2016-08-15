@@ -10,6 +10,7 @@
 #import <JSQMessagesViewController/JSQMessagesCollectionViewCell.h>
 #import "ZNGConversationContactToService.h"
 #import "ZNGEvent.h"
+#import "UIColor+ZingleSDK.h"
 
 @implementation ZNGContactToServiceViewController
 
@@ -19,6 +20,19 @@
 {
     [super viewDidLoad];
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UIImage * photoImage = [UIImage imageNamed:@"attachImage" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIButton * photoButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
+    photoButton.tintColor = [UIColor zng_gray];
+    [photoButton setImage:photoImage forState:UIControlStateNormal];
+    [photoButton addTarget:self action:@selector(inputToolbar:didPressAttachImageButton:) forControlEvents:UIControlEventTouchUpInside];
+    self.inputToolbar.contentView.leftBarButtonItem = photoButton;
+    
+    UIButton * sendButton = self.inputToolbar.contentView.rightBarButtonItem;
+    [sendButton setTitleColor:[UIColor zng_green] forState:UIControlStateNormal];
+    [sendButton setTitleColor:[[UIColor zng_green] zng_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
+    sendButton.tintColor = [UIColor zng_green];
 }
 
 - (BOOL) weAreSendingOutbound

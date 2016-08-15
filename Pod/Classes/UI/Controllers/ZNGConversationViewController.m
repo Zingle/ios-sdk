@@ -72,18 +72,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @dynamic inputToolbar;
 
-+ (UINib *)nib
-{
-    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
-                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
-}
-
-+ (instancetype)messagesViewController
-{
-    return [[[self class] alloc] initWithNibName:NSStringFromClass([ZNGConversationViewController class])
-                                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
-}
-
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -549,7 +537,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 - (void) didPressAccessoryButton:(UIButton *)sender
-{ /* unused */ }
+{
+    [self inputToolbar:nil didPressAttachImageButton:nil];
+}
+
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {

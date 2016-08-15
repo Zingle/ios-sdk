@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
 
+#import "DGActivityIndicatorAnimation.h"
 #import "DGActivityIndicatorBallBeatAnimation.h"
 #import "DGActivityIndicatorBallClipRotateAnimation.h"
 #import "DGActivityIndicatorBallClipRotateMultipleAnimation.h"

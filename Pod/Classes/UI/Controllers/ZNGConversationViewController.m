@@ -21,6 +21,7 @@
 #import "JSQMessagesLoadEarlierHeaderView.h"
 #import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGConversationTimestampFormatter.h"
+#import "JSQMessagesInputToolbar+DisablingInput.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 

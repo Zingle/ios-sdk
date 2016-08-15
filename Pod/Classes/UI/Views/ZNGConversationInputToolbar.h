@@ -45,10 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, weak, nullable) ZNGChannel * currentChannel;
 
-- (void) disableInput;
-- (void) enableInput;
-- (void) setSendButtonEnabled:(BOOL)enabled;
-
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;
 - (IBAction)didPressTriggerAutomation:(id)sender;

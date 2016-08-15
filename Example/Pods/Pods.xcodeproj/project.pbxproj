@@ -667,6 +667,10 @@
 		9683DE6CF1CBF84ACB2C25B947B8272E /* JSQMessagesCellTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 34D40711F0BC1EEEA2C380507AFA7A0E /* JSQMessagesCellTextView.m */; };
 		969843772EE69C80E9D425672AB3E8FD /* MTLReflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 14D41E11373FE9ACDC299DA293E4B1B5 /* MTLReflection.m */; settings = {COMPILER_FLAGS = "-DOS_OBJECT_USE_OBJC=0"; }; };
 		96CD762A6F22650337C224211AC35818 /* ZNGAccount.h in Headers */ = {isa = PBXBuildFile; fileRef = 7FEC30013D30642EF9AAB5B73B6A9DDF /* ZNGAccount.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		96D833F01D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D833EE1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h */; };
+		96D833F11D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 96D833EE1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h */; };
+		96D833F21D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D833EF1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m */; };
+		96D833F31D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 96D833EF1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m */; };
 		9700A068B90B83D0BEA843A7764B6DD0 /* DGActivityIndicatorBallGridBeatAnimation.h in Headers */ = {isa = PBXBuildFile; fileRef = EB55DAAF335FC044824085ED1D6345A0 /* DGActivityIndicatorBallGridBeatAnimation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		97823B4E2F215ED21E5B54B8F311A949 /* ZNGNewMessageResponse.h in Headers */ = {isa = PBXBuildFile; fileRef = E8899CF076BF7F13AF1645FB0CA2AED4 /* ZNGNewMessageResponse.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		979025EC1DCB6DEDA952DF61977B4417 /* JSQSystemSoundPlayer-iOS8.0-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 318FF45D2E30C47EB31FC73DF53CF9A0 /* JSQSystemSoundPlayer-iOS8.0-dummy.m */; };
@@ -1804,6 +1808,8 @@
 		960BF7247F12CD9A3AC1C4C5E5EF76EE /* AFNetworkActivityLogger.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AFNetworkActivityLogger.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9649DFCFAF78928027C594456A618434 /* UIButton+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIButton+AFNetworking.h"; path = "UIKit+AFNetworking/UIButton+AFNetworking.h"; sourceTree = "<group>"; };
 		96D521FFAF62EAB33139A51FD9C61E72 /* ZNGMessageClient.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ZNGMessageClient.m; sourceTree = "<group>"; };
+		96D833EE1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JSQMessagesInputToolbar+DisablingInput.h"; sourceTree = "<group>"; };
+		96D833EF1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JSQMessagesInputToolbar+DisablingInput.m"; sourceTree = "<group>"; };
 		97842C65E328A358E2A4DD01D17DE03A /* ZNGContactToServiceViewController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = ZNGContactToServiceViewController.h; sourceTree = "<group>"; };
 		9798B8718A8F061ED5ACB8F1E8B00AA5 /* JSQMessagesMediaPlaceholderView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JSQMessagesMediaPlaceholderView.h; path = JSQMessagesViewController/Views/JSQMessagesMediaPlaceholderView.h; sourceTree = "<group>"; };
 		98C477D11D0AAB82EFD2B3256918D0E1 /* JSQMessagesLabel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = JSQMessagesLabel.m; path = JSQMessagesViewController/Views/JSQMessagesLabel.m; sourceTree = "<group>"; };
@@ -3443,6 +3449,8 @@
 				076200D204053C798FABAA5E2BAD20D2 /* GradientLoadingView.swift */,
 				8CD6CDFF7DB5191469A553D910C5038B /* ZNGConversationInputToolbar.h */,
 				3AF662C13A3EF414D5AFB037642CFB0C /* ZNGConversationInputToolbar.m */,
+				96D833EE1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h */,
+				96D833EF1D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m */,
 				EEAA61BF46BC080F362211A121DEE33E /* ZNGConversationTextView.h */,
 				BA609770341FD0A23491DF5D28D9BAB9 /* ZNGConversationTextView.m */,
 				D655EDCC93BA545343E266E56EECFB38 /* ZNGConversationToolbarContentView.h */,
@@ -3812,6 +3820,7 @@
 				513231A5ACDB3E3FF67B37EBE191CF04 /* ZNGContactDetailsTableViewCell.h in Headers */,
 				5EB5C745E4C3254AC3D93B7E5A19F0AB /* ZNGContactField.h in Headers */,
 				A95E71CBE636374160C8ABBD9AF80DB0 /* ZNGContactFieldValue.h in Headers */,
+				96D833F01D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h in Headers */,
 				5E94A423C7173473F0FA57E251BF7FCB /* ZNGContactLabelsTableViewCell.h in Headers */,
 				D69EE9F76C7DDD2D888D657E06C64C0D /* ZNGContactService.h in Headers */,
 				C3B8D531BC8B6DAB5D1BACEA28875448 /* ZNGContactServiceClient.h in Headers */,
@@ -4101,6 +4110,7 @@
 				86FB0FFB05F167E2D055971512F450C8 /* ZNGContactDetailsTableViewCell.h in Headers */,
 				438755C4038115934169F7D0B0005FE0 /* ZNGContactField.h in Headers */,
 				2A4174449490D89934DBF2D6CCA342F5 /* ZNGContactFieldValue.h in Headers */,
+				96D833F11D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.h in Headers */,
 				A763C3B03B708E9E0E6439BB633F8EA9 /* ZNGContactLabelsTableViewCell.h in Headers */,
 				32666B7FEE3176F79B83E7B6B48426E6 /* ZNGContactService.h in Headers */,
 				09822D32E96067F0C1FD674A26B79E67 /* ZNGContactServiceClient.h in Headers */,
@@ -5148,6 +5158,7 @@
 				F585AF4152AAC2F06208CC1FCA0943A7 /* ZNGService.m in Sources */,
 				D23A945871FD5AC8C52572AAC47E72A7 /* ZNGServiceAddress.m in Sources */,
 				D4AEB93688ACEAE28430EC8E0FDC6937 /* ZNGServiceClient.m in Sources */,
+				96D833F21D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m in Sources */,
 				A7ACA48DA15EE9F7E16600376840A158 /* ZNGServiceToContactViewController.m in Sources */,
 				447EB573B08BC046C1737FC514196A5E /* ZNGSetting.m in Sources */,
 				900C8CB342E461C4093E8ABC56917510 /* ZNGStatus.m in Sources */,
@@ -5291,6 +5302,7 @@
 				891B357CAFD6AB0676EF5F413222585A /* ZNGService.m in Sources */,
 				ECAA17DC71729B5804A562FC622EA457 /* ZNGServiceAddress.m in Sources */,
 				4609666F2FCEABE7C8ADED9F645CF882 /* ZNGServiceClient.m in Sources */,
+				96D833F31D628B0700AD1F91 /* JSQMessagesInputToolbar+DisablingInput.m in Sources */,
 				4E63B0166753A0634B968BEAAA1C5519 /* ZNGServiceToContactViewController.m in Sources */,
 				3E98D9445CD891BAE1A4E016464ACD55 /* ZNGSetting.m in Sources */,
 				1152D9BF7832EBDF57AE895A308D9E53 /* ZNGStatus.m in Sources */,

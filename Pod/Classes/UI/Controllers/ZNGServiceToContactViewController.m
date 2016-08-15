@@ -22,6 +22,7 @@
 #import "ZNGPulsatingBarButtonImage.h"
 #import "ZNGTemplate.h"
 #import "UIViewController+ZNGSelectTemplate.h"
+#import "JSQMessagesInputToolbar+DisablingInput.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";

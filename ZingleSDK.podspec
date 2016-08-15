@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ZingleSDK"
-  s.version          = "0.3.0"
+  s.version          = "1.0.0"
   s.summary          = "Zingle iOS SDK"
 
   s.description      = <<-DESC
@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   s.homepage         = "https://github.com/Zingle/ios-sdk"
   s.screenshots      = "https://raw.githubusercontent.com/Zingle/ios-sdk/master/Assets/message_layout.png"
   s.license          = 'MIT'
-  s.author           = { "Ryan Farley" => "rfarley@zingleme.com" }
+  s.author           = { "Jason Neel" => "jneel@zingleme.com" }
   s.source           = { :git => "https://github.com/Zingle/ios-sdk.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/zingleme'
 

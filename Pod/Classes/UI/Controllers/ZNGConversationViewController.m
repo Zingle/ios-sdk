@@ -796,6 +796,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
+    // We will always show the time for the very first message
+    if (indexPath.row == 0) {
+        return YES;
+    }
+    
     ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
     ZNGEvent * priorEvent = [self priorEventToIndexPath:indexPath];
     NSDate * thisEventTime = thisEvent.createdAt;

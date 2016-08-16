@@ -9,6 +9,7 @@
 #import "ZNGAppDelegate.h"
 #import <ZingleSDK/ZingleSDK.h>
 #import <ZingleSDK/ZingleSession.h>
+@import CocoaLumberjack;
 
 @implementation ZNGAppDelegate
 {
@@ -18,6 +19,15 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     [self registerUserNotificationsForApplication:application];
+    
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    
+    DDFileLogger * fileLogger = [[DDFileLogger alloc] init];
+    fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hours
+    fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+    [DDLog addLogger:fileLogger];
+    
     return YES;
 }
 

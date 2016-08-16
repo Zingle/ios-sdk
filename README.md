@@ -207,6 +207,14 @@ All ZingleSDK push notifications should include the Category value of ZingleSDK.
 	}
 ```
 
+## Logging
+
+The ZingleSDK uses the [CocoaLumberjack logging framework](https://github.com/CocoaLumberjack/CocoaLumberjack) with a specific [logging context](https://github.com/CocoaLumberjack/CocoaLumberjack/blob/master/Documentation/CustomContext.md).
+
+```C
+#define ZINGLE_LOG_CONTEXT      889
+```
+
 ## Zingle Object Model
 
 Model | Description

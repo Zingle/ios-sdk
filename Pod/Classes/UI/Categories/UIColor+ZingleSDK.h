@@ -41,7 +41,7 @@
 
 + (UIColor *)zng_lightBlue;
 
-+ (UIColor *)zng_lighterBlue;
++ (UIColor *)zng_purple;
 
 + (UIColor *)zng_green;
 

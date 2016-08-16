@@ -57,9 +57,9 @@
     return [UIColor colorFromHexString:@"#00a1df"];
 }
 
-+ (UIColor *)zng_lighterBlue
++ (UIColor *)zng_purple
 {
-    return [UIColor colorFromHexString:@"#7ADDFF"];
+    return [UIColor colorFromHexString:@"#9B59B6"];
 }
 
 + (UIColor *)zng_green

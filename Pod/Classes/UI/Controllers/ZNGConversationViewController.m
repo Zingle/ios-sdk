@@ -142,7 +142,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     loadingGradient = [[GradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
     loadingGradient.hidesWhenStopped = YES;
-    loadingGradient.centerColor = [UIColor zng_lighterBlue];
+    loadingGradient.centerColor = [UIColor zng_purple];
     loadingGradient.edgeColor = [UIColor zng_lightBlue];
     
     loadingGradient.translatesAutoresizingMaskIntoConstraints = NO;

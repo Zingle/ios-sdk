@@ -32,5 +32,6 @@ Pod::Spec.new do |s|
   s.dependency 'GoogleFontsiOS/OpenSans'
   s.dependency 'DGActivityIndicatorView'
   s.dependency 'CocoaLumberjack/Swift'
+  s.dependency 'JVFloatLabeledTextField'
   s.dependency 'JSQMessagesViewController'
 end

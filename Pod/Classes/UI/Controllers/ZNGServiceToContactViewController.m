@@ -7,7 +7,6 @@
 //
 
 #import "ZNGServiceToContactViewController.h"
-#import "ZNGContactViewController.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGEvent.h"
 #import "UIFont+Lato.h"
@@ -549,9 +548,7 @@ static void * KVOContext = &KVOContext;
 
 - (void) pressedEditContact
 {
-    ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.conversation;
-    ZNGContactViewController * contactView = [ZNGContactViewController withContact:conversation.contact session:(ZingleAccountSession *)conversation.messageClient.session];
-    [self.navigationController pushViewController:contactView animated:YES];
+    // TODO: Implement
 }
 
 @end

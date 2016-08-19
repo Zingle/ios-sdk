@@ -206,6 +206,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                  failure:(void (^) (ZNGError *error))failure
 {
     [self.eventClient postInternalNote:note toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+        [self addSenderNameToEvents:@[note]];
         [self appendEvents:@[note]];
         self.totalEventCount = self.totalEventCount + 1;
         

@@ -29,7 +29,6 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking', '~> 2.6'
   s.dependency 'Mantle', '~> 2.0'
   s.dependency 'GoogleFontsiOS/OpenSans'
-  s.dependency 'DGActivityIndicatorView'
   s.dependency 'CocoaLumberjack/Swift'
   s.dependency 'JSQMessagesViewController'
 end

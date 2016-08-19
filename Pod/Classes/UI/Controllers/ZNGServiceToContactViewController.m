@@ -156,6 +156,7 @@ static void * KVOContext = &KVOContext;
     UIImage * selectedImage = [UIImage imageNamed:@"confirmButtonSelected" inBundle:bundle compatibleWithTraitCollection:nil];
     confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedImage:selectedImage target:self action:@selector(pressedConfirmedButton:)];
     confirmButton.emphasisImage = [UIImage imageNamed:@"confirmButtonEmptyCircle" inBundle:bundle compatibleWithTraitCollection:nil];
+    confirmButton.emphasisColor = [UIColor zng_lightBlue];
     [items addObject:confirmButton];
     
     return items;

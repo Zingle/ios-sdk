@@ -22,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isPulsating;
 
 @property (nonatomic, strong, nullable) UIImage * emphasisImage;
+@property (nonatomic, strong, nullable) UIColor * emphasisColor;
 
 NS_ASSUME_NONNULL_END
 

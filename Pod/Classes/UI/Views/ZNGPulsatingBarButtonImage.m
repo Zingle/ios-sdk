@@ -59,7 +59,7 @@
     
     UIImageView * emphasisView = [[UIImageView alloc] initWithImage:emphasisImage];
     emphasisView.frame = frame;
-    emphasisView.tintColor = [UIColor whiteColor];
+    emphasisView.tintColor = self.emphasisColor ?: [UIColor whiteColor];
     
     [containerView addSubview:emphasisView];
     [UIView animateWithDuration:1.0 animations:^{

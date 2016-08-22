@@ -27,10 +27,8 @@ Pod::Spec.new do |s|
   s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib}']
 
   s.dependency 'AFNetworking', '~> 2.6'
-  s.dependency 'AFNetworkActivityLogger', '~> 2.0'
   s.dependency 'Mantle', '~> 2.0'
   s.dependency 'GoogleFontsiOS/OpenSans'
-  s.dependency 'DGActivityIndicatorView'
   s.dependency 'CocoaLumberjack/Swift'
   s.dependency 'JVFloatLabeledTextField'
   s.dependency 'JSQMessagesViewController'

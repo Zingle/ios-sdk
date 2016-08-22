@@ -47,6 +47,8 @@
 
 + (UIColor *)zng_gray;
 
++ (UIColor *)zng_light_gray;
+
 + (UIColor *)zng_text_gray;
 
 + (UIColor *)zng_yellow;

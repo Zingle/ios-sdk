@@ -9,7 +9,6 @@
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
 #import "ZNGConversationInputToolbar.h"
 
-@class DGActivityIndicatorView;
 @class ZNGConversation;
 @class ZNGConversationViewController;
 @class ZNGMessage;
@@ -119,8 +118,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  Default value is NO.
  */
 @property (nonatomic, assign, getter=isAutoMarkAsReadEnabled) BOOL autoMarkAsReadEnabled;
-
-@property (strong, nonatomic, nullable) DGActivityIndicatorView *activityIndicator;
 
 #pragma mark - Methods to be overridden by subclasses to add functionality
 - (NSArray<UIAlertAction *> *)alertActionsForDetailsButton;

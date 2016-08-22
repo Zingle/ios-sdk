@@ -12,8 +12,6 @@ let animationKey = "movingGradientAnimation"
 
 let colorLocations = [-1.0, -0.6, -0.4, 0.0, 0.4, 0.6, 1.0]
 
-
-@IBDesignable
 @objc public class GradientLoadingView: UIView {
     
     private var animating: Bool = false

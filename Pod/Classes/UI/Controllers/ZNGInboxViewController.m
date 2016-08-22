@@ -11,7 +11,6 @@
 #import "ZNGContactClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGTableViewCell.h"
-#import "DGActivityIndicatorView.h"
 #import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 #import "ZingleAccountSession.h"

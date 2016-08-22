@@ -72,6 +72,11 @@
     return [UIColor colorFromHexString:@"#B6B8BA"];
 }
 
++ (UIColor *)zng_light_gray
+{
+    return [UIColor colorFromHexString:@"#F4F4F4"];
+}
+
 + (UIColor *)zng_text_gray
 {
     return [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
@@ -96,7 +101,7 @@
     
     unsigned rgbValue = 0;
     NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    [scanner setScanLocation:1]; // bypass '#' character
+    [scanner scanString:@"#" intoString:nil];
     [scanner scanHexInt:&rgbValue];
     return [UIColor colorWithRed:((rgbValue & 0xFF0000) >> 16)/255.0 green:((rgbValue & 0xFF00) >> 8)/255.0 blue:(rgbValue & 0xFF)/255.0 alpha:1.0];
 }

@@ -82,39 +82,42 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    NSString * thisContactId = notification.userInfo[@"feedId"];
-    BOOL thisPushRegardingSomeOtherContact = (([thisContactId length] > 0) && (![thisContactId isEqualToString:self.contact.contactId]));
+    NSString * notificationContactId = notification.userInfo[@"feedId"];
+    BOOL thisPushRegardingSomeOtherContact = (([notificationContactId length] > 0) && (![notificationContactId isEqualToString:self.contact.contactId]));
     
     if (!thisPushRegardingSomeOtherContact) {
         [self.contact updateRemotely];
     }
 }
 
-- (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events
+- (void) addSenderNameToMessageEvents:(NSArray<ZNGEvent *> *)events
 {
     for (ZNGEvent * event in events) {
-        if ((![event isMessage]) && (![event isNote])) {
-            // This is not a message or a note.  We do not need to attach a sender name.
+        ZNGMessage * message = event.message;
+        
+        if (message == nil) {
             continue;
         }
         
-        if (([event isMessage]) && (![event.message isOutbound])) {
-            // This is an incoming message.  The contact is the sender.
-            event.message.senderDisplayName = [self remoteName];
-            continue;
-        }
-        
-        ZNGUser * sender = event.triggeredByUser ?: event.message.triggeredByUser;
-        NSString * userId = event.message.triggeredByUserId ?: sender.userId;
-        
-        if ([userId length] > 0) {
-            // We know who sent the message/note.
-            if ([userId isEqualToString:_myUserId]) {
-                event.senderDisplayName = @"Me";
-            } else if (sender != nil) {
-                event.senderDisplayName = [sender fullName];
+        if (![message isOutbound]) {
+            // This message is from contact to service.  The sender is the contact.
+            message.senderDisplayName = [self remoteName];
+        } else {
+            // This message is from service to contact.  The sender is a Zingle user.  Hopefully we can figure out specifically who it is.
+            ZNGUser * sender = message.triggeredByUser;
+            NSString * userId = message.triggeredByUserId;
+            userId = ([userId length] > 0) ? userId : sender.userId;
+            
+            if ([userId length] > 0) {
+                // We know who sent the message.
+                if ([userId isEqualToString:_myUserId]) {
+                    message.senderDisplayName = @"Me";
+                } else if (sender != nil) {
+                    message.senderDisplayName = [sender fullName];
+                }
             }
         }
+        
     }
 }
 
@@ -206,7 +209,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                  failure:(void (^) (ZNGError *error))failure
 {
     [self.eventClient postInternalNote:note toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
-        [self addSenderNameToEvents:@[note]];
         [self appendEvents:@[note]];
         self.totalEventCount = self.totalEventCount + 1;
         

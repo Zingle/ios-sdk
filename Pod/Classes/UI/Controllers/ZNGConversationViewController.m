@@ -309,6 +309,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }];
 }
 
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
+{
+    // Unused
+}
+
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
+{
+    // Unused
+}
+
 #pragma mark - Data notifications
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
@@ -539,7 +549,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressAccessoryButton:(UIButton *)sender
 {
-    [self inputToolbar:nil didPressAttachImageButton:nil];
+    [self inputToolbar:self.inputToolbar didPressAttachImageButton:sender];
 }
 
 

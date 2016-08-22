@@ -103,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact * _Nullable))completion;
 
-- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
+- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation;
 
 @end
 

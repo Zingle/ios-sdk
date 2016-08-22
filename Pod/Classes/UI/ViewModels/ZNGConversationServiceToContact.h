@@ -49,8 +49,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (ZNGChannel *) defaultChannelForContact;
 
 - (void) addInternalNote:(NSString *)note
-                 success:(void (^)(ZNGStatus* status))success
-                 failure:(void (^) (ZNGError *error))failure;
+                 success:(void (^ _Nullable)(ZNGStatus* status))success
+                 failure:(void (^ _Nullable) (ZNGError *error))failure;
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion;
 

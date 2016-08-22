@@ -90,7 +90,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         NSDictionary *params = [self parametersForPageSize:100 pageIndex:1];
         
         [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-            ZNGLogVerbose(@"Received event list with %ld events.  We previously had %ld.", (unsigned long)status.totalRecords, self.totalEventCount);
+            ZNGLogVerbose(@"Received event list with %ld events.  We previously had %ld.", (unsigned long)status.totalRecords, (unsigned long)self.totalEventCount);
 
             if (status.totalRecords == self.totalEventCount) {
                 // We have no new messages
@@ -288,6 +288,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             return event.message;
         }
     }
+    
+    return nil;
 }
 
 #pragma mark - Actions
@@ -318,7 +320,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         if (status.statusCode == 200) {
             ZNGLogDebug(@"Messages marked as read.");
         } else {
-            ZNGLogError(@"Failed to mark messages marked as read. statusCode = %ld", status.statusCode);
+            ZNGLogError(@"Failed to mark messages marked as read. statusCode = %ld", (long)status.statusCode);
         }
                                                  
     } failure:^(ZNGError *error) {

@@ -13,7 +13,7 @@
 
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    ZNGEvent * event = (ZNGEvent *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
     
     // If this is a message or an unknown class (not ZNGEvent,) let the default implementation handle it with bubble size witchcraft
     if ((![event isKindOfClass:[ZNGEvent class]]) || ([event isMessage])) {

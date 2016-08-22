@@ -226,6 +226,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }];
 }
 
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
+{
+    // Unused
+}
+
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
+{
+    // Unused
+}
+
 #pragma mark - Data notifications
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
@@ -281,7 +291,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         if (deletingChar == '}') {
             // Can we find a matching {?
-            NSString * earlierText = [textView.text substringToIndex:range.location];
             NSRange openingBraceRange = [textView.text rangeOfString:@"{" options:NSBackwardsSearch];
             
             if (openingBraceRange.location != NSNotFound) {
@@ -381,7 +390,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressAccessoryButton:(UIButton *)sender
 {
-    [self inputToolbar:nil didPressAttachImageButton:nil];
+    [self inputToolbar:self.inputToolbar didPressAttachImageButton:sender];
 }
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info

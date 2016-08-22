@@ -83,7 +83,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
         [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
         _service = nil;
-        _available = nil;
+        _available = NO;
         [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
         [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
     }
@@ -336,7 +336,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     });
 }
 
-- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation
+- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation
 {
     if (conversation == nil) {
         ZNGLogError(@"Attempted to display view controller for a nil conversation.");

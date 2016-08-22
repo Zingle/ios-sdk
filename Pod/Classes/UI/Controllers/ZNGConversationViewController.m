@@ -290,6 +290,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 #pragma mark - Actions
 - (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender { /* unused */ }
 
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender { /* unused */ }
+
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
     [self.inputToolbar disableInput];
@@ -307,16 +309,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         [self presentViewController:alert animated:YES completion:nil];
     }];
-}
-
-- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
-{
-    // Unused
-}
-
-- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
-{
-    // Unused
 }
 
 #pragma mark - Data notifications

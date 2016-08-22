@@ -103,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact * _Nullable))completion;
 
-- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversation *)conversation;
+- (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation;
 
 /**
  *  Send a message to multiple recipients.  This can be used to send to a single recipient, but it is prefered to use a ZNGConversation object in order to 

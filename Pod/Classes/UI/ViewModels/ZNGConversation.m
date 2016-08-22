@@ -403,7 +403,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         if (status.statusCode == 200) {
             ZNGLogDebug(@"Messages marked as read.");
         } else {
-            ZNGLogError(@"Failed to mark messages marked as read. statusCode = %ld", status.statusCode);
+            ZNGLogError(@"Failed to mark messages marked as read. statusCode = %ld", (long)status.statusCode);
         }
                                                  
     } failure:^(ZNGError *error) {

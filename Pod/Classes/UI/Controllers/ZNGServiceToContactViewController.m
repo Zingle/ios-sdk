@@ -22,6 +22,7 @@
 #import "ZNGTemplate.h"
 #import "UIViewController+ZNGSelectTemplate.h"
 #import "JSQMessagesInputToolbar+DisablingInput.h"
+#import "ZNGContactEditViewController.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -433,6 +434,14 @@ static void * KVOContext = &KVOContext;
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"editContact"]) {
+        ZNGContactEditViewController * vc = segue.destinationViewController;
+        vc.contact = self.conversation.contact;
+    }
+}
+
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
 {
     [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * _Nullable selectedTemplateBody) {
@@ -563,7 +572,7 @@ static void * KVOContext = &KVOContext;
         return;
     }
     
-    // TODO: Implement
+    [self performSegueWithIdentifier:@"editContact" sender:self];
 }
 
 @end

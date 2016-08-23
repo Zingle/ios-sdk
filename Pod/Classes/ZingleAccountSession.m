@@ -41,6 +41,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGService * _service;
     
     ZNGUserAuthorization * userAuthorization;
+    
+    UIStoryboard * _storyboard;
 }
 
 
@@ -339,6 +341,18 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     });
 }
 
+#pragma mark - UI
+- (UIStoryboard *)storyboard
+{
+    // Lazy initializer
+    if (_storyboard == nil) {
+        NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+        _storyboard = [UIStoryboard storyboardWithName:@"ZNGConversation" bundle:bundle];
+    }
+    
+    return _storyboard;
+}
+
 - (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation
 {
     if (conversation == nil) {
@@ -346,7 +360,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return nil;
     }
     
-    ZNGServiceToContactViewController * vc = [[ZNGServiceToContactViewController alloc] init];
+    ZNGServiceToContactViewController * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"conversation"];
     vc.conversation = conversation;
     return vc;
 }

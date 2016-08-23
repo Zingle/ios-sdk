@@ -13,7 +13,7 @@
         <!--Service To Contact View Controller-->
         <scene sceneID="88j-AX-uAy">
             <objects>
-                <viewController id="yXX-6h-nLe" customClass="ZNGServiceToContactViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="conversation" id="yXX-6h-nLe" customClass="ZNGServiceToContactViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TAM-AV-ud3"/>
                         <viewControllerLayoutGuide type="bottom" id="o2z-2D-qIc"/>
@@ -63,7 +63,7 @@
         <!--Contact Edit View Controller-->
         <scene sceneID="CKL-1H-Vmx">
             <objects>
-                <viewController id="EHd-00-ynV" customClass="ZNGContactEditViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="editContact" id="EHd-00-ynV" customClass="ZNGContactEditViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aPg-E0-DAI"/>
                         <viewControllerLayoutGuide type="bottom" id="kM1-oA-NJL"/>
@@ -114,6 +114,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="dataSource" destination="EHd-00-ynV" id="xWc-RK-2GA"/>
+                                    <outlet property="delegate" destination="EHd-00-ynV" id="R23-cA-PHi"/>
                                 </connections>
                             </tableView>
                         </subviews>
@@ -139,6 +140,7 @@
                     </view>
                     <connections>
                         <outlet property="lockedContactHeightConstraint" destination="hKn-r9-8Op" id="cu2-cT-eU2"/>
+                        <outlet property="tableView" destination="emI-L2-W9W" id="KqX-8c-mqD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2U0-LZ-jjh" userLabel="First Responder" sceneMemberID="firstResponder"/>

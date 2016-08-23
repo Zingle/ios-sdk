@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString* contactId;
 @property(nonatomic) BOOL isConfirmed;
 @property(nonatomic) BOOL isStarred;
+@property(nonatomic) BOOL lockedBySource;
 @property(nonatomic, strong, nullable) ZNGMessage* lastMessage;
 @property(nonatomic, strong, nullable) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel
 @property(nonatomic, strong, nullable) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue.  Why do these two classes both exist?

@@ -74,6 +74,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
              @"contactId" : @"id",
              @"isConfirmed" : @"is_confirmed",
              @"isStarred" : @"is_starred",
+             @"lockedBySource" : @"locked_by_source",
              @"lastMessage" : @"last_message",
              @"channels" : @"channels",
              @"customFieldValues" : @"custom_field_values",

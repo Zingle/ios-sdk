@@ -7,31 +7,68 @@
 //
 
 #import "ZNGContactEditViewController.h"
+#import "ZNGContact.h"
 
 @interface ZNGContactEditViewController ()
 
 @end
 
 @implementation ZNGContactEditViewController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    // Do any additional setup after loading the view.
+{
+    CGFloat lockedContactHeight;
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    lockedContactHeight = self.lockedContactHeightConstraint.constant;
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self showOrHideLockedContactBarAnimated:NO];
+}
+
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void) setContact:(ZNGContact *)contact
+{
+    _contact = contact;
+    [self showOrHideLockedContactBarAnimated:NO];
 }
-*/
+
+- (void) showOrHideLockedContactBarAnimated:(BOOL)animated
+{
+    CGFloat lockedBarHeight = [self.contact lockedBySource] ? lockedContactHeight : 0.0;
+    self.lockedContactHeightConstraint.constant = lockedBarHeight;
+    [self.view setNeedsUpdateConstraints];
+    
+    if (animated) {
+        [UIView animateWithDuration:0.25 animations:^{ [self.view layoutIfNeeded]; }];
+    } else {
+        [self.view layoutIfNeeded];
+    }
+}
+
+#pragma mark - Table view data source
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 0;
+}
+
+- (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return nil;
+}
 
 @end

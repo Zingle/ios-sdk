@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZNGContactEditViewController : UIViewController
+@class ZNGContact;
+
+@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource>
+
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint * lockedContactHeightConstraint;
+
+@property (nonatomic, strong) ZNGContact * contact;
 
 @end

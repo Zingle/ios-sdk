@@ -354,6 +354,21 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     return (nearBottom && moreDataAvailable);
 }
 
+- (BOOL) _shouldShowConversation:(ZNGConversation *)conversation
+{
+    if (conversation == nil) {
+        ZNGLogWarn(@"Selected conversation is nil.  Neglecting to ask delegate nor to display the conversation view.");
+        return NO;
+    }
+    
+    if ([self.delegate respondsToSelector:@selector(inbox:shouldPresentConversation:)]) {
+        return [self.delegate inbox:self shouldPresentConversation:conversation];
+    }
+    
+    // Our delegate doesn't care or doesn't exist.  Let's do it.
+    return YES;
+}
+
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     self.selectedIndexPath = indexPath;
@@ -365,9 +380,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }
     
     ZNGConversationServiceToContact * conversation = [self.session conversationWithContact:contact];
-    ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
     
-    [self.navigationController pushViewController:vc animated:YES];
+    if ([self _shouldShowConversation:conversation]) {
+        ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 @end

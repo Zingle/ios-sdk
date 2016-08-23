@@ -12,6 +12,19 @@
 @class ZNGContact;
 @class ZNGInboxDataSet;
 @class ZingleAccountSession;
+@class ZNGInboxViewController;
+
+@protocol ZNGInboxDelegate <NSObject>
+
+@optional
+
+/**
+ *  Optional delegate method that can be used to prevent the inbox view from displaying its own conversation view.
+ *  The user may return NO from this method and display his own conversation UI.
+ */
+- (BOOL) inbox:(nonnull ZNGInboxViewController *)inbox shouldPresentConversation:(nonnull ZNGConversation *)conversation;
+
+@end
 
 @interface ZNGInboxViewController : UIViewController
 
@@ -22,6 +35,8 @@
 - (void)refresh;
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;
+
+@property (nonatomic, weak, nullable) id <ZNGInboxDelegate> delegate;
 
 @property (strong, nonatomic, nonnull) ZingleAccountSession * session;
 

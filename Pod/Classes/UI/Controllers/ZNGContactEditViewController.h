@@ -17,4 +17,6 @@
 
 @property (nonatomic, strong) ZNGContact * contact;
 
+- (IBAction)pressedCancel:(id)sender;
+
 @end

@@ -85,6 +85,9 @@
                                     <navigationItem title="Name" id="95x-Np-m7N">
                                         <barButtonItem key="leftBarButtonItem" title="Cancel" id="vf6-JD-eCE">
                                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                            <connections>
+                                                <action selector="pressedCancel:" destination="EHd-00-ynV" id="0x4-8J-J7Z"/>
+                                            </connections>
                                         </barButtonItem>
                                         <barButtonItem key="rightBarButtonItem" title="Save" id="lXV-Qf-e69">
                                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -92,7 +95,7 @@
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBV-tG-q1x" userLabel="Locked Contact Banner">
+                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cBV-tG-q1x" userLabel="Locked Contact Banner">
                                 <rect key="frame" x="0.0" y="64" width="600" height="32"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Locked Contact" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="liU-S1-boT">

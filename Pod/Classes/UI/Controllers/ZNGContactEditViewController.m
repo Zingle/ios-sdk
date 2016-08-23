@@ -62,15 +62,21 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     }
 }
 
-#pragma mark - Table view delegate
-- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+#pragma mark - IBActions
+- (IBAction)pressedCancel:(id)sender
 {
-    ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
-    
-    // TODO: Do stuff
-    
-    return header;
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark - Table view delegate
+//- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
+//    
+//    // TODO: Do stuff
+//    
+//    return header;
+//}
 
 #pragma mark - Table view data source
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView

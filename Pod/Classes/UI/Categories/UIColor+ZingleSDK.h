@@ -55,6 +55,8 @@
 
 + (UIColor *)zng_note_yellow;
 
++ (UIColor *)zng_strawberry;
+
 /**
  *  Creates and returns a new color object from a hex color value.
  *

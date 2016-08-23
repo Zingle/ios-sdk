@@ -98,6 +98,15 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return ([self.contactId isEqualToString:other.contactId]);
 }
 
+- (void) setNilValueForKey:(NSString *)key
+{
+    if ([key isEqualToString:NSStringFromSelector(@selector(lockedBySource))]) {
+        self.lockedBySource = NO;
+    } else {
+        [super setNilValueForKey:key];
+    }
+}
+
 + (NSValueTransformer*)lastMessageJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];

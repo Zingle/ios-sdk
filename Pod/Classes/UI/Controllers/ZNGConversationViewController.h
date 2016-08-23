@@ -14,27 +14,11 @@
 @class ZNGMessage;
 @class ZNGEvent;
 
-@protocol ZNGConversationModalDelegate <NSObject>
-
-- (void)didDismissZNGConversationViewController:(nonnull ZNGConversationViewController *)vc;
-
-@end
-
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGConversationInputToolbarDelegate>
 
 @property (nonatomic, strong, nullable) ZNGConversation * conversation;
-
-
-/**
- *  If ZNGConversationViewController is presented modally the modalDelegate should
- *  should be set to handle dismissing the modal.
- *
- *  @param delegateModal Object conforming to ZNGConversationModalDelegate
- *  that should handle dismissing the ZNGConversationViewController.
- */
-@property (weak, nonatomic, nullable) id<ZNGConversationModalDelegate> modalDelegate;
 
 /**
  *  Returns the input toolbar view object managed by this view controller.

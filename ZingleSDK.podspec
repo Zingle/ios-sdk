@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*.{h,m,swift}'
-  s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib}']
+  s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
 
   s.dependency 'AFNetworking', '~> 2.6'
   s.dependency 'Mantle', '~> 2.0'

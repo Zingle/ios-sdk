@@ -142,7 +142,10 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="cancelButton" destination="vf6-JD-eCE" id="hmm-eH-zmK"/>
                         <outlet property="lockedContactHeightConstraint" destination="hKn-r9-8Op" id="cu2-cT-eU2"/>
+                        <outlet property="navItem" destination="95x-Np-m7N" id="tHi-jf-Rij"/>
+                        <outlet property="saveButton" destination="lXV-Qf-e69" id="J9t-PQ-lEy"/>
                         <outlet property="tableView" destination="emI-L2-W9W" id="KqX-8c-mqD"/>
                     </connections>
                 </viewController>

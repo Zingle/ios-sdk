@@ -9,6 +9,7 @@
 #import "ZNGContactEditViewController.h"
 #import "ZNGContact.h"
 #import "ZNGEditContactHeader.h"
+#import "UIFont+Lato.h"
 
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
@@ -29,6 +30,12 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
+    
+    // For some reason UIAppearance does not work for these buttons, possibly because they were manually placed in IB instead of being auto generated as part
+    //  of a nav controller.
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:17.0] };
+    [self.cancelButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    [self.saveButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -47,6 +54,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 {
     _contact = contact;
     [self showOrHideLockedContactBarAnimated:NO];
+    self.navItem.title = [contact fullName];
 }
 
 - (void) showOrHideLockedContactBarAnimated:(BOOL)animated

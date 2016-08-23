@@ -547,8 +547,22 @@ static void * KVOContext = &KVOContext;
 
 }
 
+- (BOOL) _shouldModallyEditContact
+{
+    if ([self.delegate respondsToSelector:@selector(shouldShowEditContactScreenForContact:)]) {
+        return [self.delegate shouldShowEditContactScreenForContact:self.conversation.contact];
+    }
+    
+    // Our delegate does not exist or does not care.  We'll take care of this!
+    return YES;
+}
+
 - (void) pressedEditContact
 {
+    if (![self _shouldModallyEditContact]) {
+        return;
+    }
+    
     // TODO: Implement
 }
 

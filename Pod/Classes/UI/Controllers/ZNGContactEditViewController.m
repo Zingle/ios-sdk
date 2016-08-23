@@ -8,6 +8,9 @@
 
 #import "ZNGContactEditViewController.h"
 #import "ZNGContact.h"
+#import "ZNGEditContactHeader.h"
+
+static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
 @interface ZNGContactEditViewController ()
 
@@ -22,6 +25,10 @@
 {
     [super viewDidLoad];
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
+    [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -53,6 +60,16 @@
     } else {
         [self.view layoutIfNeeded];
     }
+}
+
+#pragma mark - Table view delegate
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
+    
+    // TODO: Do stuff
+    
+    return header;
 }
 
 #pragma mark - Table view data source

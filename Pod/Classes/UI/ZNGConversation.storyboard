@@ -9,6 +9,9 @@
         <mutableArray key="Lato-Regular.ttf">
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -144,6 +147,76 @@
                                             <outlet property="textField" destination="Aqf-Zt-MOZ" id="8o5-lB-PoJ"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" id="B8x-FV-499">
+                                        <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plusCircle" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Zc-3rY">
+                                                    <rect key="frame" x="33" y="12" width="20" height="20"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
+                                                    <rect key="frame" x="65" y="13" width="70" height="18"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                                                    <color key="textColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="oPZ-Zc-3rY" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="LS2-8d-3Rh"/>
+                                                <constraint firstItem="oPZ-Zc-3rY" firstAttribute="leading" secondItem="eLJ-YR-g9r" secondAttribute="leadingMargin" constant="25" id="SkT-ih-l3w"/>
+                                                <constraint firstItem="fER-8C-5A9" firstAttribute="leading" secondItem="oPZ-Zc-3rY" secondAttribute="trailing" constant="12" id="aYc-iq-wxC"/>
+                                                <constraint firstItem="fER-8C-5A9" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="wFR-ic-vF8"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" id="yxw-oU-69S">
+                                        <rect key="frame" x="0.0" y="116" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yxw-oU-69S" id="kv6-um-SBV">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
+                                                    <rect key="frame" x="33" y="12" width="20" height="20"/>
+                                                    <state key="normal" backgroundImage="minusCircle"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
+                                                    <rect key="frame" x="65" y="7" width="30" height="30"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                                                    <state key="normal" title="cell">
+                                                        <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
+                                                    <rect key="frame" x="99" y="15" width="14" height="14"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
+                                                        <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
+                                                    </constraints>
+                                                    <state key="normal" image="chevronRight"/>
+                                                </button>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
+                                                    <rect key="frame" x="121" y="7" width="471" height="30"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Pjn-y4-LVU" firstAttribute="leading" secondItem="qMA-Ni-naT" secondAttribute="trailing" constant="12" id="7md-Sn-ZGO"/>
+                                                <constraint firstItem="Pjn-y4-LVU" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="DDB-lz-6Lb"/>
+                                                <constraint firstItem="qMA-Ni-naT" firstAttribute="leading" secondItem="kv6-um-SBV" secondAttribute="leadingMargin" constant="25" id="Vic-fI-KII"/>
+                                                <constraint firstItem="WWh-6W-Omx" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="Vyu-9m-CkU"/>
+                                                <constraint firstItem="WWh-6W-Omx" firstAttribute="leading" secondItem="Pjn-y4-LVU" secondAttribute="trailing" constant="4" id="b5Q-E2-lGY"/>
+                                                <constraint firstItem="MvJ-Dy-edy" firstAttribute="leading" secondItem="WWh-6W-Omx" secondAttribute="trailing" constant="8" id="eTA-h3-k82"/>
+                                                <constraint firstItem="qMA-Ni-naT" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="iuE-Ay-l0K"/>
+                                                <constraint firstItem="MvJ-Dy-edy" firstAttribute="trailing" secondItem="kv6-um-SBV" secondAttribute="trailingMargin" id="n1f-5W-HFc"/>
+                                                <constraint firstItem="MvJ-Dy-edy" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="u9g-uW-AP2"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="EHd-00-ynV" id="xWc-RK-2GA"/>
@@ -202,4 +275,9 @@
             <point key="canvasLocation" x="408" y="461"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="chevronRight" width="20" height="20"/>
+        <image name="minusCircle" width="20" height="20"/>
+        <image name="plusCircle" width="20" height="20"/>
+    </resources>
 </document>

@@ -11,7 +11,7 @@
 #import "ZNGLogging.h"
 @import JVFloatLabeledTextField;
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZNGContactCustomFieldTableViewCell
 

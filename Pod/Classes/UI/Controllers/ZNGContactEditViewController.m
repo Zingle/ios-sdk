@@ -16,7 +16,7 @@
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
@@ -175,10 +175,9 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
             customFields = optionalCustomFields;
     }
     
-    ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
-    
     ZNGLogVerbose(@"Setting cell %@ to %@", indexPath, customFields[indexPath.row]);
     
+    ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
     cell.customFieldValue = customFields[indexPath.row];
     return cell;
 }

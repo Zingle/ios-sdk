@@ -56,6 +56,8 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     
     defaultCustomFieldDisplayNames = @[@"Title", @"First Name", @"Last Name"];
     
+    [self generateDataArrays];
+    
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
@@ -145,7 +147,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
         
         ZNGChannel * existingChannel = [self.contact channelOfType:type];
         
-        if (existingChannel == nil) {
+        if (existingChannel != nil) {
             // They already have one of these
             continue;
         }
@@ -285,8 +287,13 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
                 return [tableView dequeueReusableCellWithIdentifier:@"addPhone" forIndexPath:indexPath];
             }
             
+            ZNGChannel * channel;
             
-            ZNGChannel * channel = self.contact.channels[indexPath.row];
+            if (indexPath.row < [nonPhoneNumberChannels count]) {
+                channel = nonPhoneNumberChannels[indexPath.row];
+            } else {
+                channel = phoneNumberChannels[indexPath.row - [nonPhoneNumberChannels count]];
+            }
             
             if ([channel isPhoneNumber]) {
                 ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];

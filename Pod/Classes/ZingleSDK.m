@@ -41,7 +41,7 @@ NSString * const ZNGPushNotificationReceived = @"ZNGPushNotificationReceived";
                                     serviceChooser:(nullable ZNGServiceChooser)serviceChooser
                                       errorHandler:(ZNGErrorHandler)errorHandler
 {
-    return [[ZingleAccountSession alloc] initWithToken:token key:token accountChooser:accountChooser serviceChooser:serviceChooser errorHandler:errorHandler];
+    return [[ZingleAccountSession alloc] initWithToken:token key:key accountChooser:accountChooser serviceChooser:serviceChooser errorHandler:errorHandler];
 }
 
 @end

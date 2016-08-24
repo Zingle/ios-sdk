@@ -14,6 +14,6 @@
 
 @property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
 
-@property (nonatomic, copy) ZNGContactFieldValue * customFieldValue;
+@property (nonatomic, strong) ZNGContactFieldValue * customFieldValue;
 
 @end

@@ -20,7 +20,7 @@
 @property (nonatomic, strong) IBOutlet UIBarButtonItem * saveButton;
 
 @property (nonatomic, strong) ZNGService * service;
-@property (nonatomic, strong) ZNGContact * contact;
+@property (nonatomic, copy) ZNGContact * contact;
 
 - (IBAction)pressedCancel:(id)sender;
 

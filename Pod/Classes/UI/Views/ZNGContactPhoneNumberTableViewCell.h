@@ -18,7 +18,7 @@
  */
 @property (nonatomic, strong) ZNGService * service;
 
-@property (nonatomic, copy) ZNGChannel * channel;
+@property (nonatomic, strong) ZNGChannel * channel;
 
 @property (nonatomic, strong) IBOutlet UITextField * textField;
 

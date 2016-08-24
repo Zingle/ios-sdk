@@ -37,6 +37,8 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
 @implementation ZNGContactEditViewController
 {
+    ZNGContact * originalContact;
+    
     CGFloat lockedContactHeight;
     
     NSArray<NSString *> * defaultCustomFieldDisplayNames;
@@ -79,7 +81,8 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
 - (void) setContact:(ZNGContact *)contact
 {
-    _contact = contact;
+    originalContact = contact;
+    _contact = [contact copy];
     [self showOrHideLockedContactBarAnimated:NO];
     self.navItem.title = [contact fullName];
     [self generateDataArrays];

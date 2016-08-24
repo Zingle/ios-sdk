@@ -15,6 +15,6 @@
 
 @property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
 
-@property (nonatomic, copy) ZNGChannel * channel;
+@property (nonatomic, strong) ZNGChannel * channel;
 
 @end

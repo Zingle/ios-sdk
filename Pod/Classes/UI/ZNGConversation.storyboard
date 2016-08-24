@@ -130,7 +130,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Aqf-Zt-MOZ" customClass="JVFloatLabeledTextField">
-                                                    <rect key="frame" x="33" y="7" width="559" height="30"/>
+                                                    <rect key="frame" x="33" y="8" width="559" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -140,8 +140,10 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Aqf-Zt-MOZ" firstAttribute="centerY" secondItem="Atk-yN-GZd" secondAttribute="centerY" id="4uC-T4-l8K"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Aqf-Zt-MOZ" secondAttribute="bottom" id="IxV-CL-AKg"/>
                                                 <constraint firstItem="Aqf-Zt-MOZ" firstAttribute="trailing" secondItem="Atk-yN-GZd" secondAttribute="trailingMargin" id="gkz-SA-lv6"/>
                                                 <constraint firstItem="Aqf-Zt-MOZ" firstAttribute="leading" secondItem="Atk-yN-GZd" secondAttribute="leadingMargin" constant="25" id="j4a-d0-qeY"/>
+                                                <constraint firstItem="Aqf-Zt-MOZ" firstAttribute="top" secondItem="Atk-yN-GZd" secondAttribute="topMargin" id="xa3-1k-cAk"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -156,7 +158,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mvs-lL-jd2" customClass="JVFloatLabeledTextField">
-                                                    <rect key="frame" x="33" y="7" width="559" height="30"/>
+                                                    <rect key="frame" x="33" y="8" width="559" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -166,8 +168,10 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Mvs-lL-jd2" firstAttribute="trailing" secondItem="dZr-Pi-g0x" secondAttribute="trailingMargin" id="4hS-Hm-Vms"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Mvs-lL-jd2" secondAttribute="bottom" id="Rte-Qe-AGy"/>
                                                 <constraint firstItem="Mvs-lL-jd2" firstAttribute="centerY" secondItem="dZr-Pi-g0x" secondAttribute="centerY" id="ceq-sa-aqq"/>
                                                 <constraint firstItem="Mvs-lL-jd2" firstAttribute="leading" secondItem="dZr-Pi-g0x" secondAttribute="leadingMargin" constant="25" id="fgG-nO-d7J"/>
+                                                <constraint firstItem="Mvs-lL-jd2" firstAttribute="top" secondItem="dZr-Pi-g0x" secondAttribute="topMargin" id="sjA-Vo-seP"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -182,19 +186,25 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plusCircle" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Zc-3rY">
-                                                    <rect key="frame" x="33" y="12" width="20" height="20"/>
+                                                    <rect key="frame" x="33" y="11" width="22" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="22" id="ADd-nw-21w"/>
+                                                        <constraint firstAttribute="width" constant="22" id="kWk-FH-G34"/>
+                                                    </constraints>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
-                                                    <rect key="frame" x="65" y="13" width="70" height="18"/>
+                                                    <rect key="frame" x="67" y="10" width="70" height="24"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="fER-8C-5A9" secondAttribute="bottom" constant="2" id="LR7-XN-vca"/>
                                                 <constraint firstItem="oPZ-Zc-3rY" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="LS2-8d-3Rh"/>
                                                 <constraint firstItem="oPZ-Zc-3rY" firstAttribute="leading" secondItem="eLJ-YR-g9r" secondAttribute="leadingMargin" constant="25" id="SkT-ih-l3w"/>
                                                 <constraint firstItem="fER-8C-5A9" firstAttribute="leading" secondItem="oPZ-Zc-3rY" secondAttribute="trailing" constant="12" id="aYc-iq-wxC"/>
+                                                <constraint firstItem="fER-8C-5A9" firstAttribute="top" secondItem="eLJ-YR-g9r" secondAttribute="topMargin" constant="2" id="lvc-Aq-iHh"/>
                                                 <constraint firstItem="fER-8C-5A9" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="wFR-ic-vF8"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -207,18 +217,22 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
-                                                    <rect key="frame" x="33" y="12" width="20" height="20"/>
+                                                    <rect key="frame" x="33" y="11" width="22" height="22"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
+                                                        <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
+                                                    </constraints>
                                                     <state key="normal" backgroundImage="minusCircle"/>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="65" y="7" width="30" height="30"/>
+                                                    <rect key="frame" x="67" y="7" width="30" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="cell">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="99" y="15" width="14" height="14"/>
+                                                    <rect key="frame" x="101" y="15" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
@@ -226,7 +240,7 @@
                                                     <state key="normal" image="chevronRight"/>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="121" y="7" width="471" height="30"/>
+                                                    <rect key="frame" x="123" y="8" width="469" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -236,7 +250,9 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Pjn-y4-LVU" firstAttribute="leading" secondItem="qMA-Ni-naT" secondAttribute="trailing" constant="12" id="7md-Sn-ZGO"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="MvJ-Dy-edy" secondAttribute="bottom" id="C5j-9o-Vob"/>
                                                 <constraint firstItem="Pjn-y4-LVU" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="DDB-lz-6Lb"/>
+                                                <constraint firstItem="MvJ-Dy-edy" firstAttribute="top" secondItem="kv6-um-SBV" secondAttribute="topMargin" id="TuK-bR-0U7"/>
                                                 <constraint firstItem="qMA-Ni-naT" firstAttribute="leading" secondItem="kv6-um-SBV" secondAttribute="leadingMargin" constant="25" id="Vic-fI-KII"/>
                                                 <constraint firstItem="WWh-6W-Omx" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="Vyu-9m-CkU"/>
                                                 <constraint firstItem="WWh-6W-Omx" firstAttribute="leading" secondItem="Pjn-y4-LVU" secondAttribute="trailing" constant="4" id="b5Q-E2-lGY"/>

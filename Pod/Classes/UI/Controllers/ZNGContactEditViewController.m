@@ -60,6 +60,8 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
     
+    self.tableView.estimatedRowHeight = 44.0;
+    
     // For some reason UIAppearance does not work for these buttons, possibly because they were manually placed in IB instead of being auto generated as part
     //  of a nav controller.
     NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:17.0] };

@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class ZNGContact;
+@class ZNGService;
 
 @interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
@@ -18,6 +19,7 @@
 @property (nonatomic, strong) IBOutlet UIBarButtonItem * cancelButton;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem * saveButton;
 
+@property (nonatomic, strong) ZNGService * service;
 @property (nonatomic, strong) ZNGContact * contact;
 
 - (IBAction)pressedCancel:(id)sender;

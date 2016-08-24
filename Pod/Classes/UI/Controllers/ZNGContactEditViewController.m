@@ -10,6 +10,13 @@
 #import "ZNGContact.h"
 #import "ZNGEditContactHeader.h"
 #import "UIFont+Lato.h"
+#import "ZNGContactField.h"
+#import "ZNGContactFieldValue.h"
+#import "ZNGService.h"
+#import "ZNGContactCustomFieldTableViewCell.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelVerbose;
 
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
@@ -20,12 +27,19 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 @implementation ZNGContactEditViewController
 {
     CGFloat lockedContactHeight;
+    
+    NSArray<NSString *> * defaultCustomFieldDisplayNames;
+    NSArray<NSString *> * editableCustomFieldDataTypes;
+    NSArray<ZNGContactFieldValue *> * defaultCustomFields;
+    NSArray<ZNGContactFieldValue *> * optionalCustomFields;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
+    
+    defaultCustomFieldDisplayNames = @[@"Title", @"First Name", @"Last Name"];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
@@ -55,6 +69,42 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     _contact = contact;
     [self showOrHideLockedContactBarAnimated:NO];
     self.navItem.title = [contact fullName];
+    [self generateCustomFields];
+    [self.tableView reloadData];
+}
+
+- (void) setService:(ZNGService *)service
+{
+    _service = service;
+    [self generateCustomFields];
+    [self.tableView reloadData];
+}
+
+- (void) generateCustomFields
+{
+    NSMutableArray<ZNGContactFieldValue *> * defaultValues = [[NSMutableArray alloc] initWithCapacity:[defaultCustomFieldDisplayNames count]];
+    NSMutableArray<ZNGContactFieldValue *> * otherValues = [[NSMutableArray alloc] initWithCapacity:[self.service.contactCustomFields count]];
+    
+    for (ZNGContactField * customField in self.service.contactCustomFields) {
+        NSMutableArray<ZNGContactFieldValue *> * destinationArray = ([defaultCustomFieldDisplayNames containsObject:customField.displayName]) ? defaultValues : otherValues;
+        [destinationArray addObject:[self contactFieldValueForContactField:customField]];
+    }
+    
+    defaultCustomFields = defaultValues;
+    optionalCustomFields = otherValues;
+}
+
+- (ZNGContactFieldValue *) contactFieldValueForContactField:(ZNGContactField *)field
+{
+    // See if this contact has a value
+    ZNGContactFieldValue * value = [self.contact contactFieldValueForType:field];
+    
+    if (value == nil) {
+        value = [[ZNGContactFieldValue alloc] init];
+        value.customField = field;
+    }
+    
+    return value;
 }
 
 - (void) showOrHideLockedContactBarAnimated:(BOOL)animated
@@ -77,6 +127,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 }
 
 #pragma mark - Table view delegate
+// TODO: Implement this
 //- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 //{
 //    ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
@@ -89,17 +140,47 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 #pragma mark - Table view data source
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
+}
+
+- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch (section) {
+        case 0:
+            return @"Default";
+        default:
+            return @"Optional";
+    }
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 0;
+    switch (section) {
+        case 0:
+            return [defaultCustomFields count];
+        default:
+            return [optionalCustomFields count];
+    }
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    NSArray<ZNGContactFieldValue *> * customFields;
+    
+    switch (indexPath.section) {
+        case 0:
+            customFields = defaultCustomFields;
+            break;
+        default:
+            customFields = optionalCustomFields;
+    }
+    
+    ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
+    
+    ZNGLogVerbose(@"Setting cell %@ to %@", indexPath, customFields[indexPath.row]);
+    
+    cell.customFieldValue = customFields[indexPath.row];
+    return cell;
 }
 
 @end

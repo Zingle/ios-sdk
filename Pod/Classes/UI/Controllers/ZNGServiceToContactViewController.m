@@ -438,6 +438,7 @@ static void * KVOContext = &KVOContext;
 {
     if ([segue.identifier isEqualToString:@"editContact"]) {
         ZNGContactEditViewController * vc = segue.destinationViewController;
+        vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
     }
 }

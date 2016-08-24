@@ -14,7 +14,18 @@
 #import "ZNGContactFieldValue.h"
 #import "ZNGService.h"
 #import "ZNGContactCustomFieldTableViewCell.h"
+#import "ZNGContactChannelTableViewCell.h"
+#import "ZNGContactPhoneNumberTableViewCell.h"
 #import "ZNGLogging.h"
+#import "ZNGChannel.h"
+
+enum  {
+    ContactSectionDefaultCustomFields,
+    ContactSectionChannels,
+    ContactSectionLabels,
+    ContactSectionOptionalCustomFields,
+    ContactSectionCount
+};
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -32,6 +43,8 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     NSArray<NSString *> * editableCustomFieldDataTypes;
     NSArray<ZNGContactFieldValue *> * defaultCustomFields;
     NSArray<ZNGContactFieldValue *> * optionalCustomFields;
+    NSArray<ZNGChannel *> * phoneNumberChannels;
+    NSArray<ZNGChannel *> * nonPhoneNumberChannels;
 }
 
 - (void)viewDidLoad
@@ -69,19 +82,20 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     _contact = contact;
     [self showOrHideLockedContactBarAnimated:NO];
     self.navItem.title = [contact fullName];
-    [self generateCustomFields];
+    [self generateDataArrays];
     [self.tableView reloadData];
 }
 
 - (void) setService:(ZNGService *)service
 {
     _service = service;
-    [self generateCustomFields];
+    [self generateDataArrays];
     [self.tableView reloadData];
 }
 
-- (void) generateCustomFields
+- (void) generateDataArrays
 {
+    // Set custom fields
     NSMutableArray<ZNGContactFieldValue *> * defaultValues = [[NSMutableArray alloc] initWithCapacity:[defaultCustomFieldDisplayNames count]];
     NSMutableArray<ZNGContactFieldValue *> * otherValues = [[NSMutableArray alloc] initWithCapacity:[self.service.contactCustomFields count]];
     
@@ -92,6 +106,72 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     
     defaultCustomFields = defaultValues;
     optionalCustomFields = otherValues;
+    
+    
+    // Set channels
+    NSMutableArray<ZNGChannel *> * newPhoneNumberChannels = [[NSMutableArray alloc] init];
+    NSMutableArray<ZNGChannel *> * newChannels = [[NSMutableArray alloc] init];
+    
+    [self ensureContactHasAllRequiredChannelTypes];
+    
+    for (ZNGChannel * channel in self.contact.channels) {
+        if ([channel isPhoneNumber]) {
+            [newPhoneNumberChannels addObject:channel];
+        } else {
+            [newChannels addObject:channel];
+        }
+    }
+    
+    phoneNumberChannels = newPhoneNumberChannels;
+    nonPhoneNumberChannels = newChannels;
+}
+
+- (void) ensureContactHasAllRequiredChannelTypes
+{
+    NSArray<NSString *> * channelTypeNames = [self omnipresentChannelTypeClasses];
+    NSMutableArray<ZNGChannelType *> * requiredTypes = [[NSMutableArray alloc] initWithCapacity:[channelTypeNames count]];
+    
+    for (NSString * typeClass in channelTypeNames) {
+        ZNGChannelType * type = [self.service channelTypeWithTypeClass:typeClass];
+        
+        if (type == nil) {
+            continue;
+        }
+        
+        ZNGChannel * existingChannel = [self.contact channelOfType:type];
+        
+        if (existingChannel == nil) {
+            // They already have one of these
+            continue;
+        }
+        
+        // This contact does not have an entry for this required channel type.  Add one.
+        [requiredTypes addObject:type];
+    }
+    
+    if ([requiredTypes count] == 0) {
+        // We're good to go; this guy does not need any more channels
+        return;
+    }
+    
+    NSMutableArray * mutableChannels = [self.contact.channels mutableCopy];
+
+    for (ZNGChannelType * type in requiredTypes) {
+        ZNGChannel * channel = [[ZNGChannel alloc] init];
+        channel.channelType = type;
+        
+        [mutableChannels addObject:channel];
+    }
+    
+    self.contact.channels = mutableChannels;
+}
+
+/**
+ *  Returns an array of channel type names for channel types that will always be shown under a contact, whether or not they exist.
+ */
+- (NSArray<NSString *> *)omnipresentChannelTypeClasses
+{
+    return @[@"EmailAddress"];
 }
 
 - (ZNGContactFieldValue *) contactFieldValueForContactField:(ZNGContactField *)field
@@ -140,46 +220,83 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 #pragma mark - Table view data source
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return ContactSectionCount;
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch (section) {
-        case 0:
+        case ContactSectionDefaultCustomFields:
             return @"Default";
-        default:
+        case ContactSectionOptionalCustomFields:
             return @"Optional";
+        case ContactSectionLabels:
+            return @"Labels";
+        case ContactSectionChannels:
+            return @"Channels";
+        default:
+            return nil;
     }
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section) {
-        case 0:
+        case ContactSectionDefaultCustomFields:
             return [defaultCustomFields count];
-        default:
+        case ContactSectionOptionalCustomFields:
             return [optionalCustomFields count];
+        case ContactSectionLabels:
+            // TODO: Change to 1 when implemented
+            return 0;
+        case ContactSectionChannels:
+            return [self.contact.channels count] + 1;
+        default:
+            return 0;
     }
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray<ZNGContactFieldValue *> * customFields;
-    
     switch (indexPath.section) {
-        case 0:
-            customFields = defaultCustomFields;
-            break;
-        default:
-            customFields = optionalCustomFields;
+        case ContactSectionDefaultCustomFields:
+        case ContactSectionOptionalCustomFields:
+        {
+            NSArray<ZNGContactFieldValue *> * customFields = (indexPath.section == ContactSectionDefaultCustomFields) ? defaultCustomFields : optionalCustomFields;
+            
+            ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
+            cell.customFieldValue = customFields[indexPath.row];
+            return cell;
+        }
+            
+        case ContactSectionLabels:
+            // TODO: Implement
+            return nil;
+            
+        case ContactSectionChannels:
+        {
+            if (indexPath.row >= [self.contact.channels count]) {
+                // This is our placeholder row
+                return [tableView dequeueReusableCellWithIdentifier:@"addPhone" forIndexPath:indexPath];
+            }
+            
+            
+            ZNGChannel * channel = self.contact.channels[indexPath.row];
+            
+            if ([channel isPhoneNumber]) {
+                ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];
+                cell.channel = channel;
+                return cell;
+            }
+            
+            ZNGContactChannelTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"channel" forIndexPath:indexPath];
+            cell.channel = channel;
+            return cell;
+        }
     }
     
-    ZNGLogVerbose(@"Setting cell %@ to %@", indexPath, customFields[indexPath.row]);
-    
-    ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
-    cell.customFieldValue = customFields[indexPath.row];
-    return cell;
+    ZNGLogError(@"Unknown section %lld in contact editing table view", (long long)indexPath.section);
+    return nil;
 }
 
 @end

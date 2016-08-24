@@ -42,6 +42,7 @@
 
 - (ZNGChannelType *)phoneNumberChannelType;
 - (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName;
+- (ZNGChannelType *)channelTypeWithTypeClass:(NSString *)typeClass;
 
 - (ZNGChannel *)defaultPhoneNumberChannel;
 - (ZNGChannel *)defaultChannelForType:(ZNGChannelType *)channelType;

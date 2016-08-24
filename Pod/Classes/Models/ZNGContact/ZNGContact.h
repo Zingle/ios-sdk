@@ -61,6 +61,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (nullable ZNGChannel *)defaultChannel;
 
+/**
+ *  Returns the first available channel of the specified type
+ */
+- (nullable ZNGChannel *)channelOfType:(ZNGChannelType *)type;
+
 - (nullable NSString *)fullName;
 
 /**

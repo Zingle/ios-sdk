@@ -16,6 +16,20 @@ static NSString * const ZNGChannelTypeClassUserDefined = @"UserDefinedChannel";
 
 @implementation ZNGChannelType
 
+- (BOOL) isEqual:(ZNGChannelType *)object
+{
+    if (![object isKindOfClass:[ZNGChannelType class]]) {
+        return NO;
+    }
+    
+    return ([self.channelTypeId isEqualToString:object.channelTypeId] || ([self.displayName isEqualToString:object.displayName]));
+}
+
+- (NSUInteger) hash
+{
+    return [self.displayName hash];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

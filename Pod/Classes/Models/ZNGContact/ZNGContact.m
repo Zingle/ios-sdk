@@ -199,6 +199,16 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return nil;
 }
 
+- (ZNGChannel *)channelOfType:(ZNGChannelType *)type
+{
+    for (ZNGChannel * channel in self.channels) {
+        if ([channel.channelType isEqual:type]) {
+            return channel;
+        }
+    }
+    
+    return nil;
+}
 
 -(ZNGChannel *)phoneNumberChannel
 {

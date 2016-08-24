@@ -141,6 +141,16 @@
     return nil;
 }
 
+- (ZNGChannelType *)channelTypeWithTypeClass:(NSString *)typeClass
+{
+    for (ZNGChannelType * channelType in self.channelTypes) {
+        if ([channelType.typeClass isEqualToString:typeClass]) {
+            return channelType;
+        }
+    }
+    return nil;
+}
+
 - (ZNGChannel *)defaultPhoneNumberChannel
 {
     return [self defaultChannelForType:[self phoneNumberChannelType]];

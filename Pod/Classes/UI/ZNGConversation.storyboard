@@ -12,6 +12,7 @@
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
             <string>Lato-Regular</string>
+            <string>Lato-Regular</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -147,8 +148,34 @@
                                             <outlet property="textField" destination="Aqf-Zt-MOZ" id="8o5-lB-PoJ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" id="B8x-FV-499">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
                                         <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lGA-Qd-2RU" id="dZr-Pi-g0x">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mvs-lL-jd2" customClass="JVFloatLabeledTextField">
+                                                    <rect key="frame" x="33" y="7" width="559" height="30"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="lGA-Qd-2RU" id="Tfd-Xv-6aK"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Mvs-lL-jd2" firstAttribute="trailing" secondItem="dZr-Pi-g0x" secondAttribute="trailingMargin" id="4hS-Hm-Vms"/>
+                                                <constraint firstItem="Mvs-lL-jd2" firstAttribute="centerY" secondItem="dZr-Pi-g0x" secondAttribute="centerY" id="ceq-sa-aqq"/>
+                                                <constraint firstItem="Mvs-lL-jd2" firstAttribute="leading" secondItem="dZr-Pi-g0x" secondAttribute="leadingMargin" constant="25" id="fgG-nO-d7J"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="textField" destination="Mvs-lL-jd2" id="GHw-9F-fN8"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" id="B8x-FV-499">
+                                        <rect key="frame" x="0.0" y="116" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -172,8 +199,8 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" id="yxw-oU-69S">
-                                        <rect key="frame" x="0.0" y="116" width="600" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" id="yxw-oU-69S" customClass="ZNGContactPhoneNumberTableViewCell">
+                                        <rect key="frame" x="0.0" y="160" width="600" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yxw-oU-69S" id="kv6-um-SBV">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
@@ -202,6 +229,9 @@
                                                     <rect key="frame" x="121" y="7" width="471" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="yxw-oU-69S" id="5ba-Ac-icI"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>

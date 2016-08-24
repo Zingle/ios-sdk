@@ -25,4 +25,9 @@
  */
 - (BOOL) isPhoneNumber;
 
+/**
+ *  Sets the value, clearing formatted value as appropriate.
+ */
+- (void) setValueFromTextEntry:(NSString *)newValue;
+
 @end

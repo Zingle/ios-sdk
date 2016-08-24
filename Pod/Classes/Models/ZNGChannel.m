@@ -48,4 +48,10 @@
     return [self.channelId hash];
 }
 
+- (void) setValueFromTextEntry:(NSString *)newValue
+{
+    self.value = newValue;
+    self.formattedValue = newValue;
+}
+
 @end

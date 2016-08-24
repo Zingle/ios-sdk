@@ -10,6 +10,11 @@
 
 @implementation ZNGContactFieldValue
 
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"%@: %@", self.customField.displayName, self.value];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

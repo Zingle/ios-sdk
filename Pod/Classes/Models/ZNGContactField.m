@@ -28,5 +28,18 @@
     return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGFieldOption.class];
 }
 
+- (BOOL) isEqual:(ZNGContactField *)object
+{
+    if (![object isKindOfClass:[ZNGContactField class]]) {
+        return NO;
+    }
+    
+    return (([self.contactFieldId isEqualToString:object.contactFieldId]) || ([self.displayName isEqualToString:object.displayName]));
+}
+
+- (NSUInteger) hash
+{
+    return [self.displayName hash];
+}
 
 @end

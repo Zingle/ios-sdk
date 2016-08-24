@@ -42,6 +42,11 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ZNGContactFieldValue *)lastNameFieldValue;
 
 /**
+ *  Returns the contact field of the specified type if present in this contact.  Nil if there is no existing value.
+ */
+- (nullable ZNGContactFieldValue *) contactFieldValueForType:(ZNGContactField *)field;
+
+/**
  *  If there is a default phone number channel, this will return that channel.  Otherwise, it will return the first available phone number channel.
  */
 -(nullable ZNGChannel *)phoneNumberChannel;

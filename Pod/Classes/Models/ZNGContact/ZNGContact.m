@@ -188,6 +188,18 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return fieldValue;
 }
 
+- (nullable ZNGContactFieldValue *) contactFieldValueForType:(ZNGContactField *)field
+{
+    for (ZNGContactFieldValue * value in self.customFieldValues) {
+        if ([value.customField isEqual:field]) {
+            return value;
+        }
+    }
+    
+    return nil;
+}
+
+
 -(ZNGChannel *)phoneNumberChannel
 {
     ZNGChannel * channel = nil;

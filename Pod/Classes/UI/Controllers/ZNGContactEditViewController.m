@@ -218,6 +218,11 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (BOOL) contactHasBeenChanged
+{
+    return [self.contact hasBeenEditedSince:originalContact];
+}
+
 #pragma mark - Table view delegate
 // TODO: Implement this
 //- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

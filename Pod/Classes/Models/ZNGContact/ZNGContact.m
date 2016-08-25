@@ -290,6 +290,16 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return !(sameLastMessage && sameName && sameStarConfirmed && sameLabels);
 }
 
+- (BOOL) hasBeenEditedSince:(ZNGContact *)old
+{
+    BOOL sameCustomFields = [self.customFieldValues isEqualToArray:old.customFieldValues];
+    BOOL sameChannels = [self.channels isEqualToArray:old.channels];
+    BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));
+    BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
+
+    return (!sameCustomFields || !sameChannels || !sameStarConfirmed || !sameLabels);
+}
+
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old
 {
     return (![old.lastMessage isEqual:self.lastMessage]);

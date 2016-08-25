@@ -83,6 +83,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(nullable ZNGContact *)old;
 
+/**
+ *  Returns YES if a contact's meta data has been edited since a previous copy.  Used primarily to check for dirtiness in contact edit UI.
+ */
+- (BOOL) hasBeenEditedSince:(ZNGContact *)old;
+
 - (BOOL) isEqualToContact:(nullable ZNGContact *)other;
 
 #pragma mark - Mutators

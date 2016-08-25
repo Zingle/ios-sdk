@@ -15,6 +15,20 @@
     return [NSString stringWithFormat:@"%@: %@", self.customField.displayName, self.value];
 }
 
+- (BOOL) isEqual:(ZNGContactFieldValue *)object
+{
+    if (![object isKindOfClass:[ZNGContactFieldValue class]]) {
+        return NO;
+    }
+    
+    return (([self.customField isEqual:object.customField]) && ([self.value isEqualToString:object.value]));
+}
+
+- (NSUInteger) hash
+{
+    return [self.value hash];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

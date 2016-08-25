@@ -8,6 +8,13 @@
 
 #import <Mantle/Mantle.h>
 
+extern NSString * const ZNGContactFieldDataTypeString;
+extern NSString * const ZNGContactFieldDataTypeNumber;
+extern NSString * const ZNGContactFieldDataTypeBool;
+extern NSString * const ZNGContactFieldDataTypeDate;
+extern NSString * const ZNGContactFieldDataTypeTime;
+extern NSString * const ZNGContactFieldDataTypeSingleSelect;
+
 @interface ZNGContactField : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong) NSString* contactFieldId;

@@ -9,6 +9,13 @@
 #import "ZNGContactField.h"
 #import "ZNGFieldOption.h"
 
+NSString * const ZNGContactFieldDataTypeString = @"string";
+NSString * const ZNGContactFieldDataTypeNumber = @"number";
+NSString * const ZNGContactFieldDataTypeBool = @"boolean";
+NSString * const ZNGContactFieldDataTypeDate = @"date";
+NSString * const ZNGContactFieldDataTypeTime = @"time";
+NSString * const ZNGContactFieldDataTypeSingleSelect = @"single_select_options";
+
 @implementation ZNGContactField
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey

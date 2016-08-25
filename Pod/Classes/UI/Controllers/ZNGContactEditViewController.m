@@ -35,6 +35,7 @@ enum  {
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
+static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 @interface ZNGContactEditViewController ()
 
@@ -402,8 +403,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 {
     if (indexPath.section == 0) {
         // They wish to add a label.
-        // TODO: Implement
-        
+        [self performSegueWithIdentifier:SelectLabelSegueIdentifier sender:self];
         return;
     }
     
@@ -427,6 +427,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
+#pragma mark - Label selection
 - (void) doLabelRemoval:(ZNGLabel *)label
 {
     NSMutableArray * mutableLabels = [self.contact.labels mutableCopy];
@@ -434,7 +435,35 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     self.contact.labels = mutableLabels;
     
     NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
-    [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) labelSelectViewController:(ZNGLabelSelectViewController *)viewController didSelectLabel:(ZNGLabel *)label
+{
+    if (label != nil) {
+        NSMutableArray * mutableLabels = [self.contact.labels mutableCopy];
+        [mutableLabels addObject:label];
+        self.contact.labels = mutableLabels;
+        
+        NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
+        [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
+}
+
+- (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:SelectLabelSegueIdentifier]) {
+        ZNGLabelSelectViewController * vc = segue.destinationViewController;
+        
+        // We will remove labels already applied to this user
+        NSMutableArray<ZNGLabel *> * availableLabels = [self.service.contactLabels mutableCopy];
+        for (ZNGLabel * label in self.contact.labels) {
+            [availableLabels removeObject:label];
+        }
+        
+        vc.labels = availableLabels;
+        vc.delegate = self;
+    }
 }
 
 @end

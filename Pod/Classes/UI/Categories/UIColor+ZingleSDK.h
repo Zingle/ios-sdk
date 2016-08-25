@@ -57,6 +57,10 @@
 
 + (UIColor *)zng_strawberry;
 
++ (UIColor *) zng_loadingGradientInnerColor;
+
++ (UIColor *) zng_loadingGradientOuterColor;
+
 /**
  *  Creates and returns a new color object from a hex color value.
  *

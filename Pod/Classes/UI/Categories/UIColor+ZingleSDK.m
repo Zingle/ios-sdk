@@ -97,6 +97,16 @@
     return [UIColor colorFromHexString:@"#E74C3C"];
 }
 
++ (UIColor *) zng_loadingGradientInnerColor
+{
+    return [self zng_purple];
+}
+
++ (UIColor *) zng_loadingGradientOuterColor
+{
+    return [self zng_lightBlue];
+}
+
 
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {

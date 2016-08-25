@@ -16,8 +16,13 @@
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGContactChannelTableViewCell.h"
 #import "ZNGContactPhoneNumberTableViewCell.h"
+#import "ZNGContactLabelsTableViewCell.h"
 #import "ZNGLogging.h"
 #import "ZNGChannel.h"
+#import "ZNGLabelRoundedCollectionViewCell.h"
+#import "ZingleSDK/ZingleSDK-Swift.h"
+#import "ZNGLabel.h"
+#import "UIColor+ZingleSDK.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -254,8 +259,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
         case ContactSectionOptionalCustomFields:
             return [optionalCustomFields count];
         case ContactSectionLabels:
-            // TODO: Change to 1 when implemented
-            return 0;
+            return 1;
         case ContactSectionChannels:
             return [self.contact.channels count] + 1;
         default:
@@ -277,8 +281,14 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
         }
             
         case ContactSectionLabels:
-            // TODO: Implement
-            return nil;
+        {
+            ZNGContactLabelsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"labels" forIndexPath:indexPath];
+            cell.collectionView.dataSource = self;
+            cell.collectionView.delegate = self;
+            [cell.collectionView.collectionViewLayout invalidateLayout];
+            [cell.collectionView reloadData];
+            return cell;
+        }
             
         case ContactSectionChannels:
         {
@@ -309,6 +319,57 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
     
     ZNGLogError(@"Unknown section %lld in contact editing table view", (long long)indexPath.section);
     return nil;
+}
+
+#pragma mark - Collection view data source (labels collection view inside of the table)
+- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    // We always have one section for "add label."  We will have one more section if any labels are on this duder.
+    return ([self.contact.labels count] > 0) ? 2 : 1;
+}
+
+- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    if (section == 0) {
+        return 1;   // The "Add label" cell
+    }
+    
+    return [self.contact.labels count];
+}
+
+- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGLabelRoundedCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:ZNGContactLabelsCollectionViewCellReuseIdentifier forIndexPath:indexPath];
+    
+    if (indexPath.section == 0) {
+        // "Add label" cell
+        cell.label.text = @"ADD LABEL";
+        
+//        int numWords = arc4random() % 5 + 1;
+//        NSMutableString * words = [@"LABEL" mutableCopy];
+//        for (int i=1; i < numWords; i++) {
+//            [words appendString:@" LABEL"];
+//        }
+//        cell.label.text = words;
+        
+        cell.label.textColor = [UIColor grayColor];
+        cell.label.backgroundColor = [UIColor clearColor];
+        cell.label.borderColor = [UIColor grayColor];
+        return cell;
+    }
+    
+    ZNGLabel * label = self.contact.labels[indexPath.row];
+    cell.label.text = [NSString stringWithFormat:@"%@   X ", [label.displayName uppercaseString]];
+    UIColor * color = label.backgroundUIColor;
+    cell.label.textColor = color;
+    cell.label.borderColor = color;
+    cell.label.backgroundColor = [color zng_colorByDarkeningColorWithValue:-0.5];
+    return cell;
+}
+
+- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    // TODO: Implement
 }
 
 @end

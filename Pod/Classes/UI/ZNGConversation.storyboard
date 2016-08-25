@@ -263,6 +263,52 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="labels" id="Gtr-ud-SDp" customClass="ZNGContactLabelsTableViewCell">
+                                        <rect key="frame" x="0.0" y="204" width="600" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gtr-ud-SDp" id="fa7-Yj-Urf">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0qY-cL-3Yg">
+                                                    <rect key="frame" x="8" y="0.0" width="584" height="44"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="9Vn-1l-2CP"/>
+                                                    </constraints>
+                                                    <collectionViewLayout key="collectionViewLayout" id="V4u-rn-gKr" customClass="ZNGContactLabelFlowLayout"/>
+                                                    <cells/>
+                                                    <variation key="default">
+                                                        <mask key="constraints">
+                                                            <exclude reference="9Vn-1l-2CP"/>
+                                                        </mask>
+                                                    </variation>
+                                                </collectionView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerY" secondItem="fa7-Yj-Urf" secondAttribute="centerY" id="52U-3Y-4M9"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leadingMargin" id="E6z-dU-2Rv"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="0qY-cL-3Yg" secondAttribute="trailing" id="IhO-vc-4Wi"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leading" constant="8" id="R5z-Hi-9sE"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerX" secondItem="fa7-Yj-Urf" secondAttribute="centerX" id="UDL-f9-P3h"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="bottom" secondItem="fa7-Yj-Urf" secondAttribute="bottomMargin" constant="4" id="fit-zm-fCD"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="top" secondItem="fa7-Yj-Urf" secondAttribute="topMargin" constant="-4" id="oCJ-d5-vGT"/>
+                                                <constraint firstAttribute="trailing" secondItem="0qY-cL-3Yg" secondAttribute="trailing" constant="8" id="sz2-zx-JiG"/>
+                                                <constraint firstAttribute="bottom" secondItem="0qY-cL-3Yg" secondAttribute="bottom" id="vfM-Qg-PZW"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="top" secondItem="fa7-Yj-Urf" secondAttribute="top" id="xPx-O4-pvu"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="E6z-dU-2Rv"/>
+                                                    <exclude reference="IhO-vc-4Wi"/>
+                                                    <exclude reference="fit-zm-fCD"/>
+                                                    <exclude reference="oCJ-d5-vGT"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="collectionView" destination="0qY-cL-3Yg" id="SEe-hc-xaA"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="EHd-00-ynV" id="xWc-RK-2GA"/>

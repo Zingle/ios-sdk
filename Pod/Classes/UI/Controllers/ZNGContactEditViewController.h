@@ -11,7 +11,7 @@
 @class ZNGContact;
 @class ZNGService;
 
-@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * lockedContactHeightConstraint;

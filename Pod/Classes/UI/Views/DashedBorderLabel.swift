@@ -13,25 +13,25 @@ public class DashedBorderLabel: UILabel {
     
     var borderLine: CAShapeLayer?
     
-    @IBInspectable var borderColor: UIColor? {
+    @IBInspectable public var borderColor: UIColor? {
         didSet {
             drawBorder()
         }
     }
     
-    @IBInspectable var borderWidth: CGFloat = 0.0 {
+    @IBInspectable public var borderWidth: CGFloat = 0.0 {
         didSet {
             drawBorder()
         }
     }
     
-    @IBInspectable var textInset: CGFloat = 0.0 {
+    @IBInspectable public var textInset: CGFloat = 0.0 {
         didSet {
             invalidateIntrinsicContentSize()
         }
     }
     
-    @IBInspectable var cornerRadius: CGFloat {
+    @IBInspectable public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
         }
@@ -54,7 +54,7 @@ public class DashedBorderLabel: UILabel {
         border.strokeColor = borderColor?.CGColor
         border.fillColor = nil
         border.lineWidth = borderWidth
-        border.lineDashPattern = [2,2]
+        border.lineDashPattern = [4,4]
         borderLine = border
         layer.addSublayer(border)
     }

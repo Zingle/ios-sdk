@@ -9,12 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "ZNGLabelSelectViewController.h"
 
+@class GradientLoadingView;
 @class ZNGContact;
 @class ZNGService;
 
 @interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, ZNGLabelSelectionDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
+@property (nonatomic, strong) IBOutlet GradientLoadingView * loadingGradient;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * lockedContactHeightConstraint;
 @property (nonatomic, strong) IBOutlet UINavigationItem * navItem;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem * cancelButton;

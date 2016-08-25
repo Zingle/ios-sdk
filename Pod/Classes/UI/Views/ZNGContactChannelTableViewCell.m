@@ -17,7 +17,7 @@
     _channel = [channel copy];
     
     self.textField.placeholder = channel.channelType.displayName;
-    self.textField.text = channel.value;
+    self.textField.text = channel.formattedValue;
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField

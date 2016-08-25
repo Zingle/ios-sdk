@@ -215,7 +215,33 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 #pragma mark - IBActions
 - (IBAction)pressedCancel:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    // We will confirm before discarding information if the contact has been edited.
+    if ([self contactHasBeenChanged]) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Discard changes?" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction * discard = [UIAlertAction actionWithTitle:@"Discard Changes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+        UIAlertAction * returnToEditing = [UIAlertAction actionWithTitle:@"Continue Editing" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:returnToEditing];
+        [alert addAction:discard];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
+}
+
+- (IBAction)pressedSave:(id)sender
+{
+    // If we have no changes, we can just go poof
+    if (![self contactHasBeenChanged]) {
+        ZNGLogInfo(@"Contact editing screen is being dismissed via \"Save,\" but no changes were made.");
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
+    
+    // TODO: Go save the contact!
 }
 
 - (BOOL) contactHasBeenChanged

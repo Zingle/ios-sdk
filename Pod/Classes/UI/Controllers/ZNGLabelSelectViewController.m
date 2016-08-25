@@ -35,6 +35,12 @@
     self.tableView.tableHeaderView = searchController.searchBar;
 }
 
+- (UIStatusBarStyle) preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
+#pragma mark - Actions
 - (IBAction)pressedCancel:(id)sender
 {
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -46,6 +52,7 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+#pragma mark - Data
 - (NSArray<ZNGLabel *> *) currentLabelData
 {
     return (searchController.active) ? filteredLabels : self.labels;

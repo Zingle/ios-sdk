@@ -83,10 +83,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self showOrHideLockedContactBarAnimated:NO];
 }
 
-- (void)didReceiveMemoryWarning
+- (UIStatusBarStyle) preferredStatusBarStyle
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    return UIStatusBarStyleLightContent;
 }
 
 - (void) setContact:(ZNGContact *)contact

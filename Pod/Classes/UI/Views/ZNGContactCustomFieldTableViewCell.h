@@ -10,7 +10,7 @@
 @class JVFloatLabeledTextField;
 @class ZNGContactFieldValue;
 
-@interface ZNGContactCustomFieldTableViewCell : UITableViewCell <UITextFieldDelegate>
+@interface ZNGContactCustomFieldTableViewCell : UITableViewCell <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
 

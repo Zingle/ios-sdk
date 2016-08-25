@@ -8,6 +8,9 @@
 
 #import "ZNGContactLabelsTableViewCell.h"
 #import "ZNGLabelRoundedCollectionViewCell.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 NSString * const ZNGContactLabelsCollectionViewCellReuseIdentifier = @"LabelCell";
 
@@ -34,7 +37,9 @@ NSString * const ZNGContactLabelsCollectionViewCellReuseIdentifier = @"LabelCell
     self.collectionView.frame = CGRectMake(0, 0, targetSize.width, FLT_MAX);
     [self.collectionView layoutIfNeeded];
     
-    return self.collectionView.contentSize;
+    ZNGLogVerbose(@"Labels table cell is reporting height as %.0f", self.collectionView.contentSize.height);
+    
+    return self.collectionView.collectionViewLayout.collectionViewContentSize;
 }
 
 @end

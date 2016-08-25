@@ -400,7 +400,41 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 
 - (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Implement
+    if (indexPath.section == 0) {
+        // They wish to add a label.
+        // TODO: Implement
+        
+        return;
+    }
+    
+    if (indexPath.row > [self.contact.labels count]) {
+        ZNGLogError(@"Touching a label caused an out of bounds.  Index %lld is outside of our %llu objects.", (long long)indexPath.row, (unsigned long long)[self.contact.labels count]);
+        return;
+    }
+    
+    // They are deleting a label.
+    ZNGLabel * label = self.contact.labels[indexPath.row];
+    NSString * message = [NSString stringWithFormat:@"Remove the %@ label from %@?", label.displayName, [self.contact fullName]];
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Label" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self doLabelRemoval:label];
+    }];
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:delete];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) doLabelRemoval:(ZNGLabel *)label
+{
+    NSMutableArray * mutableLabels = [self.contact.labels mutableCopy];
+    [mutableLabels removeObject:label];
+    self.contact.labels = mutableLabels;
+    
+    NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
+    [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
 }
 
 @end

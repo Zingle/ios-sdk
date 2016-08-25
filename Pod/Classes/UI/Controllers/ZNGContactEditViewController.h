@@ -23,5 +23,6 @@
 @property (nonatomic, copy) ZNGContact * contact;
 
 - (IBAction)pressedCancel:(id)sender;
+- (IBAction)pressedSave:(id)sender;
 
 @end

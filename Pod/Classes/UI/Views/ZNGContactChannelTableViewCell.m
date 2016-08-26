@@ -18,6 +18,14 @@
     
     self.textField.placeholder = channel.channelType.displayName;
     self.textField.text = channel.formattedValue;
+    
+    if ([channel.channelType isPhoneNumberType]) {
+        self.textField.keyboardType = UIKeyboardTypeNumberPad;
+    } else if ([channel.channelType isEmailType]) {
+        self.textField.keyboardType = UIKeyboardTypeEmailAddress;
+    } else {
+        self.textField.keyboardType = UIKeyboardTypeDefault;
+    }
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField

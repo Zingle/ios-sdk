@@ -376,13 +376,6 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         // "Add label" cell
         cell.label.text = @"ADD LABEL";
         
-//        int numWords = arc4random() % 5 + 1;
-//        NSMutableString * words = [@"LABEL" mutableCopy];
-//        for (int i=1; i < numWords; i++) {
-//            [words appendString:@" LABEL"];
-//        }
-//        cell.label.text = words;
-        
         cell.label.textColor = [UIColor grayColor];
         cell.label.backgroundColor = [UIColor clearColor];
         cell.label.borderColor = [UIColor grayColor];

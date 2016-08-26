@@ -369,11 +369,14 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         newPhoneChannel.channelType = [self.service phoneNumberChannelType];
         
         NSMutableArray * mutableChannels = [self.contact.channels mutableCopy];
+        NSMutableArray * mutablePhoneChannels = [phoneNumberChannels mutableCopy];
         [mutableChannels addObject:newPhoneChannel];
+        [mutablePhoneChannels addObject:newPhoneChannel];
         self.contact.channels = mutableChannels;
+        phoneNumberChannels = mutablePhoneChannels;
         
         NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
-        [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationTop];
+        [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
 }
 

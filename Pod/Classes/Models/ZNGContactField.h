@@ -26,4 +26,9 @@ extern NSString * const ZNGContactFieldDataTypeSingleSelect;
 @property(nonatomic, strong) NSArray<ZNGFieldOption *> * options;// Array of ZNGFieldOption
 @property(nonatomic, strong) NSString * replacementVariable;    // The value to be put within { } to be magically replaced by the server.
 
+/**
+ *  Returns YES if autocapitalization should be on for every word
+ */
+- (BOOL) shouldCapitalizeEveryWord;
+
 @end

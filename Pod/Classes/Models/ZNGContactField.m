@@ -49,4 +49,9 @@ NSString * const ZNGContactFieldDataTypeSingleSelect = @"single_select_options";
     return [self.displayName hash];
 }
 
+- (BOOL) shouldCapitalizeEveryWord
+{
+    return (([[self.displayName lowercaseString] containsString:@"name"]) || ([[self.displayName lowercaseString] containsString:@"title"]));
+}
+
 @end

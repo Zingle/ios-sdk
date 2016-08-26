@@ -265,6 +265,9 @@
                                                 <constraint firstItem="MvJ-Dy-edy" firstAttribute="centerY" secondItem="kv6-um-SBV" secondAttribute="centerY" id="u9g-uW-AP2"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="textField" destination="MvJ-Dy-edy" id="hfv-Vf-9h7"/>
+                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="labels" id="Gtr-ud-SDp" customClass="ZNGContactLabelsTableViewCell">
                                         <rect key="frame" x="0.0" y="204" width="600" height="44"/>

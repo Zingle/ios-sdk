@@ -370,7 +370,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         
         NSMutableArray * mutableChannels = [self.contact.channels mutableCopy];
         [mutableChannels addObject:newPhoneChannel];
-        self.contact.channels = newPhoneChannel;
+        self.contact.channels = mutableChannels;
         
         NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
         [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationTop];

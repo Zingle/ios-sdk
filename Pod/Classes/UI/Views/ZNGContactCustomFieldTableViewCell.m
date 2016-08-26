@@ -9,6 +9,8 @@
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGContactFieldValue.h"
 #import "ZNGLogging.h"
+#import "ZNGFieldOption.h"
+
 @import JVFloatLabeledTextField;
 
 static const int zngLogLevel = ZNGLogLevelInfo;
@@ -17,6 +19,33 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     UIPickerView * pickerView;
     UIDatePicker * datePicker;
+    
+    NSDateFormatter * dateFormatter;
+    NSDateFormatter * _timeFormatter;
+    
+    BOOL numericOnly;
+}
+
+- (void) prepareForReuse
+{
+    [super prepareForReuse];
+    pickerView = nil;
+    datePicker = nil;
+    self.textField.inputView = nil;
+    self.textField.text = @"";
+    self.textField.placeholder = @"";
+    numericOnly = NO;
+}
+
+- (NSString *) displayStringForDate:(NSDate *)date
+{
+    if (dateFormatter == nil) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        dateFormatter.timeStyle = NSDateFormatterNoStyle;
+    }
+    
+    return [dateFormatter stringFromDate:date];
 }
 
 - (void) setCustomFieldValue:(ZNGContactFieldValue *)customFieldValue
@@ -24,82 +53,153 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGLogVerbose(@"%@ custom field type set to %@, was %@", [self class], customFieldValue.customField.displayName, _customFieldValue.customField.displayName);
     
     _customFieldValue = customFieldValue;
-    [self setupPickerViewIfNecessary];
     
-    self.textField.placeholder = customFieldValue.customField.displayName;
-    self.textField.text = customFieldValue.value;
+    [self configureInput];
+    [self updateDisplay];
 }
 
-- (void) setupPickerViewIfNecessary
+- (void) updateDisplay
 {
-    // Do we need a date picker?
+    self.textField.placeholder = self.customFieldValue.customField.displayName;
+    
+    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
+        if ([self.customFieldValue.value length] > 0) {
+            double dateUTCDouble = [self.customFieldValue.value doubleValue];
+            NSDate * date = [NSDate dateWithTimeIntervalSince1970:dateUTCDouble];
+            datePicker.date = date;
+            self.textField.text = [self displayStringForDate:date];
+        } else {
+            self.textField.text = @"";
+        }
+    } else {
+        
+        if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
+            datePicker.date = [self dateObjectForTimeString:self.customFieldValue.value];
+        } else {
+            NSUInteger index = [self indexOfCurrentValue];
+            
+            if (index != NSNotFound) {
+                [pickerView selectRow:index inComponent:0 animated:NO];
+            }
+        }
+        
+        self.textField.text = self.customFieldValue.value;
+    }
+}
+
+- (void) configureInput
+{
+    // Temporary debugging code
+//    if ([self.customFieldValue.customField.displayName isEqualToString:@"Title"]) {
+//        NSLog(@"Break");
+//        self.customFieldValue.customField.dataType = ZNGContactFieldDataTypeSingleSelect;
+//    }
+    
+    // Do we need a picker?
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeTime;
+        [datePicker addTarget:self action:@selector(daetPickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
+        self.textField.inputView = datePicker;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeDate;
+        [datePicker addTarget:self action:@selector(datePickerSelectedDate:) forControlEvents:UIControlEventValueChanged];
+        self.textField.inputView = datePicker;
+
     } else if (([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
         pickerView = [[UIPickerView alloc] init];
         pickerView.delegate = self;
         pickerView.dataSource = self;
         self.textField.inputView = pickerView;
-    }
-    
-    if (datePicker != nil) {
-        [datePicker addTarget:self action:@selector(datePickerSelectionChanged:) forControlEvents:UIControlEventValueChanged];
-        self.textField.inputView = datePicker;
+    } else {
+        // This is text input
+        // Is it numeric of text?
+        if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeNumber]) {
+            self.textField.keyboardType = UIKeyboardTypeNumberPad;
+            numericOnly = YES;
+        } else {
+            self.textField.keyboardType = UIKeyboardTypeDefault;
+            self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
+            self.textField.autocapitalizationType = ([self.customFieldValue.customField shouldCapitalizeEveryWord]) ? UITextAutocapitalizationTypeWords : UITextAutocapitalizationTypeSentences;
+        }
     }
 }
 
-- (void) datePickerSelectionChanged:(UIDatePicker *)sender
+- (NSUInteger) indexOfCurrentValue
 {
-    self.customFieldValue.value = [self valueForSelectedDateOrTime];
+    if ([self.customFieldValue.value length] == 0) {
+        return NSNotFound;
+    }
+    
+    NSString * currentValue = self.customFieldValue.value;
+    
+    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+        return [[self booleanSelections] indexOfObject:currentValue];
+    }
+    
+    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) {
+        return [self.customFieldValue.customField.options indexOfObjectPassingTest:^BOOL(ZNGFieldOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
+            return [option.value isEqualToString:currentValue];
+        }];
+    }
+    
+    return NSNotFound;
 }
 
-- (NSString *) valueForSelectedDateOrTime
+- (NSDateFormatter *) timeFormatter
 {
-    UIDatePicker * datePicker = self.textField.inputView;
-    
-    if (![datePicker isKindOfClass:[UIDatePicker class]]) {
-        ZNGLogError(@"Text field's input view is not a date picker.");
-        return nil;
+    if (_timeFormatter == nil) {
+        _timeFormatter = [[NSDateFormatter alloc] init];
+        _timeFormatter.dateFormat = @"HH:mm:ss";
     }
     
-    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
-        NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"HH:mm:ss";
-        return [formatter stringFromDate:datePicker.date];
-    }
+    return _timeFormatter;
+}
+
+- (NSDate *) dateObjectForTimeString:(NSString *)string
+{
+    return [[self timeFormatter] dateFromString:string];
+}
+
+- (void) datePickerSelectedTime:(UIDatePicker *)sender
+{
+    NSDateFormatter * timeFormatter = [self timeFormatter];
+    self.customFieldValue.value = [timeFormatter stringFromDate:datePicker.date];
+}
+
+- (void) datePickerSelectedDate:(UIDatePicker *)sender
+{
+    // The user has selected a year.  We will use date components to find the UTC time at noon on that day.
+    NSCalendar * calendar = [NSCalendar currentCalendar];
+    NSDateComponents * components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:datePicker.date];
+    components.hour = 12;
+    NSDate * noonThatDay = [calendar dateFromComponents:components];
     
-    if([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
-        // The user has selected a year.  We will use date components to find the UTC time at noon on that day.
-        NSCalendar * calendar = [NSCalendar currentCalendar];
-        NSDateComponents * components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:datePicker.date];
-        components.hour = 12;
-        NSDate * noonThatDay = [calendar dateFromComponents:components];
-        
-        // Set our string to the UTC timestamp in seconds
-        NSNumber * seconds = @((unsigned long long)[noonThatDay timeIntervalSince1970]);
-        return [seconds stringValue];
-    }
-    
-    ZNGLogError(@"Unexpected date picker.  What do we even do with this date?  Send help!");
-    return nil;
+    // Set our string to the UTC timestamp in seconds
+    NSNumber * seconds = @((unsigned long long)[noonThatDay timeIntervalSince1970]);
+    self.customFieldValue.value = [seconds stringValue];
+    [self updateDisplay];
 }
 
 #pragma mark - Picker view
+- (NSArray<NSString *> *) booleanSelections
+{
+    return @[@"", @"No", @"Yes"];
+}
+
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     NSString * value;
     
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        value = (row == 0) ? @"No" : @"Yes";
+        value = [self booleanSelections][row];
     } else {
-        value = self.customFieldValue.customField.options[row];
+        value = [self.customFieldValue.customField.options[row] value];
     }
     
-    self.textField.text = value;
+    self.customFieldValue.value = value;
+    [self updateDisplay];
 }
 
 - (NSInteger) numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -110,7 +210,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        return 2;
+        return [[self booleanSelections] count];
     }
     
     return [self.customFieldValue.customField.options count];
@@ -119,11 +219,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        if (row == 0) {
-            return @"No";
-        } else {
-            return @"Yes";
-        }
+        return [self booleanSelections][row];
     }
     
     if (row >= [self.customFieldValue.customField.options count]) {
@@ -131,27 +227,20 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return nil;
     }
     
-    return self.customFieldValue.customField.options[row];
+    return [self.customFieldValue.customField.options[row] displayName];
 }
 
 #pragma mark - Text field delegate
-//
-//- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField
-//{
-//    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeString]) {
-//        // We want a string.  We don't have to do anything special.
-//        textField.keyboardType = UIKeyboardTypeDefault;
-//        return YES;
-//    }
-//    
-//    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeNumber]) {
-//        // Numbers only.
-//        textField.keyboardType = UIKeyboardTypeNumberPad;
-//        return YES;
-//    }
-//    
-//    
-//}
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    if (!numericOnly) {
+        return YES;
+    }
+    
+    NSCharacterSet * nonNumericCharacters = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
+    NSRange nonNumericRange = [string rangeOfCharacterFromSet:nonNumericCharacters];
+    return (nonNumericRange.location == NSNotFound);    // Return YES if we did not find any non numeric characters
+}
 
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {

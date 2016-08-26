@@ -23,6 +23,7 @@
 #import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
+#import "Mantle/MTLJSONAdapter.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -91,7 +92,11 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 - (void) setContact:(ZNGContact *)contact
 {
     originalContact = contact;
-    _contact = [contact copy];
+    
+    // Use Mantle for a lazy deep copy
+    NSDictionary * contactDict = [MTLJSONAdapter JSONDictionaryFromModel:contact error:nil];
+    _contact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactDict error:nil];
+
     [self showOrHideLockedContactBarAnimated:NO];
     self.navItem.title = [contact fullName];
     [self generateDataArrays];
@@ -194,6 +199,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     if (value == nil) {
         value = [[ZNGContactFieldValue alloc] init];
         value.customField = field;
+        
+        NSMutableArray * mutableContactFields = [self.contact.customFieldValues mutableCopy];
+        [mutableContactFields addObject:value];
+        self.contact.customFieldValues = mutableContactFields;
     }
     
     return value;
@@ -350,6 +359,22 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     ZNGLogError(@"Unknown section %lld in contact editing table view", (long long)indexPath.section);
     return nil;
+}
+
+- (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if ((indexPath.section == ContactSectionChannels) && (indexPath.row >= [self.contact.channels count])) {
+        // This is the "Add phone number" row
+        ZNGChannel * newPhoneChannel = [[ZNGChannel alloc] init];
+        newPhoneChannel.channelType = [self.service phoneNumberChannelType];
+        
+        NSMutableArray * mutableChannels = [self.contact.channels mutableCopy];
+        [mutableChannels addObject:newPhoneChannel];
+        self.contact.channels = newPhoneChannel;
+        
+        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
+        [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationTop];
+    }
 }
 
 #pragma mark - Collection view data source (labels collection view inside of the table)

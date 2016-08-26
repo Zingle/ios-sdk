@@ -42,6 +42,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     } else if (([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
         pickerView = [[UIPickerView alloc] init];
         pickerView.delegate = self;
+        pickerView.dataSource = self;
         self.textField.inputView = pickerView;
     }
     

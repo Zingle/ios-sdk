@@ -51,9 +51,40 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
 }
 
-- (void) datePickerSelectionChanged:(id)sender
+- (void) datePickerSelectionChanged:(UIDatePicker *)sender
 {
+    self.customFieldValue.value = [self valueForSelectedDateOrTime];
+}
+
+- (NSString *) valueForSelectedDateOrTime
+{
+    UIDatePicker * datePicker = self.textField.inputView;
     
+    if (![datePicker isKindOfClass:[UIDatePicker class]]) {
+        ZNGLogError(@"Text field's input view is not a date picker.");
+        return nil;
+    }
+    
+    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
+        NSDateFormatter * formatter = [[NSDateFormatter alloc] init];
+        formatter.dateFormat = @"HH:mm:ss";
+        return [formatter stringFromDate:datePicker.date];
+    }
+    
+    if([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
+        // The user has selected a year.  We will use date components to find the UTC time at noon on that day.
+        NSCalendar * calendar = [NSCalendar currentCalendar];
+        NSDateComponents * components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:datePicker.date];
+        components.hour = 12;
+        NSDate * noonThatDay = [calendar dateFromComponents:components];
+        
+        // Set our string to the UTC timestamp in seconds
+        NSNumber * seconds = @((unsigned long long)[noonThatDay timeIntervalSince1970]);
+        return [seconds stringValue];
+    }
+    
+    ZNGLogError(@"Unexpected date picker.  What do we even do with this date?  Send help!");
+    return nil;
 }
 
 #pragma mark - Picker view

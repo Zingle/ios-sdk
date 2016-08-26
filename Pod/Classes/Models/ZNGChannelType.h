@@ -19,5 +19,6 @@
 @property(nonatomic) BOOL isGlobal;
 
 - (BOOL) isPhoneNumberType;
+- (BOOL) isEmailType;
 
 @end

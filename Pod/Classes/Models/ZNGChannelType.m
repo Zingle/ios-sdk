@@ -48,4 +48,9 @@ static NSString * const ZNGChannelTypeClassUserDefined = @"UserDefinedChannel";
     return [self.typeClass isEqualToString:ZNGChannelTypeClassPhoneNumber];
 }
 
+- (BOOL) isEmailType
+{
+    return [self.typeClass isEqualToString:ZNGChannelTypeClassEmail];
+}
+
 @end

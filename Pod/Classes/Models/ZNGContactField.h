@@ -8,6 +8,8 @@
 
 #import <Mantle/Mantle.h>
 
+@class ZNGFieldOption;
+
 extern NSString * const ZNGContactFieldDataTypeString;
 extern NSString * const ZNGContactFieldDataTypeNumber;
 extern NSString * const ZNGContactFieldDataTypeBool;
@@ -21,7 +23,7 @@ extern NSString * const ZNGContactFieldDataTypeSingleSelect;
 @property(nonatomic, strong) NSString* displayName;
 @property(nonatomic, strong) NSString* dataType;
 @property(nonatomic) BOOL isGlobal;
-@property(nonatomic, strong) NSArray* options;// Array of ZNGFieldOption
+@property(nonatomic, strong) NSArray<ZNGFieldOption *> * options;// Array of ZNGFieldOption
 @property(nonatomic, strong) NSString * replacementVariable;    // The value to be put within { } to be magically replaced by the server.
 
 @end

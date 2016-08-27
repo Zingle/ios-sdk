@@ -53,6 +53,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGLogVerbose(@"%@ custom field type set to %@, was %@", [self class], customFieldValue.customField.displayName, _customFieldValue.customField.displayName);
     
     _customFieldValue = customFieldValue;
+    self.textField.placeholder = customFieldValue.customField.displayName;
     
     [self configureInput];
     [self updateDisplay];

@@ -25,5 +25,6 @@
 @property (nonatomic, weak) id <ZNGLabelSelectionDelegate> delegate;
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
+@property (nonatomic, strong) IBOutlet UIBarButtonItem * cancelButton;
 
 @end

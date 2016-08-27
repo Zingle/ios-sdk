@@ -198,13 +198,19 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     if (value == nil) {
         value = [[ZNGContactFieldValue alloc] init];
-        value.customField = field;
         
         NSMutableArray * mutableContactFields = [self.contact.customFieldValues mutableCopy];
         [mutableContactFields addObject:value];
         self.contact.customFieldValues = mutableContactFields;
     }
     
+    // A bit of a code archaeological curiosity:
+    //  This .customField = field line was originally in the value == nil block above, but sometimes the custom field's dataType and
+    //  options value would be nil.  It is not clear where this data was being cleared, but moving setting of the custom field type
+    //  out here blows away any erroneously cleared or missing data in that case.  I'd really rather not think further about why this is
+    //  happening as the last man in the office on a Friday evening :-/
+    value.customField = field;
+
     return value;
 }
 

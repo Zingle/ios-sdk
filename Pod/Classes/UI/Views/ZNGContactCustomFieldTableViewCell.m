@@ -13,7 +13,7 @@
 
 @import JVFloatLabeledTextField;
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelVerbose;
 
 @implementation ZNGContactCustomFieldTableViewCell
 {
@@ -50,7 +50,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) setCustomFieldValue:(ZNGContactFieldValue *)customFieldValue
 {
-    ZNGLogVerbose(@"%@ custom field type set to %@, was %@", [self class], customFieldValue.customField.displayName, _customFieldValue.customField.displayName);
+    ZNGLogVerbose(@"%@ custom field type set to %@ (type %@), was %@", [self class], customFieldValue.customField.displayName, customFieldValue.customField.dataType, _customFieldValue.customField.displayName);
     
     _customFieldValue = customFieldValue;
     self.textField.placeholder = customFieldValue.customField.displayName;

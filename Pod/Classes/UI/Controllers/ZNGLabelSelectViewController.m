@@ -9,6 +9,7 @@
 #import "ZNGLabelSelectViewController.h"
 #import "ZNGLabel.h"
 #import "UIFont+Lato.h"
+#import "UIColor+ZingleSDK.h"
 
 @interface ZNGLabelSelectViewController ()
 
@@ -36,6 +37,8 @@
     searchController.searchResultsUpdater = self;
     searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
+    
+    searchController.searchBar.barTintColor = [UIColor zng_lightBlue];
     
     self.tableView.tableHeaderView = searchController.searchBar;
 }

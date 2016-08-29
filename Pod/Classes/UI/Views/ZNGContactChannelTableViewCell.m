@@ -12,9 +12,16 @@
 
 @implementation ZNGContactChannelTableViewCell
 
+- (void) applyChangesIfFirstResponder
+{
+    if ([self.textField isFirstResponder]) {
+        [self.channel setValueFromTextEntry:self.textField.text];
+    }
+}
+
 - (void) setChannel:(ZNGChannel *)channel
 {
-    _channel = [channel copy];
+    _channel = channel;
     
     self.textField.placeholder = channel.channelType.displayName;
     self.textField.text = channel.formattedValue;

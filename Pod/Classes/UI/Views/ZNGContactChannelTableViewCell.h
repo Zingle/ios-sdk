@@ -6,12 +6,12 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "ZNGContactEditTableViewCell.h"
 
 @class JVFloatLabeledTextField;
 @class ZNGChannel;
 
-@interface ZNGContactChannelTableViewCell : UITableViewCell <UITextFieldDelegate>
+@interface ZNGContactChannelTableViewCell : ZNGContactEditTableViewCell <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
 

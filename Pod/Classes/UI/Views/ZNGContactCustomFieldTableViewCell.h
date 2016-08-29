@@ -6,16 +6,14 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "ZNGContactEditTableViewCell.h"
 @class JVFloatLabeledTextField;
 @class ZNGContactFieldValue;
 
-@interface ZNGContactCustomFieldTableViewCell : UITableViewCell <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@interface ZNGContactCustomFieldTableViewCell : ZNGContactEditTableViewCell <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
 
 @property (nonatomic, strong) ZNGContactFieldValue * customFieldValue;
-
-- (void) applyChangesIfFirstResponder;
 
 @end

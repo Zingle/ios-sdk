@@ -6,12 +6,12 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#import "ZNGContactEditTableViewCell.h"
 
 @class ZNGChannel;
 @class ZNGService;
 
-@interface ZNGContactPhoneNumberTableViewCell : UITableViewCell <UITextFieldDelegate>
+@interface ZNGContactPhoneNumberTableViewCell : ZNGContactEditTableViewCell <UITextFieldDelegate>
 
 /**
  *  If the service property is not set, channels will not be formatted correctly.
@@ -21,7 +21,5 @@
 @property (nonatomic, strong) ZNGChannel * channel;
 
 @property (nonatomic, strong) IBOutlet UITextField * textField;
-
-- (void) applyChangesIfFirstResponder;
 
 @end

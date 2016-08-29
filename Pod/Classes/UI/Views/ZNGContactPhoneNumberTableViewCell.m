@@ -21,7 +21,7 @@
 
 - (void) setChannel:(ZNGChannel *)channel
 {
-    _channel = [channel copy];
+    _channel = channel;
     [self updateTextField];
 }
 
@@ -30,7 +30,23 @@
     self.textField.text = (self.service != nil) ? [self.service displayNameForChannel:self.channel] : self.channel.formattedValue;
 }
 
+- (void) applyChangesIfFirstResponder
+{
+    if ([self.textField isFirstResponder]) {
+        [self.channel setValueFromTextEntry:self.textField.text];
+    }
+}
+
 #pragma mark - Text view delegate
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // Only allow phone number characters
+    NSCharacterSet * phoneNumberCharacters = [NSCharacterSet characterSetWithCharactersInString:@"0123456789-() *#+"];
+    NSCharacterSet * disallowedCharacters = [phoneNumberCharacters invertedSet];
+    NSRange disallowedRange = [string rangeOfCharacterFromSet:disallowedCharacters];
+    return (disallowedRange.location == NSNotFound);
+}
+
 - (void) textFieldDidBeginEditing:(UITextField *)textField
 {
     // We are probably displaying a formatted form, e.g. (703) 555-1212.

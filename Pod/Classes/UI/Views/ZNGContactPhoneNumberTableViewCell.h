@@ -22,4 +22,6 @@
 
 @property (nonatomic, strong) IBOutlet UITextField * textField;
 
+- (void) applyChangesIfFirstResponder;
+
 @end

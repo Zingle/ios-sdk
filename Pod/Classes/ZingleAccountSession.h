@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGConversationServiceToContact;
 @class ZNGAutomationClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
 @class ZNGServiceToContactViewController;
+@class ZNGContactEditViewController;
 
 @interface ZingleAccountSession : ZingleSession
 
@@ -103,6 +104,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) conversationWithContactId:(NSString *)contactId completion:(void (^)(ZNGConversationServiceToContact * _Nullable))completion;
 
 - (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation;
+
+/**
+ *  Returns a modal view controller for creating a new contact.  This view will dismiss itself when appropriate.
+ */
+- (ZNGContactEditViewController *) contactEditViewControllerForNewContact;
 
 /**
  *  Send a message to multiple recipients.  This can be used to send to a single recipient, but it is prefered to use a ZNGConversation object in order to 

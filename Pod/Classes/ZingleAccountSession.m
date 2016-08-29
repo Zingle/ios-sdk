@@ -17,9 +17,9 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGAutomationClient.h"
 #import "ZNGContactClient.h"
-#import "ZNGContactChannelClient.h"
 #import "ZNGLabelClient.h"
 #import "ZNGUserAuthorizationClient.h"
+#import "ZNGContactEditViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -361,6 +361,14 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGServiceToContactViewController * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"conversation"];
     vc.conversation = conversation;
+    return vc;
+}
+
+- (ZNGContactEditViewController *) contactEditViewControllerForNewContact
+{
+    ZNGContactEditViewController * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"editContact"];
+    vc.service = self.service;
+    vc.contactClient = self.contactClient;
     return vc;
 }
 

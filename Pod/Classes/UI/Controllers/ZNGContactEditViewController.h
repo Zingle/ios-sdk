@@ -14,6 +14,12 @@
 @class ZNGContactClient;
 @class ZNGService;
 
+@protocol ZNGContactEditDelegate <NSObject>
+
+- (void) contactWasCreated:(ZNGContact *)contact;
+
+@end
+
 @interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, ZNGLabelSelectionDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
@@ -26,6 +32,8 @@
 @property (nonatomic, strong) ZNGContactClient * contactClient;
 @property (nonatomic, strong) ZNGService * service;
 @property (nonatomic, copy) ZNGContact * contact;
+
+@property (nonatomic, weak) id <ZNGContactEditDelegate> delegate;
 
 - (IBAction)pressedCancel:(id)sender;
 - (IBAction)pressedSave:(id)sender;

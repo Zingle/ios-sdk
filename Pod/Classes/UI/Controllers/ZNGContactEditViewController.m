@@ -78,6 +78,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:17.0] };
     [self.cancelButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
     [self.saveButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
+    
+    [self updateUIForNewContact];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -94,13 +96,32 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 - (void) setContact:(ZNGContact *)contact
 {
     originalContact = contact;
-    
-    // Use Mantle for a lazy deep copy
-    NSDictionary * contactDict = [MTLJSONAdapter JSONDictionaryFromModel:contact error:nil];
-    _contact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactDict error:nil];
+ 
+    if (contact == nil) {
+        ZNGLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
+        _contact = [[ZNGContact alloc] init];
+    } else {
+        // Use Mantle for a lazy deep copy
+        NSDictionary * contactDict = [MTLJSONAdapter JSONDictionaryFromModel:contact error:nil];
+        _contact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactDict error:nil];
+    }
 
+    [self updateUIForNewContact];
+}
+
+- (void) updateUIForNewContact
+{
+    if (self.contact == nil) {
+        ZNGLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
+        _contact = [[ZNGContact alloc] init];
+    }
+    
     [self showOrHideLockedContactBarAnimated:NO];
-    self.navItem.title = [contact fullName];
+    NSString * saveOrCreate = (originalContact != nil) ? @"Save" : @"Create";
+    [self.saveButton setTitle:saveOrCreate];
+    NSString * name = [originalContact fullName];
+    self.navItem.title = ([name length] > 0) ? name : @"Create Contact";
+    
     [self generateDataArrays];
     [self.tableView reloadData];
 }
@@ -190,7 +211,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
  */
 - (NSArray<NSString *> *)omnipresentChannelTypeClasses
 {
-    return @[@"EmailAddress"];
+    return @[@"EmailAddress", @"PhoneNumber"];
 }
 
 - (ZNGContactFieldValue *) contactFieldValueForContactField:(ZNGContactField *)field
@@ -230,10 +251,30 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 }
 
 #pragma mark - IBActions
+- (void) saveAnyEditsInProgress
+{
+    for (UITableViewCell * cell in [self.tableView visibleCells]) {
+        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
+            [(ZNGContactCustomFieldTableViewCell *)cell applyChangesIfFirstResponder];
+        } else if ([cell isKindOfClass:[ZNGContactPhoneNumberTableViewCell class]]) {
+            [(ZNGContactPhoneNumberTableViewCell *)cell applyChangesIfFirstResponder];
+        }
+    }
+}
+
 - (IBAction)pressedCancel:(id)sender
 {
+    [self saveAnyEditsInProgress];
+    
+    BOOL requireConfirmationBeforeCancel = [self contactHasBeenChanged];
+    
+    // If this is a brand new contact with no channels added, we can dismiss immediately
+    if ((originalContact == nil) && ([[self.contact channelsWithValues] count] == 0)) {
+        requireConfirmationBeforeCancel = NO;
+    }
+    
     // We will confirm before discarding information if the contact has been edited.
-    if ([self contactHasBeenChanged]) {
+    if (requireConfirmationBeforeCancel) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Discard changes?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         
         UIAlertAction * discard = [UIAlertAction actionWithTitle:@"Discard Changes" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
@@ -251,14 +292,21 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (IBAction)pressedSave:(id)sender
 {
-    [self.loadingGradient startAnimating];
-    
-    // Save any active edits
-    for (ZNGContactCustomFieldTableViewCell * cell in [self.tableView visibleCells]) {
-        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
-            [cell applyChangesIfFirstResponder];
+    [self saveAnyEditsInProgress];
+
+    // First we will check if they are creating a fresh person and, if so, if they have actually entered a channel
+    if (originalContact == nil) {
+        if ([[self.contact channelsWithValues] count] == 0) {
+            // Uh oh!
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to create contact" message:@"A new contact must have at least one phone number or other communication channel" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+            return;
         }
     }
+    
+    [self.loadingGradient startAnimating];
     
     // If we have no changes, we can just go poof
     if (![self contactHasBeenChanged]) {
@@ -270,6 +318,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self.contactClient updateContactFrom:originalContact to:self.contact success:^(ZNGContact * _Nonnull contact) {
         // We did it
         [self.loadingGradient stopAnimating];
+        [self.delegate contactWasCreated:contact];
+        
+        // If we're in a simulator, we will fake a push notification so our UI gets updated
+#ifdef TARGET_IPHONE_SIMULATOR
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:contact];
+#endif
+        
         [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(ZNGError * _Nonnull error) {
         [self.loadingGradient stopAnimating];

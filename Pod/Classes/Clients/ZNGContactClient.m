@@ -177,7 +177,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     
     // Remove any empty fields and channels
     changedContact.channels = [changedContact channelsWithValues];
-    changedContact.customFieldValues = [changedContact customFieldsWithValues];
+    changedContact.customFieldValues = [changedContact customFieldsWithValuesAsNewValueObjects];
     
     // Find any label changes
     NSMutableOrderedSet<ZNGLabel *> * oldContactLabels = ([oldContact.labels count] > 0) ? [NSMutableOrderedSet orderedSetWithArray:oldContact.labels] : [[NSMutableOrderedSet alloc] init];

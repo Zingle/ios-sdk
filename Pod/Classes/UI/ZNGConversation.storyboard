@@ -163,7 +163,7 @@
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mvs-lL-jd2" customClass="JVFloatLabeledTextField">
                                                     <rect key="frame" x="33" y="8" width="559" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="lGA-Qd-2RU" id="Tfd-Xv-6aK"/>
                                                     </connections>

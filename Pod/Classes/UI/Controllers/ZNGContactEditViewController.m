@@ -290,6 +290,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (IBAction)pressedSave:(id)sender
 {
+    self.saveButton.enabled = NO;
     [self saveAnyEditsInProgress];
 
     // First we will check if they are creating a fresh person and, if so, if they have actually entered a channel
@@ -326,6 +327,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(ZNGError * _Nonnull error) {
         [self.loadingGradient stopAnimating];
+        self.saveButton.enabled = YES;
         ZNGLogError(@"Unable to save contact: %@", error);
         
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to save contact" message:nil preferredStyle:UIAlertControllerStyleAlert];

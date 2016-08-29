@@ -90,6 +90,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) isEqualToContact:(nullable ZNGContact *)other;
 
+- (NSArray<ZNGChannel *> *) channelsWithValues;
+- (NSArray<ZNGContactFieldValue *> *) customFieldsWithValues;
+
 #pragma mark - Mutators
 - (void) star;
 - (void) unstar;

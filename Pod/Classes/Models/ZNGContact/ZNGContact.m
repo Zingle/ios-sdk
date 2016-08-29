@@ -280,6 +280,32 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     }
 }
 
+- (NSArray<ZNGChannel *> *) channelsWithValues
+{
+    NSMutableArray<ZNGChannel *> * populatedChannels = [[NSMutableArray alloc] initWithCapacity:[self.channels count]];
+    
+    for (ZNGChannel * channel in self.channels) {
+        if (([channel.value length] > 0) || ([channel.formattedValue length] > 0)) {
+            [populatedChannels addObject:channel];
+        }
+    }
+    
+    return populatedChannels;
+}
+
+- (NSArray<ZNGContactFieldValue *> *) customFieldsWithValues
+{
+    NSMutableArray<ZNGContactFieldValue *> * values = [[NSMutableArray alloc] initWithCapacity:[self.customFieldValues count]];
+    
+    for (ZNGContactFieldValue * value in self.customFieldValues) {
+        if ([value.value length] > 0) {
+            [values addObject:value];
+        }
+    }
+    
+    return values;
+}
+
 - (BOOL)requiresVisualRefeshSince:(ZNGContact *)old
 {
     BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);
@@ -292,8 +318,8 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 - (BOOL) hasBeenEditedSince:(ZNGContact *)old
 {
-    BOOL sameCustomFields = [self.customFieldValues isEqualToArray:old.customFieldValues];
-    BOOL sameChannels = [self.channels isEqualToArray:old.channels];
+    BOOL sameCustomFields = [[self customFieldsWithValues] isEqualToArray:[old customFieldsWithValues]];
+    BOOL sameChannels = [[self channelsWithValues] isEqualToArray:[old channelsWithValues]];
     BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));
     BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
 

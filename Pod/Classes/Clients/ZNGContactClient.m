@@ -236,11 +236,22 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     NSMutableOrderedSet<ZNGLabel *> * removedLabels = oldContactLabels;
     [removedLabels minusOrderedSet:newContactLabels];
     
+    // Find any channel changes
+    NSArray<ZNGChannel *> * oldChannelsWithValues = [oldContact channelsWithValues];
+    NSMutableOrderedSet<ZNGChannel *> * oldChannels = ([oldChannelsWithValues count] > 0) ? [NSMutableOrderedSet orderedSetWithArray:oldChannelsWithValues] : [[NSMutableOrderedSet alloc] init];
+    NSArray<ZNGChannel *> * newChannelsWithValues = [newContact channelsWithValues];
+    NSMutableOrderedSet<ZNGChannel *> * newChannels = ([newChannelsWithValues count] > 0) ? [NSMutableOrderedSet orderedSetWithArray:newChannelsWithValues] : [[NSMutableOrderedSet alloc] init];
+    NSMutableOrderedSet<ZNGChannel *> * addedChannels = [newChannels mutableCopy];
+    [addedChannels minusOrderedSet:oldChannels];
+    NSMutableOrderedSet<ZNGChannel *> * removedChannels = oldChannels;
+    [removedChannels minusOrderedSet:newChannels];
+    
     void (^contactUpdateSuccessBlock)(ZNGContact *, ZNGStatus *) = ^void(ZNGContact * contact, ZNGStatus * status) {
         ZNGLogDebug(@"Updating contact (but not yet labels if present) succeeded.");
         
-        // If we have no label changes, we are done
-        if (([addedLabels count] == 0) && ([removedLabels count] == 0)) {
+        // If we have no label nor channel changes, we are done
+        NSUInteger labelAndChannelChangeCount = [addedLabels count] + [removedLabels count] + [addedChannels count] + [removedChannels count];
+        if (labelAndChannelChangeCount == 0) {
             // We're done
             if (success != nil) {
                 success(contact);
@@ -249,27 +260,43 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
             return;
         }
         
-        // We have label changes to make
+        // We have label or channel changes to make
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            BOOL labelSuccess = YES;
+            BOOL syncSuccess = YES;
             
             for (ZNGLabel * label in addedLabels) {
-                labelSuccess = [self _synchronouslyAddLabel:label toContact:contact timeout:15.0];
-                if (!labelSuccess) {
+                syncSuccess = [self _synchronouslyAddLabel:label toContact:contact timeout:15.0];
+                if (!syncSuccess) {
                     break;
                 }
             }
             
             for (ZNGLabel * label in removedLabels) {
-                if (!labelSuccess) {
+                if (!syncSuccess) {
                     break;
                 }
                 
-                [self _synchronouslyRemoveLabel:label fromContact:contact timeout:15.0];
+                syncSuccess = [self _synchronouslyRemoveLabel:label fromContact:contact timeout:15.0];
+            }
+            
+            for (ZNGContact * channel in addedChannels) {
+                if (!syncSuccess) {
+                    break;
+                }
+                
+                syncSuccess = [self _synchronouslyAddChannel:channel toContact:contact timeout:15.0];
+            }
+            
+            for (ZNGContact * channel in removedChannels) {
+                if (!syncSuccess) {
+                    break;
+                }
+                
+                syncSuccess = [self _synchronouslyRemoveChannel:channel fromContact:contact timeout:15.0];
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (labelSuccess) {
+                if (syncSuccess) {
                     if (success != nil) {
                         contact.labels = [newContactLabels array];
                         success(contact);
@@ -291,10 +318,6 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     } else {
         // Updating
         NSMutableDictionary<NSString *, id> * parameters = [[NSMutableDictionary alloc] init];
-        
-        if ([changedContact.channels count] > 0) {
-            parameters[@"channels"] = [MTLJSONAdapter JSONArrayFromModels:changedContact.channels error:nil];
-        }
         
         if ([changedContact.customFieldValues count] > 0) {
             parameters[@"custom_field_values"] = [MTLJSONAdapter JSONArrayFromModels:changedContact.customFieldValues error:nil];
@@ -341,6 +364,47 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
         success = YES;
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to remove label %@ from %@: %@", label.displayName, [contact fullName], error);
+        dispatch_semaphore_signal(semaphore);
+        success = NO;
+    }];
+    
+    long result = dispatch_semaphore_wait(semaphore, semaphoreTimeout);
+    return (result == 0) ? success : NO;
+}
+
+- (BOOL) _synchronouslyAddChannel:(ZNGChannel *)channel toContact:(ZNGContact *)contact timeout:(NSTimeInterval)timeout
+{
+    dispatch_time_t semaphoreTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC));
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block BOOL success;
+    
+    ZNGNewChannel * newChannel = [[ZNGNewChannel alloc] initWithChannel:channel];
+    [self saveContactChannel:newChannel withContactId:contact.contactId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
+        ZNGLogVerbose(@"Added channel %@ to %@", channel.value, [contact fullName]);
+        dispatch_semaphore_signal(semaphore);
+        success = YES;
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to add channel %@ to %@: %@", channel.value, [contact fullName], error);
+        dispatch_semaphore_signal(semaphore);
+        success = NO;
+    }];
+    
+    long result = dispatch_semaphore_wait(semaphore, semaphoreTimeout);
+    return (result == 0) ? success : NO;
+}
+
+- (BOOL) _synchronouslyRemoveChannel:(ZNGChannel *)channel fromContact:(ZNGContact *)contact timeout:(NSTimeInterval)timeout
+{
+    dispatch_time_t semaphoreTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(timeout * NSEC_PER_SEC));
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    __block BOOL success;
+    
+    [self deleteContactChannelWithId:channel.channelId withContactId:contact.contactId success:^(ZNGStatus *status) {
+        ZNGLogVerbose(@"Removed channel %@ from %@", channel.value, [contact fullName]);
+        dispatch_semaphore_signal(semaphore);
+        success = YES;
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to remove channel %@ from %@: %@", channel.value, [contact fullName], error);
         dispatch_semaphore_signal(semaphore);
         success = NO;
     }];

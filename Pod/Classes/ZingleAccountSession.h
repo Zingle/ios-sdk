@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGChannelType;
 @class ZNGContact;
 @class ZNGConversationServiceToContact;
-@class ZNGAutomationClient, ZNGContactChannelClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
+@class ZNGAutomationClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient, ZNGTemplateClient;
 @class ZNGServiceToContactViewController;
 
 @interface ZingleAccountSession : ZingleSession
@@ -45,7 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Clients
 @property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
-@property (nonatomic, strong, nonnull) ZNGContactChannelClient * contactChannelClient;
 @property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nonnull) ZNGTemplateClient * templateClient;
 

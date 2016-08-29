@@ -210,7 +210,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     NSString * serviceId = self.service.serviceId;
     
     self.automationClient = [[ZNGAutomationClient alloc] initWithSession:self serviceId:serviceId];
-    self.contactChannelClient = [[ZNGContactChannelClient alloc] initWithSession:self serviceId:serviceId];
     self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
     dispatch_semaphore_signal(contactClientSemaphore);
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];

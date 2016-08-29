@@ -113,6 +113,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) sendMessage:(NSString *)body toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion;
 
+#pragma mark - Contact creating/updating
+- (void) createContact:(ZNGContact *)contact success:(void (^ _Nullable)(ZNGContact * _Nonnull contact))success failure:(void (^ _Nullable)(ZNGError * _Nonnull error))failure;
+- (void) updateContactFrom:(ZNGContact * _Nullable)oldContact to:(ZNGContact *)newContact success:(void (^ _Nullable)(ZNGContact * _Nonnull contact))success failure:(void (^ _Nullable)(ZNGError * _Nonnull error))failure;
+
 @end
 
 NS_ASSUME_NONNULL_END

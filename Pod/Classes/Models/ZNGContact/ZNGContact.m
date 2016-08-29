@@ -13,6 +13,7 @@
 #import "ZNGContactClient.h"
 #import "ZNGLogging.h"
 #import "ZingleSDK.h"
+#import "ZNGNewChannel.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 

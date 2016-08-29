@@ -15,6 +15,7 @@
 @class ZNGLabel;
 @class ZNGContactClient;
 @class ZNGNewContactFieldValue;
+@class ZNGNewChannel;
 
 /**
  *  The notification posted whenever a contact mutates itself.  The object in the NSNotification will be the updated ZNGContact

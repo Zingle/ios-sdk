@@ -10,6 +10,8 @@
 #import "ZNGContact.h"
 #import "ZNGNewContactFieldValue.h"
 
+@class ZNGNewChannel;
+
 @interface ZNGContactClient : ZNGBaseClientService
 
 #pragma mark - GET methods

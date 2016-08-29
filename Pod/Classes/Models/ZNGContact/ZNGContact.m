@@ -23,7 +23,17 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 @implementation ZNGContact
 
-
+- (id) init
+{
+    self = [super init];
+    
+    if (self != nil) {
+        _channels = @[];
+        _customFieldValues = @[];
+    }
+    
+    return self;
+}
 
 
 #pragma mark - Updating for changes

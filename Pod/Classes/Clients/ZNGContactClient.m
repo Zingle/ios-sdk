@@ -11,6 +11,7 @@
 #import "ZNGLogging.h"
 #import "ZNGLabel.h"
 #import "ZNGError.h"
+#import "ZNGNewChannel.h"
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
@@ -39,6 +40,19 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     
     [self getWithResourcePath:path
                 responseClass:[ZNGContact class]
+                      success:success
+                      failure:failure];
+}
+
+- (void)contactChannelWithId:(NSString*)contactChannelId
+               withContactId:(NSString*)contactId
+                     success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
+                     failure:(void (^)(ZNGError* error))failure
+{
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", self.serviceId, contactId, contactChannelId];
+    
+    [self getWithResourcePath:path
+                responseClass:[ZNGChannel class]
                       success:success
                       failure:failure];
 }
@@ -74,6 +88,28 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     [self postWithModel:newContact
                    path:path
           responseClass:[ZNGContact class]
+                success:success
+                failure:failure];
+}
+
+- (void)saveContactChannel:(ZNGNewChannel*)contactChannel
+             withContactId:(NSString*)contactId
+                   success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
+                   failure:(void (^)(ZNGError* error))failure
+{
+    if (contactChannel.channelTypeId == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"Required argument: contactChannel.channelType.channelTypeId"];
+    }
+    
+    if (contactChannel.value == nil) {
+        [NSException raise:NSInvalidArgumentException format:@"Required argument: contactChannel.value"];
+    }
+    
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels", self.serviceId, contactId];
+    
+    [self postWithModel:contactChannel
+                   path:path
+          responseClass:[ZNGChannel class]
                 success:success
                 failure:failure];
 }
@@ -157,6 +193,19 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
                   failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/labels/%@", self.serviceId, contactId, labelId];
+    
+    [self deleteWithPath:path
+                 success:success
+                 failure:failure];
+}
+
+
+- (void)deleteContactChannelWithId:(NSString*)contactChannelId
+                     withContactId:(NSString*)contactId
+                           success:(void (^)(ZNGStatus* status))success
+                           failure:(void (^)(ZNGError* error))failure
+{
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/channels/%@", self.serviceId, contactId, contactChannelId];
     
     [self deleteWithPath:path
                  success:success

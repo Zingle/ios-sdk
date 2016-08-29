@@ -22,6 +22,11 @@
               success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure;
 
+- (void)contactChannelWithId:(NSString*)contactChannelId
+               withContactId:(NSString*)contactId
+                     success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
+                     failure:(void (^)(ZNGError* error))failure;
+
 - (void)findOrCreateContactWithChannelTypeID:(NSString *)channelTypeId
                              andChannelValue:(NSString *)channelValue
                                      success:(void (^) (ZNGContact *contact, ZNGStatus* status))success
@@ -32,6 +37,11 @@
 - (void)saveContact:(ZNGContact*)contact
             success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
+
+- (void)saveContactChannel:(ZNGNewChannel*)contactChannel
+             withContactId:(NSString*)contactId
+                   success:(void (^)(ZNGChannel* contactChannel, ZNGStatus* status))success
+                   failure:(void (^)(ZNGError* error))failure;
 
 - (void)updateContactFieldValue:(ZNGNewContactFieldValue*)contactFieldValue
              withContactFieldId:(NSString*)contactFieldId
@@ -66,6 +76,11 @@
             withContactId:(NSString*)contactId
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure;
+
+- (void)deleteContactChannelWithId:(NSString*)contactChannelId
+                     withContactId:(NSString*)contactId
+                           success:(void (^)(ZNGStatus* status))success
+                           failure:(void (^)(ZNGError* error))failure;
 
 #pragma mark - Contact creating/updating
 - (void) createContact:(ZNGContact *)contact success:(void (^)(ZNGContact * contact))success failure:(void (^)(ZNGError * error))failure;

@@ -253,11 +253,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 #pragma mark - IBActions
 - (void) saveAnyEditsInProgress
 {
-    for (UITableViewCell * cell in [self.tableView visibleCells]) {
-        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
-            [(ZNGContactCustomFieldTableViewCell *)cell applyChangesIfFirstResponder];
-        } else if ([cell isKindOfClass:[ZNGContactPhoneNumberTableViewCell class]]) {
-            [(ZNGContactPhoneNumberTableViewCell *)cell applyChangesIfFirstResponder];
+    for (ZNGContactEditTableViewCell * cell in [self.tableView visibleCells]) {
+        if ([cell isKindOfClass:[ZNGContactEditTableViewCell class]]) {
+            [cell applyChangesIfFirstResponder];
         }
     }
 }

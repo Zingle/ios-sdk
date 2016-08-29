@@ -13,7 +13,7 @@
 
 @import JVFloatLabeledTextField;
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGContactCustomFieldTableViewCell
 {

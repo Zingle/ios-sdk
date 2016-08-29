@@ -24,6 +24,8 @@
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
 #import "Mantle/MTLJSONAdapter.h"
+#import "ZingleAccountSession.h"
+#import "ZNGContactClient.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -249,6 +251,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (IBAction)pressedSave:(id)sender
 {
+    [self.loadingGradient startAnimating];
+    
     // Save any active edits
     for (ZNGContactCustomFieldTableViewCell * cell in [self.tableView visibleCells]) {
         if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
@@ -263,7 +267,19 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         return;
     }
     
-    // TODO: Go save the contact!
+    [self.contactClient updateContactFrom:originalContact to:self.contact success:^(ZNGContact * _Nonnull contact) {
+        // We did it
+        [self.loadingGradient stopAnimating];
+        [self dismissViewControllerAnimated:YES completion:nil];
+    } failure:^(ZNGError * _Nonnull error) {
+        [self.loadingGradient stopAnimating];
+        ZNGLogError(@"Unable to save contact: %@", error);
+        
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to save contact" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+    }];
 }
 
 - (BOOL) contactHasBeenChanged

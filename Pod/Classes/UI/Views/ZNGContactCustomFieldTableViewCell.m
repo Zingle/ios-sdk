@@ -197,6 +197,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
         value = [self booleanSelections][row];
     } else {
         value = [self.customFieldValue.customField.options[row] value];
+        self.customFieldValue.selectedCustomFieldOptionId = [self.customFieldValue.customField.options[row] optionId];
     }
     
     self.customFieldValue.value = value;

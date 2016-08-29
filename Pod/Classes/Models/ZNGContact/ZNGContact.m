@@ -306,6 +306,22 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return values;
 }
 
+- (NSArray<ZNGNewContactFieldValue *> *) customFieldsWithValuesAsNewValueObjects
+{
+    NSArray<ZNGContactFieldValue *> * customFields = [self customFieldsWithValues];
+    NSMutableArray<ZNGNewContactFieldValue *> * values = [[NSMutableArray alloc] initWithCapacity:[customFields count]];
+    
+    for (ZNGContactFieldValue * customField in customFields) {
+        ZNGNewContactFieldValue * newValue = [[ZNGNewContactFieldValue alloc] init];
+        newValue.value = customField.value;
+        newValue.customFieldOptionId = customField.selectedCustomFieldOptionId;
+        newValue.customFieldId = customField.customField.contactFieldId;
+        [values addObject:newValue];
+    }
+    
+    return values;
+}
+
 - (BOOL)requiresVisualRefeshSince:(ZNGContact *)old
 {
     BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);

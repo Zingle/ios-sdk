@@ -14,6 +14,7 @@
 @class ZNGContactFieldValue;
 @class ZNGLabel;
 @class ZNGContactClient;
+@class ZNGNewContactFieldValue;
 
 /**
  *  The notification posted whenever a contact mutates itself.  The object in the NSNotification will be the updated ZNGContact
@@ -92,6 +93,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray<ZNGChannel *> *) channelsWithValues;
 - (NSArray<ZNGContactFieldValue *> *) customFieldsWithValues;
+
+/**
+ *  Converts the custom field values into the stripped down "new value" objects for sending to the server.
+ */
+- (NSArray<ZNGNewContactFieldValue *> *) customFieldsWithValuesAsNewValueObjects;
 
 #pragma mark - Mutators
 - (void) star;

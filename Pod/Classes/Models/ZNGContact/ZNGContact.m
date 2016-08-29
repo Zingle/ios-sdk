@@ -334,6 +334,10 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 - (BOOL) hasBeenEditedSince:(ZNGContact *)old
 {
+    if (old == nil) {
+        return YES;
+    }
+    
     BOOL sameCustomFields = [[self customFieldsWithValues] isEqualToArray:[old customFieldsWithValues]];
     BOOL sameChannels = [[self channelsWithValues] isEqualToArray:[old channelsWithValues]];
     BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));

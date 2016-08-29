@@ -30,6 +30,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     if (self != nil) {
         _channels = @[];
         _customFieldValues = @[];
+        _labels = @[];
     }
     
     return self;

@@ -67,4 +67,8 @@
                   success:(void (^)(ZNGStatus* status))success
                   failure:(void (^)(ZNGError* error))failure;
 
+#pragma mark - Contact creating/updating
+- (void) createContact:(ZNGContact *)contact success:(void (^)(ZNGContact * contact))success failure:(void (^)(ZNGError * error))failure;
+- (void) updateContactFrom:(ZNGContact *)oldContact to:(ZNGContact *)newContact success:(void (^)(ZNGContact * contact))success failure:(void (^)(ZNGError * error))failure;
+
 @end

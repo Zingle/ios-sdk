@@ -16,4 +16,6 @@
 
 @property (nonatomic, strong) ZNGContactFieldValue * customFieldValue;
 
+- (void) applyChangesIfFirstResponder;
+
 @end

@@ -249,6 +249,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (IBAction)pressedSave:(id)sender
 {
+    // Save any active edits
+    for (ZNGContactCustomFieldTableViewCell * cell in [self.tableView visibleCells]) {
+        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
+            [cell applyChangesIfFirstResponder];
+        }
+    }
+    
     // If we have no changes, we can just go poof
     if (![self contactHasBeenChanged]) {
         ZNGLogInfo(@"Contact editing screen is being dismissed via \"Save,\" but no changes were made.");

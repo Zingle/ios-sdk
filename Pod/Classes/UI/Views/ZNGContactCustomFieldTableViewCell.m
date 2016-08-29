@@ -249,4 +249,11 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     self.customFieldValue.value = textField.text;
 }
 
+- (void) applyChangesIfFirstResponder
+{
+    if (self.textField.isFirstResponder) {
+        self.customFieldValue.value = self.textField.text;
+    }
+}
+
 @end

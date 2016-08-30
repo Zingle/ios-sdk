@@ -33,6 +33,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         _myUserId = [theUserId copy];
         _channel = aChannel;
         _contactClient = contactClient;
+        
+        if (_channel == nil) {
+            // Can we auto select a channel?
+            _channel = [aContact defaultChannel];
+        }
 
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(events)) options:NSKeyValueObservingOptionNew context:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];

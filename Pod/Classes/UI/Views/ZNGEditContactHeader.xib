@@ -13,17 +13,18 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZNGEditContactHeader">
-            <rect key="frame" x="0.0" y="0.0" width="386" height="47"/>
+            <rect key="frame" x="0.0" y="0.0" width="386" height="42"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gO-wE-4ph">
-                    <rect key="frame" x="0.0" y="0.0" width="386" height="47"/>
+                    <rect key="frame" x="0.0" y="0.0" width="386" height="42"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V0b-Hz-vQ8">
-                            <rect key="frame" x="6" y="14" width="24" height="24"/>
+                            <rect key="frame" x="12" y="18" width="16" height="16"/>
+                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="24" id="lS9-ug-hZT"/>
-                                <constraint firstAttribute="height" constant="24" id="t0V-Ll-0yt"/>
+                                <constraint firstAttribute="width" constant="16" id="lS9-ug-hZT"/>
+                                <constraint firstAttribute="height" constant="16" id="t0V-Ll-0yt"/>
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7C-dj-5nR" userLabel="Divider">
@@ -34,7 +35,7 @@
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1f-GL-88w">
-                            <rect key="frame" x="37" y="18" width="56" height="17"/>
+                            <rect key="frame" x="35" y="18" width="56" height="17"/>
                             <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -42,11 +43,11 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="6" id="04c-cb-1SN"/>
+                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="12" id="04c-cb-1SN"/>
                         <constraint firstItem="k1f-GL-88w" firstAttribute="centerY" secondItem="V0b-Hz-vQ8" secondAttribute="centerY" id="9f0-l9-f2l"/>
                         <constraint firstAttribute="bottom" secondItem="V0b-Hz-vQ8" secondAttribute="bottom" constant="14" id="A7x-2I-K9S"/>
                         <constraint firstItem="s7C-dj-5nR" firstAttribute="top" secondItem="3gO-wE-4ph" secondAttribute="top" constant="6" id="Q6z-NJ-ZOl"/>
-                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="top" secondItem="s7C-dj-5nR" secondAttribute="bottom" constant="7" id="Tzi-mx-r0F"/>
+                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="top" secondItem="s7C-dj-5nR" secondAttribute="bottom" constant="11" id="Tzi-mx-r0F"/>
                         <constraint firstItem="s7C-dj-5nR" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="37" id="bXe-HG-NoF"/>
                         <constraint firstAttribute="trailing" secondItem="s7C-dj-5nR" secondAttribute="trailing" constant="10" id="fIu-3m-wRc"/>
                         <constraint firstItem="k1f-GL-88w" firstAttribute="leading" secondItem="V0b-Hz-vQ8" secondAttribute="trailing" constant="7" id="oA1-DN-UT4"/>
@@ -69,10 +70,11 @@
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="dividerLine" destination="s7C-dj-5nR" id="MER-sP-LXv"/>
                 <outlet property="sectionImage" destination="V0b-Hz-vQ8" id="izO-r2-9Fa"/>
                 <outlet property="sectionLabel" destination="k1f-GL-88w" id="jnY-6N-eYt"/>
             </connections>
-            <point key="canvasLocation" x="327" y="216.5"/>
+            <point key="canvasLocation" x="327" y="214"/>
         </view>
     </objects>
 </document>

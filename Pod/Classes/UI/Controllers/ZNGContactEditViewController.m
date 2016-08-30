@@ -439,29 +439,36 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 47.0;
+    return 42.0;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    header.dividerLine.hidden = (section == 0); // Hide the divider for the topmost header
     
     switch (section) {
         case ContactSectionDefaultCustomFields:
             header.sectionLabel.text = @"PROFILE";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconProfile" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionChannels:
             header.sectionLabel.text = @"CHANNELS";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconChannels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionLabels:
             header.sectionLabel.text = @"LABELS";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionOptionalCustomFields:
             header.sectionLabel.text = @"CUSTOM FIELDS";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconCustomFields" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         default:
             ZNGLogError(@"Unexpected section %lld encountered in contact editing screen.", (long long)section);
             header.sectionLabel.text = @"OTHER";
+            header.sectionImage.image = nil;
             break;
     }
     

@@ -12,6 +12,5 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView * sectionImage;
 @property (nonatomic, strong) IBOutlet UILabel * sectionLabel;
-@property (nonatomic, strong) IBOutlet UIView * dividerLine;
 
 @end

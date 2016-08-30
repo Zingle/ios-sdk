@@ -38,6 +38,7 @@ enum  {
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
+static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 @interface ZNGContactEditViewController ()
@@ -69,7 +70,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
+    UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
+    [self.tableView registerNib:footerNib forHeaderFooterViewReuseIdentifier:FooterReuseIdentifier];
     
     self.tableView.estimatedRowHeight = 44.0;
     
@@ -439,14 +442,18 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    return 42.0;
+    return 30.0;
+}
+
+- (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
+{
+    return 12.0;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
-    header.dividerLine.hidden = (section == 0); // Hide the divider for the topmost header
     
     switch (section) {
         case ContactSectionDefaultCustomFields:
@@ -473,6 +480,11 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     }
     
     return header;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
+{
+    return [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
 }
 
 #pragma mark - Table view data source

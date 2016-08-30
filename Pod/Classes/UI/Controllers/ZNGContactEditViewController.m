@@ -437,15 +437,36 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 }
 
 #pragma mark - Table view delegate
-// TODO: Implement this
-//- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-//{
-//    ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
-//    
-//    // TODO: Do stuff
-//    
-//    return header;
-//}
+- (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 47.0;
+}
+
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+{
+    ZNGEditContactHeader * header = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderReuseIdentifier];
+    
+    switch (section) {
+        case ContactSectionDefaultCustomFields:
+            header.sectionLabel.text = @"PROFILE";
+            break;
+        case ContactSectionChannels:
+            header.sectionLabel.text = @"CHANNELS";
+            break;
+        case ContactSectionLabels:
+            header.sectionLabel.text = @"LABELS";
+            break;
+        case ContactSectionOptionalCustomFields:
+            header.sectionLabel.text = @"CUSTOM FIELDS";
+            break;
+        default:
+            ZNGLogError(@"Unexpected section %lld encountered in contact editing screen.", (long long)section);
+            header.sectionLabel.text = @"OTHER";
+            break;
+    }
+    
+    return header;
+}
 
 #pragma mark - Table view data source
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView

@@ -10,7 +10,7 @@
 
 @interface ZNGEditContactHeader : UITableViewHeaderFooterView
 
-@property (nonatomic, strong) IBOutlet UIImageView * imageView;
-@property (nonatomic, strong) IBOutlet UILabel * textLabel;
+@property (nonatomic, strong) IBOutlet UIImageView * sectionImage;
+@property (nonatomic, strong) IBOutlet UILabel * sectionLabel;
 
 @end

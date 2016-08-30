@@ -13,52 +13,66 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZNGEditContactHeader">
-            <rect key="frame" x="0.0" y="0.0" width="386" height="64"/>
+            <rect key="frame" x="0.0" y="0.0" width="386" height="47"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gO-wE-4ph">
-                    <rect key="frame" x="0.0" y="0.0" width="386" height="64"/>
+                    <rect key="frame" x="0.0" y="0.0" width="386" height="47"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="V0b-Hz-vQ8">
-                            <rect key="frame" x="8" y="10" width="44" height="44"/>
+                            <rect key="frame" x="6" y="14" width="24" height="24"/>
                             <constraints>
-                                <constraint firstAttribute="width" constant="44" placeholder="YES" id="TLI-wF-ISF"/>
-                                <constraint firstAttribute="height" constant="44" placeholder="YES" id="ei9-Hy-sEE"/>
+                                <constraint firstAttribute="width" constant="24" id="lS9-ug-hZT"/>
+                                <constraint firstAttribute="height" constant="24" id="t0V-Ll-0yt"/>
                             </constraints>
                         </imageView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s7C-dj-5nR" userLabel="Divider">
+                            <rect key="frame" x="37" y="6" width="339" height="1"/>
+                            <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="1" id="WsI-FV-JdC"/>
+                            </constraints>
+                        </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="HEADER" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="k1f-GL-88w">
-                            <rect key="frame" x="60" y="23" width="318" height="18"/>
-                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                            <rect key="frame" x="37" y="18" width="56" height="17"/>
+                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <constraints>
-                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="8" id="A1E-ph-nqE"/>
-                        <constraint firstAttribute="trailing" secondItem="k1f-GL-88w" secondAttribute="trailing" constant="8" id="KBx-xC-ZVI"/>
-                        <constraint firstItem="k1f-GL-88w" firstAttribute="centerY" secondItem="3gO-wE-4ph" secondAttribute="centerY" id="SYN-Sl-VqF"/>
-                        <constraint firstItem="k1f-GL-88w" firstAttribute="leading" secondItem="V0b-Hz-vQ8" secondAttribute="trailing" constant="8" id="VwF-77-vaP"/>
-                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="centerY" secondItem="3gO-wE-4ph" secondAttribute="centerY" id="z5l-82-xDx"/>
+                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="6" id="04c-cb-1SN"/>
+                        <constraint firstItem="k1f-GL-88w" firstAttribute="centerY" secondItem="V0b-Hz-vQ8" secondAttribute="centerY" id="9f0-l9-f2l"/>
+                        <constraint firstAttribute="bottom" secondItem="V0b-Hz-vQ8" secondAttribute="bottom" constant="14" id="A7x-2I-K9S"/>
+                        <constraint firstItem="s7C-dj-5nR" firstAttribute="top" secondItem="3gO-wE-4ph" secondAttribute="top" constant="6" id="Q6z-NJ-ZOl"/>
+                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="top" secondItem="s7C-dj-5nR" secondAttribute="bottom" constant="7" id="Tzi-mx-r0F"/>
+                        <constraint firstItem="s7C-dj-5nR" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="37" id="bXe-HG-NoF"/>
+                        <constraint firstAttribute="trailing" secondItem="s7C-dj-5nR" secondAttribute="trailing" constant="10" id="fIu-3m-wRc"/>
+                        <constraint firstItem="k1f-GL-88w" firstAttribute="leading" secondItem="V0b-Hz-vQ8" secondAttribute="trailing" constant="7" id="oA1-DN-UT4"/>
                     </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="A7x-2I-K9S"/>
+                        </mask>
+                    </variation>
                 </view>
             </subviews>
-            <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="trailing" secondItem="3gO-wE-4ph" secondAttribute="trailing" id="8QS-mM-kst"/>
-                <constraint firstItem="3gO-wE-4ph" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="GdW-e6-ZP4"/>
-                <constraint firstAttribute="bottom" secondItem="3gO-wE-4ph" secondAttribute="bottom" id="JJS-PY-asb"/>
-                <constraint firstItem="3gO-wE-4ph" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="ecK-TE-JP5"/>
+                <constraint firstItem="3gO-wE-4ph" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="5hw-nm-s8G"/>
+                <constraint firstAttribute="bottom" secondItem="3gO-wE-4ph" secondAttribute="bottom" id="B0e-qq-Fpj"/>
+                <constraint firstItem="3gO-wE-4ph" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Bh5-DC-W2x"/>
+                <constraint firstAttribute="trailing" secondItem="3gO-wE-4ph" secondAttribute="trailing" id="fkq-ly-q2S"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
-                <outlet property="imageView" destination="V0b-Hz-vQ8" id="6jh-qf-vXm"/>
-                <outlet property="textLabel" destination="k1f-GL-88w" id="o78-X8-84e"/>
+                <outlet property="sectionImage" destination="V0b-Hz-vQ8" id="izO-r2-9Fa"/>
+                <outlet property="sectionLabel" destination="k1f-GL-88w" id="jnY-6N-eYt"/>
             </connections>
-            <point key="canvasLocation" x="327" y="240"/>
+            <point key="canvasLocation" x="327" y="216.5"/>
         </view>
     </objects>
 </document>

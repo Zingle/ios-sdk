@@ -9,9 +9,28 @@
 #import "ZNGContactPhoneNumberTableViewCell.h"
 #import "ZNGChannel.h"
 #import "ZNGService.h"
+#import "UIColor+ZingleSDK.h"
 @import JVFloatLabeledTextField;
 
 @implementation ZNGContactPhoneNumberTableViewCell
+{
+    UIColor * defaultTextFieldBackgroundColor;
+    UIImageView * lockedRightView;
+}
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    defaultTextFieldBackgroundColor = self.textField.backgroundColor;
+    
+    self.textField.rightViewMode = UITextFieldViewModeAlways;
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UIImage * lockImage = [UIImage imageNamed:@"lock" inBundle:bundle compatibleWithTraitCollection:nil];
+    lockedRightView = [[UIImageView alloc] initWithImage:lockImage];
+    lockedRightView.contentMode = UIViewContentModeCenter;
+    lockedRightView.tintColor = [UIColor lightGrayColor];
+}
 
 - (void) setService:(ZNGService *)service
 {
@@ -25,8 +44,17 @@
     [self updateTextField];
 }
 
+- (void) setEditingLocked:(BOOL)editingLocked
+{
+    [super setEditingLocked:editingLocked];
+    [self updateTextField];
+}
+
 - (void) updateTextField
 {
+    self.textField.enabled = !self.editingLocked;
+    self.textField.rightView = (self.editingLocked) ? lockedRightView : nil;
+    self.textField.backgroundColor = (self.editingLocked) ? [UIColor zng_light_gray] : defaultTextFieldBackgroundColor;
     self.textField.text = (self.service != nil) ? [self.service displayNameForChannel:self.channel] : self.channel.formattedValue;
 }
 

@@ -10,6 +10,7 @@
 #import "ZNGContactFieldValue.h"
 #import "ZNGLogging.h"
 #import "ZNGFieldOption.h"
+#import "UIColor+ZingleSDK.h"
 
 @import JVFloatLabeledTextField;
 
@@ -23,7 +24,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSDateFormatter * dateFormatter;
     NSDateFormatter * _timeFormatter;
     
+    UIColor * defaultTextFieldBackgroundColor;
+    
     BOOL numericOnly;
+}
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    defaultTextFieldBackgroundColor = self.textField.backgroundColor;
 }
 
 - (void) prepareForReuse
@@ -48,6 +58,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return [dateFormatter stringFromDate:date];
 }
 
+- (void) setEditingLocked:(BOOL)editingLocked
+{
+    [super setEditingLocked:editingLocked];
+    [self updateDisplay];
+}
+
 - (void) setCustomFieldValue:(ZNGContactFieldValue *)customFieldValue
 {
     ZNGLogVerbose(@"%@ custom field type set to %@ (type %@), was %@", [self class], customFieldValue.customField.displayName, customFieldValue.customField.dataType, _customFieldValue.customField.displayName);
@@ -60,6 +76,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) updateDisplay
 {
+    self.textField.enabled = !self.editingLocked;
+    self.textField.backgroundColor = (self.editingLocked) ? [UIColor zng_light_gray] : defaultTextFieldBackgroundColor;
     self.textField.placeholder = self.customFieldValue.customField.displayName;
     
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {

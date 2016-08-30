@@ -16,7 +16,7 @@
     CGFloat halfHeight = self.bounds.size.height / 2.0;
     CGFloat quarterHeight = halfHeight / 2.0;
 
-    CGPoint rightViewCenter = CGPointMake(self.bounds.size.width - halfHeight, halfHeight);
+    CGPoint rightViewCenter = CGPointMake(self.bounds.size.width - quarterHeight, halfHeight);
     
     return CGRectMake(rightViewCenter.x - quarterHeight, rightViewCenter.y - quarterHeight, halfHeight, halfHeight);
 }

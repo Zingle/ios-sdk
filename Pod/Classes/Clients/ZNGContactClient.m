@@ -248,6 +248,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     
     void (^contactUpdateSuccessBlock)(ZNGContact *, ZNGStatus *) = ^void(ZNGContact * contact, ZNGStatus * status) {
         ZNGLogDebug(@"Updating contact (but not yet labels if present) succeeded.");
+        contact.contactClient = self;
         
         // If we have no label nor channel changes, we are done
         NSUInteger labelAndChannelChangeCount = [addedLabels count] + [removedLabels count] + [addedChannels count] + [removedChannels count];

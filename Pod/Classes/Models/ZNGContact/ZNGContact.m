@@ -351,9 +351,21 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     }
     
     BOOL sameCustomFields = [[self customFieldsWithValues] isEqualToArray:[old customFieldsWithValues]];
-    BOOL sameChannels = [[self channelsWithValues] isEqualToArray:[old channelsWithValues]];
+    __block BOOL sameChannels = [[self channelsWithValues] isEqualToArray:[old channelsWithValues]];
     BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));
     BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
+    
+    if (sameChannels) {
+        // We have the same channel IDs, but some of the channels may be changed
+        [[self channelsWithValues] enumerateObjectsUsingBlock:^(ZNGChannel * _Nonnull channel, NSUInteger idx, BOOL * _Nonnull stop) {
+            NSUInteger oldChannelIndex = [old.channels indexOfObject:channel];
+            
+            if ([channel changedSince:old.channels[oldChannelIndex]]) {
+                sameChannels = NO;
+                *stop = YES;
+            }
+        }];
+    }
 
     return (!sameCustomFields || !sameChannels || !sameStarConfirmed || !sameLabels);
 }

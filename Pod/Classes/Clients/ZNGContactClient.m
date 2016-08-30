@@ -260,8 +260,8 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     NSMutableOrderedSet<ZNGChannel *> * removedChannels = [oldChannels mutableCopy];
     [removedChannels minusOrderedSet:newChannels];
     
-    NSMutableArray<ZNGChannel *> * changedValueChannels = [[NSMutableArray alloc] initWithCapacity:channelsInBoth];
-    NSMutableArray<ZNGChannel *> * changedOtherwiseChannels = [[NSMutableArray alloc] initWithCapacity:channelsInBoth];
+    NSMutableArray<ZNGChannel *> * changedValueChannels = [[NSMutableArray alloc] initWithCapacity:[channelsInBoth count]];
+    NSMutableArray<ZNGChannel *> * changedOtherwiseChannels = [[NSMutableArray alloc] initWithCapacity:[channelsInBoth count]];
     
     for (ZNGChannel * channel in channelsInBoth) {
         NSUInteger oldChannelIndex = [oldChannels indexOfObject:channel];

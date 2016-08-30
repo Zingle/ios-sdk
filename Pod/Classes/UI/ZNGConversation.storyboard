@@ -460,7 +460,7 @@
         <!--Navigation Controller-->
         <scene sceneID="hmO-50-cAh">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dwi-fK-mN6" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="placeholderNavController" automaticallyAdjustsScrollViewInsets="NO" id="Dwi-fK-mN6" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="zXt-GC-vtB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -478,7 +478,7 @@
     </scenes>
     <resources>
         <image name="chevronRight" width="20" height="20"/>
-        <image name="minusCircle" width="20" height="20"/>
-        <image name="plusCircle" width="20" height="20"/>
+        <image name="minusCircle" width="22" height="22"/>
+        <image name="plusCircle" width="22" height="22"/>
     </resources>
 </document>

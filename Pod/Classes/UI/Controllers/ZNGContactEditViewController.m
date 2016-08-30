@@ -333,7 +333,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         self.saveButton.enabled = YES;
         ZNGLogError(@"Unable to save contact: %@", error);
         
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to save contact" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to save contact" message:error.errorDescription preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:ok];
         [self presentViewController:alert animated:YES completion:nil];

@@ -61,6 +61,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         _sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
         [_sessionManager.requestSerializer setValue:ZNGAgentValue forHTTPHeaderField:ZNGAgentHeaderField];
+        [_sessionManager.requestSerializer setValue:[[NSBundle mainBundle] bundleIdentifier] forHTTPHeaderField:ZNGClientIDField];
         
         NSString * bundleVersion = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
         [_sessionManager.requestSerializer setValue:bundleVersion forHTTPHeaderField:ZNGClientVersionField];

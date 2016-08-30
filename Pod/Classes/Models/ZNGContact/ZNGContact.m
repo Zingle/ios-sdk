@@ -371,7 +371,10 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return @[
               @"Title",
               @"First Name",
-              @"Last Name"
+              @"Last Name",
+              @"Room",
+              @"Checkin Date",
+              @"Checkout Date"
               ];
 }
 

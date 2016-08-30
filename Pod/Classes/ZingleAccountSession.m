@@ -138,13 +138,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return;
     }
     
-    [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
-    [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
-    _available = (service != nil);
     _service = self.availableServices[serviceIndex];
-    [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
-    [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
-    
+ 
     if (_service != nil) {
         [self updateStateForNewAccountOrService];
     }
@@ -203,6 +198,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     [self initializeAllClients];
     [self retrieveUserObject];
+    self.available = YES;
 }
 
 - (void) initializeAllClients

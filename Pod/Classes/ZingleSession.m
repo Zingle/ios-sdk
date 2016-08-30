@@ -20,6 +20,11 @@ NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
 
 NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
 
+static NSString * const ZNGAgentHeaderField = @"Zingle_Agent";
+static NSString * const ZNGAgentValue = @"iOS_SDK";
+static NSString * const ZNGClientIDField = @"x-zingle-client-id";
+static NSString * const ZNGClientVersionField = @"x-zingle-client-version";
+
 static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZingleSession
@@ -55,7 +60,10 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         _sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
         _sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
-        [_sessionManager.requestSerializer setValue:@"iOS_SDK" forHTTPHeaderField:@"Zingle_Agent"];
+        [_sessionManager.requestSerializer setValue:ZNGAgentValue forHTTPHeaderField:ZNGAgentHeaderField];
+        
+        NSString * bundleVersion = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+        [_sessionManager.requestSerializer setValue:bundleVersion forHTTPHeaderField:ZNGClientVersionField];
         
         self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
         self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];

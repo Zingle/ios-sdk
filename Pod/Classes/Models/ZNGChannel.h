@@ -30,4 +30,15 @@
  */
 - (void) setValueFromTextEntry:(NSString *)newValue;
 
+/**
+ *  Returns YES if this channel has had its value or displayName changed since the older parameter.
+ */
+- (BOOL) changedSince:(ZNGChannel *)old;
+
+/**
+ *  If this is a phone number channel, this will return a string containing only numbers with a leading 1 removed.
+ */
+- (NSString *) valueForComparison;
+
+
 @end

@@ -34,6 +34,30 @@
     return ([self.channelType.typeClass isEqualToString:@"PhoneNumber"]);
 }
 
+- (NSString *) valueForComparison
+{
+    if ([self isPhoneNumber]) {
+        NSCharacterSet * nonNumbers = [[NSCharacterSet characterSetWithCharactersInString:@"0123456789"] invertedSet];
+        NSString * onlyNumbers = [[self.value componentsSeparatedByCharactersInSet:nonNumbers] componentsJoinedByString:@""];
+        
+        if ([onlyNumbers characterAtIndex:0] == '1') {
+            return [onlyNumbers substringFromIndex:1];
+        }
+        
+        return onlyNumbers;
+    }
+    
+    return self.value;
+}
+
+- (BOOL) changedSince:(ZNGChannel *)old
+{
+    BOOL valueChanged = ![[self valueForComparison] isEqualToString:[old valueForComparison]];
+    BOOL typeChanged = ![self.displayName isEqualToString:old.displayName];
+    
+    return (valueChanged || typeChanged);
+}
+
 - (BOOL) isEqual:(ZNGChannel *)other
 {
     if (![other isKindOfClass:[ZNGChannel class]]) {

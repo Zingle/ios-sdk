@@ -29,7 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString* contactId;
 @property(nonatomic) BOOL isConfirmed;
 @property(nonatomic) BOOL isStarred;
-@property(nonatomic) BOOL lockedBySource;
+@property(nonatomic, copy, nullable) NSString * lockedBySource;
 @property(nonatomic, strong, nullable) ZNGMessage* lastMessage;
 @property(nonatomic, strong, nullable) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel
 @property(nonatomic, strong, nullable) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue.  Why do these two classes both exist?
@@ -99,6 +99,18 @@ NS_ASSUME_NONNULL_BEGIN
  *  Converts the custom field values into the stripped down "new value" objects for sending to the server.
  */
 - (NSArray<ZNGNewContactFieldValue *> *) customFieldsWithValuesAsNewValueObjects;
+
+/**
+ *  Returns YES if the field is uneditable either because it is locked itself (functionality not existing atm) or if the
+ *   contact is locked by source and this custom field is locked by that state.
+ */
+- (BOOL) editingCustomFieldIsLocked:(ZNGContactFieldValue *)customField;
+
+/**
+ *  Returns YES if the user should not be able to edit the provided channel.  This generally means that the contact is locked by source and
+ *   the channel type is phone number or email address.
+ */
+- (BOOL) editingChannelIsLocked:(ZNGChannel *)channel;
 
 #pragma mark - Mutators
 - (void) star;

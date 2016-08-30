@@ -110,15 +110,6 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return ([self.contactId isEqualToString:other.contactId]);
 }
 
-- (void) setNilValueForKey:(NSString *)key
-{
-    if ([key isEqualToString:NSStringFromSelector(@selector(lockedBySource))]) {
-        self.lockedBySource = NO;
-    } else {
-        [super setNilValueForKey:key];
-    }
-}
-
 + (NSValueTransformer*)lastMessageJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
@@ -373,6 +364,35 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old
 {
     return (![old.lastMessage isEqual:self.lastMessage]);
+}
+
+- (NSArray<NSString *> *) _customFieldDisplayNamesLockedWhenContactLockedBySource
+{
+    return @[
+              @"Title",
+              @"First Name",
+              @"Last Name"
+              ];
+}
+
+- (BOOL) editingCustomFieldIsLocked:(ZNGContactFieldValue *)customField
+{
+    if ([self.lockedBySource length] > 0) {
+        NSArray<NSString *> * lockedDisplayNames = [self _customFieldDisplayNamesLockedWhenContactLockedBySource];
+        return [lockedDisplayNames containsObject:customField.customField.displayName];
+    }
+    
+    return NO;
+}
+
+- (BOOL) editingChannelIsLocked:(ZNGChannel *)channel
+{
+    // If the contact is locked by source, the user cannot edit the email nor phone number channels
+    if ([self.lockedBySource length] > 0) {
+        return ([channel isPhoneNumber] || [channel isEmail]);
+    }
+    
+    return NO;
 }
 
 #pragma mark - Mutators

@@ -31,7 +31,12 @@
 
 - (BOOL) isPhoneNumber
 {
-    return ([self.channelType.typeClass isEqualToString:@"PhoneNumber"]);
+    return ([self.channelType isPhoneNumberType]);
+}
+
+- (BOOL) isEmail
+{
+    return ([self.channelType isEmailType]);
 }
 
 - (NSString *) valueForComparison

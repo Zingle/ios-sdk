@@ -535,7 +535,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             NSArray<ZNGContactFieldValue *> * customFields = (indexPath.section == ContactSectionDefaultCustomFields) ? defaultCustomFields : optionalCustomFields;
             
             ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
-            cell.customFieldValue = customFields[indexPath.row];
+            ZNGContactFieldValue * customFieldValue = customFields[indexPath.row];
+            cell.customFieldValue = customFieldValue;
+            cell.editingLocked = [self.contact editingCustomFieldIsLocked:customFieldValue];
             return cell;
         }
             
@@ -564,15 +566,19 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
                 channel = phoneNumberChannels[indexPath.row - [nonPhoneNumberChannels count]];
             }
             
+            BOOL locked = [self.contact editingChannelIsLocked:channel];
+            
             if ([channel isPhoneNumber]) {
                 ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];
                 cell.channel = channel;
+                cell.editingLocked = locked;
                 cell.delegate = self;
                 return cell;
             }
             
             ZNGContactChannelTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"channel" forIndexPath:indexPath];
             cell.channel = channel;
+            cell.editingLocked = locked;
             return cell;
         }
     }

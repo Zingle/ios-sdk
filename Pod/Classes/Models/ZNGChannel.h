@@ -26,6 +26,11 @@
 - (BOOL) isPhoneNumber;
 
 /**
+ *  Returns YES if this channel is of email type
+ */
+- (BOOL) isEmail;
+
+/**
  *  Sets the value, clearing formatted value as appropriate.
  */
 - (void) setValueFromTextEntry:(NSString *)newValue;

@@ -15,4 +15,6 @@
  */
 - (void) applyChangesIfFirstResponder;
 
+@property (nonatomic) BOOL editingLocked;
+
 @end

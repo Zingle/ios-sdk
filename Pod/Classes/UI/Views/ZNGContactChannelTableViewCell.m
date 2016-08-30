@@ -8,9 +8,37 @@
 
 #import "ZNGContactChannelTableViewCell.h"
 #import "ZNGChannel.h"
+#import "UIColor+ZingleSDK.h"
 @import JVFloatLabeledTextField;
 
 @implementation ZNGContactChannelTableViewCell
+{
+    UIColor * defaultBackgroundColor;
+    UIColor * lockedBackgroundColor;
+    UIView * lockedRightView;
+}
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UIImage * lockedImage = [UIImage imageNamed:@"lock" inBundle:bundle compatibleWithTraitCollection:nil];
+    lockedRightView = [[UIImageView alloc] initWithImage:lockedImage];
+    lockedRightView.contentMode = UIViewContentModeCenter;
+    lockedRightView.tintColor = [UIColor lightGrayColor];
+    
+    defaultBackgroundColor = self.textField.backgroundColor;
+    lockedBackgroundColor = [UIColor zng_light_gray];
+    
+    self.textField.rightViewMode = UITextFieldViewModeAlways;
+}
+
+- (void) setEditingLocked:(BOOL)editingLocked
+{
+    [super setEditingLocked:editingLocked];
+    [self updateUI];
+}
 
 - (void) applyChangesIfFirstResponder
 {
@@ -22,13 +50,23 @@
 - (void) setChannel:(ZNGChannel *)channel
 {
     _channel = channel;
+    [self updateUI];
+}
+
+- (void) updateUI
+{
+    UIView * rightView = (self.editingLocked) ? lockedRightView : nil;
+    UIColor * backgroundColor = (self.editingLocked) ? lockedBackgroundColor : defaultBackgroundColor;
     
-    self.textField.placeholder = channel.channelType.displayName;
-    self.textField.text = channel.formattedValue;
+    self.textField.placeholder = self.channel.channelType.displayName;
+    self.textField.text = self.channel.formattedValue;
+    self.textField.backgroundColor = backgroundColor;
+    self.textField.rightView = rightView;
+    self.textField.enabled = !self.editingLocked;
     
-    if ([channel.channelType isPhoneNumberType]) {
+    if ([self.channel.channelType isPhoneNumberType]) {
         self.textField.keyboardType = UIKeyboardTypeNumberPad;
-    } else if ([channel.channelType isEmailType]) {
+    } else if ([self.channel.channelType isEmailType]) {
         self.textField.keyboardType = UIKeyboardTypeEmailAddress;
     } else {
         self.textField.keyboardType = UIKeyboardTypeDefault;

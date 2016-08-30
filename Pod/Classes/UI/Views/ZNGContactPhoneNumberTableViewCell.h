@@ -10,6 +10,16 @@
 
 @class ZNGChannel;
 @class ZNGService;
+@class ZNGContactPhoneNumberTableViewCell;
+
+@protocol ZNGContactPhoneNumberTableCellDelegate <NSObject>
+
+@optional
+- (void) userClickedDeleteOnPhoneNumberTableCell:(ZNGContactPhoneNumberTableViewCell *)cell;
+- (void) userClickedPhoneNumberTypeButtonOnCell:(ZNGContactPhoneNumberTableViewCell *)cell;
+
+@end
+
 
 @interface ZNGContactPhoneNumberTableViewCell : ZNGContactEditTableViewCell <UITextFieldDelegate>
 
@@ -21,5 +31,13 @@
 @property (nonatomic, strong) ZNGChannel * channel;
 
 @property (nonatomic, strong) IBOutlet UITextField * textField;
+@property (nonatomic, strong) IBOutlet UIButton * displayNameButton;
+
+/**
+ *  One of HOME, BUSINESS, MOBILE.  Stored/retrieved in all upper case but displayed in all lower case.
+ */
+@property (nonatomic, copy) NSString * displayName;
+
+@property (nonatomic, weak) id <ZNGContactPhoneNumberTableCellDelegate> delegate;
 
 @end

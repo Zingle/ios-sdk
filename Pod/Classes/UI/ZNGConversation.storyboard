@@ -226,24 +226,33 @@
                                                         <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
                                                     </constraints>
                                                     <state key="normal" backgroundImage="minusCircle"/>
+                                                    <connections>
+                                                        <action selector="pressedDelete:" destination="yxw-oU-69S" eventType="touchUpInside" id="xVF-jM-iIM"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="67" y="7" width="30" height="30"/>
+                                                    <rect key="frame" x="67" y="7" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
-                                                    <state key="normal" title="cell">
+                                                    <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
+                                                    <connections>
+                                                        <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="Zvo-5Z-3uK"/>
+                                                    </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="101" y="15" width="14" height="14"/>
+                                                    <rect key="frame" x="116" y="15" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
                                                     </constraints>
                                                     <state key="normal" image="chevronRight"/>
+                                                    <connections>
+                                                        <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="l86-wD-mhf"/>
+                                                    </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="123" y="8" width="469" height="28"/>
+                                                    <rect key="frame" x="138" y="8" width="454" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation"/>
                                                     <connections>
@@ -266,6 +275,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="displayNameButton" destination="Pjn-y4-LVU" id="Pdr-xf-9zI"/>
                                             <outlet property="textField" destination="MvJ-Dy-edy" id="hfv-Vf-9h7"/>
                                         </connections>
                                     </tableViewCell>

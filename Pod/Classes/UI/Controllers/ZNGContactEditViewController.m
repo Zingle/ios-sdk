@@ -342,6 +342,100 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     return [self.contact hasBeenEditedSince:originalContact];
 }
 
+#pragma mark - Phone number cell delegate
+- (void) userClickedPhoneNumberTypeButtonOnCell:(ZNGContactPhoneNumberTableViewCell *)cell
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Phone number type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction * mobile = [UIAlertAction actionWithTitle:@"Mobile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        cell.displayName = @"MOBILE";
+    }];
+    UIAlertAction * home = [UIAlertAction actionWithTitle:@"Home" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        cell.displayName = @"HOME";
+    }];
+    UIAlertAction * business = [UIAlertAction actionWithTitle:@"Business" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        cell.displayName = @"BUSINESS";
+    }];
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    
+    [alert addAction:mobile];
+    [alert addAction:home];
+    [alert addAction:business];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) userClickedDeleteOnPhoneNumberTableCell:(ZNGContactPhoneNumberTableViewCell *)cell
+{
+    [self saveAnyEditsInProgress];
+    
+    // Are they actually deleting a channel with actual data in it or that existed previously?  If so, confirm.
+    BOOL channelExistedPreviously = ([[originalContact channelsWithValues] containsObject:cell.channel]);
+    BOOL dataIsWritten = ([cell.channel.value length] > 0);
+    
+    if (channelExistedPreviously || dataIsWritten) {
+        // Confirm
+        NSString * message = [NSString stringWithFormat:@"Delete the %@ channel?", [self.service displayNameForChannel:cell.channel] ?: @""];
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            [self _deleteChannel:cell.channel];
+        }];
+        UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+        [alert addAction:delete];
+        [alert addAction:cancel];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        // No need to confirm
+        [self _deleteChannel:cell.channel];
+    }
+}
+
+- (void) _deleteChannel:(ZNGChannel *)channel
+{
+    NSUInteger indexInPhoneChannels = [phoneNumberChannels indexOfObject:channel];
+    
+    if (indexInPhoneChannels == NSNotFound) {
+        ZNGLogError(@"User pressed delete on a phone number table cell, but the cell's channel does not appear in our contact's %llu phone number channels", (unsigned long long)[phoneNumberChannels count]);
+        return;
+    }
+    
+    NSIndexPath * indexPath = [self indexPathForChannel:channel];
+    
+    NSMutableArray<ZNGChannel *> * mutableChannels = [self.contact.channels mutableCopy];
+    NSMutableArray<ZNGChannel *> * mutablePhoneChannels = [phoneNumberChannels mutableCopy];
+    [mutablePhoneChannels removeObjectAtIndex:indexInPhoneChannels];
+    [mutableChannels removeObject:channel];
+    self.contact.channels = mutableChannels;
+    phoneNumberChannels = mutablePhoneChannels;
+    
+    if (indexPath == nil) {
+        ZNGLogWarn(@"Unable to find row for delete animation after removing phone number channel.  Reloading entire channel section.");
+        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
+        [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationAutomatic];
+    } else {
+        [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
+}
+
+- (NSIndexPath *) indexPathForChannel:(ZNGChannel *)channel
+{
+    NSUInteger row = NSNotFound;
+    
+    if (![channel isPhoneNumber]) {
+        row = [nonPhoneNumberChannels indexOfObject:channel];
+    } else {
+        NSUInteger index = [phoneNumberChannels indexOfObject:channel];
+        row = (index != NSNotFound) ? index + [nonPhoneNumberChannels count] : NSNotFound;
+    }
+    
+    if (row == NSNotFound) {
+        return nil;
+    }
+    
+    return [NSIndexPath indexPathForRow:row inSection:ContactSectionChannels];
+}
+
 #pragma mark - Table view delegate
 // TODO: Implement this
 //- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
@@ -432,6 +526,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             if ([channel isPhoneNumber]) {
                 ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];
                 cell.channel = channel;
+                cell.delegate = self;
                 return cell;
             }
             

@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ZNGLabelSelectViewController.h"
+#import "ZNGContactPhoneNumberTableViewCell.h"
 
 @class GradientLoadingView;
 @class ZNGContact;
@@ -20,7 +21,7 @@
 
 @end
 
-@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, ZNGLabelSelectionDelegate>
+@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegate, ZNGLabelSelectionDelegate, ZNGContactPhoneNumberTableCellDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
 @property (nonatomic, strong) IBOutlet GradientLoadingView * loadingGradient;

@@ -37,6 +37,32 @@
     }
 }
 
+- (void) setDisplayName:(NSString *)displayName
+{
+    [self.displayNameButton setTitle:[displayName lowercaseString] forState:UIControlStateNormal];
+    self.channel.displayName = [displayName uppercaseString];
+}
+
+- (NSString *)displayName
+{
+    return self.channel.displayName;
+}
+
+#pragma mark - Actions
+- (IBAction)pressedDelete:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(userClickedDeleteOnPhoneNumberTableCell:)]) {
+        [self.delegate userClickedDeleteOnPhoneNumberTableCell:self];
+    }
+}
+
+- (IBAction)pressedPhoneNumberType:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(userClickedPhoneNumberTypeButtonOnCell:)]) {
+        [self.delegate userClickedPhoneNumberTypeButtonOnCell:self];
+    }
+}
+
 #pragma mark - Text view delegate
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {

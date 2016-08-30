@@ -20,7 +20,7 @@ NSString * const ZNGContactLabelsCollectionViewCellReuseIdentifier = @"LabelCell
 {
     [super awakeFromNib];
     
-    UICollectionViewFlowLayout * layout = self.collectionView.collectionViewLayout;
+    UICollectionViewFlowLayout * layout = (UICollectionViewFlowLayout *)self.collectionView.collectionViewLayout;
     layout.estimatedItemSize = CGSizeMake(110.0, 40.0);
     layout.minimumLineSpacing = 2.0;
     self.collectionView.scrollEnabled = NO;

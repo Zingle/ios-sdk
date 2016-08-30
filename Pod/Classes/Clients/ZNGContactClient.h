@@ -68,6 +68,14 @@
                     success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                     failure:(void (^)(ZNGError* error))failure;
 
+/**
+ *  Updates a channel's display name or default status.  This has no effect if the channel's value has changed.
+ */
+- (void) updateChannel:(ZNGChannel *)channel
+           fromContact:(ZNGContact *)contact
+               success:(void (^)(ZNGChannel* channel, ZNGStatus* status))success
+               failure:(void (^)(ZNGError* error))failure;
+
 #pragma mark - DELETE methods
 
 - (void)deleteContactWithId:(NSString*)contactId

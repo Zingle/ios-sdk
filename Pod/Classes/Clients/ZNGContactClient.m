@@ -311,7 +311,6 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
                     }
                 } else {
                     if (failure != nil) {
-                        ZNGError * error = [[ZNGError alloc] init];
                         failure(nil);
                     }
                 }

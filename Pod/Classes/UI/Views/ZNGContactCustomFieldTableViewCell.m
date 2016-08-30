@@ -53,7 +53,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     ZNGLogVerbose(@"%@ custom field type set to %@ (type %@), was %@", [self class], customFieldValue.customField.displayName, customFieldValue.customField.dataType, _customFieldValue.customField.displayName);
     
     _customFieldValue = customFieldValue;
-    self.textField.placeholder = customFieldValue.customField.displayName;
     
     [self configureInput];
     [self updateDisplay];
@@ -90,17 +89,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) configureInput
 {
-    // Temporary debugging code
-//    if ([self.customFieldValue.customField.displayName isEqualToString:@"Title"]) {
-//        NSLog(@"Break");
-//        self.customFieldValue.customField.dataType = ZNGContactFieldDataTypeSingleSelect;
-//    }
-    
     // Do we need a picker?
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeTime;
-        [datePicker addTarget:self action:@selector(daetPickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
+        [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
         datePicker = [[UIDatePicker alloc] init];

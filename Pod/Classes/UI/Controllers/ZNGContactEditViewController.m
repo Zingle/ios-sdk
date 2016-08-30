@@ -447,7 +447,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return 12.0;
+    // Show a footer for every section except the final one
+    return (section < (ContactSectionCount - 1)) ? 12.0 : 0.0;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

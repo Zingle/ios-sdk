@@ -136,6 +136,11 @@
                                                     <rect key="frame" x="37" y="8" width="555" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <outlet property="delegate" destination="B6y-R7-CYB" id="qvo-6N-R9O"/>
                                                     </connections>
@@ -170,6 +175,11 @@
                                                     <rect key="frame" x="37" y="8" width="555" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
                                                     <connections>
                                                         <outlet property="delegate" destination="lGA-Qd-2RU" id="Tfd-Xv-6aK"/>
                                                     </connections>

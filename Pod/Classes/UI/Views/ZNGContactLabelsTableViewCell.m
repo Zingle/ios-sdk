@@ -39,7 +39,11 @@ NSString * const ZNGContactLabelsCollectionViewCellReuseIdentifier = @"LabelCell
     
     ZNGLogVerbose(@"Labels table cell is reporting height as %.0f", self.collectionView.contentSize.height);
     
-    return self.collectionView.collectionViewLayout.collectionViewContentSize;
+    CGSize collectionViewContentSize = self.collectionView.collectionViewLayout.collectionViewContentSize;
+    CGFloat verticalPadding = fabs(self.collectionViewTopPaddingConstraint.constant) + fabs(self.collectionViewBottomPaddingConstraint.constant);
+    CGSize cellSize = CGSizeMake(collectionViewContentSize.width, collectionViewContentSize.height + verticalPadding);
+    
+    return cellSize;
 }
 
 @end

@@ -297,9 +297,16 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
             
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (syncSuccess) {
+                    // If we have a success callback, we'll make one more request to retrieve an up-to-date contact object with all labels and channels.
                     if (success != nil) {
-                        contact.labels = [newContactLabels array];
-                        success(contact);
+                        [self contactWithId:contact.contactId success:^(ZNGContact * updatedContact, ZNGStatus *status) {
+                            updatedContact.contactClient = self;
+                            success(updatedContact);
+                        } failure:^(ZNGError *error) {
+                            ZNGLogWarn(@"Creating/updating %@ was fully successful, but the request for most up to date data failed after all updates.  Data returned may be \
+                                       slightly stale", [contact fullName]);
+                            success(contact);
+                        }];
                     }
                 } else {
                     if (failure != nil) {

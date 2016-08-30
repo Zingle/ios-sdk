@@ -122,7 +122,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] init];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
-    self.internalNoteColor = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
+    self.intenralNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
     
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
@@ -695,7 +695,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     if ([event isNote]) {
-        return self.internalNoteColor;
+        return self.intenralNoteBubbleImageData;
     }
     
     return self.incomingBubbleImageData;

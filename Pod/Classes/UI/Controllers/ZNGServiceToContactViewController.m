@@ -116,6 +116,7 @@ static void * KVOContext = &KVOContext;
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
     [self updateUIForAvailableChannels];
+    [self updateForChannelSelection];
     
     [self startEmphasisTimer];
 }
@@ -323,8 +324,14 @@ static void * KVOContext = &KVOContext;
     } else {
         NSString * text;
         
+        if (bannerContainer == nil) {
+            // Our view has not yet loaded.  We'll be back here in a moment, courtesy of viewDidLoad
+            return;
+        }
+        
         if (self.conversation.channel.blockInbound) {
             if (self.conversation.channel.blockOutbound) {
+                [self.inputToolbar disableInput];
                 text = @"INBOUND AND OUTBOUND MESSAGES BLOCKED";
             } else {
                 text = @"INBOUND MESSAGES FROM CONTACT BLOCKED";
@@ -340,27 +347,27 @@ static void * KVOContext = &KVOContext;
         } else {
             // We need to show a new banner
             CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
-            UIView * bannerContent = [[UIView alloc] initWithFrame:rect];
-            bannerContent.translatesAutoresizingMaskIntoConstraints = NO;
-            bannerContent.backgroundColor = [UIColor zng_strawberry];
-            NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
-            NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
-            NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
-            blockedChannelOffScreenConstraint = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-            blockedChannelOnScreenConstraint = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-            [bannerContainer addSubview:bannerContent];
+            blockedChannelBanner = [[UIView alloc] initWithFrame:rect];
+            blockedChannelBanner.translatesAutoresizingMaskIntoConstraints = NO;
+            blockedChannelBanner.backgroundColor = [UIColor zng_strawberry];
+            NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
+            blockedChannelOffScreenConstraint = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+            blockedChannelOnScreenConstraint = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+            [bannerContainer addSubview:blockedChannelBanner];
             [bannerContainer addConstraints:@[height, width, left, blockedChannelOffScreenConstraint]];
             
             UILabel * textLabel = [[UILabel alloc] initWithFrame:rect];
             textLabel.textAlignment = NSTextAlignmentCenter;
-            textLabel.font = [UIFont latoBoldFontOfSize:15.0];
+            textLabel.font = [UIFont latoBoldFontOfSize:13.0];
             textLabel.textColor = [UIColor whiteColor];
             textLabel.text = text;
             textLabel.translatesAutoresizingMaskIntoConstraints = NO;
-            NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-            NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-            [bannerContent addSubview:textLabel];
-            [bannerContent addConstraints:@[centerX, centerY]];
+            NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:blockedChannelBanner attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:blockedChannelBanner attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+            [blockedChannelBanner addSubview:textLabel];
+            [blockedChannelBanner addConstraints:@[centerX, centerY]];
             
             // Animate on screen
             [bannerContainer layoutIfNeeded];

@@ -19,6 +19,7 @@
 #import "ZNGServiceToContactViewController.h"
 #import "UIFont+Lato.h"
 #import "JSQMessagesTimestampFormatter.h"
+#import "ZNGAnalytics.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -169,6 +170,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }
     
     _data = data;
+    
+    [[ZNGAnalytics sharedAnalytics] trackConversationFilterSwitch:data];
 }
 
 #pragma mark - Key Value Observing

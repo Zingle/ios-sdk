@@ -236,6 +236,68 @@ static NSString * const HostPropertyName = @"Host";
     [[self segment] track:event properties:properties];
 }
 
+- (void) trackSentMessage:(NSString *)messageBody toContact:(ZNGContact *)contact
+{
+    NSString * event = @"Sent a message";
+    
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    [properties setValue:messageBody forKey:@"messageText"];
+    properties[@"hasAttachment"] = @NO;
+
+    [[self segment] track:event properties:properties];
+}
+
+- (void) trackSentMessage:(NSString *)messageBody toMultipleContacts:(NSArray<ZNGContact *> *)contacts
+{
+    NSString * event = @"Sent a message to multiple contacts";
+    
+    NSMutableDictionary * properties = [self defaultProperties];
+    
+    NSMutableArray * contactIds = [[NSMutableArray alloc] initWithCapacity:[contacts count]];
+    NSMutableArray * contactNames = [[NSMutableArray alloc] initWithCapacity:[contacts count]];
+    
+    for (ZNGContact * contact in contacts) {
+        [contactIds addObject:contact.contactId];
+        [contactNames addObject:[contact fullName]];
+    }
+    
+    properties[@"contactNames"] = contactNames;
+    properties[@"contactIds"] = contactIds;
+    
+    [[self segment] track:event properties:properties];
+}
+
+- (void) trackSentMessage:(NSString *)messageBody toLabels:(NSArray<ZNGLabel *> *)labels
+{
+    NSString * event = @"Sent a message to label(s)";
+    
+    NSMutableDictionary * properties = [self defaultProperties];
+    
+    NSMutableArray * labelNames = [[NSMutableArray alloc] initWithCapacity:[labels count]];
+    NSMutableArray * labelIds = [[NSMutableArray alloc] initWithCapacity:[labels count]];
+    
+    for (ZNGLabel * label in labels) {
+        [labelNames addObject:label.displayName];
+        [labelIds addObject:label.labelId];
+    }
+    
+    properties[@"labelNames"] = labelNames;
+    properties[@"labelIds"] = labelIds;
+    
+    [[self segment] track:event properties:properties];
+}
+
+- (void) trackSentMessage:(NSString *)messageBody toPhoneNumbers:(NSArray<NSString *> *)phoneNumbers
+{
+    NSString * event = @"Sent a message to phone number(s)";
+    
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"phoneNumbers"] = phoneNumbers;
+    
+    [[self segment] track:event properties:properties];
+}
+
+
 - (void) trackChangedChannel:(ZNGChannel *)channel inConversation:(ZNGConversationServiceToContact *)conversation
 {
     // These conversation properties will include new channel info

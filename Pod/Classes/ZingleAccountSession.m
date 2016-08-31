@@ -20,6 +20,7 @@
 #import "ZNGLabelClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGContactEditViewController.h"
+#import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -219,6 +220,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
         userAuthorization = theUserAuthorization;
+        [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to retrieve current user info from the root URL: %@", error);
     }];
@@ -437,6 +439,20 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         dispatch_async(dispatch_get_main_queue(), ^{
             completion(YES);
         });
+        
+        if ([contacts count] == 1) {
+            [[ZNGAnalytics sharedAnalytics] trackSentMessage:body toContact:[contacts firstObject]];
+        } else if ([contacts count] > 1) {
+            [[ZNGAnalytics sharedAnalytics] trackSentMessage:body toMultipleContacts:contacts];
+        }
+        
+        if ([labels count] > 0) {
+            [[ZNGAnalytics sharedAnalytics] trackSentMessage:body toLabels:labels];
+        }
+        
+        if ([phoneNumbers count] > 0) {
+            [[ZNGAnalytics sharedAnalytics] trackSentMessage:body toPhoneNumbers:phoneNumbers];
+        }
     });
 }
 

@@ -14,6 +14,7 @@
 #import "ZNGNotificationsClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGUserAuthorizationClient.h"
+#import "ZNGAnalytics.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -56,7 +57,11 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
-        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:[NSURL URLWithString:urlString]];
+        NSURL * url = [NSURL URLWithString:urlString];
+        
+        [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
+        
+        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
         _sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
         _sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];

@@ -420,6 +420,19 @@ static void * KVOContext = &KVOContext;
     return [self.conversation.service displayNameForChannel:channel];
 }
 
+// Our super implementation of this is fine, but we must first ensure that there is a channel selected
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
+{
+    if (self.conversation.channel == nil) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please select a channel" message:@"A channel must be selected before sending an image." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        [super inputToolbar:toolbar didPressAttachImageButton:sender];
+    }
+}
+
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a custom field to insert" message:nil preferredStyle:UIAlertControllerStyleActionSheet];

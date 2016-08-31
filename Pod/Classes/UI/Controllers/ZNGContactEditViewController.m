@@ -26,6 +26,7 @@
 #import "Mantle/MTLJSONAdapter.h"
 #import "ZingleAccountSession.h"
 #import "ZNGContactClient.h"
+#import "ZNGAnalytics.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -321,6 +322,12 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         // We did it
         [self.loadingGradient stopAnimating];
         [self.delegate contactWasCreated:contact];
+        
+        if (originalContact == nil) {
+            [[ZNGAnalytics sharedAnalytics] trackCreatedContact:contact];
+        } else {
+            [[ZNGAnalytics sharedAnalytics] trackEditedExistingContact:contact];
+        }
         
         // If we're in a simulator, we will fake a push notification so our UI gets updated
 #ifdef TARGET_IPHONE_SIMULATOR
@@ -682,6 +689,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
     [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    
+    [[ZNGAnalytics sharedAnalytics] trackRemovedLabel:label fromContact:self.contact];
 }
 
 - (void) labelSelectViewController:(ZNGLabelSelectViewController *)viewController didSelectLabel:(ZNGLabel *)label
@@ -693,6 +702,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         
         NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
         [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        
+        [[ZNGAnalytics sharedAnalytics] trackAddedLabel:label toContact:self.contact];
     }
 }
 

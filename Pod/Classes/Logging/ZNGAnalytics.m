@@ -304,32 +304,32 @@ static NSString * const HostPropertyName = @"Host";
     [[self segment] track:@"Selected a channel" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
-- (void) confirmedConversation:(ZNGConversationServiceToContact *)conversation
+- (void) trackConfirmedConversation:(ZNGConversationServiceToContact *)conversation
 {
     [[self segment] track:@"Confirmed conversation" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
-- (void) unconfirmedConversation:(ZNGConversationServiceToContact *)conversation
+- (void) trackUnconfirmedConversation:(ZNGConversationServiceToContact *)conversation
 {
     [[self segment] track:@"Unconfirmed conversation" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
-- (void) starredContact:(ZNGContact *)contact
+- (void) trackStarredContact:(ZNGContact *)contact
 {
     [[self segment] track:@"Starred contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
 }
 
-- (void) unstarredContact:(ZNGContact *)contact
+- (void) trackUnstarredContact:(ZNGContact *)contact
 {
     [[self segment] track:@"Unstarred contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
 }
 
-- (void) showedConversationDetails:(ZNGConversationServiceToContact *)conversation
+- (void) trackShowedConversationDetails:(ZNGConversationServiceToContact *)conversation
 {
     [[self segment] track:@"Showed detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
-- (void) hidConversationDetails:(ZNGConversationServiceToContact *)conversation
+- (void) trackHidConversationDetails:(ZNGConversationServiceToContact *)conversation
 {
     [[self segment] track:@"Hid detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];
 }
@@ -347,7 +347,7 @@ static NSString * const HostPropertyName = @"Host";
 
 - (void) trackAddedLabel:(ZNGLabel *)label toContact:(ZNGContact *)contact
 {
-    NSString * event = @"Added a label to contact";
+    NSString * event = @"Added a label to contact on the contact edit screen";
     
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     [properties setValue:label.displayName forKey:@"labelName"];
@@ -357,7 +357,7 @@ static NSString * const HostPropertyName = @"Host";
 
 - (void) trackRemovedLabel:(ZNGLabel *)label fromContact:(ZNGContact *)contact
 {
-    NSString * event = @"Removed a label from contact";
+    NSString * event = @"Removed a label from contact on the contact edit screen";
     
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     [properties setValue:label.displayName forKey:@"labelName"];

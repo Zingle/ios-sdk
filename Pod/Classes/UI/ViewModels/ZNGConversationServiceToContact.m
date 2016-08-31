@@ -11,6 +11,7 @@
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
 #import "ZNGContactClient.h"
+#import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -73,6 +74,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             self.channel = [self defaultChannelForContact];
         }
     }
+}
+
+- (void) setChannel:(ZNGChannel *)channel
+{
+    _channel = channel;
+    [[ZNGAnalytics sharedAnalytics] trackChangedChannel:channel inConversation:self];
 }
 
 - (NSArray<NSString *> *)eventTypes

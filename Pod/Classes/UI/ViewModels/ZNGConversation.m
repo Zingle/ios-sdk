@@ -14,6 +14,7 @@
 #import "ZingleSession.h"
 #import "ZNGLogging.h"
 #import "ZNGNewMessageResponse.h"
+#import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
@@ -459,6 +460,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             if (success) {
                 success(status);
             }
+            
+            [[ZNGAnalytics sharedAnalytics] trackSentMessage:message inConversation:self];
         } failure:^(ZNGError *error) {
             ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
             

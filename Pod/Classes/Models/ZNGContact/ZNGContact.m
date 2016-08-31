@@ -14,6 +14,7 @@
 #import "ZNGLogging.h"
 #import "ZingleSDK.h"
 #import "ZNGNewChannel.h"
+#import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -426,6 +427,13 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
                                         
                                         self.isStarred = contact.isStarred;
                                         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+                                        
+                                        if (contact.isStarred) {
+                                            [[ZNGAnalytics sharedAnalytics] trackStarredContact:self];
+                                        } else {
+                                            [[ZNGAnalytics sharedAnalytics] trackUnstarredContact:self];
+                                        }
+                                        
                                     } failure:^(ZNGError *error) {
                                         ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
                                     }];

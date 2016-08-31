@@ -20,6 +20,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak, nullable) ZingleSession * session;
 
+/**
+ *  Setting this flag will prevent this client from setting the mostRecentError property on its ZingleSession
+ */
+@property (nonatomic) BOOL ignoreErrors;
+
 #pragma mark - Initialization
 - (instancetype) initWithSession:(__weak ZingleSession *)session;
 

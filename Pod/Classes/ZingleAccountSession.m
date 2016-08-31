@@ -434,7 +434,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             }
         }
         
-        completion(YES);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completion(YES);
+        });
     });
 }
 

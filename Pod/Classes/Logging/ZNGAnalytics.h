@@ -26,6 +26,9 @@
 
 @property (nonatomic) BOOL enabled;
 
+/**
+ *  The key used to authenticate with Segment.
+ */
 @property (nonatomic, copy) NSString * segmentWriteKey;
 
 /**

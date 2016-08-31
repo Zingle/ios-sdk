@@ -81,6 +81,16 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
++ (NSString *) description
+{
+    return @"Unfiltered inbox data";
+}
+
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"<%@: %p>", [self class], self];
+}
+
 #pragma mark - Filtering
 - (nonnull NSMutableDictionary *) parameters
 {

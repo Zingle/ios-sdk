@@ -18,16 +18,24 @@
 @class ZNGLabel;
 @class ZNGMessage;
 @class ZNGTemplate;
+@class ZNGUserAuthorization;
 
 @interface ZNGAnalytics : NSObject
 
 + (instancetype) sharedAnalytics;
 
+@property (nonatomic) BOOL enabled;
+
 @property (nonatomic, copy) NSString * segmentWriteKey;
+
+/**
+ *  Used to send the host name with all analytics meta data.
+ */
+@property (nonatomic, copy) NSURL * zingleURL;
 
 #pragma mark - Login
 - (void) trackLoginFailureWithToken:(NSString *)token;
-- (void) trackLoginSuccessWithToken:(NSString *)token;
+- (void) trackLoginSuccessWithToken:(NSString *)token andUserAuthorizationObject:(ZNGUserAuthorization *)userAuthorization;
 
 #pragma mark - Inbox
 - (void) trackConversationFilterSwitch:(ZNGInboxDataSet *)inboxData;
@@ -52,6 +60,7 @@
 - (void) trackCreatedContact:(ZNGContact *)contact;
 - (void) trackEditedExistingContact:(ZNGContact *)contact;
 - (void) trackAddedLabel:(ZNGLabel *)label toContact:(ZNGContact *)contact;
+- (void) trackRemovedLabel:(ZNGLabel *)label fromContact:(ZNGContact *)contact;
 
 
 

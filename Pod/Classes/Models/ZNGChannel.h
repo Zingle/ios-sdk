@@ -18,6 +18,8 @@
 @property(nonatomic, strong) NSString* country;
 @property(nonatomic) BOOL isDefault;
 @property(nonatomic) BOOL isDefaultForType;
+@property(nonatomic) BOOL blockInbound;
+@property(nonatomic) BOOL blockOutbound;
 @property(nonatomic, strong) ZNGChannelType* channelType;
 
 /**

@@ -20,6 +20,8 @@
              @"country" : @"country",
              @"isDefault" : @"is_default",
              @"isDefaultForType" : @"is_default_for_type",
+             @"blockInbound" : @"block_inbound",
+             @"blockOutbound" : @"block_outbound",
              @"channelType" : @"channel_type"
              };
 }

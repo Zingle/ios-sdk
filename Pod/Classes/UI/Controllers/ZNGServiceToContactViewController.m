@@ -39,6 +39,11 @@ static void * KVOContext = &KVOContext;
     ZNGPulsatingBarButtonImage * confirmButton;
     UIView * bannerContainer;
     
+    UIView * blockedChannelBanner;
+    UILabel * blockedChannelLabel;
+    NSLayoutConstraint * blockedChannelOnScreenConstraint;
+    NSLayoutConstraint * blockedChannelOffScreenConstraint;
+    
     dispatch_source_t emphasizeTimer;
 }
 
@@ -121,7 +126,7 @@ static void * KVOContext = &KVOContext;
         if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
             [self updateConfirmedButton];
         } else if ([keyPath isEqualToString:KVOChannelPath]) {
-            self.inputToolbar.currentChannel = self.conversation.channel;
+            [self updateForChannelSelection];
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateUIForAvailableChannels];
         }
@@ -236,13 +241,13 @@ static void * KVOContext = &KVOContext;
     if (contact.isConfirmed) {
         [contact unconfirm];
         confirmButton.selected = NO;
-        [self showBannerWithText:@"UNCONFIRMED"];
+        [self showTemporaryBlueBannerWithText:@"UNCONFIRMED"];
         
         [[ZNGAnalytics sharedAnalytics] trackUnconfirmedConversation:self.conversation];
     } else {
         [contact confirm];
         confirmButton.selected = YES;
-        [self showBannerWithText:@"CONFIRMED"];
+        [self showTemporaryBlueBannerWithText:@"CONFIRMED"];
         
         [[ZNGAnalytics sharedAnalytics] trackConfirmedConversation:self.conversation];
     }
@@ -291,7 +296,85 @@ static void * KVOContext = &KVOContext;
     [self.view addConstraints:@[top, width, left, height]];
 }
 
-- (void) showBannerWithText:(NSString *)text
+- (void) updateForChannelSelection
+{
+    self.inputToolbar.currentChannel = self.conversation.channel;
+    BOOL someKindOfBlock = (self.conversation.channel.blockOutbound || self.conversation.channel.blockInbound);
+    
+    if (!someKindOfBlock) {
+        if (self.conversation.channel != nil) {
+            [self.inputToolbar enableInput];
+        }
+        
+        // Do we need to remove previous UI for a blocked channel?
+        if (blockedChannelBanner.superview != nil) {
+            // Remove this pre-existing banner
+            [bannerContainer layoutIfNeeded];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                [bannerContainer removeConstraint:blockedChannelOnScreenConstraint];
+                [bannerContainer addConstraint:blockedChannelOffScreenConstraint];
+                [bannerContainer layoutIfNeeded];
+            } completion:^(BOOL finished) {
+                [blockedChannelBanner removeFromSuperview];
+                blockedChannelBanner = nil;
+            }];
+        }
+    } else {
+        NSString * text;
+        
+        if (self.conversation.channel.blockInbound) {
+            if (self.conversation.channel.blockOutbound) {
+                text = @"INBOUND AND OUTBOUND MESSAGES BLOCKED";
+            } else {
+                text = @"INBOUND MESSAGES FROM CONTACT BLOCKED";
+            }
+        } else {
+            [self.inputToolbar disableInput];
+            text = @"OUTBOUND MESSAGES TO CONTACT BLOCKED";
+        }
+        
+        if (blockedChannelBanner.superview != nil) {
+            // There is already a banner.  Update its text.
+            blockedChannelLabel.text = text;
+        } else {
+            // We need to show a new banner
+            CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
+            UIView * bannerContent = [[UIView alloc] initWithFrame:rect];
+            bannerContent.translatesAutoresizingMaskIntoConstraints = NO;
+            bannerContent.backgroundColor = [UIColor zng_strawberry];
+            NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
+            blockedChannelOffScreenConstraint = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+            blockedChannelOnScreenConstraint = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+            [bannerContainer addSubview:bannerContent];
+            [bannerContainer addConstraints:@[height, width, left, blockedChannelOffScreenConstraint]];
+            
+            UILabel * textLabel = [[UILabel alloc] initWithFrame:rect];
+            textLabel.textAlignment = NSTextAlignmentCenter;
+            textLabel.font = [UIFont latoBoldFontOfSize:15.0];
+            textLabel.textColor = [UIColor whiteColor];
+            textLabel.text = text;
+            textLabel.translatesAutoresizingMaskIntoConstraints = NO;
+            NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+            [bannerContent addSubview:textLabel];
+            [bannerContent addConstraints:@[centerX, centerY]];
+            
+            // Animate on screen
+            [bannerContainer layoutIfNeeded];
+            
+            [UIView animateWithDuration:0.5 animations:^{
+                [bannerContainer removeConstraint:blockedChannelOffScreenConstraint];
+                [bannerContainer addConstraint:blockedChannelOnScreenConstraint];
+                [bannerContainer layoutIfNeeded];
+            } completion:nil];
+        }
+    }
+}
+
+- (void) showTemporaryBlueBannerWithText:(NSString *)text
 {
     CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
     UIView * bannerContent = [[UIView alloc] initWithFrame:rect];

@@ -10,6 +10,11 @@
 
 @implementation ZNGInboxDataClosed
 
++ (NSString *) description
+{
+    return @"Closed conversation inbox data";
+}
+
 - (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [super parameters];

@@ -23,6 +23,7 @@
 #import "UIViewController+ZNGSelectTemplate.h"
 #import "JSQMessagesInputToolbar+DisablingInput.h"
 #import "ZNGContactEditViewController.h"
+#import "ZNGAnalytics.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -177,8 +178,10 @@ static void * KVOContext = &KVOContext;
     UIAlertAction * toggleDetailedEvents = [UIAlertAction actionWithTitle:detailedEventsText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (alreadyShowingDetailedEvents) {
             self.conversation = [[ZNGConversationServiceToContact alloc] initWithConversation:self.conversation];
+            [[ZNGAnalytics sharedAnalytics] trackHidConversationDetails:self.conversation];
         } else {
             self.conversation = [[ZNGConversationDetailedEvents alloc] initWithConversation:self.conversation];
+            [[ZNGAnalytics sharedAnalytics] trackShowedConversationDetails:self.conversation];
         }
         
         [self.conversation loadRecentEventsErasingOlderData:YES];
@@ -234,10 +237,14 @@ static void * KVOContext = &KVOContext;
         [contact unconfirm];
         confirmButton.selected = NO;
         [self showBannerWithText:@"UNCONFIRMED"];
+        
+        [[ZNGAnalytics sharedAnalytics] trackUnconfirmedConversation:self.conversation];
     } else {
         [contact confirm];
         confirmButton.selected = YES;
         [self showBannerWithText:@"CONFIRMED"];
+        
+        [[ZNGAnalytics sharedAnalytics] trackConfirmedConversation:self.conversation];
     }
 }
 
@@ -447,9 +454,10 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
 {
-    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * _Nullable selectedTemplateBody) {
+    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * selectedTemplateBody, ZNGTemplate * selectedTemplate) {
         if (selectedTemplateBody != nil) {
             [self appendStringToMessageInput:selectedTemplateBody];
+            [[ZNGAnalytics sharedAnalytics] trackInsertedTemplate:selectedTemplate intoConversation:self.conversation];
         }
     }];
 }
@@ -530,6 +538,8 @@ static void * KVOContext = &KVOContext;
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to trigger automation" message:nil preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
             [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            [[ZNGAnalytics sharedAnalytics] trackTriggeredAutomation:automation onContact:self.conversation.contact];
         }
     }];
 }
@@ -538,7 +548,9 @@ static void * KVOContext = &KVOContext;
 {
     __weak ZNGServiceToContactViewController * weakSelf = self;
     
-    [self.conversation addInternalNote:note success:nil failure:^(ZNGError * _Nonnull error) {
+    [self.conversation addInternalNote:note success:^(ZNGStatus * _Nonnull status) {
+        [[ZNGAnalytics sharedAnalytics] trackAddedNote:note toConversation:weakSelf.conversation];
+    } failure:^(ZNGError * _Nonnull error) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Failed to add note" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:ok];
@@ -551,6 +563,7 @@ static void * KVOContext = &KVOContext;
     NSString * replacementValue = [NSString stringWithFormat:@"{%@}", customField.replacementVariable];
     
     [self appendStringToMessageInput:replacementValue];
+    [[ZNGAnalytics sharedAnalytics] trackInsertedCustomField:customField intoConversation:self.conversation];
 }
 
 - (void) appendStringToMessageInput:(NSString *)text

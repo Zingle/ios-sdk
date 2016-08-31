@@ -10,6 +10,11 @@
 
 @implementation ZNGInboxDataUnconfirmed
 
++ (NSString *) description
+{
+    return @"Unconfirmed conversation inbox data";
+}
+
 - (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [super parameters];

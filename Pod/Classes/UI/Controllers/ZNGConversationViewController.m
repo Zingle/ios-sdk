@@ -22,6 +22,7 @@
 #import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGConversationTimestampFormatter.h"
 #import "JSQMessagesInputToolbar+DisablingInput.h"
+#import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -565,6 +566,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self.conversation sendMessageWithImage:image success:^(ZNGStatus *status) {
         [self.inputToolbar enableInput];
         [self finishSendingMessageAnimated:YES];
+        
+        if (cameraMode) {
+            [[ZNGAnalytics sharedAnalytics] trackSentCameraImageToConversation:self.conversation];
+        } else {
+            [[ZNGAnalytics sharedAnalytics] trackSentSavedImageToConversation:self.conversation];
+        }
+        
     } failure:^(ZNGError *error) {
         [self.inputToolbar enableInput];
         

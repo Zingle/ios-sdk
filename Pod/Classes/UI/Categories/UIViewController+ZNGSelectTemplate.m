@@ -11,7 +11,7 @@
 
 @implementation UIViewController (ZNGSelectTemplate)
 
-- (void) presentUserWithChoiceOfTemplate:(NSArray<ZNGTemplate *> *)templates completion:(void (^)(NSString * _Nullable selectedTemplateBody))completion
+- (void) presentUserWithChoiceOfTemplate:(NSArray<ZNGTemplate *> *)templates completion:(void (^)(NSString * _Nullable selectedTemplateBody, ZNGTemplate * _Nullable selectedTemplate))completion
 {
     NSParameterAssert(completion);
     
@@ -21,7 +21,7 @@
         UIAlertAction * action = [UIAlertAction actionWithTitle:template.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             if (![template requiresResponseTime]) {
                 // This template requires no further information.  It's callback time.
-                completion(template.body);
+                completion(template.body, template);
             } else {
                 // This template requires a response time
                 UIAlertController * responseTimeSelectAlert = [UIAlertController alertControllerWithTitle:@"Select a response time" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -30,13 +30,13 @@
                 for (NSString * time in responseTimes) {
                     UIAlertAction * action = [UIAlertAction actionWithTitle:time style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                         NSString * body = [template bodyWithResponseTime:time];
-                        completion(body);
+                        completion(body, template);
                     }];
                     [responseTimeSelectAlert addAction:action];
                 }
                 
                 UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-                    completion(nil);
+                    completion(nil, nil);
                 }];
                 [responseTimeSelectAlert addAction:cancel];
                 
@@ -47,7 +47,7 @@
     }
     
     UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        completion(nil);
+        completion(nil, nil);
     }];
     [templateSelectAlert addAction:cancel];
     

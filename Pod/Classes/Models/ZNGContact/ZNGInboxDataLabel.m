@@ -13,6 +13,16 @@
     NSString * labelId;
 }
 
++ (NSString *) description
+{
+    return @"Inbox data by label";
+}
+
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"<%@: %@ %p>", [self class], labelId, self];
+}
+
 - (id) initWithContactClient:(ZNGContactClient *)contactClient labelId:(NSString *)theLabelId;
 {
     self = [super initWithContactClient:contactClient];

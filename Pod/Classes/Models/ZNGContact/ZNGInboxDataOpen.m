@@ -10,6 +10,11 @@
 
 @implementation ZNGInboxDataOpen
 
++ (NSString *) description
+{
+    return @"Open conversation inbox data";
+}
+
 - (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [super parameters];

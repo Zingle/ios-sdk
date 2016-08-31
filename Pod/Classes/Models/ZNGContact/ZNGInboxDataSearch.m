@@ -10,6 +10,16 @@
 
 @implementation ZNGInboxDataSearch
 
++ (NSString *) description
+{
+    return @"Inbox data by search result";
+}
+
+- (NSString *) description
+{
+    return [NSString stringWithFormat:@"%@: %@ %p", [self class], self.searchTerm, self];
+}
+
 - (nonnull instancetype) initWithContactClient:(ZNGContactClient *)contactClient searchTerm:(nonnull NSString *)theSearchTerm;
 {
     self = [super initWithContactClient:contactClient];

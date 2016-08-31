@@ -32,4 +32,5 @@ Pod::Spec.new do |s|
   s.dependency 'CocoaLumberjack/Swift'
   s.dependency 'JVFloatLabeledTextField'
   s.dependency 'JSQMessagesViewController'
+  s.dependency 'Analytics', '~> 3.0'
 end

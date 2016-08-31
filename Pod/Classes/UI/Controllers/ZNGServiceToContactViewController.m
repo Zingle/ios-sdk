@@ -447,7 +447,7 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
 {
-    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * _Nullable selectedTemplateBody) {
+    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * selectedTemplateBody, ZNGTemplate * selectedTemplate) {
         if (selectedTemplateBody != nil) {
             [self appendStringToMessageInput:selectedTemplateBody];
         }

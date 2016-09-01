@@ -464,9 +464,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    CGRect sourceRect = [self.view convertRect:toolbar.contentView.imageButton.frame fromView:toolbar.contentView.imageButton.superview];
-    alert.popoverPresentationController.sourceView = self.view;
-    alert.popoverPresentationController.sourceRect = sourceRect;
+    alert.popoverPresentationController.sourceView = toolbar.contentView.imageButton;
+    alert.popoverPresentationController.sourceRect = toolbar.contentView.imageButton.bounds;
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");

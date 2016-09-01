@@ -464,6 +464,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    CGRect sourceRect = [self.view convertRect:toolbar.contentView.imageButton.frame fromView:toolbar.contentView.imageButton.superview];
+    alert.popoverPresentationController.sourceView = self.view;
+    alert.popoverPresentationController.sourceRect = sourceRect;
+    
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");
     } else {
@@ -517,6 +521,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    // We would ideally use popoverPresentationController.barButtonItem here, but that crashes 100% of the time in iOS 9 for Apple reasons.
+    // See: http://stackoverflow.com/questions/31590644/trouble-using-barbuttonitem-for-popoverpresentationcontroller-in-ios-9
+    CGFloat size = 20.0;
+    CGRect sourceRect = CGRectMake(self.view.bounds.size.width - (2.0 * size), 1.7 * size, size, size);
+    alert.popoverPresentationController.sourceView = self.view;
+    alert.popoverPresentationController.sourceRect = sourceRect;
+
     for (UIAlertAction * action in alertActions) {
         [alert addAction:action];
     }

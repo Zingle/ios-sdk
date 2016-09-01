@@ -11,11 +11,13 @@
 
 @implementation UIViewController (ZNGSelectTemplate)
 
-- (void) presentUserWithChoiceOfTemplate:(NSArray<ZNGTemplate *> *)templates completion:(void (^)(NSString * _Nullable selectedTemplateBody, ZNGTemplate * _Nullable selectedTemplate))completion
+- (void) presentUserWithChoiceOfTemplate:(NSArray<ZNGTemplate *> *)templates fromRect:(CGRect)sourceRect inView:(UIView *)sourceView completion:(void (^)(NSString * _Nullable selectedTemplateBody, ZNGTemplate * _Nullable selectedTemplate))completion
 {
     NSParameterAssert(completion);
     
     UIAlertController * templateSelectAlert = [UIAlertController alertControllerWithTitle:@"Select a template" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    templateSelectAlert.popoverPresentationController.sourceView = sourceView;
+    templateSelectAlert.popoverPresentationController.sourceRect = sourceRect;
     
     for (ZNGTemplate * template in templates) {
         UIAlertAction * action = [UIAlertAction actionWithTitle:template.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -25,6 +27,8 @@
             } else {
                 // This template requires a response time
                 UIAlertController * responseTimeSelectAlert = [UIAlertController alertControllerWithTitle:@"Select a response time" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+                responseTimeSelectAlert.popoverPresentationController.sourceView = sourceView;
+                responseTimeSelectAlert.popoverPresentationController.sourceRect = sourceRect;
                 NSArray<NSString *> * responseTimes = [template responseTimeChoices];
                 
                 for (NSString * time in responseTimes) {

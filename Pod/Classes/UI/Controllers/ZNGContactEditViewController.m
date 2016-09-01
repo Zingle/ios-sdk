@@ -357,6 +357,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Phone number type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
+    CGRect sourceRect = [self.view convertRect:cell.frame fromView:cell.superview];
+    alert.popoverPresentationController.sourceRect = sourceRect;
+    alert.popoverPresentationController.sourceView = self.view;
+    
     UIAlertAction * mobile = [UIAlertAction actionWithTitle:@"Mobile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         cell.displayName = @"MOBILE";
     }];

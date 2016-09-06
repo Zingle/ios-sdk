@@ -36,11 +36,6 @@
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;
 
-/**
- *  Selects the provided contact if she is available in our data.  Deselects if the contact is not present or if it is nil.
- */
-- (void) selectContact:(ZNGContact * __nullable)contact;
-
 @property (nonatomic, weak, nullable) id <ZNGInboxDelegate> delegate;
 
 @property (strong, nonatomic, nonnull) ZingleAccountSession * session;
@@ -49,5 +44,14 @@
 @property (weak, nonatomic, nullable) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong, nullable) ZNGInboxDataSet * data;
+
+/**
+ *  Read/write property that indicates the visually selected contact.
+ *
+ *  Setting this to a non-nil ZNGContact that is in our current data will cause that row to be highlighted and scrolled on screen (if necessary.)
+ *
+ *  Setting this to nil or to a contact that is not present in our data will deselect any current selection
+ */
+@property (nonatomic, strong, nullable) ZNGContact * selectedContact;
 
 @end

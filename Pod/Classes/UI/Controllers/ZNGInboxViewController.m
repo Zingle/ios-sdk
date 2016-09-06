@@ -159,6 +159,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     if (self.data == nil) {
         self.data = [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
     }
+    
+    self.selectedContact = nil;
 }
 
 #pragma mark - Setters
@@ -172,6 +174,28 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     _data = data;
     
     [[ZNGAnalytics sharedAnalytics] trackConversationFilterSwitch:data];
+}
+
+- (void) setSelectedContact:(ZNGContact *)selectedContact
+{
+    _selectedContact = selectedContact;
+    NSIndexPath * newSelection = [self indexPathForContact:selectedContact];
+    NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
+    
+    if ([newSelection isEqual:oldSelection]) {
+        return;
+    }
+    
+    if (oldSelection != nil) {
+        [self.tableView deselectRowAtIndexPath:oldSelection animated:NO];
+    }
+    
+    if (newSelection != nil) {
+        // As per UIKit documentation for selectRowAtIndexPath:animated:scrollPosition:, calling select row with None for scroll position
+        //  followed by scrollToRowAtIndexPath... with None for scroll position will do the minimum amount of scrolling to put the selected row on screen.
+        [self.tableView selectRowAtIndexPath:newSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
+        [self.tableView scrollToRowAtIndexPath:newSelection atScrollPosition:UITableViewScrollPositionNone animated:NO];
+    }
 }
 
 #pragma mark - Key Value Observing
@@ -317,24 +341,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     return [NSIndexPath indexPathForRow:index inSection:0];
 }
 
-- (void) selectContact:(ZNGContact *)contact
-{
-    NSIndexPath * newSelection = [self indexPathForContact:contact];
-    NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
-    
-    if ([newSelection isEqual:oldSelection]) {
-        return;
-    }
-    
-    if (oldSelection != nil) {
-        [self.tableView deselectRowAtIndexPath:oldSelection animated:NO];
-    }
-    
-    if (newSelection != nil) {
-        [self.tableView selectRowAtIndexPath:newSelection animated:NO scrollPosition:UITableViewScrollPositionTop];
-    }
-}
-
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.data.contacts count];
@@ -410,6 +416,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     self.selectedIndexPath = indexPath;
     
     ZNGContact *contact = [self contactAtIndexPath:indexPath];
+    
+    [self willChangeValueForKey:NSStringFromSelector(@selector(selectedContact))];
+    _selectedContact = contact;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(selectedContact))];
     
     if (contact == nil) {
         return;

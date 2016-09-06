@@ -45,7 +45,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     
-    self.selectionStyle = UITableViewCellSelectionStyleNone;
+    self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
     self.contactName.textColor = [UIColor colorFromHexString:@"#333333"];
     self.lastMessage.textColor = [UIColor colorFromHexString:@"#595959"];

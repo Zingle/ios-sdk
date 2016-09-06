@@ -302,6 +302,39 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     return (indexPath.row < [self.data.contacts count]) ? self.data.contacts[indexPath.row] : nil;
 }
 
+- (NSIndexPath *) indexPathForContact:(ZNGContact *)contact
+{
+    if (contact == nil) {
+        return nil;
+    }
+    
+    NSUInteger index = [self.data.contacts indexOfObject:contact];
+    
+    if (index == NSNotFound) {
+        return nil;
+    }
+    
+    return [NSIndexPath indexPathForRow:index inSection:0];
+}
+
+- (void) selectContact:(ZNGContact *)contact
+{
+    NSIndexPath * newSelection = [self indexPathForContact:contact];
+    NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
+    
+    if ([newSelection isEqual:oldSelection]) {
+        return;
+    }
+    
+    if (oldSelection != nil) {
+        [self.tableView deselectRowAtIndexPath:oldSelection animated:NO];
+    }
+    
+    if (newSelection != nil) {
+        [self.tableView selectRowAtIndexPath:newSelection animated:NO scrollPosition:UITableViewScrollPositionTop];
+    }
+}
+
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [self.data.contacts count];

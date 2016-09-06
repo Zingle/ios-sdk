@@ -240,10 +240,9 @@
 			attributes = {
 				CLASSPREFIX = ZNG;
 				LastUpgradeCheck = 0720;
-				ORGANIZATIONNAME = "Ryan Farley";
+				ORGANIZATIONNAME = Zingle;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = EME9422BAK;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;

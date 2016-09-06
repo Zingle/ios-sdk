@@ -163,6 +163,17 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     self.selectedContact = nil;
 }
 
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    NSIndexPath * selectedContactIndexPath = [self.tableView indexPathForSelectedRow];
+    
+    if (selectedContactIndexPath != nil) {
+        [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+            [self.tableView scrollToRowAtIndexPath:selectedContactIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
+        } completion:nil];
+    }
+}
+
 #pragma mark - Setters
 - (void) setData:(ZNGInboxDataSet *)data
 {

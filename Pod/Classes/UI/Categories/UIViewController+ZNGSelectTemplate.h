@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Presents the user with a selection dialog for all provided templates.  Prompts the user for response time value if appropriate to the template.
  */
-- (void) presentUserWithChoiceOfTemplate:(NSArray<ZNGTemplate *> *)templates completion:(void (^)(NSString * _Nullable selectedTemplateBody, ZNGTemplate * _Nullable selectedTemplate))completion;
+- (void) presentUserWithChoiceOfTemplate:(NSArray<ZNGTemplate *> *)templates fromRect:(CGRect)sourceRect inView:(UIView *)sourceView completion:(void (^)(NSString * _Nullable selectedTemplateBody, ZNGTemplate * _Nullable selectedTemplate))completion;
 
 NS_ASSUME_NONNULL_END
 

@@ -557,7 +557,9 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender
 {
-    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates completion:^(NSString * selectedTemplateBody, ZNGTemplate * selectedTemplate) {
+    CGRect sourceRect = [self.view convertRect:toolbar.contentView.templateButton.frame fromView:toolbar.contentView.templateButton.superview];
+    
+    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates fromRect:sourceRect inView:self.view completion:^(NSString * selectedTemplateBody, ZNGTemplate * selectedTemplate) {
         if (selectedTemplateBody != nil) {
             [self appendStringToMessageInput:selectedTemplateBody];
             [[ZNGAnalytics sharedAnalytics] trackInsertedTemplate:selectedTemplate intoConversation:self.conversation];

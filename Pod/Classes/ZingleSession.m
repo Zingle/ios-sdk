@@ -74,6 +74,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
         self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
         self.notificationsClient = [[ZNGNotificationsClient alloc] initWithSession:self];
+        self.notificationsClient.ignoreErrors = YES;
         self.serviceClient = [[ZNGServiceClient alloc] initWithSession:self];
         self.userAuthorizationClient = [[ZNGUserAuthorizationClient alloc] initWithSession:self];
         

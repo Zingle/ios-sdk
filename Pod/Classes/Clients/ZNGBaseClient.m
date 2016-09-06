@@ -46,7 +46,9 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 
 - (void) propogateError:(ZNGError *)error
 {
-    self.session.mostRecentError = error;
+    if (!self.ignoreErrors) {
+        self.session.mostRecentError = error;
+    }
 }
 
 #pragma mark - GET

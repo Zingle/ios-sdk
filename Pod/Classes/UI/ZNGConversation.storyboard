@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="yXX-6h-nLe">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="10117" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="yXX-6h-nLe">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
@@ -246,8 +246,8 @@
                                                         <action selector="pressedDelete:" destination="yxw-oU-69S" eventType="touchUpInside" id="xVF-jM-iIM"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="7" width="46" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
+                                                    <rect key="frame" x="71" y="7" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
@@ -256,8 +256,8 @@
                                                         <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="Zvo-5Z-3uK"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="121" y="15" width="14" height="14"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
+                                                    <rect key="frame" x="120" y="15" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
@@ -267,8 +267,8 @@
                                                         <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="l86-wD-mhf"/>
                                                     </connections>
                                                 </button>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="143" y="8" width="449" height="28"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
+                                                    <rect key="frame" x="142" y="8" width="450" height="28"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation"/>
                                                     <connections>
@@ -349,9 +349,12 @@
                                     <outlet property="delegate" destination="EHd-00-ynV" id="R23-cA-PHi"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="moV-rG-hce" customClass="GradientLoadingView" customModule="ZingleSDK" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="moV-rG-hce" customClass="GradientLoadingView" customModule="ZingleSDK" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="64" width="600" height="6"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="6" id="A2f-vX-uBP"/>
+                                </constraints>
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="hidesWhenStopped" value="YES"/>
                                     <userDefinedRuntimeAttribute type="color" keyPath="centerColor">
@@ -369,13 +372,16 @@
                             <constraint firstItem="mqP-UE-oA1" firstAttribute="leading" secondItem="zra-gb-FUq" secondAttribute="leading" id="73b-Bn-RuX"/>
                             <constraint firstItem="emI-L2-W9W" firstAttribute="leading" secondItem="zra-gb-FUq" secondAttribute="leading" id="7vz-6x-jAk"/>
                             <constraint firstAttribute="trailing" secondItem="mqP-UE-oA1" secondAttribute="trailing" id="Bw6-Kc-VLI"/>
+                            <constraint firstAttribute="trailing" secondItem="moV-rG-hce" secondAttribute="trailing" id="D6U-P7-8bD"/>
                             <constraint firstItem="kM1-oA-NJL" firstAttribute="top" secondItem="emI-L2-W9W" secondAttribute="bottom" id="HIT-Cx-joa"/>
+                            <constraint firstItem="moV-rG-hce" firstAttribute="leading" secondItem="zra-gb-FUq" secondAttribute="leading" id="IKn-6O-Oxe"/>
                             <constraint firstAttribute="trailing" secondItem="cBV-tG-q1x" secondAttribute="trailing" id="V8f-1N-iVx"/>
                             <constraint firstAttribute="trailing" secondItem="emI-L2-W9W" secondAttribute="trailing" id="YMa-qS-0qK"/>
                             <constraint firstItem="emI-L2-W9W" firstAttribute="top" secondItem="cBV-tG-q1x" secondAttribute="bottom" id="bvW-gE-Id4"/>
                             <constraint firstItem="cBV-tG-q1x" firstAttribute="top" secondItem="mqP-UE-oA1" secondAttribute="bottom" id="fEb-AH-DxV"/>
                             <constraint firstItem="cBV-tG-q1x" firstAttribute="leading" secondItem="zra-gb-FUq" secondAttribute="leading" id="hzT-3F-gO0"/>
                             <constraint firstItem="cBV-tG-q1x" firstAttribute="top" secondItem="aPg-E0-DAI" secondAttribute="bottom" constant="44" id="iTN-Y6-VFU"/>
+                            <constraint firstItem="moV-rG-hce" firstAttribute="top" secondItem="aPg-E0-DAI" secondAttribute="bottom" constant="44" id="pES-Sf-cUe"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">

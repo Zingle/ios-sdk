@@ -430,6 +430,14 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     failure:(void (^) (ZNGError *error))failure
 {
     ZNGNewMessage *newMessage = [self freshMessage];
+    
+    if (newMessage == nil) {
+        NSDictionary * userInfo = @{ NSLocalizedDescriptionKey : @"Unable to initialize a fresh outgoing message" };
+        ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:userInfo];
+        failure(error);
+        return;
+    }
+    
     newMessage.body = body;
     
     self.loading = YES;
@@ -484,6 +492,15 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                      success:(void (^)(ZNGStatus* status))success
                      failure:(void (^) (ZNGError *error))failure
 {
+    ZNGNewMessage *newMessage = [self freshMessage];
+    
+    if (newMessage == nil) {
+        NSDictionary * userInfo = @{ NSLocalizedDescriptionKey : @"Unable to initialize a fresh outgoing message" };
+        ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:userInfo];
+        failure(error);
+        return;
+    }
+    
     self.loading = YES;
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
@@ -491,14 +508,14 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         NSData *base64Data = [UIImagePNGRepresentation(imageForUpload) base64EncodedDataWithOptions:0];
         NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
+        newMessage.attachments = @[@{
+                                       kAttachementContentTypeKey : kAttachementContentTypeParam,
+                                       kAttachementBase64 : encodedString
+                                       }];
         
         // It is probably unnecessary to jump back onto the main thread before sending the request, but we will be safe.
         dispatch_async(dispatch_get_main_queue(), ^{
-            ZNGNewMessage *newMessage = [self freshMessage];
-            newMessage.attachments = @[@{
-                                           kAttachementContentTypeKey : kAttachementContentTypeParam,
-                                           kAttachementBase64 : encodedString
-                                           }];
+
             [self.messageClient sendMessage:newMessage success:^(ZNGNewMessageResponse *response, ZNGStatus *status) {
                 
                 NSString * messageId = [[response messageIds] firstObject];

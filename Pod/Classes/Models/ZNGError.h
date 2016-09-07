@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString * const kZingleErrorDomain;
+
 @interface ZNGError : NSError
 
 @property(nonatomic, strong) NSString* errorText;

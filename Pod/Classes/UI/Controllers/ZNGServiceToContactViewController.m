@@ -24,6 +24,7 @@
 #import "JSQMessagesInputToolbar+DisablingInput.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
+#import "ZingleAccountSession.h"
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";

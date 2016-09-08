@@ -242,6 +242,10 @@ static void * KVOContext = &KVOContext;
 {
     ZNGContact * contact = [self contact];
     
+    if (contact == nil) {
+        return;
+    }
+    
     if (contact.isConfirmed) {
         [contact unconfirm];
         confirmButton.selected = NO;

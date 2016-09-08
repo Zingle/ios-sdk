@@ -23,4 +23,9 @@
              };
 }
 
+- (BOOL) isTextRelay
+{
+    return [self.code isEqualToString:@"text_relay"];
+}
+
 @end

@@ -18,4 +18,6 @@
 @property(nonatomic, strong) NSString* displayName;
 @property(nonatomic) bool isPrinterPlan;
 
+- (BOOL) isTextRelay;
+
 @end

@@ -153,7 +153,15 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) setAvailableServices:(NSArray<ZNGService *> * _Nullable)availableServices
 {
-    _availableServices = availableServices;
+    NSMutableArray<ZNGService *> * nonTextRelayServices = [[NSMutableArray alloc] initWithCapacity:[availableServices count]];
+    
+    for (ZNGService * service in availableServices) {
+        if (![service isTextRelay]) {
+            [nonTextRelayServices addObject:service];
+        }
+    }
+    
+    _availableServices = nonTextRelayServices;
 }
 
 #pragma mark - Account/Service state management
@@ -257,9 +265,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             self.availableServices = services;
         }
         
-        if ([services count] == 1) {
-            self.service = [services firstObject];
-        }
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
         self.availableServices = @[];

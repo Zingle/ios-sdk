@@ -39,6 +39,7 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
 
+- (BOOL) isTextRelay;
 
 - (ZNGChannelType *)phoneNumberChannelType;
 - (ZNGChannelType *)channelTypeWithDisplayName:(NSString *)channelDisplayName;

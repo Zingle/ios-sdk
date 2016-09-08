@@ -53,6 +53,11 @@
              };
 }
 
+- (BOOL) isTextRelay
+{
+    return [self.plan isTextRelay];
+}
+
 + (NSValueTransformer*)accountJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccount.class];

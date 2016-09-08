@@ -14,6 +14,7 @@
 #import "ZNGEventClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGServiceToContactViewController.h"
+#import "ZNGConversationDetailedEvents.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGAutomationClient.h"
 #import "ZNGContactClient.h"
@@ -23,6 +24,8 @@
 #import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
+
+NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"ZingleUserChangedDetailedEventsPreferenceNotification";
 
 // Override readonly properties with strong properties to get proper KVO
 @interface ZingleAccountSession ()
@@ -47,7 +50,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 }
 
 
-
 - (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
 {
     return [self initWithToken:token key:key accountChooser:nil serviceChooser:nil errorHandler:nil];
@@ -64,6 +66,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     if (self != nil) {
         contactClientSemaphore = dispatch_semaphore_create(0);
         
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
+        
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
         
@@ -73,6 +77,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) logout
@@ -246,6 +255,15 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }];
 }
 
+- (void) notifyShowDetailedEventsPreferenceChanged:(NSNotification *)notification
+{
+    NSNumber * number = notification.object;
+    
+    if ([number isKindOfClass:[NSNumber class]]) {
+        self.showDetailedEvents = [number boolValue];
+    }
+}
+
 #pragma mark - Account retrieval
 - (void) retrieveAvailableAccounts
 {
@@ -297,9 +315,19 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                                                               withMessageClient:self.messageClient
                                                                     eventClient:self.eventClient
                                                                   contactClient:self.contactClient];
-        
-        [self.conversationCache setObject:conversation forKey:contact.contactId];
     }
+    
+    // Do we need to switch from detailed events to non detailed events or vice versa?
+    BOOL isDetailedEvents = ([conversation isKindOfClass:[ZNGConversationDetailedEvents class]]);
+    
+    if ((!self.showDetailedEvents) && (isDetailedEvents)) {
+        conversation = [[ZNGConversationServiceToContact alloc] initWithConversation:conversation];
+    } else if ((self.showDetailedEvents) && (!isDetailedEvents)) {
+        conversation = [[ZNGConversationDetailedEvents alloc] initWithConversation:conversation];
+    }
+    
+    // This may or may not actually have an effect, depending on if we initialized a new conversation or switched types above.q
+    [self.conversationCache setObject:conversation forKey:contact.contactId];
 
     [conversation loadRecentEventsErasingOlderData:NO];
     return conversation;
@@ -311,9 +339,14 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:contactId];
     
     if (conversation != nil) {
-        [conversation loadRecentEventsErasingOlderData:NO];
-        completion(conversation);
-        return;
+        BOOL isDetailedEvents = [conversation isKindOfClass:[ZNGConversationDetailedEvents class]];
+        BOOL correctType = (self.showDetailedEvents == isDetailedEvents);
+        
+        if (correctType) {
+            [conversation loadRecentEventsErasingOlderData:NO];
+            completion(conversation);
+            return;
+        }
     }
     
     void (^success)(ZNGContact *, ZNGStatus *) = ^(ZNGContact *contact, ZNGStatus *status) {

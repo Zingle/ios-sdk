@@ -19,6 +19,11 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGServiceToContactViewController;
 @class ZNGContactEditViewController;
 
+/**
+ *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
+ */
+extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
+
 @interface ZingleAccountSession : ZingleSession
 
 #pragma mark - Account/Service selection
@@ -53,6 +58,11 @@ NS_ASSUME_NONNULL_BEGIN
  *  KVO compliant flag that indicates when the session has been fully initialized (with an account and a service) and may take requests.
  */
 @property (nonatomic, assign) BOOL available;
+
+/**
+ *  If this flag is set, all conversation objects provided by this session will be detailed event conversations.
+ */
+@property (nonatomic, assign) BOOL showDetailedEvents;
 
 #pragma mark - Initialization
 /**

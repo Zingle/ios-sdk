@@ -128,7 +128,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) setService:(ZNGService *)service
 {
-    if ((_service != nil) && (![_service isEqual:service])) {
+    if (service == nil) {
+        _service = nil;
+        return;
+    }
+    
+    if (![_service isEqual:service]) {
         ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
     }
     
@@ -153,6 +158,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) setAvailableServices:(NSArray<ZNGService *> * _Nullable)availableServices
 {
+    // Note: There is a distinction between a nil array (services have not been requested) and an empty array (no services are available)
+    //  that we must preserve here.
+    if (availableServices == nil) {
+        _availableServices = nil;
+        return;
+    }
+    
     NSMutableArray<ZNGService *> * nonTextRelayServices = [[NSMutableArray alloc] initWithCapacity:[availableServices count]];
     
     for (ZNGService * service in availableServices) {

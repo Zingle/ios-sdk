@@ -191,6 +191,7 @@ static void * KVOContext = &KVOContext;
             [[ZNGAnalytics sharedAnalytics] trackShowedConversationDetails:self.conversation];
         }
         
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZingleUserChangedDetailedEventsPreferenceNotification object:@(!alreadyShowingDetailedEvents)];
         [self.conversation loadRecentEventsErasingOlderData:YES];
     }];
     [actions addObject:toggleDetailedEvents];

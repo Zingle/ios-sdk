@@ -144,6 +144,7 @@ static void * KVOContext = &KVOContext;
     } else {
         self.inputToolbar.noSelectedChannelText = nil;
         [self.inputToolbar enableInput];
+        [self.inputToolbar toggleSendButtonEnabled];
     }
 }
 
@@ -305,6 +306,7 @@ static void * KVOContext = &KVOContext;
     if (!someKindOfBlock) {
         if (self.conversation.channel != nil) {
             [self.inputToolbar enableInput];
+            [self.inputToolbar toggleSendButtonEnabled];
         }
         
         // Do we need to remove previous UI for a blocked channel?

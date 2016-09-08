@@ -304,7 +304,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to create contact" message:@"A new contact must have at least one phone number or other communication channel" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
             [alert addAction:ok];
-            [self presentViewController:alert animated:YES completion:nil];
+            [self presentViewController:alert animated:YES completion:^{
+                self.saveButton.enabled = YES;
+            }];
             return;
         }
     }

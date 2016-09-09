@@ -7,6 +7,7 @@
 //
 
 #import "ZNGConversationDetailedEvents.h"
+#import "ZNGEvent.h"
 
 @implementation ZNGConversationDetailedEvents
 
@@ -26,8 +27,7 @@
 
 - (NSArray<NSString *> *) eventTypes
 {
-    // No specific filter == all event types
-    return nil;
+    return [ZNGEvent recognizedEventTypes];
 }
 
 @end

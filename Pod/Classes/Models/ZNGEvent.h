@@ -30,6 +30,8 @@
 + (instancetype) eventForNewMessage:(ZNGMessage *)message;
 + (instancetype) eventForNewNote:(NSString *)note toContact:(ZNGContact *)contact;
 
++ (NSArray<NSString *> *) recognizedEventTypes;
+
 - (BOOL) isMessage;
 - (BOOL) isNote;
 

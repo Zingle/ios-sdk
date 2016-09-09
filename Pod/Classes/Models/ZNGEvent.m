@@ -22,6 +22,27 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
 
 @implementation ZNGEvent
 
++ (NSArray<NSString *> *) recognizedEventTypes
+{
+    static NSArray<NSString *> * types;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        types = @[
+                  ZNGEventTypeMessage,
+                  ZNGEventTypeNote,
+                  ZNGEventMarkConfirmed,
+                  ZNGEventMarkUnconfirmed,
+                  ZNGEventContactCreated,
+                  ZNGEventConversationStarred,
+                  ZNGEventConversationUnstarred,
+                  ZNGEventWorkflowStarted,
+                  ZNGEventWorkflowEnded
+                  ];
+    });
+    
+    return types;
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

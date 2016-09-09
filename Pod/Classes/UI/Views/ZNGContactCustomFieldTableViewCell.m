@@ -263,6 +263,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     // We only need to save our raw text if the picker view did not exist.  If a picker exists, changing the value of the picker will change our value.
     if (!pickerExists) {
         self.customFieldValue.value = textField.text;
+    } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+        if ([self.customFieldValue.value boolValue]) {
+            self.customFieldValue.value = @"true";
+        } else {
+            self.customFieldValue.value = @"false";
+        }
     }
 }
 

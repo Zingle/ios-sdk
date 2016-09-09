@@ -83,7 +83,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void) commonInit
 {
-    [self addObserver:self forKeyPath:NSStringFromSelector(@selector(data)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
@@ -98,7 +97,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self removeObserver:self forKeyPath:ZNGKVOContactsPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath context:ZNGInboxKVOContext];
-    [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(data)) context:ZNGInboxKVOContext];
 }
 
 + (instancetype)withAccountSession:(ZingleAccountSession *)aSession
@@ -182,6 +180,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         return;
     }
     
+    ZNGLogDebug(@"Inbox data changed from %@ to %@", _data, data);
+    
     _data = data;
     
     [[ZNGAnalytics sharedAnalytics] trackConversationFilterSwitch:data];
@@ -222,16 +222,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         if ((!self.data.loading) && (refreshControl.isRefreshing)) {
             [refreshControl endRefreshing];
         }
-    } else if ([keyPath isEqualToString:NSStringFromSelector(@selector(data))]) {
-        ZNGInboxDataSet * oldData = change[NSKeyValueChangeOldKey];
-        
-        if (![self.data isEqual:oldData]) {
-            // This is a new filtering type
+    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingInitialDataPath]) {
+        if (self.data.loadingInitialData) {
             self.tableView.hidden = YES;
             [self showActivityIndicator];
-        }
-    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingInitialDataPath]) {
-        if (!self.data.loadingInitialData) {
+        } else {
             // We just finished loading
             [self hideActivityIndicator];
             self.tableView.hidden = NO;
@@ -303,7 +298,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             
         case NSKeyValueChangeSetting:
         default:
-            ZNGLogVerbose(@"Reloading the table");
+            ZNGLogVerbose(@"Reloading the table to new data with %llu items", (unsigned long long)[self.data.contacts count]);
             // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
             [self.tableView reloadData];
     }

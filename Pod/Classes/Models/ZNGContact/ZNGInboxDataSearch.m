@@ -17,7 +17,7 @@
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat:@"%@: %@ %p", [self class], self.searchTerm, self];
+    return [NSString stringWithFormat:@"<%@: %@ %p>", [self class], self.searchTerm, self];
 }
 
 - (nonnull instancetype) initWithContactClient:(ZNGContactClient *)contactClient searchTerm:(nonnull NSString *)theSearchTerm;

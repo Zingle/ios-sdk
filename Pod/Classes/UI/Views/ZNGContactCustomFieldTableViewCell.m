@@ -257,7 +257,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) textFieldDidEndEditing:(UITextField *)textField
 {
-    self.customFieldValue.value = textField.text;
+    UIView * picker = textField.inputView;
+    BOOL pickerExists = (([picker isKindOfClass:[UIDatePicker class]]) || ([picker isKindOfClass:[UIPickerView class]]));
+    
+    // We only need to save our raw text if the picker view did not exist.  If a picker exists, changing the value of the picker will change our value.
+    if (!pickerExists) {
+        self.customFieldValue.value = textField.text;
+    }
 }
 
 - (void) applyChangesIfFirstResponder

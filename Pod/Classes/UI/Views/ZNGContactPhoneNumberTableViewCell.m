@@ -55,7 +55,9 @@
     self.textField.enabled = !self.editingLocked;
     self.textField.rightView = (self.editingLocked) ? lockedRightView : nil;
     self.textField.backgroundColor = (self.editingLocked) ? [UIColor zng_light_gray] : defaultTextFieldBackgroundColor;
-    self.textField.text = (self.service != nil) ? [self.service displayNameForChannel:self.channel] : self.channel.formattedValue;
+    
+    NSString * value = ([self.service shouldDisplayRawValueForChannel:self.channel]) ? self.channel.value : self.channel.formattedValue;
+    self.textField.text = value;
 }
 
 - (void) applyChangesIfFirstResponder

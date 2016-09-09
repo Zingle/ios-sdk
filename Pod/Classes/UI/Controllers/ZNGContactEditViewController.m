@@ -391,7 +391,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     if (channelExistedPreviously || dataIsWritten) {
         // Confirm
-        NSString * message = [NSString stringWithFormat:@"Delete the %@ channel?", [self.service displayNameForChannel:cell.channel] ?: @""];
+        NSString * channelDescription = [self.service shouldDisplayRawValueForChannel:cell.channel] ? [cell.channel displayValueUsingRawValue] : [cell.channel displayValueUsingFormattedValue];
+        NSString * message = [NSString stringWithFormat:@"Delete the %@ channel?", channelDescription ?: @""];
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Delete" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [self _deleteChannel:cell.channel];

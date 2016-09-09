@@ -47,5 +47,10 @@
  */
 - (NSString *) valueForComparison;
 
+// These are separate methods because of http://jira.zinglecorp.com:8080/browse/TECH-1970 and its code that must live in
+//  the service object to determine which value to display for phone numbers.  Gross.
+- (NSString *) displayValueUsingRawValue;
+- (NSString *) displayValueUsingFormattedValue;
+
 
 @end

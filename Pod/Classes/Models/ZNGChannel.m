@@ -85,4 +85,20 @@
     self.formattedValue = newValue;
 }
 
+- (NSString *) _displayValueWithSuppliedValue:(NSString *)value
+{
+    NSString * prefix = ([self.displayName length] > 0) ? self.displayName : self.channelType.displayName;
+    return [NSString stringWithFormat:@"%@ - %@", prefix, value];
+}
+
+- (NSString *) displayValueUsingRawValue
+{
+    return [self _displayValueWithSuppliedValue:self.value];
+}
+
+- (NSString *) displayValueUsingFormattedValue
+{
+    return [self _displayValueWithSuppliedValue:self.formattedValue];
+}
+
 @end

@@ -484,7 +484,7 @@ static void * KVOContext = &KVOContext;
         ZNGChannel * channel = [[event.message contactCorrespondent] channel];
         
         if (channel != nil) {
-            NSString * channelString = [NSString stringWithFormat:@"\n%@: %@", channel.displayName, [self.conversation.service displayNameForChannel:channel]];
+            NSString * channelString = [NSString stringWithFormat:@"\n%@", [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue]];
             NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:12.0] };
             NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:channelString attributes:attributes];
             NSMutableAttributedString * mutableString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
@@ -515,7 +515,7 @@ static void * KVOContext = &KVOContext;
 #pragma mark - Actions
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel
 {
-    return [self.conversation.service displayNameForChannel:channel];
+    return [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue];
 }
 
 // Our super implementation of this is fine, but we must first ensure that there is a channel selected
@@ -584,7 +584,7 @@ static void * KVOContext = &KVOContext;
     }
 
     for (ZNGChannel * channel in self.conversation.contact.channels) {
-        NSString * displayName = [self.conversation.service displayNameForChannel:channel];
+        NSString * displayName = [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue];
         UIAlertAction * action = [UIAlertAction actionWithTitle:displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             self.conversation.channel = channel;
         }];

@@ -182,18 +182,16 @@
  *  Thanks to http://jira.zinglecorp.com:8080/browse/TECH-1970, there is logic for displaying a channel
  *   that depends on the country code for the channel vs. the service.  This is gross and I hate it.
  */
-- (NSString *) displayNameForChannel:(ZNGChannel *)channel
+- (BOOL) shouldDisplayRawValueForChannel:(ZNGChannel *)channel
 {
-    NSString * country = self.serviceAddress.country;
-    
-    if ((country != nil) && ([channel isPhoneNumber])) {
-        if (![country isEqualToString:channel.country]) {
-            // We have a phone number from a different country.  Show the raw value.
-            return channel.value;
-        }
+    if (![channel isPhoneNumber]) {
+        return NO;
     }
     
-    return channel.formattedValue;
+    NSString * country = self.serviceAddress.country;
+    NSString * channelCountry = channel.country;
+    
+    return (([country length] > 0) && ([channelCountry length] > 0) && (![country isEqualToString:channelCountry]));
 }
 
 

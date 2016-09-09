@@ -76,14 +76,14 @@
     UIFont * font = [UIFont latoFontOfSize:fontPointSize];
 
     
-    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to: " attributes:@{ NSFontAttributeName : boldFont }];
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to:  " attributes:@{ NSFontAttributeName : boldFont }];
     NSString * valueString;
     
     if (channel != nil) {
         if ([self.delegate respondsToSelector:@selector(displayNameForChannel:)]) {
             valueString = [self.delegate displayNameForChannel:channel];
         } else {
-            valueString = channel.formattedValue;
+            valueString = [channel displayValueUsingFormattedValue];
         }
     } else if (self.noSelectedChannelText != nil) {
         valueString = self.noSelectedChannelText;

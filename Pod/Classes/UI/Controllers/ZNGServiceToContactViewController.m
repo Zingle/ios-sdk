@@ -46,6 +46,9 @@ static void * KVOContext = &KVOContext;
     NSLayoutConstraint * blockedChannelOffScreenConstraint;
     
     dispatch_source_t emphasizeTimer;
+    
+    NSMutableArray<NSDate *> * touchTimes;
+    NSUInteger spamZIndex;
 }
 
 @dynamic conversation;
@@ -110,6 +113,10 @@ static void * KVOContext = &KVOContext;
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
+    spamZIndex = INT_MAX;
+    
     [self updateConfirmedButton];
     [self setupBannerContainer];
     
@@ -153,6 +160,105 @@ static void * KVOContext = &KVOContext;
 {
     ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.conversation;
     return conversation.contact;
+}
+
+- (void) checkForSpam
+{
+    NSDate * mostRecentTouch = [NSDate date];
+    [touchTimes addObject:mostRecentTouch];
+    
+    if ([touchTimes count] < 12) {
+        // Not even spamming
+        return;
+    }
+    
+    if ([touchTimes count] > 12) {
+        [touchTimes removeObjectAtIndex:0];
+    }
+    
+    NSDate * oldestTouch = [touchTimes firstObject];
+    NSTimeInterval totalSpamTime = [mostRecentTouch timeIntervalSinceDate:oldestTouch];
+    
+    if (totalSpamTime > 4.0) {
+        // Not fast enough
+        return;
+    }
+    
+    NSDate * secondMostRecentTouch = touchTimes[[touchTimes count] - 2];
+    NSTimeInterval spamTime = [mostRecentTouch timeIntervalSinceDate:secondMostRecentTouch];
+    uint32_t percentChance = 0;
+    
+    // Change of spam will be 50% if the touch was a 0.25 seconds ago, 10% if it was 2 seconds ago
+    if (spamTime <= 0.25) {
+        percentChance = 50;
+    } else if (spamTime < 1.0) {
+        percentChance = 25;
+    } else if (spamTime < 2.0) {
+        percentChance = 10;
+    }
+    
+    uint32_t token = arc4random() % 100;
+    
+    if (token <= percentChance) {
+        [self smoulderAtRandomPoint];
+    }
+}
+
+- (void) smoulderAtRandomPoint
+{
+    CAEmitterLayer * smoulderer = [CAEmitterLayer layer];
+    smoulderer.frame = self.view.layer.bounds;
+    smoulderer.renderMode = kCAEmitterLayerAdditive;
+    smoulderer.beginTime = CACurrentMediaTime();
+    smoulderer.zPosition = spamZIndex--;
+    
+    u_int32_t minY = 64.0;
+    u_int32_t maxY = minY + bannerContainer.frame.size.height + 50.0;
+    u_int32_t minX = 20.0;
+    u_int32_t maxX = bannerContainer.frame.size.width - 20.0 - minX;
+    
+    CGFloat y = minY + (arc4random() % (maxY - minY));
+    CGFloat x = minX + (arc4random() % (maxX - minX));
+    
+    smoulderer.emitterPosition = CGPointMake(x, y);
+    
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    UIImage * particle = [UIImage imageNamed:@"particle" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    CAEmitterCell * cell = [CAEmitterCell emitterCell];
+    cell.birthRate = 75;
+    cell.lifetime = 3.0;
+    cell.lifetimeRange = 0.5;
+    cell.color = [[UIColor colorWithRed:0.8 green:0.4 blue:0.2 alpha:0.1]
+                  CGColor];
+    cell.contents = (id)[particle CGImage];
+    cell.velocity = 10;
+    cell.velocityRange = 20;
+    cell.emissionRange = 2.0 * M_PI;
+    cell.scale = 0.25;
+    cell.scaleSpeed = 0.25;
+    cell.spin = 0.0;
+    cell.spinRange = 1.0;
+    cell.name = @"fire";
+    
+    smoulderer.emitterCells = @[ cell ];
+
+    
+    [self.view.layer addSublayer:smoulderer];
+    
+    
+    NSTimeInterval lifetime = 1.0 + (arc4random() % 5);
+    
+    // Set birth rate to 0, wait for last cells to expire (lifetime + lifetimeRange), then remove emitter layer
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(lifetime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [smoulderer setValue:@(0.0) forKeyPath:@"emitterCells.fire.birthRate"];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((cell.lifetime + cell.lifetimeRange) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [smoulderer removeFromSuperlayer];
+        });
+    });
+    
 }
 
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems
@@ -259,6 +365,8 @@ static void * KVOContext = &KVOContext;
         
         [[ZNGAnalytics sharedAnalytics] trackConfirmedConversation:self.conversation];
     }
+    
+    [self checkForSpam];
 }
 
 - (void) startEmphasisTimer

@@ -21,7 +21,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 113.0;
+    self.preferredDefaultHeight = 121.0;
     
     self.barTintColor = [UIColor whiteColor];
     
@@ -32,6 +32,8 @@
     sendButton.tintColor = [UIColor zng_green];
     sendButton.titleLabel.font = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
+
+    self.clipsToBounds = YES;
     
     self.contentView.textView.font = [UIFont latoFontOfSize:16.0];
     
@@ -76,7 +78,8 @@
     UIFont * font = [UIFont latoFontOfSize:fontPointSize];
 
     
-    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to:  " attributes:@{ NSFontAttributeName : boldFont }];
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"Reply to:  " attributes:@{ NSFontAttributeName : boldFont,
+                                                                                                                        NSForegroundColorAttributeName: [UIColor colorFromHexString:@"#6B6B6B"] }];
     NSString * valueString;
     
     if (channel != nil) {

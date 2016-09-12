@@ -47,6 +47,11 @@
     return [UIColor colorFromHexString:@"#EE8176"];
 }
 
++ (UIColor *)zng_titleBlack
+{
+    return [UIColor colorFromHexString:@"#333333"];
+}
+
 + (UIColor *)zng_blue
 {
     return [UIColor colorFromHexString:@"#285C8C"];

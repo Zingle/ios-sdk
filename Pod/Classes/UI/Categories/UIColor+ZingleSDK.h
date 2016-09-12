@@ -36,6 +36,7 @@
  */
 + (UIColor *)zng_messageBubbleLightGrayColor;
 
++ (UIColor *)zng_titleBlack;
 
 + (UIColor *)zng_blue;
 

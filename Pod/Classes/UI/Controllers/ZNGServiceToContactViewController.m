@@ -135,9 +135,11 @@ static void * KVOContext = &KVOContext;
         if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
             [self updateConfirmedButton];
         } else if ([keyPath isEqualToString:KVOChannelPath]) {
+            [self updateUIForAvailableChannels];
             [self updateForChannelSelection];
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateUIForAvailableChannels];
+            [self updateForChannelSelection];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -474,15 +476,15 @@ static void * KVOContext = &KVOContext;
             [bannerContainer addSubview:blockedChannelBanner];
             [bannerContainer addConstraints:@[height, width, left, blockedChannelOffScreenConstraint]];
             
-            UILabel * textLabel = [[UILabel alloc] initWithFrame:rect];
-            textLabel.textAlignment = NSTextAlignmentCenter;
-            textLabel.font = [UIFont latoBoldFontOfSize:13.0];
-            textLabel.textColor = [UIColor whiteColor];
-            textLabel.text = text;
-            textLabel.translatesAutoresizingMaskIntoConstraints = NO;
-            NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:blockedChannelBanner attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-            NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:blockedChannelBanner attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-            [blockedChannelBanner addSubview:textLabel];
+            blockedChannelLabel = [[UILabel alloc] initWithFrame:rect];
+            blockedChannelLabel.textAlignment = NSTextAlignmentCenter;
+            blockedChannelLabel.font = [UIFont latoBoldFontOfSize:13.0];
+            blockedChannelLabel.textColor = [UIColor whiteColor];
+            blockedChannelLabel.text = text;
+            blockedChannelLabel.translatesAutoresizingMaskIntoConstraints = NO;
+            NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:blockedChannelLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:blockedChannelBanner attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+            NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:blockedChannelLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:blockedChannelBanner attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+            [blockedChannelBanner addSubview:blockedChannelLabel];
             [blockedChannelBanner addConstraints:@[centerX, centerY]];
             
             // Animate on screen

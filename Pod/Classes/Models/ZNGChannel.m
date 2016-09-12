@@ -61,8 +61,9 @@
 {
     BOOL valueChanged = ![[self valueForComparison] isEqualToString:[old valueForComparison]];
     BOOL typeChanged = ![self.displayName isEqualToString:old.displayName];
+    BOOL blockedStatusChanged = ((self.blockInbound != old.blockInbound) || (self.blockOutbound != old.blockOutbound));
     
-    return (valueChanged || typeChanged);
+    return (valueChanged || typeChanged || blockedStatusChanged);
 }
 
 - (BOOL) isEqual:(ZNGChannel *)other

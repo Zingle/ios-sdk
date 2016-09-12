@@ -16,7 +16,7 @@
 #import "ZNGNewChannel.h"
 #import "ZNGAnalytics.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 NSString * __nonnull const ZNGContactNotificationSelfMutated = @"ZNGContactNotificationSelfMutated";
 
@@ -43,12 +43,6 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 - (void) updateRemotely
 {
     [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-        
-        if (![contact requiresVisualRefeshSince:self]) {
-            // Nothing significant has changed
-            return;
-        }
-        
         if (![[self fullName] isEqualToString:[contact fullName]]) {
             self.customFieldValues = contact.customFieldValues;
         }
@@ -59,6 +53,19 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         
         if (![self.channels isEqualToArray:contact.channels]) {
             self.channels = contact.channels;
+        } else {
+            __block BOOL allChannelsEqual = YES;
+            [contact.channels enumerateObjectsUsingBlock:^(ZNGChannel * _Nonnull newChannel, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([newChannel changedSince:self.channels[idx]]) {
+                    allChannelsEqual = NO;
+                    *stop = YES;
+                }
+            }];
+            
+            if (!allChannelsEqual) {
+                self.channels = contact.channels;
+                ZNGLogDebug(@"Updating contact's channels due to one or more mutated channels.");
+            }
         }
         
         if (![self.labels isEqualToArray:contact.labels]) {
@@ -77,7 +84,9 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
             self.isStarred = contact.isStarred;
         }
         
-    } failure:nil];
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to refresh contact: %@", error);
+    }];
 }
 
 #pragma mark - Mantle

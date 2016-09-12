@@ -194,8 +194,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     // There is not an explicit default.  Check for the most recent message.
     ZNGMessage * message = [self mostRecentInboundMessage];
     
-    if ([self.contact.channels containsObject:message.sender.channel]) {
-        return message.sender.channel;
+    if (message.sender.channel != nil) {
+        return [self channelWithinContactMatchingChannel:message.sender.channel];
     }
     
     // We are getting into a muddy area.  Check for a message in either direction.
@@ -203,18 +203,31 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     channel = ([message isOutbound]) ? message.recipient.channel : message.sender.channel;
     
     if (channel != nil) {
-        return channel;
+        return [self channelWithinContactMatchingChannel:channel];
     }
     
     // Things are even muddier.  There appears to be no message history with a relevant channel.  Look for a phone number channel.
     channel = [self.contact phoneNumberChannel];
     
     if (channel != nil) {
-        return channel;
+        return [self channelWithinContactMatchingChannel:channel];
     }
     
     // Ummm I really don't know what channel to pick at this point.  Pick the first one!
     return [self.contact.channels firstObject];
+}
+
+// If the provided channel exists within our contact object, where it will have more complete information, this method returns that instance.
+// If not, it returns the same object.
+- (ZNGChannel *) channelWithinContactMatchingChannel:(ZNGChannel *)channel
+{
+    NSUInteger channelIndex = [self.contact.channels indexOfObject:channel];
+    
+    if (channelIndex == NSNotFound) {
+        return channel;
+    }
+    
+    return self.contact.channels[channelIndex];
 }
 
 - (void) addInternalNote:(NSString *)note

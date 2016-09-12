@@ -128,9 +128,11 @@ static void * KVOContext = &KVOContext;
         if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
             [self updateConfirmedButton];
         } else if ([keyPath isEqualToString:KVOChannelPath]) {
+            [self updateUIForAvailableChannels];
             [self updateForChannelSelection];
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateUIForAvailableChannels];
+            [self updateForChannelSelection];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

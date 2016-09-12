@@ -15,6 +15,8 @@
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
+static NSString * const ChannelsKVOPath = @"contact.channels";
+
 @implementation ZNGConversationServiceToContact
 
 - (id) initFromService:(ZNGService*)aService
@@ -41,6 +43,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
 
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(events)) options:NSKeyValueObservingOptionNew context:nil];
+        [self addObserver:self forKeyPath:ChannelsKVOPath options:NSKeyValueObservingOptionNew context:nil];
+        
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
     
@@ -54,6 +58,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) dealloc
 {
+    [self removeObserver:self forKeyPath:ChannelsKVOPath];
     [self removeObserver:self forKeyPath:NSStringFromSelector(@selector(events))];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -72,6 +77,24 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     if ([keyPath isEqualToString:NSStringFromSelector(@selector(events))]) {
         if ((self.channel == nil) && ([self.events count] > 0)) {
             self.channel = [self defaultChannelForContact];
+        }
+    } else if ([keyPath isEqualToString:ChannelsKVOPath]) {
+        // We may need to update our current channel
+        if (self.channel != nil) {
+            NSUInteger channelIndex = [self.contact.channels indexOfObject:self.channel];
+            
+            if (channelIndex == NSNotFound) {
+                ZNGLogError(@"Received a KVO update to update channels, but our current channel no longer exists in the contact's %llu channels.  Help.", (unsigned long long)[self.contact.channels count]);
+                self.channel = nil;
+                return;
+            }
+            
+            ZNGChannel * updatedChannel = self.contact.channels[channelIndex];
+            
+            if ([updatedChannel changedSince:self.channel]) {
+                ZNGLogDebug(@"Our current channel seems to have changed.  Updating.");
+                self.channel = updatedChannel;
+            }
         }
     }
 }

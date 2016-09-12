@@ -172,11 +172,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-oP-Tqy">
-                    <rect key="frame" x="82" y="7" width="15" height="16"/>
-                    <constraints>
-                        <constraint firstAttribute="width" constant="15" id="Bbc-Pf-KBE"/>
-                        <constraint firstAttribute="height" constant="16" id="ooI-9j-RbU"/>
-                    </constraints>
+                    <rect key="frame" x="82" y="4" width="12" height="22"/>
                     <color key="tintColor" white="0.47702047413793103" alpha="1" colorSpace="calibratedWhite"/>
                     <state key="normal" image="chevronUp"/>
                     <connections>
@@ -230,7 +226,7 @@
     <resources>
         <image name="addNote" width="26" height="26"/>
         <image name="attachImage" width="24" height="24"/>
-        <image name="chevronUp" width="18" height="18"/>
+        <image name="chevronUp" width="12" height="13"/>
         <image name="insertCustomField" width="26" height="26"/>
         <image name="insertTemplate" width="28" height="28"/>
         <image name="triggerAutomation" width="30" height="30"/>

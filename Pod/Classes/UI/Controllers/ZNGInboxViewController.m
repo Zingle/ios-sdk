@@ -239,10 +239,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void) notifyContactSelfMutated:(NSNotification *)notification
 {
     // We cannot use the normal KVO to detect this change since it occured in place within the object.
-    NSUInteger index = [self.data.contacts indexOfObject:notification.object];
     
-    if (index != NSNotFound) {
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]] withRowAnimation:UITableViewRowAnimationFade];
+    if ([self.data.contacts containsObject:notification.object]) {
+        [self.tableView reloadData];
     }
 }
 
@@ -265,34 +264,20 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     {
         case NSKeyValueChangeInsertion:
             ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
-            [self.tableView insertRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationMiddle];
+            [self.tableView reloadData];
             break;
             
         case NSKeyValueChangeRemoval:
             ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
-            [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationMiddle];
+            [self.tableView reloadData];
+
             break;
             
         case NSKeyValueChangeReplacement:
         {
             ZNGLogVerbose(@"Replacing %ld items", (unsigned long)[paths count]);
-            
-            NSArray<ZNGContact *> * oldContacts = change[NSKeyValueChangeOldKey];
-            __block BOOL shouldEmphasize = NO;
-            
-            [paths enumerateObjectsUsingBlock:^(NSIndexPath * _Nonnull indexPath, NSUInteger idx, BOOL * _Nonnull stop) {
-                ZNGContact * old = oldContacts[idx];
-                ZNGContact * current = [self contactAtIndexPath:indexPath];
-                
-                if ([current visualRefreshSinceOldMessageShouldAnimate:old]) {
-                    shouldEmphasize = YES;
-                    *stop = YES;
-                }
-            }];
-            
-            UITableViewRowAnimation animation = (shouldEmphasize) ? UITableViewRowAnimationMiddle : UITableViewRowAnimationFade;
-            
-            [self.tableView reloadRowsAtIndexPaths:paths withRowAnimation:animation];
+            [self.tableView reloadData];
+
             break;
         }
             

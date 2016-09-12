@@ -51,6 +51,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if (dateFormatter == nil) {
         dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         dateFormatter.dateStyle = NSDateFormatterShortStyle;
         dateFormatter.timeStyle = NSDateFormatterNoStyle;
     }
@@ -116,6 +117,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeDate;
+        datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         [datePicker addTarget:self action:@selector(datePickerSelectedDate:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
 
@@ -182,7 +184,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) datePickerSelectedDate:(UIDatePicker *)sender
 {
-    // The user has selected a year.  We will use date components to find the UTC time at noon on that day.
+    // The user has selected a day.  We will use date components to find the UTC time at noon on that day.
     NSCalendar * calendar = [NSCalendar currentCalendar];
     NSDateComponents * components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:datePicker.date];
     components.hour = 12;

@@ -43,9 +43,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 - (void) updateRemotely
 {
     [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-        if (![[self fullName] isEqualToString:[contact fullName]]) {
-            self.customFieldValues = contact.customFieldValues;
-        }
+        self.customFieldValues = contact.customFieldValues;
         
         if (![self.lastMessage isEqual:contact.lastMessage]) {
             self.lastMessage = contact.lastMessage;

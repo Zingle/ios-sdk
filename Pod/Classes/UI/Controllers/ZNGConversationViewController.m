@@ -778,7 +778,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self shouldShowTimestampAboveIndexPath:indexPath] ? kJSQMessagesCollectionViewCellLabelHeightDefault : 0.0;
+    return [self shouldShowTimestampAboveIndexPath:indexPath] ? 28.0 : 0.0;
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
@@ -790,7 +790,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return 0.0;
     }
     
-    return kJSQMessagesCollectionViewCellLabelHeightDefault;
+    return 16.0;
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView

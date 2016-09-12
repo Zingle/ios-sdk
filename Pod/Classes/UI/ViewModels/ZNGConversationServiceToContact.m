@@ -45,7 +45,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(events)) options:NSKeyValueObservingOptionNew context:nil];
         [self addObserver:self forKeyPath:ChannelsKVOPath options:NSKeyValueObservingOptionNew context:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceivedDawg:) name:ZNGPushNotificationReceived object:nil];
     }
     
     return self;
@@ -115,7 +115,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return [_contact fullName];
 }
 
-- (void) notifyPushNotificationReceived:(NSNotification *)notification
+- (void) notifyPushNotificationReceivedDawg:(NSNotification *)notification
 {
     NSString * notificationContactId = notification.userInfo[@"feedId"];
     BOOL thisPushRegardingSomeOtherContact = (([notificationContactId length] > 0) && (![notificationContactId isEqualToString:self.contact.contactId]));

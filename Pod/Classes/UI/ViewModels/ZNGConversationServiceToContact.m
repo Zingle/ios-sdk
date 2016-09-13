@@ -106,8 +106,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (void) setChannel:(ZNGChannel *)channel
 {
+    if ((_channel != nil) && (channel != nil) && (![channel isEqual:_channel])) {
+        [[ZNGAnalytics sharedAnalytics] trackChangedChannel:channel inConversation:self];
+    }
+
     _channel = channel;
-    [[ZNGAnalytics sharedAnalytics] trackChangedChannel:channel inConversation:self];
 }
 
 - (NSArray<NSString *> *)eventTypes

@@ -27,6 +27,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     UIColor * defaultTextFieldBackgroundColor;
     
     BOOL numericOnly;
+    BOOL justClearedDateOrTime;
 }
 
 - (void) awakeFromNib
@@ -110,11 +111,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     // Do we need a picker?
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
+        self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeTime;
         [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
+        self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeDate;
         datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
@@ -122,11 +125,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self.textField.inputView = datePicker;
 
     } else if (([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
+        self.textField.clearButtonMode = UITextFieldViewModeNever;
         pickerView = [[UIPickerView alloc] init];
         pickerView.delegate = self;
         pickerView.dataSource = self;
         self.textField.inputView = pickerView;
     } else {
+        self.textField.clearButtonMode = UITextFieldViewModeNever;
+
         // This is text input
         // Is it numeric of text?
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeNumber]) {
@@ -138,6 +144,23 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             self.textField.autocapitalizationType = ([self.customFieldValue.customField shouldCapitalizeEveryWord]) ? UITextAutocapitalizationTypeWords : UITextAutocapitalizationTypeSentences;
         }
     }
+}
+
+#pragma mark - Data type
+- (BOOL) isDateOrTimeType
+{
+    return ([self isDateType] || [self isTimeType]);
+}
+
+- (BOOL) isDateType
+{
+    return [self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate];
+
+}
+
+- (BOOL) isTimeType
+{
+    return [self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime];
 }
 
 - (NSUInteger) indexOfCurrentValue
@@ -248,6 +271,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Text field delegate
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
+    // Do not allow picking outside of the date/time pickers for those cases.  This is only relevant if the user has an external keyboard attached.
+    if ([self isDateOrTimeType]) {
+        return NO;
+    }
+    
     if (!numericOnly) {
         return YES;
     }
@@ -255,6 +283,37 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSCharacterSet * nonNumericCharacters = [[NSCharacterSet decimalDigitCharacterSet] invertedSet];
     NSRange nonNumericRange = [string rangeOfCharacterFromSet:nonNumericCharacters];
     return (nonNumericRange.location == NSNotFound);    // Return YES if we did not find any non numeric characters
+}
+
+- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField
+{
+    // If this text field is not already first responder and the user hits clear, we do not want that itself to
+    //  make the text field first responder.  This only occurs for date/time fields.
+    if (justClearedDateOrTime) {
+        justClearedDateOrTime = NO;
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField
+{
+    // We will select the date picker's starting date when the user first begins editing.
+    if ([self isTimeType]) {
+        [self datePickerSelectedTime:datePicker];
+    } else if ([self isDateType]) {
+        [self datePickerSelectedDate:datePicker];
+    }
+}
+
+- (BOOL) textFieldShouldClear:(UITextField *)textField
+{
+    if ([self isDateOrTimeType]) {
+        justClearedDateOrTime = YES;
+    }
+    
+    return YES;
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField

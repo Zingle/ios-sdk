@@ -543,7 +543,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIImagePickerController * picker = [[UIImagePickerController alloc] init];
     picker.delegate = self;
-    picker.allowsEditing = YES;
+    picker.allowsEditing = NO;
     picker.sourceType = cameraMode ? UIImagePickerControllerSourceTypeCamera : UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:picker animated:YES completion:nil];
 }
@@ -556,7 +556,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    UIImage * image = info[UIImagePickerControllerEditedImage];
+    UIImage * image = info[UIImagePickerControllerOriginalImage];
     
     if (image == nil) {
         ZNGLogError(@"No image data was found after the user selected an image.");

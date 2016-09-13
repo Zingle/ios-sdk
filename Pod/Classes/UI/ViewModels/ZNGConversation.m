@@ -439,6 +439,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     self.loading = YES;
     
+    ZNGParticipant * recipient = [newMessage.recipients firstObject];
+    ZNGLogVerbose(@"Sending \"%@\" to %@", body, recipient.channelValue);
+    
     [self.messageClient sendMessage:newMessage success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
         
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
@@ -461,6 +464,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             [self appendEvents:@[event]];
             self.totalEventCount = self.totalEventCount + 1;
             self.loading = NO;
+            
+            ZNGCorrespondent * correspondant = message.recipient;
+            ZNGLogVerbose(@"After sending message, recipient channel value is %@", correspondant.channel.value);
             
             if (success) {
                 success(status);

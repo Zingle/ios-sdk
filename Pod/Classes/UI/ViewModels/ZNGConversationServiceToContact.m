@@ -78,7 +78,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         
         ZNGMessage * lastMessage = [self mostRecentInboundMessage];
         
-        if (lastMessage.sender.channel != nil) {
+        if ((lastMessage.sender.channel != nil) && ([self.contact.channels containsObject:lastMessage.sender.channel])) {
             self.channel = [self channelWithinContactMatchingChannel:lastMessage.sender.channel];
         } else {
             self.channel = [self defaultChannelForContact];

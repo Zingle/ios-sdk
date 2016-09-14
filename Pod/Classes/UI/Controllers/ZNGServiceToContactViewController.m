@@ -717,9 +717,14 @@ static void * KVOContext = &KVOContext;
     }];
     UIAlertAction * addNote = [UIAlertAction actionWithTitle:@"Add note" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UITextField * noteField = [alert.textFields firstObject];
-        NSString * note = noteField.text;
+        NSString * note = [noteField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
         
-        if ([note length] > 0) {
+        if ([note length] == 0) {
+            UIAlertController * noteAlert = [UIAlertController alertControllerWithTitle:@"Notes cannot be empty" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [noteAlert addAction:ok];
+            [self presentViewController:noteAlert animated:YES completion:nil];
+        } else {
             [self addInternalNote:note];
         }
     }];

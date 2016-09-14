@@ -265,6 +265,14 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
                  success:(void (^)(ZNGStatus* status))success
                  failure:(void (^) (ZNGError *error))failure
 {
+    NSString * nonWhiteNote = [note stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([nonWhiteNote length] == 0) {
+        ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedFailureReasonErrorKey : @"Cannot add an empty note" }];
+        failure(error);
+        return;
+    }
+    
     [self.eventClient postInternalNote:note toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
         [self addSenderNameToEvents:@[note]];
         [self appendEvents:@[note]];

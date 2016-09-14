@@ -173,6 +173,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     checkedInitialVisibleCells = NO;
     
+    [self.inputToolbar.contentView.textView resignFirstResponder];
+    
     self.isVisible = NO;
     [super viewWillDisappear:animated];
 }

@@ -59,6 +59,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) updateRemotely;
 
 /**
+ *  Updates this contact with a newer copy
+ */
+- (void) updateWithNewData:(ZNGContact *)contact;
+
+/**
  *  Returns a default channel if available.  Returns the only channel if only one exists.
  */
 - (nullable ZNGChannel *)defaultChannel;

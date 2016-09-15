@@ -43,48 +43,57 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 - (void) updateRemotely
 {
     [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-        self.customFieldValues = contact.customFieldValues;
-        
-        if (![self.lastMessage isEqual:contact.lastMessage]) {
-            self.lastMessage = contact.lastMessage;
-        }
-        
-        if (![self.channels isEqualToArray:contact.channels]) {
-            self.channels = contact.channels;
-        } else {
-            __block BOOL allChannelsEqual = YES;
-            [contact.channels enumerateObjectsUsingBlock:^(ZNGChannel * _Nonnull newChannel, NSUInteger idx, BOOL * _Nonnull stop) {
-                if ([newChannel changedSince:self.channels[idx]]) {
-                    allChannelsEqual = NO;
-                    *stop = YES;
-                }
-            }];
-            
-            if (!allChannelsEqual) {
-                self.channels = contact.channels;
-                ZNGLogDebug(@"Updating contact's channels due to one or more mutated channels.");
-            }
-        }
-        
-        if (![self.labels isEqualToArray:contact.labels]) {
-            self.labels = contact.labels;
-        }
-        
-        if (![self.updatedAt isEqualToDate:contact.updatedAt]) {
-            self.updatedAt = contact.updatedAt;
-        }
-        
-        if (self.isConfirmed != contact.isConfirmed) {
-            self.isConfirmed = contact.isConfirmed;
-        }
-        
-        if (self.isStarred != contact.isStarred) {
-            self.isStarred = contact.isStarred;
-        }
-        
+        [self updateWithNewData:contact];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to refresh contact: %@", error);
     }];
+}
+
+- (void) updateWithNewData:(ZNGContact *)contact
+{
+    if (![self.contactId isEqualToString:contact]) {
+        ZNGLogError(@"Contact %@ was told to update with a new contact object, but that object has an ID of %@.  Ignoring.", self.contactId, contact.contactId);
+        return;
+    }
+    
+    self.customFieldValues = contact.customFieldValues;
+    
+    if (![self.lastMessage isEqual:contact.lastMessage]) {
+        self.lastMessage = contact.lastMessage;
+    }
+    
+    if (![self.channels isEqualToArray:contact.channels]) {
+        self.channels = contact.channels;
+    } else {
+        __block BOOL allChannelsEqual = YES;
+        [contact.channels enumerateObjectsUsingBlock:^(ZNGChannel * _Nonnull newChannel, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([newChannel changedSince:self.channels[idx]]) {
+                allChannelsEqual = NO;
+                *stop = YES;
+            }
+        }];
+        
+        if (!allChannelsEqual) {
+            self.channels = contact.channels;
+            ZNGLogDebug(@"Updating contact's channels due to one or more mutated channels.");
+        }
+    }
+    
+    if (![self.labels isEqualToArray:contact.labels]) {
+        self.labels = contact.labels;
+    }
+    
+    if (![self.updatedAt isEqualToDate:contact.updatedAt]) {
+        self.updatedAt = contact.updatedAt;
+    }
+    
+    if (self.isConfirmed != contact.isConfirmed) {
+        self.isConfirmed = contact.isConfirmed;
+    }
+    
+    if (self.isStarred != contact.isStarred) {
+        self.isStarred = contact.isStarred;
+    }
 }
 
 #pragma mark - Mantle

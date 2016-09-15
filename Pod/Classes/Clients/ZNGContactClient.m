@@ -354,6 +354,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
                     if (success != nil) {
                         [self contactWithId:contact.contactId success:^(ZNGContact * updatedContact, ZNGStatus *status) {
                             updatedContact.contactClient = self;
+                            [oldContact updateWithNewData:updatedContact];
                             success(updatedContact);
                         } failure:^(ZNGError *error) {
                             ZNGLogWarn(@"Creating/updating %@ was fully successful, but the request for most up to date data failed after all updates.  Data returned may be \

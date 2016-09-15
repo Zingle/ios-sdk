@@ -125,15 +125,15 @@
                                 <rect key="frame" x="0.0" y="96" width="600" height="504"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="customField" id="B6y-R7-CYB" customClass="ZNGContactCustomFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="customField" rowHeight="62" id="B6y-R7-CYB" customClass="ZNGContactCustomFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="28" width="600" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B6y-R7-CYB" id="Atk-yN-GZd">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Aqf-Zt-MOZ" customClass="JVFloatLabeledTextField">
-                                                    <rect key="frame" x="37" y="8" width="555" height="28"/>
+                                                    <rect key="frame" x="37" y="8" width="555" height="46"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <userDefinedRuntimeAttributes>
@@ -164,15 +164,18 @@
                                             <outlet property="textField" destination="Aqf-Zt-MOZ" id="8o5-lB-PoJ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
-                                        <rect key="frame" x="0.0" y="72" width="600" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" rowHeight="62" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
+                                        <rect key="frame" x="0.0" y="90" width="600" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lGA-Qd-2RU" id="dZr-Pi-g0x">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Mvs-lL-jd2" customClass="ZNGContactEditFloatLabeledTextField">
-                                                    <rect key="frame" x="37" y="8" width="555" height="28"/>
+                                                    <rect key="frame" x="37" y="8" width="555" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="xnr-8F-gJk"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                                     <userDefinedRuntimeAttributes>
@@ -197,46 +200,58 @@
                                             <outlet property="textField" destination="Mvs-lL-jd2" id="GHw-9F-fN8"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" id="B8x-FV-499">
-                                        <rect key="frame" x="0.0" y="116" width="600" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" rowHeight="62" id="B8x-FV-499">
+                                        <rect key="frame" x="0.0" y="152" width="600" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plusCircle" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Zc-3rY">
-                                                    <rect key="frame" x="37" y="11" width="22" height="22"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
+                                                    <rect key="frame" x="71" y="10" width="70" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="oFc-Ld-Pad"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                                                    <color key="textColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="plusCircle" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Zc-3rY">
+                                                    <rect key="frame" x="37" y="20" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="ADd-nw-21w"/>
                                                         <constraint firstAttribute="width" constant="22" id="kWk-FH-G34"/>
                                                     </constraints>
                                                 </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
-                                                    <rect key="frame" x="71" y="10" width="70" height="24"/>
-                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="fER-8C-5A9" firstAttribute="centerY" secondItem="oPZ-Zc-3rY" secondAttribute="centerY" id="AJq-aK-Bio"/>
+                                                <constraint firstItem="oPZ-Zc-3rY" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="JzQ-H3-QB8"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="fER-8C-5A9" secondAttribute="bottom" constant="2" id="LR7-XN-vca"/>
                                                 <constraint firstItem="oPZ-Zc-3rY" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="LS2-8d-3Rh"/>
                                                 <constraint firstItem="oPZ-Zc-3rY" firstAttribute="leading" secondItem="eLJ-YR-g9r" secondAttribute="leadingMargin" constant="29" id="SkT-ih-l3w"/>
                                                 <constraint firstItem="fER-8C-5A9" firstAttribute="leading" secondItem="oPZ-Zc-3rY" secondAttribute="trailing" constant="12" id="aYc-iq-wxC"/>
                                                 <constraint firstItem="fER-8C-5A9" firstAttribute="top" secondItem="eLJ-YR-g9r" secondAttribute="topMargin" constant="2" id="lvc-Aq-iHh"/>
                                                 <constraint firstItem="fER-8C-5A9" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="wFR-ic-vF8"/>
+                                                <constraint firstItem="fER-8C-5A9" firstAttribute="centerY" secondItem="eLJ-YR-g9r" secondAttribute="centerY" id="wXC-vE-29Q"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="LS2-8d-3Rh"/>
+                                                    <exclude reference="AJq-aK-Bio"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" id="yxw-oU-69S" customClass="ZNGContactPhoneNumberTableViewCell">
-                                        <rect key="frame" x="0.0" y="160" width="600" height="44"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" rowHeight="62" id="yxw-oU-69S" customClass="ZNGContactPhoneNumberTableViewCell">
+                                        <rect key="frame" x="0.0" y="214" width="600" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yxw-oU-69S" id="kv6-um-SBV">
-                                            <rect key="frame" x="0.0" y="0.0" width="600" height="44"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
-                                                    <rect key="frame" x="37" y="11" width="22" height="22"/>
+                                                    <rect key="frame" x="37" y="19" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
                                                         <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
@@ -247,7 +262,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="7" width="45" height="30"/>
+                                                    <rect key="frame" x="71" y="15" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
@@ -257,7 +272,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="120" y="15" width="14" height="14"/>
+                                                    <rect key="frame" x="120" y="23" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
@@ -268,9 +283,12 @@
                                                     </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="142" y="8" width="450" height="28"/>
+                                                    <rect key="frame" x="142" y="8" width="450" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="Yjv-O7-T28"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numberPad"/>
                                                     <connections>
                                                         <outlet property="delegate" destination="yxw-oU-69S" id="5ba-Ac-icI"/>
                                                     </connections>
@@ -296,14 +314,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="labels" rowHeight="52" id="Gtr-ud-SDp" customClass="ZNGContactLabelsTableViewCell">
-                                        <rect key="frame" x="0.0" y="204" width="600" height="52"/>
+                                        <rect key="frame" x="0.0" y="276" width="600" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gtr-ud-SDp" id="fa7-Yj-Urf">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0qY-cL-3Yg">
-                                                    <rect key="frame" x="8" y="4" width="584" height="44"/>
+                                                    <rect key="frame" x="37" y="4" width="555" height="44"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="9Vn-1l-2CP"/>
                                                     </constraints>
@@ -320,8 +338,8 @@
                                                 <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerY" secondItem="fa7-Yj-Urf" secondAttribute="centerY" id="52U-3Y-4M9"/>
                                                 <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leadingMargin" id="E6z-dU-2Rv"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="0qY-cL-3Yg" secondAttribute="trailing" id="IhO-vc-4Wi"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leading" constant="8" id="R5z-Hi-9sE"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerX" secondItem="fa7-Yj-Urf" secondAttribute="centerX" id="UDL-f9-P3h"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leading" constant="37" id="R5z-Hi-9sE"/>
+                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerX" secondItem="fa7-Yj-Urf" secondAttribute="centerX" constant="14.5" id="UDL-f9-P3h"/>
                                                 <constraint firstItem="0qY-cL-3Yg" firstAttribute="bottom" secondItem="fa7-Yj-Urf" secondAttribute="bottomMargin" constant="4" id="fit-zm-fCD"/>
                                                 <constraint firstItem="0qY-cL-3Yg" firstAttribute="top" secondItem="fa7-Yj-Urf" secondAttribute="topMargin" constant="-4" id="oCJ-d5-vGT"/>
                                                 <constraint firstAttribute="trailing" secondItem="0qY-cL-3Yg" secondAttribute="trailing" constant="8" id="sz2-zx-JiG"/>

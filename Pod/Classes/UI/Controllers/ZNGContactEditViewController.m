@@ -76,6 +76,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self.tableView registerNib:footerNib forHeaderFooterViewReuseIdentifier:FooterReuseIdentifier];
     
     self.tableView.estimatedRowHeight = 44.0;
+    self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 10.0)];
+    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 10.0)];
     
     // For some reason UIAppearance does not work for these buttons, possibly because they were manually placed in IB instead of being auto generated as part
     //  of a nav controller.
@@ -460,8 +462,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (CGFloat) tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    // Show a footer for every section except the final one
-    return (section < (ContactSectionCount - 1)) ? 12.0 : 0.0;
+    return 10.0;
 }
 
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section

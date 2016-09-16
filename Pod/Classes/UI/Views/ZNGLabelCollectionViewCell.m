@@ -35,7 +35,7 @@
     UIColor * color = label.backgroundUIColor;
     self.label.textColor = color;
     self.label.borderColor = color;
-    self.label.backgroundColor = [color zng_colorByLighteningColor:0.7];
+    self.label.backgroundColor = [color zng_colorByLighteningColor:0.5];
     [self.contentView setNeedsLayout];
 }
 

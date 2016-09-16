@@ -7,10 +7,12 @@
 //
 
 #import "ZNGLabelCollectionViewCell.h"
+#import "UIColor+ZingleSDK.h"
+#import "ZingleSDK/ZingleSDK-Swift.h"
 
 @interface ZNGLabelCollectionViewCell ()
 
-@property (weak, nonatomic) IBOutlet UILabel *label;
+@property (weak, nonatomic) IBOutlet DashedBorderLabel *label;
 
 @end
 
@@ -28,10 +30,11 @@
 
 - (void)configureCellWithLabel: (ZNGLabel *)label
 {
-    self.backgroundColor = [label backgroundUIColor];
-    self.label.textColor = [label textUIColor];
     self.label.text = [label.displayName uppercaseString];
-    self.layer.cornerRadius = 3;
+    UIColor * color = label.backgroundUIColor;
+    self.label.textColor = color;
+    self.label.borderColor = color;
+    self.label.backgroundColor = [color zng_colorByDarkeningColorWithValue:-0.5];
     self.clipsToBounds = YES;
     [self.contentView setNeedsLayout];
 }

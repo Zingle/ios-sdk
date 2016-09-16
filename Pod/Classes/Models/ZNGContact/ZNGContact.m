@@ -51,7 +51,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 - (void) updateWithNewData:(ZNGContact *)contact
 {
-    if (![self.contactId isEqualToString:contact]) {
+    if (![self.contactId isEqualToString:contact.contactId]) {
         ZNGLogError(@"Contact %@ was told to update with a new contact object, but that object has an ID of %@.  Ignoring.", self.contactId, contact.contactId);
         return;
     }

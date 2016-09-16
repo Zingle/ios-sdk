@@ -30,12 +30,12 @@
 
 - (void)configureCellWithLabel: (ZNGLabel *)label
 {
-    self.label.text = [label.displayName uppercaseString];
+    NSString * paddedText = [NSString stringWithFormat:@" %@ ", [label.displayName uppercaseString]];
+    self.label.text = paddedText;
     UIColor * color = label.backgroundUIColor;
     self.label.textColor = color;
     self.label.borderColor = color;
     self.label.backgroundColor = [color zng_colorByDarkeningColorWithValue:-0.5];
-    self.clipsToBounds = YES;
     [self.contentView setNeedsLayout];
 }
 

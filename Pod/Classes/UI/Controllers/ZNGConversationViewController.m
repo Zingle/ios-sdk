@@ -894,8 +894,39 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        if (!event.message.isMediaMessage) {
+        if (event.message.isMediaMessage) {
+            UIView * mediaView = cell.mediaView;
             
+            if ([mediaView isKindOfClass:[UIImageView class]]) {
+                // JSQMessagesViewController just fills an entire cell with a UIImageView.  We will swap that for a container view, allowing us to preserve the image's
+                //  aspect ratio and align it to the correct side
+                UIView * imageViewContainer = [[UIView alloc] initWithFrame:mediaView.frame];
+                [mediaView removeFromSuperview];
+                
+                BOOL outgoing = ([self weAreSendingOutbound] == [event.message isOutbound]);
+                NSLayoutAttribute correctSide = outgoing ? NSLayoutAttributeRight : NSLayoutAttributeLeft;
+                
+                NSLayoutConstraint * side = [NSLayoutConstraint constraintWithItem:mediaView attribute:correctSide relatedBy:NSLayoutRelationEqual toItem:imageViewContainer attribute:correctSide multiplier:1.0 constant:0.0];
+                NSLayoutConstraint * top = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:imageViewContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+                NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationLessThanOrEqual toItem:imageViewContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
+                NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationLessThanOrEqual toItem:imageViewContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+                
+                [imageViewContainer addSubview:mediaView];
+                [imageViewContainer addConstraints:@[side, top, height, width]];
+                
+                UIImage * image = ((UIImageView *)mediaView).image;
+
+                if (image.size.height != 0.0) {
+                    CGFloat aspectRatio = image.size.width / image.size.height;
+                    NSLayoutConstraint * aspectRatioConstraint = [NSLayoutConstraint constraintWithItem:mediaView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:mediaView attribute:NSLayoutAttributeHeight multiplier:aspectRatio constant:0.0];
+                    [imageViewContainer addConstraint:aspectRatioConstraint];
+                }
+                
+                mediaView.contentMode = UIViewContentModeScaleAspectFit;
+                cell.mediaView = imageViewContainer;
+            }
+            
+        } else {
             if ([event isNote]) {
                 cell.textView.textColor = self.internalNoteTextColor;
             } else if ([self weAreSendingOutbound] == [event.message isOutbound]) {

@@ -45,7 +45,7 @@
                         </variation>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Mar 11 12:44 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdp-gA-wBf">
-                        <rect key="frame" x="278" y="6" width="133" height="21"/>
+                        <rect key="frame" x="278" y="8" width="133" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="126" id="7Vu-HZ-P42"/>
                         </constraints>
@@ -58,6 +58,9 @@
                             </mask>
                         </variation>
                     </label>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-A6-8hF">
+                        <rect key="frame" x="422" y="12" width="14" height="14"/>
+                    </imageView>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bcp-Jc-OsM">
                         <rect key="frame" x="28" y="58" width="413" height="58"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -142,26 +145,36 @@
                     <constraint firstAttribute="topMargin" secondItem="m4M-d6-zfV" secondAttribute="top" constant="8" id="0cM-lg-BkD"/>
                     <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="20f-WK-ucb"/>
                     <constraint firstAttribute="leadingMargin" secondItem="m4M-d6-zfV" secondAttribute="leading" constant="8" id="2PP-om-gfK"/>
+                    <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="gdp-gA-wBf" secondAttribute="centerY" id="2mH-To-fPD"/>
                     <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="3i6-2W-Bih"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="3pv-CZ-iXc"/>
+                    <constraint firstItem="ts2-A6-8hF" firstAttribute="baseline" secondItem="gdp-gA-wBf" secondAttribute="baseline" constant="2" id="57X-bn-0C0"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="8QL-Bl-NuL"/>
+                    <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Bhb-CF-DfK" secondAttribute="centerY" id="8bW-nx-fba"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-26" id="Baf-a5-F7Z"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="Bxv-mc-zhF"/>
                     <constraint firstAttribute="trailingMargin" secondItem="m4M-d6-zfV" secondAttribute="trailing" constant="-8" id="CFs-52-Xx2"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="K2p-s6-ySC"/>
                     <constraint firstItem="Bcp-Jc-OsM" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" id="Llr-LD-gRI"/>
+                    <constraint firstItem="gdp-gA-wBf" firstAttribute="baseline" secondItem="Blq-2G-nRN" secondAttribute="baseline" id="NPD-Fl-ttn"/>
                     <constraint firstAttribute="bottomMargin" secondItem="m4M-d6-zfV" secondAttribute="bottom" constant="-8" id="QxG-xf-3Zm"/>
-                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="-2" id="Rs6-ED-Nou"/>
+                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="2" id="Rs6-ED-Nou"/>
+                    <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="Tt0-DL-Djw"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="4" id="U75-DU-1bb"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" id="UNj-EJ-OPy"/>
+                    <constraint firstAttribute="trailing" secondItem="ts2-A6-8hF" secondAttribute="trailing" constant="13" id="V63-p1-9e4"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="bQA-nP-CdX"/>
                     <constraint firstItem="Bcp-Jc-OsM" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="cb4-J8-zM2"/>
+                    <constraint firstItem="ts2-A6-8hF" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="11" id="d2w-oJ-day"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="dNf-mR-rpb"/>
+                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="gRs-oL-M3J"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="Bhb-CF-DfK" secondAttribute="trailing" constant="6" id="j15-7U-HcK"/>
                     <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" priority="800" id="nKa-R1-arl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Bcp-Jc-OsM" secondAttribute="trailing" id="pkM-Rh-5Oy"/>
                     <constraint firstAttribute="topMargin" secondItem="Blq-2G-nRN" secondAttribute="top" id="tce-jX-rie"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-4" id="v47-G5-2aC"/>
+                    <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="wJX-jq-S25"/>
+                    <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="xrT-Dk-kla"/>
                     <constraint firstAttribute="bottomMargin" secondItem="Bcp-Jc-OsM" secondAttribute="bottom" id="zMW-2I-53i"/>
                 </constraints>
                 <variation key="default">
@@ -170,9 +183,16 @@
                         <exclude reference="bQA-nP-CdX"/>
                         <exclude reference="v47-G5-2aC"/>
                         <exclude reference="Bxv-mc-zhF"/>
+                        <exclude reference="Tt0-DL-Djw"/>
                         <exclude reference="nKa-R1-arl"/>
                         <exclude reference="02S-nn-AOQ"/>
+                        <exclude reference="20f-WK-ucb"/>
                         <exclude reference="3i6-2W-Bih"/>
+                        <exclude reference="NPD-Fl-ttn"/>
+                        <exclude reference="Rs6-ED-Nou"/>
+                        <exclude reference="2mH-To-fPD"/>
+                        <exclude reference="57X-bn-0C0"/>
+                        <exclude reference="wJX-jq-S25"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
@@ -188,6 +208,7 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="chevronRight" width="14" height="14"/>
         <image name="smallCircle" width="10" height="10"/>
     </resources>
 </document>

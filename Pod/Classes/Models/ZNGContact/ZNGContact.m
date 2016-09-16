@@ -90,10 +90,6 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     if (self.isConfirmed != contact.isConfirmed) {
         self.isConfirmed = contact.isConfirmed;
     }
-    
-    if (self.isStarred != contact.isStarred) {
-        self.isStarred = contact.isStarred;
-    }
 }
 
 #pragma mark - Mantle
@@ -346,10 +342,10 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 {
     BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);
     BOOL sameName = ([[old fullName] isEqualToString:[self fullName]]);
-    BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));
+    BOOL sameConfirmed = (old.isConfirmed == self.isConfirmed);
     BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
     
-    return !(sameLastMessage && sameName && sameStarConfirmed && sameLabels);
+    return !(sameLastMessage && sameName && sameConfirmed && sameLabels);
 }
 
 - (BOOL) hasBeenEditedSince:(ZNGContact *)old
@@ -360,7 +356,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     
     BOOL sameCustomFields = [[self customFieldsWithValues] isEqualToArray:[old customFieldsWithValues]];
     __block BOOL sameChannels = [[self channelsWithValues] isEqualToArray:[old channelsWithValues]];
-    BOOL sameStarConfirmed = ((old.isStarred == self.isStarred) && (old.isConfirmed == self.isConfirmed));
+    BOOL sameConfirmed = (old.isConfirmed == self.isConfirmed);
     BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
     
     if (sameChannels) {
@@ -375,7 +371,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         }];
     }
 
-    return (!sameCustomFields || !sameChannels || !sameStarConfirmed || !sameLabels);
+    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels);
 }
 
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old

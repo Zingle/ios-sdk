@@ -118,8 +118,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) editingChannelIsLocked:(ZNGChannel *)channel;
 
 #pragma mark - Mutators
-- (void) star;
-- (void) unstar;
 - (void) confirm;
 - (void) unconfirm;
 

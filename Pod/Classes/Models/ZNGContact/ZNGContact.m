@@ -416,45 +416,6 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 }
 
 #pragma mark - Mutators
-- (void) star
-{
-    [self _setStar:YES];
-}
-
-- (void) unstar
-{
-    [self _setStar:NO];
-}
-
-- (void) _setStar:(BOOL)isStarred
-{
-    // We have to explicitly use @YES/@NO instead of autoboxing with @(isStarred) because a certain very particular Jovin server explodes if it gets a 1 for a boolean
-    NSNumber * starredNumber = isStarred ? @YES : @NO;
-    NSDictionary * params = @{ ParameterNameStarred : starredNumber };
-    
-    [self.contactClient updateContactWithId:self.contactId withParameters:params
-                                    success:^(ZNGContact *contact, ZNGStatus *status) {
-                                        
-                                        if (contact.isStarred != isStarred) {
-                                            ZNGLogError(@"Our POST to set isStarred to %@ succeeded, but the contact returned by the server is still %@",
-                                                        (isStarred) ? @"YES" : @"NO",
-                                                        (contact.isStarred) ? @"starred" : @"not starred");
-                                        }
-                                        
-                                        self.isStarred = contact.isStarred;
-                                        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
-                                        
-                                        if (contact.isStarred) {
-                                            [[ZNGAnalytics sharedAnalytics] trackStarredContact:self];
-                                        } else {
-                                            [[ZNGAnalytics sharedAnalytics] trackUnstarredContact:self];
-                                        }
-                                        
-                                    } failure:^(ZNGError *error) {
-                                        ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
-                                    }];
-}
-
 - (void) confirm
 {
     [self _setConfirmed:YES];

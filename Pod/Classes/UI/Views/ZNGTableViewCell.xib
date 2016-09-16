@@ -64,7 +64,7 @@
                         </variation>
                     </label>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bcp-Jc-OsM">
-                        <rect key="frame" x="18" y="61" width="423" height="55"/>
+                        <rect key="frame" x="18" y="58" width="423" height="58"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mma-kZ-PRG">
                             <size key="itemSize" width="50" height="50"/>
@@ -136,7 +136,7 @@
                         </variation>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBa-nb-zNh">
-                        <rect key="frame" x="18" y="37" width="76" height="16"/>
+                        <rect key="frame" x="18" y="34" width="76" height="16"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                         <color key="textColor" red="0.34901960784313724" green="0.34901960784313724" blue="0.34901960784313724" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
@@ -151,7 +151,7 @@
                     <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" id="AM2-bW-kED"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-26" id="Baf-a5-F7Z"/>
                     <constraint firstAttribute="trailingMargin" secondItem="m4M-d6-zfV" secondAttribute="trailing" constant="-8" id="CFs-52-Xx2"/>
-                    <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="8" id="K2p-s6-ySC"/>
+                    <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="K2p-s6-ySC"/>
                     <constraint firstAttribute="bottom" secondItem="xba-GW-bAR" secondAttribute="bottom" id="L4G-CN-CgD"/>
                     <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="-8" id="PnP-9h-kzJ"/>
                     <constraint firstAttribute="bottomMargin" secondItem="m4M-d6-zfV" secondAttribute="bottom" constant="-8" id="QxG-xf-3Zm"/>

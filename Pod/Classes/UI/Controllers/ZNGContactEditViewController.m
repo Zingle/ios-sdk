@@ -643,6 +643,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     if (indexPath.section == 0) {
         // "Add label" cell
         cell.label.text = @"ADD LABEL";
+        cell.label.dashed = YES;
         
         cell.label.textColor = [UIColor grayColor];
         cell.label.backgroundColor = [UIColor clearColor];
@@ -650,6 +651,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         return cell;
     }
     
+    cell.label.dashed = NO;
     ZNGLabel * label = self.contact.labels[indexPath.row];
     cell.label.text = [NSString stringWithFormat:@"%@   X ", [label.displayName uppercaseString]];
     UIColor * color = label.backgroundUIColor;

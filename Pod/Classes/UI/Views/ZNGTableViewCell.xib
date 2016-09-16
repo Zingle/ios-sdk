@@ -52,7 +52,7 @@
                             <constraint firstAttribute="width" constant="126" id="7Vu-HZ-P42"/>
                         </constraints>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
-                        <color key="textColor" red="0.27450980392156865" green="0.63137254901960782" blue="0.87450980392156863" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="textColor" red="0.53725490196078429" green="0.55686274509803924" blue="0.58431372549019611" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">

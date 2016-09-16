@@ -88,7 +88,6 @@
         if (self.contact.lastMessage.body.length > 0) {
             self.lastMessage.text = self.contact.lastMessage.body;
             self.dateLabel.attributedText = [self.timestampFormatter attributedTimestampForDate:self.contact.lastMessage.createdAt];
-            self.dateLabel.textColor = [UIColor zng_lightBlue];
         } else {
             self.lastMessage.text = @" ";
             self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];

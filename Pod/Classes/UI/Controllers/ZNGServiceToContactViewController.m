@@ -305,18 +305,6 @@ static void * KVOContext = &KVOContext;
     }];
     [actions addObject:toggleDetailedEvents];
     
-    ZNGContact * contact = self.conversation.contact;
-    BOOL isStarred = [self.conversation.contact isStarred];
-    NSString * starText = isStarred ? @"Unstar conversation" : @"Star conversation";
-    UIAlertAction * toggleStarred = [UIAlertAction actionWithTitle:starText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (isStarred) {
-            [contact unstar];
-        } else {
-            [contact star];
-        }
-    }];
-    [actions addObject:toggleStarred];
-    
     return actions;
 }
 

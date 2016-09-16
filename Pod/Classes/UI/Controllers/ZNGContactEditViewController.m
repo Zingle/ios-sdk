@@ -627,6 +627,15 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     return ([self.contact.labels count] > 0) ? 2 : 1;
 }
 
+- (UIEdgeInsets) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+{
+    if (section == 0) {
+        return UIEdgeInsetsZero;
+    }
+    
+    return UIEdgeInsetsMake(5.0, 0.0, 0.0, 0.0);
+}
+
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == 0) {
@@ -642,7 +651,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     if (indexPath.section == 0) {
         // "Add label" cell
-        cell.label.text = @"ADD LABEL";
+        cell.label.text = @" ADD LABEL ";
         cell.label.dashed = YES;
         
         cell.label.textColor = [UIColor grayColor];
@@ -653,7 +662,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     cell.label.dashed = NO;
     ZNGLabel * label = self.contact.labels[indexPath.row];
-    cell.label.text = [NSString stringWithFormat:@"%@   X ", [label.displayName uppercaseString]];
+    cell.label.text = [NSString stringWithFormat:@" %@   X  ", [label.displayName uppercaseString]];
     UIColor * color = label.backgroundUIColor;
     cell.label.textColor = color;
     cell.label.borderColor = color;

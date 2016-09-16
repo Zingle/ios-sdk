@@ -30,18 +30,6 @@
                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LUx-5V-4az">
-                        <rect key="frame" x="403" y="-9" width="50" height="50"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstAttribute="height" constant="50" id="2ce-rL-0vz"/>
-                            <constraint firstAttribute="width" constant="50" id="P1a-to-EJh"/>
-                        </constraints>
-                        <state key="normal" image="starred"/>
-                        <connections>
-                            <action selector="starButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Ak3-Mh-pu6"/>
-                        </connections>
-                    </button>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallCircle" translatesAutoresizingMaskIntoConstraints="NO" id="Bhb-CF-DfK">
                         <rect key="frame" x="12" y="14" width="10" height="10"/>
                         <color key="tintColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
@@ -152,26 +140,22 @@
                 <constraints>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="8" id="02S-nn-AOQ"/>
                     <constraint firstAttribute="topMargin" secondItem="m4M-d6-zfV" secondAttribute="top" constant="8" id="0cM-lg-BkD"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="20f-WK-ucb"/>
                     <constraint firstAttribute="leadingMargin" secondItem="m4M-d6-zfV" secondAttribute="leading" constant="8" id="2PP-om-gfK"/>
                     <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="3i6-2W-Bih"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="3pv-CZ-iXc"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="LUx-5V-4az" secondAttribute="trailing" id="80Q-7A-gIT"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="8QL-Bl-NuL"/>
-                    <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" id="AM2-bW-kED"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-26" id="Baf-a5-F7Z"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="Bxv-mc-zhF"/>
                     <constraint firstAttribute="trailingMargin" secondItem="m4M-d6-zfV" secondAttribute="trailing" constant="-8" id="CFs-52-Xx2"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="K2p-s6-ySC"/>
                     <constraint firstItem="Bcp-Jc-OsM" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" id="Llr-LD-gRI"/>
-                    <constraint firstItem="LUx-5V-4az" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="-8" id="PnP-9h-kzJ"/>
                     <constraint firstAttribute="bottomMargin" secondItem="m4M-d6-zfV" secondAttribute="bottom" constant="-8" id="QxG-xf-3Zm"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="-2" id="Rs6-ED-Nou"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="4" id="U75-DU-1bb"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" id="UNj-EJ-OPy"/>
-                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="LUx-5V-4az" secondAttribute="centerY" id="WMO-rG-xQu"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="bQA-nP-CdX"/>
                     <constraint firstItem="Bcp-Jc-OsM" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="cb4-J8-zM2"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="LUx-5V-4az" secondAttribute="trailing" constant="-12" id="dFq-oI-1Iu"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="dNf-mR-rpb"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="Bhb-CF-DfK" secondAttribute="trailing" constant="6" id="j15-7U-HcK"/>
                     <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" priority="800" id="nKa-R1-arl"/>
@@ -189,8 +173,6 @@
                         <exclude reference="nKa-R1-arl"/>
                         <exclude reference="02S-nn-AOQ"/>
                         <exclude reference="3i6-2W-Bih"/>
-                        <exclude reference="80Q-7A-gIT"/>
-                        <exclude reference="AM2-bW-kED"/>
                     </mask>
                 </variation>
             </tableViewCellContentView>
@@ -200,7 +182,6 @@
                 <outlet property="labelCollectionView" destination="Bcp-Jc-OsM" id="v5c-eY-yzt"/>
                 <outlet property="lastMessage" destination="XBa-nb-zNh" id="FDW-CG-wwF"/>
                 <outlet property="placeholderView" destination="m4M-d6-zfV" id="SEZ-2f-5iC"/>
-                <outlet property="starButton" destination="LUx-5V-4az" id="OhE-yK-ceH"/>
                 <outlet property="unconfirmedCircle" destination="Bhb-CF-DfK" id="sFy-wo-9aM"/>
             </connections>
             <point key="canvasLocation" x="306.5" y="334.5"/>
@@ -208,6 +189,5 @@
     </objects>
     <resources>
         <image name="smallCircle" width="10" height="10"/>
-        <image name="starred" width="17" height="16"/>
     </resources>
 </document>

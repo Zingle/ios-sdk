@@ -17,7 +17,6 @@
 @interface ZNGTableViewCell () <UICollectionViewDataSource, UICollectionViewDelegate>
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
 @property (weak, nonatomic) IBOutlet UILabel *lastMessage;
-@property (weak, nonatomic) IBOutlet UIButton *starButton;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *placeholderView;
 @property (weak, nonatomic) IBOutlet UIView * unconfirmedCircle;
@@ -115,13 +114,6 @@
             
         }
         
-        self.starButton.enabled = YES;
-        if (self.contact.isStarred) {
-            [self.starButton setImage:[UIImage zng_starredImage] forState:UIControlStateNormal];
-        } else {
-            [self.starButton setImage:[UIImage zng_unstarredImage] forState:UIControlStateNormal];
-        }
-        
         if ([self.contact.labels count] > 0) {
             self.labelCollectionView.hidden = NO;
             self.labelCollectionView.delegate = self;
@@ -146,10 +138,7 @@
     self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
     
     self.unconfirmedCircle.hidden = YES;
-    
-    self.starButton.enabled = NO;
-    [self.starButton setImage:nil forState:UIControlStateNormal];
-    
+
     self.placeholderView.hidden = NO;
     
     self.labelCollectionView.hidden = YES;
@@ -178,17 +167,6 @@
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section
 {
     return 5.0;
-}
-
-- (IBAction)starButtonPressed:(id)sender
-{
-    self.starButton.enabled = NO;
-
-    if (self.contact.isStarred) {
-        [self.contact unstar];
-    } else {
-        [self.contact star];
-    }
 }
 
 @end

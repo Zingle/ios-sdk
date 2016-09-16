@@ -109,7 +109,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) setConversationForContactService
 {
-    if (self.contactService.contactId != nil) {
+    if (self.contact.contactId != nil) {
         _conversation = nil;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
             dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
@@ -125,7 +125,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                     ZNGLogDebug(@"Creating conversation object.");
                     self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
                                                                                                channelTypeId:self.channelTypeID
-                                                                                                   contactId:self.contactService.contactId
+                                                                                                   contactId:self.contact.contactId
                                                                                             toContactService:self.contactService
                                                                                            withMessageClient:self.messageClient
                                                                                                  eventClient:self.eventClient];

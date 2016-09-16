@@ -666,7 +666,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     UIColor * color = label.backgroundUIColor;
     cell.label.textColor = color;
     cell.label.borderColor = color;
-    cell.label.backgroundColor = [color zng_colorByDarkeningColorWithValue:-0.5];
+    cell.label.backgroundColor = [color zng_colorByLighteningColor:0.5];
     return cell;
 }
 

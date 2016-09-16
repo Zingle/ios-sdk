@@ -14,11 +14,11 @@
 #import <JSQMessagesViewController/JSQMessagesTimestampFormatter.h>
 #import <ZingleSDK/ZNGConversationContactToService.h>
 
-static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
-static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
+static NSString *kZNGToken = @"jneel@zingle.me";
+static NSString *kZNGKey = @"zingle";
 
 // User-Defined Channel if using Contact User Authorization
-static NSString *kZNGChannelTypeId = @"9f211296-07d8-4ad3-a6d8-a9862c833b2b";
+static NSString *kZNGChannelTypeId = @"076545a3-4d12-4162-8010-9bbb46f46b32";
 static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 @implementation ContactServiceChoosingViewController
@@ -27,8 +27,6 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     NSArray<ZNGContactService *> * contactServices;
 
     __weak ZNGContactToServiceViewController * conversationView;
-    
-    BOOL waitingForConversation;
 }
 
 - (void) viewDidLoad
@@ -103,10 +101,6 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
         conversationView = aConversationView;
         ZNGConversationContactToService * conversation = session.conversation;
         aConversationView.conversation = conversation;
-        
-        if (conversation == nil) {
-            waitingForConversation = YES;
-        }
     }
 }
 

@@ -1,6 +1,0 @@
-framework module DGActivityIndicatorView {
-  umbrella header "DGActivityIndicatorView-iOS8.0-umbrella.h"
-
-  export *
-  module * { export * }
-}

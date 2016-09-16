@@ -21,14 +21,11 @@
   "source_files": "Pod/Classes/**/*.{h,m,swift}",
   "resources": [
     "Pod/Assets/**/*",
-    "Pod/Classes/UI/**/*.{xib}"
+    "Pod/Classes/UI/**/*.{xib,storyboard}"
   ],
   "dependencies": {
     "AFNetworking": [
       "~> 2.6"
-    ],
-    "AFNetworkActivityLogger": [
-      "~> 2.0"
     ],
     "Mantle": [
       "~> 2.0"
@@ -36,14 +33,17 @@
     "GoogleFontsiOS/OpenSans": [
 
     ],
-    "DGActivityIndicatorView": [
+    "CocoaLumberjack/Swift": [
 
     ],
-    "CocoaLumberjack/Swift": [
+    "JVFloatLabeledTextField": [
 
     ],
     "JSQMessagesViewController": [
 
+    ],
+    "Analytics": [
+      "~> 3.0"
     ]
   }
 }

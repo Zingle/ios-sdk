@@ -1,7 +1,4 @@
 PODS:
-  - AFNetworkActivityLogger (2.0.4):
-    - AFNetworking/NSURLConnection (~> 2.0)
-    - AFNetworking/NSURLSession (~> 2.0)
   - AFNetworking (2.6.3):
     - AFNetworking/NSURLConnection (= 2.6.3)
     - AFNetworking/NSURLSession (= 2.6.3)
@@ -23,6 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - Analytics (3.5.0)
   - CocoaLumberjack/Core (2.3.0)
   - CocoaLumberjack/Default (2.3.0):
     - CocoaLumberjack/Core
@@ -30,23 +28,23 @@ PODS:
     - CocoaLumberjack/Default
   - CocoaLumberjack/Swift (2.3.0):
     - CocoaLumberjack/Extensions
-  - DGActivityIndicatorView (2.1)
   - GoogleFontsiOS/Core (0.1.1)
   - GoogleFontsiOS/OpenSans (0.1.1):
     - GoogleFontsiOS/Core
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
+  - JVFloatLabeledTextField (1.1.1)
   - Mantle (2.0.7):
     - Mantle/extobjc (= 2.0.7)
   - Mantle/extobjc (2.0.7)
   - ZingleSDK (1.0.0):
-    - AFNetworkActivityLogger (~> 2.0)
     - AFNetworking (~> 2.6)
+    - Analytics (~> 3.0)
     - CocoaLumberjack/Swift
-    - DGActivityIndicatorView
     - GoogleFontsiOS/OpenSans
     - JSQMessagesViewController
+    - JVFloatLabeledTextField
     - Mantle (~> 2.0)
 
 DEPENDENCIES:
@@ -57,15 +55,15 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  Analytics: 79046b34f62a861622fbb6d1af5b0e705d6aba2e
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
-  DGActivityIndicatorView: 1942ae657a8d247c035f229422b2d15a8adbe5b6
   GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
   Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
-  ZingleSDK: 154a80fff969bf1654129a99f42634e42664c97a
+  ZingleSDK: d0949344aac2fe202dfdbb452f35c3e64a2c4d24
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

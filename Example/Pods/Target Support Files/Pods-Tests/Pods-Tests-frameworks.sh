@@ -84,24 +84,24 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS9.3/AFNetworkActivityLogger.framework"
   install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS9.3/AFNetworking.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Analytics-iOS9.3/Analytics.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS9.3/DGActivityIndicatorView.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS9.3/GoogleFontsiOS.framework"
   install_framework "$BUILT_PRODUCTS_DIR/JSQMessagesViewController-iOS9.3/JSQMessagesViewController.framework"
   install_framework "$BUILT_PRODUCTS_DIR/JSQSystemSoundPlayer-iOS9.3/JSQSystemSoundPlayer.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/JVFloatLabeledTextField-iOS9.3/JVFloatLabeledTextField.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS9.3/AFNetworkActivityLogger.framework"
   install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS9.3/AFNetworking.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/Analytics-iOS9.3/Analytics.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework"
-  install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS9.3/DGActivityIndicatorView.framework"
   install_framework "$BUILT_PRODUCTS_DIR/GoogleFontsiOS-iOS9.3/GoogleFontsiOS.framework"
   install_framework "$BUILT_PRODUCTS_DIR/JSQMessagesViewController-iOS9.3/JSQMessagesViewController.framework"
   install_framework "$BUILT_PRODUCTS_DIR/JSQSystemSoundPlayer-iOS9.3/JSQSystemSoundPlayer.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/JVFloatLabeledTextField-iOS9.3/JVFloatLabeledTextField.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi

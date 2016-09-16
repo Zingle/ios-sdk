@@ -31,6 +31,12 @@ public class DashedBorderLabel: UILabel {
         }
     }
     
+    @IBInspectable public var dashed: Bool = false {
+        didSet {
+            drawBorder()
+        }
+    }
+    
     @IBInspectable public var cornerRadius: CGFloat {
         get {
             return layer.cornerRadius
@@ -54,7 +60,8 @@ public class DashedBorderLabel: UILabel {
         border.strokeColor = borderColor?.CGColor
         border.fillColor = nil
         border.lineWidth = borderWidth
-        border.lineDashPattern = [4,4]
+        let dashSpacing = dashed ? 4 : 0
+        border.lineDashPattern = [4, dashSpacing]
         borderLine = border
         layer.addSublayer(border)
     }

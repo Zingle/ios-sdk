@@ -98,7 +98,7 @@
         }
         
         if (self.contact.isConfirmed) {
-            self.unconfirmedCircle.hidden = YES;
+            self.unconfirmedCircle.tintColor = [UIColor clearColor];
         } else {
             if (self.contact.lastMessage.createdAt) {
                 NSTimeInterval distanceBetweenDates = [self.contact.lastMessage.createdAt timeIntervalSinceNow];
@@ -108,8 +108,6 @@
                 } else {
                     self.unconfirmedCircle.tintColor = [UIColor zng_blue];
                 }
-                
-                self.unconfirmedCircle.hidden = NO;
             }
             
         }
@@ -137,7 +135,7 @@
     
     self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
     
-    self.unconfirmedCircle.hidden = YES;
+    self.unconfirmedCircle.tintColor = [UIColor clearColor];
 
     self.placeholderView.hidden = NO;
     

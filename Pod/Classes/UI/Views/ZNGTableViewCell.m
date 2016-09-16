@@ -18,9 +18,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
 @property (weak, nonatomic) IBOutlet UILabel *lastMessage;
 @property (weak, nonatomic) IBOutlet UIButton *starButton;
-@property (weak, nonatomic) IBOutlet UIView *confirmedView;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *placeholderView;
+@property (weak, nonatomic) IBOutlet UIView * unconfirmedCircle;
 
 @property (nonatomic, strong) ZNGContact *contact;
 @property (nonatomic, strong) NSString *serviceId;
@@ -99,15 +99,18 @@
         }
         
         if (self.contact.isConfirmed) {
-            self.confirmedView.backgroundColor = [UIColor clearColor];
+            self.unconfirmedCircle.hidden = YES;
         } else {
             if (self.contact.lastMessage.createdAt) {
                 NSTimeInterval distanceBetweenDates = [self.contact.lastMessage.createdAt timeIntervalSinceNow];
+                
                 if (distanceBetweenDates < -500) {
-                    self.confirmedView.backgroundColor = [UIColor zng_unconfirmedMessageRed];
+                    self.unconfirmedCircle.tintColor = [UIColor zng_unconfirmedMessageRed];
                 } else {
-                    self.confirmedView.backgroundColor = [UIColor zng_unconfirmedMessageGreen];
+                    self.unconfirmedCircle.tintColor = [UIColor zng_blue];
                 }
+                
+                self.unconfirmedCircle.hidden = NO;
             }
             
         }
@@ -142,7 +145,7 @@
     
     self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
     
-    self.confirmedView.backgroundColor = [UIColor clearColor];
+    self.unconfirmedCircle.hidden = YES;
     
     self.starButton.enabled = NO;
     [self.starButton setImage:nil forState:UIControlStateNormal];

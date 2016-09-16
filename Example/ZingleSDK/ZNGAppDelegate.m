@@ -9,6 +9,7 @@
 #import "ZNGAppDelegate.h"
 #import <ZingleSDK/ZingleSDK.h>
 #import <ZingleSDK/ZingleSession.h>
+@import CocoaLumberjack;
 
 @implementation ZNGAppDelegate
 {
@@ -17,6 +18,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    [DDLog addLogger:[DDTTYLogger sharedInstance]];
+    [DDLog addLogger:[DDASLLogger sharedInstance]];
+    
     [self registerUserNotificationsForApplication:application];
     return YES;
 }

@@ -47,7 +47,7 @@
                         </variation>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Mar 11 12:44 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdp-gA-wBf">
-                        <rect key="frame" x="278" y="9" width="133" height="21"/>
+                        <rect key="frame" x="278" y="7" width="133" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="126" id="7Vu-HZ-P42"/>
                         </constraints>
@@ -64,7 +64,7 @@
                         <rect key="frame" x="422" y="12" width="14" height="14"/>
                     </imageView>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bcp-Jc-OsM">
-                        <rect key="frame" x="28" y="60" width="413" height="56"/>
+                        <rect key="frame" x="26" y="60" width="415" height="56"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mma-kZ-PRG">
                             <size key="itemSize" width="50" height="50"/>
@@ -136,8 +136,8 @@
                         </variation>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBa-nb-zNh">
-                        <rect key="frame" x="28" y="36" width="76" height="16"/>
-                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                        <rect key="frame" x="28" y="34" width="88" height="18"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.53725490196078429" green="0.55686274509803924" blue="0.58431372549019611" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -156,8 +156,8 @@
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-26" id="Baf-a5-F7Z"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="Bxv-mc-zhF"/>
                     <constraint firstAttribute="trailingMargin" secondItem="m4M-d6-zfV" secondAttribute="trailing" constant="-8" id="CFs-52-Xx2"/>
-                    <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="K2p-s6-ySC"/>
-                    <constraint firstItem="Bcp-Jc-OsM" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" id="Llr-LD-gRI"/>
+                    <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="3" id="K2p-s6-ySC"/>
+                    <constraint firstItem="Bcp-Jc-OsM" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" constant="-2" id="Llr-LD-gRI"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="baseline" secondItem="Blq-2G-nRN" secondAttribute="baseline" id="NPD-Fl-ttn"/>
                     <constraint firstAttribute="bottomMargin" secondItem="m4M-d6-zfV" secondAttribute="bottom" constant="-8" id="QxG-xf-3Zm"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="2" id="Rs6-ED-Nou"/>
@@ -169,7 +169,7 @@
                     <constraint firstItem="Bcp-Jc-OsM" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="cb4-J8-zM2"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="11" id="d2w-oJ-day"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="dNf-mR-rpb"/>
-                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="gRs-oL-M3J"/>
+                    <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="-2" id="gRs-oL-M3J"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="Bhb-CF-DfK" secondAttribute="trailing" constant="6" id="j15-7U-HcK"/>
                     <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" priority="800" id="nKa-R1-arl"/>
                     <constraint firstAttribute="trailingMargin" secondItem="Bcp-Jc-OsM" secondAttribute="trailing" id="pkM-Rh-5Oy"/>

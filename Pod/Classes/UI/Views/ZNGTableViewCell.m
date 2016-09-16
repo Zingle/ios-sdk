@@ -102,7 +102,7 @@
                 if (distanceBetweenDates < -500) {
                     self.unconfirmedCircle.tintColor = [UIColor zng_unconfirmedMessageRed];
                 } else {
-                    self.unconfirmedCircle.tintColor = [UIColor zng_blue];
+                    self.unconfirmedCircle.tintColor = [UIColor zng_lightBlue];
                 }
             }
             

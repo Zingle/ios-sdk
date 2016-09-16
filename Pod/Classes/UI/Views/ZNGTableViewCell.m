@@ -46,9 +46,6 @@
     
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
     
-    self.contactName.textColor = [UIColor colorFromHexString:@"#333333"];
-    self.lastMessage.textColor = [UIColor colorFromHexString:@"#595959"];
-    
     self.labelCollectionView.collectionViewLayout = [[ZNGLabelCollectionViewFlowLayout alloc] init];
     ZNGLabelCollectionViewFlowLayout *flow = (ZNGLabelCollectionViewFlowLayout *)self.labelCollectionView.collectionViewLayout;
     flow.estimatedItemSize = CGSizeMake(1, 1);

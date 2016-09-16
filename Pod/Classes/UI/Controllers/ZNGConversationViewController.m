@@ -231,11 +231,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // Unused
 }
 
-- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
-{
-    // Unused
-}
-
 #pragma mark - Data notifications
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {

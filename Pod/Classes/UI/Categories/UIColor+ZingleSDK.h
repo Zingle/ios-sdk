@@ -73,6 +73,8 @@
 
 #pragma mark - Utilities
 
+- (UIColor *)zng_colorByLighteningColor:(CGFloat)light;
+
 /**
  *  Creates and returns a new color object whose brightness component is decreased by the given value, using the initial color values of the receiver.
  *

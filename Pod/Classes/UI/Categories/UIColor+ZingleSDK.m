@@ -128,6 +128,22 @@
 
 #pragma mark - Utilities
 
+- (UIColor *)zng_colorByLighteningColor:(CGFloat)light
+{
+    CGFloat hue, saturation, brightness, alpha;
+    
+    if ([self getHue:&hue saturation:&saturation brightness:&brightness alpha:&alpha]) {
+        brightness += light;
+        brightness = MAX(MIN(brightness, 1.0), 0.0);
+        
+        saturation -= light;
+        saturation = MAX(MIN(saturation, 1.0), 0.0);
+        return [UIColor colorWithHue:hue saturation:saturation brightness:brightness alpha:alpha];
+    }
+    
+    return self;
+}
+
 - (UIColor *)zng_colorByDarkeningColorWithValue:(CGFloat)value
 {
     NSUInteger totalComponents = CGColorGetNumberOfComponents(self.CGColor);

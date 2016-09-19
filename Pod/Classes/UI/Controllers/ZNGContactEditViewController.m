@@ -108,7 +108,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         _contact = [[ZNGContact alloc] init];
     } else {
         // Use Mantle for a lazy deep copy
-        NSDictionary * contactDict = [MTLJSONAdapter JSONDictionaryFromModel:contact error:nil];
+        NSDictionary * contactDict = [MTLJSONAdapter JSONDictionaryFromModel:contact];
         _contact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactDict error:nil];
     }
 

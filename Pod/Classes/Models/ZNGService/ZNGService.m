@@ -55,52 +55,54 @@
 
 + (NSValueTransformer*)accountJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccount.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGAccount class]];
 }
 
 + (NSValueTransformer*)planJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAccountPlan.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGAccountPlan class]];
 }
 
 + (NSValueTransformer*)channelsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannel.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGChannel class]];
 }
 
 + (NSValueTransformer*)channelTypesJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGChannelType.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGChannelType class]];
+
 }
 
 + (NSValueTransformer*)contactLabelsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGLabel.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGLabel class]];
+
 }
 
 + (NSValueTransformer*)contactCustomFieldsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGContactField.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGContactField class]];
 }
 
 + (NSValueTransformer*)settingsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGSetting.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGSetting class]];
 }
 
 + (NSValueTransformer *)automationsJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGAutomation class]];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGAutomation class]];
 }
 
 + (NSValueTransformer *)templatesJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGTemplate class]];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGTemplate class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGServiceAddress.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGServiceAddress class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

@@ -28,7 +28,7 @@
 
 + (NSValueTransformer*)channelTypeJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGChannelType.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGChannelType.class];
 }
 
 - (BOOL) isPhoneNumber

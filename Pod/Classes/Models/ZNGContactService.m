@@ -34,7 +34,7 @@
 
 + (NSValueTransformer*)lastMessageJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGMessage class]];
 }
 
 @end

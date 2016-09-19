@@ -35,7 +35,7 @@
 
 + (NSValueTransformer*)customFieldValuesJSONTransformer
 {
-    return [MTLJSONAdapter arrayTransformerWithModelClass:ZNGNewContactFieldValue.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGNewContactFieldValue class]];
 }
 
 @end

@@ -14,8 +14,6 @@
 #import "ZNGInboxDataLabel.h"
 #import "ZNGInboxDataOpen.h"
 #import "ZNGInboxDataSearch.h"
-#import "ZNGInboxDataStarred.h"
 #import "ZNGInboxDataUnconfirmed.h"
-
 
 #endif /* ZNGInboxDataFilters_h */

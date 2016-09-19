@@ -25,6 +25,8 @@
 
 @interface ZNGServiceToContactViewController : ZNGConversationViewController
 
+@property (weak, nonatomic, readonly, nullable) ZNGServiceConversationInputToolbar * inputToolbar;
+
 @property (nonatomic, strong, nullable) ZNGConversationServiceToContact * conversation;
 
 @property (nonatomic, weak, nullable) id <ZNGServiceToContactViewDelegate> delegate;

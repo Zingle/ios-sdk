@@ -8,6 +8,15 @@
 
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
 
+@class ZNGConversationInputToolbar;
+
+@protocol ZNGConversationInputToolbarDelegate <JSQMessagesInputToolbarDelegate>
+
+@optional
+- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender;
+
+@end
+
 @interface ZNGConversationInputToolbar : JSQMessagesInputToolbar
 
 @property (nonatomic, assign) BOOL inputEnabled;

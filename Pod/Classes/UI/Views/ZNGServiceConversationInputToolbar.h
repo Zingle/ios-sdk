@@ -12,7 +12,7 @@
 @class ZNGChannel;
 @class ZNGServiceConversationInputToolbar;
 
-@protocol ZNGServiceConversationInputToolbarDelegate <JSQMessagesInputToolbarDelegate>
+@protocol ZNGServiceConversationInputToolbarDelegate <ZNGConversationInputToolbarDelegate>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;
-- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender;
 

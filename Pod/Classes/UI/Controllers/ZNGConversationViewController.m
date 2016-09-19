@@ -21,7 +21,6 @@
 #import "JSQMessagesLoadEarlierHeaderView.h"
 #import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGConversationTimestampFormatter.h"
-#import "JSQMessagesInputToolbar+DisablingInput.h"
 #import "ZNGAnalytics.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
@@ -295,13 +294,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    [self.inputToolbar disableInput];
+    self.inputToolbar.inputEnabled = NO;
     
     [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
-        [self.inputToolbar enableInput];
+        self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
-        [self.inputToolbar enableInput];
+        self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
         
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to send" message:@"Error encountered while sending message." preferredStyle:UIAlertControllerStyleAlert];
@@ -573,10 +572,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) sendImage:(UIImage *)image fromCameraMode:(BOOL)cameraMode
 {
-    [self.inputToolbar disableInput];
+    self.inputToolbar.inputEnabled = NO;
     
     [self.conversation sendMessageWithImage:image success:^(ZNGStatus *status) {
-        [self.inputToolbar enableInput];
+        self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
         
         if (cameraMode) {
@@ -586,7 +585,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
         
     } failure:^(ZNGError *error) {
-        [self.inputToolbar enableInput];
+        self.inputToolbar.inputEnabled = YES;
         
         UIAlertAction * retrySameImage = [UIAlertAction actionWithTitle:@"Retry the same image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self sendImage:image fromCameraMode:cameraMode];

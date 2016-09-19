@@ -50,6 +50,12 @@
     return nibViews.firstObject;
 }
 
+- (void) setInputEnabled:(BOOL)inputEnabled
+{
+    [self.contentView enableOrDisableAllEditingButtons:inputEnabled];
+    [super setInputEnabled:inputEnabled];
+}
+
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel
 {
     _currentChannel = currentChannel;

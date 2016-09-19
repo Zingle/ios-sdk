@@ -21,7 +21,6 @@
 #import "ZNGPulsatingBarButtonImage.h"
 #import "ZNGTemplate.h"
 #import "UIViewController+ZNGSelectTemplate.h"
-#import "JSQMessagesInputToolbar+DisablingInput.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
 #import "ZingleAccountSession.h"
@@ -52,6 +51,7 @@ static void * KVOContext = &KVOContext;
 }
 
 @dynamic conversation;
+@dynamic inputToolbar;
 
 + (UINib *)nib
 {
@@ -123,8 +123,7 @@ static void * KVOContext = &KVOContext;
     self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
-    [self updateUIForAvailableChannels];
-    [self updateForChannelSelection];
+    [self updateInputStatus];
     
     [self startEmphasisTimer];
 }
@@ -135,26 +134,12 @@ static void * KVOContext = &KVOContext;
         if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
             [self updateConfirmedButton];
         } else if ([keyPath isEqualToString:KVOChannelPath]) {
-            [self updateUIForAvailableChannels];
-            [self updateForChannelSelection];
+            [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
-            [self updateUIForAvailableChannels];
-            [self updateForChannelSelection];
+            [self updateInputStatus];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
-    }
-}
-
-- (void) updateUIForAvailableChannels
-{
-    if ([self.conversation.contact.channels count] == 0) {
-        self.inputToolbar.noSelectedChannelText = @"No channels available";
-        [self.inputToolbar disableInput];
-    } else {
-        self.inputToolbar.noSelectedChannelText = nil;
-        [self.inputToolbar enableInput];
-        [self.inputToolbar toggleSendButtonEnabled];
     }
 }
 
@@ -402,17 +387,22 @@ static void * KVOContext = &KVOContext;
     [self.view addConstraints:@[top, width, left, height]];
 }
 
-- (void) updateForChannelSelection
+/**
+ *  Enables/disables input appropriately for the current channel selection and its blocked status
+ */
+- (void) updateInputStatus
 {
+    BOOL shouldDisableInput = NO;
+    
+    if ([self.conversation.contact.channels count] == 0) {
+        self.inputToolbar.noSelectedChannelText = @"No channels available";
+        shouldDisableInput = YES;
+    }
+    
     self.inputToolbar.currentChannel = self.conversation.channel;
     BOOL someKindOfBlock = (self.conversation.channel.blockOutbound || self.conversation.channel.blockInbound);
     
     if (!someKindOfBlock) {
-        if (self.conversation.channel != nil) {
-            [self.inputToolbar enableInput];
-            [self.inputToolbar toggleSendButtonEnabled];
-        }
-        
         // Do we need to remove previous UI for a blocked channel?
         if (blockedChannelBanner.superview != nil) {
             // Remove this pre-existing banner
@@ -437,13 +427,13 @@ static void * KVOContext = &KVOContext;
         
         if (self.conversation.channel.blockInbound) {
             if (self.conversation.channel.blockOutbound) {
-                [self.inputToolbar disableInput];
+                shouldDisableInput = YES;
                 text = @"INBOUND AND OUTBOUND MESSAGES BLOCKED";
             } else {
                 text = @"INBOUND MESSAGES FROM CONTACT BLOCKED";
             }
         } else {
-            [self.inputToolbar disableInput];
+            shouldDisableInput = YES;
             text = @"OUTBOUND MESSAGES TO CONTACT BLOCKED";
         }
         
@@ -485,6 +475,8 @@ static void * KVOContext = &KVOContext;
             } completion:nil];
         }
     }
+    
+    self.inputToolbar.inputEnabled = !shouldDisableInput;
 }
 
 - (void) showTemporaryBlueBannerWithText:(NSString *)text

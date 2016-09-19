@@ -233,7 +233,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
 - (void) updateContactFrom:(ZNGContact *)oldContact to:(ZNGContact *)newContact success:(void (^)(ZNGContact * contact))success failure:(void (^)(ZNGError * error))failure
 {
     // Create a deep copy of the new contact
-    NSDictionary * contactAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:newContact error:nil];
+    NSDictionary * contactAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:newContact];
     ZNGContact * changedContact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactAsDictionary error:nil];
     
     // Remove any empty fields and channels
@@ -380,7 +380,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
         NSMutableDictionary<NSString *, id> * parameters = [[NSMutableDictionary alloc] init];
         
         if ([changedContact.customFieldValues count] > 0) {
-            parameters[@"custom_field_values"] = [MTLJSONAdapter JSONArrayFromModels:changedContact.customFieldValues error:nil];
+            parameters[@"custom_field_values"] = [MTLJSONAdapter JSONArrayFromModels:changedContact.customFieldValues];
         }
         
         // Note: Using this logic instead of just @(boolValue) is necessary because the Zingle server does not accept 0 and 1 as boolean.  This is Nathan's fault.

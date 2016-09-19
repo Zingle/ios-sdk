@@ -42,13 +42,6 @@
     self.currentChannel = nil;
 }
 
-- (void) setInputEnabled:(BOOL)inputEnabled
-{
-    _inputEnabled = inputEnabled;
-    [self.contentView enableOrDisableAllEditingButtons:inputEnabled];
-    self.contentView.textView.editable = inputEnabled;
-}
-
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
 {
     NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:NSStringFromClass([ZNGConversationToolbarContentView class])

@@ -7,7 +7,7 @@
 //
 
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
-#import "ZNGConversationInputToolbar.h"
+#import "ZNGServiceConversationInputToolbar.h"
 
 @class ZNGConversation;
 @class ZNGConversationViewController;
@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGConversationInputToolbarDelegate>
+@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGServiceConversationInputToolbarDelegate>
 
 @property (nonatomic, strong, nullable) ZNGConversation * conversation;
 
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Returns the input toolbar view object managed by this view controller.
  *  This view controller is the toolbar's delegate.
  */
-@property (weak, nonatomic, readonly) ZNGConversationInputToolbar * inputToolbar;
+@property (weak, nonatomic, readonly) ZNGServiceConversationInputToolbar * inputToolbar;
 
 /**
  * OPTIONAL UI SETTINGS

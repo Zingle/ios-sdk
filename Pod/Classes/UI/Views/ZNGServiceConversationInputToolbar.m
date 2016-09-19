@@ -1,19 +1,19 @@
 //
-//  ZNGConversationInputToolbar.m
+//  ZNGServiceConversationInputToolbar.m
 //  Pods
 //
 //  Created by Jason Neel on 7/18/16.
 //
 //
 
-#import "ZNGConversationInputToolbar.h"
+#import "ZNGServiceConversationInputToolbar.h"
 #import "ZNGConversationToolbarContentView.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGChannel.h"
 #import "UIFont+Lato.h"
 #import "ZNGLogging.h"
 
-@implementation ZNGConversationInputToolbar
+@implementation ZNGServiceConversationInputToolbar
 
 @dynamic contentView;
 @dynamic delegate;
@@ -40,6 +40,13 @@
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
     
     self.currentChannel = nil;
+}
+
+- (void) setInputEnabled:(BOOL)inputEnabled
+{
+    _inputEnabled = inputEnabled;
+    [self.contentView enableOrDisableAllEditingButtons:inputEnabled];
+    self.contentView.textView.editable = inputEnabled;
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView

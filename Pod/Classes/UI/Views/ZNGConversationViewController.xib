@@ -25,7 +25,7 @@
                     <collectionViewLayout key="collectionViewLayout" id="dZl-7C-LHR" customClass="ZNGConversationFlowLayout"/>
                     <cells/>
                 </collectionView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoD-Az-3DM" customClass="ZNGConversationInputToolbar">
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoD-Az-3DM" customClass="ZNGServiceConversationInputToolbar">
                     <rect key="frame" x="0.0" y="447" width="320" height="121"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="121" id="HIk-02-qcW"/>

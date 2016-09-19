@@ -1,5 +1,5 @@
 //
-//  ZNGConversationInputToolbar.h
+//  ZNGServiceConversationInputToolbar.h
 //  Pods
 //
 //  Created by Jason Neel on 7/18/16.
@@ -10,27 +10,27 @@
 #import "ZNGConversationToolbarContentView.h"
 
 @class ZNGChannel;
-@class ZNGConversationInputToolbar;
+@class ZNGServiceConversationInputToolbar;
 
-@protocol ZNGConversationInputToolbarDelegate <JSQMessagesInputToolbarDelegate>
+@protocol ZNGServiceConversationInputToolbarDelegate <JSQMessagesInputToolbarDelegate>
 
 NS_ASSUME_NONNULL_BEGIN
 
 @optional
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel;
 
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender;
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender;
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender;
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender;
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender;
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender;
 
 @end
 
-@interface ZNGConversationInputToolbar : JSQMessagesInputToolbar
+@interface ZNGServiceConversationInputToolbar : JSQMessagesInputToolbar
 
-@property (weak, nonatomic, nullable) id<ZNGConversationInputToolbarDelegate> delegate;
+@property (weak, nonatomic, nullable) id<ZNGServiceConversationInputToolbarDelegate> delegate;
 
 @property (weak, nonatomic, readonly) ZNGConversationToolbarContentView * contentView;
 
@@ -44,6 +44,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  The currently selected channel.  Setting this will update the UI.
  */
 @property (nonatomic, weak, nullable) ZNGChannel * currentChannel;
+
+@property (nonatomic, assign) BOOL inputEnabled;
 
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;

@@ -6,8 +6,8 @@
 //
 //
 
-#import "ZNGConversationInputToolbar.h"
+#import "ZNGServiceConversationInputToolbar.h"
 
-@interface ZNGNewMessageInputToolbar : ZNGConversationInputToolbar
+@interface ZNGNewMessageInputToolbar : ZNGServiceConversationInputToolbar
 
 @end

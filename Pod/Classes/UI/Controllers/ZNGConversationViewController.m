@@ -462,7 +462,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 #pragma mark - Buttons
-- (void) inputToolbar:(ZNGConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     

@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 
   s.dependency 'AFNetworking', '~> 2.6'
   s.dependency 'AFNetworkActivityLogger', '~> 2.0'
-  s.dependency 'Mantle', '~> 2.0'
+  s.dependency 'Mantle', '1.5.7'
   s.dependency 'GoogleFontsiOS/OpenSans'
   s.dependency 'DGActivityIndicatorView'
   s.dependency 'CocoaLumberjack/Swift'

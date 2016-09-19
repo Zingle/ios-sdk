@@ -104,17 +104,17 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 
 + (NSValueTransformer*)channelsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGChannel.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGChannel.class];
 }
 
 + (NSValueTransformer*)customFieldValuesJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGContactFieldValue.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGContactFieldValue.class];
 }
 
 + (NSValueTransformer*)labelsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGLabel.class];
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGLabel.class];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

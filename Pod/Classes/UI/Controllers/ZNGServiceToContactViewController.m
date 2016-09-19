@@ -779,7 +779,7 @@ static void * KVOContext = &KVOContext;
 - (void) appendStringToMessageInput:(NSString *)text
 {
     self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
-
+    [self.inputToolbar toggleSendButtonEnabled];
 }
 
 - (BOOL) _shouldModallyEditContact

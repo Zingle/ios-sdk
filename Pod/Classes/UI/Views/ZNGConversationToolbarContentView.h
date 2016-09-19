@@ -18,4 +18,6 @@
 
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
 
+- (void) enableOrDisableAllEditingButtons:(BOOL)enabled;
+
 @end

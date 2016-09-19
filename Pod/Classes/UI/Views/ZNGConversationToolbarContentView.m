@@ -24,4 +24,13 @@
     self.noteButton.tintColor = gray;
 }
 
+- (void) enableOrDisableAllEditingButtons:(BOOL)enabled
+{
+    self.templateButton.enabled = enabled;
+    self.customFieldButton.enabled = enabled;
+    self.automationButton.enabled = enabled;
+    self.imageButton.enabled = enabled;
+    self.noteButton.enabled = enabled;
+}
+
 @end

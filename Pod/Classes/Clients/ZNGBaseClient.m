@@ -263,7 +263,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 {
     NSDictionary* params;
     
-    ZNGLogDebug(@"POSTing a %@ to %@%@, expecting %@", [model class], self.session.sessionManager.baseURL, path, responseClass);
+    ZNGLogDebug(@"POSTing a %@ to %@%@, expecting %@", [(NSObject *)model class], self.session.sessionManager.baseURL, path, responseClass);
     
     if (model) {
         NSError* error = nil;
@@ -275,7 +275,8 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         // This block never executes in Mantle 1.7 :(
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];
-            ZNGLogWarn(@"Unable to encode %@ to JSON: %@", [model class], zngError);
+            Class modelClass = [(NSObject *)model class];
+            ZNGLogWarn(@"Unable to encode %@ to JSON: %@", [(NSObject *)model class], zngError);
             
             if (failure) {
                 failure(zngError);

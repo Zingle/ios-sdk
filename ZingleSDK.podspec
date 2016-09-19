@@ -27,7 +27,6 @@ Pod::Spec.new do |s|
   s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
 
   s.dependency 'AFNetworking', '~> 2.6'
-  s.dependency 'GoogleFontsiOS/OpenSans'
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle', '~> 1.0'
   s.dependency 'CocoaLumberjack/Swift', '2.3'

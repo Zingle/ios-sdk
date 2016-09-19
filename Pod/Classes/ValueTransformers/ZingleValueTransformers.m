@@ -13,8 +13,7 @@
 
 + (NSValueTransformer*)dateValueTransformer
 {
-    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSNumber* dateValue, BOOL* success, NSError* __autoreleasing* error) {
-        
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(NSNumber * dateValue) {
         double dateDouble = [dateValue doubleValue];
         
         if (dateDouble == 0.0)
@@ -23,9 +22,7 @@
         }
         
         return [NSDate dateWithTimeIntervalSince1970:dateDouble];
-        
-    } reverseBlock:^id(NSDate* date, BOOL* success, NSError* __autoreleasing* error) {
-        
+    } reverseBlock:^id(NSDate * date) {
         NSTimeInterval interval = [date timeIntervalSince1970];
         NSInteger time = interval;
         return [NSNumber numberWithInteger:time];

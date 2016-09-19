@@ -209,12 +209,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 + (NSValueTransformer*)senderJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGCorrespondent.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
 }
 
 + (NSValueTransformer*)recipientJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGCorrespondent.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer
@@ -229,7 +229,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGUser.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
 }
 
 @end

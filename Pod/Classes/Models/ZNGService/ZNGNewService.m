@@ -40,7 +40,7 @@
 
 + (NSValueTransformer*)serviceAddressJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGServiceAddress.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGServiceAddress class]];
 }
 
 @end

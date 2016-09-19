@@ -21,7 +21,7 @@
 
 + (NSValueTransformer*)channelJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGChannel.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGChannel class]];
 }
 
 @end

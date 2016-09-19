@@ -39,17 +39,17 @@ static NSString * const ZNGEventContactCreated = @"contact_created";
 
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGUser.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
 }
 
 + (NSValueTransformer*)automationJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGAutomation.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGAutomation class]];
 }
 
 + (NSValueTransformer*)messageJSONTransformer
 {
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:ZNGMessage.class];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGMessage class]];
 }
 
 - (BOOL) isEqual:(ZNGEvent *)other {

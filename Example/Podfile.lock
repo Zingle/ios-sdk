@@ -37,17 +37,17 @@ PODS:
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - Mantle (2.0.7):
-    - Mantle/extobjc (= 2.0.7)
-  - Mantle/extobjc (2.0.7)
-  - ZingleSDK (0.2.4):
+  - Mantle (1.5.7):
+    - Mantle/extobjc (= 1.5.7)
+  - Mantle/extobjc (1.5.7)
+  - ZingleSDK (1.0.2):
     - AFNetworkActivityLogger (~> 2.0)
     - AFNetworking (~> 2.6)
     - CocoaLumberjack/Swift
     - DGActivityIndicatorView
     - GoogleFontsiOS/OpenSans
     - JSQMessagesViewController
-    - Mantle (~> 2.0)
+    - Mantle (= 1.5.7)
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -64,8 +64,8 @@ SPEC CHECKSUMS:
   GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  Mantle: bc40bb061d8c2c6fb48d5083e04d928c3b7f73d9
-  ZingleSDK: 98f26c7ab390faf6dd0919ed2c6dc25b18447b93
+  Mantle: 4af47cf9547a4d0ad145a48cd0be3b411a5ae2b8
+  ZingleSDK: 08d361df1644a7d4c623d215bc2d44fe46146e86
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

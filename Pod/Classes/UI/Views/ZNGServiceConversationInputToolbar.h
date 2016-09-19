@@ -6,7 +6,7 @@
 //
 //
 
-#import <JSQMessagesViewController/JSQMessagesViewController.h>
+#import <ZingleSDK/ZNGConversationInputToolbar.h>
 #import "ZNGConversationToolbarContentView.h"
 
 @class ZNGChannel;
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface ZNGServiceConversationInputToolbar : JSQMessagesInputToolbar
+@interface ZNGServiceConversationInputToolbar : ZNGConversationInputToolbar
 
 @property (weak, nonatomic, nullable) id<ZNGServiceConversationInputToolbarDelegate> delegate;
 

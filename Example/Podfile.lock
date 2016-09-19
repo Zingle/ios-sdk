@@ -1,7 +1,4 @@
 PODS:
-  - AFNetworkActivityLogger (2.0.4):
-    - AFNetworking/NSURLConnection (~> 2.0)
-    - AFNetworking/NSURLSession (~> 2.0)
   - AFNetworking (2.6.3):
     - AFNetworking/NSURLConnection (= 2.6.3)
     - AFNetworking/NSURLSession (= 2.6.3)
@@ -30,24 +27,23 @@ PODS:
     - CocoaLumberjack/Default
   - CocoaLumberjack/Swift (2.3.0):
     - CocoaLumberjack/Extensions
-  - DGActivityIndicatorView (2.0)
+  - DGActivityIndicatorView (2.1)
   - GoogleFontsiOS/Core (0.1.1)
   - GoogleFontsiOS/OpenSans (0.1.1):
     - GoogleFontsiOS/Core
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - Mantle (1.5.7):
-    - Mantle/extobjc (= 1.5.7)
-  - Mantle/extobjc (1.5.7)
-  - ZingleSDK (1.0.2):
-    - AFNetworkActivityLogger (~> 2.0)
+  - Mantle (1.5.8):
+    - Mantle/extobjc (= 1.5.8)
+  - Mantle/extobjc (1.5.8)
+  - ZingleSDK (1.0.3):
     - AFNetworking (~> 2.6)
-    - CocoaLumberjack/Swift
+    - CocoaLumberjack/Swift (= 2.3)
     - DGActivityIndicatorView
     - GoogleFontsiOS/OpenSans
     - JSQMessagesViewController
-    - Mantle (= 1.5.7)
+    - Mantle (~> 1.0)
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -57,15 +53,14 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFNetworkActivityLogger: 121486778117d53b3ab1c61d264b88081d0c3eee
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
-  DGActivityIndicatorView: 52875b025a6ccf6a431a905285c12e2bb95eb559
+  DGActivityIndicatorView: 1942ae657a8d247c035f229422b2d15a8adbe5b6
   GoogleFontsiOS: 9f4a4f886160d8cb723bd936604b3f6b975f1167
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  Mantle: 4af47cf9547a4d0ad145a48cd0be3b411a5ae2b8
-  ZingleSDK: 08d361df1644a7d4c623d215bc2d44fe46146e86
+  Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
+  ZingleSDK: 4ee33ac3780eb77cca6115c909da09863afbdba1
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

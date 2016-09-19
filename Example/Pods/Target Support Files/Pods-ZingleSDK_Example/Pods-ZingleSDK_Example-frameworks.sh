@@ -84,7 +84,6 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS8.0/AFNetworkActivityLogger.framework"
   install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS8.0/AFNetworking.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS8.0/CocoaLumberjack.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS8.0/DGActivityIndicatorView.framework"
@@ -95,7 +94,6 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS8.0/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "$BUILT_PRODUCTS_DIR/AFNetworkActivityLogger-iOS8.0/AFNetworkActivityLogger.framework"
   install_framework "$BUILT_PRODUCTS_DIR/AFNetworking-iOS8.0/AFNetworking.framework"
   install_framework "$BUILT_PRODUCTS_DIR/CocoaLumberjack-iOS8.0/CocoaLumberjack.framework"
   install_framework "$BUILT_PRODUCTS_DIR/DGActivityIndicatorView-iOS8.0/DGActivityIndicatorView.framework"

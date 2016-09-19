@@ -13,10 +13,6 @@
 #import "NSObject+MTLComparisonAdditions.h"
 #import "NSValueTransformer+MTLInversionAdditions.h"
 #import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
-#import "metamacros.h"
-#import "MTLEXTKeyPathCoding.h"
-#import "MTLEXTRuntimeExtensions.h"
-#import "MTLEXTScope.h"
 
 FOUNDATION_EXPORT double MantleVersionNumber;
 FOUNDATION_EXPORT const unsigned char MantleVersionString[];

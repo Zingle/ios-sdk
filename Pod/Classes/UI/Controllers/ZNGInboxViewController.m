@@ -194,6 +194,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
     
     if ([newSelection isEqual:oldSelection]) {
+        [self.tableView scrollToRowAtIndexPath:newSelection atScrollPosition:UITableViewScrollPositionNone animated:NO];
         return;
     }
     

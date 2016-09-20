@@ -507,22 +507,6 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     return ContactSectionCount;
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-{
-    switch (section) {
-        case ContactSectionDefaultCustomFields:
-            return @"Default";
-        case ContactSectionOptionalCustomFields:
-            return @"Optional";
-        case ContactSectionLabels:
-            return @"Labels";
-        case ContactSectionChannels:
-            return @"Channels";
-        default:
-            return nil;
-    }
-}
-
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section) {

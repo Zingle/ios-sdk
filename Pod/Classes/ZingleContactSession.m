@@ -34,8 +34,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     dispatch_semaphore_t messageAndEventClientSemaphore;
     dispatch_semaphore_t userHeaderSetSemaphore;
-    
-    ZNGService * _service;   // Needed for creation of conversation view controller.  This may be unnecessary with a small refactor of that view.
 }
 
 - (instancetype) initWithToken:(NSString *)token
@@ -170,6 +168,74 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }];
 }
 
+- (void) retrieveServiceObject
+{
+    if ([self.contactService.serviceId length] == 0) {
+        ZNGLogWarn(@"retrieveServiceObject was called, but we do not have a service ID in our %@ contact service", self.contactService.serviceDisplayName);
+        return;
+    }
+    
+    [self.serviceClient serviceWithId:self.contactService.serviceId success:^(ZNGService *service, ZNGStatus *status) {
+        [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
+        _service = service;
+        [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
+        
+        [self ensureContactHasAllDefaultCustomFields];
+        
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to retrieve %@ service: %@", self.contactService.serviceId, error);
+    }];
+}
+
+- (void) ensureContactHasAllDefaultCustomFields
+{
+    NSMutableArray<NSString *> * defaultCustomFieldDisplayNames = [[self _defaultCustomFieldDisplayNames] mutableCopy];
+
+    // Remove any defaults that this dude already has
+    for (ZNGContactFieldValue * existingCustomFieldValue in self.contact.customFieldValues) {
+        [defaultCustomFieldDisplayNames removeObject:existingCustomFieldValue.customField.displayName];
+    }
+    
+    NSUInteger defaultCount = [defaultCustomFieldDisplayNames count];
+    
+    if (defaultCount == 0) {
+        // There are no missing defaults
+        return;
+    }
+    
+    NSMutableArray<ZNGContactField *> * defaultCustomFields = [[NSMutableArray alloc] initWithCapacity:defaultCount];
+    
+    // Build our array of missing default custom fields
+    for (NSString * defaultName in defaultCustomFieldDisplayNames) {
+        for (ZNGContactField * customField in self.service.contactCustomFields) {
+            if ([customField.displayName isEqualToString:defaultName]) {
+                [defaultCustomFields addObject:customField];
+                break;
+            }
+        }
+    }
+    
+    if ([defaultCustomFields count] < defaultCount) {
+        ZNGLogWarn(@"%llu default custom field names were listed, but only %llu were found in the service object.", (unsigned long long)defaultCount, (unsigned long long)[defaultCustomFields count]);
+    }
+    
+    // Build our array of custom field values for all of the missing custom fields
+    NSMutableArray<ZNGContactFieldValue *> * newCustomFieldValues = (self.contact.customFieldValues != nil) ? [self.contact.customFieldValues mutableCopy] : [[NSMutableArray alloc] init];
+    
+    for (ZNGContactField * customField in defaultCustomFields) {
+        ZNGContactFieldValue * customFieldValue = [[ZNGContactFieldValue alloc] init];
+        customFieldValue.customField = customField;
+        [newCustomFieldValues addObject:customFieldValue];
+    }
+    
+    self.contact.customFieldValues = newCustomFieldValues;
+}
+
+- (NSArray<NSString *> *) _defaultCustomFieldDisplayNames
+{
+    return @[@"Title", @"First Name", @"Last Name"];
+}
+
 - (void) setAuthorizationHeader
 {
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
@@ -185,6 +251,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
         }
         
+        [self retrieveServiceObject];
         [self registerForPushNotifications];
         
         dispatch_semaphore_signal(userHeaderSetSemaphore);

@@ -59,6 +59,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) ZNGContact * contact;
 
 /**
+ *  The service corresponding to the current contactService.
+ */
+@property (nonatomic, readonly, nullable) ZNGService * service;
+
+/**
  *  The current messaging conversation between the contact and the contact service.  Al messages are sent and received through this property.
  *  This is set automatically along with the contact property.
  *

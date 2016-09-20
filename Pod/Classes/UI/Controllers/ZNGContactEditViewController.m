@@ -107,9 +107,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         ZNGLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
         _contact = [[ZNGContact alloc] init];
     } else {
-        // Use Mantle for a lazy deep copy
-        NSDictionary * contactDict = [MTLJSONAdapter JSONDictionaryFromModel:contact];
-        _contact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactDict error:nil];
+        // ZNGContact's copy is a deep copy
+        _contact = [contact copy];
     }
 
     [self updateUIForNewContact];

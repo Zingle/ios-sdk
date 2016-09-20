@@ -232,9 +232,8 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
 
 - (void) updateContactFrom:(ZNGContact *)oldContact to:(ZNGContact *)newContact success:(void (^)(ZNGContact * contact))success failure:(void (^)(ZNGError * error))failure
 {
-    // Create a deep copy of the new contact
-    NSDictionary * contactAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:newContact];
-    ZNGContact * changedContact = [MTLJSONAdapter modelOfClass:[ZNGContact class] fromJSONDictionary:contactAsDictionary error:nil];
+    // Create a copy of the new contact.  ZNGContact promises a deep copy.
+    ZNGContact * changedContact = [newContact copy];
     
     // Remove any empty fields and channels
     changedContact.channels = [changedContact channelsWithValues];

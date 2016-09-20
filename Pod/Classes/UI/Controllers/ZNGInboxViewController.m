@@ -404,8 +404,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    self.selectedIndexPath = indexPath;
-    
     ZNGContact *contact = [self contactAtIndexPath:indexPath];
     
     [self willChangeValueForKey:NSStringFromSelector(@selector(selectedContact))];

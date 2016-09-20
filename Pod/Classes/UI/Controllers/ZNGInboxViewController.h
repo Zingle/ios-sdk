@@ -40,7 +40,6 @@
 
 @property (strong, nonatomic, nonnull) ZingleAccountSession * session;
 
-@property (strong, nonatomic, nullable) NSIndexPath *selectedIndexPath;
 @property (weak, nonatomic, nullable) IBOutlet UITableView *tableView;
 
 @property (nonatomic, strong, nullable) ZNGInboxDataSet * data;

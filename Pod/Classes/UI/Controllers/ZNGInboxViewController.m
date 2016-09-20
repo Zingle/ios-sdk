@@ -287,6 +287,15 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
             [self.tableView reloadData];
     }
+    
+    // Ensure that we retain our selection visually
+    if (self.selectedContact != nil) {
+        NSIndexPath * selectedContactIndexPath = [self indexPathForContact:self.selectedContact];
+        
+        if ((selectedContactIndexPath != nil) && (![[self.tableView indexPathForSelectedRow] isEqual:selectedContactIndexPath])) {
+            [self.tableView selectRowAtIndexPath:selectedContactIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        }
+    }
 }
 
 #pragma mark - Data Handling

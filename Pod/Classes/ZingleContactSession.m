@@ -210,11 +210,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 #pragma mark - UI convenience
 - (ZNGContactToServiceViewController *) conversationViewController
 {
-    if (_service == nil) {
-        ZNGLogWarn(@"Unable to return conversation view controller.  There is no current conversation nor service.");
-        return nil;
-    }
-    
     ZNGContactToServiceViewController * vc = [[ZNGContactToServiceViewController alloc] init];
     vc.conversation = self.conversation;
     return vc;

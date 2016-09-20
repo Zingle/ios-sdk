@@ -38,6 +38,11 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return self;
 }
 
+- (id) copyWithZone:(NSZone *)zone
+{
+    NSDictionary * selfAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self];
+    return [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:selfAsDictionary error:nil];
+}
 
 #pragma mark - Updating for changes
 - (void) updateRemotely

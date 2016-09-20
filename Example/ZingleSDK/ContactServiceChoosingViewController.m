@@ -14,8 +14,8 @@
 #import <JSQMessagesViewController/JSQMessagesTimestampFormatter.h>
 #import <ZingleSDK/ZNGConversationContactToService.h>
 
-static NSString *kZNGToken = @"jneel@zingle.me";
-static NSString *kZNGKey = @"zingle";
+static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
+static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
 
 // User-Defined Channel if using Contact User Authorization
 static NSString *kZNGChannelTypeId = @"076545a3-4d12-4162-8010-9bbb46f46b32";

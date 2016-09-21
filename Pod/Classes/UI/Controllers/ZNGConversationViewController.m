@@ -448,6 +448,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 // We found a template to delete.  Delete it.
                 NSRange customFieldRange = NSMakeRange(openingBraceRange.location, range.location-openingBraceRange.location+1);
                 textView.text = [textView.text stringByReplacingCharactersInRange:customFieldRange withString:@""];
+                [self.inputToolbar toggleSendButtonEnabled];
                 return NO;
             }
         }

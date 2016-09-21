@@ -31,13 +31,7 @@
 
 - (void) toggleSendButtonEnabled
 {
-    self.contentView.textView.editable = self.inputEnabled;
-    
-    if (self.inputEnabled) {
-        self.sendButton.enabled = [self.contentView.textView hasText];
-    } else {
-        self.sendButton.enabled = NO;
-    }
+    self.sendButton.enabled = [self.contentView.textView hasText];
 }
 
 @end

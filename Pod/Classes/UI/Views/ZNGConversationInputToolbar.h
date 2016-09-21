@@ -20,5 +20,6 @@
 @interface ZNGConversationInputToolbar : JSQMessagesInputToolbar
 
 @property (nonatomic, assign) BOOL inputEnabled;
+@property (nonatomic, readonly) UIButton * sendButton;
 
 @end

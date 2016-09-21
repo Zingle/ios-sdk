@@ -24,11 +24,11 @@
     } else {
         self.contentView.textView.editable = NO;
         self.contentView.textView.text = @"";
-        [[self _sendButton] setEnabled:NO];
+        self.sendButton.enabled = NO;
     }
 }
 
-- (UIButton *) _sendButton
+- (UIButton *) sendButton
 {
     if (self.sendButtonOnRight) {
         return self.contentView.rightBarButtonItem;

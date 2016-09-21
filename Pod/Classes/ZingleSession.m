@@ -17,7 +17,7 @@
 #import "ZNGAnalytics.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
-NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
+NSString * const DebugBaseURL = @"https://stage-api.zingle.me/v1/";
 
 NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
 

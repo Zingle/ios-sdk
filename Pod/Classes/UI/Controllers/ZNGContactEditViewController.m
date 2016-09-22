@@ -72,7 +72,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self generateDataArrays];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
-    deleteXImage = [UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil];
+    deleteXImage = [[UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
@@ -653,11 +653,15 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     xAttachment.image = deleteXImage;
     NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:xAttachment];
     [text appendAttributedString:imageString];
-    cell.label.attributedText = text;
+    [text appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+    
     UIColor * color = label.backgroundUIColor;
     cell.label.textColor = color;
     cell.label.borderColor = color;
     cell.label.backgroundColor = [color zng_colorByLighteningColor:0.5];
+    [text addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, [text length])];
+    
+    cell.label.attributedText = text;
     return cell;
 }
 

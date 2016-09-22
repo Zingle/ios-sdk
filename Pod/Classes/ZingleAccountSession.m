@@ -142,7 +142,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         return;
     }
     
-    if (![_service isEqual:service]) {
+    if ((_service != nil) && (![_service isEqual:service])) {
         ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
     }
     
@@ -150,6 +150,10 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     if (serviceIndex == NSNotFound) {
         ZNGLogError(@"setService was called with service ID %@, but it does not exist within our %lld available services.  Ignoring.", service.serviceId, (unsigned long long)[self.availableServices count]);
+
+        ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Selected service is not available" }];
+        self.mostRecentError = error;
+        
         return;
     }
     

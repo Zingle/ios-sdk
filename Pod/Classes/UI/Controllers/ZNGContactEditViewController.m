@@ -651,6 +651,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@  ", [label.displayName uppercaseString]]];
     NSTextAttachment * xAttachment = [[NSTextAttachment alloc] init];
     xAttachment.image = deleteXImage;
+    
+    // Shimmy the image up a few pixels for proper vertical centering
+    xAttachment.bounds = CGRectMake(0.0, 0.5, deleteXImage.size.width, deleteXImage.size.height);
+    
     NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:xAttachment];
     [text appendAttributedString:imageString];
     [text appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];

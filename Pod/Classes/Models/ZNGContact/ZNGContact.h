@@ -106,6 +106,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<ZNGNewContactFieldValue *> *) customFieldsWithValuesAsNewValueObjects;
 
 /**
+ *  Returns empty string new contact field value objects corresponding to all custom fields that have been deleted since the supplied copy of this contact.
+ *  This is needed since PUTting a contact with missing fields does not remove those fields in the 1.x API :(
+ */
+- (NSArray<ZNGNewContactFieldValue *> *) customFieldsDeletedSince:(ZNGContact *)oldContact;
+
+/**
  *  Returns YES if the field is uneditable either because it is locked itself (functionality not existing atm) or if the
  *   contact is locked by source and this custom field is locked by that state.
  */

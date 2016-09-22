@@ -325,7 +325,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
                 // This looks like a simple new-contact-to-head move so far.  Our first object has moved down by one.
                 // If we can find our new head somewhere else, we can do a simple swap.
-                NSUInteger sourceIndexOfNewHead = [oldPage indexOfObject:[incomingContacts firstObject]];
+                NSUInteger sourceIndexOfNewHead = [mutableContacts indexOfObject:[incomingContacts firstObject]];
                 
                 if (sourceIndexOfNewHead != NSNotFound) {
                     // This looks like a simple reordering!  Hooray!

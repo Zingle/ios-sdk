@@ -343,6 +343,34 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
     return values;
 }
 
+- (NSArray<ZNGNewContactFieldValue *> *) customFieldsDeletedSince:(ZNGContact *)oldContact
+{
+    NSMutableArray<ZNGNewContactFieldValue *> * deletedFields = [[NSMutableArray alloc] init];
+    NSArray<ZNGContactFieldValue *> * currentValues = [self customFieldsWithValues];
+    NSArray<ZNGContactFieldValue *> * oldValues = [oldContact customFieldsWithValues];
+    
+    for (ZNGContactFieldValue * oldValue in oldValues) {
+        BOOL foundCurrentValue = NO;
+        ZNGContactField * oldField = oldValue.customField;
+        
+        for (ZNGContactFieldValue * currentValue in currentValues) {
+            if ([currentValue.customField.contactFieldId isEqualToString:oldField.contactFieldId]) {
+                foundCurrentValue = YES;
+                break;
+            }
+        }
+        
+        if (!foundCurrentValue) {
+            ZNGNewContactFieldValue * deletedField = [[ZNGNewContactFieldValue alloc] init];
+            deletedField.customFieldId = oldField.contactFieldId;
+            deletedField.value = @"";
+            [deletedFields addObject:deletedField];
+        }
+    }
+    
+    return deletedFields;
+}
+
 - (BOOL)requiresVisualRefeshSince:(ZNGContact *)old
 {
     BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);

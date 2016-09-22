@@ -235,9 +235,12 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     // Create a copy of the new contact.  ZNGContact promises a deep copy.
     ZNGContact * changedContact = [newContact copy];
     
+    // Detect deleted custom fields
+    NSArray<ZNGNewContactFieldValue *> * deletedCustomFields = [newContact customFieldsDeletedSince:oldContact];
+    
     // Remove any empty fields and channels
     changedContact.channels = [changedContact channelsWithValues];
-    changedContact.customFieldValues = [changedContact customFieldsWithValuesAsNewValueObjects];
+    changedContact.customFieldValues = [[changedContact customFieldsWithValuesAsNewValueObjects] arrayByAddingObjectsFromArray:deletedCustomFields];
     
     // Find any label changes
     NSMutableOrderedSet<ZNGLabel *> * oldContactLabels = ([oldContact.labels count] > 0) ? [NSMutableOrderedSet orderedSetWithArray:oldContact.labels] : [[NSMutableOrderedSet alloc] init];

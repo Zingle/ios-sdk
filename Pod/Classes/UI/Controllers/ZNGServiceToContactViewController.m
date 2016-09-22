@@ -30,6 +30,7 @@ static NSString * const UnconfirmedText = @" Unconfirmed ";
 
 static NSString * const KVOContactChannelsPath = @"conversation.contact.channels";
 static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
+static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
 
 static void * KVOContext = &KVOContext;
@@ -91,6 +92,7 @@ static void * KVOContext = &KVOContext;
 {
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
@@ -101,6 +103,7 @@ static void * KVOContext = &KVOContext;
     }
     
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
+    [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
 }
@@ -137,6 +140,8 @@ static void * KVOContext = &KVOContext;
             [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateInputStatus];
+        } else if ([keyPath isEqualToString:KVOContactCustomFieldsPath]) {
+            self.navigationItem.title = self.conversation.remoteName;
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

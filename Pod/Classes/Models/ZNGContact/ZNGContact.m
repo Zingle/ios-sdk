@@ -15,6 +15,7 @@
 #import "ZingleSDK.h"
 #import "ZNGNewChannel.h"
 #import "ZNGAnalytics.h"
+#import "ZNGFieldOption.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -361,9 +362,25 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         }
         
         if (!foundCurrentValue) {
+            // This value is being removed.
             ZNGNewContactFieldValue * deletedField = [[ZNGNewContactFieldValue alloc] init];
             deletedField.customFieldId = oldField.contactFieldId;
             deletedField.value = @"";
+            
+            // If this is a single selection type object, we will check for an empty selection.
+            if ([oldField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) {
+                for (ZNGFieldOption * option in oldField.options) {
+                    if ([[option.value stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]] length] == 0) {
+                        deletedField.customFieldOptionId = option.optionId;
+                        break;
+                    }
+                }
+                
+                if (deletedField.customFieldOptionId == nil) {
+                    ZNGLogWarn(@"Deleting %@ custom field, but it is a single selection field with no empty option.  This will probably not work.", oldField.displayName);
+                }
+            }
+            
             [deletedFields addObject:deletedField];
         }
     }

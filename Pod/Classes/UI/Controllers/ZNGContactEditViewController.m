@@ -58,6 +58,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     NSArray<ZNGContactFieldValue *> * optionalCustomFields;
     NSArray<ZNGChannel *> * phoneNumberChannels;
     NSArray<ZNGChannel *> * nonPhoneNumberChannels;
+    
+    UIImage * deleteXImage;
 }
 
 - (void)viewDidLoad
@@ -70,6 +72,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self generateDataArrays];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    deleteXImage = [UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
@@ -645,7 +648,12 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     cell.label.dashed = NO;
     ZNGLabel * label = self.contact.labels[indexPath.row];
-    cell.label.text = [NSString stringWithFormat:@" %@   X  ", [label.displayName uppercaseString]];
+    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@  ", [label.displayName uppercaseString]]];
+    NSTextAttachment * xAttachment = [[NSTextAttachment alloc] init];
+    xAttachment.image = deleteXImage;
+    NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:xAttachment];
+    [text appendAttributedString:imageString];
+    cell.label.attributedText = text;
     UIColor * color = label.backgroundUIColor;
     cell.label.textColor = color;
     cell.label.borderColor = color;

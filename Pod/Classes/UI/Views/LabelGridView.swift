@@ -43,6 +43,8 @@ public class LabelGridView: UIView {
     
     var xImage: UIImage!
     
+    private var totalSize:CGSize? = nil
+    
     private var addLabelView: DashedBorderLabel? = nil
     
     private var labelViews: [DashedBorderLabel]? = nil
@@ -120,9 +122,12 @@ public class LabelGridView: UIView {
         
         invalidateIntrinsicContentSize()
     }
- 
-    public override func systemLayoutSizeFittingSize(targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
- 
+    
+    public override func intrinsicContentSize() -> CGSize {
+        return totalSize ?? super.intrinsicContentSize()
+    }
+    
+    public override func layoutSubviews() {
         // Note that this method assumes that all labels are identical height
         
         var currentX: CGFloat = 0.0
@@ -130,17 +135,17 @@ public class LabelGridView: UIView {
         var widestWidth: CGFloat = 0.0
         
         if let addLabelView = addLabelView {
-            let addLabelSize = addLabelView.systemLayoutSizeFittingSize(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+            let addLabelSize = addLabelView.intrinsicContentSize()
             addLabelView.frame = CGRectMake(0.0, 0.0, addLabelSize.width, addLabelSize.height)
             currentY = currentY + addLabelSize.height + verticalSpacing
         }
         
         labelViews?.forEach({ (label: DashedBorderLabel) in
-            let labelSize = label.systemLayoutSizeFittingSize(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+            let labelSize = label.intrinsicContentSize()
             
             // Do we need to go down to the next row?
             if currentX != 0.0 {
-                let remainingWidth = targetSize.width - currentX
+                let remainingWidth = frame.size.width - currentX
                 
                 if remainingWidth < labelSize.width {
                     // We need to go to the next row
@@ -158,10 +163,99 @@ public class LabelGridView: UIView {
         })
         
         guard let lastFrame = labelViews?.last?.frame else {
-            return CGSizeZero
+            totalSize = super.intrinsicContentSize()
+            return
         }
         
-        return CGSizeMake(widestWidth, lastFrame.origin.y + lastFrame.size.height)
+        totalSize = CGSizeMake(widestWidth, lastFrame.origin.y + lastFrame.size.height)
     }
+    
+//    public override func sizeThatFits(targetSize: CGSize) -> CGSize {
+//        
+//        // Note that this method assumes that all labels are identical height
+//        
+//        var currentX: CGFloat = 0.0
+//        var currentY: CGFloat = 0.0
+//        var widestWidth: CGFloat = 0.0
+//        
+//        if let addLabelView = addLabelView {
+//            let addLabelSize = addLabelView.sizeThatFits(targetSize)
+//            addLabelView.frame = CGRectMake(0.0, 0.0, addLabelSize.width, addLabelSize.height)
+//            currentY = currentY + addLabelSize.height + verticalSpacing
+//        }
+//        
+//        labelViews?.forEach({ (label: DashedBorderLabel) in
+//            let labelSize = label.sizeThatFits(targetSize)
+//            
+//            // Do we need to go down to the next row?
+//            if currentX != 0.0 {
+//                let remainingWidth = targetSize.width - currentX
+//                
+//                if remainingWidth < labelSize.width {
+//                    // We need to go to the next row
+//                    currentY = currentY + label.frame.size.height + verticalSpacing
+//                    currentX = 0.0
+//                }
+//            }
+//            
+//            label.frame = CGRectMake(currentX, currentY, labelSize.width, labelSize.height)
+//            currentX = currentX + labelSize.width + horizontalSpacing
+//            
+//            if currentX > widestWidth {
+//                widestWidth = currentX
+//            }
+//        })
+//        
+//        guard let lastFrame = labelViews?.last?.frame else {
+//            return CGSizeZero
+//        }
+//        
+//        totalSize = CGSizeMake(widestWidth, lastFrame.origin.y + lastFrame.size.height)
+//        return totalSize!
+//    }
+// 
+//    public override func systemLayoutSizeFittingSize(targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+// 
+//        // Note that this method assumes that all labels are identical height
+//        
+//        var currentX: CGFloat = 0.0
+//        var currentY: CGFloat = 0.0
+//        var widestWidth: CGFloat = 0.0
+//        
+//        if let addLabelView = addLabelView {
+//            let addLabelSize = addLabelView.systemLayoutSizeFittingSize(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+//            addLabelView.frame = CGRectMake(0.0, 0.0, addLabelSize.width, addLabelSize.height)
+//            currentY = currentY + addLabelSize.height + verticalSpacing
+//        }
+//        
+//        labelViews?.forEach({ (label: DashedBorderLabel) in
+//            let labelSize = label.systemLayoutSizeFittingSize(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+//            
+//            // Do we need to go down to the next row?
+//            if currentX != 0.0 {
+//                let remainingWidth = targetSize.width - currentX
+//                
+//                if remainingWidth < labelSize.width {
+//                    // We need to go to the next row
+//                    currentY = currentY + label.frame.size.height + verticalSpacing
+//                    currentX = 0.0
+//                }
+//            }
+//            
+//            label.frame = CGRectMake(currentX, currentY, labelSize.width, labelSize.height)
+//            currentX = currentX + labelSize.width + horizontalSpacing
+//            
+//            if currentX > widestWidth {
+//                widestWidth = currentX
+//            }
+//        })
+//        
+//        guard let lastFrame = labelViews?.last?.frame else {
+//            return CGSizeZero
+//        }
+//        
+//        totalSize = CGSizeMake(widestWidth, lastFrame.origin.y + lastFrame.size.height)
+//        return totalSize!
+//    }
 
 }

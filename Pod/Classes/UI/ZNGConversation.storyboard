@@ -250,8 +250,8 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
-                                                    <rect key="frame" x="37" y="19" width="22" height="22"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
+                                                    <rect key="frame" x="37" y="18" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
                                                         <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
@@ -261,8 +261,8 @@
                                                         <action selector="pressedDelete:" destination="yxw-oU-69S" eventType="touchUpInside" id="xVF-jM-iIM"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="15" width="45" height="30"/>
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
+                                                    <rect key="frame" x="71" y="14" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
@@ -271,8 +271,8 @@
                                                         <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="Zvo-5Z-3uK"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="120" y="23" width="14" height="14"/>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
+                                                    <rect key="frame" x="120" y="22" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>

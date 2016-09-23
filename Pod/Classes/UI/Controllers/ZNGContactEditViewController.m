@@ -42,7 +42,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
-@interface ZNGContactEditViewController ()
+@interface ZNGContactEditViewController () <LabelGridDelegate>
 
 @end
 
@@ -60,6 +60,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     NSArray<ZNGChannel *> * nonPhoneNumberChannels;
     
     UIImage * deleteXImage;
+    
+    __weak ZNGContactLabelsTableViewCell * labelsGridCell;
 }
 
 - (void)viewDidLoad
@@ -543,8 +545,15 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             
         case ContactSectionLabels:
         {
-            ZNGContactLabelsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"labels" forIndexPath:indexPath];
+            ZNGContactLabelsTableViewCell * cell = labelsGridCell;
+            
+            if (cell == nil) {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"labels" forIndexPath:indexPath];
+                labelsGridCell = cell;
+            }
+
             cell.labelsGrid.labels = self.contact.labels;
+            cell.labelsGrid.delegate = self;
             return cell;
         }
             
@@ -604,12 +613,39 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 }
 
 #pragma mark - Label selection
+
+- (void) pressedAddLabel
+{
+    [self performSegueWithIdentifier:SelectLabelSegueIdentifier sender:self];
+}
+
+- (void) pressedRemoveLabel:(ZNGLabel *)label
+{
+    if (label == nil) {
+        ZNGLogError(@"Remove label delegate method was called, but with no label selected.  Ignoring.");
+        return;
+    }
+    
+    NSString * message = [NSString stringWithFormat:@"Remove the %@ label from %@?", label.displayName, [self.contact fullName]];
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
+    
+    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Label" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        [self doLabelRemoval:label];
+    }];
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:delete];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
 - (void) doLabelRemoval:(ZNGLabel *)label
 {
     NSMutableArray * mutableLabels = [self.contact.labels mutableCopy];
     [mutableLabels removeObject:label];
     self.contact.labels = mutableLabels;
     
+    labelsGridCell.labelsGrid.labels = mutableLabels;
     NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
     [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     
@@ -623,6 +659,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         [mutableLabels addObject:label];
         self.contact.labels = mutableLabels;
         
+        labelsGridCell.labelsGrid.labels = mutableLabels;
         NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
         [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         

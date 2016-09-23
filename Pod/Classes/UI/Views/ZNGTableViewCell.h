@@ -11,6 +11,7 @@
 
 @class JSQMessagesTimestampFormatter;
 @class ZNGTableViewCell;
+@class LabelGridView;
 
 /**
  *  The `ZNGTableViewCellDelegate` protocol defines methods that allow you to manage
@@ -35,7 +36,7 @@
  */
 @property (weak, nonatomic) id<ZNGTableViewCellDelegate> delegate;
 
-@property (weak, nonatomic) IBOutlet UICollectionView *labelCollectionView;
+@property (nonatomic, weak) IBOutlet LabelGridView * labelGrid;
 
 @property (nonatomic, strong) JSQMessagesTimestampFormatter * timestampFormatter;
 

@@ -355,8 +355,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
         cell.timestampFormatter = timestampFormatter;
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
-        [cell.labelCollectionView reloadData];
-        
         return cell;
     }
     

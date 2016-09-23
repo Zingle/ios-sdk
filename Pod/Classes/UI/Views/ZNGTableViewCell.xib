@@ -63,16 +63,6 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-A6-8hF">
                         <rect key="frame" x="422" y="12" width="14" height="14"/>
                     </imageView>
-                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="Bcp-Jc-OsM">
-                        <rect key="frame" x="26" y="59" width="415" height="57"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="mma-kZ-PRG">
-                            <size key="itemSize" width="50" height="50"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                    </collectionView>
                     <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="m4M-d6-zfV">
                         <rect key="frame" x="0.0" y="0.0" width="449" height="124"/>
                         <subviews>
@@ -141,6 +131,9 @@
                         <color key="textColor" red="0.53725490196078429" green="0.55686274509803924" blue="0.58431372549019611" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ae-yN-7Cr" customClass="LabelGridView" customModule="ZingleSDK" customModuleProvider="target">
+                        <rect key="frame" x="28" y="59" width="408" height="57"/>
+                    </view>
                 </subviews>
                 <constraints>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="8" id="02S-nn-AOQ"/>
@@ -157,27 +150,27 @@
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="5" id="Bxv-mc-zhF"/>
                     <constraint firstAttribute="trailingMargin" secondItem="m4M-d6-zfV" secondAttribute="trailing" constant="-8" id="CFs-52-Xx2"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="top" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="3" id="K2p-s6-ySC"/>
-                    <constraint firstItem="Bcp-Jc-OsM" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" constant="-2" id="Llr-LD-gRI"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="baseline" secondItem="Blq-2G-nRN" secondAttribute="baseline" id="NPD-Fl-ttn"/>
                     <constraint firstAttribute="bottomMargin" secondItem="m4M-d6-zfV" secondAttribute="bottom" constant="-8" id="QxG-xf-3Zm"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="2" id="Rs6-ED-Nou"/>
                     <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="Tt0-DL-Djw"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="4" id="U75-DU-1bb"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="leading" id="UNj-EJ-OPy"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="4Ae-yN-7Cr" secondAttribute="trailing" constant="5" id="UcM-h5-cx1"/>
                     <constraint firstAttribute="trailing" secondItem="ts2-A6-8hF" secondAttribute="trailing" constant="13" id="V63-p1-9e4"/>
+                    <constraint firstItem="4Ae-yN-7Cr" firstAttribute="leading" secondItem="XBa-nb-zNh" secondAttribute="leading" id="Wo0-29-rhg"/>
+                    <constraint firstItem="4Ae-yN-7Cr" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="aIh-SK-12M"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="bQA-nP-CdX"/>
-                    <constraint firstItem="Bcp-Jc-OsM" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="cb4-J8-zM2"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="11" id="d2w-oJ-day"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="dNf-mR-rpb"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="-2" id="gRs-oL-M3J"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="Bhb-CF-DfK" secondAttribute="trailing" constant="6" id="j15-7U-HcK"/>
                     <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" priority="800" id="nKa-R1-arl"/>
-                    <constraint firstAttribute="trailingMargin" secondItem="Bcp-Jc-OsM" secondAttribute="trailing" id="pkM-Rh-5Oy"/>
                     <constraint firstAttribute="topMargin" secondItem="Blq-2G-nRN" secondAttribute="top" id="tce-jX-rie"/>
+                    <constraint firstItem="4Ae-yN-7Cr" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="uK8-zq-RH8"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-4" id="v47-G5-2aC"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="wJX-jq-S25"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="xrT-Dk-kla"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="Bcp-Jc-OsM" secondAttribute="bottom" id="zMW-2I-53i"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
@@ -201,7 +194,7 @@
             <connections>
                 <outlet property="contactName" destination="Blq-2G-nRN" id="ysH-oI-GYs"/>
                 <outlet property="dateLabel" destination="gdp-gA-wBf" id="fsD-8B-nWV"/>
-                <outlet property="labelCollectionView" destination="Bcp-Jc-OsM" id="v5c-eY-yzt"/>
+                <outlet property="labelGrid" destination="4Ae-yN-7Cr" id="ivM-gT-UO2"/>
                 <outlet property="lastMessage" destination="XBa-nb-zNh" id="FDW-CG-wwF"/>
                 <outlet property="placeholderView" destination="m4M-d6-zfV" id="SEZ-2f-5iC"/>
                 <outlet property="unconfirmedCircle" destination="Bhb-CF-DfK" id="sFy-wo-9aM"/>

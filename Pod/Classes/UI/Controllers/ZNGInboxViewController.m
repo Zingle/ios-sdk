@@ -20,6 +20,7 @@
 #import "UIFont+Lato.h"
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGAnalytics.h"
+#import "ZingleSDK/ZingleSDK-Swift.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -354,6 +355,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
         cell.timestampFormatter = timestampFormatter;
+        cell.labelGrid.font = [UIFont latoSemiBoldFontOfSize:9.0];
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         return cell;
     }

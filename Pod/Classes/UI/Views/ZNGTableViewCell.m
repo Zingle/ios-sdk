@@ -15,7 +15,7 @@
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZingleSDK/ZingleSDK-Swift.h"
 
-@interface ZNGTableViewCell () <UICollectionViewDataSource>
+@interface ZNGTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
 @property (weak, nonatomic) IBOutlet UILabel *lastMessage;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;

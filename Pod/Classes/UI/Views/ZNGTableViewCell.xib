@@ -133,6 +133,12 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4Ae-yN-7Cr" customClass="LabelGridView" customModule="ZingleSDK" customModuleProvider="target">
                         <rect key="frame" x="28" y="59" width="408" height="57"/>
+                        <userDefinedRuntimeAttributes>
+                            <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="NO"/>
+                            <userDefinedRuntimeAttribute type="number" keyPath="labelTextInset">
+                                <real key="value" value="7"/>
+                            </userDefinedRuntimeAttribute>
+                        </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
                 <constraints>

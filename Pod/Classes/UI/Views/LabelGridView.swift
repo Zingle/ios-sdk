@@ -11,7 +11,13 @@ import UIKit
 @objc
 public class LabelGridView: UIView {
     
-    public var showAddLabel: Bool = false {
+    @IBInspectable public var showAddLabel: Bool = false {
+        didSet {
+            createLabelViews()
+        }
+    }
+    
+    @IBInspectable public var showRemovalX: Bool = false {
         didSet {
             createLabelViews()
         }
@@ -23,19 +29,37 @@ public class LabelGridView: UIView {
         }
     }
     
-    public var horizontalSpacing:CGFloat = 4.0 {
+    @IBInspectable public var horizontalSpacing:CGFloat = 6.0 {
         didSet {
             invalidateIntrinsicContentSize()
         }
     }
     
-    public var verticalSpacing:CGFloat = 4.0 {
+    @IBInspectable public var verticalSpacing:CGFloat = 6.0 {
         didSet {
             invalidateIntrinsicContentSize()
         }
     }
     
-    public var font: UIFont = UIFont.systemFontOfSize(13.0) {
+    @IBInspectable public var font: UIFont = UIFont.latoFontOfSize(13.0) {
+        didSet {
+            createLabelViews()
+        }
+    }
+    
+    @IBInspectable public var labelBorderWidth:CGFloat = 2.0 {
+        didSet {
+            createLabelViews()
+        }
+    }
+    
+    @IBInspectable public var labelTextInset:CGFloat = 6.0 {
+        didSet {
+            createLabelViews()
+        }
+    }
+    
+    @IBInspectable public var labelCornerRadius:CGFloat = 12.0 {
         didSet {
             createLabelViews()
         }
@@ -63,6 +87,13 @@ public class LabelGridView: UIView {
         let bundle = NSBundle(forClass: LabelGridView.self)
         xImage = UIImage(named: "deleteX", inBundle: bundle, compatibleWithTraitCollection: nil)?.imageWithRenderingMode(.AlwaysTemplate)
     }
+    
+    private func configureLabel(label: DashedBorderLabel) {
+        label.borderWidth = labelBorderWidth
+        label.textInset = labelTextInset
+        label.cornerRadius = labelCornerRadius
+        label.font = font
+    }
  
     private func createLabelViews() {
  
@@ -72,8 +103,8 @@ public class LabelGridView: UIView {
             if addLabelView?.superview == nil {
                 // Create the add label view
                 addLabelView = DashedBorderLabel()
+                configureLabel(addLabelView!)
                 addLabelView!.dashed = true
-                addLabelView!.font = font
                 addLabelView!.text = " ADD LABEL "
                 addLabelView!.textColor = UIColor.grayColor()
                 addLabelView!.backgroundColor = UIColor.clearColor()
@@ -88,19 +119,24 @@ public class LabelGridView: UIView {
         
         labels?.forEach({ (label: ZNGLabel) in
             let labelView = DashedBorderLabel()
+            configureLabel(labelView)
             labelView.text = label.displayName
             
-            let labelText = " \(label.displayName.uppercaseString)  "
+            let labelText = " \(label.displayName.uppercaseString) "
             let text = NSMutableAttributedString(string: labelText)
             
-            let imageAttachment = NSTextAttachment()
-            imageAttachment.image = xImage
-            imageAttachment.bounds = CGRectMake(0.0, 0.5, xImage.size.width, xImage.size.height)
-            
-            let imageAsText = NSAttributedString(attachment: imageAttachment)
-            
-            text.appendAttributedString(imageAsText)
-            text.appendAttributedString(NSAttributedString(string: " "))
+            if showRemovalX {
+                let imageAttachment = NSTextAttachment()
+                imageAttachment.image = xImage
+                imageAttachment.bounds = CGRectMake(0.0, 0.5, xImage.size.width, xImage.size.height)
+                
+                let imageAsText = NSAttributedString(attachment: imageAttachment)
+                
+                let oneSpaceString = NSAttributedString(string: " ")
+                text.appendAttributedString(oneSpaceString)
+                text.appendAttributedString(imageAsText)
+                text.appendAttributedString(oneSpaceString)
+            }
             
             let color = label.backgroundUIColor()
             labelView.font = font

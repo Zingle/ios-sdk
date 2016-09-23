@@ -9,7 +9,19 @@
 import UIKit
 
 @objc
+public protocol LabelGridDelegate: AnyObject {
+    func pressedAddLabel()
+    func pressedRemoveLabel(label: ZNGLabel)
+}
+
+@objc
 public class LabelGridView: UIView {
+    
+    public weak var delegate: LabelGridDelegate? = nil {
+        didSet {
+            userInteractionEnabled = (delegate != nil)
+        }
+    }
     
     @IBInspectable public var showAddLabel: Bool = false {
         didSet {
@@ -86,6 +98,7 @@ public class LabelGridView: UIView {
     private func commonInit() {
         let bundle = NSBundle(forClass: LabelGridView.self)
         xImage = UIImage(named: "deleteX", inBundle: bundle, compatibleWithTraitCollection: nil)?.imageWithRenderingMode(.AlwaysTemplate)
+        userInteractionEnabled = false
     }
     
     private func configureLabel(label: DashedBorderLabel) {
@@ -93,6 +106,19 @@ public class LabelGridView: UIView {
         label.textInset = labelTextInset
         label.cornerRadius = labelCornerRadius
         label.font = font
+        label.userInteractionEnabled = true
+    }
+    
+    @objc private func pressedAddLabel(gestureRecognizer: UITapGestureRecognizer) {
+        delegate?.pressedAddLabel()
+    }
+    
+    @objc private func tappedLabel(gestureRecognizer: UITapGestureRecognizer) {
+        if let tappedLabelView = gestureRecognizer.view as? DashedBorderLabel,
+            index = labelViews?.indexOf(tappedLabelView),
+            label = labels?[index] {
+            delegate?.pressedRemoveLabel(label)
+        }
     }
  
     private func createLabelViews() {
@@ -109,6 +135,9 @@ public class LabelGridView: UIView {
                 addLabelView!.textColor = UIColor.grayColor()
                 addLabelView!.backgroundColor = UIColor.clearColor()
                 addLabelView!.borderColor = UIColor.grayColor()
+                
+                let tapper = UITapGestureRecognizer(target: self, action: #selector(pressedAddLabel))
+                addLabelView!.addGestureRecognizer(tapper)
                 
                 addSubview(addLabelView!)
             }
@@ -146,6 +175,9 @@ public class LabelGridView: UIView {
             text.addAttribute(NSForegroundColorAttributeName, value: color, range: NSMakeRange(0, text.length))
             labelView.attributedText = text
             
+            let tapper = UITapGestureRecognizer(target: self, action: #selector(tappedLabel))
+            labelView.addGestureRecognizer(tapper)
+            
             newLabelViews.append(labelView)
             addSubview(labelView)
         })
@@ -156,6 +188,7 @@ public class LabelGridView: UIView {
         
         labelViews = newLabelViews
         
+        layoutIfNeeded()
         invalidateIntrinsicContentSize()
     }
     
@@ -163,9 +196,12 @@ public class LabelGridView: UIView {
         return totalSize ?? super.intrinsicContentSize()
     }
     
+    public override func systemLayoutSizeFittingSize(targetSize: CGSize, withHorizontalFittingPriority horizontalFittingPriority: UILayoutPriority, verticalFittingPriority: UILayoutPriority) -> CGSize {
+        return totalSize ?? super.systemLayoutSizeFittingSize(targetSize, withHorizontalFittingPriority: horizontalFittingPriority, verticalFittingPriority: verticalFittingPriority)
+    }
+    
     public override func layoutSubviews() {
         // Note that this method assumes that all labels are identical height
-        
         var currentX: CGFloat = 0.0
         var currentY: CGFloat = 0.0
         var widestWidth: CGFloat = 0.0
@@ -185,7 +221,7 @@ public class LabelGridView: UIView {
                 
                 if remainingWidth < labelSize.width {
                     // We need to go to the next row
-                    currentY = currentY + label.frame.size.height + verticalSpacing
+                    currentY = currentY + labelSize.height + verticalSpacing
                     currentX = 0.0
                 }
             }
@@ -198,11 +234,11 @@ public class LabelGridView: UIView {
             }
         })
         
-        guard let lastFrame = labelViews?.last?.frame else {
+        guard let lastFrame = labelViews?.last?.frame ?? addLabelView?.frame else {
             totalSize = super.intrinsicContentSize()
             return
         }
         
-        totalSize = CGSizeMake(widestWidth, lastFrame.origin.y + lastFrame.size.height)
+        totalSize = CGSizeMake(widestWidth - horizontalSpacing, lastFrame.origin.y + lastFrame.size.height)
     }
 }

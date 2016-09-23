@@ -255,7 +255,10 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     NSUInteger channelIndex = [self.contact.channels indexOfObject:channel];
     
     if (channelIndex == NSNotFound) {
-        return channel;
+        ZNGLogInfo(@"Trying to find %@ (%@) in %@'s channels, but it does not exist.  Was this channel deleted?  Some data will probably be stale.",
+                   channel.value, channel.channelType.displayName, [self.contact fullName]);
+        
+        return nil;
     }
     
     return self.contact.channels[channelIndex];

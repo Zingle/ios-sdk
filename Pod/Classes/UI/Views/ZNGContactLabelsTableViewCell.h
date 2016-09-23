@@ -8,12 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-extern NSString * const ZNGContactLabelsCollectionViewCellReuseIdentifier;
+@class LabelGridView;
 
 @interface ZNGContactLabelsTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) IBOutlet UICollectionView * collectionView;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint * collectionViewTopPaddingConstraint;
-@property (nonatomic, strong) IBOutlet NSLayoutConstraint * collectionViewBottomPaddingConstraint;
+@property (nonatomic, strong) IBOutlet LabelGridView * labelsGrid;
 
 @end

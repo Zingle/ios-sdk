@@ -250,7 +250,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
                                                     <rect key="frame" x="37" y="19" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
@@ -261,7 +261,7 @@
                                                         <action selector="pressedDelete:" destination="yxw-oU-69S" eventType="touchUpInside" id="xVF-jM-iIM"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
+                                                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
                                                     <rect key="frame" x="71" y="15" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
@@ -271,7 +271,7 @@
                                                         <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="Zvo-5Z-3uK"/>
                                                     </connections>
                                                 </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
+                                                <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
                                                     <rect key="frame" x="120" y="23" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
@@ -320,45 +320,32 @@
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" scrollEnabled="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="0qY-cL-3Yg">
-                                                    <rect key="frame" x="37" y="4" width="555" height="44"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="9Vn-1l-2CP"/>
-                                                    </constraints>
-                                                    <collectionViewLayout key="collectionViewLayout" id="AaR-DG-w3l" customClass="ZNGContactLabelFlowLayout"/>
-                                                    <cells/>
-                                                    <variation key="default">
-                                                        <mask key="constraints">
-                                                            <exclude reference="9Vn-1l-2CP"/>
-                                                        </mask>
-                                                    </variation>
-                                                </collectionView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="phf-Wt-fzx" customClass="LabelGridView" customModule="ZingleSDK" customModuleProvider="target">
+                                                    <rect key="frame" x="37" y="12" width="555" height="28"/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="boolean" keyPath="showRemovalX" value="YES"/>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="labelTextInset">
+                                                            <real key="value" value="6"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="labelCornerRadius">
+                                                            <real key="value" value="14"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </view>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerY" secondItem="fa7-Yj-Urf" secondAttribute="centerY" id="52U-3Y-4M9"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leadingMargin" id="E6z-dU-2Rv"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="0qY-cL-3Yg" secondAttribute="trailing" id="IhO-vc-4Wi"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leading" constant="37" id="R5z-Hi-9sE"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="centerX" secondItem="fa7-Yj-Urf" secondAttribute="centerX" constant="14.5" id="UDL-f9-P3h"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="bottom" secondItem="fa7-Yj-Urf" secondAttribute="bottomMargin" constant="4" id="fit-zm-fCD"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="top" secondItem="fa7-Yj-Urf" secondAttribute="topMargin" constant="-4" id="oCJ-d5-vGT"/>
-                                                <constraint firstAttribute="trailing" secondItem="0qY-cL-3Yg" secondAttribute="trailing" constant="8" id="sz2-zx-JiG"/>
-                                                <constraint firstAttribute="bottom" secondItem="0qY-cL-3Yg" secondAttribute="bottom" constant="4" id="vfM-Qg-PZW"/>
-                                                <constraint firstItem="0qY-cL-3Yg" firstAttribute="top" secondItem="fa7-Yj-Urf" secondAttribute="top" constant="4" id="xPx-O4-pvu"/>
+                                                <constraint firstItem="phf-Wt-fzx" firstAttribute="leading" secondItem="fa7-Yj-Urf" secondAttribute="leadingMargin" constant="29" id="M09-RC-bIb"/>
+                                                <constraint firstItem="phf-Wt-fzx" firstAttribute="centerX" secondItem="fa7-Yj-Urf" secondAttribute="centerX" constant="14" id="Nep-Ta-zvu"/>
+                                                <constraint firstItem="phf-Wt-fzx" firstAttribute="trailing" secondItem="fa7-Yj-Urf" secondAttribute="trailingMargin" id="XxO-Ft-frK"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="phf-Wt-fzx" secondAttribute="bottom" constant="4" id="daZ-UH-Kzu"/>
+                                                <constraint firstItem="phf-Wt-fzx" firstAttribute="top" secondItem="fa7-Yj-Urf" secondAttribute="topMargin" constant="4" id="mMg-1d-aUP"/>
+                                                <constraint firstItem="phf-Wt-fzx" firstAttribute="centerY" secondItem="fa7-Yj-Urf" secondAttribute="centerY" id="mbp-dK-58P"/>
                                             </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="E6z-dU-2Rv"/>
-                                                    <exclude reference="IhO-vc-4Wi"/>
-                                                    <exclude reference="fit-zm-fCD"/>
-                                                    <exclude reference="oCJ-d5-vGT"/>
-                                                </mask>
-                                            </variation>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="collectionView" destination="0qY-cL-3Yg" id="SEe-hc-xaA"/>
-                                            <outlet property="collectionViewBottomPaddingConstraint" destination="fit-zm-fCD" id="LHa-dX-PdN"/>
-                                            <outlet property="collectionViewTopPaddingConstraint" destination="oCJ-d5-vGT" id="qjv-gA-KEA"/>
+                                            <outlet property="labelsGrid" destination="phf-Wt-fzx" id="m0p-jL-uwd"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

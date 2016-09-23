@@ -544,10 +544,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         case ContactSectionLabels:
         {
             ZNGContactLabelsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"labels" forIndexPath:indexPath];
-            cell.collectionView.dataSource = self;
-            cell.collectionView.delegate = self;
-            [cell.collectionView.collectionViewLayout invalidateLayout];
-            [cell.collectionView reloadData];
+            cell.labelsGrid.labels = self.contact.labels;
             return cell;
         }
             
@@ -604,97 +601,6 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
         [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
     }
-}
-
-#pragma mark - Collection view data source (labels collection view inside of the table)
-- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
-{
-    // We always have one section for "add label."  We will have one more section if any labels are on this duder.
-    return ([self.contact.labels count] > 0) ? 2 : 1;
-}
-
-- (UIEdgeInsets) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
-{
-    if (section == 0) {
-        return UIEdgeInsetsZero;
-    }
-    
-    return UIEdgeInsetsMake(5.0, 0.0, 0.0, 0.0);
-}
-
-- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return 1;   // The "Add label" cell
-    }
-    
-    return [self.contact.labels count];
-}
-
-- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGLabelRoundedCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:ZNGContactLabelsCollectionViewCellReuseIdentifier forIndexPath:indexPath];
-    
-    if (indexPath.section == 0) {
-        // "Add label" cell
-        cell.label.text = @" ADD LABEL ";
-        cell.label.dashed = YES;
-        
-        cell.label.textColor = [UIColor grayColor];
-        cell.label.backgroundColor = [UIColor clearColor];
-        cell.label.borderColor = [UIColor grayColor];
-        return cell;
-    }
-    
-    cell.label.dashed = NO;
-    ZNGLabel * label = self.contact.labels[indexPath.row];
-    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@" %@  ", [label.displayName uppercaseString]]];
-    NSTextAttachment * xAttachment = [[NSTextAttachment alloc] init];
-    xAttachment.image = deleteXImage;
-    
-    // Shimmy the image up a few pixels for proper vertical centering
-    xAttachment.bounds = CGRectMake(0.0, 0.5, deleteXImage.size.width, deleteXImage.size.height);
-    
-    NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:xAttachment];
-    [text appendAttributedString:imageString];
-    [text appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-    
-    UIColor * color = label.backgroundUIColor;
-    cell.label.textColor = color;
-    cell.label.borderColor = color;
-    cell.label.backgroundColor = [color zng_colorByLighteningColor:0.5];
-    [text addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, [text length])];
-    
-    cell.label.attributedText = text;
-    return cell;
-}
-
-- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0) {
-        // They wish to add a label.
-        [self performSegueWithIdentifier:SelectLabelSegueIdentifier sender:self];
-        return;
-    }
-    
-    if (indexPath.row > [self.contact.labels count]) {
-        ZNGLogError(@"Touching a label caused an out of bounds.  Index %lld is outside of our %llu objects.", (long long)indexPath.row, (unsigned long long)[self.contact.labels count]);
-        return;
-    }
-    
-    // They are deleting a label.
-    ZNGLabel * label = self.contact.labels[indexPath.row];
-    NSString * message = [NSString stringWithFormat:@"Remove the %@ label from %@?", label.displayName, [self.contact fullName]];
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Label" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-        [self doLabelRemoval:label];
-    }];
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [alert addAction:delete];
-    [alert addAction:cancel];
-    
-    [self presentViewController:alert animated:YES completion:nil];
 }
 
 #pragma mark - Label selection

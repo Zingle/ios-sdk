@@ -21,7 +21,7 @@
 
 @end
 
-@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ZNGLabelSelectionDelegate, ZNGContactPhoneNumberTableCellDelegate>
+@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ZNGLabelSelectionDelegate, ZNGContactPhoneNumberTableCellDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
 @property (nonatomic, strong) IBOutlet GradientLoadingView * loadingGradient;

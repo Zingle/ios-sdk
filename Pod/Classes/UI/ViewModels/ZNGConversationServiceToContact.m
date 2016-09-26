@@ -18,6 +18,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 static NSString * const ChannelsKVOPath = @"contact.channels";
 
 @implementation ZNGConversationServiceToContact
+{
+    NSArray<ZNGChannel *> * _usedChannels;
+    NSUInteger _usedChannelTotalEventCount;
+    NSUInteger _usedChannelEventCount;
+}
 
 - (id) initFromService:(ZNGService*)aService
              toContact:(ZNGContact *)aContact
@@ -303,6 +308,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (NSArray<ZNGChannel *> *)usedChannels
 {
+    // Can we use our cached data?
+    if ((self.totalEventCount == _usedChannelTotalEventCount) && ([self.events count] == _usedChannelEventCount)) {
+        return _usedChannels;
+    }
+    
     NSMutableSet<ZNGChannel *> * channels = [[NSMutableSet alloc] initWithCapacity:[self.contact.channels count]];
     
     for (ZNGEvent * event in self.events) {
@@ -320,7 +330,12 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         }
     }
     
-    return [channels allObjects];
+    // Cache our result
+    _usedChannelTotalEventCount = self.totalEventCount;
+    _usedChannelEventCount = [self.events count];
+    _usedChannels = [channels allObjects];
+    
+    return _usedChannels;
 }
 
 @end

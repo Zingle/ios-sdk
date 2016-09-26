@@ -549,7 +549,7 @@ static void * KVOContext = &KVOContext;
 
 - (BOOL) shouldShowChannelInfoUnderTimestamps
 {
-    return ([self.conversation.contact.channels count] > 1);
+    return ([[self.conversation usedChannels] count] > 1);
 }
 
 - (BOOL) contactChannelAtIndexPathChangedSincePriorMessage:(NSIndexPath *)indexPath
@@ -600,11 +600,6 @@ static void * KVOContext = &KVOContext;
     }
     
     return height;
-}
-
-- (BOOL) shouldShowChannelInfo
-{
-    return ([self.conversation.contact.channels count] > 1);
 }
 
 #pragma mark - Actions

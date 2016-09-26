@@ -42,7 +42,9 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
 - (id) copyWithZone:(NSZone *)zone
 {
     NSDictionary * selfAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self];
-    return [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:selfAsDictionary error:nil];
+    ZNGContact * contact = [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:selfAsDictionary error:nil];
+    contact.contactClient = self.contactClient;
+    return contact;
 }
 
 #pragma mark - Updating for changes

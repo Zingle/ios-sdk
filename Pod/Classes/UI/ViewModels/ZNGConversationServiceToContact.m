@@ -301,4 +301,26 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     }];
 }
 
+- (NSArray<ZNGChannel *> *)usedChannels
+{
+    NSMutableSet<ZNGChannel *> * channels = [[NSMutableSet alloc] initWithCapacity:[self.contact.channels count]];
+    
+    for (ZNGEvent * event in self.events) {
+        if ([event isMessage]) {
+            ZNGChannel * channel = [[event.message contactCorrespondent] channel];
+            
+            // If we can find an entry for this channel within the contact object, it may have more data, so we'll grab it.  If not, no big deal.
+            NSUInteger index = [self.contact.channels indexOfObject:channel];
+            
+            if (index != NSNotFound) {
+                channel = self.contact.channels[index];
+            }
+            
+            [channels addObject:channel];
+        }
+    }
+    
+    return [channels allObjects];
+}
+
 @end

@@ -54,6 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion;
 
+/**
+ *  Returns all remote channels that have been used by this contact in our current data.  Note that, if the contact has used a channel in messages
+ *   older than our current data, that channel will *not* be included in this array.
+ */
+- (NSArray<ZNGChannel *> *) usedChannels;
+
 NS_ASSUME_NONNULL_END
 
 @end

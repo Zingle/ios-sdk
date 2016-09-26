@@ -20,12 +20,6 @@
         _country = channel.country;
         _displayName = channel.displayName;
         _isDefaultForType = channel.isDefaultForType;
-        
-        // TODO: Remove this once hte server auto-detects country
-#warning TODO: Remove temporary country hard-coding
-        if ([_country length] == 0) {
-            _country = @"US";
-        }
     }
     
     return self;

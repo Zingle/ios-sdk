@@ -154,6 +154,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         [destinationArray addObject:[self contactFieldValueForContactField:customField]];
     }
     
+    // Maintain default field order
+    [defaultValues sortUsingComparator:^NSComparisonResult(ZNGContactFieldValue * _Nonnull obj1, ZNGContactFieldValue * _Nonnull obj2) {
+        NSUInteger obj1SortIndex = [defaultCustomFieldDisplayNames indexOfObject:obj1.customField.displayName];
+        NSUInteger obj2SortIndex = [defaultCustomFieldDisplayNames indexOfObject:obj2.customField.displayName];
+        return [@(obj1SortIndex) compare:@(obj2SortIndex)];
+    }];
+    
     defaultCustomFields = defaultValues;
     optionalCustomFields = otherValues;
     

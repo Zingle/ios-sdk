@@ -775,7 +775,7 @@ static void * KVOContext = &KVOContext;
 
 - (void) insertCustomField:(ZNGContactField *)customField
 {
-    NSString * replacementValue = [NSString stringWithFormat:@"{%@}", customField.replacementVariable];
+    NSString * replacementValue = [NSString stringWithFormat:@"{%@} ", customField.replacementVariable];
     
     [self appendStringToMessageInput:replacementValue];
     [[ZNGAnalytics sharedAnalytics] trackInsertedCustomField:customField intoConversation:self.conversation];

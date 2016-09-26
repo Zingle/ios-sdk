@@ -89,7 +89,10 @@
 - (NSString *) _displayValueWithSuppliedValue:(NSString *)value
 {
     NSString * prefix = ([self.displayName length] > 0) ? self.displayName : self.channelType.displayName;
-    return [NSString stringWithFormat:@"%@ - %@", prefix, value];
+    
+    NSUInteger totalLength = [prefix length] + [value length];
+    
+    return (totalLength > 0) ? [NSString stringWithFormat:@"%@ - %@", prefix?: @"", value ?: @""] : nil;
 }
 
 - (NSString *) displayValueUsingRawValue

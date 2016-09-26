@@ -24,6 +24,9 @@
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
 #import "ZingleAccountSession.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -579,9 +582,16 @@ static void * KVOContext = &KVOContext;
         ZNGChannel * channel = [[event.message contactCorrespondent] channel];
         
         if (channel != nil) {
-            NSString * channelString = [NSString stringWithFormat:@"\n%@", [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue]];
+            NSString * channelString = [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue];
+            
+            if ([channelString length] == 0) {
+                channelString = @"Unknown channel";
+                ZNGLogWarn(@"Channel display value is missing for channel %@", channel.channelId);
+            }
+            
+            NSString * displayString = [NSString stringWithFormat:@"\n%@",channelString];
             NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:12.0] };
-            NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:channelString attributes:attributes];
+            NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:displayString attributes:attributes];
             NSMutableAttributedString * mutableString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
             [mutableString appendAttributedString:attributedChannelString];
             attributedString = mutableString;

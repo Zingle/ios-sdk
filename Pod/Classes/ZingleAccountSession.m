@@ -434,6 +434,14 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         return;
     }
     
+    if ([self _freshOutgoingMessage] == nil) {
+        ZNGLogError(@"Unable to generate a clean outgoing message.");
+
+        if (completion != nil) {
+            completion(NO);
+        }
+    }
+    
     // Since message PUT requires a recipient type for the entire message (contact vs. label,) we will have to send
     //  multiple messages if we have multiple recipient types.
     NSMutableArray<ZNGNewMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:typeCount];
@@ -515,7 +523,19 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];
     
     ZNGChannelType * phoneNumberChannelType = [self.service phoneNumberChannelType];
+    
+    if (phoneNumberChannelType == nil) {
+        ZNGLogError(@"Unable to send outgoing messages.  No phone number channel type exists.  This server is unhappy :(");
+        return nil;
+    }
+    
     ZNGChannel * phoneNumberChannel = [self.service defaultPhoneNumberChannel];
+    
+    if (phoneNumberChannel == nil) {
+        ZNGLogError(@"Unable to send outgoing message.  This service does not have an outgoing phone number channel configured.");
+        return nil;
+    }
+    
     message.channelTypeIds = @[phoneNumberChannelType.channelTypeId];
     
     ZNGParticipant * sender = [[ZNGParticipant alloc] init];

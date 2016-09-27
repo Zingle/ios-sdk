@@ -652,9 +652,17 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [mutableLabels removeObject:label];
     self.contact.labels = mutableLabels;
     
+    // There's a lot of nonsense going on here to refresh things cleanly.
+    // We need to record the table view's contentOffset before and set it after to prevent the table view from scrolling itself to
+    //  the top due to the reloadRowsAtIndexPaths:.  There's something odd going on with calculating row height that causes this.
+    // After that, we call scrollToRowAtIndexPath:, which will only have an effect in the case of the user adding labels that make the
+    //  label section itself overflow off screen.  In that case, the table will be scrolled to keep the labels all on screen.
     labelsGridCell.labelsGrid.labels = mutableLabels;
     NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
+    CGPoint contentOffset = self.tableView.contentOffset;
     [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView setContentOffset:contentOffset animated:NO];
+    [self.tableView scrollToRowAtIndexPath:labelsIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
     
     [[ZNGAnalytics sharedAnalytics] trackRemovedLabel:label fromContact:self.contact];
 }
@@ -666,9 +674,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         [mutableLabels addObject:label];
         self.contact.labels = mutableLabels;
         
+        // See notes regarding table view scrolling above in doLabelRemoval:
         labelsGridCell.labelsGrid.labels = mutableLabels;
         NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
+        CGPoint contentOffset = self.tableView.contentOffset;
         [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView setContentOffset:contentOffset animated:NO];
+        [self.tableView scrollToRowAtIndexPath:labelsIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
         
         [[ZNGAnalytics sharedAnalytics] trackAddedLabel:label toContact:self.contact];
     }

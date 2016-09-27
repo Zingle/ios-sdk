@@ -31,6 +31,19 @@
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGChannelType.class];
 }
 
++ (NSValueTransformer *) valueJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(id incoming) {
+        if ([incoming isKindOfClass:[NSNumber class]]) {
+            return [incoming stringValue];
+        }
+        
+        return incoming;
+    } reverseBlock:^id(id thing) {
+        return thing;
+    }];
+}
+
 - (BOOL) isPhoneNumber
 {
     return ([self.channelType isPhoneNumberType]);

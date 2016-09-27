@@ -43,6 +43,8 @@ static void * KVOContext = &KVOContext;
     ZNGPulsatingBarButtonImage * confirmButton;
     UIView * bannerContainer;
     
+    UIButton * titleButton;
+    
     UIView * blockedChannelBanner;
     UILabel * blockedChannelLabel;
     NSLayoutConstraint * blockedChannelOnScreenConstraint;
@@ -118,6 +120,16 @@ static void * KVOContext = &KVOContext;
 
 - (void) viewDidLoad
 {
+    // Replace the default nav bar title with a button
+    // Note that this must be done before [super viewDidLoad] to prevent the title from jarringly popping out of nonexistence
+    titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
+    titleButton.titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
+    [titleButton setTitleColor:[UIColor zng_lightBlue] forState:UIControlStateNormal];
+    [titleButton addTarget:self action:@selector(pressedEditContact) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.titleView = titleButton;
+
+    
     [super viewDidLoad];
     
     touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
@@ -144,7 +156,7 @@ static void * KVOContext = &KVOContext;
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactCustomFieldsPath]) {
-            self.navigationItem.title = self.conversation.remoteName;
+            [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

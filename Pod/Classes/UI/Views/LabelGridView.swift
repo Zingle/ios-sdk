@@ -88,8 +88,8 @@ public class LabelGridView: UIView {
     private var totalSize:CGSize? = nil
     
     private var addLabelView: DashedBorderLabel? = nil
-    
     private var labelViews: [DashedBorderLabel]? = nil
+    private var moreLabel: UILabel? = nil
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -188,6 +188,10 @@ public class LabelGridView: UIView {
             addSubview(labelView)
         })
         
+        if maxRows > 0 && moreLabel == nil {
+            moreLabel = UILabel()
+        }
+        
         labelViews?.forEach {
             $0.removeFromSuperview()
         }
@@ -225,8 +229,9 @@ public class LabelGridView: UIView {
         labelViews?.forEach({ (label: DashedBorderLabel) in
             let labelSize = label.intrinsicContentSize()
             
-            // Do we need to go down to the next row?
+            // If we've already overflowed, we will not even check for remaining space; this label will already be skipped.
             if currentX != 0.0 && overflowCount == 0 {
+                // Do we need to go down to the next row?
                 let remainingWidth = frame.size.width - currentX
                 
                 if remainingWidth < labelSize.width {
@@ -247,6 +252,11 @@ public class LabelGridView: UIView {
             
             if overflowCount == 0 {
                 label.frame = CGRectMake(currentX, currentY, labelSize.width, labelSize.height)
+                
+                if label.superview == nil {
+                    addSubview(label)
+                }
+                
                 lastDisplayedLabel = label
                 currentX = currentX + labelSize.width + horizontalSpacing
                 
@@ -260,33 +270,47 @@ public class LabelGridView: UIView {
         
         if overflowCount > 0 {
             // We cannot fit all of our labels within our bounds.  Add a "x more..." label and make room as necessary
-            // TODO: Make this a lazy property instead of recreating it every time we layout
-            let moreLabel = UILabel()
-            moreLabel.text = "\(overflowCount) more..."
-            
             let biggerSize = font.pointSize + 5;
-            moreLabel.font = UIFont(name: font.fontName, size: biggerSize)
+            moreLabel!.font = UIFont(name: font.fontName, size: biggerSize)
+            moreLabel!.textColor = UIColor.zng_gray()
+            moreLabel!.backgroundColor = UIColor.clearColor()
             
-            moreLabel.textColor = UIColor.zng_gray()
-            moreLabel.backgroundColor = UIColor.clearColor()
-            
-            let moreLabelSize = moreLabel.intrinsicContentSize()
+            let moreLabelSize = moreLabel!.intrinsicContentSize()
             var downwardScooch:CGFloat = 0
             
             if let lastHeight = lastDisplayedLabel?.frame.size.height {
                 downwardScooch = lastHeight - moreLabelSize.height
             }
             
-            moreLabel.frame = CGRectMake(currentX + horizontalSpacing, currentY + downwardScooch, moreLabelSize.width, moreLabelSize.height)
-            currentX = currentX + moreLabelSize.width + horizontalSpacing
+            var moreLabelFrame = CGRectMake(currentX + horizontalSpacing, currentY + downwardScooch, moreLabelSize.width, moreLabelSize.height)
+            
+            if moreLabel!.superview == nil {
+                addSubview(moreLabel!)
+            }
+            
+            // Loop through all labels on this same row, eliminating any that would push the "X more..." label off screen
+            labelViews?.filter({ $0.superview != nil && $0.frame.minY < moreLabelFrame.maxY && $0.frame.maxY > moreLabelFrame.minY }).reverse().forEach({ label in
+                let remainingRightSpace = bounds.size.width - label.frame.maxX
+                
+                if remainingRightSpace < moreLabelSize.width {
+                    // This label would overlap our "X more..." label.  Move our "X more" label into its place and remove this label from the view hierarchy.
+                    moreLabelFrame = CGRectMake(label.frame.origin.x, moreLabelFrame.origin.y, moreLabelFrame.size.width, moreLabelFrame.size.height)
+                    label.removeFromSuperview()
+                    overflowCount = overflowCount + 1
+                }
+            })
+            
+            currentX = moreLabelFrame.origin.x + moreLabelFrame.size.width + horizontalSpacing
             
             if (currentX > widestWidth) {
                 widestWidth = currentX
             }
             
-            addSubview(moreLabel)
-            
-            // TODO: Remove any overlap with previous labels
+            moreLabel!.text = "\(overflowCount) more..."
+            moreLabel!.frame = moreLabelFrame
+ 
+        } else {
+            moreLabel?.removeFromSuperview()
         }
         
         guard let lastFrame = lastDisplayedLabel?.frame else {

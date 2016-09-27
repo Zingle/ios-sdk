@@ -41,6 +41,12 @@ public class LabelGridView: UIView {
         }
     }
     
+    @IBInspectable public var maxRows:UInt = 0 {
+        didSet {
+            createLabelViews()
+        }
+    }
+    
     @IBInspectable public var horizontalSpacing:CGFloat = 6.0 {
         didSet {
             invalidateIntrinsicContentSize()
@@ -205,10 +211,14 @@ public class LabelGridView: UIView {
         var currentX: CGFloat = 0.0
         var currentY: CGFloat = 0.0
         var widestWidth: CGFloat = 0.0
+        var rowIndex: UInt = 0
+        var hitMax = false
+        var lastDisplayedLabel: DashedBorderLabel?
         
         if let addLabelView = addLabelView {
             let addLabelSize = addLabelView.intrinsicContentSize()
             addLabelView.frame = CGRectMake(0.0, 0.0, addLabelSize.width, addLabelSize.height)
+            lastDisplayedLabel = addLabelView
             currentY = currentY + addLabelSize.height + verticalSpacing
         }
         
@@ -216,25 +226,38 @@ public class LabelGridView: UIView {
             let labelSize = label.intrinsicContentSize()
             
             // Do we need to go down to the next row?
-            if currentX != 0.0 {
+            if currentX != 0.0 && !hitMax {
                 let remainingWidth = frame.size.width - currentX
                 
                 if remainingWidth < labelSize.width {
                     // We need to go to the next row
-                    currentY = currentY + labelSize.height + verticalSpacing
-                    currentX = 0.0
+                    rowIndex = rowIndex + 1
+                    
+                    // .. but are we allowed to?
+                    if maxRows == 0 || rowIndex < maxRows {
+                        currentY = currentY + labelSize.height + verticalSpacing
+                        rowIndex = rowIndex + 1
+                        currentX = 0.0
+                    } else {
+                        hitMax = true
+                    }
                 }
             }
             
-            label.frame = CGRectMake(currentX, currentY, labelSize.width, labelSize.height)
-            currentX = currentX + labelSize.width + horizontalSpacing
-            
-            if currentX > widestWidth {
-                widestWidth = currentX
+            if !hitMax {
+                label.frame = CGRectMake(currentX, currentY, labelSize.width, labelSize.height)
+                lastDisplayedLabel = label
+                currentX = currentX + labelSize.width + horizontalSpacing
+                
+                if currentX > widestWidth {
+                    widestWidth = currentX
+                }
+            } else {
+                label.removeFromSuperview()
             }
         })
         
-        guard let lastFrame = labelViews?.last?.frame ?? addLabelView?.frame else {
+        guard let lastFrame = lastDisplayedLabel?.frame else {
             totalSize = super.intrinsicContentSize()
             return
         }

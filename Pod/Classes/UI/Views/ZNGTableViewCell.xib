@@ -63,7 +63,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-A6-8hF">
                         <rect key="frame" x="307" y="12" width="14" height="14"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last message" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBa-nb-zNh">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last message" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBa-nb-zNh">
                         <rect key="frame" x="28" y="33" width="88" height="18"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.53725490196078429" green="0.55686274509803924" blue="0.58431372549019611" alpha="1" colorSpace="calibratedRGB"/>
@@ -75,6 +75,9 @@
                             <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="NO"/>
                             <userDefinedRuntimeAttribute type="number" keyPath="labelTextInset">
                                 <real key="value" value="7"/>
+                            </userDefinedRuntimeAttribute>
+                            <userDefinedRuntimeAttribute type="number" keyPath="maxRows">
+                                <integer key="value" value="1"/>
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
@@ -104,6 +107,7 @@
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="2" id="bQA-nP-CdX"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="leading" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="11" id="d2w-oJ-day"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="12" id="dNf-mR-rpb"/>
+                    <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="Blq-2G-nRN" secondAttribute="bottom" constant="44" id="enL-5h-ZEb"/>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" constant="-2" id="gRs-oL-M3J"/>
                     <constraint firstItem="Blq-2G-nRN" firstAttribute="leading" secondItem="Bhb-CF-DfK" secondAttribute="trailing" constant="6" id="j15-7U-HcK"/>
                     <constraint firstAttribute="trailingMargin" relation="lessThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" priority="800" id="nKa-R1-arl"/>

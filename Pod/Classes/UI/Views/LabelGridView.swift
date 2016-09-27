@@ -212,8 +212,8 @@ public class LabelGridView: UIView {
         var currentY: CGFloat = 0.0
         var widestWidth: CGFloat = 0.0
         var rowIndex: UInt = 0
-        var hitMax = false
-        var lastDisplayedLabel: DashedBorderLabel?
+        var overflowCount = 0
+        var lastDisplayedLabel: UILabel?
         
         if let addLabelView = addLabelView {
             let addLabelSize = addLabelView.intrinsicContentSize()
@@ -226,7 +226,7 @@ public class LabelGridView: UIView {
             let labelSize = label.intrinsicContentSize()
             
             // Do we need to go down to the next row?
-            if currentX != 0.0 && !hitMax {
+            if currentX != 0.0 && overflowCount == 0 {
                 let remainingWidth = frame.size.width - currentX
                 
                 if remainingWidth < labelSize.width {
@@ -239,12 +239,13 @@ public class LabelGridView: UIView {
                         rowIndex = rowIndex + 1
                         currentX = 0.0
                     } else {
-                        hitMax = true
+                        let currentIndex = labelViews!.indexOf(label)!
+                        overflowCount = labelViews!.count - currentIndex
                     }
                 }
             }
             
-            if !hitMax {
+            if overflowCount == 0 {
                 label.frame = CGRectMake(currentX, currentY, labelSize.width, labelSize.height)
                 lastDisplayedLabel = label
                 currentX = currentX + labelSize.width + horizontalSpacing
@@ -256,6 +257,37 @@ public class LabelGridView: UIView {
                 label.removeFromSuperview()
             }
         })
+        
+        if overflowCount > 0 {
+            // We cannot fit all of our labels within our bounds.  Add a "x more..." label and make room as necessary
+            // TODO: Make this a lazy property instead of recreating it every time we layout
+            let moreLabel = UILabel()
+            moreLabel.text = "\(overflowCount) more..."
+            
+            let biggerSize = font.pointSize + 5;
+            moreLabel.font = UIFont(name: font.fontName, size: biggerSize)
+            
+            moreLabel.textColor = UIColor.zng_gray()
+            moreLabel.backgroundColor = UIColor.clearColor()
+            
+            let moreLabelSize = moreLabel.intrinsicContentSize()
+            var downwardScooch:CGFloat = 0
+            
+            if let lastHeight = lastDisplayedLabel?.frame.size.height {
+                downwardScooch = lastHeight - moreLabelSize.height
+            }
+            
+            moreLabel.frame = CGRectMake(currentX + horizontalSpacing, currentY + downwardScooch, moreLabelSize.width, moreLabelSize.height)
+            currentX = currentX + moreLabelSize.width + horizontalSpacing
+            
+            if (currentX > widestWidth) {
+                widestWidth = currentX
+            }
+            
+            addSubview(moreLabel)
+            
+            // TODO: Remove any overlap with previous labels
+        }
         
         guard let lastFrame = lastDisplayedLabel?.frame else {
             totalSize = super.intrinsicContentSize()

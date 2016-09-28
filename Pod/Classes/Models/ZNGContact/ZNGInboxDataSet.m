@@ -46,6 +46,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 {
     ZNGContactClient * contactClient;
     
+    BOOL loadedInitialData;
+    
     NSUInteger pageSize;
     
     NSOperationQueue * fetchQueue;
@@ -62,14 +64,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         fetchQueue.name = @"Zingle Inbox fetching";
         fetchQueue.maxConcurrentOperationCount = 1;
         
-        _loading = YES;
-        _loadingInitialData = YES;
         _contacts = @[];
         pageSize = 25;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
-        
-        [self refresh];
     }
     
     return self;
@@ -115,6 +113,12 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 #pragma mark - Loading data
 - (void) refresh
 {
+    if (!loadedInitialData) {
+        self.loadingInitialData = YES;
+        self.loading = YES;
+        loadedInitialData = YES;
+    }
+    
     [self refreshStartingAtIndex:0 removingTail:YES];
 }
 

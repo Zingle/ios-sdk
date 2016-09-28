@@ -12,8 +12,8 @@ IB_DESIGNABLE
 @interface ZNGGradientLoadingView : UIView
 
 @property (nonatomic, assign) IBInspectable BOOL hidesWhenStopped;
-@property (nonatomic, strong, nullable) IBInspectable UIColor * centerColor;
-@property (nonatomic, strong, nullable) IBInspectable UIColor * edgeColor;
+@property (nonatomic, strong) IBInspectable UIColor * centerColor;
+@property (nonatomic, strong) IBInspectable UIColor * edgeColor;
 
 - (void) startAnimating;
 - (void) stopAnimating;

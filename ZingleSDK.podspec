@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ZingleSDK"
-  s.version          = "1.0.3"
+  s.version          = "1.0.4"
   s.summary          = "Zingle iOS SDK"
 
   s.description      = <<-DESC
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes/**/*.{h,m,swift}'
   s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
 
-  s.dependency 'AFNetworking', '~> 2.6'
+  s.dependency 'AFNetworking', '~> 2.5'
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle', '~> 1.0'
   s.dependency 'CocoaLumberjack/Swift', '2.3'

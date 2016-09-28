@@ -10,7 +10,7 @@
 #import "ZNGLabelSelectViewController.h"
 #import "ZNGContactPhoneNumberTableViewCell.h"
 
-@class GradientLoadingView;
+@class ZNGGradientLoadingView;
 @class ZNGContact;
 @class ZNGContactClient;
 @class ZNGService;
@@ -24,7 +24,7 @@
 @interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ZNGLabelSelectionDelegate, ZNGContactPhoneNumberTableCellDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
-@property (nonatomic, strong) IBOutlet GradientLoadingView * loadingGradient;
+@property (nonatomic, strong) IBOutlet ZNGGradientLoadingView * loadingGradient;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * lockedContactHeightConstraint;
 @property (nonatomic, strong) IBOutlet UINavigationItem * navItem;
 @property (nonatomic, strong) IBOutlet UIBarButtonItem * cancelButton;

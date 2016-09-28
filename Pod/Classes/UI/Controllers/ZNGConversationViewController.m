@@ -22,6 +22,7 @@
 #import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGConversationTimestampFormatter.h"
 #import "ZNGAnalytics.h"
+#import "ZNGGradientLoadingView.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -66,7 +67,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     BOOL moreMessagesAvailableRemotely;
     BOOL hasDisplayedInitialData;
     
-    GradientLoadingView * loadingGradient;
+    ZNGGradientLoadingView * loadingGradient;
     
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
 }
@@ -140,7 +141,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) setupLoadingGradient
 {
-    loadingGradient = [[GradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
+    loadingGradient = [[ZNGGradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
     loadingGradient.hidesWhenStopped = YES;
     loadingGradient.centerColor = [UIColor zng_loadingGradientInnerColor];
     loadingGradient.edgeColor = [UIColor zng_loadingGradientOuterColor];

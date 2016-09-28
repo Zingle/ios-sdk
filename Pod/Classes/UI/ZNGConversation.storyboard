@@ -367,7 +367,7 @@
                                     <outlet property="delegate" destination="EHd-00-ynV" id="R23-cA-PHi"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="moV-rG-hce" customClass="GradientLoadingView" customModule="ZingleSDK" customModuleProvider="target">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="moV-rG-hce" customClass="ZNGGradientLoadingView">
                                 <rect key="frame" x="0.0" y="64" width="600" height="6"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -409,7 +409,7 @@
                     </view>
                     <connections>
                         <outlet property="cancelButton" destination="vf6-JD-eCE" id="hmm-eH-zmK"/>
-                        <outlet property="loadingGradient" destination="moV-rG-hce" id="n5M-MB-xjy"/>
+                        <outlet property="loadingGradient" destination="moV-rG-hce" id="ySw-Hp-1sD"/>
                         <outlet property="lockedContactHeightConstraint" destination="hKn-r9-8Op" id="cu2-cT-eU2"/>
                         <outlet property="navItem" destination="95x-Np-m7N" id="tHi-jf-Rij"/>
                         <outlet property="saveButton" destination="lXV-Qf-e69" id="J9t-PQ-lEy"/>

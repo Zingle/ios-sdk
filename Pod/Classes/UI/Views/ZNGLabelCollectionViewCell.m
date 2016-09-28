@@ -8,11 +8,11 @@
 
 #import "ZNGLabelCollectionViewCell.h"
 #import "UIColor+ZingleSDK.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
+#import "ZNGDashedBorderLabel.h"
 
 @interface ZNGLabelCollectionViewCell ()
 
-@property (weak, nonatomic) IBOutlet DashedBorderLabel *label;
+@property (weak, nonatomic) IBOutlet ZNGDashedBorderLabel *label;
 
 @end
 

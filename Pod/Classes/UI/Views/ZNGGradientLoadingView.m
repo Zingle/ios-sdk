@@ -17,6 +17,9 @@ static NSString * const AnimationKey = @"movingGradientAnimation";
     NSArray<NSNumber *> * colorLocations;
     
     CAGradientLayer * gradient;
+    
+    UIColor * _centerColor;
+    UIColor * _edgeColor;
 }
 
 - (void) setHidesWhenStopped:(BOOL)hidesWhenStopped
@@ -34,10 +37,28 @@ static NSString * const AnimationKey = @"movingGradientAnimation";
     [self setupGradientLayer];
 }
 
+- (UIColor *) centerColor
+{
+    if (_centerColor == nil) {
+        return [UIColor clearColor];
+    }
+    
+    return _centerColor;
+}
+
 - (void) setEdgeColor:(UIColor *)edgeColor
 {
     _edgeColor = edgeColor;
     [self setupGradientLayer];
+}
+
+- (UIColor *) edgeColor
+{
+    if (_edgeColor == nil) {
+        return [UIColor clearColor];
+    }
+    
+    return _edgeColor;
 }
 
 - (void) awakeFromNib
@@ -52,10 +73,16 @@ static NSString * const AnimationKey = @"movingGradientAnimation";
     [self setupGradientLayer];
 }
 
+- (void) layoutSubviews
+{
+    gradient.frame = self.layer.bounds;
+}
+
 - (void) setupGradientLayer
 {
     if (gradient == nil) {
         gradient = [[CAGradientLayer alloc] init];
+        gradient.frame = self.layer.bounds;
         [self.layer addSublayer:gradient];
         
         colorLocations = @[ @(-1.0), @(-0.6), @(-0.4), @(0.0), @(0.4), @(0.6), @(1.0) ];
@@ -74,6 +101,8 @@ static NSString * const AnimationKey = @"movingGradientAnimation";
     if (animating) {
         return;
     }
+    
+    animating = YES;
     
     [gradient removeAnimationForKey:AnimationKey];
     

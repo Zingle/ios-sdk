@@ -20,6 +20,7 @@
 #import "ZNGLogging.h"
 #import "ZNGChannel.h"
 #import "ZNGLabelRoundedCollectionViewCell.h"
+#import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
 #import "Mantle/MTLJSONAdapter.h"
@@ -27,7 +28,6 @@
 #import "ZNGContactClient.h"
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"
-#import "ZNGDashedBorderLabel.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -43,7 +43,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
-@interface ZNGContactEditViewController ()
+@interface ZNGContactEditViewController () <LabelGridDelegate>
 
 @end
 
@@ -59,6 +59,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     NSArray<ZNGContactFieldValue *> * optionalCustomFields;
     NSArray<ZNGChannel *> * phoneNumberChannels;
     NSArray<ZNGChannel *> * nonPhoneNumberChannels;
+    
+    UIImage * deleteXImage;
+    
+    __weak ZNGContactLabelsTableViewCell * labelsGridCell;
 }
 
 - (void)viewDidLoad
@@ -71,6 +75,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self generateDataArrays];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    deleteXImage = [[UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
@@ -149,6 +154,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         NSMutableArray<ZNGContactFieldValue *> * destinationArray = ([defaultCustomFieldDisplayNames containsObject:customField.displayName]) ? defaultValues : otherValues;
         [destinationArray addObject:[self contactFieldValueForContactField:customField]];
     }
+    
+    // Maintain default field order
+    [defaultValues sortUsingComparator:^NSComparisonResult(ZNGContactFieldValue * _Nonnull obj1, ZNGContactFieldValue * _Nonnull obj2) {
+        NSUInteger obj1SortIndex = [defaultCustomFieldDisplayNames indexOfObject:obj1.customField.displayName];
+        NSUInteger obj2SortIndex = [defaultCustomFieldDisplayNames indexOfObject:obj2.customField.displayName];
+        return [@(obj1SortIndex) compare:@(obj2SortIndex)];
+    }];
     
     defaultCustomFields = defaultValues;
     optionalCustomFields = otherValues;
@@ -541,11 +553,15 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             
         case ContactSectionLabels:
         {
-            ZNGContactLabelsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"labels" forIndexPath:indexPath];
-            cell.collectionView.dataSource = self;
-            cell.collectionView.delegate = self;
-            [cell.collectionView.collectionViewLayout invalidateLayout];
-            [cell.collectionView reloadData];
+            ZNGContactLabelsTableViewCell * cell = labelsGridCell;
+            
+            if (cell == nil) {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"labels" forIndexPath:indexPath];
+                labelsGridCell = cell;
+            }
+
+            cell.labelsGrid.labels = self.contact.labels;
+            cell.labelsGrid.delegate = self;
             return cell;
         }
             
@@ -604,71 +620,20 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     }
 }
 
-#pragma mark - Collection view data source (labels collection view inside of the table)
-- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+#pragma mark - Label selection
+
+- (void) pressedAddLabel
 {
-    // We always have one section for "add label."  We will have one more section if any labels are on this duder.
-    return ([self.contact.labels count] > 0) ? 2 : 1;
+    [self performSegueWithIdentifier:SelectLabelSegueIdentifier sender:self];
 }
 
-- (UIEdgeInsets) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section
+- (void) pressedRemoveLabel:(ZNGLabel *)label
 {
-    if (section == 0) {
-        return UIEdgeInsetsZero;
-    }
-    
-    return UIEdgeInsetsMake(5.0, 0.0, 0.0, 0.0);
-}
-
-- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
-{
-    if (section == 0) {
-        return 1;   // The "Add label" cell
-    }
-    
-    return [self.contact.labels count];
-}
-
-- (UICollectionViewCell *) collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGLabelRoundedCollectionViewCell * cell = [collectionView dequeueReusableCellWithReuseIdentifier:ZNGContactLabelsCollectionViewCellReuseIdentifier forIndexPath:indexPath];
-    
-    if (indexPath.section == 0) {
-        // "Add label" cell
-        cell.label.text = @" ADD LABEL ";
-        cell.label.dashed = YES;
-        
-        cell.label.textColor = [UIColor grayColor];
-        cell.label.backgroundColor = [UIColor clearColor];
-        cell.label.borderColor = [UIColor grayColor];
-        return cell;
-    }
-    
-    cell.label.dashed = NO;
-    ZNGLabel * label = self.contact.labels[indexPath.row];
-    cell.label.text = [NSString stringWithFormat:@" %@   X  ", [label.displayName uppercaseString]];
-    UIColor * color = label.backgroundUIColor;
-    cell.label.textColor = color;
-    cell.label.borderColor = color;
-    cell.label.backgroundColor = [color zng_colorByLighteningColor:0.5];
-    return cell;
-}
-
-- (void) collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    if (indexPath.section == 0) {
-        // They wish to add a label.
-        [self performSegueWithIdentifier:SelectLabelSegueIdentifier sender:self];
+    if (label == nil) {
+        ZNGLogError(@"Remove label delegate method was called, but with no label selected.  Ignoring.");
         return;
     }
     
-    if (indexPath.row > [self.contact.labels count]) {
-        ZNGLogError(@"Touching a label caused an out of bounds.  Index %lld is outside of our %llu objects.", (long long)indexPath.row, (unsigned long long)[self.contact.labels count]);
-        return;
-    }
-    
-    // They are deleting a label.
-    ZNGLabel * label = self.contact.labels[indexPath.row];
     NSString * message = [NSString stringWithFormat:@"Remove the %@ label from %@?", label.displayName, [self.contact fullName]];
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
     
@@ -682,15 +647,23 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-#pragma mark - Label selection
 - (void) doLabelRemoval:(ZNGLabel *)label
 {
     NSMutableArray * mutableLabels = [self.contact.labels mutableCopy];
     [mutableLabels removeObject:label];
     self.contact.labels = mutableLabels;
     
+    // There's a lot of nonsense going on here to refresh things cleanly.
+    // We need to record the table view's contentOffset before and set it after to prevent the table view from scrolling itself to
+    //  the top due to the reloadRowsAtIndexPaths:.  There's something odd going on with calculating row height that causes this.
+    // After that, we call scrollToRowAtIndexPath:, which will only have an effect in the case of the user adding labels that make the
+    //  label section itself overflow off screen.  In that case, the table will be scrolled to keep the labels all on screen.
+    labelsGridCell.labelsGrid.labels = mutableLabels;
     NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
+    CGPoint contentOffset = self.tableView.contentOffset;
     [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView setContentOffset:contentOffset animated:NO];
+    [self.tableView scrollToRowAtIndexPath:labelsIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
     
     [[ZNGAnalytics sharedAnalytics] trackRemovedLabel:label fromContact:self.contact];
 }
@@ -702,8 +675,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         [mutableLabels addObject:label];
         self.contact.labels = mutableLabels;
         
+        // See notes regarding table view scrolling above in doLabelRemoval:
+        labelsGridCell.labelsGrid.labels = mutableLabels;
         NSIndexPath * labelsIndexPath = [NSIndexPath indexPathForRow:0 inSection:ContactSectionLabels];
+        CGPoint contentOffset = self.tableView.contentOffset;
         [self.tableView reloadRowsAtIndexPaths:@[labelsIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView setContentOffset:contentOffset animated:NO];
+        [self.tableView scrollToRowAtIndexPath:labelsIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
         
         [[ZNGAnalytics sharedAnalytics] trackAddedLabel:label toContact:self.contact];
     }

@@ -184,6 +184,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     ZNGLogDebug(@"Inbox data changed from %@ to %@", _data, data);
     
     _data = data;
+    [_data refresh];
     
     [[ZNGAnalytics sharedAnalytics] trackConversationFilterSwitch:data];
 }

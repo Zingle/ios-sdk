@@ -57,9 +57,9 @@ Import the SDK header file where needed:
 
 Several pieces of data will be required to initialize a contact class session.
 
-1. The Zingle API user's token
-2. The Zingle API user's security key
-3. The channel type UUID representing the custom chat type of the API user
+1. The Zingle API user's token (this is your Zingle dashboard username)
+2. The Zingle API user's security key (this is your Zingle dashboard password)
+3. The channel type UUID representing the chat channel being used by the API user
 4. The channel value, such as the user name of the current third party app user within the custom chat type
 
 ### Initialization

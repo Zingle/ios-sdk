@@ -20,6 +20,7 @@ extern NSString * __nonnull const ParameterKeyIsClosed;
 extern NSString * __nonnull const ParameterKeyLabelId;
 extern NSString * __nonnull const ParameterKeyQuery;
 extern NSString * __nonnull const ParameterKeyIsStarred;
+extern NSString * __nonnull const ParameterKeySearchMessageBodies;
 
 extern NSString * __nonnull const ParameterValueTrue;
 extern NSString * __nonnull const ParameterValueFalse;

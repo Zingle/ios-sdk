@@ -13,6 +13,7 @@
 @class ZNGInboxDataSet;
 @class ZingleAccountSession;
 @class ZNGInboxViewController;
+@class ZNGInboxDataSet;
 
 @protocol ZNGInboxDelegate <NSObject>
 
@@ -35,6 +36,11 @@
 - (void)refresh;
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;
+
+/**
+ *  The data set that will be used if the view appears without any current data.  Defaults to a new ZNGInboxDataSet.
+ */
+- (ZNGInboxDataSet *) initialDataSet;
 
 @property (nonatomic, weak, nullable) id <ZNGInboxDelegate> delegate;
 

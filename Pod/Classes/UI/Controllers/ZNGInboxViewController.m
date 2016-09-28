@@ -156,10 +156,15 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [super viewWillAppear:animated];
     
     if (self.data == nil) {
-        self.data = [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
+        self.data = [self initialDataSet];
     }
     
     self.selectedContact = nil;
+}
+
+- (ZNGInboxDataSet *) initialDataSet
+{
+    return [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

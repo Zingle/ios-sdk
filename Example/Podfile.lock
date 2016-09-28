@@ -35,8 +35,8 @@ PODS:
   - Mantle (1.5.8):
     - Mantle/extobjc (= 1.5.8)
   - Mantle/extobjc (1.5.8)
-  - ZingleSDK (1.0.3):
-    - AFNetworking (~> 2.6)
+  - ZingleSDK (1.0.4):
+    - AFNetworking (~> 2.5)
     - Analytics (~> 3.0)
     - CocoaLumberjack/Swift (= 2.3)
     - JSQMessagesViewController
@@ -58,7 +58,7 @@ SPEC CHECKSUMS:
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
   Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
-  ZingleSDK: 6c4e8f2ddfda41c7ceab1fe1800239369dd4f86c
+  ZingleSDK: 50eb47dd8fe8bcd87d0cbeca1531bb80765ea626
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

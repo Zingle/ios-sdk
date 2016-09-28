@@ -19,7 +19,6 @@
 #import "ZNGEventCollectionViewCell.h"
 #import "UIFont+Lato.h"
 #import "JSQMessagesLoadEarlierHeaderView.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGConversationTimestampFormatter.h"
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"

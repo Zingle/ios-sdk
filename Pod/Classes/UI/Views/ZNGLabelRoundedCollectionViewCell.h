@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class DashedBorderLabel;
+@class ZNGDashedBorderLabel;
 
 @interface ZNGLabelRoundedCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) IBOutlet DashedBorderLabel * label;
+@property (nonatomic, strong) IBOutlet ZNGDashedBorderLabel * label;
 
 @end

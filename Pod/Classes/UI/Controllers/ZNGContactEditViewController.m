@@ -20,7 +20,6 @@
 #import "ZNGLogging.h"
 #import "ZNGChannel.h"
 #import "ZNGLabelRoundedCollectionViewCell.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
 #import "Mantle/MTLJSONAdapter.h"

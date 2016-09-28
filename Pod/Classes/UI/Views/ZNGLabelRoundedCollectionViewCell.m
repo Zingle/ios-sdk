@@ -7,7 +7,6 @@
 //
 
 #import "ZNGLabelRoundedCollectionViewCell.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
 
 @implementation ZNGLabelRoundedCollectionViewCell
 

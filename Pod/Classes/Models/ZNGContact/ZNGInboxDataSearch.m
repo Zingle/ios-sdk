@@ -32,7 +32,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         _searchTerm = [theSearchTerm copy];
         
         if ([targetInbox isKindOfClass:[ZNGInboxDataSearch class]]) {
-            ZNGLogWarn(@"Search inbox data set is being initialized with a previous search inbox data set.  The old search terms will be erased, but other parameters will be retained.");
+            ZNGLogInfo(@"Search inbox data set is being initialized with a previous search inbox data set.  The old search terms will be erased, but other parameters will be retained.");
+            
+            ZNGInboxDataSearch * oldSearchData = (ZNGInboxDataSearch *)targetInbox;
+            _onlyContactsWithMessages = oldSearchData.onlyContactsWithMessages;
+            _searchMessageBodies = oldSearchData.searchMessageBodies;
         }
         
         _targetInbox = targetInbox;

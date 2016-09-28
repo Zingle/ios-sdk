@@ -24,6 +24,8 @@ NSString * const ParameterKeyIsClosed               = @"is_closed";
 NSString * const ParameterKeyLabelId                = @"label_id";
 NSString * const ParameterKeyQuery                  = @"query";
 NSString * const ParameterKeyIsStarred              = @"is_starred";
+NSString * const ParameterKeySearchMessageBodies    = @"search_message_bodies";
+
 
 NSString * const ParameterValueTrue                 = @"true";
 NSString * const ParameterValueFalse                = @"false";

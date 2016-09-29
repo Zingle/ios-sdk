@@ -40,7 +40,7 @@
 /**
  *  The data set that will be used if the view appears without any current data.  Defaults to a new ZNGInboxDataSet.
  */
-- (ZNGInboxDataSet *) initialDataSet;
+- (ZNGInboxDataSet * _Nonnull) initialDataSet;
 
 @property (nonatomic, weak, nullable) id <ZNGInboxDelegate> delegate;
 

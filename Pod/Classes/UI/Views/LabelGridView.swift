@@ -87,8 +87,8 @@ public class LabelGridView: UIView {
     
     private var totalSize:CGSize? = nil
     
-    private var addLabelView: DashedBorderLabel? = nil
-    private var labelViews: [DashedBorderLabel]? = nil
+    private var addLabelView: ZNGDashedBorderLabel? = nil
+    private var labelViews: [ZNGDashedBorderLabel]? = nil
     private var moreLabel: UILabel? = nil
     
     override init(frame: CGRect) {
@@ -107,7 +107,7 @@ public class LabelGridView: UIView {
         userInteractionEnabled = false
     }
     
-    private func configureLabel(label: DashedBorderLabel) {
+    private func configureLabel(label: ZNGDashedBorderLabel) {
         label.borderWidth = labelBorderWidth
         label.textInset = labelTextInset
         label.cornerRadius = labelCornerRadius
@@ -120,7 +120,7 @@ public class LabelGridView: UIView {
     }
     
     @objc private func tappedLabel(gestureRecognizer: UITapGestureRecognizer) {
-        if let tappedLabelView = gestureRecognizer.view as? DashedBorderLabel,
+        if let tappedLabelView = gestureRecognizer.view as? ZNGDashedBorderLabel,
             index = labelViews?.indexOf(tappedLabelView),
             label = labels?[index] {
             delegate?.pressedRemoveLabel(label)
@@ -129,12 +129,12 @@ public class LabelGridView: UIView {
  
     private func createLabelViews() {
  
-        var newLabelViews = [DashedBorderLabel]()
+        var newLabelViews = [ZNGDashedBorderLabel]()
         
         if showAddLabel {
             if addLabelView?.superview == nil {
                 // Create the add label view
-                addLabelView = DashedBorderLabel()
+                addLabelView = ZNGDashedBorderLabel()
                 configureLabel(addLabelView!)
                 addLabelView!.dashed = true
                 addLabelView!.text = " ADD LABEL "
@@ -153,7 +153,7 @@ public class LabelGridView: UIView {
         }
         
         labels?.forEach({ (label: ZNGLabel) in
-            let labelView = DashedBorderLabel()
+            let labelView = ZNGDashedBorderLabel()
             configureLabel(labelView)
             labelView.text = label.displayName
             
@@ -226,7 +226,7 @@ public class LabelGridView: UIView {
             currentY = currentY + addLabelSize.height + verticalSpacing
         }
         
-        labelViews?.forEach({ (label: DashedBorderLabel) in
+        labelViews?.forEach({ (label: ZNGDashedBorderLabel) in
             let labelSize = label.intrinsicContentSize()
             
             // If we've already overflowed, we will not even check for remaining space; this label will already be skipped.

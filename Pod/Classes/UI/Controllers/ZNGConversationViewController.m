@@ -19,9 +19,9 @@
 #import "ZNGEventCollectionViewCell.h"
 #import "UIFont+Lato.h"
 #import "JSQMessagesLoadEarlierHeaderView.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGConversationTimestampFormatter.h"
 #import "ZNGAnalytics.h"
+#import "ZNGGradientLoadingView.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -66,12 +66,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     BOOL moreMessagesAvailableRemotely;
     BOOL hasDisplayedInitialData;
     
-    GradientLoadingView * loadingGradient;
+    ZNGGradientLoadingView * loadingGradient;
     
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
 }
 
 @dynamic inputToolbar;
+
++ (UINib *)nib
+{
+    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
+                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
+}
 
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
@@ -140,7 +146,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) setupLoadingGradient
 {
-    loadingGradient = [[GradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
+    loadingGradient = [[ZNGGradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
     loadingGradient.hidesWhenStopped = YES;
     loadingGradient.centerColor = [UIColor zng_loadingGradientInnerColor];
     loadingGradient.edgeColor = [UIColor zng_loadingGradientOuterColor];
@@ -466,8 +472,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    alert.popoverPresentationController.sourceView = toolbar.contentView.imageButton;
-    alert.popoverPresentationController.sourceRect = toolbar.contentView.imageButton.bounds;
+    UIView * popoverSource = toolbar.contentView.leftBarButtonContainerView;
+    
+    if ([toolbar.contentView respondsToSelector:@selector(imageButton)]) {
+        popoverSource = toolbar.contentView.imageButton;
+    }
+    
+    alert.popoverPresentationController.sourceView = popoverSource;
+    alert.popoverPresentationController.sourceRect = popoverSource.bounds;
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");

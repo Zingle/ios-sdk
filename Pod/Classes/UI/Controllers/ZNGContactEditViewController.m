@@ -27,6 +27,7 @@
 #import "ZingleAccountSession.h"
 #import "ZNGContactClient.h"
 #import "ZNGAnalytics.h"
+#import "ZNGGradientLoadingView.h"
 
 enum  {
     ContactSectionDefaultCustomFields,

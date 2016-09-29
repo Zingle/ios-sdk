@@ -25,10 +25,10 @@
                     <collectionViewLayout key="collectionViewLayout" id="dZl-7C-LHR" customClass="ZNGConversationFlowLayout"/>
                     <cells/>
                 </collectionView>
-                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoD-Az-3DM" customClass="ZNGServiceConversationInputToolbar">
-                    <rect key="frame" x="0.0" y="447" width="320" height="121"/>
+                <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BoD-Az-3DM" customClass="ZNGConversationInputToolbar">
+                    <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="121" id="HIk-02-qcW"/>
+                        <constraint firstAttribute="height" constant="44" id="HIk-02-qcW"/>
                     </constraints>
                     <items/>
                 </toolbar>

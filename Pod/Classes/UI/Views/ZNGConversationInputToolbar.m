@@ -10,6 +10,33 @@
 
 @implementation ZNGConversationInputToolbar
 
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (id) initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    _inputEnabled = YES;
+}
+
 - (void) setInputEnabled:(BOOL)inputEnabled
 {
     _inputEnabled = inputEnabled;

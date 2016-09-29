@@ -14,6 +14,8 @@
 #import "ZNGTemplateClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGAnalytics.h"
+#import "ZNGColoredLogFormatter.h"
+#import "ZNGLogFormatter.h"
 #import "ZNGLogging.h"
 #import "ZNGAccount.h"
 #import "ZNGAccountPlan.h"

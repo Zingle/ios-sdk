@@ -55,6 +55,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     if ([_searchTerm length] > 0) {
         parameters[ParameterKeyQuery] = [_searchTerm stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    } else {
+        [parameters removeObjectForKey:ParameterKeyQuery];
     }
     
     if (self.searchMessageBodies) {

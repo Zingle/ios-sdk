@@ -61,8 +61,8 @@ static void * KVOContext = &KVOContext;
 
 + (UINib *)nib
 {
-    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
-                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
+    // JSQMessagesViewController's viewDidLoad tries to rudely load us from nib using this return value.  We do not want this, since we're coming from a storyboard earlier.
+    return nil;
 }
 
 + (instancetype)messagesViewController

@@ -73,6 +73,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @dynamic inputToolbar;
 
++ (UINib *)nib
+{
+    return [UINib nibWithNibName:NSStringFromClass([ZNGConversationViewController class])
+                          bundle:[NSBundle bundleForClass:[ZNGConversationViewController class]]];
+}
+
 - (id) initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
@@ -466,8 +472,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    alert.popoverPresentationController.sourceView = toolbar.contentView.imageButton;
-    alert.popoverPresentationController.sourceRect = toolbar.contentView.imageButton.bounds;
+    UIView * popoverSource = toolbar.contentView.leftBarButtonContainerView;
+    
+    if ([toolbar.contentView respondsToSelector:@selector(imageButton)]) {
+        popoverSource = toolbar.contentView.imageButton;
+    }
+    
+    alert.popoverPresentationController.sourceView = popoverSource;
+    alert.popoverPresentationController.sourceRect = popoverSource.bounds;
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
         ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");

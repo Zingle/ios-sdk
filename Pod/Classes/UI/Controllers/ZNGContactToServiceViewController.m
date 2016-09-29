@@ -26,7 +26,7 @@
     UIButton * photoButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
     photoButton.tintColor = [UIColor zng_gray];
     [photoButton setImage:photoImage forState:UIControlStateNormal];
-    [photoButton addTarget:self action:@selector(inputToolbar:didPressAttachImageButton:) forControlEvents:UIControlEventTouchUpInside];
+    [photoButton addTarget:self action:@selector(pressedAttachImage:) forControlEvents:UIControlEventTouchUpInside];
     self.inputToolbar.contentView.leftBarButtonItem = photoButton;
     
     UIButton * sendButton = self.inputToolbar.contentView.rightBarButtonItem;
@@ -38,6 +38,11 @@
 - (BOOL) weAreSendingOutbound
 {
     return NO;
+}
+
+- (void) pressedAttachImage:(id)sender
+{
+    [self inputToolbar:self.inputToolbar didPressAttachImageButton:sender];
 }
 
 #pragma mark - Details button

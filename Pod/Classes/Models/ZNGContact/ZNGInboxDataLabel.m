@@ -9,9 +9,6 @@
 #import "ZNGInboxDataLabel.h"
 
 @implementation ZNGInboxDataLabel
-{
-    NSString * labelId;
-}
 
 + (NSString *) description
 {
@@ -20,7 +17,7 @@
 
 - (NSString *) description
 {
-    return [NSString stringWithFormat:@"<%@: %@ %p>", [self class], labelId, self];
+    return [NSString stringWithFormat:@"<%@: %@ %p>", [self class], self.labelId, self];
 }
 
 - (id) initWithContactClient:(ZNGContactClient *)contactClient labelId:(NSString *)theLabelId;
@@ -28,7 +25,7 @@
     self = [super initWithContactClient:contactClient];
     
     if (self != nil) {
-        labelId = theLabelId;
+        self.labelId = theLabelId;
     }
     
     return self;
@@ -38,7 +35,7 @@
 {
     NSMutableDictionary * parameters = [super parameters];
     
-    parameters[ParameterKeyLabelId] = labelId;
+    parameters[ParameterKeyLabelId] = self.labelId;
     
     return parameters;
 }

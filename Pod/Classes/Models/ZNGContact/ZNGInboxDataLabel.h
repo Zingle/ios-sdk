@@ -20,4 +20,6 @@
 
 - (id) initWithContactClient:(ZNGContactClient *)contactClient NS_UNAVAILABLE;
 
+@property (nonatomic, copy, nonnull) NSString * labelId;
+
 @end

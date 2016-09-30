@@ -36,17 +36,18 @@
 
 - (NSString *) levelString:(DDLogMessage *)logMessage
 {
-    if (logMessage.level & DDLogFlagError) {
-        return @"ERROR";
-    } else if (logMessage.level & DDLogFlagWarning) {
-        return @"WARNING";
-    } else if (logMessage.level & DDLogFlagInfo) {
-        return @"INFO";
-    } else if (logMessage.level & DDLogFlagDebug) {
-        return @"DEBUG";
+    switch (logMessage->_flag) {
+        case DDLogFlagError:
+            return @"ERROR";
+        case DDLogFlagWarning:
+            return @"WARNING";
+        case DDLogFlagInfo:
+            return @"INFO";
+        case DDLogFlagDebug:
+            return @"DEBUG";
+        default:
+            return @"VERBOSE";
     }
-    
-    return @"VERBOSE";
 }
 
 

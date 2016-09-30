@@ -14,19 +14,18 @@
 
 - (NSString *)levelString:(DDLogMessage *)logMessage
 {
-    if (logMessage.flag & DDLogFlagVerbose) {
-        return @"VERBOSE";
-    } else if (logMessage.flag & DDLogFlagDebug) {
-        return @" DEBUG ";
-    } else if (logMessage.flag & DDLogFlagInfo) {
-        return [NSString stringWithFormat:@"%@fg255,255,255;%@bg3,80,0; INFO  %@;", XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE];
-    } else if (logMessage.flag & DDLogFlagWarning) {
-        return [NSString stringWithFormat:@"%@fg0,0,0;%@bg241,232,6;WARNING%@;", XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE];
-    } else if (logMessage.flag & DDLogFlagError) {
-        return [NSString stringWithFormat:@"%@fg255,255,255;%@bg154,0,0; ERROR %@;", XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE];
+    switch (logMessage->_flag) {
+        case DDLogFlagError:
+            return [NSString stringWithFormat:@"%@fg255,255,255;%@bg154,0,0; ERROR %@;", XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE];
+        case DDLogFlagWarning:
+            return [NSString stringWithFormat:@"%@fg0,0,0;%@bg241,232,6;WARNING%@;", XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE];
+        case DDLogFlagInfo:
+            return [NSString stringWithFormat:@"%@fg255,255,255;%@bg3,80,0; INFO  %@;", XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE, XCODE_COLORS_ESCAPE];
+        case DDLogFlagDebug:
+            return @" DEBUG ";
+        default:
+            return @"VERBOSE";
     }
-    
-    return [super levelString:logMessage];
 } 
 
 @end

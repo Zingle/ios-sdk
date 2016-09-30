@@ -8,6 +8,8 @@
 
 #import "ZNGInboxDataSet.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZNGInboxDataLabel : ZNGInboxDataSet
 
 /**
@@ -21,5 +23,7 @@
 - (id) initWithContactClient:(ZNGContactClient *)contactClient NS_UNAVAILABLE;
 
 @property (nonatomic, copy, nonnull) NSString * labelId;
+
+NS_ASSUME_NONNULL_END
 
 @end

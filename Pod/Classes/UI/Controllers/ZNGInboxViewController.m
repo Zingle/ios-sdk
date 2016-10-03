@@ -36,7 +36,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 @implementation ZNGInboxViewController
 {
     UIRefreshControl * refreshControl;
-    JSQMessagesTimestampFormatter * timestampFormatter;
+    
+    NSDateFormatter * dayOfWeekFormatter;
+    NSDateFormatter * dateWithoutYearFormatter;
+    NSDateFormatter * dateWithYearFormatter;
+    NSDateFormatter * timeFormatter;
 }
 
 #pragma mark - Life cycle
@@ -131,14 +135,17 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     // Adding the view below the refresh control
     [self.tableView insertSubview:bgView atIndex:0];
     
-    // Adjust time fonts
-    timestampFormatter = [[JSQMessagesTimestampFormatter alloc] init];
-    NSMutableDictionary * dateAttributes = [timestampFormatter.dateTextAttributes mutableCopy];
-    NSMutableDictionary * timeAttributes = [timestampFormatter.timeTextAttributes mutableCopy];
-    dateAttributes[NSFontAttributeName] = [UIFont latoBoldFontOfSize:12.0];
-    timeAttributes[NSFontAttributeName] = [UIFont latoFontOfSize:12.0];
-    timestampFormatter.dateTextAttributes = dateAttributes;
-    timestampFormatter.timeTextAttributes = timeAttributes;
+    // Time/date formatting
+    timeFormatter = [[NSDateFormatter alloc] init];
+    timeFormatter.dateStyle = NSDateFormatterNoStyle;
+    timeFormatter.timeStyle = NSDateFormatterShortStyle;
+    dayOfWeekFormatter = [[NSDateFormatter alloc] init];
+    dayOfWeekFormatter.dateFormat = @"EEEE";
+    dateWithYearFormatter = [[NSDateFormatter alloc] init];
+    dateWithYearFormatter.dateFormat = @"MMM d, y";
+    dateWithoutYearFormatter = [[NSDateFormatter alloc] init];
+    dateWithoutYearFormatter.dateFormat = @"MMM d";
+
     
     self.title = @"Inbox";
     self.tableView.delegate = self;
@@ -354,15 +361,55 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     return [self.data.contacts count];
 }
 
+- (NSDateFormatter *) dateFormatterForContact:(ZNGContact *)contact
+{
+    NSCalendar * calendar = [NSCalendar currentCalendar];
+    NSDate * now = [NSDate date];
+    NSDate * messageTime = contact.lastMessage.createdAt ?: now;
+    NSTimeInterval deltaTime = [now timeIntervalSinceDate:messageTime];
+    
+    NSCalendarUnit dayAndYear = NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitYear;
+    NSDateComponents * nowComponents = [calendar components:dayAndYear fromDate:now];
+    NSDateComponents * messageTimeComponents = [calendar components:dayAndYear fromDate:messageTime];
+    
+    NSTimeInterval oneDay = 24.0 * 60.0 * 60.0;
+    NSTimeInterval oneWeek = oneDay * 7.0;
+    
+    if ((deltaTime < oneDay) && (nowComponents.day == messageTimeComponents.day)) {
+        // This message was on this same calendar day
+        return timeFormatter;
+    } else if ((deltaTime < oneWeek) && (nowComponents.weekday != messageTimeComponents.weekday)) {
+        // This message was within the past seven days but on a different day of the week (so we can unambiguously say "Sunday," etc.)
+        return dayOfWeekFormatter;
+    } else if (nowComponents.year == messageTimeComponents.year) {
+        // It was more than a week ago within the same year
+        return dateWithoutYearFormatter;
+    }
+    
+    // This was a long time ago, son
+    return dateWithYearFormatter;
+}
+
+- (NSString *) dateStringForContact:(ZNGContact *)contact
+{
+    NSDate * timestamp = contact.lastMessage.createdAt;
+    
+    if (timestamp == nil) {
+        return nil;
+    }
+    
+    return [[self dateFormatterForContact:contact] stringFromDate:timestamp];
+}
+
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGContact * contact = [self contactAtIndexPath:indexPath];
     
     if (contact != nil) {
         ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
-        cell.timestampFormatter = timestampFormatter;
         cell.labelGrid.font = [UIFont latoSemiBoldFontOfSize:9.0];
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
+        cell.dateLabel.text = [self dateStringForContact:contact];
         return cell;
     }
     

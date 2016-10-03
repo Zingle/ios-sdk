@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "ZNGContact.h"
 
-@class JSQMessagesTimestampFormatter;
 @class ZNGTableViewCell;
 @class LabelGridView;
 
@@ -37,7 +36,7 @@
 @property (weak, nonatomic) id<ZNGTableViewCellDelegate> delegate;
 
 @property (nonatomic, weak) IBOutlet LabelGridView * labelGrid;
+@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 
-@property (nonatomic, strong) JSQMessagesTimestampFormatter * timestampFormatter;
 
 @end

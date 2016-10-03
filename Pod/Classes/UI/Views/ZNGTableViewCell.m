@@ -18,7 +18,6 @@
 @interface ZNGTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
 @property (weak, nonatomic) IBOutlet UILabel *lastMessage;
-@property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView *placeholderView;
 @property (weak, nonatomic) IBOutlet UIView * unconfirmedCircle;
 
@@ -48,15 +47,6 @@
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
 }
 
-- (JSQMessagesTimestampFormatter *) timestampFormatter
-{
-    if (_timestampFormatter == nil) {
-        return [JSQMessagesTimestampFormatter sharedFormatter];
-    }
-    
-    return _timestampFormatter;
-}
-
 - (void)configureCellWithContact:(ZNGContact *)contact withServiceId:(NSString *)serviceId
 {
     self.placeholderView.hidden = YES;
@@ -72,10 +62,8 @@
         
         if (self.contact.lastMessage.body.length > 0) {
             self.lastMessage.text = self.contact.lastMessage.body;
-            self.dateLabel.attributedText = [self.timestampFormatter attributedTimestampForDate:self.contact.lastMessage.createdAt];
         } else {
             self.lastMessage.text = @" ";
-            self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
         }
         
         if (self.contact.isConfirmed) {
@@ -104,9 +92,7 @@
     self.contactName.text = @" ";
     
     self.lastMessage.text = @" ";
-    
-    self.dateLabel.attributedText = [[NSAttributedString alloc] initWithString:@" "];
-    
+        
     self.unconfirmedCircle.tintColor = [UIColor clearColor];
 
     self.placeholderView.hidden = NO;

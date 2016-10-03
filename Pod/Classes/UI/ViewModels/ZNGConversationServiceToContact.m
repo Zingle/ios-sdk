@@ -319,6 +319,10 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         if ([event isMessage]) {
             ZNGChannel * channel = [[event.message contactCorrespondent] channel];
             
+            if (channel == nil) {
+                continue;
+            }
+            
             // If we can find an entry for this channel within the contact object, it may have more data, so we'll grab it.  If not, no big deal.
             NSUInteger index = [self.contact.channels indexOfObject:channel];
             

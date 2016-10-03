@@ -31,7 +31,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yAc-fE-ozc" userLabel="Mid Bar">
-                    <rect key="frame" x="0.0" y="31" width="320" height="1"/>
+                    <rect key="frame" x="0.0" y="32" width="320" height="1"/>
                     <color key="backgroundColor" red="0.8666666666666667" green="0.8666666666666667" blue="0.8666666666666667" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="B6Z-Rc-2UG"/>
@@ -192,7 +192,7 @@
                 <constraint firstItem="aXg-DS-vF9" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="FLV-qc-kR7"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" id="HeZ-J5-fvv"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="top" secondItem="1" secondAttribute="top" id="L3l-C0-jVd"/>
-                <constraint firstItem="yAc-fE-ozc" firstAttribute="top" secondItem="Ppu-y2-IOa" secondAttribute="bottom" constant="1" id="LPm-pf-52w"/>
+                <constraint firstItem="yAc-fE-ozc" firstAttribute="top" secondItem="Ppu-y2-IOa" secondAttribute="bottom" constant="2" id="LPm-pf-52w"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" priority="900" id="VBt-ph-ej0"/>
                 <constraint firstItem="iTt-oP-Tqy" firstAttribute="centerY" secondItem="Ppu-y2-IOa" secondAttribute="centerY" id="Wzl-io-vIm"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bTQ-bh-h0p"/>

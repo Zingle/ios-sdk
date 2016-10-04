@@ -301,9 +301,21 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
+    NSMutableArray<UIImage *> * attachments = [[NSMutableArray alloc] init];
+    
+    // Check for image attachments
+    [self.inputToolbar.contentView.textView.attributedText enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, [self.inputToolbar.contentView.textView.attributedText length]) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+        NSTextAttachment * attachment = (NSTextAttachment *)value;
+        UIImage * image = attachment.image;
+        
+        if (image != nil) {
+            [attachments addObject:image];
+        }
+    }];
+    
     self.inputToolbar.inputEnabled = NO;
     
-    [self.conversation sendMessageWithBody:text success:^(ZNGStatus *status) {
+    [self.conversation sendMessageWithBody:text images:attachments success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {

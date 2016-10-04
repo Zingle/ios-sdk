@@ -16,8 +16,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZNGMessage
 {
-    UIImageView * imageView;
-    JSQMessagesMediaPlaceholderView * mediaPlaceholder;
     BOOL startedDownloadingAttachments;
 }
 
@@ -28,7 +26,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     if (self != nil) {
         if ([self isMediaMessage]) {
-            mediaPlaceholder = [JSQMessagesMediaPlaceholderView viewWithActivityIndicator];
+            [self downloadAttachmentsIfNecessary];
         }
     }
     
@@ -61,11 +59,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }
         
         UIImage * theImage = [[UIImage alloc] initWithData:imageData];
-        UIImageView * theImageView = [[UIImageView alloc] initWithImage:theImage];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.image = theImage;
-            imageView = theImageView;
             [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
         });
     });
@@ -127,67 +123,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return self.body;
 }
 
-- (id<JSQMessageMediaData>)media
-{
-    [self downloadAttachmentsIfNecessary];
-    
-    return self;
-}
-
-#pragma mark - Message media data for <JSQMessageMediaData>
-/**
- *  @return An initialized `UIView` object that represents the data for this media object.
- *
- *  @discussion You may return `nil` from this method while the media data is being downloaded.
- */
-- (UIView *)mediaView
-{
-    return imageView;
-}
-
-/**
- *  @return The frame size for the mediaView when displayed in a `JSQMessagesCollectionViewCell`.
- *
- *  @discussion You should return an appropriate size value to be set for the mediaView's frame
- *  based on the contents of the view, and the frame and layout of the `JSQMessagesCollectionViewCell`
- *  in which mediaView will be displayed.
- *
- *  @warning You must return a size with non-zero, positive width and height values.
- */
-- (CGSize)mediaViewDisplaySize
-{
-    // TODO: This should be changed to actually reflect the image.  I don't know how to solve this problem while the image data is still downloading.
-    return mediaPlaceholder.frame.size;
-}
-
-/**
- *  @return A placeholder media view to be displayed if mediaView is not yet available, or `nil`.
- *  For example, if mediaView will be constructed based on media data that must be downloaded,
- *  this placeholder view will be used until mediaView is not `nil`.
- *
- *  @discussion If you do not need support for a placeholder view, then you may simply return the
- *  same value here as mediaView. Otherwise, consider using `JSQMessagesMediaPlaceholderView`.
- *
- *  @warning You must not return `nil` from this method.
- *
- *  @see JSQMessagesMediaPlaceholderView.
- */
-- (UIView *)mediaPlaceholderView
-{
-    return mediaPlaceholder;
-}
-
-/**
- *  @return An integer that can be used as a table address in a hash table structure.
- *
- *  @discussion This value must be unique for each media item with distinct contents.
- *  This value is used to cache layout information in the collection view.
- */
-- (NSUInteger)mediaHash
-{
-    return [self hash];
-}
-
 #pragma mark - Serialization
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
@@ -208,7 +143,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
              @"recipient" : @"recipient",
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
-             @"readAt" : @"read_at"
+             @"readAt" : @"read_at",
+             @"imageAttachments" : [NSNull null],
+             @"imageDownloadingQueue" : [NSNull null]
              };
 }
 

@@ -14,7 +14,7 @@
 // Posted through NSNotificationCenter when media has finished downloading
 #define kZNGMessageMediaLoadedNotification  @"kZNGMessageMediaLoadedNotification"
 
-@interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData, JSQMessageMediaData>
+@interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 #pragma mark - JSON properties
 @property(nonatomic, strong) NSString* messageId;
@@ -39,6 +39,13 @@
 
 #pragma mark - Properties added by containing Conversation
 @property (nonatomic, copy) NSString * senderDisplayName;
+
+/**
+ *  KVO compliant array that will be loaded with image data from attachments
+ */
+@property (nonatomic, readonly) NSArray<UIImage *> * imageAttachments;
+
+@property (nonatomic, strong) dispatch_queue_t imageDownloadingQueue;
 
 /**
  *  If this message was sent from a service and has trigger-er information, that will be returned.  Otherwise, the sender ID will be returned.

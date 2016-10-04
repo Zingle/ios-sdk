@@ -150,7 +150,7 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
 
 - (BOOL) isMediaMessage
 {
-    return ([self.message.attachments count] > 0);
+    return NO;
 }
 
 - (NSUInteger)messageHash
@@ -181,12 +181,6 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
     }
     
     return @"Unknown event";
-}
-
-- (id<JSQMessageMediaData>)media
-{
-    [self.message downloadAttachmentsIfNecessary];
-    return self.message;
 }
 
 @end

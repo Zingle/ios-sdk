@@ -274,8 +274,8 @@ static void * KVOContext = &KVOContext;
     NSMutableArray<UIBarButtonItem *> * items = ([superButtonItems count] > 0) ? [superButtonItems mutableCopy] : [[NSMutableArray alloc] init];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
-    UIImage * confirmImage = [UIImage imageNamed:@"confirmButton" inBundle:bundle compatibleWithTraitCollection:nil];
-    UIImage * selectedImage = [UIImage imageNamed:@"confirmButtonSelected" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImage * confirmImage = [UIImage imageNamed:@"confirmButtonSelected" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImage * selectedImage = [UIImage imageNamed:@"confirmButton" inBundle:bundle compatibleWithTraitCollection:nil];
     confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedImage:selectedImage target:self action:@selector(pressedConfirmedButton:)];
     confirmButton.emphasisImage = [UIImage imageNamed:@"confirmButtonEmptyCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     confirmButton.emphasisColor = [UIColor zng_lightBlue];
@@ -373,7 +373,7 @@ static void * KVOContext = &KVOContext;
     emphasizeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
     
     if (emphasizeTimer != nil) {
-        uint64_t interval = 3 * NSEC_PER_SEC;
+        uint64_t interval = 2 * NSEC_PER_SEC;
         dispatch_source_set_timer(emphasizeTimer, DISPATCH_TIME_NOW, interval, (uint64_t)(0.1 * NSEC_PER_SEC));
         __weak ZNGServiceToContactViewController * weakSelf = self;
         dispatch_source_set_event_handler(emphasizeTimer, ^{

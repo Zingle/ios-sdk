@@ -426,6 +426,14 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
 {
+    [self sendMessageWithBody:body images:nil success:success failure:failure];
+}
+
+- (void)sendMessageWithBody:(NSString *)body
+                     images:(NSArray<UIImage *> *)images
+                    success:(void (^)(ZNGStatus* status))success
+                    failure:(void (^) (ZNGError *error))failure
+{
     ZNGNewMessage *newMessage = [self freshMessage];
     
     if (newMessage == nil) {
@@ -442,7 +450,32 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     ZNGParticipant * recipient = [newMessage.recipients firstObject];
     ZNGLogVerbose(@"Sending \"%@\" to %@", body, recipient.channelValue);
     
-    [self.messageClient sendMessage:newMessage success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
+    if ([images count] == 0) {
+        [self _sendMessage:newMessage success:success failure:failure];
+    } else {
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSMutableArray<NSDictionary *> * attachments = [[NSMutableArray alloc] initWithCapacity:[images count]];
+            
+            for (UIImage * image in images) {
+                UIImage *imageForUpload = [self resizeImage:image];
+                NSData *base64Data = [UIImagePNGRepresentation(imageForUpload) base64EncodedDataWithOptions:0];
+                NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
+                NSDictionary * attachment = @{ kAttachementContentTypeKey : kAttachementContentTypeParam, kAttachementBase64 : encodedString };
+                [attachments addObject:attachment];
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                newMessage.attachments = attachments;
+                [self _sendMessage:newMessage success:success failure:failure];
+            });
+        });
+    }
+}
+
+- (void) _sendMessage:(ZNGNewMessage *)message success:(void (^)(ZNGStatus* status))success failure:(void (^) (ZNGError *error))failure
+{
+    [self.messageClient sendMessage:message success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
         
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
         
@@ -489,67 +522,6 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             failure(error);
         }
     }];
-}
-
-- (void)sendMessageWithImage:(UIImage *)image
-                     success:(void (^)(ZNGStatus* status))success
-                     failure:(void (^) (ZNGError *error))failure
-{
-    ZNGNewMessage *newMessage = [self freshMessage];
-    
-    if (newMessage == nil) {
-        NSDictionary * userInfo = @{ NSLocalizedDescriptionKey : @"Unable to initialize a fresh outgoing message" };
-        ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:userInfo];
-        failure(error);
-        return;
-    }
-    
-    self.loading = YES;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        UIImage *imageForUpload = [self resizeImage:image];
-        
-        NSData *base64Data = [UIImagePNGRepresentation(imageForUpload) base64EncodedDataWithOptions:0];
-        NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
-        newMessage.attachments = @[@{
-                                       kAttachementContentTypeKey : kAttachementContentTypeParam,
-                                       kAttachementBase64 : encodedString
-                                       }];
-        
-        // It is probably unnecessary to jump back onto the main thread before sending the request, but we will be safe.
-        dispatch_async(dispatch_get_main_queue(), ^{
-
-            [self.messageClient sendMessage:newMessage success:^(ZNGNewMessageResponse *response, ZNGStatus *status) {
-                
-                NSString * messageId = [[response messageIds] firstObject];
-                
-                [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-                    [self appendEvents:@[[ZNGEvent eventForNewMessage:message]]];
-                    self.totalEventCount = self.totalEventCount + 1;
-                    
-                    self.loading = NO;
-                    
-                    if (success) {
-                        success(status);
-                    }
-                } failure:^(ZNGError *error) {
-                    ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
-                    
-                    self.loading = NO;
-                    
-                    if (failure) {
-                        failure(error);
-                    }
-                }];
-            } failure:^(ZNGError *error) {
-                self.loading = NO;
-                
-                if (failure != nil) {
-                    failure(error);
-                }
-            }];
-        });
-    });
 }
 
 -(UIImage *)resizeImage:(UIImage *)image

@@ -22,6 +22,7 @@
 #import "ZNGConversationTimestampFormatter.h"
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"
+#import "ZNGImageAttachment.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -578,45 +579,22 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     [self dismissViewControllerAnimated:YES completion:^{
-        BOOL cameraMode = (picker.sourceType == UIImagePickerControllerSourceTypeCamera);
-        [self sendImage:image fromCameraMode:cameraMode];
+        [self attachImage:image];
     }];
 }
 
-- (void) sendImage:(UIImage *)image fromCameraMode:(BOOL)cameraMode
+- (void) attachImage:(UIImage *)image
 {
-    self.inputToolbar.inputEnabled = NO;
+    if (image == nil) {
+        return;
+    }
     
-    [self.conversation sendMessageWithImage:image success:^(ZNGStatus *status) {
-        self.inputToolbar.inputEnabled = YES;
-        [self finishSendingMessageAnimated:YES];
-        
-        if (cameraMode) {
-            [[ZNGAnalytics sharedAnalytics] trackSentCameraImageToConversation:self.conversation];
-        } else {
-            [[ZNGAnalytics sharedAnalytics] trackSentSavedImageToConversation:self.conversation];
-        }
-        
-    } failure:^(ZNGError *error) {
-        self.inputToolbar.inputEnabled = YES;
-        
-        UIAlertAction * retrySameImage = [UIAlertAction actionWithTitle:@"Retry the same image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self sendImage:image fromCameraMode:cameraMode];
-        }];
-        
-        UIAlertAction * chooseAnotherImage = [UIAlertAction actionWithTitle:@"Try another image" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self showImagePickerWithCameraMode:cameraMode];
-        }];
-        
-        UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-        
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Error Sending Message" message:@"Unable to attach the selected image" preferredStyle:UIAlertControllerStyleAlert];
-        [alert addAction:retrySameImage];
-        [alert addAction:chooseAnotherImage];
-        [alert addAction:cancel];
-        
-        [self presentViewController:alert animated:YES completion:nil];
-    }];
+    ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
+    attachment.image = image;
+    NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
+    NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
+    [mutableString appendAttributedString:imageString];
+    self.inputToolbar.contentView.textView.attributedText = mutableString;
 }
 
 #pragma mark - Message read marking

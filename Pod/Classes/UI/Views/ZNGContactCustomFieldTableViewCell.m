@@ -109,6 +109,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) configureInput
 {
+    BOOL optionsExist = [self.customFieldValue.customField.options count] > 0;
+    
     // Do we need a picker?
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
@@ -124,7 +126,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [datePicker addTarget:self action:@selector(datePickerSelectedDate:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
 
-    } else if (([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
+    } else if ((optionsExist) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
         self.textField.clearButtonMode = UITextFieldViewModeNever;
         pickerView = [[UIPickerView alloc] init];
         pickerView.delegate = self;
@@ -175,13 +177,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         return [[self booleanSelections] indexOfObject:currentValue];
     }
     
-    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeSingleSelect]) {
-        return [self.customFieldValue.customField.options indexOfObjectPassingTest:^BOOL(ZNGFieldOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
-            return [option.value isEqualToString:currentValue];
-        }];
+    if (self.customFieldValue.customField.options == nil) {
+        return NSNotFound;
     }
     
-    return NSNotFound;
+    return [self.customFieldValue.customField.options indexOfObjectPassingTest:^BOOL(ZNGFieldOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [option.value isEqualToString:currentValue];
+    }];
 }
 
 - (NSDateFormatter *) timeFormatter

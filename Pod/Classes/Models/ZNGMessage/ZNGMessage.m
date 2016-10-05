@@ -12,6 +12,7 @@
 #import "JSQPhotoMediaItem.h"
 #import "JSQMessagesMediaPlaceholderView.h"
 #import "ZNGImageAttachment.h"
+#import "UIColor+ZingleSDK.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -32,6 +33,22 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     return self;
+}
+
++ (NSValueTransformer *) bodyJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithBlock:^NSString *(NSString * source) {
+        if (source == nil) {
+            return nil;
+        }
+        
+        // Remove any attachment sentinel characters
+        NSString * attachmentCharacters = [NSString stringWithFormat:@"%c\ufffc", NSAttachmentCharacter];
+        NSCharacterSet * attachmentCharacterSet = [NSCharacterSet characterSetWithCharactersInString:attachmentCharacters];
+        NSString * strippedString = [[source componentsSeparatedByCharactersInSet:attachmentCharacterSet] componentsJoinedByString:@""];
+        
+        return strippedString;
+    }];
 }
 
 - (void) downloadAttachmentsIfNecessary
@@ -128,7 +145,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (NSAttributedString *) attributedText
 {
-    NSString * bodyString = ([self.body length] > 0) ? self.body : @"";
+    
+    NSString * nonWhitespaceBody = [self.body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    BOOL bodyPresent = ([nonWhitespaceBody length] > 0);
+    NSString * bodyString = bodyPresent ? self.body : @"";
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:bodyString];
     
     // Attach any loaded images
@@ -137,7 +157,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         attachment.image = image;
         attachment.maxDisplayHeight = 200.0;
         
-        NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:@"\n\n"];
+        NSString * spacingString = bodyPresent ? @"\n\n" : @"";
+        NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:spacingString];
         NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
         [string appendAttributedString:spacing];
         [string appendAttributedString:imageString];
@@ -147,8 +168,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     NSUInteger loadingImageCount = [self.attachments count] - [self.imageAttachments count];
     
     if (loadingImageCount > 0) {
-        NSString * placeholderString = [NSString stringWithFormat:@"<Loading %llu image attachment%@>", (unsigned long long)loadingImageCount, (loadingImageCount != 1) ? @"s" : @""];
-        NSAttributedString * placeholderAttributedString = [[NSAttributedString alloc] initWithString:placeholderString];
+        NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
+        NSString * placeholderString = [NSString stringWithFormat:@"%@<Loading %llu image attachment%@>", spacingString, (unsigned long long)loadingImageCount, (loadingImageCount != 1) ? @"s" : @""];
+        NSDictionary * attributes = @{ NSForegroundColorAttributeName : [UIColor zng_gray] };
+        NSAttributedString * placeholderAttributedString = [[NSAttributedString alloc] initWithString:placeholderString attributes:attributes];
         [string appendAttributedString:placeholderAttributedString];
     }
     

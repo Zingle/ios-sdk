@@ -313,6 +313,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
     }];
     
+    // Remove any attachment sentinels
+    NSString * replacementCharacterString = [NSString stringWithFormat:@"%c", NSAttachmentCharacter];
+    text = [text stringByReplacingOccurrencesOfString:replacementCharacterString withString:@""];
+    
     self.inputToolbar.inputEnabled = NO;
     
     [self.conversation sendMessageWithBody:text images:attachments success:^(ZNGStatus *status) {

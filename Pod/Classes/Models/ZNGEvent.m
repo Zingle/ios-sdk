@@ -183,4 +183,13 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
     return @"Unknown event";
 }
 
+- (NSAttributedString *) attributedText
+{
+    if ([self isMessage]) {
+        return [self.message attributedText];
+    }
+    
+    return [[NSAttributedString alloc] initWithString:[self text]];
+}
+
 @end

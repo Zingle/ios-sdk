@@ -11,6 +11,7 @@
 #import "ZingleValueTransformers.h"
 #import "JSQPhotoMediaItem.h"
 #import "JSQMessagesMediaPlaceholderView.h"
+#import "ZNGImageAttachment.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -41,29 +42,31 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     startedDownloadingAttachments = YES;
     
-    // We only support images for now.
-    NSString * path = [self.attachments firstObject];
-    NSURL * url = [NSURL URLWithString:path];
-    
-    if (url == nil) {
-        ZNGLogWarn(@"Unable to parse URL for message attachment: %@", path);
-        return;
-    }
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-        NSData * imageData = [NSData dataWithContentsOfURL:url];
-        
-        if (imageData == nil) {
-            ZNGLogWarn(@"Unable to retrieve image data for message attachment from %@", path);
-            return;
+        for (NSString * path in self.attachments) {
+            NSURL * url = [NSURL URLWithString:path];
+            
+            if (url == nil) {
+                ZNGLogWarn(@"Unable to parse URL for message attachment: %@", path);
+                return;
+            }
+            
+            NSData * imageData = [NSData dataWithContentsOfURL:url];
+            
+            if (imageData == nil) {
+                ZNGLogWarn(@"Unable to retrieve image data for message attachment from %@", path);
+                return;
+            }
+            
+            UIImage * theImage = [[UIImage alloc] initWithData:imageData];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                NSMutableArray<UIImage *> * mutableImages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(imageAttachments))];
+                [mutableImages addObject:theImage];
+                [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
+            });
         }
-        
-        UIImage * theImage = [[UIImage alloc] initWithData:imageData];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.image = theImage;
-            [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
-        });
     });
 }
 
@@ -123,6 +126,35 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return self.body;
 }
 
+- (NSAttributedString *) attributedText
+{
+    NSString * bodyString = ([self.body length] > 0) ? self.body : @"";
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:bodyString];
+    
+    // Attach any loaded images
+    for (UIImage * image in self.imageAttachments) {
+        ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
+        attachment.image = image;
+        attachment.maxDisplayHeight = 200.0;
+        
+        NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:@"\n\n"];
+        NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
+        [string appendAttributedString:spacing];
+        [string appendAttributedString:imageString];
+    }
+    
+    // Add a loading indicator
+    NSUInteger loadingImageCount = [self.attachments count] - [self.imageAttachments count];
+    
+    if (loadingImageCount > 0) {
+        NSString * placeholderString = [NSString stringWithFormat:@"<Loading %llu image attachment%@>", (unsigned long long)loadingImageCount, (loadingImageCount != 1) ? @"s" : @""];
+        NSAttributedString * placeholderAttributedString = [[NSAttributedString alloc] initWithString:placeholderString];
+        [string appendAttributedString:placeholderAttributedString];
+    }
+    
+    return string;
+}
+
 #pragma mark - Serialization
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
@@ -144,8 +176,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
-             @"imageAttachments" : [NSNull null],
-             @"imageDownloadingQueue" : [NSNull null]
+             @"imageAttachments" : [NSNull null]
              };
 }
 

@@ -8,8 +8,36 @@
 
 #import "ZNGConversationFlowLayout.h"
 #import "ZNGEvent.h"
+#import "ZNGBubblesSizeCalculator.h"
 
 @implementation ZNGConversationFlowLayout
+
+- (id) init
+{
+    self = [super init];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    self.bubbleSizeCalculator = [[ZNGBubblesSizeCalculator alloc] init];
+}
 
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {

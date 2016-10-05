@@ -35,8 +35,6 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
 
-@property (nonatomic, strong) UIImage * image;
-
 #pragma mark - Properties added by containing Conversation
 @property (nonatomic, copy) NSString * senderDisplayName;
 
@@ -44,8 +42,6 @@
  *  KVO compliant array that will be loaded with image data from attachments
  */
 @property (nonatomic, readonly) NSArray<UIImage *> * imageAttachments;
-
-@property (nonatomic, strong) dispatch_queue_t imageDownloadingQueue;
 
 /**
  *  If this message was sent from a service and has trigger-er information, that will be returned.  Otherwise, the sender ID will be returned.
@@ -60,5 +56,10 @@
  *  The sender or receiver, whichever corresponds to a contact.
  */
 - (ZNGCorrespondent *) contactCorrespondent;
+
+/**
+ *  An attributed string containing the body text plus any image attachments or loading image placeholders
+ */
+- (NSAttributedString *) attributedText;
 
 @end

@@ -338,7 +338,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) applyChangesIfFirstResponder
 {
     if (self.textField.isFirstResponder) {
-        self.customFieldValue.value = self.textField.text;
+        if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+            if ([self.customFieldValue.value boolValue]) {
+                self.customFieldValue.value = @"true";
+            } else {
+                self.customFieldValue.value = @"false";
+            }
+        } else {
+            self.customFieldValue.value = self.textField.text;
+        }
     }
 }
 

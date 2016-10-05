@@ -97,9 +97,10 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure;
 
-- (void)sendMessageWithImage:(UIImage *)image
-                     success:(void (^)(ZNGStatus* status))success
-                     failure:(void (^) (ZNGError *error))failure;
+- (void)sendMessageWithBody:(NSString *)body
+                     images:(NSArray<UIImage *> *)images
+                    success:(void (^)(ZNGStatus* status))success
+                    failure:(void (^) (ZNGError *error))failure;
 
 - (ZNGEvent *) priorEvent:(ZNGEvent *)event;
 

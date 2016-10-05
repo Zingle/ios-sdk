@@ -480,7 +480,35 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return YES;
 }
 
-#pragma mark - Buttons
+#pragma mark - Buttons'
+- (void) handleTouchInMessageBubble:(UITapGestureRecognizer *)tapper
+{
+    JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)tapper.view;
+    UITextView * textView = cell.textView;
+    CGPoint location = [tapper locationInView:cell.textView];
+    
+    if (CGRectContainsPoint(cell.textView.bounds, location)) {
+        // They touched the text view.  Did they touch an image attachment?
+        NSTextContainer * textContainer = textView.textContainer;
+        NSLayoutManager * layoutManager = textView.layoutManager;
+        CGPoint textLocation = CGPointMake(location.x - textView.textContainerInset.left, location.y - textView.textContainerInset.top);
+
+        NSUInteger characterIndex = [layoutManager characterIndexForPoint:textLocation inTextContainer:textContainer fractionOfDistanceBetweenInsertionPoints:NULL];
+        
+        if (characterIndex < [textView.text length]) {
+            NSTextAttachment * attachment = [textView.attributedText attribute:NSAttachmentAttributeName atIndex:characterIndex effectiveRange:NULL];
+            
+            if (attachment.image != nil) {
+                ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
+                imageView.image = attachment.image;
+                imageView.navigationItem.title = self.navigationItem.title;
+                
+                [self.navigationController pushViewController:imageView animated:YES];
+            }
+        }
+    }
+}
+
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -801,21 +829,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     return 0.0f;
-}
-
-- (void) collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
-    
-    if ([event.message isMediaMessage]) {
-        ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
-        
-#warning: TODO: Detect the correct image
-        imageView.image = [event.message.imageAttachments firstObject];
-        imageView.navigationItem.title = self.navigationItem.title;
-        
-        [self.navigationController pushViewController:imageView animated:YES];
-    }
 }
 
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath

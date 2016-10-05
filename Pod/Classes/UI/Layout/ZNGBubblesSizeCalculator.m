@@ -137,10 +137,6 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     finalSize = CGSizeMake(finalWidth, stringSize.height + verticalInsets);
 
-    if (indexPath.row == 23) {
-        ZNGLogInfo(@"Row 23 is %.0f tall with %llu loaded images", finalSize.height, (unsigned long long)loadedImagesCount);
-    }
-
     return finalSize;
 }
 

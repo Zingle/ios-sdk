@@ -926,7 +926,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         cell.messageBubbleTopLabel.textColor = self.authorTextColor;
         
-        cell.textView.attributedText = [event attributedText];
+        NSMutableAttributedString * text = [[event attributedText] mutableCopy];
+        JSQMessagesCollectionViewFlowLayout * layout = (JSQMessagesCollectionViewFlowLayout *)collectionView.collectionViewLayout;
+        [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
+        
+        cell.textView.attributedText = text;
+
+        [cell.tapGestureRecognizer addTarget:self action:@selector(handleTouchInMessageBubble:)];
         
         return cell;
     }

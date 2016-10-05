@@ -327,11 +327,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     if (!pickerExists) {
         self.customFieldValue.value = textField.text;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        if ([self.customFieldValue.value boolValue]) {
-            self.customFieldValue.value = @"true";
-        } else {
-            self.customFieldValue.value = @"false";
-        }
+        self.customFieldValue.value = ([self.customFieldValue.value boolValue]) ? @"true" : @"false";
     }
 }
 
@@ -339,11 +335,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if (self.textField.isFirstResponder) {
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-            if ([self.customFieldValue.value boolValue]) {
-                self.customFieldValue.value = @"true";
-            } else {
-                self.customFieldValue.value = @"false";
-            }
+            self.customFieldValue.value = ([self.customFieldValue.value boolValue]) ? @"true" : @"false";
         } else {
             self.customFieldValue.value = self.textField.text;
         }

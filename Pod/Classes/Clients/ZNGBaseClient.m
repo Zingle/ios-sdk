@@ -16,7 +16,7 @@
 
 // Debug level in BaseClient will show every outgoing request URL and every incoming model class (and count)
 #ifdef DEBUG
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelVerbose;
 #else
 static const int zngLogLevel = ZNGLogLevelWarning;
 #endif
@@ -59,6 +59,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                         failure:(void (^)(ZNGError* error))failure
 {
     ZNGLogDebug(@"Sending request to %@%@, expecting [%@] in response", self.session.sessionManager.baseURL, path, responseClass);
+    ZNGLogVerbose(@"... with parameters: %@", parameters);
     
     return [self.session.sessionManager GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
@@ -197,6 +198,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                              failure:(void (^)(ZNGError* error))failure
 {
     ZNGLogDebug(@"PUTting to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
+    ZNGLogVerbose(@"... with parameters: %@", parameters);
     
     return [self.session.sessionManager PUT:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
         
@@ -350,6 +352,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
                                     failure:(void (^)(ZNGError* error))failure
 {
     ZNGLogDebug(@"POSTing to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
+    ZNGLogVerbose(@"... with parameters: %@", parameters);
     
     return [self.session.sessionManager POST:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         

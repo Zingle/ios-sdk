@@ -271,11 +271,10 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     
     if (model) {
         NSError* error = nil;
-        // Mantle 1.7:
+
         params = [MTLJSONAdapter JSONDictionaryFromModel:(MTLModel<MTLJSONSerializing> *)model];
-        // Mantle 2.0:
-//        params = [MTLJSONAdapter JSONDictionaryFromModel:model error:&error];
-        
+        ZNGLogVerbose(@"... with parameters: %@", params);
+ 
         // This block never executes in Mantle 1.7 :(
         if (error) {
             ZNGError* zngError = [[ZNGError alloc] initWithDomain:kJSONParseErrorDomain code:0 userInfo:error.userInfo];

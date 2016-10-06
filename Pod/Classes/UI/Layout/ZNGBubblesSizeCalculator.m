@@ -24,9 +24,6 @@
 
 #import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
-
-
 @interface ZNGBubblesSizeCalculator ()
 
 @property (assign, nonatomic, readonly) NSUInteger minimumBubbleWidth;

@@ -555,10 +555,10 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[contacts count]];
     for (ZNGContact * contact in contacts) {
-        ZNGChannel * channel = [contact defaultChannel] ?: [contact phoneNumberChannel];
+        ZNGChannel * channel = [contact phoneNumberChannel];
         
         if (channel == nil) {
-            ZNGLogError(@"Unable to find a default outgoing channel for %@ (%@).", [contact fullName], contact.contactId);
+            ZNGLogError(@"Unable to find a phone number channel for %@ (%@).", [contact fullName], contact.contactId);
             continue;
         }
         

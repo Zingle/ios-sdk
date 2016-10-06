@@ -16,7 +16,7 @@
 
 // Debug level in BaseClient will show every outgoing request URL and every incoming model class (and count)
 #ifdef DEBUG
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelDebug;
 #else
 static const int zngLogLevel = ZNGLogLevelWarning;
 #endif

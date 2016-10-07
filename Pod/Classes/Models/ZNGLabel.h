@@ -8,17 +8,21 @@
 
 #import <Mantle/Mantle.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZNGLabel : MTLModel<MTLJSONSerializing>
 
-@property(nonatomic, strong) NSString* labelId;
-@property(nonatomic, strong) NSString* displayName;
-@property(nonatomic, strong) NSString* backgroundColor;
-@property(nonatomic, strong) NSString* textColor;
+@property(nonatomic, strong, nullable) NSString* labelId;
+@property(nonatomic, strong, nullable) NSString* displayName;
+@property(nonatomic, strong, nullable) NSString* backgroundColor;
+@property(nonatomic, strong, nullable) NSString* textColor;
 @property(nonatomic) BOOL isGlobal;
 
 - (UIColor *)textUIColor;
 - (UIColor *)backgroundUIColor;
 
 - (BOOL) matchesSearchTerm:(NSString *)term;
+
+NS_ASSUME_NONNULL_END
 
 @end

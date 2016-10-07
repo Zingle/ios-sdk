@@ -157,7 +157,7 @@ public class LabelGridView: UIView {
             configureLabel(labelView)
             labelView.text = label.displayName
             
-            let labelText = " \(label.displayName.uppercaseString) "
+            let labelText = " \(label.displayName?.uppercaseString ?? "") "
             let text = NSMutableAttributedString(string: labelText)
             
             if showRemovalX {

@@ -26,7 +26,10 @@
     NSDictionary * parameters = nil;
     
     if (accountId != nil) {
-        parameters = @{ @"account_id" : accountId };
+        parameters = @{
+                       @"account_id" : accountId,
+                       @"page_size" : @(1000)
+                       };
     }
     
     [self getListWithParameters:parameters path:@"services" responseClass:[ZNGService class] success:success failure:failure];

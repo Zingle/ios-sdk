@@ -15,7 +15,9 @@
 - (void) getAccountListWithSuccess:(void (^)(NSArray* accounts, ZNGStatus* status))success
                            failure:(void (^)(ZNGError* error))failure
 {
-    [self getListWithParameters:nil
+    NSDictionary * parameters = @{ @"page_size" : @(1000) };
+    
+    [self getListWithParameters:parameters
                            path:@"accounts"
                   responseClass:[ZNGAccount class]
                         success:success

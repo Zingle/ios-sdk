@@ -19,7 +19,7 @@
 {
     NSMutableDictionary * parameters = [super parameters];
     
-    parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
+    parameters[ParameterKeyIsClosed] = ParameterValueTrue;
     
     return parameters;
 }

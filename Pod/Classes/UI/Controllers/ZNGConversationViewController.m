@@ -648,6 +648,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
     [mutableString appendAttributedString:imageString];
     self.inputToolbar.contentView.textView.attributedText = mutableString;
+    
+    [self.inputToolbar toggleSendButtonEnabled];
 }
 
 #pragma mark - Message read marking

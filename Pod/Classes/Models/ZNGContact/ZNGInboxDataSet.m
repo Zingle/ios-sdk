@@ -270,18 +270,26 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (void) mergeNewData:(NSArray<ZNGContact *> *)incomingContacts withStatus:(ZNGStatus *)status
 {
-    if ([incomingContacts count] == 0) {
-        ZNGLogDebug(@"Received 0 contacts in response");
-        self.loadingInitialData = NO;
-        self.count = status.totalRecords;
-        self.totalPageCount = status.totalPages;
-        return;
-    }
-    
     if (![[NSThread currentThread] isMainThread]) {
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self mergeNewData:incomingContacts withStatus:status];
         });
+        return;
+    }
+    
+    if ([incomingContacts count] == 0) {
+        ZNGLogDebug(@"Received 0 contacts in response");
+        
+        if ((status.totalRecords == 0) && ([self.contacts count] > 0)) {
+            NSMutableArray<ZNGContact *> * mutableContacts = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+            [mutableContacts removeAllObjects];
+        }
+        
+        self.loadingInitialData = NO;
+        self.loading = NO;
+        self.count = status.totalRecords;
+        self.totalPageCount = status.totalPages;
+        
         return;
     }
     

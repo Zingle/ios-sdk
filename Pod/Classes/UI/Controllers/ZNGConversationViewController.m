@@ -946,9 +946,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
         
         cell.textView.attributedText = text;
+        
+        // Disable text view user interaction to prevent nonsense touch interception on devices when touching images.  If this is left as YES,
+        //  the cell's tap gesture recognizer never fires when touching an image.
+        cell.textView.userInteractionEnabled = ([event.message.imageAttachments count] == 0);
 
         [cell.tapGestureRecognizer addTarget:self action:@selector(handleTouchInMessageBubble:)];
-        
         return cell;
     }
     

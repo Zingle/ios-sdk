@@ -41,6 +41,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     NSDateFormatter * dateWithoutYearFormatter;
     NSDateFormatter * dateWithYearFormatter;
     NSDateFormatter * timeFormatter;
+    
+    NSTimer * refreshTimer;
 }
 
 #pragma mark - Life cycle
@@ -169,6 +171,18 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     self.selectedContact = nil;
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    [self startRefreshTimer];
+}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [self stopRefreshTimer];
+    [super viewDidDisappear:animated];
+}
+
 - (ZNGInboxDataSet *) initialDataSet
 {
     return [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
@@ -183,6 +197,18 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.tableView scrollToRowAtIndexPath:selectedContactIndexPath atScrollPosition:UITableViewScrollPositionNone animated:YES];
         } completion:nil];
     }
+}
+
+- (void) startRefreshTimer
+{
+    [refreshTimer invalidate];
+    refreshTimer = [NSTimer scheduledTimerWithTimeInterval:30.0 target:self selector:@selector(_doRefresh) userInfo:nil repeats:YES];
+}
+
+- (void) stopRefreshTimer
+{
+    [refreshTimer invalidate];
+    refreshTimer = nil;
 }
 
 #pragma mark - Setters
@@ -320,8 +346,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self refresh:nil];
 }
 
-- (void)refresh:(UIRefreshControl *)aRefreshControl {
+- (void) _doRefresh
+{
     [self.data refresh];
+}
+
+- (void)refresh:(UIRefreshControl *)aRefreshControl {
+    [self _doRefresh];
 }
 
 - (void)showActivityIndicator

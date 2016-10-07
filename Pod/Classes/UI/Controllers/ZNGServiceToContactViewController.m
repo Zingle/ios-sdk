@@ -594,8 +594,17 @@ static void * KVOContext = &KVOContext;
         ZNGChannel * channel = [[event.message contactCorrespondent] channel];
         
         if (channel != nil) {
-            NSString * channelString = [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue];
             
+            // Find a more complete copy of this channel object from the contact object if possible.
+            for (ZNGChannel * testChannel in self.conversation.contact.channels) {
+                if ([testChannel.channelId isEqualToString:channel.channelId]) {
+                    channel = testChannel;
+                    break;
+                }
+            }
+            
+            NSString * channelString = [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue];
+
             if ([channelString length] == 0) {
                 channelString = @"Unknown channel";
                 ZNGLogWarn(@"Channel display value is missing for channel %@", channel.channelId);

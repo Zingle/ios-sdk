@@ -654,9 +654,11 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
 {
+    CGRect sourceRect = [self.view convertRect:toolbar.contentView.customFieldButton.frame fromView:toolbar.contentView.templateButton.superview];
+    
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a custom field to insert" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     alert.popoverPresentationController.sourceView = self.view;
-    alert.popoverPresentationController.sourceRect = self.inputToolbar.frame;
+    alert.popoverPresentationController.sourceRect = sourceRect;
     
     NSArray<ZNGContactField *> * alphabeticalCustomFields = [self.conversation.service.contactCustomFields sortedArrayUsingComparator:^NSComparisonResult(ZNGContactField * _Nonnull obj1, ZNGContactField * _Nonnull obj2) {
         return [obj1.displayName compare:obj2.displayName options:NSCaseInsensitiveSearch];
@@ -751,9 +753,11 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
 {
+    CGRect sourceRect = [self.view convertRect:toolbar.contentView.automationButton.frame fromView:toolbar.contentView.templateButton.superview];
+    
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select an automation" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     alert.popoverPresentationController.sourceView = self.view;
-    alert.popoverPresentationController.sourceRect = self.inputToolbar.frame;
+    alert.popoverPresentationController.sourceRect = sourceRect;
     
     NSUInteger automationCount = 0;
     

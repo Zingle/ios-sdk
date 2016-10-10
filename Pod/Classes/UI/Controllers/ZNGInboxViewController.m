@@ -122,10 +122,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     self.tableView.hidden = YES;
     
-    refreshControl = [[UIRefreshControl alloc] init];
-    [refreshControl setBackgroundColor:[UIColor whiteColor]];
-    [refreshControl setTintColor:[UIColor zng_lightBlue]];
-    [refreshControl addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    refreshControl = [self configuredRefreshControl];
     [self.tableView addSubview:refreshControl];
     
     // Creating view for extending background color
@@ -158,6 +155,15 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     self.tableView.tableFooterView = [[UIView alloc] init];
     
     [self showActivityIndicator];
+}
+
+- (nonnull UIRefreshControl *) configuredRefreshControl
+{
+    UIRefreshControl * refresher = [[UIRefreshControl alloc] init];
+    refresher.backgroundColor = [UIColor whiteColor];
+    refresher.tintColor = [UIColor zng_lightBlue];
+    [refresher addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
+    return refresher;
 }
 
 - (void) viewWillAppear:(BOOL)animated

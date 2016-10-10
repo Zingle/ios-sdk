@@ -33,6 +33,11 @@
 
 + (nonnull instancetype) withSession:(nonnull ZingleAccountSession *)session;
 
+/**
+ *  Returns a refresh control that is styled appropriately and has the correct action setup.
+ */
+- (nonnull UIRefreshControl *) configuredRefreshControl;
+
 - (void)refresh;
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;

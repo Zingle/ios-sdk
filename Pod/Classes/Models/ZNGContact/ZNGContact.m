@@ -23,6 +23,8 @@ NSString * __nonnull const ZNGContactNotificationSelfMutated = @"ZNGContactNotif
 
 static NSString * const ParameterNameStarred = @"is_starred";
 static NSString * const ParameterNameConfirmed = @"is_confirmed";
+static NSString * const ParameterNameClosed = @"is_closed";
+
 
 @implementation ZNGContact
 
@@ -107,6 +109,7 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
              @"contactId" : @"id",
              @"isConfirmed" : @"is_confirmed",
              @"isStarred" : @"is_starred",
+             @"isClosed" : @"is_closed",
              @"lockedBySource" : @"locked_by_source",
              @"lastMessage" : @"last_message",
              @"channels" : @"channels",
@@ -495,5 +498,37 @@ static NSString * const ParameterNameConfirmed = @"is_confirmed";
         ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
     }];
 }
+
+- (void) close
+{
+    [self _setClosed:YES];
+}
+
+- (void) reopen
+{
+    [self _setClosed:NO];
+}
+
+- (void) _setClosed:(BOOL)isClosed
+{
+    NSNumber * closed = isClosed ? @YES : @NO;
+    NSDictionary * params = @{ ParameterNameClosed : closed };
+    
+    [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
+        
+        if (contact.isClosed != isClosed) {
+            ZNGLogError(@"Our POST to set isClosed to %@ succeeded, but the contact returned by the server is still %@",
+                        (isClosed) ? @"YES" : @"NO",
+                        (contact.isClosed) ? @"closed" : @"open");
+        }
+        
+        self.isClosed = contact.isClosed;
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+        
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to update %@'s closed status: %@", [self fullName], error);
+    }];
+}
+
 
 @end

@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString* contactId;
 @property(nonatomic) BOOL isConfirmed;
 @property(nonatomic) BOOL isStarred;
+@property(nonatomic) BOOL isClosed;
 @property(nonatomic, copy, nullable) NSString * lockedBySource;
 @property(nonatomic, strong, nullable) ZNGMessage* lastMessage;
 @property(nonatomic, strong, nullable) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel
@@ -126,6 +127,8 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Mutators
 - (void) confirm;
 - (void) unconfirm;
+- (void) close;
+- (void) reopen;
 
 NS_ASSUME_NONNULL_END
 

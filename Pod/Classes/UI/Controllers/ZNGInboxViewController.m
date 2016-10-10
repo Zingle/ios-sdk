@@ -478,6 +478,47 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }
 }
 
+- (NSArray<UITableViewRowAction *> *) tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGContact * contact = [self contactAtIndexPath:indexPath];
+    
+    if (contact == nil) {
+        ZNGLogWarn(@"Unable to find a contact at index %@.  Returning no edit actions.", indexPath);
+        return nil;
+    }
+    
+    UITableViewRowAction * closeAction;
+    UITableViewRowAction * confirmAction;
+    
+    if (contact.isClosed) {
+        closeAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Reopen" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+            [contact reopen];
+            tableView.editing = NO;
+        }];
+        closeAction.backgroundColor = [UIColor zng_lightBlue];
+    } else {
+        closeAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDestructive title:@"Close" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+            [contact close];
+            tableView.editing = NO;
+        }];
+    }
+    
+    if (contact.isConfirmed) {
+        confirmAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Unconfirm" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+            [contact unconfirm];
+            tableView.editing = NO;
+        }];
+    } else {
+        confirmAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleNormal title:@"Confirm" handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+            [contact confirm];
+            tableView.editing = NO;
+        }];
+        confirmAction.backgroundColor = [UIColor zng_blue];
+    }
+    
+    return @[closeAction, confirmAction];
+}
+
 - (BOOL) shouldRequestNewDataAfterViewingIndexPath:(NSIndexPath *)indexPath
 {
     // This method could be tweaked to take velocity into account.  For now we will just grab more data if we are within 10 items from the bottom of our current data.

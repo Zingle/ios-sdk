@@ -702,9 +702,11 @@ static void * KVOContext = &KVOContext;
 
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressChooseChannelButton:(id)sender
 {
+    CGRect sourceRect = [self.view convertRect:toolbar.contentView.channelSelectButton.frame fromView:toolbar.contentView.channelSelectButton.superview];
+    
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a channel" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     alert.popoverPresentationController.sourceView = self.view;
-    alert.popoverPresentationController.sourceRect = self.inputToolbar.frame;
+    alert.popoverPresentationController.sourceRect = sourceRect;
     
     if ([self.conversation.contact.channels count] == 0) {
         alert.title = @"No available channels";

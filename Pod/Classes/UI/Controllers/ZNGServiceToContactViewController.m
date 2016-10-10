@@ -294,6 +294,17 @@ static void * KVOContext = &KVOContext;
     }];
     [actions addObject:editContact];
     
+    BOOL alreadyClosed = self.conversation.contact.isClosed;
+    NSString * closeOrOpenString = alreadyClosed ? @"Reopen conversation" : @"Close conversation";
+    UIAlertAction * closeOrOpen = [UIAlertAction actionWithTitle:closeOrOpenString style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (alreadyClosed) {
+            [self.conversation.contact reopen];
+        } else {
+            [self.conversation.contact close];
+        }
+    }];
+    [actions addObject:closeOrOpen];
+    
     BOOL alreadyShowingDetailedEvents = [self.conversation isKindOfClass:[ZNGConversationDetailedEvents class]];
     NSString * detailedEventsText = (alreadyShowingDetailedEvents) ? @"Hide detailed events" : @"Show detailed events";
     UIAlertAction * toggleDetailedEvents = [UIAlertAction actionWithTitle:detailedEventsText style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

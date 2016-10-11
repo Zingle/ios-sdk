@@ -121,6 +121,11 @@ static NSString * const ParameterNameClosed = @"is_closed";
              };
 }
 
+- (NSUInteger) hash
+{
+    return [self.contactId hash];
+}
+
 - (BOOL) isEqual:(id)other
 {
     if (![other isKindOfClass:[ZNGContact class]]) {

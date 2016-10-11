@@ -471,23 +471,25 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     contactAfterChange.isConfirmed = !contactAfterChange.isConfirmed;
     BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     
+    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
+    settings.buttonIndex = 0;
+    settings.fillOnTrigger = changeWillCauseRemoval;
+    
     if (contact.isConfirmed) {
+        settings.threshold = 2.0;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact unconfirm];
             return !changeWillCauseRemoval;
         }];
     } else {
+        settings.threshold = 2.6;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact confirm];
             return !changeWillCauseRemoval;
         }];
     }
-    
-    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
-    settings.buttonIndex = 0;
-    settings.fillOnTrigger = changeWillCauseRemoval;
     
     cell.leftButtons = @[confirmButton];
     cell.leftExpansion = settings;
@@ -500,23 +502,25 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     contactAfterChange.isClosed = !contact.isClosed;
     BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     
+    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
+    settings.buttonIndex = 0;
+    settings.fillOnTrigger = changeWillCauseRemoval;
+    
     if (contact.isClosed) {
+        settings.threshold = 2.5;
         closeButton = [MGSwipeButton buttonWithTitle:@"Reopen" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact reopen];
             return !changeWillCauseRemoval;
         }];
     } else {
+        settings.threshold = 3.0;
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact close];
             return !changeWillCauseRemoval;
         }];
     }
-    
-    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
-    settings.buttonIndex = 0;
-    settings.fillOnTrigger = changeWillCauseRemoval;
     
     cell.rightButtons = @[closeButton];
     cell.rightExpansion = settings;

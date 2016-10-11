@@ -94,7 +94,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return NO;
     }
     
-    return ([self.messageId isEqualToString:other.messageId]);
+    if ([self.messageId isEqualToString:other.messageId]) {
+        return YES;
+    }
+    
+    // The server is sometimes neglecting to send us a message ID.  We can be pretty safe in saying that the message is the same if the date is the same.
+    return ([self.createdAt isEqualToDate:other.createdAt]);
 }
 
 - (NSUInteger)hash

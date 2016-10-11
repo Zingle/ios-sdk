@@ -4,7 +4,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "ZingleSDK"
-  s.version          = "1.0.4"
+  s.version          = "1.0.5"
   s.summary          = "Zingle iOS SDK"
 
   s.description      = <<-DESC
@@ -32,4 +32,5 @@ Pod::Spec.new do |s|
   s.dependency 'CocoaLumberjack/Swift', '2.3'
   s.dependency 'JSQMessagesViewController'
   s.dependency 'Analytics', '~> 3.0'
+  s.dependency 'MGSwipeTableCell'
 end

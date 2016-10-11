@@ -388,7 +388,11 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 #pragma mark - Local changes
 - (void) contactWasChangedLocally:(ZNGContact *)contact
 {
-    if ((![self contactBelongsInDataSet:contact]) && ([self.contacts containsObject:contact])) {
+    BOOL stillBelongsInThisDataSet = [self contactBelongsInDataSet:contact];
+    BOOL wasPresent = [self.contacts containsObject:contact];
+    
+    if ((!stillBelongsInThisDataSet) && (wasPresent)) {
+        ZNGLogInfo(@"Removing %@ from our current data set due to a local change.", [contact fullName]);
         NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
         [mutableContacts removeObject:contact];
     }

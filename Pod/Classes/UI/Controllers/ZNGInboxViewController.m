@@ -22,7 +22,7 @@
 #import "ZNGAnalytics.h"
 #import "ZingleSDK/ZingleSDK-Swift.h"
 
-static int const zngLogLevel = ZNGLogLevelInfo;
+static int const zngLogLevel = ZNGLogLevelVerbose;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadingInitialData";
@@ -311,6 +311,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     {
         case NSKeyValueChangeInsertion:
             ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
+            
             [self.tableView reloadData];
             break;
             
@@ -467,24 +468,23 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     MGSwipeButton * confirmButton;
     ZNGContact * contactAfterChange = [contact copy];
+    contactAfterChange.isConfirmed = !contactAfterChange.isConfirmed;
+    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     
     if (contact.isConfirmed) {
-        contactAfterChange.isConfirmed = NO;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact unconfirm];
-            return NO;
+            return !changeWillCauseRemoval;
         }];
     } else {
-        contactAfterChange.isConfirmed = YES;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact confirm];
-            return NO;
+            return !changeWillCauseRemoval;
         }];
     }
     
-    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
     settings.buttonIndex = 0;
     settings.fillOnTrigger = changeWillCauseRemoval;
@@ -497,24 +497,23 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     MGSwipeButton * closeButton;
     ZNGContact * contactAfterChange = [contact copy];
+    contactAfterChange.isClosed = !contact.isClosed;
+    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     
     if (contact.isClosed) {
-        contactAfterChange.isClosed = NO;
         closeButton = [MGSwipeButton buttonWithTitle:@"Reopen" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact reopen];
-            return NO;
+            return !changeWillCauseRemoval;
         }];
     } else {
-        contactAfterChange.isClosed = YES;
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact close];
-            return NO;
+            return !changeWillCauseRemoval;
         }];
     }
     
-    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
     settings.buttonIndex = 0;
     settings.fillOnTrigger = changeWillCauseRemoval;

@@ -80,6 +80,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  *  @note If this data lies beyond the current range of loaded data, all missing data leading up to this value will be loaded first.
  */
 - (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail;
+
 /**
  *  Overridden by subclasses to effect filtering.
  *
@@ -88,5 +89,17 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  *  These default parameters include page size and sort order. 
  */
 - (nonnull NSMutableDictionary *) parameters;
+
+/**
+ *  Notify this data set of a local change that has not yet propogated from the server.  If a call to contactBelongsInDataSet: for this contact returns NO, that contact
+ *   will be excluded from this data set (until the next remote update.)
+ */
+- (void) contactWasChangedLocally:(nonnull ZNGContact *)contact;
+
+/**
+ *  This method will attempt to predict whether a contact object belongs in this data set.  It can be used to predict whether a contact will be removed
+ *   when a change is sent to the server.
+ */
+- (BOOL) contactBelongsInDataSet:(nonnull ZNGContact *)contact;
 
 @end

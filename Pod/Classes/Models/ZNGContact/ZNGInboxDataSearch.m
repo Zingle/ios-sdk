@@ -8,6 +8,8 @@
 
 #import "ZNGInboxDataSearch.h"
 #import "ZNGLogging.h"
+#import "ZNGContact.h"
+#import "ZNGLabel.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -69,6 +71,24 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     return parameters;
+}
+
+// It is not expected for this method to be used for this particular data set.  We'll take a quick shot at getting things close instead of just being lazy and returning YES.
+- (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
+{
+    NSMutableString * allSearchableFields = [[contact fullName] mutableCopy];
+    
+    for (ZNGLabel * label in contact.labels) {
+        if (label.displayName != nil) {
+            [allSearchableFields appendString:label.displayName];
+        }
+    }
+    
+    if ((self.searchMessageBodies) && (contact.lastMessage.body != nil)) {
+        [allSearchableFields appendString:contact.lastMessage.body];
+    }
+    
+    return [[allSearchableFields lowercaseString] containsString:[self.searchTerm lowercaseString]];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ZNGInboxDataUnconfirmed.h"
+#import "ZNGContact.h"
 
 @implementation ZNGInboxDataUnconfirmed
 
@@ -22,6 +23,11 @@
     parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
     
     return parameters;
+}
+
+- (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
+{
+    return !(contact.isConfirmed);
 }
 
 @end

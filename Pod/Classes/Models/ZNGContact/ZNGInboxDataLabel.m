@@ -7,6 +7,8 @@
 //
 
 #import "ZNGInboxDataLabel.h"
+#import "ZNGContact.h"
+#import "ZNGLabel.h"
 
 @implementation ZNGInboxDataLabel
 
@@ -38,6 +40,17 @@
     parameters[ParameterKeyLabelId] = self.labelId;
     
     return parameters;
+}
+
+- (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
+{
+    for (ZNGLabel * label in contact.labels) {
+        if ([label.labelId isEqualToString:self.labelId]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 @end

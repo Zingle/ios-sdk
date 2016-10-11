@@ -385,4 +385,19 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     self.totalPageCount = status.totalPages;
 }
 
+#pragma mark - Local changes
+- (void) contactWasChangedLocally:(ZNGContact *)contact
+{
+    if ((![self contactBelongsInDataSet:contact]) && ([self.contacts containsObject:contact])) {
+        NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
+        [mutableContacts removeObject:contact];
+    }
+}
+
+- (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
+{
+    // Default implementation is YES, since we do not yet discriminate.
+    return YES;
+}
+
 @end

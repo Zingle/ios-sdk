@@ -7,6 +7,7 @@
 //
 
 #import "ZNGInboxDataClosed.h"
+#import "ZNGContact.h"
 
 @implementation ZNGInboxDataClosed
 
@@ -22,6 +23,11 @@
     parameters[ParameterKeyIsClosed] = ParameterValueTrue;
     
     return parameters;
+}
+
+- (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
+{
+    return contact.isClosed;
 }
 
 @end

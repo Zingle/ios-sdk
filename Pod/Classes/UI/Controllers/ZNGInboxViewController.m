@@ -191,7 +191,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (ZNGInboxDataSet *) initialDataSet
 {
-    return [[ZNGInboxDataSet alloc] initWithContactClient:self.session.contactClient];
+    return [[ZNGInboxDataOpen alloc] initWithContactClient:self.session.contactClient];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

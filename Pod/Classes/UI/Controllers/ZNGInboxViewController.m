@@ -447,11 +447,59 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         cell.labelGrid.font = [UIFont latoSemiBoldFontOfSize:9.0];
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         cell.dateLabel.text = [self dateStringForContact:contact];
+        
+        cell.rightButtons = [self rightButtonsForContact:contact];
+        cell.leftButtons = [self leftButtonsForContact:contact];
+        
+        MGSwipeExpansionSettings * expansionSettings = [[MGSwipeExpansionSettings alloc] init];
+        expansionSettings.buttonIndex = 0;
+        expansionSettings.fillOnTrigger = YES;
+        cell.leftExpansion = expansionSettings;
+        cell.rightExpansion = expansionSettings;
+        
         return cell;
     }
     
     ZNGLogError(@"Unable to load data for contact at index %ld.", (unsigned long)indexPath.row);
     return nil;
+}
+
+- (NSArray<UIView *> *) rightButtonsForContact:(ZNGContact *)contact
+{
+    MGSwipeButton * closeButton;
+    
+    if (contact.isClosed) {
+        closeButton = [MGSwipeButton buttonWithTitle:@"Reopen" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [contact reopen];
+            return NO;
+        }];
+    } else {
+        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [contact close];
+            return NO;
+        }];
+    }
+    
+    return @[closeButton];
+}
+
+- (NSArray<UIView *> *) leftButtonsForContact:(ZNGContact *)contact
+{
+    MGSwipeButton * confirmButton;
+    
+    if (contact.isConfirmed) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [contact unconfirm];
+            return NO;
+        }];
+    } else {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [contact confirm];
+            return NO;
+        }];
+    }
+    
+    return @[confirmButton];
 }
 
 #pragma mark - UITableViewDelegate

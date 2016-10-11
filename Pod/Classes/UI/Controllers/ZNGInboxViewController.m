@@ -316,7 +316,12 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             
         case NSKeyValueChangeRemoval:
             ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
-            [self.tableView reloadData];
+            
+            if ([paths count] == 1) {
+                [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+            } else {
+                [self.tableView reloadData];
+            }
 
             break;
             
@@ -448,14 +453,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         cell.dateLabel.text = [self dateStringForContact:contact];
         
-        cell.rightButtons = [self rightButtonsForContact:contact];
-        cell.leftButtons = [self leftButtonsForContact:contact];
-        
-        MGSwipeExpansionSettings * expansionSettings = [[MGSwipeExpansionSettings alloc] init];
-        expansionSettings.buttonIndex = 0;
-        expansionSettings.fillOnTrigger = YES;
-        cell.leftExpansion = expansionSettings;
-        cell.rightExpansion = expansionSettings;
+        [self configureLeftButtonsForCell:cell contact:contact];
+        [self configureRightButtonsForCell:cell contact:contact];
         
         return cell;
     }
@@ -464,42 +463,64 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     return nil;
 }
 
-- (NSArray<UIView *> *) rightButtonsForContact:(ZNGContact *)contact
-{
-    MGSwipeButton * closeButton;
-    
-    if (contact.isClosed) {
-        closeButton = [MGSwipeButton buttonWithTitle:@"Reopen" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [contact reopen];
-            return NO;
-        }];
-    } else {
-        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [contact close];
-            return NO;
-        }];
-    }
-    
-    return @[closeButton];
-}
-
-- (NSArray<UIView *> *) leftButtonsForContact:(ZNGContact *)contact
+- (void) configureLeftButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
 {
     MGSwipeButton * confirmButton;
+    ZNGContact * contactAfterChange = [contact copy];
     
     if (contact.isConfirmed) {
+        contactAfterChange.isConfirmed = NO;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [self.data contactWasChangedLocally:contactAfterChange];
             [contact unconfirm];
             return NO;
         }];
     } else {
+        contactAfterChange.isConfirmed = YES;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [self.data contactWasChangedLocally:contactAfterChange];
             [contact confirm];
             return NO;
         }];
     }
     
-    return @[confirmButton];
+    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
+    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
+    settings.buttonIndex = 0;
+    settings.fillOnTrigger = changeWillCauseRemoval;
+    
+    cell.leftButtons = @[confirmButton];
+    cell.leftExpansion = settings;
+}
+
+- (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
+{
+    MGSwipeButton * closeButton;
+    ZNGContact * contactAfterChange = [contact copy];
+    
+    if (contact.isClosed) {
+        contactAfterChange.isClosed = NO;
+        closeButton = [MGSwipeButton buttonWithTitle:@"Reopen" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [self.data contactWasChangedLocally:contactAfterChange];
+            [contact reopen];
+            return NO;
+        }];
+    } else {
+        contactAfterChange.isClosed = YES;
+        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            [self.data contactWasChangedLocally:contactAfterChange];
+            [contact close];
+            return NO;
+        }];
+    }
+    
+    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
+    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
+    settings.buttonIndex = 0;
+    settings.fillOnTrigger = changeWillCauseRemoval;
+    
+    cell.rightButtons = @[closeButton];
+    cell.rightExpansion = settings;
 }
 
 #pragma mark - UITableViewDelegate

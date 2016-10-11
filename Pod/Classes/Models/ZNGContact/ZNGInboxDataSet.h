@@ -56,7 +56,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 /**
  *  All contacts matching this filter that have been successfully fetched.
  */
-@property (nonatomic, readonly, nonnull) NSArray<ZNGContact *> * contacts;
+@property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGContact *> * contacts;
 
 /**
  *  Designated initializer.

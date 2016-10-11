@@ -38,7 +38,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 @property (nonatomic, assign) BOOL loadingInitialData;
 @property (nonatomic, assign) BOOL loading;
 @property (nonatomic, assign) NSUInteger count;
-@property (nonatomic, strong, nonnull) NSArray<ZNGContact *> * contacts;
+@property (nonatomic, strong, nonnull) NSOrderedSet<ZNGContact *> * contacts;
 
 // Private property.  Used to avoid having to do some weak->totalPageCount nonsense within our NSOperationQueue operations.
 @property (nonatomic, assign) NSUInteger totalPageCount;
@@ -66,7 +66,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         fetchQueue.name = @"Zingle Inbox fetching";
         fetchQueue.maxConcurrentOperationCount = 1;
         
-        _contacts = @[];
+        _contacts = [[NSOrderedSet alloc] init];
         pageSize = 25;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
@@ -247,7 +247,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * pageSize;
                 
                 if (indexAfterCurrentData < [weakSelf.contacts count]) {
-                    NSMutableArray<ZNGContact *> * mutable = [weakSelf mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+                    NSMutableOrderedSet<ZNGContact *> * mutable = [weakSelf mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
                     NSRange removalRange = NSMakeRange(indexAfterCurrentData, [mutable count] - indexAfterCurrentData);
                     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:removalRange];
                     
@@ -281,7 +281,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         ZNGLogDebug(@"Received 0 contacts in response");
         
         if ((status.totalRecords == 0) && ([self.contacts count] > 0)) {
-            NSMutableArray<ZNGContact *> * mutableContacts = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+            NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
             [mutableContacts removeAllObjects];
         }
         
@@ -294,7 +294,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     }
     
     // Grab our mutable proxy object
-    NSMutableArray<ZNGContact *> * mutableContacts = [self mutableArrayValueForKey:NSStringFromSelector(@selector(contacts))];
+    NSMutableOrderedSet<ZNGContact *> * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
     
     NSUInteger oldDataCount = [mutableContacts count];
     NSUInteger startIndex = (status.page - 1) * status.pageSize;
@@ -334,20 +334,21 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         //  2) All messages are still in order, but one (almost always one) or more needs to be refreshed
         BOOL simpleReorderingOrRefresh = NO;
         if ((overflowCount == 0) && ([incomingContacts count] >= 2)) {
-            NSArray<ZNGContact *> * oldPage = [mutableContacts subarrayWithRange:overlapRange];
+            NSArray<ZNGContact *> * oldPage = [[mutableContacts array] subarrayWithRange:overlapRange];
             
             if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
                 // This looks like a simple new-contact-to-head move so far.  Our first object has moved down by one.
                 // If we can find our new head somewhere else, we can do a simple swap.
-                NSUInteger sourceIndexOfNewHead = [mutableContacts indexOfObject:[incomingContacts firstObject]];
+                ZNGContact * firstNewContact = [incomingContacts firstObject];
+                BOOL newHeadFoundInOldData = [mutableContacts containsObject:firstNewContact];
                 
-                if (sourceIndexOfNewHead != NSNotFound) {
+                if (newHeadFoundInOldData) {
                     // This looks like a simple reordering!  Hooray!
                     simpleReorderingOrRefresh = YES;
-                    ZNGLogVerbose(@"Moving contact from position %lu to head", (unsigned long)sourceIndexOfNewHead);
+                    ZNGLogVerbose(@"Moving contact from a later position to head");
                     
-                    [mutableContacts removeObjectAtIndex:sourceIndexOfNewHead];
-                    [mutableContacts insertObject:[incomingContacts firstObject] atIndex:0];
+                    [mutableContacts removeObject:firstNewContact];
+                    [mutableContacts insertObject:firstNewContact atIndex:0];
                 }
             } else if ([oldPage isEqualToArray:incomingContacts]) {
                 simpleReorderingOrRefresh = YES;

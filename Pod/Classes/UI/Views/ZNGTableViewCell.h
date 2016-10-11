@@ -8,11 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "ZNGContact.h"
+@import MGSwipeTableCell;
 
 @class ZNGTableViewCell;
 @class LabelGridView;
 
-@interface ZNGTableViewCell : UITableViewCell
+@interface ZNGTableViewCell : MGSwipeTableCell
 
 + (NSString *)cellReuseIdentifier;
 

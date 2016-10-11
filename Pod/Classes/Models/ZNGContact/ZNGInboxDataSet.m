@@ -53,6 +53,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     NSUInteger pageSize;
     
     NSOperationQueue * fetchQueue;
+    
+    ZNGContact * lastLocallyRemovedContact;
 }
 
 - (nonnull instancetype) initWithContactClient:(ZNGContactClient *)aContactClient
@@ -263,7 +265,13 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     
     [fetchQueue addOperationWithBlock:^{
         dispatch_async(dispatch_get_main_queue(), ^{
-            weakSelf.loading = NO;
+            ZNGInboxDataSet * strongSelf = weakSelf;
+            
+            strongSelf.loading = NO;
+            
+            if (strongSelf != nil) {
+                strongSelf->lastLocallyRemovedContact = nil;
+            }
         });
     }];
 }
@@ -291,6 +299,13 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         self.totalPageCount = status.totalPages;
         
         return;
+    }
+    
+    // If this data contains a duder that we just removed locally, get rid of him.
+    if ([incomingContacts containsObject:lastLocallyRemovedContact]) {
+        NSMutableArray * mutableIncoming = [incomingContacts mutableCopy];
+        [mutableIncoming removeObject:lastLocallyRemovedContact];
+        incomingContacts = mutableIncoming;
     }
     
     // Grab our mutable proxy object
@@ -395,6 +410,10 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         ZNGLogInfo(@"Removing %@ from our current data set due to a local change.", [contact fullName]);
         NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
         [mutableContacts removeObject:contact];
+        lastLocallyRemovedContact = contact;
+        self.count = self.count - 1;
+    } else {
+        lastLocallyRemovedContact = nil;
     }
 }
 

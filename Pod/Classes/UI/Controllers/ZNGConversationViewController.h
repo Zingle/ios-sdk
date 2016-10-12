@@ -96,6 +96,13 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) NSString *receiverName;
 
 /**
+ *  Additional inset between the toolbar and the bottom most message bubble.
+ *
+ *  Defaults to 0.0
+ */
+@property (nonatomic) CGFloat additionalBottomInset;
+
+/**
  *  Sets whether or not the messages should be automatically marked as read.
  *
  *  @param autoMarkAsReadEnabled If YES, then the messages are automatically marked as read.

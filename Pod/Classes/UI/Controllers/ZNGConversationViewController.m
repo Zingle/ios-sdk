@@ -115,6 +115,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self setupLoadingGradient];
     
+    if (self.additionalBottomInset != 0.0) {
+        UIEdgeInsets defaultInsets = self.collectionView.contentInset;
+        self.collectionView.contentInset = UIEdgeInsetsMake(defaultInsets.top, defaultInsets.left, defaultInsets.bottom + self.additionalBottomInset, defaultInsets.right);
+    }
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;

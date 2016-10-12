@@ -174,7 +174,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         self.data = [self initialDataSet];
     }
     
-    self.selectedContact = nil;
+    // If we are in a narrow split view (one view at a time,) we will deselect when being presented.
+    // Alternatively, on an iPad, we wish to retain our selection.
+    if ([self.splitViewController.viewControllers count] == 1) {
+        self.selectedContact = nil;
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated

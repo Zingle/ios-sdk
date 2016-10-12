@@ -21,4 +21,6 @@
  */
 - (BOOL) canBeTriggedOnAContact;
 
+- (BOOL) isActive;
+
 @end

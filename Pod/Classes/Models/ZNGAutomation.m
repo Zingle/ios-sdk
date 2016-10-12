@@ -34,4 +34,9 @@ static NSString * const ZNGAutomationTypeCustom = @"Custom Automation";
     return [triggerableTypes containsObject:self.type];
 }
 
+- (BOOL) isActive
+{
+    return [self.status isEqualToString:@"active"];
+}
+
 @end

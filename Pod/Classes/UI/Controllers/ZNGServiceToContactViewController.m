@@ -774,7 +774,7 @@ static void * KVOContext = &KVOContext;
     
     NSUInteger automationCount = 0;
     
-    for (ZNGAutomation * automation in self.conversation.service.automations) {
+    for (ZNGAutomation * automation in [self.conversation.service activeAutomations]) {
         if ([automation canBeTriggedOnAContact]) {
             UIAlertAction * action = [UIAlertAction actionWithTitle:automation.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self triggerAutomation:automation];

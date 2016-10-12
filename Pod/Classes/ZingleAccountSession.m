@@ -73,7 +73,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         
         accountChooser = anAccountChooser;
         serviceChooser = aServiceChooser;
-        [self retrieveAvailableAccounts];
     }
     
     return self;
@@ -82,6 +81,11 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) connect
+{
+    [self retrieveAvailableAccounts];
 }
 
 - (void) logout
@@ -98,7 +102,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
         [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
         _service = nil;
-        _available = NO;
+        self.available = NO;
         [self didChangeValueForKey:NSStringFromSelector(@selector(available))];
         [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
     }

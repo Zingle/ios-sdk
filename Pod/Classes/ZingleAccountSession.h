@@ -53,12 +53,6 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 @property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
 
-#pragma mark - Status
-/**
- *  KVO compliant flag that indicates when the session has been fully initialized (with an account and a service) and may take requests.
- */
-@property (nonatomic, assign) BOOL available;
-
 /**
  *  If this flag is set, all conversation objects provided by this session will be detailed event conversations.
  */

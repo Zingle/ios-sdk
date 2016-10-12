@@ -151,6 +151,11 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     }];
 }
 
+- (void) connect
+{
+    ZNGLogError(@"Connect called on abstract ZingleSession class.");
+}
+
 + (NSString *) urlOverride
 {
     NSString * prefix = [[NSUserDefaults standardUserDefaults] valueForKey:@"zingle_server_prefix"];

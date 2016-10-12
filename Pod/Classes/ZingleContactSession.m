@@ -56,22 +56,25 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         _channelValue = [channelValue copy];
         _onlyRegisterPushNotificationsForCurrentContactService = YES;
         self.contactServiceChooser = contactServiceChooser;
-        
-        // First we must populate our list of available contact services
-        NSDictionary *parameters = @{ @"channel_value" : channelValue,
-                                      @"channel_type_id" : channelTypeId };
-        [self.contactServiceClient contactServiceListWithParameters:parameters success:^(NSArray *contactServices, ZNGStatus *status) {
-            self.availableContactServices = contactServices;
-            
-            if (self.contactServiceChooser != nil) {
-                self.contactService = self.contactServiceChooser(contactServices);
-            }
-        } failure:^(ZNGError *error) {
-            ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", channelValue, channelTypeId);
-        }];
     }
     
     return self;
+}
+
+- (void) connect
+{
+    // First we must populate our list of available contact services
+    NSDictionary *parameters = @{ @"channel_value" : self.channelValue,
+                                  @"channel_type_id" : self.channelTypeID };
+    [self.contactServiceClient contactServiceListWithParameters:parameters success:^(NSArray *contactServices, ZNGStatus *status) {
+        self.availableContactServices = contactServices;
+        
+        if (self.contactServiceChooser != nil) {
+            self.contactServiceChooser(contactServices);
+        }
+    } failure:^(ZNGError *error) {
+        ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", self.channelValue, self.channelTypeID);
+    }];
 }
 
 - (void) setContactService:(ZNGContactService *)contactService
@@ -128,6 +131,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                                                                                            withMessageClient:self.messageClient
                                                                                                  eventClient:self.eventClient];
                     [self.conversation loadRecentEventsErasingOlderData:NO];
+                    
+                    self.available = YES;
                 });
             } else {
                 ZNGLogError(@"No message client was ever created.  We are unable to setup our conversation object.");

@@ -39,6 +39,11 @@
 @property (nonatomic, readonly, nonnull) NSString * key;
 
 /**
+ *  KVO compliant flag that indicates when the session has been fully initialized and may take requests.
+ */
+@property (nonatomic, assign) BOOL available;
+
+/**
  *  KVO compliant property holding the most recent error.  This is not cleared except to be replaced.
  */
 @property (nonatomic, strong, nullable) ZNGError * mostRecentError;
@@ -89,6 +94,11 @@
  *  Reset the password associated with the provided email address.
  */
 + (void) resetPasswordForEmail:(nonnull NSString *)email completion:(void (^_Nullable)(BOOL success))completion;
+
+/*
+ *  Start the connection by requesting initial data
+ */
+- (void) connect;
 
 /**
  *  Static setter for the push notification device token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.

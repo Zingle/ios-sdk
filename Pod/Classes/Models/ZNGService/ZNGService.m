@@ -125,6 +125,19 @@
     return self.serviceId;
 }
 
+- (NSArray<ZNGAutomation *> *)activeAutomations
+{
+    NSMutableArray<ZNGAutomation *> * automations = [[NSMutableArray alloc] initWithCapacity:[self.automations count]];
+    
+    for (ZNGAutomation * automation in self.automations) {
+        if ([automation isActive]) {
+            [automations addObject:automation];
+        }
+    }
+    
+    return automations;
+}
+
 - (ZNGChannelType *)phoneNumberChannelType
 {
     NSUInteger index = [self.channelTypes indexOfObjectPassingTest:^BOOL(ZNGChannelType * _Nonnull channelType, NSUInteger idx, BOOL * _Nonnull stop) {

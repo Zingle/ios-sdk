@@ -39,6 +39,8 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* updatedAt;
 
+- (NSArray<ZNGAutomation *> *) activeAutomations;
+
 - (BOOL) isTextRelay;
 
 - (ZNGChannelType *)phoneNumberChannelType;

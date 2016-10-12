@@ -175,9 +175,9 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
     } else if ([self.eventType isEqualToString:ZNGEventConversationUnstarred]) {
         return @"Conversation unstarred";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowStarted]) {
-        return @"Workflow started";
+        return @"Automation started";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowEnded]) {
-        return @"Workflow ended";
+        return @"Automation ended";
     }
     
     return @"Unknown event";

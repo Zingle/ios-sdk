@@ -103,7 +103,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             }
         }
         
-        self.textField.text = self.customFieldValue.value;
+        NSString * value = self.customFieldValue.value;
+        
+        if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+            BOOL asBool = [self.customFieldValue.value boolValue];
+            value = asBool ? @"Yes" : @"No";
+        }
+        
+        self.textField.text = value;
     }
 }
 
@@ -174,6 +181,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * currentValue = self.customFieldValue.value;
     
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+        BOOL asBool = [currentValue boolValue];
+        currentValue = asBool ? @"Yes" : @"No";
         return [[self booleanSelections] indexOfObject:currentValue];
     }
     

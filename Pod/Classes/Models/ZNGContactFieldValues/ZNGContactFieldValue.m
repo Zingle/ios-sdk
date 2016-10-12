@@ -15,6 +15,19 @@
     return [NSString stringWithFormat:@"%@: %@", self.customField.displayName, self.value];
 }
 
+
+- (NSDictionary *) dictionaryValue
+{
+    NSMutableDictionary * superDict = [[super dictionaryValue] mutableCopy];
+    
+    if (([self.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) && ([self.value length] > 0)) {
+        // Ensure that we are serialized as true or false
+        superDict[NSStringFromSelector(@selector(value))] = [self.value boolValue] ? @"true" : @"false";
+    }
+        
+    return superDict;
+}
+
 - (BOOL) isEqual:(ZNGContactFieldValue *)object
 {
     if (![object isKindOfClass:[ZNGContactFieldValue class]]) {

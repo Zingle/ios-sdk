@@ -39,7 +39,7 @@ To integrate the ZingleSDK into your Xcode project using CocoaPods, specify it i
 source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '8.0'
 
-pod 'ZingleSDK', :git => 'https://github.com/Zingle/ios-sdk.git'
+pod 'ZingleSDK'
 ```
 
 Then, run the following command:

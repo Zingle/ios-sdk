@@ -477,14 +477,14 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     if (contact.isConfirmed) {
         settings.threshold = 2.0;
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact unconfirm];
             return !changeWillCauseRemoval;
         }];
     } else {
         settings.threshold = 2.6;
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_blue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             [contact confirm];
             return !changeWillCauseRemoval;

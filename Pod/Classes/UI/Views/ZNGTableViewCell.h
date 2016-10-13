@@ -23,6 +23,7 @@
 
 @property (nonatomic, weak) IBOutlet LabelGridView * labelGrid;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
+@property (weak, nonatomic) IBOutlet UIView * closedShadingOverlay;
 
 
 @end

@@ -81,7 +81,12 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hWO-o0-B6O">
+                        <rect key="frame" x="0.0" y="0.0" width="334" height="124"/>
+                        <color key="backgroundColor" white="0.90665409482758619" alpha="0.59037012411347523" colorSpace="calibratedWhite"/>
+                    </view>
                 </subviews>
+                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                 <constraints>
                     <constraint firstItem="gdp-gA-wBf" firstAttribute="leading" secondItem="Blq-2G-nRN" secondAttribute="trailing" constant="8" id="02S-nn-AOQ"/>
                     <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="20f-WK-ucb"/>
@@ -89,6 +94,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="gdp-gA-wBf" secondAttribute="trailing" constant="30" id="3i6-2W-Bih"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="3pv-CZ-iXc"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="baseline" secondItem="gdp-gA-wBf" secondAttribute="baseline" constant="2" id="57X-bn-0C0"/>
+                    <constraint firstAttribute="bottom" secondItem="hWO-o0-B6O" secondAttribute="bottom" id="7z5-2j-EGB"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="8QL-Bl-NuL"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Bhb-CF-DfK" secondAttribute="centerY" id="8bW-nx-fba"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-26" id="Baf-a5-F7Z"/>
@@ -115,6 +121,9 @@
                     <constraint firstItem="4Ae-yN-7Cr" firstAttribute="top" secondItem="XBa-nb-zNh" secondAttribute="bottom" constant="8" id="uK8-zq-RH8"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-4" id="v47-G5-2aC"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="wJX-jq-S25"/>
+                    <constraint firstItem="hWO-o0-B6O" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="xK4-oQ-a8P"/>
+                    <constraint firstItem="hWO-o0-B6O" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="xXV-6u-GPU"/>
+                    <constraint firstAttribute="trailing" secondItem="hWO-o0-B6O" secondAttribute="trailing" id="xn2-CD-b0o"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="xrT-Dk-kla"/>
                 </constraints>
                 <variation key="default">
@@ -138,13 +147,14 @@
                 </variation>
             </tableViewCellContentView>
             <connections>
+                <outlet property="closedShadingOverlay" destination="hWO-o0-B6O" id="96S-XP-jFr"/>
                 <outlet property="contactName" destination="Blq-2G-nRN" id="ysH-oI-GYs"/>
                 <outlet property="dateLabel" destination="gdp-gA-wBf" id="fsD-8B-nWV"/>
                 <outlet property="labelGrid" destination="4Ae-yN-7Cr" id="ivM-gT-UO2"/>
                 <outlet property="lastMessage" destination="XBa-nb-zNh" id="FDW-CG-wwF"/>
                 <outlet property="unconfirmedCircle" destination="Bhb-CF-DfK" id="sFy-wo-9aM"/>
             </connections>
-            <point key="canvasLocation" x="306.5" y="334.5"/>
+            <point key="canvasLocation" x="306" y="334.5"/>
         </tableViewCell>
     </objects>
     <resources>

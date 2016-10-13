@@ -51,6 +51,8 @@
 {
     self.placeholderView.hidden = YES;
     
+    self.closedShadingOverlay.hidden = !(contact.isClosed);
+    
     if ([contact isKindOfClass:[NSNull class]]) {
         self.contact = nil;
         self.serviceId = nil;

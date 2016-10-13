@@ -29,9 +29,4 @@
     return nibViews.firstObject;
 }
 
-- (void) toggleSendButtonEnabled
-{
-    self.sendButton.enabled = [self.contentView.textView hasText];
-}
-
 @end

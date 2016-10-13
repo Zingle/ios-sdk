@@ -13,7 +13,7 @@
 #import "ZNGError.h"
 #import "ZNGNewChannel.h"
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZNGContactClient
 
@@ -281,7 +281,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     }
     
     void (^contactUpdateSuccessBlock)(ZNGContact *, ZNGStatus *) = ^void(ZNGContact * contact, ZNGStatus * status) {
-        ZNGLogDebug(@"Updating contact (but not yet labels if present) succeeded.");
+        ZNGLogDebug(@"Updating %@ (%@) (but not yet labels or channels if present) succeeded.", [contact fullName], contact.isConfirmed ? @"confirmed" : @"unconfirmed");
         contact.contactClient = self;
         
         // If we have no label nor channel changes, we are done

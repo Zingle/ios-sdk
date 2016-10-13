@@ -19,7 +19,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
 @property (weak, nonatomic) IBOutlet UILabel *lastMessage;
 @property (weak, nonatomic) IBOutlet UIView *placeholderView;
-@property (weak, nonatomic) IBOutlet UIView * unconfirmedCircle;
+@property (weak, nonatomic) IBOutlet UIImageView * unconfirmedCircle;
 
 @property (nonatomic, strong) ZNGContact *contact;
 @property (nonatomic, strong) NSString *serviceId;
@@ -29,6 +29,8 @@
 @implementation ZNGTableViewCell
 {
     ZNGLabelCollectionViewCell *_sizingCell;
+    UIImage * unconfirmedImage;
+    UIImage * unconfirmedLateImage;
 }
 
 + (NSString *)cellReuseIdentifier
@@ -43,6 +45,10 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    unconfirmedImage = [UIImage imageNamed:@"unconfirmedCircle" inBundle:bundle compatibleWithTraitCollection:nil];
+    unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     
     self.selectionStyle = UITableViewCellSelectionStyleDefault;
 }
@@ -69,18 +75,17 @@
         }
         
         if (self.contact.isConfirmed) {
-            self.unconfirmedCircle.tintColor = [UIColor clearColor];
+            self.unconfirmedCircle.image = nil;
         } else {
             if (self.contact.lastMessage.createdAt) {
                 NSTimeInterval distanceBetweenDates = [self.contact.lastMessage.createdAt timeIntervalSinceNow];
                 
                 if (distanceBetweenDates < -500) {
-                    self.unconfirmedCircle.tintColor = [UIColor zng_unconfirmedMessageRed];
+                    self.unconfirmedCircle.image = unconfirmedImage;
                 } else {
-                    self.unconfirmedCircle.tintColor = [UIColor zng_lightBlue];
+                    self.unconfirmedCircle.image = unconfirmedLateImage;
                 }
             }
-            
         }
         
         self.labelGrid.labels = self.contact.labels;

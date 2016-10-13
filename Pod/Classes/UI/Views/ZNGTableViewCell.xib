@@ -30,7 +30,7 @@
                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="smallCircle" translatesAutoresizingMaskIntoConstraints="NO" id="Bhb-CF-DfK">
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unconfirmedCircle" translatesAutoresizingMaskIntoConstraints="NO" id="Bhb-CF-DfK">
                         <rect key="frame" x="12" y="14" width="10" height="10"/>
                         <color key="tintColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -159,6 +159,6 @@
     </objects>
     <resources>
         <image name="chevronRight" width="14" height="14"/>
-        <image name="smallCircle" width="10" height="10"/>
+        <image name="unconfirmedCircle" width="10" height="10"/>
     </resources>
 </document>

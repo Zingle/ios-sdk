@@ -331,7 +331,24 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
         
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to send" message:@"Error encountered while sending message." preferredStyle:UIAlertControllerStyleAlert];
+        NSString * errorTitle = @"Unable to send";
+        NSString * errorMessage = @"Error encountered while sending the message.";
+        
+        if (error.zingleErrorCode == ZINGLE_ERROR_EMPTY_MESSAGE) {
+            errorTitle = @"Unable to send an empty message";
+            
+            NSCharacterSet * braceCharacterSet = [NSCharacterSet characterSetWithCharactersInString:@"{}"];
+            NSRange replacementCharacterRange = [text rangeOfCharacterFromSet:braceCharacterSet];
+            BOOL mayContainReplacementStrings = (replacementCharacterRange.location != NSNotFound);
+            
+            if (mayContainReplacementStrings) {
+                // They sent a message with {replacement fields}, but the server reported that the message was empty.  This is probably a result of
+                //  a custom field or channel value replacement value that is empty.  See: http://jira.zinglecorp.com:8080/browse/MOBILE-316
+                errorMessage = @"The fields sent in this message are empty.  The message was not sent.";
+            }
+        }
+        
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:errorTitle message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:ok];
         

@@ -14,9 +14,7 @@
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"customFieldValues" : @"custom_field_values",
-             @"isStarred" : @"is_starred",
-             @"isConfirmed" : @"is_confirmed"
+             @"customFieldValues" : @"custom_field_values"
              };
 }
 
@@ -26,8 +24,6 @@
     
     if (self) {
         _customFieldValues = contact.customFieldValues;
-        _isStarred = contact.isStarred;
-        _isConfirmed = contact.isConfirmed;
     }
     
     return self;

@@ -519,6 +519,15 @@ static NSString * const ParameterNameClosed = @"is_closed";
     NSNumber * closed = isClosed ? @YES : @NO;
     NSDictionary * params = @{ ParameterNameClosed : closed };
     
+    // Per MOBILE-371, closing an unconfirmed conversation should confirm the conversation
+    if (isClosed && !self.isConfirmed) {
+        ZNGLogInfo(@"Closing an unconfirmed contact.  This contact will be confirmed at the same time.");
+        
+        NSMutableDictionary * mutableParams = [params mutableCopy];
+        mutableParams[ParameterNameConfirmed] = @YES;
+        params = mutableParams;
+    }
+    
     [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
         
         if (contact.isClosed != isClosed) {
@@ -528,6 +537,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
         }
         
         self.isClosed = contact.isClosed;
+        self.isConfirmed = contact.isConfirmed;
+        
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
         
     } failure:^(ZNGError *error) {

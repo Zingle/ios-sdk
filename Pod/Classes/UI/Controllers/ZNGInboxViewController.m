@@ -535,6 +535,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             contact.isClosed = YES;
+            contact.isConfirmed = YES;  // Per MOBILE-371, closing an unconfirmed contact should also confirm him.
             [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
             
             [contact close];

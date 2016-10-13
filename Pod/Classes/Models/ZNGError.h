@@ -10,6 +10,11 @@
 
 extern NSString * const kZingleErrorDomain;
 
+// Additional error codes found at https://github.com/Zingle/rest-api-documentation/blob/master/error_codes.md
+typedef enum {
+    ZINGLE_ERROR_EMPTY_MESSAGE  =   3602
+} ZingleErrorCode;
+
 @interface ZNGError : NSError
 
 @property(nonatomic, strong) NSString* errorText;

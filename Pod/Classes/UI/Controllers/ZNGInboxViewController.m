@@ -483,6 +483,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         settings.threshold = 2.0;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
+            
+            contact.isConfirmed = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
+            
             [contact unconfirm];
             return !changeWillCauseRemoval;
         }];
@@ -490,6 +494,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         settings.threshold = 2.6;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
+            
+            contact.isConfirmed = YES;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
+
             [contact confirm];
             return !changeWillCauseRemoval;
         }];
@@ -511,9 +519,13 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     settings.fillOnTrigger = changeWillCauseRemoval;
     
     if (contact.isClosed) {
-        settings.threshold = 2.5;
-        closeButton = [MGSwipeButton buttonWithTitle:@"Reopen" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        settings.threshold = 3.0;
+        closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
+            
+            contact.isClosed = NO;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
+            
             [contact reopen];
             return !changeWillCauseRemoval;
         }];
@@ -521,6 +533,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         settings.threshold = 3.0;
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
+            
+            contact.isClosed = YES;
+            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
+            
             [contact close];
             return !changeWillCauseRemoval;
         }];

@@ -295,7 +295,7 @@ static void * KVOContext = &KVOContext;
     [actions addObject:editContact];
     
     BOOL alreadyClosed = self.conversation.contact.isClosed;
-    NSString * closeOrOpenString = alreadyClosed ? @"Reopen conversation" : @"Close conversation";
+    NSString * closeOrOpenString = alreadyClosed ? @"Open conversation" : @"Close conversation";
     UIAlertAction * closeOrOpen = [UIAlertAction actionWithTitle:closeOrOpenString style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (alreadyClosed) {
             [self.conversation.contact reopen];

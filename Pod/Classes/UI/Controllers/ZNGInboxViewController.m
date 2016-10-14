@@ -484,10 +484,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
-            contact.isConfirmed = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
-            
             [contact unconfirm];
+  
             return !changeWillCauseRemoval;
         }];
     } else {
@@ -495,10 +493,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
-            contact.isConfirmed = YES;
-            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
-
             [contact confirm];
+
             return !changeWillCauseRemoval;
         }];
     }
@@ -512,6 +508,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     MGSwipeButton * closeButton;
     ZNGContact * contactAfterChange = [contact copy];
     contactAfterChange.isClosed = !contact.isClosed;
+    contactAfterChange.isConfirmed = contactAfterChange.isClosed ? YES : contact.isConfirmed;   // Closing will also confirm
     BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
     
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
@@ -523,10 +520,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
-            contact.isClosed = NO;
-            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
-            
             [contact reopen];
+
             return !changeWillCauseRemoval;
         }];
     } else {
@@ -534,11 +529,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
-            contact.isClosed = YES;
-            contact.isConfirmed = YES;  // Per MOBILE-371, closing an unconfirmed contact should also confirm him.
-            [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:contact];
-            
             [contact close];
+            
             return !changeWillCauseRemoval;
         }];
     }

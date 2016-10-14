@@ -485,6 +485,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 - (void) _setConfirmed:(BOOL)isConfirmed
 {
+    BOOL oldValue = self.isConfirmed;
+    
     // We have to explicitly use @YES/@NO instead of autoboxing with @(isStarred) because a certain very particular Jovin server explodes if it gets a 1 for a boolean
     NSNumber * confirmedNumber = isConfirmed ? @YES : @NO;
     NSDictionary * params = @{ ParameterNameConfirmed : confirmedNumber };
@@ -504,6 +506,9 @@ static NSString * const ParameterNameClosed = @"is_closed";
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
+
+        self.isConfirmed = oldValue;
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     }];
 }
 
@@ -519,6 +524,9 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 - (void) _setClosed:(BOOL)isClosed
 {
+    BOOL oldClosed = self.isClosed;
+    BOOL oldConfirmed = self.isConfirmed;
+    
     NSNumber * closed = isClosed ? @YES : @NO;
     NSDictionary * params = @{ ParameterNameClosed : closed };
     
@@ -547,11 +555,14 @@ static NSString * const ParameterNameClosed = @"is_closed";
         
         self.isClosed = contact.isClosed;
         self.isConfirmed = contact.isConfirmed;
-        
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
         
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to update %@'s closed status: %@", [self fullName], error);
+        
+        self.isClosed = oldClosed;
+        self.isConfirmed = oldConfirmed;
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     }];
 }
 

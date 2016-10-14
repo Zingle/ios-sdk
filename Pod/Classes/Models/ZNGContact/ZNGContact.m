@@ -404,9 +404,10 @@ static NSString * const ParameterNameClosed = @"is_closed";
     BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);
     BOOL sameName = ([[old fullName] isEqualToString:[self fullName]]);
     BOOL sameConfirmed = (old.isConfirmed == self.isConfirmed);
+    BOOL sameClosed = (old.isClosed == self.isClosed);
     BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
     
-    return !(sameLastMessage && sameName && sameConfirmed && sameLabels);
+    return !(sameLastMessage && sameName && sameConfirmed && sameClosed && sameLabels);
 }
 
 - (BOOL) hasBeenEditedSince:(ZNGContact *)old

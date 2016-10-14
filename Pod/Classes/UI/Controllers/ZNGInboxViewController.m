@@ -478,9 +478,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
     settings.buttonIndex = 0;
     settings.fillOnTrigger = changeWillCauseRemoval;
+    settings.threshold = 2.0;
     
     if (contact.isConfirmed) {
-        settings.threshold = 2.0;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
@@ -489,7 +489,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             return !changeWillCauseRemoval;
         }];
     } else {
-        settings.threshold = 2.6;
         confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
@@ -514,9 +513,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
     settings.buttonIndex = 0;
     settings.fillOnTrigger = changeWillCauseRemoval;
+    settings.threshold = 2.0;
     
     if (contact.isClosed) {
-        settings.threshold = 3.0;
         closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
@@ -525,7 +524,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             return !changeWillCauseRemoval;
         }];
     } else {
-        settings.threshold = 3.0;
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             

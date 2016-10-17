@@ -293,6 +293,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     if ([self.data.contacts containsObject:notification.object]) {
         [self.tableView reloadData];
+        [self retainSelection];
     }
 }
 
@@ -346,11 +347,21 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     }
     
     // Ensure that we retain our selection visually
+    [self retainSelection];
+}
+
+- (void) retainSelection
+{
     if (self.selectedContact != nil) {
         NSIndexPath * selectedContactIndexPath = [self indexPathForContact:self.selectedContact];
         
-        if ((selectedContactIndexPath != nil) && (![[self.tableView indexPathForSelectedRow] isEqual:selectedContactIndexPath])) {
-            [self.tableView selectRowAtIndexPath:selectedContactIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        if (selectedContactIndexPath != nil) {
+            if (![[self.tableView indexPathForSelectedRow] isEqual:selectedContactIndexPath]) {
+                [self.tableView selectRowAtIndexPath:selectedContactIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+            }
+        } else {
+            // Our selected contact is no longer in our data.  De-select it.
+            self.selectedContact = nil;
         }
     }
 }

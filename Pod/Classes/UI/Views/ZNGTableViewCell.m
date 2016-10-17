@@ -14,6 +14,9 @@
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZingleSDK/ZingleSDK-Swift.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @interface ZNGTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
@@ -78,11 +81,14 @@
             self.unconfirmedCircle.image = nil;
         } else {
             if (self.contact.lastMessage.createdAt) {
-                NSTimeInterval distanceBetweenDates = [self.contact.lastMessage.createdAt timeIntervalSinceNow];
+                NSTimeInterval timeSinceMessage = (self.contact.lastMessage.createdAt != nil) ? [[NSDate date] timeIntervalSinceDate:self.contact.lastMessage.createdAt] : FLT_MAX;
+                NSTimeInterval fiveMinutes = 5.0 * 60.0;
                 
-                if (distanceBetweenDates < -500) {
+                if (timeSinceMessage <= fiveMinutes) {
+                    ZNGLogDebug(@"It has been %.0f seconds since the last message.  Not too long.  Showing blue circle.", timeSinceMessage);
                     self.unconfirmedCircle.image = unconfirmedImage;
                 } else {
+                    ZNGLogDebug(@"It has been %.0f seconds since the last message!  This has been too long!  Red circle!  Red circle!", timeSinceMessage);
                     self.unconfirmedCircle.image = unconfirmedLateImage;
                 }
             }

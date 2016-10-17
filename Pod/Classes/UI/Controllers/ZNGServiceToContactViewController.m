@@ -363,13 +363,13 @@ static void * KVOContext = &KVOContext;
         confirmButton.selected = NO;
         [self showTemporaryBlueBannerWithText:@"UNCONFIRMED"];
         
-        [[ZNGAnalytics sharedAnalytics] trackUnconfirmedConversation:self.conversation];
+        [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:self.conversation.contact fromUIType:@"button"];
     } else {
         [contact confirm];
         confirmButton.selected = YES;
         [self showTemporaryBlueBannerWithText:@"CONFIRMED"];
         
-        [[ZNGAnalytics sharedAnalytics] trackConfirmedConversation:self.conversation];
+        [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:self.conversation.contact fromUIType:@"button"];
     }
     
     [self checkForSpam];

@@ -304,14 +304,28 @@ static NSString * const HostPropertyName = @"Host";
     [[self segment] track:@"Selected a channel" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
-- (void) trackConfirmedConversation:(ZNGConversationServiceToContact *)conversation
+- (void) trackConfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
 {
-    [[self segment] track:@"Confirmed conversation" properties:[self defaultPropertiesWithConversation:conversation]];
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"contactName"] = [contact fullName];
+
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+    }
+    
+    [[self segment] track:@"Confirmed conversation" properties:properties];
 }
 
-- (void) trackUnconfirmedConversation:(ZNGConversationServiceToContact *)conversation
+- (void) trackUnconfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
 {
-    [[self segment] track:@"Unconfirmed conversation" properties:[self defaultPropertiesWithConversation:conversation]];
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"contactName"] = [contact fullName];
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+    }
+    
+    [[self segment] track:@"Unconfirmed conversation" properties:properties];
 }
 
 - (void) trackStarredContact:(ZNGContact *)contact

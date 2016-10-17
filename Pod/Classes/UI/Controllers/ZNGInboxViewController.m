@@ -485,7 +485,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact unconfirm];
-  
+            
+            [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:contact fromUIType:@"swipe"];
+            
             return !changeWillCauseRemoval;
         }];
     } else {
@@ -493,6 +495,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact confirm];
+            
+            [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:contact fromUIType:@"swipe"];
 
             return !changeWillCauseRemoval;
         }];

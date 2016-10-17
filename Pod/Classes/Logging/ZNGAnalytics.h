@@ -58,8 +58,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) trackSentMessage:(NSString *)messageBody toLabels:(NSArray<ZNGLabel *> *)labels;
 - (void) trackSentMessage:(NSString *)messageBody toPhoneNumbers:(NSArray<NSString *> *)phoneNumbers;
 - (void) trackChangedChannel:(ZNGChannel *)channel inConversation:(ZNGConversationServiceToContact *)conversation;
-- (void) trackConfirmedConversation:(ZNGConversationServiceToContact *)conversation;
-- (void) trackUnconfirmedConversation:(ZNGConversationServiceToContact *)conversation;
+- (void) trackConfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
+- (void) trackUnconfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
 - (void) trackStarredContact:(ZNGContact *)contact;
 - (void) trackUnstarredContact:(ZNGContact *)contact;
 - (void) trackShowedConversationDetails:(ZNGConversationServiceToContact *)conversation;

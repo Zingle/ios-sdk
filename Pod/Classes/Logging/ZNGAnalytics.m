@@ -328,16 +328,6 @@ static NSString * const HostPropertyName = @"Host";
     [[self segment] track:@"Unconfirmed conversation" properties:properties];
 }
 
-- (void) trackStarredContact:(ZNGContact *)contact
-{
-    [[self segment] track:@"Starred contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
-}
-
-- (void) trackUnstarredContact:(ZNGContact *)contact
-{
-    [[self segment] track:@"Unstarred contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
-}
-
 - (void) trackShowedConversationDetails:(ZNGConversationServiceToContact *)conversation
 {
     [[self segment] track:@"Showed detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];

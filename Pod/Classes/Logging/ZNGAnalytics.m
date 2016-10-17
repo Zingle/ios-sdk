@@ -306,50 +306,58 @@ static NSString * const HostPropertyName = @"Host";
 
 - (void) trackConfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
 {
+    NSString * event = @"Confirmed conversation";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"contactName"] = [contact fullName];
 
     if ([sourceType length] > 0) {
         properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:@"Confirmed conversation" properties:properties];
+    [[self segment] track:event properties:properties];
 }
 
 - (void) trackUnconfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
 {
+    NSString * event = @"Unconfirmed conversation";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"contactName"] = [contact fullName];
     
     if ([sourceType length] > 0) {
         properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:@"Unconfirmed conversation" properties:properties];
+    [[self segment] track:event properties:properties];
 }
 
 - (void) trackOpenedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
 {
+    NSString * event = @"Opened conversation";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"contactName"] = [contact fullName];
     
     if ([sourceType length] > 0) {
         properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:@"Opened conversation" properties:properties];
+    [[self segment] track:event properties:properties];
 }
 
 - (void) trackClosedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
 {
+    NSString * event = @"Closed conversation";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"contactName"] = [contact fullName];
     
     if ([sourceType length] > 0) {
         properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:@"Closed conversation" properties:properties];
+    [[self segment] track:event properties:properties];
 }
 
 - (void) trackShowedConversationDetails:(ZNGConversationServiceToContact *)conversation

@@ -328,6 +328,30 @@ static NSString * const HostPropertyName = @"Host";
     [[self segment] track:@"Unconfirmed conversation" properties:properties];
 }
 
+- (void) trackOpenedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
+{
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"contactName"] = [contact fullName];
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+    }
+    
+    [[self segment] track:@"Opened conversation" properties:properties];
+}
+
+- (void) trackClosedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
+{
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"contactName"] = [contact fullName];
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+    }
+    
+    [[self segment] track:@"Closed conversation" properties:properties];
+}
+
 - (void) trackShowedConversationDetails:(ZNGConversationServiceToContact *)conversation
 {
     [[self segment] track:@"Showed detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];

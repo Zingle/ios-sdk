@@ -299,8 +299,10 @@ static void * KVOContext = &KVOContext;
     UIAlertAction * closeOrOpen = [UIAlertAction actionWithTitle:closeOrOpenString style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (alreadyClosed) {
             [self.conversation.contact reopen];
+            [[ZNGAnalytics sharedAnalytics] trackOpenedContact:self.conversation.contact fromUIType:@"Ellipsis menu"];
         } else {
             [self.conversation.contact close];
+            [[ZNGAnalytics sharedAnalytics] trackClosedContact:self.conversation.contact fromUIType:@"Ellipsis menu"];
         }
     }];
     [actions addObject:closeOrOpen];

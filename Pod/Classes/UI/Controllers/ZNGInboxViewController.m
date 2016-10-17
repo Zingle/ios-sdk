@@ -485,7 +485,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact unconfirm];
-            
             [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:contact fromUIType:@"swipe"];
             
             return !changeWillCauseRemoval;
@@ -495,7 +494,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact confirm];
-            
             [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:contact fromUIType:@"swipe"];
 
             return !changeWillCauseRemoval;
@@ -524,6 +522,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact reopen];
+            [[ZNGAnalytics sharedAnalytics] trackOpenedContact:contact fromUIType:@"swipe"];
 
             return !changeWillCauseRemoval;
         }];
@@ -532,6 +531,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact close];
+            [[ZNGAnalytics sharedAnalytics] trackClosedContact:contact fromUIType:@"swipe"];
             
             return !changeWillCauseRemoval;
         }];

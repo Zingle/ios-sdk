@@ -16,6 +16,7 @@
 #import "ZNGLogging.h"
 #import "ZNGLabelGridView.h"
 
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @interface ZNGTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *contactName;

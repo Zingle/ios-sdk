@@ -124,6 +124,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL) editingChannelIsLocked:(ZNGChannel *)channel;
 
+/**
+ *  Returns a date, after which, this contact will be highlighted as "urgent" if still unconfirmed.
+ */
+- (NSDate *) lateUnconfirmedTime;
+
 #pragma mark - Mutators
 - (void) confirm;
 - (void) unconfirm;

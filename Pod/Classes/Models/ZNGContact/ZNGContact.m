@@ -473,6 +473,11 @@ static NSString * const ParameterNameClosed = @"is_closed";
     return NO;
 }
 
+- (NSDate *) lateUnconfirmedTime
+{
+    return [self.lastMessage.createdAt dateByAddingTimeInterval:(5.0 * 60.0)];
+}
+
 #pragma mark - Mutators
 - (void) confirm
 {

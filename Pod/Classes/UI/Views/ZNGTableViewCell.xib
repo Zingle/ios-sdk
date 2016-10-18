@@ -70,7 +70,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlF-2S-BqZ" customClass="ZNGLabelGridView">
-                        <rect key="frame" x="28" y="59" width="293" height="65"/>
+                        <rect key="frame" x="28" y="59" width="293" height="57"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="NO"/>
@@ -115,7 +115,7 @@
                     <constraint firstAttribute="topMargin" secondItem="Blq-2G-nRN" secondAttribute="top" id="tce-jX-rie"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-4" id="v47-G5-2aC"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="wJX-jq-S25"/>
-                    <constraint firstAttribute="bottom" secondItem="TlF-2S-BqZ" secondAttribute="bottom" id="wz1-Pz-CgK"/>
+                    <constraint firstAttribute="bottom" secondItem="TlF-2S-BqZ" secondAttribute="bottom" constant="8" id="wz1-Pz-CgK"/>
                     <constraint firstItem="hWO-o0-B6O" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="xK4-oQ-a8P"/>
                     <constraint firstItem="hWO-o0-B6O" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="xXV-6u-GPU"/>
                     <constraint firstAttribute="trailing" secondItem="hWO-o0-B6O" secondAttribute="trailing" id="xn2-CD-b0o"/>

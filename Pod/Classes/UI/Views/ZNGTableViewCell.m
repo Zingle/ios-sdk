@@ -31,7 +31,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGTableViewCell
 {
-    ZNGLabelCollectionViewCell *_sizingCell;
     UIImage * unconfirmedImage;
     UIImage * unconfirmedLateImage;
 }

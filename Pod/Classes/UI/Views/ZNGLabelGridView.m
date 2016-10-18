@@ -10,6 +10,8 @@
 #import "ZNGDashedBorderLabel.h"
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
+#import "ZNGLogging.h"
+#import "UIFont+Lato.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -50,6 +52,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) commonInit
 {
     totalSize = CGSizeZero;
+    
+    // Defaults
+    _horizontalSpacing = 6.0;
+    _verticalSpacing = 6.0;
+    _font = [UIFont latoFontOfSize:13.0];
+    _labelBorderWidth = 2.0;
+    _labelTextInset = 6.0;
+    _labelCornerRadius = 12.0;
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     xImage = [UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil];

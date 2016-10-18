@@ -11,6 +11,8 @@
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
 
+static const int zngLogLevel = ZNGLogLevelWarning;
+
 @implementation ZNGLabelGridView
 {
     UIImage * xImage;
@@ -218,11 +220,15 @@
         moreLabel = [[UILabel alloc] init];
     }
     
+    ZNGLogDebug(@"Replacing %llu existing labels with %llu labels.", (unsigned long long)[labelViews count], (unsigned long long)[newLabelViews count]);
+    
     for (ZNGDashedBorderLabel * label in labelViews) {
         [label removeFromSuperview];
     }
     
     labelViews = newLabelViews;
+    
+    ZNGLogDebug(@"%@ now has %llu subviews", [self class], (unsigned long long)[self.subviews count]);
     
     [self layoutIfNeeded];
     [self invalidateIntrinsicContentSize];

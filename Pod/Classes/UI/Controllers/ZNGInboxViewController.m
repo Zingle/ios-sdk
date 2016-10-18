@@ -43,6 +43,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     NSDateFormatter * timeFormatter;
     
     NSTimer * refreshTimer;
+    
+    UIImage * unconfirmedImage;
+    UIImage * unconfirmedLateImage;
+    
+    NSMutableDictionary<NSIndexPath *, NSTimer *> * refreshUnconfirmedTimers;
 }
 
 #pragma mark - Life cycle
@@ -121,6 +126,12 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [super viewDidLoad];
     
     self.tableView.hidden = YES;
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGInboxViewController class]];
+    unconfirmedImage = [UIImage imageNamed:@"unconfirmedCircle" inBundle:bundle compatibleWithTraitCollection:nil];
+    unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
     
     refreshControl = [self configuredRefreshControl];
     [self.tableView addSubview:refreshControl];
@@ -462,21 +473,74 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGContact * contact = [self contactAtIndexPath:indexPath];
+    ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+    
+    NSTimer * timer = refreshUnconfirmedTimers[indexPath];
+    [timer invalidate];
+    [refreshUnconfirmedTimers removeObjectForKey:indexPath];
     
     if (contact != nil) {
-        ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+        
+        cell.contactName.text = [contact fullName];
+        NSUInteger lastMessageAttachmentCount = [contact.lastMessage.attachments count];
+        
+        if ([contact.lastMessage.body length] > 0) {
+            cell.lastMessage.text = contact.lastMessage.body;
+        } else if (lastMessageAttachmentCount > 0) {
+            cell.lastMessage.text = [NSString stringWithFormat:@"%llu attachment%@", (unsigned long long)lastMessageAttachmentCount, (lastMessageAttachmentCount != 1) ? @"s" : @""];
+        } else {
+            cell.lastMessage.text = nil;
+        }
+        
+        if (contact.isConfirmed) {
+            cell.unconfirmedCircle.image = nil;
+        } else {
+            NSTimeInterval timeUntilLate = [[contact lateUnconfirmedTime] timeIntervalSinceNow];
+            
+            if (timeUntilLate <= 0.0) {
+                // Already late
+                cell.unconfirmedCircle.image = unconfirmedLateImage;
+            } else {
+                // Not late yet.  Show unconfirmed image and swap to unconfirmed late later.
+                cell.unconfirmedCircle.image = unconfirmedImage;
+                
+                NSTimer * timer = [NSTimer scheduledTimerWithTimeInterval:timeUntilLate target:self selector:@selector(refreshIndexPathFromTimer:) userInfo:indexPath repeats:NO];
+                refreshUnconfirmedTimers[indexPath] = timer;
+            }
+        }
+        
+        cell.labelGrid.labels = contact.labels;
         cell.labelGrid.font = [UIFont latoSemiBoldFontOfSize:9.0];
-        [cell configureCellWithContact:contact withServiceId:self.session.service.serviceId];
         cell.dateLabel.text = [self dateStringForContact:contact];
         
         [self configureLeftButtonsForCell:cell contact:contact];
         [self configureRightButtonsForCell:cell contact:contact];
-        
-        return cell;
+    } else {
+        cell.contactName.text = nil;
+        cell.lastMessage.text = nil;
+        cell.unconfirmedCircle.image = nil;
     }
     
-    ZNGLogError(@"Unable to load data for contact at index %ld.", (unsigned long)indexPath.row);
-    return nil;
+    return cell;
+}
+
+/**
+ *  Called when we suspect a contact will go from unconfirmed to unconfirmed late
+ */
+- (void) refreshIndexPathFromTimer:(NSTimer *)timer
+{
+    NSIndexPath * indexPath = timer.userInfo;
+    
+    if (![indexPath isKindOfClass:[NSIndexPath class]]) {
+        ZNGLogError(@"Refresh inbox table cell timer was triggered with no index path data.  Ignoring.");
+        return;
+    }
+    
+    [refreshUnconfirmedTimers removeObjectForKey:indexPath];
+    
+    if ([self contactAtIndexPath:indexPath] != nil) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }
 }
 
 - (void) configureLeftButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact

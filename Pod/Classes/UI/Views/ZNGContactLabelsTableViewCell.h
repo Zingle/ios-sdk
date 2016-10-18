@@ -8,10 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class LabelGridView;
+@class ZNGLabelGridView;
 
 @interface ZNGContactLabelsTableViewCell : UITableViewCell
 
-@property (nonatomic, strong) IBOutlet LabelGridView * labelsGrid;
+@property (nonatomic, strong) IBOutlet ZNGLabelGridView * labelsGrid;
 
 @end

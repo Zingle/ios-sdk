@@ -8,7 +8,6 @@
 
 #import "ZNGContactLabelsTableViewCell.h"
 #import "ZNGLabelRoundedCollectionViewCell.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
 
 @implementation ZNGContactLabelsTableViewCell
 

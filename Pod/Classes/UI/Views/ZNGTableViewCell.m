@@ -13,7 +13,10 @@
 #import "UIImage+ZingleSDK.h"
 #import "UIColor+ZingleSDK.h"
 #import "JSQMessagesTimestampFormatter.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
+#import "ZNGLogging.h"
+#import "ZNGLabelGridView.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @interface ZNGTableViewCell ()
 @property (weak, nonatomic) IBOutlet UILabel *contactName;

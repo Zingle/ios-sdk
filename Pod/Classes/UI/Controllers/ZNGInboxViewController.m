@@ -20,7 +20,7 @@
 #import "UIFont+Lato.h"
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGAnalytics.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
+#import "ZNGLabelGridView.h"
 
 static int const zngLogLevel = ZNGLogLevelVerbose;
 

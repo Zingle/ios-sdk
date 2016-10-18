@@ -20,7 +20,6 @@
 #import "ZNGLogging.h"
 #import "ZNGChannel.h"
 #import "ZNGLabelRoundedCollectionViewCell.h"
-#import "ZingleSDK/ZingleSDK-Swift.h"
 #import "ZNGLabel.h"
 #import "UIColor+ZingleSDK.h"
 #import "Mantle/MTLJSONAdapter.h"
@@ -28,6 +27,7 @@
 #import "ZNGContactClient.h"
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"
+#import "ZNGLabelGridView.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -43,7 +43,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
-@interface ZNGContactEditViewController () <LabelGridDelegate>
+@interface ZNGContactEditViewController () <ZNGLabelGridViewDelegate>
 
 @end
 
@@ -622,12 +622,12 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 #pragma mark - Label selection
 
-- (void) pressedAddLabel
+- (void) labelGridPressedAddLabel:(ZNGLabelGridView *)grid
 {
     [self performSegueWithIdentifier:SelectLabelSegueIdentifier sender:self];
 }
 
-- (void) pressedRemoveLabel:(ZNGLabel *)label
+- (void) labelGrid:(ZNGLabelGridView *)grid pressedRemoveLabel:(ZNGLabel *)label
 {
     if (label == nil) {
         ZNGLogError(@"Remove label delegate method was called, but with no label selected.  Ignoring.");

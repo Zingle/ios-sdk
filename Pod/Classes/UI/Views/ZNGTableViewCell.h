@@ -11,7 +11,7 @@
 @import MGSwipeTableCell;
 
 @class ZNGTableViewCell;
-@class LabelGridView;
+@class ZNGLabelGridView;
 
 @interface ZNGTableViewCell : MGSwipeTableCell
 
@@ -21,7 +21,7 @@
 
 - (void)configureCellWithContact:(ZNGContact *)contact withServiceId:(NSString *)serviceId;
 
-@property (nonatomic, weak) IBOutlet LabelGridView * labelGrid;
+@property (nonatomic, weak) IBOutlet ZNGLabelGridView * labelGrid;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
 @property (weak, nonatomic) IBOutlet UIView * closedShadingOverlay;
 

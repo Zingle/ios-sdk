@@ -154,6 +154,7 @@
     // Confirm him
     dude = [dude copy];
     dude.isConfirmed = YES;
+    dude.updatedAt = [NSDate date];
     fiftyDudes = [fiftyDudes mutableCopy];
     [fiftyDudes replaceObjectAtIndex:dudeIndex withObject:dude];
     contactClient.contacts = fiftyDudes;
@@ -341,6 +342,9 @@
     dude1.isConfirmed = YES;
     [data contactWasChangedLocally:dude1];
     dude1.updatedAt = [NSDate date];
+    fiftyDudes = [fiftyDudes mutableCopy];
+    [fiftyDudes replaceObjectAtIndex:dude1Index withObject:dude1];
+    contactClient.contacts = fiftyDudes;
     
     // Begin refresh
     [data refresh];
@@ -348,14 +352,13 @@
     // Locally confirm dude #2
     dude2 = [dude2 copy];
     dude2.isConfirmed = YES;
-    dude2.updatedAt = [NSDate date];
     [data contactWasChangedLocally:dude2];
     
     // Wait for a KVO update
     [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:nil];
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
-    // Ensure that dude #2 is not now magically unconfirmed again
+    // Ensure that dude #2 is not now magically unconfirmed again due to remote data coming in and overwriting out local change
     for (ZNGContact * contact in data.contacts) {
         if ([contact isEqual:dude2]) {
             XCTAssertTrue(contact.isConfirmed);

@@ -304,6 +304,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     if ([incomingContacts containsObject:lastLocallyRemovedContact]) {
         NSMutableArray * mutableIncoming = [incomingContacts mutableCopy];
         [mutableIncoming removeObject:lastLocallyRemovedContact];
+        status.totalRecords = status.totalRecords - 1;
         incomingContacts = mutableIncoming;
     }
     

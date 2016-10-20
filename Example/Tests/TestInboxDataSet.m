@@ -43,7 +43,7 @@
     ZNGContactField * lastNameField = [[ZNGContactField alloc] init];
     lastNameField.displayName = @"Last Name";
     lastName.customField = lastNameField;
-    lastName.value = [NSString stringWithFormat:@"No. %ud", number];
+    lastName.value = [NSString stringWithFormat:@"No. %u", number];
     
     contact.customFieldValues = @[firstName, lastName];
     

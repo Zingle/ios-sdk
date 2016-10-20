@@ -19,6 +19,8 @@
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
+		96C5E7E41DB7F1A9005A17AC /* ZNGMockContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */; };
+		96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
 		DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7FF2561C87671800BC720E /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
@@ -61,6 +63,9 @@
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
 		9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceTableViewCell.h; sourceTree = "<group>"; };
 		9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceTableViewCell.m; sourceTree = "<group>"; };
+		96C5E7E21DB7F1A9005A17AC /* ZNGMockContactClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGMockContactClient.h; sourceTree = "<group>"; };
+		96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMockContactClient.m; sourceTree = "<group>"; };
+		96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestInboxDataSet.m; sourceTree = "<group>"; };
 		AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D3014CCAB506BA98DAAAD88B /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -171,6 +176,9 @@
 			children = (
 				960FCBB01D0F6E9C00B7E82C /* Tests.m */,
 				960FCBB21D0F6E9C00B7E82C /* Info.plist */,
+				96C5E7E21DB7F1A9005A17AC /* ZNGMockContactClient.h */,
+				96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */,
+				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -407,7 +415,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
 				960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */,
+				96C5E7E41DB7F1A9005A17AC /* ZNGMockContactClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

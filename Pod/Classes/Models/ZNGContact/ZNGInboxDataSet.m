@@ -46,11 +46,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 @implementation ZNGInboxDataSet
 {
-    ZNGContactClient * contactClient;
-    
     BOOL loadedInitialData;
-    
-    NSUInteger pageSize;
     
     NSOperationQueue * fetchQueue;
     
@@ -62,14 +58,14 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     self = [super init];
     
     if (self != nil) {
-        contactClient = aContactClient;
+        _contactClient = aContactClient;
         
         fetchQueue = [[NSOperationQueue alloc] init];
         fetchQueue.name = @"Zingle Inbox fetching";
         fetchQueue.maxConcurrentOperationCount = 1;
         
         _contacts = [[NSOrderedSet alloc] init];
-        pageSize = 25;
+        _pageSize = 25;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
     }
@@ -97,7 +93,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 - (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
-    parameters[ParameterKeyPageSize] = @(pageSize);
+    parameters[ParameterKeyPageSize] = @(self.pageSize);
     parameters[ParameterKeySortField] = ParameterValueLastMessageCreatedAt;
     parameters[ParameterKeySortDirection] = ParameterValueDescending;
     parameters[ParameterKeyLastMessageCreatedAt] = ParameterValueGreaterThanZero;
@@ -138,6 +134,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 {
     // Calculate what page indices should be loaded in order to load some data starting at the specified index.
     
+    NSUInteger pageSize = self.pageSize;
     NSMutableOrderedSet<NSNumber *> * pagesToRefresh = [[NSMutableOrderedSet alloc] init];
     NSUInteger loadedCount = [_contacts count];
     NSUInteger lastPageToLoad = (index / pageSize) + 1; // The page holding the object at the specified index
@@ -191,7 +188,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 {
     self.loading = YES;
     __weak ZNGInboxDataSet * weakSelf = self;
-    __weak ZNGContactClient * weakContactClient = contactClient;
+    __weak ZNGContactClient * weakContactClient = self.contactClient;
     
     // Create an NSBlockOperation for each page to fetch.  Feed them into the fetchQueue so that they will run one at a time in order.
     // Using NSBlockOperation also allows proper cancellation if we are deallocated.  This is a very real concern, especially when doing
@@ -212,6 +209,8 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             
             NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = pageNumber;
+            
+            ZNGLogInfo(@"%@ (%p) is loading page #%@ of data...", [weakSelf class], weakSelf, pageNumber);
             
             [strongContactClient contactListWithParameters:parameters success:^(NSArray<ZNGContact *> *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;

@@ -54,9 +54,17 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
 @property (nonatomic, readonly) NSUInteger count;
 
 /**
+ *  Page size!
+ */
+@property (nonatomic, assign) NSUInteger pageSize;
+
+
+/**
  *  All contacts matching this filter that have been successfully fetched.
  */
 @property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGContact *> * contacts;
+
+@property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
 
 /**
  *  Designated initializer.

@@ -399,15 +399,19 @@ static NSString * const ParameterNameClosed = @"is_closed";
     return deletedFields;
 }
 
-- (BOOL)requiresVisualRefeshSince:(ZNGContact *)old
+- (BOOL) changedSince:(nullable ZNGContact *)old
 {
-    BOOL sameLastMessage = ([old.lastMessage isEqual:self.lastMessage]);
-    BOOL sameName = ([[old fullName] isEqualToString:[self fullName]]);
-    BOOL sameConfirmed = (old.isConfirmed == self.isConfirmed);
-    BOOL sameClosed = (old.isClosed == self.isClosed);
-    BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
+    if ((old.updatedAt == nil) || (self.updatedAt == nil)) {
+        return YES;
+    }
     
-    return !(sameLastMessage && sameName && sameConfirmed && sameClosed && sameLabels);
+    if (![old.contactId isEqualToString:self.contactId]) {
+        ZNGLogError(@"%@ is being checked against %@ as if they were the same contact, but they have different IDs (%@ vs. %@).", [old fullName], [self fullName], old.contactId, self.contactId);
+        return NO;
+    }
+    
+    NSTimeInterval timeBetweenUpdates = [self.updatedAt timeIntervalSinceDate:old.updatedAt];
+    return (timeBetweenUpdates > 0.0);
 }
 
 - (BOOL) hasBeenEditedSince:(ZNGContact *)old

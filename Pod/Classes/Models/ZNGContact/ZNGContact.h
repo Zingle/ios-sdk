@@ -77,12 +77,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *)fullName;
 
 /**
- *  Returns YES if any of the inbox display information has changed between instances, such as name, last message, star, labels, confirmation status
+ *  Returns YES if the contact has been changed since the old copy.
  *
- *  @param old The instance of this contact to compare against.
- *  @returns YES if information has differed since the old instance.
+ *  @param old The older instance of the same contact.
  */
-- (BOOL)requiresVisualRefeshSince:(nullable ZNGContact *)old;
+- (BOOL) changedSince:(nullable ZNGContact *)old;
 
 /**
  *  Returns YES if a table that contains this contact should emphasize the refresh.

@@ -246,7 +246,7 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
             }
             
             dispatch_sync(dispatch_get_main_queue(), ^{
-                NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * pageSize;
+                NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * weakSelf.pageSize;
                 
                 if (indexAfterCurrentData < [weakSelf.contacts count]) {
                     NSMutableOrderedSet<ZNGContact *> * mutable = [weakSelf mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];

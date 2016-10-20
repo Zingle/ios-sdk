@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "ZNGConversationViewController.h"
+#import "MGSwipeTableCell/MGSwipeTableCell.h"
 @class ZNGService;
 @class ZNGContact;
 @class ZNGInboxDataSet;
@@ -27,7 +28,7 @@
 
 @end
 
-@interface ZNGInboxViewController : UIViewController
+@interface ZNGInboxViewController : UIViewController <MGSwipeTableCellDelegate>
 
 + (nonnull instancetype)inboxViewController;
 

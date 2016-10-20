@@ -48,6 +48,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     UIImage * unconfirmedLateImage;
     
     NSMutableDictionary<NSIndexPath *, NSTimer *> * refreshUnconfirmedTimers;
+    
+    NSMutableSet<NSIndexPath *> * swipingCells;
+    BOOL pendingReloadBlockedBySwipe;
 }
 
 #pragma mark - Life cycle
@@ -132,6 +135,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
+    swipingCells = [[NSMutableSet alloc] init];
     
     refreshControl = [self configuredRefreshControl];
     [self.tableView addSubview:refreshControl];
@@ -242,6 +246,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     ZNGLogDebug(@"Inbox data changed from %@ to %@", _data, data);
     
+    pendingReloadBlockedBySwipe = NO;
+    [swipingCells removeAllObjects];
+    
     _data = data;
     [_data refresh];
     
@@ -303,8 +310,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     // We cannot use the normal KVO to detect this change since it occured in place within the object.
     
     if ([self.data.contacts containsObject:notification.object]) {
-        [self.tableView reloadData];
-        [self retainSelection];
+        [self reloadTableData];
     }
 }
 
@@ -328,7 +334,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         case NSKeyValueChangeInsertion:
             ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
             
-            [self.tableView reloadData];
+            [self reloadTableData];
             break;
             
         case NSKeyValueChangeRemoval:
@@ -337,7 +343,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             if ([paths count] == 1) {
                 [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
             } else {
-                [self.tableView reloadData];
+                [self reloadTableData];
             }
 
             break;
@@ -345,7 +351,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         case NSKeyValueChangeReplacement:
         {
             ZNGLogVerbose(@"Replacing %ld items", (unsigned long)[paths count]);
-            [self.tableView reloadData];
+            [self reloadTableData];
 
             break;
         }
@@ -354,11 +360,50 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         default:
             ZNGLogVerbose(@"Reloading the table to new data with %llu items", (unsigned long long)[self.data.contacts count]);
             // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
-            [self.tableView reloadData];
+            [self reloadTableData];
+    }
+}
+
+/**
+ *  Reloads the table data, recording swipe table cell offsets and current selection for restoration after reload
+ */
+- (void) reloadTableData
+{
+    [self retainSelection];
+    
+    if ([swipingCells count] == 0) {
+        [self.tableView reloadData];
+    } else {
+        ZNGLogDebug(@"Delaying refresh while some swiping is happening.");
+        pendingReloadBlockedBySwipe = YES;
+    }
+}
+
+- (void) swipeTableCellWillBeginSwiping:(MGSwipeTableCell *)cell
+{
+    NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+    
+    ZNGLogVerbose(@"%@ swiping began", indexPath);
+    
+    if (indexPath != nil) {
+        [swipingCells addObject:indexPath];
+    }
+}
+
+- (void) swipeTableCellWillEndSwiping:(MGSwipeTableCell *)cell
+{
+    NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+    
+    ZNGLogVerbose(@"%@ swiping ended", indexPath);
+    
+    if (indexPath != nil) {
+        [swipingCells removeObject:indexPath];
     }
     
-    // Ensure that we retain our selection visually
-    [self retainSelection];
+    if ((pendingReloadBlockedBySwipe) && ([swipingCells count] == 0)) {
+        pendingReloadBlockedBySwipe = NO;
+        [self.tableView reloadData];
+    }
 }
 
 - (void) retainSelection
@@ -474,6 +519,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     ZNGContact * contact = [self contactAtIndexPath:indexPath];
     ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
+    cell.delegate = self;
     
     NSTimer * timer = refreshUnconfirmedTimers[indexPath];
     [timer invalidate];

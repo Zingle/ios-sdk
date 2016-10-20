@@ -116,7 +116,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
              @"customFieldValues" : @"custom_field_values",
              @"labels" : @"labels",
              @"createdAt" : @"created_at",
-             @"updatedAt" : @"udpated_at",
+             @"updatedAt" : @"updated_at",
              @"contactClient" : [NSNull null]
              };
 }

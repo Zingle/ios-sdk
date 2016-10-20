@@ -291,24 +291,23 @@
 - (void) testTwoContactsUpdatedLocallyInQuickSuccession
 {
     NSUInteger pageSize = 50;
-    NSMutableArray<ZNGContact *> * fiftyDudes = [[NSMutableArray alloc] initWithCapacity:50];
+    NSMutableArray<ZNGContact *> * twoDudes = [[NSMutableArray alloc] initWithCapacity:2];
     
     for (int i=0; i < 50; i++) {
-        [fiftyDudes addObject:[self randomContact]];
+        [twoDudes addObject:[self randomContact]];
     }
     
-    // Pick someone in the rough middle of a page
-    NSUInteger dude1Index = 12;
-    NSUInteger dude2Index = 13;
+    NSUInteger dude1Index = 0;
+    NSUInteger dude2Index = 1;
     
     // Ensure both start out unconfirmed
-    ZNGContact * dude1 = fiftyDudes[dude1Index];
+    ZNGContact * dude1 = twoDudes[dude1Index];
     dude1.isConfirmed = NO;
-    ZNGContact * dude2 = fiftyDudes[dude2Index];
+    ZNGContact * dude2 = twoDudes[dude2Index];
     dude2.isConfirmed = NO;
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
-    contactClient.contacts = fiftyDudes;
+    contactClient.contacts = twoDudes;
     ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
     data.pageSize = pageSize;
     [data refresh];
@@ -342,12 +341,22 @@
     dude1.isConfirmed = YES;
     [data contactWasChangedLocally:dude1];
     dude1.updatedAt = [NSDate date];
-    fiftyDudes = [fiftyDudes mutableCopy];
-    [fiftyDudes replaceObjectAtIndex:dude1Index withObject:dude1];
-    contactClient.contacts = fiftyDudes;
+    twoDudes = [twoDudes mutableCopy];
+    [twoDudes replaceObjectAtIndex:dude1Index withObject:dude1];
+    contactClient.contacts = twoDudes;
     
     // Begin refresh
     [data refresh];
+    
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        for (ZNGContact * contact in data.contacts) {
+            if ([contact isEqualToContact:dude1]) {
+                return dude1.isConfirmed;
+            }
+        }
+        
+        return NO;
+    }];
     
     // Locally confirm dude #2
     dude2 = [dude2 copy];
@@ -355,7 +364,6 @@
     [data contactWasChangedLocally:dude2];
     
     // Wait for a KVO update
-    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:nil];
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     // Ensure that dude #2 is not now magically unconfirmed again due to remote data coming in and overwriting out local change

@@ -411,9 +411,9 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     if ((!stillBelongsInThisDataSet) && (wasPresent)) {
         ZNGLogInfo(@"Removing %@ from our current data set due to a local change.", [contact fullName]);
         NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
+        self.count = self.count - 1;
         [mutableContacts removeObject:contact];
         lastLocallyRemovedContact = contact;
-        self.count = self.count - 1;
     } else {
         if (wasPresent) {
             NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];

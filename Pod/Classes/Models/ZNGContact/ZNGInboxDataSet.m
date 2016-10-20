@@ -412,6 +412,12 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         lastLocallyRemovedContact = contact;
         self.count = self.count - 1;
     } else {
+        if (wasPresent) {
+            NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
+            NSUInteger contactIndex = [mutableContacts indexOfObject:contact];
+            [mutableContacts replaceObjectAtIndex:contactIndex withObject:contact];
+        }
+        
         lastLocallyRemovedContact = nil;
     }
 }

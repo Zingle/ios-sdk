@@ -281,5 +281,83 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
+/**
+ *  If two contacts are both set from confirmed to unconfirmed one after another, the second contact may be set back to confirmed
+ *   when data for the first contact is received.  This test reproduces this problem as seen in the wild in October 2016.
+ */
+- (void) testTwoContactsUpdatedLocallyInQuickSuccession
+{
+    NSUInteger pageSize = 50;
+    NSMutableArray<ZNGContact *> * fiftyDudes = [[NSMutableArray alloc] initWithCapacity:50];
+    
+    for (int i=0; i < 50; i++) {
+        [fiftyDudes addObject:[self randomContact]];
+    }
+    
+    // Pick someone in the rough middle of a page
+    NSUInteger dude1Index = 12;
+    NSUInteger dude2Index = 13;
+    
+    // Ensure both start out unconfirmed
+    ZNGContact * dude1 = fiftyDudes[dude1Index];
+    dude1.isConfirmed = NO;
+    ZNGContact * dude2 = fiftyDudes[dude2Index];
+    dude2.isConfirmed = NO;
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
+    contactClient.contacts = fiftyDudes;
+    ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
+    data.pageSize = pageSize;
+    [data refresh];
+    
+    
+    // Both should start out confirmed
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        __block BOOL dude1Unconfirmed = NO;
+        __block BOOL dude2Unconfirmed = NO;
+        
+        [data.contacts enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([contact isEqual:dude1]) {
+                dude1Unconfirmed = !contact.isConfirmed;
+            } else if ([contact isEqual:dude2]) {
+                dude2Unconfirmed = !contact.isConfirmed;
+            }
+            
+            if (dude1Unconfirmed && dude2Unconfirmed) {
+                *stop = YES;
+            }
+        }];
+        
+        return (dude1Unconfirmed && dude2Unconfirmed);
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    // Locally confirm dude #1
+    dude1 = [dude1 copy];
+    dude1.isConfirmed = YES;
+    [data contactWasChangedLocally:dude1];
+    
+    // Begin refresh
+    [data refresh];
+    
+    // Locally confirm dude #2
+    dude2 = [dude2 copy];
+    dude2.isConfirmed = YES;
+    [data contactWasChangedLocally:dude2];
+    
+    // Wait for a KVO update
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:nil];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    // Ensure that dude #2 is not now magically unconfirmed again
+    for (ZNGContact * contact in data.contacts) {
+        if ([contact isEqual:dude2]) {
+            XCTAssertTrue(contact.isConfirmed);
+            break;
+        }
+    }
+}
 
 @end

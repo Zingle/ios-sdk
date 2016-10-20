@@ -55,6 +55,8 @@
     CFRelease(uuidRef);
     contact.contactId = (__bridge NSString *)uuidString;
     
+    contact.createdAt = contact.updatedAt = [NSDate date];
+    
     return contact;
 }
 
@@ -338,6 +340,7 @@
     dude1 = [dude1 copy];
     dude1.isConfirmed = YES;
     [data contactWasChangedLocally:dude1];
+    dude1.updatedAt = [NSDate date];
     
     // Begin refresh
     [data refresh];
@@ -345,6 +348,7 @@
     // Locally confirm dude #2
     dude2 = [dude2 copy];
     dude2.isConfirmed = YES;
+    dude2.updatedAt = [NSDate date];
     [data contactWasChangedLocally:dude2];
     
     // Wait for a KVO update

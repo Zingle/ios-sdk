@@ -372,8 +372,15 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
                 [oldPage enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
                     ZNGContact * newContact = incomingContacts[idx];
                     if ([newContact requiresVisualRefeshSince:contact]) {
-                        ZNGLogVerbose(@"Refreshing contact at position %lu", (unsigned long)idx);
-                        [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
+                        
+                        NSTimeInterval timeSinceOurOldData = [newContact.updatedAt timeIntervalSinceDate:contact.updatedAt];
+                        
+                        if (timeSinceOurOldData > 0.0) {
+                            ZNGLogVerbose(@"Refreshing contact at position %lu", (unsigned long)idx);
+                            [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
+                        } else {
+                            ZNGLogDebug(@"Failing to replace %@ since the updated at timestamp has not changed.", [contact fullName]);
+                        }
                     }
                 }];
             }

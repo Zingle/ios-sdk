@@ -48,8 +48,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     UIImage * unconfirmedLateImage;
     
     NSMutableDictionary<NSIndexPath *, NSTimer *> * refreshUnconfirmedTimers;
+    NSTimer * cancelSwipesTimer;
     
-    NSMutableSet<NSIndexPath *> * swipingCells;
+    BOOL swipeActive;
     BOOL pendingReloadBlockedBySwipe;
 }
 
@@ -135,7 +136,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
-    swipingCells = [[NSMutableSet alloc] init];
     
     refreshControl = [self configuredRefreshControl];
     [self.tableView addSubview:refreshControl];
@@ -205,6 +205,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void) viewDidDisappear:(BOOL)animated
 {
     [self stopRefreshTimer];
+    [self cancelCancelSwipesTimer];
     [super viewDidDisappear:animated];
 }
 
@@ -246,8 +247,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     ZNGLogDebug(@"Inbox data changed from %@ to %@", _data, data);
     
+    ZNGLogVerbose(@"Setting pendingReloadBlockedBySwipe and swipeActive to NO due to data change.");
     pendingReloadBlockedBySwipe = NO;
-    [swipingCells removeAllObjects];
+    swipeActive = NO;
     
     _data = data;
     [_data refresh];
@@ -340,7 +342,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         case NSKeyValueChangeRemoval:
             ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
             
-            if ([paths count] == 1) {
+            if (([paths count] == 1) && (!pendingReloadBlockedBySwipe)) {
                 [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
             } else {
                 [self reloadTableData];
@@ -371,10 +373,11 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     [self retainSelection];
     
-    if ([swipingCells count] == 0) {
+    if (!swipeActive) {
         [self.tableView reloadData];
     } else {
         ZNGLogDebug(@"Delaying refresh while some swiping is happening.");
+        ZNGLogVerbose(@"Setting pendingReloadBlockedBySwipe to YES due to active swipe during a reload");
         pendingReloadBlockedBySwipe = YES;
     }
 }
@@ -382,25 +385,59 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void) swipeTableCellWillBeginSwiping:(MGSwipeTableCell *)cell
 {
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
+    ZNGLogVerbose(@"%@ swiping began (setting swipeActive to YES)", indexPath);
     
-    ZNGLogVerbose(@"%@ swiping began", indexPath);
+    [self resetCancelSwipesTimer];
     
-    if (indexPath != nil) {
-        [swipingCells addObject:indexPath];
-    }
+    swipeActive = YES;
 }
 
 - (void) swipeTableCellWillEndSwiping:(MGSwipeTableCell *)cell
 {
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
     
-    ZNGLogVerbose(@"%@ swiping ended", indexPath);
+    ZNGLogVerbose(@"%@ swiping ended (setting swipeActive to NO)", indexPath);
+    swipeActive = NO;
     
-    if (indexPath != nil) {
-        [swipingCells removeObject:indexPath];
+    if (pendingReloadBlockedBySwipe) {
+        ZNGLogVerbose(@"Clearing pendingReloadBlockedBySwipe to NO as we finally refresh the table after swipe-induced delay");
+        pendingReloadBlockedBySwipe = NO;
+        [self.tableView reloadData];
+    }
+}
+
+- (BOOL) swipeTableCell:(MGSwipeTableCell *)cell canSwipe:(MGSwipeDirection)direction fromPoint:(CGPoint)point
+{
+    // Prevent multiple rapid fire edits
+    return (!swipeActive && !pendingReloadBlockedBySwipe);
+}
+
+- (void) cancelCancelSwipesTimer
+{
+    [cancelSwipesTimer invalidate];
+    cancelSwipesTimer = nil;
+}
+
+- (void) resetCancelSwipesTimer
+{
+    // If the cell has had a swipe active for 10 seconds, cancel it.
+    [self cancelCancelSwipesTimer];
+    cancelSwipesTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(collapseAllSwipeGestures) userInfo:nil repeats:NO];
+}
+
+- (void) collapseAllSwipeGestures
+{
+    [self cancelCancelSwipesTimer];
+    
+    for (MGSwipeTableCell * cell in [self.tableView visibleCells]) {
+        [cell hideSwipeAnimated:YES];
     }
     
-    if ((pendingReloadBlockedBySwipe) && ([swipingCells count] == 0)) {
+    ZNGLogVerbose(@"Clearing swipeActive flag to NO while collapsing all swipe gestures");
+    swipeActive = NO;
+    
+    if (pendingReloadBlockedBySwipe) {
+        ZNGLogVerbose(@"... also clearing pendingReloadBlockedBySwipe to NO as we refresh while canceling all swipe gestures");
         pendingReloadBlockedBySwipe = NO;
         [self.tableView reloadData];
     }
@@ -604,12 +641,15 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     settings.fillOnTrigger = changeWillCauseRemoval;
     settings.threshold = 2.0;
     
+    __weak ZNGInboxViewController * weakSelf = self;
+    
     if (contact.isConfirmed) {
         confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [self.data contactWasChangedLocally:contactAfterChange];
+            [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact unconfirm];
             [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:contact fromUIType:@"swipe"];
+            [weakSelf clearSwipeActiveFlag];
             
             return !changeWillCauseRemoval;
         }];
@@ -619,6 +659,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             
             [contact confirm];
             [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:contact fromUIType:@"swipe"];
+            [weakSelf clearSwipeActiveFlag];
 
             return !changeWillCauseRemoval;
         }];
@@ -641,21 +682,25 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     settings.fillOnTrigger = changeWillCauseRemoval;
     settings.threshold = 2.0;
     
+    __weak ZNGInboxViewController * weakSelf = self;
+    
     if (contact.isClosed) {
         closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [self.data contactWasChangedLocally:contactAfterChange];
+            [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact reopen];
             [[ZNGAnalytics sharedAnalytics] trackOpenedContact:contact fromUIType:@"swipe"];
+            [weakSelf clearSwipeActiveFlag];
 
             return !changeWillCauseRemoval;
         }];
     } else {
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [self.data contactWasChangedLocally:contactAfterChange];
+            [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact close];
             [[ZNGAnalytics sharedAnalytics] trackClosedContact:contact fromUIType:@"swipe"];
+            [weakSelf clearSwipeActiveFlag];
             
             return !changeWillCauseRemoval;
         }];
@@ -663,6 +708,14 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     cell.rightButtons = @[closeButton];
     cell.rightExpansion = settings;
+}
+
+/**
+ *  Used so the button actions above can clear the flag without requiring a strong reference
+ */
+- (void) clearSwipeActiveFlag
+{
+    swipeActive = NO;
 }
 
 #pragma mark - UITableViewDelegate

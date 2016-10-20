@@ -12,6 +12,11 @@
 
 @implementation ZNGMockContactClient
 
+- (id) init
+{
+    return [super init];
+}
+
 - (void)contactWithId:(NSString*)contactId
               success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure

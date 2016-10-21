@@ -86,6 +86,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 
 - (void) logout
 {
+    [_conversationCache removeAllObjects];
     [self _unregisterForAllPushNotifications];
 }
 

@@ -26,11 +26,17 @@ static NSString * const ZNGAgentValue = @"iOS_SDK";
 static NSString * const ZNGClientIDField = @"x-zingle-client-id";
 static NSString * const ZNGClientVersionField = @"x-zingle-client-version";
 
+static NSString * const DeviceTokenUpdatedNotification = @"DeviceTokenUpdatedNotification";
+
 static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZingleSession
 {
     BOOL isDebugging;
+    
+    // If we try to register for push notifications but do not have a device token, the relevant service IDs will be saved here.
+    // If our device token is then set later, we will register for these services.
+    NSArray<NSString *> * pushNotificationQueuedServiceIds;
 }
 
 #pragma mark - Initializers
@@ -79,6 +85,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         self.userAuthorizationClient = [[ZNGUserAuthorizationClient alloc] initWithSession:self];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDeviceTokenRegistered:) name:DeviceTokenUpdatedNotification object:nil];
     }
     
     return self;
@@ -87,6 +94,11 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) logout
+{
+    [self _unregisterForAllPushNotifications];
 }
 
 - (NSString *) urlOverride
@@ -115,11 +127,22 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 {
     [[NSUserDefaults standardUserDefaults] setValue:pushNotificationDeviceToken forKey:PushNotificationDeviceTokenUserDefaultsKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
+    
+    if ([pushNotificationDeviceToken length] > 0) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:DeviceTokenUpdatedNotification object:pushNotificationDeviceToken];
+    }
 }
 
 - (void) setPushNotificationDeviceToken:(NSData *)pushNotificationDeviceToken
 {
     [[self class] setPushNotificationDeviceToken:pushNotificationDeviceToken];
+}
+
+- (void) notifyDeviceTokenRegistered:(NSNotification *)notification
+{
+    if ([pushNotificationQueuedServiceIds count] > 0) {
+        [self _registerForPushNotificationsForServiceIds:pushNotificationQueuedServiceIds removePreviousSubscriptions:YES];
+    }
 }
 
 - (NSData *) pushNotificationDeviceToken
@@ -150,9 +173,12 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     NSData * tokenData = [self pushNotificationDeviceToken];
     
     if (tokenData == nil) {
+        pushNotificationQueuedServiceIds = serviceIds;
         ZNGLogDebug(@"Not registering for push notifications because no device token has been set.");
         return;
     }
+    
+    pushNotificationQueuedServiceIds = nil;
     
     if ([serviceIds count] == 0) {
         ZNGLogInfo(@"No service IDs provided to register for push notifications method.  Ignoring.");
@@ -183,6 +209,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 - (void) _unregisterForAllPushNotifications
 {
+    pushNotificationQueuedServiceIds = nil;
     NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
 
     if ([tokenString length] == 0) {

@@ -89,11 +89,6 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_UNAVAILABLE;
 
-/**
- *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.
- */
-- (void) logout;
-
 #pragma mark - Messaging methods
 
 /**

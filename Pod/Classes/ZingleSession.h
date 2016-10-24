@@ -83,7 +83,7 @@
 /**
  *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.
  */
-- (void) logout;
+- (void) logout NS_REQUIRES_SUPER;
 
 /**
  *  Static setter for the push notification device token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.

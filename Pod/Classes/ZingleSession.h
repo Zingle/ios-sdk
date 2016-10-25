@@ -86,6 +86,11 @@
 - (void) logout NS_REQUIRES_SUPER;
 
 /**
+ *  Reset the password associated with the provided email address.
+ */
++ (void) resetPasswordForEmail:(nonnull NSString *)email completion:(void (^_Nullable)(BOOL success))completion;
+
+/**
  *  Static setter for the push notification device token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.
  */
 + (void) setPushNotificationDeviceToken:(nonnull NSData *)token;

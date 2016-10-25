@@ -52,30 +52,11 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         _key = [key copy];
         _errorHandler = [errorHandler copy];
         
-        NSString * defaultURL;
-#ifdef DEBUG
-        defaultURL = DebugBaseURL;
-#else
-        defaultURL = LiveBaseURL;
-#endif
-        
-        NSString * urlString = [self urlOverride] ?: defaultURL;
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
-        NSURL * url = [NSURL URLWithString:urlString];
-        
-        [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
-        
-        _sessionManager = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
-        _sessionManager.responseSerializer = [AFJSONResponseSerializer serializer];
-        _sessionManager.requestSerializer = [AFJSONRequestSerializer serializer];
+        _sessionManager = [[self class] anonymousSessionManager];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
-        [_sessionManager.requestSerializer setValue:ZNGAgentValue forHTTPHeaderField:ZNGAgentHeaderField];
-        [_sessionManager.requestSerializer setValue:[[NSBundle mainBundle] bundleIdentifier] forHTTPHeaderField:ZNGClientIDField];
-        
-        NSString * bundleVersion = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-        [_sessionManager.requestSerializer setValue:bundleVersion forHTTPHeaderField:ZNGClientVersionField];
         
         self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
         self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
@@ -101,7 +82,76 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [self _unregisterForAllPushNotifications];
 }
 
-- (NSString *) urlOverride
+/**
+ *  Returns a session manager with all appropriate meta data.  Can be used for a normal login session or for an anonymous request such as a password reset.
+ */
++ (AFHTTPSessionManager *) anonymousSessionManager
+{
+    NSString * defaultURL;
+#ifdef DEBUG
+    defaultURL = DebugBaseURL;
+#else
+    defaultURL = LiveBaseURL;
+#endif
+    
+    NSString * urlString = [self urlOverride] ?: defaultURL;
+    NSURL * url = [NSURL URLWithString:urlString];
+    [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
+
+    AFHTTPSessionManager * session = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
+    session.responseSerializer = [AFJSONResponseSerializer serializer];
+    session.requestSerializer = [AFJSONRequestSerializer serializer];
+    [session.requestSerializer setValue:ZNGAgentValue forHTTPHeaderField:ZNGAgentHeaderField];
+    [session.requestSerializer setValue:[[NSBundle mainBundle] bundleIdentifier] forHTTPHeaderField:ZNGClientIDField];
+    NSString * bundleVersion = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    [session.requestSerializer setValue:bundleVersion forHTTPHeaderField:ZNGClientVersionField];
+
+    return session;
+}
+
++ (void) resetPasswordForEmail:(NSString *)email completion:(void (^_Nullable)(BOOL success))completion
+{
+    NSString * emailMinusWhitespace = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([emailMinusWhitespace length]  == 0) {
+        ZNGLogError(@"Reset password called with a blank email address");
+        completion(NO);
+        return;
+    }
+    
+    AFHTTPSessionManager * session = [self anonymousSessionManager];
+    NSString * path = @"reset-password";
+    NSDictionary * parameters = @{ @"email" : emailMinusWhitespace };
+    
+    [session POST:path parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+        NSDictionary* statusDict = responseObject[@"status"];
+        ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:nil];
+        
+        if (status.statusCode != 200) {
+            ZNGLogWarn(@"Server returned %llu when attempting to reset password.", (unsigned long long)status.statusCode);
+            
+            if (completion != nil) {
+                completion(NO);
+            }
+            return;
+        }
+        
+        ZNGLogInfo(@"Reset password succeeded.");
+        
+        if (completion != nil) {
+            completion(YES);
+        }
+        
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        ZNGLogWarn(@"Reset password request failed: %@", [error localizedDescription]);
+        
+        if (completion != nil) {
+            completion(NO);
+        }
+    }];
+}
+
++ (NSString *) urlOverride
 {
     NSString * prefix = [[NSUserDefaults standardUserDefaults] valueForKey:@"zingle_server_prefix"];
     

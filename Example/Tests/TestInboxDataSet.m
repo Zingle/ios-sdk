@@ -28,6 +28,44 @@
     [super tearDown];
 }
 
+/**
+ *  Returns an array of one hundred ZNGContacts.
+ *  Contacts at indexes divisible by 2 will be confirmed.
+ *  Contacts at indexes divisible by 3 will be closed.
+ */
+- (NSArray<ZNGContact *> *) oneHundredDudes
+{
+    NSUInteger numDudes = 100;
+    NSMutableArray<ZNGContact *> * dudes = [[NSMutableArray alloc] initWithCapacity:numDudes];
+    
+    ZNGContactFieldValue * firstName = [[ZNGContactFieldValue alloc] init];
+    ZNGContactField * firstNameField = [[ZNGContactField alloc] init];
+    firstNameField.displayName = @"First Name";
+    firstName.customField = firstNameField;
+    firstName.value = @"Contact";
+    
+    for (NSUInteger i=0; i < numDudes; i++) {
+        ZNGContact * dude = [[ZNGContact alloc] init];
+        dude.isConfirmed = ((i % 2) == 0);
+        dude.isClosed = ((i % 3) == 0);
+        
+        ZNGContactFieldValue * lastName = [[ZNGContactFieldValue alloc] init];
+        ZNGContactField * lastNameField = [[ZNGContactField alloc] init];
+        lastNameField.displayName = @"Last Name";
+        lastName.customField = lastNameField;
+        lastName.value = [NSString stringWithFormat:@"No. %llu", (unsigned long long)i];
+        
+        dude.customFieldValues = @[[firstName copy], lastName];
+        
+        // Fake UUID of the form 00000000-0000-0000-0000-000000000000 with the contact's index in hex.
+        dude.contactId = [NSString stringWithFormat:@"00000000-0000-0000-0000-%012llx", (unsigned long long)i];
+        
+        [dudes addObject:dude];
+    }
+    
+    return dudes;
+}
+
 - (ZNGContact *)randomContact
 {
     ZNGContact * contact = [[ZNGContact alloc] init];

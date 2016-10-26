@@ -48,6 +48,13 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  */
 @property (nonatomic) NSUInteger pageSize;
 
+/**
+ *  Whether this conversation should make network requests to update its data when a push notification is received.
+ *
+ *  Defaults to YES.
+ */
+@property (nonatomic) BOOL automaticallyRefreshesOnPushNotification;
+
 @property (nonatomic, readonly) ZNGMessageClient * messageClient;
 @property (nonatomic, readonly) ZNGEventClient * eventClient;
 

@@ -55,6 +55,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         _messageClient = messageClient;
         _eventClient = eventClient;
         _pageSize = kDefaultPageSize;
+        _automaticallyRefreshesOnPushNotification = YES;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
@@ -288,7 +289,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    [self loadRecentEventsErasingOlderData:NO];
+    if (self.automaticallyRefreshesOnPushNotification) {
+        [self loadRecentEventsErasingOlderData:NO];
+    }
 }
 
 - (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events

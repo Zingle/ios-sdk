@@ -66,40 +66,8 @@
     return dudes;
 }
 
-- (ZNGContact *)randomContact
-{
-    ZNGContact * contact = [[ZNGContact alloc] init];
-    u_int32_t number = arc4random() % 10000;
-    
-    ZNGContactFieldValue * firstName = [[ZNGContactFieldValue alloc] init];
-    ZNGContactField * firstNameField = [[ZNGContactField alloc] init];
-    firstNameField.displayName = @"First Name";
-    firstName.customField = firstNameField;
-    firstName.value = @"Contact";
-    
-    ZNGContactFieldValue * lastName = [[ZNGContactFieldValue alloc] init];
-    ZNGContactField * lastNameField = [[ZNGContactField alloc] init];
-    lastNameField.displayName = @"Last Name";
-    lastName.customField = lastNameField;
-    lastName.value = [NSString stringWithFormat:@"No. %u", number];
-    
-    contact.customFieldValues = @[firstName, lastName];
-    
-    contact.isClosed = arc4random() % 2;
-    contact.isConfirmed = arc4random() % 2;
-    
-    CFUUIDRef uuidRef = CFUUIDCreate(NULL);
-    CFStringRef uuidString = CFUUIDCreateString(NULL, uuidRef);
-    CFRelease(uuidRef);
-    contact.contactId = (__bridge NSString *)uuidString;
-    
-    contact.createdAt = contact.updatedAt = [NSDate date];
-    
-    return contact;
-}
-
 - (void) testSingleContactRetrieval {
-    ZNGContact * dude = [self randomContact];
+    ZNGContact * dude = [[self oneHundredDudes] firstObject];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = @[dude];
     ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
@@ -113,11 +81,7 @@
 }
 
 - (void) testPagination {
-    NSMutableArray<ZNGContact *> * hundredsOfDudes = [[NSMutableArray alloc] initWithCapacity:100];
-    
-    for (int i=0; i < 100; i++) {
-        [hundredsOfDudes addObject:[self randomContact]];
-    }
+    NSArray<ZNGContact *> * hundredsOfDudes = [self oneHundredDudes];
     
     NSUInteger pageSize = 10;
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
@@ -155,21 +119,17 @@
 - (void) testRemoteConfirmedStatusChangeWithinAllData
 {
     NSUInteger pageSize = 25;
-    NSMutableArray<ZNGContact *> * fiftyDudes = [[NSMutableArray alloc] initWithCapacity:50];
-    
-    for (int i=0; i < 50; i++) {
-        [fiftyDudes addObject:[self randomContact]];
-    }
+    NSMutableArray<ZNGContact *> * oneHundredDudes = [[self oneHundredDudes] mutableCopy];
     
     // Pick someone in the rough middle of a page
     NSUInteger dudeIndex = 12;
     
     // Ensure he starts out unconfirmed
-    ZNGContact * dude = fiftyDudes[dudeIndex];
+    ZNGContact * dude = oneHundredDudes[dudeIndex];
     dude.isConfirmed = NO;
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
-    contactClient.contacts = fiftyDudes;
+    contactClient.contacts = oneHundredDudes;
     ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
     data.pageSize = pageSize;
     [data refresh];
@@ -193,9 +153,9 @@
     dude = [dude copy];
     dude.isConfirmed = YES;
     dude.updatedAt = [NSDate date];
-    fiftyDudes = [fiftyDudes mutableCopy];
-    [fiftyDudes replaceObjectAtIndex:dudeIndex withObject:dude];
-    contactClient.contacts = fiftyDudes;
+    oneHundredDudes = [oneHundredDudes mutableCopy];
+    [oneHundredDudes replaceObjectAtIndex:dudeIndex withObject:dude];
+    contactClient.contacts = oneHundredDudes;
     
     // Ensure he is now confirmed
     [data refresh];
@@ -216,21 +176,17 @@
 - (void) testContactDisappearedFromDataSet
 {
     NSUInteger pageSize = 50;
-    NSMutableArray<ZNGContact *> * fiftyDudes = [[NSMutableArray alloc] initWithCapacity:50];
-    
-    for (int i=0; i < 50; i++) {
-        [fiftyDudes addObject:[self randomContact]];
-    }
+    NSMutableArray<ZNGContact *> * oneHundredDudes = [[self oneHundredDudes] mutableCopy];
     
     // Pick someone in the rough middle of a page
-    NSUInteger dudeIndex = 12;
+    NSUInteger dudeIndex = 11;
     
     // Ensure he starts out unconfirmed
-    ZNGContact * dude = fiftyDudes[dudeIndex];
+    ZNGContact * dude = oneHundredDudes[dudeIndex];
     dude.isConfirmed = NO;
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
-    contactClient.contacts = fiftyDudes;
+    contactClient.contacts = oneHundredDudes;
     ZNGInboxDataUnconfirmed * data = [[ZNGInboxDataUnconfirmed alloc] initWithContactClient:contactClient];
     data.pageSize = pageSize;
     [data refresh];
@@ -247,9 +203,9 @@
     // Confirm him
     dude = [dude copy];
     dude.isConfirmed = YES;
-    fiftyDudes = [fiftyDudes mutableCopy];
-    [fiftyDudes replaceObjectAtIndex:dudeIndex withObject:dude];
-    contactClient.contacts = fiftyDudes;
+    oneHundredDudes = [oneHundredDudes mutableCopy];
+    [oneHundredDudes replaceObjectAtIndex:dudeIndex withObject:dude];
+    contactClient.contacts = oneHundredDudes;
     
     // Refresh
     [data refresh];
@@ -270,21 +226,18 @@
 - (void) testSingleContactRemovedFromDataLocally
 {
     NSUInteger pageSize = 50;
-    NSMutableArray<ZNGContact *> * fiftyDudes = [[NSMutableArray alloc] initWithCapacity:50];
-    
-    for (int i=0; i < 50; i++) {
-        [fiftyDudes addObject:[self randomContact]];
-    }
+    NSMutableArray<ZNGContact *> * oneHundredDudes = [[self oneHundredDudes] mutableCopy];
+
     
     // Pick someone in the rough middle of a page
-    NSUInteger dudeIndex = 12;
+    NSUInteger dudeIndex = 11;
     
     // Ensure he starts out unconfirmed
-    ZNGContact * dude = fiftyDudes[dudeIndex];
+    ZNGContact * dude = oneHundredDudes[dudeIndex];
     dude.isConfirmed = NO;
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
-    contactClient.contacts = fiftyDudes;
+    contactClient.contacts = oneHundredDudes;
     ZNGInboxDataUnconfirmed * data = [[ZNGInboxDataUnconfirmed alloc] initWithContactClient:contactClient];
     data.pageSize = pageSize;
     [data refresh];
@@ -308,9 +261,9 @@
     // Now update the "remote data" and ensure that he did not magically reappear
     dude = [dude copy];
     dude.isConfirmed = YES;
-    fiftyDudes = [fiftyDudes mutableCopy];
-    [fiftyDudes replaceObjectAtIndex:dudeIndex withObject:dude];
-    contactClient.contacts = fiftyDudes;
+    oneHundredDudes = [oneHundredDudes mutableCopy];
+    [oneHundredDudes replaceObjectAtIndex:dudeIndex withObject:dude];
+    contactClient.contacts = oneHundredDudes;
     [data refresh];
     
     XCTAssertTrue(data.loading);
@@ -329,11 +282,7 @@
 - (void) testTwoContactsUpdatedLocallyInQuickSuccession
 {
     NSUInteger pageSize = 50;
-    NSMutableArray<ZNGContact *> * twoDudes = [[NSMutableArray alloc] initWithCapacity:2];
-    
-    for (int i=0; i < 50; i++) {
-        [twoDudes addObject:[self randomContact]];
-    }
+    NSMutableArray<ZNGContact *> * twoDudes = [[[self oneHundredDudes] subarrayWithRange:NSMakeRange(0, 2)] mutableCopy];
     
     NSUInteger dude1Index = 0;
     NSUInteger dude2Index = 1;

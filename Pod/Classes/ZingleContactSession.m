@@ -64,7 +64,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             self.availableContactServices = contactServices;
             
             if (self.contactServiceChooser != nil) {
-                self.contactServiceChooser(contactServices);
+                self.contactService = self.contactServiceChooser(contactServices);
             }
         } failure:^(ZNGError *error) {
             ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", channelValue, channelTypeId);

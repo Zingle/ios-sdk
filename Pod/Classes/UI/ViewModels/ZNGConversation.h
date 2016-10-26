@@ -141,6 +141,8 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  */
 - (NSArray<NSString *> *)eventTypes;
 
+- (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification;
+
 - (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events;
 - (ZNGNewMessage *)freshMessage;
 - (ZNGParticipant *)sender;

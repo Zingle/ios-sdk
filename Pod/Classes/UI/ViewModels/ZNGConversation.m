@@ -287,9 +287,14 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     return @[@"message"];
 }
 
+- (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification
+{
+    return YES;
+}
+
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    if (self.automaticallyRefreshesOnPushNotification) {
+    if ((self.automaticallyRefreshesOnPushNotification) && ([self pushNotificationRelevantToThisConversation:notification])) {
         [self loadRecentEventsErasingOlderData:NO];
     }
 }

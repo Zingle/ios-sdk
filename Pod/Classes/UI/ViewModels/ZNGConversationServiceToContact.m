@@ -128,12 +128,16 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return [_contact fullName];
 }
 
-- (void) notifyPushNotificationReceivedDawg:(NSNotification *)notification
+- (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification
 {
     NSString * notificationContactId = notification.userInfo[@"feedId"];
     BOOL thisPushRegardingSomeOtherContact = (([notificationContactId length] > 0) && (![notificationContactId isEqualToString:self.contact.contactId]));
-    
-    if (!thisPushRegardingSomeOtherContact) {
+    return !thisPushRegardingSomeOtherContact;
+}
+
+- (void) notifyPushNotificationReceivedDawg:(NSNotification *)notification
+{
+    if ((self.automaticallyRefreshesOnPushNotification) && ([self pushNotificationRelevantToThisConversation:notification])) {
         [self.contact updateRemotely];
     }
 }

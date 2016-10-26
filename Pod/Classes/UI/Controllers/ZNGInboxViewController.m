@@ -22,7 +22,7 @@
 #import "ZNGAnalytics.h"
 #import "ZNGLabelGridView.h"
 
-static int const zngLogLevel = ZNGLogLevelVerbose;
+static int const zngLogLevel = ZNGLogLevelInfo;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadingInitialData";

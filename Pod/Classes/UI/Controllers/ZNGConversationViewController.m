@@ -177,6 +177,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self markAllVisibleMessagesAsRead];
     checkedInitialVisibleCells = YES;
     
+    self.conversation.automaticallyRefreshesOnPushNotification = YES;
+    
     [self checkForMoreRemoteMessagesAvailable];
 }
 
@@ -185,6 +187,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     checkedInitialVisibleCells = NO;
     
     [self.inputToolbar.contentView.textView resignFirstResponder];
+    self.conversation.automaticallyRefreshesOnPushNotification = NO;
     
     self.isVisible = NO;
     [super viewWillDisappear:animated];

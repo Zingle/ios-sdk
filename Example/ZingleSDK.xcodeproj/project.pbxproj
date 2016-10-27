@@ -23,6 +23,9 @@
 		9622B34A1DC2913800957C5F /* luisTestAccount.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3451DC2913800957C5F /* luisTestAccount.json */; };
 		9622B34B1DC2913800957C5F /* luisTestService-contactService.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3461DC2913800957C5F /* luisTestService-contactService.json */; };
 		9622B34C1DC2913800957C5F /* luisTestService.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3471DC2913800957C5F /* luisTestService.json */; };
+		9622B3511DC2B31E00957C5F /* luisIOSTest.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3501DC2B31E00957C5F /* luisIOSTest.json */; };
+		9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3561DC2BA2600957C5F /* ZNGMockAccountClient.m */; };
+		9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */; };
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
@@ -74,6 +77,11 @@
 		9622B3451DC2913800957C5F /* luisTestAccount.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = luisTestAccount.json; path = data/luisTestAccount.json; sourceTree = "<group>"; };
 		9622B3461DC2913800957C5F /* luisTestService-contactService.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = "luisTestService-contactService.json"; path = "data/luisTestService-contactService.json"; sourceTree = "<group>"; };
 		9622B3471DC2913800957C5F /* luisTestService.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = luisTestService.json; path = data/luisTestService.json; sourceTree = "<group>"; };
+		9622B3501DC2B31E00957C5F /* luisIOSTest.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = luisIOSTest.json; path = data/luisIOSTest.json; sourceTree = "<group>"; };
+		9622B3551DC2BA2600957C5F /* ZNGMockAccountClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockAccountClient.h; path = mocks/ZNGMockAccountClient.h; sourceTree = "<group>"; };
+		9622B3561DC2BA2600957C5F /* ZNGMockAccountClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockAccountClient.m; path = mocks/ZNGMockAccountClient.m; sourceTree = "<group>"; };
+		9622B3571DC2BA2600957C5F /* ZNGMockServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockServiceClient.h; path = mocks/ZNGMockServiceClient.h; sourceTree = "<group>"; };
+		9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockServiceClient.m; path = mocks/ZNGMockServiceClient.m; sourceTree = "<group>"; };
 		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
@@ -204,6 +212,7 @@
 				9622B3381DC284A800957C5F /* devEnterpriseService.json */,
 				9622B3431DC2913800957C5F /* devEnterpriseService-contactService.json */,
 				9622B3441DC2913800957C5F /* devTestAccount.json */,
+				9622B3501DC2B31E00957C5F /* luisIOSTest.json */,
 				9622B3451DC2913800957C5F /* luisTestAccount.json */,
 				9622B3461DC2913800957C5F /* luisTestService-contactService.json */,
 				9622B3471DC2913800957C5F /* luisTestService.json */,
@@ -214,10 +223,14 @@
 		9622B33C1DC284F700957C5F /* Mock Clients */ = {
 			isa = PBXGroup;
 			children = (
+				9622B3551DC2BA2600957C5F /* ZNGMockAccountClient.h */,
+				9622B3561DC2BA2600957C5F /* ZNGMockAccountClient.m */,
 				9622B33D1DC2852200957C5F /* ZNGMockContactClient.h */,
 				9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */,
 				9622B33F1DC2852200957C5F /* ZNGMockContactServiceClient.h */,
 				9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */,
+				9622B3571DC2BA2600957C5F /* ZNGMockServiceClient.h */,
+				9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */,
 			);
 			name = "Mock Clients";
 			sourceTree = "<group>";
@@ -342,6 +355,7 @@
 			files = (
 				9622B33A1DC284A800957C5F /* devEnterpriseService.json in Resources */,
 				9622B34A1DC2913800957C5F /* luisTestAccount.json in Resources */,
+				9622B3511DC2B31E00957C5F /* luisIOSTest.json in Resources */,
 				9622B3481DC2913800957C5F /* devEnterpriseService-contactService.json in Resources */,
 				9622B3491DC2913800957C5F /* devTestAccount.json in Resources */,
 				9622B34B1DC2913800957C5F /* luisTestService-contactService.json in Resources */,
@@ -461,8 +475,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
+				9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */,
 				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,
 				9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */,
+				9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */,
 				969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

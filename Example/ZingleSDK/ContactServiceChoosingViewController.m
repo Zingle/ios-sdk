@@ -18,7 +18,7 @@ static NSString *kZNGToken = @"[YOUR ZINGLE TOKEN]";
 static NSString *kZNGKey = @"[YOUR ZINGLE KEY]";
 
 // User-Defined Channel if using Contact User Authorization
-static NSString *kZNGChannelTypeId = @"b5bcee02-ee8c-46a9-abd9-d5e3a28519ef";
+static NSString *kZNGChannelTypeId = @"3e89f316-03ca-412c-84e4-6830feffb28f";
 static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 @implementation ContactServiceChoosingViewController

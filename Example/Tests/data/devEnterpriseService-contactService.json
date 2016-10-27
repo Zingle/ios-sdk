@@ -1,0 +1,28 @@
+{
+  "last_message": {
+    "body": "Amazing!",
+    "id": "000000000-0000-0000-0000-abcde0123456",
+    "recipient_type": null,
+    "communication_direction": null,
+    "read_at": 0,
+    "template_id": null,
+    "translated_body_language_code": null,
+    "created_at": 1477596138,
+    "senderDisplayName": null,
+    "translated_body": null,
+    "body_language_code": null,
+    "display_name": null,
+    "recipient": null,
+    "triggered_by_user": null,
+    "attachments": null,
+    "sender_type": null,
+    "sender": null,
+    "triggered_by_user_id": null
+  },
+  "service_display_name": "Some Other Contact Service",
+  "account_display_name": "Dev Test Account",
+  "service_id": "21111111-1111-1111-1111-111111111111",
+  "unread_message_count": 0,
+  "contact_id": "e444c8b4-990b-4b99-a120-a98757222536",
+  "account_id": "11111111-1111-1111-1111-111111111111"
+}

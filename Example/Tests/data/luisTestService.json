@@ -1,0 +1,357 @@
+{
+  "id": "41111111-1111-1111-1111-111111111111",
+  "templates": [
+    {
+      "body": "Welcome {title} {last_name}. If you need anything, simply reply back to this message. It's that simple \"Text it In\"!",
+      "id": "3cabc93f-9486-4471-a6e4-8af080a8d4ed",
+      "subject": null,
+      "display_name": "Default Welcome Message",
+      "type": "welcome",
+      "is_global": false
+    },
+    {
+      "body": "HotSOS Checkin Message",
+      "id": "8d76c031-ff37-45e1-9eba-5a8d85ca5389",
+      "subject": null,
+      "display_name": "HotSOS Checkin",
+      "type": "automated_welcome",
+      "is_global": false
+    },
+    {
+      "body": "HotSOS Checkout Message",
+      "id": "09c8b590-4e4a-4b32-8170-4f4b311cb509",
+      "subject": null,
+      "display_name": "HotSOS Checkout",
+      "type": "automated_welcome",
+      "is_global": false
+    },
+    {
+      "body": "Opera Checkin Message",
+      "id": "95e1f472-0bcf-47cb-a970-af91742e1979",
+      "subject": null,
+      "display_name": "Opera Checkin",
+      "type": "automated_welcome",
+      "is_global": false
+    },
+    {
+      "body": "Opera Checkout Message",
+      "id": "4511a33f-9137-4c5a-8174-6e3567012882",
+      "subject": null,
+      "display_name": "Opera Checkout",
+      "type": "automated_welcome",
+      "is_global": false
+    },
+    {
+      "body": "{first_name}, thank you for your text. We will be with you in {response_time}",
+      "id": "4f9ef04b-350c-4750-9c68-386418a7631f",
+      "subject": null,
+      "display_name": "Thank You",
+      "type": "general",
+      "is_global": false
+    }
+  ],
+  "created_at": 1477424562,
+  "contact_custom_fields": [
+    {
+      "data_type": "single_select_options",
+      "id": "fdcaea9e-d0ff-46d5-ad91-e05a2793d763",
+      "options": [
+        {
+          "value": "ab",
+          "display_name": "ab",
+          "id": "ab",
+          "sort_order": 0
+        },
+        {
+          "value": "ce",
+          "display_name": "ce",
+          "id": "ce",
+          "sort_order": 1
+        },
+        {
+          "value": "ef",
+          "display_name": "ef",
+          "id": "ef",
+          "sort_order": 2
+        }
+      ],
+      "display_name": "dropi",
+      "replacement_variable": "DROPI",
+      "is_global": false
+    },
+    {
+      "data_type": "string",
+      "id": "96b81e1b-9e50-44ef-972a-e253bd73d0f8",
+      "options": [],
+      "display_name": "ext",
+      "replacement_variable": "EXT",
+      "is_global": false
+    },
+    {
+      "data_type": "date",
+      "id": "14202556-3a4c-42de-9e54-86dcacbae417",
+      "options": [],
+      "display_name": "fecha",
+      "replacement_variable": "FECHA",
+      "is_global": false
+    },
+    {
+      "data_type": "number",
+      "id": "3a8e6aee-a675-4a11-9707-687a512ee377",
+      "options": [],
+      "display_name": "no",
+      "replacement_variable": "NO",
+      "is_global": false
+    },
+    {
+      "data_type": "boolean",
+      "id": "e88b8d9d-b0dd-4247-8989-8ae8202fbd68",
+      "options": [],
+      "display_name": "sino",
+      "replacement_variable": "SINO",
+      "is_global": false
+    },
+    {
+      "data_type": "time",
+      "id": "d179ee59-f493-48f2-a63d-7627d1cfdab5",
+      "options": [],
+      "display_name": "tiempoysilencio",
+      "replacement_variable": "TIEMPOYSILENCIO",
+      "is_global": false
+    },
+    {
+      "data_type": "string",
+      "id": "e01a3856-89b1-4db4-bf56-38d79454c921",
+      "options": null,
+      "display_name": "First Name",
+      "replacement_variable": "first_name",
+      "is_global": false
+    },
+    {
+      "data_type": "string",
+      "id": "0df80524-3b27-4fb0-8eeb-c81bd448d294",
+      "options": null,
+      "display_name": "Last Name",
+      "replacement_variable": "last_name",
+      "is_global": false
+    },
+    {
+      "data_type": "string",
+      "id": "84d6a03a-a093-4951-bd12-6551597bbbf4",
+      "options": [
+        {
+          "value": "",
+          "display_name": "",
+          "id": "",
+          "sort_order": "1"
+        },
+        {
+          "value": "Mr.",
+          "display_name": "Mr.",
+          "id": "Mr.",
+          "sort_order": "2"
+        },
+        {
+          "value": "Mrs.",
+          "display_name": "Mrs.",
+          "id": "Mrs.",
+          "sort_order": "3"
+        },
+        {
+          "value": "Ms.",
+          "display_name": "Ms.",
+          "id": "Ms.",
+          "sort_order": "4"
+        },
+        {
+          "value": "Dr",
+          "display_name": "Dr.",
+          "id": "Dr",
+          "sort_order": "5"
+        },
+        {
+          "value": "Prof.",
+          "display_name": "Prof.",
+          "id": "Prof.",
+          "sort_order": "6"
+        },
+        {
+          "value": "Dir.",
+          "display_name": "Dir.",
+          "id": "Dir.",
+          "sort_order": "7"
+        },
+        {
+          "value": "Rev.",
+          "display_name": "Rev.",
+          "id": "Rev.",
+          "sort_order": "8"
+        },
+        {
+          "value": "Capt.",
+          "display_name": "Capt.",
+          "id": "Capt.",
+          "sort_order": "9"
+        }
+      ],
+      "display_name": "Title",
+      "replacement_variable": "TITLE",
+      "is_global": false
+    }
+  ],
+  "channels": [
+    {
+      "block_outbound": false,
+      "channel_type": {
+        "type_class": "PhoneNumber",
+        "allow_communications": true,
+        "id": "0a293ea3-4721-433e-a031-610ebcf43255",
+        "outbound_notification_url": null,
+        "display_name": "Phone Number",
+        "is_global": false,
+        "inbound_notification_url": null
+      },
+      "country": "US",
+      "id": "8ea049f1-bc4d-4341-a1c6-fec677301b30",
+      "formatted_value": "(858) 239-0311",
+      "is_default_for_type": false,
+      "is_default": false,
+      "value": "+18582390311",
+      "display_name": null,
+      "block_inbound": false
+    },
+    {
+      "block_outbound": false,
+      "channel_type": {
+        "type_class": "FacebookChannel",
+        "allow_communications": true,
+        "id": "5dc9a055-4564-410e-bb6d-1e53a1206264",
+        "outbound_notification_url": null,
+        "display_name": "Facebook Messenger",
+        "is_global": false,
+        "inbound_notification_url": null
+      },
+      "country": null,
+      "id": "39997642-aca4-4c14-93b8-c979ea421c84",
+      "formatted_value": "Facebook",
+      "is_default_for_type": false,
+      "is_default": false,
+      "value": "603058289869697",
+      "display_name": null,
+      "block_inbound": false
+    }
+  ],
+  "automations": [
+    {
+      "status": "active",
+      "id": "7007805d-cae2-409e-880c-af4e7c139c22",
+      "display_name": "2515",
+      "type": "Keyword",
+      "is_global": false
+    },
+    {
+      "status": "active",
+      "id": "2d9635b9-7f11-402d-8922-d94cc30c1c39",
+      "display_name": "Default Escalation",
+      "type": "Escalation",
+      "is_global": false
+    },
+    {
+      "status": "active",
+      "id": "7e53a45b-0915-4bdf-8c6f-4d110f1c4148",
+      "display_name": "sino",
+      "type": "Keyword",
+      "is_global": false
+    },
+    {
+      "status": "active",
+      "id": "0c71123c-37cc-4be9-810e-c090914f4417",
+      "display_name": "sinotrigger",
+      "type": "Keyword",
+      "is_global": false
+    },
+    {
+      "status": "active",
+      "id": "686885ff-87ab-4dff-b34b-111c5aa4fb0b",
+      "display_name": "t1",
+      "type": "Phone Call",
+      "is_global": false
+    }
+  ],
+  "contact_labels": [
+    {
+      "id": "d2a3b542-80e1-484f-b5d3-f01ef5ed9b2b",
+      "display_name": "asdasd",
+      "text_color": "#ffffff",
+      "background_color": "#e84527",
+      "is_global": false
+    }
+  ],
+  "display_name": "Luis Test Service",
+  "business_name": "Luis Test Service",
+  "updated_at": 1477597145,
+  "plan": {
+    "id": "c77c7516-c14a-438f-b869-bf05f9e398bd",
+    "setup_price": 0,
+    "code": "enterprise_lite",
+    "is_printer_plan": false,
+    "term_months": 1,
+    "display_name": "Zingle Enterprise Silver",
+    "monthly_or_unit_price": 0
+  },
+  "account": {
+    "id": "11111111-1111-1111-1111-111111111112",
+    "created_at": 1477424556,
+    "current_term_end_date": 0,
+    "term_months": 1,
+    "display_name": "Luis Test Account",
+    "updated_at": 1477596957,
+    "current_term_start_date": 0
+  },
+  "channel_types": [
+    {
+      "type_class": "FacebookChannel",
+      "allow_communications": true,
+      "id": "5dc9a055-4564-410e-bb6d-1e53a1206264",
+      "outbound_notification_url": null,
+      "display_name": "Facebook Messenger",
+      "is_global": false,
+      "inbound_notification_url": null
+    },
+    {
+      "type_class": "PhoneNumber",
+      "allow_communications": true,
+      "id": "0a293ea3-4721-433e-a031-610ebcf43255",
+      "outbound_notification_url": null,
+      "display_name": "Phone Number",
+      "is_global": false,
+      "inbound_notification_url": null
+    },
+    {
+      "type_class": "UserDefinedChannel",
+      "allow_communications": true,
+      "id": "3e89f316-03ca-412c-84e4-6830feffb28f",
+      "outbound_notification_url": null,
+      "display_name": "Chat",
+      "is_global": false,
+      "inbound_notification_url": null
+    },
+    {
+      "type_class": "EmailAddress",
+      "allow_communications": true,
+      "id": "b71f3d91-da94-412b-8ff1-59a882b63024",
+      "outbound_notification_url": null,
+      "display_name": "Email Address",
+      "is_global": false,
+      "inbound_notification_url": null
+    }
+  ],
+  "service_address": {
+    "address": "1",
+    "state": "CA",
+    "country": "US",
+    "city": "1",
+    "postal_code": "92008"
+  },
+  "time_zone": "America/Los_Angeles"
+}

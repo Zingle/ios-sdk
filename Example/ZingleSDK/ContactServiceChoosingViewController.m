@@ -48,6 +48,8 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     } errorHandler:nil];
     
     [session addObserver:self forKeyPath:NSStringFromSelector(@selector(conversation)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
+    
+    [session connect];
 }
 
 - (void) dealloc

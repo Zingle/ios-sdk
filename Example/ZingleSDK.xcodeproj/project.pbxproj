@@ -15,13 +15,14 @@
 		6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* ZNGAppDelegate.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		92E39693E54735C032BC69C0 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */; };
-		960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 960FCBB01D0F6E9C00B7E82C /* Tests.m */; };
+		9622B33A1DC284A800957C5F /* devEnterpriseService.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3381DC284A800957C5F /* devEnterpriseService.json */; };
+		9622B33B1DC284A800957C5F /* joesDiner.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3391DC284A800957C5F /* joesDiner.json */; };
+		9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */; };
+		9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */; };
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
 		969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AC8F31DC1600600D0E5D8 /* TestContactSession.m */; };
-		969AC8F71DC1846800D0E5D8 /* ZNGMockContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AC8F61DC1846800D0E5D8 /* ZNGMockContactServiceClient.m */; };
-		96C5E7E41DB7F1A9005A17AC /* ZNGMockContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */; };
 		96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
 		DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7FF2561C87671800BC720E /* Launch Screen.storyboard */; };
@@ -58,18 +59,19 @@
 		6003F5A8195388D20070C39A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		960FCBAE1D0F6E9C00B7E82C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		960FCBB01D0F6E9C00B7E82C /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		960FCBB21D0F6E9C00B7E82C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9622B3381DC284A800957C5F /* devEnterpriseService.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = devEnterpriseService.json; path = data/devEnterpriseService.json; sourceTree = "<group>"; };
+		9622B3391DC284A800957C5F /* joesDiner.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = joesDiner.json; path = data/joesDiner.json; sourceTree = "<group>"; };
+		9622B33D1DC2852200957C5F /* ZNGMockContactClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockContactClient.h; path = mocks/ZNGMockContactClient.h; sourceTree = "<group>"; };
+		9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockContactClient.m; path = mocks/ZNGMockContactClient.m; sourceTree = "<group>"; };
+		9622B33F1DC2852200957C5F /* ZNGMockContactServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockContactServiceClient.h; path = mocks/ZNGMockContactServiceClient.h; sourceTree = "<group>"; };
+		9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockContactServiceClient.m; path = mocks/ZNGMockContactServiceClient.m; sourceTree = "<group>"; };
 		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
 		9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceTableViewCell.h; sourceTree = "<group>"; };
 		9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceTableViewCell.m; sourceTree = "<group>"; };
 		969AC8F31DC1600600D0E5D8 /* TestContactSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestContactSession.m; sourceTree = "<group>"; };
-		969AC8F51DC1846800D0E5D8 /* ZNGMockContactServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGMockContactServiceClient.h; sourceTree = "<group>"; };
-		969AC8F61DC1846800D0E5D8 /* ZNGMockContactServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMockContactServiceClient.m; sourceTree = "<group>"; };
-		96C5E7E21DB7F1A9005A17AC /* ZNGMockContactClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGMockContactClient.h; sourceTree = "<group>"; };
-		96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMockContactClient.m; sourceTree = "<group>"; };
 		96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestInboxDataSet.m; sourceTree = "<group>"; };
 		AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -179,16 +181,33 @@
 		960FCBAF1D0F6E9C00B7E82C /* Tests */ = {
 			isa = PBXGroup;
 			children = (
-				960FCBB01D0F6E9C00B7E82C /* Tests.m */,
+				9622B33C1DC284F700957C5F /* Mock Clients */,
+				9622B3371DC2848800957C5F /* Data */,
 				960FCBB21D0F6E9C00B7E82C /* Info.plist */,
-				96C5E7E21DB7F1A9005A17AC /* ZNGMockContactClient.h */,
-				96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */,
-				969AC8F51DC1846800D0E5D8 /* ZNGMockContactServiceClient.h */,
-				969AC8F61DC1846800D0E5D8 /* ZNGMockContactServiceClient.m */,
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
 				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
 			);
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		9622B3371DC2848800957C5F /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				9622B3381DC284A800957C5F /* devEnterpriseService.json */,
+				9622B3391DC284A800957C5F /* joesDiner.json */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
+		9622B33C1DC284F700957C5F /* Mock Clients */ = {
+			isa = PBXGroup;
+			children = (
+				9622B33D1DC2852200957C5F /* ZNGMockContactClient.h */,
+				9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */,
+				9622B33F1DC2852200957C5F /* ZNGMockContactServiceClient.h */,
+				9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */,
+			);
+			name = "Mock Clients";
 			sourceTree = "<group>";
 		};
 		E46F9EC8A5E5B1CE8FF62E4C /* Pods */ = {
@@ -309,6 +328,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9622B33A1DC284A800957C5F /* devEnterpriseService.json in Resources */,
+				9622B33B1DC284A800957C5F /* joesDiner.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -424,9 +445,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
-				960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */,
-				969AC8F71DC1846800D0E5D8 /* ZNGMockContactServiceClient.m in Sources */,
-				96C5E7E41DB7F1A9005A17AC /* ZNGMockContactClient.m in Sources */,
+				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,
+				9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */,
 				969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

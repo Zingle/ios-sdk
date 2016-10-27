@@ -72,7 +72,7 @@
 @property (nonatomic, strong, nullable) ZNGUserAuthorizationClient * userAuthorizationClient;
 
 #pragma mark - Properties used by client objects
-@property (nonatomic, readonly, nonnull) AFHTTPSessionManager * sessionManager;
+@property (nonatomic, strong, nonnull) AFHTTPSessionManager * sessionManager;
 @property (nonatomic, readonly, nonnull) dispatch_queue_t jsonProcessingQueue;
 
 - (nonnull id) init NS_UNAVAILABLE;

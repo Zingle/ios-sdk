@@ -19,6 +19,8 @@
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
+		969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AC8F31DC1600600D0E5D8 /* TestContactSession.m */; };
+		969AC8F71DC1846800D0E5D8 /* ZNGMockContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AC8F61DC1846800D0E5D8 /* ZNGMockContactServiceClient.m */; };
 		96C5E7E41DB7F1A9005A17AC /* ZNGMockContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */; };
 		96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
@@ -63,6 +65,9 @@
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
 		9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceTableViewCell.h; sourceTree = "<group>"; };
 		9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceTableViewCell.m; sourceTree = "<group>"; };
+		969AC8F31DC1600600D0E5D8 /* TestContactSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestContactSession.m; sourceTree = "<group>"; };
+		969AC8F51DC1846800D0E5D8 /* ZNGMockContactServiceClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGMockContactServiceClient.h; sourceTree = "<group>"; };
+		969AC8F61DC1846800D0E5D8 /* ZNGMockContactServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMockContactServiceClient.m; sourceTree = "<group>"; };
 		96C5E7E21DB7F1A9005A17AC /* ZNGMockContactClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZNGMockContactClient.h; sourceTree = "<group>"; };
 		96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZNGMockContactClient.m; sourceTree = "<group>"; };
 		96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestInboxDataSet.m; sourceTree = "<group>"; };
@@ -178,7 +183,10 @@
 				960FCBB21D0F6E9C00B7E82C /* Info.plist */,
 				96C5E7E21DB7F1A9005A17AC /* ZNGMockContactClient.h */,
 				96C5E7E31DB7F1A9005A17AC /* ZNGMockContactClient.m */,
+				969AC8F51DC1846800D0E5D8 /* ZNGMockContactServiceClient.h */,
+				969AC8F61DC1846800D0E5D8 /* ZNGMockContactServiceClient.m */,
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
+				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -417,7 +425,9 @@
 			files = (
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
 				960FCBB11D0F6E9C00B7E82C /* Tests.m in Sources */,
+				969AC8F71DC1846800D0E5D8 /* ZNGMockContactServiceClient.m in Sources */,
 				96C5E7E41DB7F1A9005A17AC /* ZNGMockContactClient.m in Sources */,
+				969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -639,7 +639,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
     settings.buttonIndex = 0;
     settings.fillOnTrigger = changeWillCauseRemoval;
-    settings.threshold = 2.0;
+    settings.threshold = 1.4;
     
     __weak ZNGInboxViewController * weakSelf = self;
     

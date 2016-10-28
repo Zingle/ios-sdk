@@ -10,6 +10,7 @@
 #import "ZingleSDK/ZingleContactSession.h"
 #import "ZNGMockAccountClient.h"
 #import "ZNGMockContactClient.h"
+#import "ZNGMockServiceClient.h"
 #import "ZNGMockContactServiceClient.h"
 #import "ZNGMockUserAuthorizationClient.h"
 
@@ -308,5 +309,63 @@
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
+
+/**
+ *  Ensure that a contact object exists and has at least first and last name fields
+ */
+- (void) testContactWellFormed
+{
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:nil errorHandler:nil];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        if ([session.availableContactServices count] > 0) {
+            session.contactService = contactService1;
+            return YES;
+        }
+        
+        return NO;
+    }];
+    
+    [session connect];
+
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
+
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+    contactClient.contact = me;
+    
+    session.contactClient = contactClient;
+    session.contactService = contactService1;
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    XCTAssertNotNil([session.contact firstNameFieldValue]);
+    XCTAssertNotNil([session.contact lastNameFieldValue]);
+}
+
+
 
 @end

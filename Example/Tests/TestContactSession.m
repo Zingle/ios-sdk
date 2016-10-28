@@ -192,18 +192,17 @@
     
     [session connect];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError * _Nullable error) {
-        
-        [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
-        
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
-        
-        session.contactClient = contactClient;
-        session.contactService = contactService1;
-        
-        [self waitForExpectationsWithTimeout:2.0 handler:nil];
-    }];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+    contactClient.contact = me;
+    
+    session.contactClient = contactClient;
+    session.contactService = contactService1;
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 - (void) testMultipleContactSessions
@@ -235,18 +234,17 @@
     
     [session connect];
     
-    [self waitForExpectationsWithTimeout:2.0 handler:^(NSError * _Nullable error) {
-        
-        [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
-        
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
-        
-        session.contactClient = contactClient;
-        session.contactService = contactService1;
-        
-        [self waitForExpectationsWithTimeout:2.0 handler:nil];
-    }];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+    contactClient.contact = me;
+    
+    session.contactClient = contactClient;
+    session.contactService = contactService1;
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 - (void) testContactServiceChoosingBlock

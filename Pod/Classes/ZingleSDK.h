@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
 typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * availableServices);
-typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> *);
+typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> * availableContactServices);
 typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
 
 @interface ZingleSDK : NSObject

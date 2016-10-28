@@ -23,6 +23,7 @@ NSString * const ZNGContactFieldDataTypeSingleSelect = @"single_select_options";
     return @{
              @"contactFieldId" : @"id",
              @"displayName" : @"display_name",
+             @"code" : @"code",
              @"dataType" : @"data_type",
              @"isGlobal" : @"is_global",
              @"options" : @"options",

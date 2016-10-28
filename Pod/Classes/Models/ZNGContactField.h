@@ -21,6 +21,7 @@ extern NSString * const ZNGContactFieldDataTypeSingleSelect;
 
 @property(nonatomic, strong) NSString* contactFieldId;
 @property(nonatomic, strong) NSString* displayName;
+@property(nonatomic, strong) NSString * code;
 @property(nonatomic, strong) NSString* dataType;
 @property(nonatomic) BOOL isGlobal;
 @property(nonatomic, strong) NSArray<ZNGFieldOption *> * options;// Array of ZNGFieldOption

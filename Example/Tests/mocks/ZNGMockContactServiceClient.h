@@ -12,6 +12,11 @@
 @interface ZNGMockContactServiceClient : ZNGContactServiceClient
 
 /**
+ *  If this property is set, all requests will return this error.
+ */
+@property (nonatomic, strong) ZNGError * error;
+
+/**
  *  The contact services to be returned through network requests
  */
 @property (nonatomic, strong) NSArray<ZNGContactService *> * contactServices;

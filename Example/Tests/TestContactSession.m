@@ -355,7 +355,11 @@
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
 
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-    contactClient.contact = me;
+    
+    // Remove first name and last name fields to ensure the contact session is enforcing their existence
+    ZNGContact * contact = [me copy];
+    contact.customFieldValues = @[];
+    contactClient.contact = contact;
     
     session.contactClient = contactClient;
     session.contactService = contactService1;

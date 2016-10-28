@@ -14,9 +14,15 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZNGMockContactClient : ZNGContactClient
 
 /**
- *  The contacts used to mock all network requests.
+ *  The contacts used to mock all contact queries.
  */
 @property (nonatomic, strong, nullable) NSArray<ZNGContact *> * contacts;
+
+/**
+ *  The contact returned for contact class queries as 'you'
+ */
+@property (nonatomic, strong, nullable) ZNGContact * contact;
+
 
 - (id) init;
 

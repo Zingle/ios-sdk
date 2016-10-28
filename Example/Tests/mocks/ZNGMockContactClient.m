@@ -99,31 +99,44 @@
                           success:(void (^)(NSArray* contacts, ZNGStatus* status))success
                           failure:(void (^)(ZNGError* error))failure
 {
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        int pageSize = [parameters[ParameterKeyPageSize] intValue];
-        int pageIndex = [parameters[ParameterKeyPageIndex] intValue];
-        NSArray<ZNGContact *> * matchingData = [self contactsMatchingParameters:parameters];
-        ZNGStatus * status = [self statusForContacts:matchingData pageSize:pageSize];
-        NSArray<ZNGContact *> * result = nil;
+    int pageSize = [parameters[ParameterKeyPageSize] intValue];
+    int pageIndex = [parameters[ParameterKeyPageIndex] intValue];
+    NSArray<ZNGContact *> * matchingData = [self contactsMatchingParameters:parameters];
+    ZNGStatus * status = [self statusForContacts:matchingData pageSize:pageSize];
+    NSArray<ZNGContact *> * result = nil;
 
-        if (pageSize > 0) {
-            NSUInteger startingIndexForPage = (pageIndex - 1) * pageSize;
-            NSUInteger totalContactCount = [matchingData count];
-            
-            if (startingIndexForPage < totalContactCount) {
-                NSUInteger remainingContacts = totalContactCount - startingIndexForPage;
-                NSUInteger count = MIN(remainingContacts, pageSize);
-                status.page = pageIndex;
-                
-                result = [matchingData subarrayWithRange:NSMakeRange(startingIndexForPage, count)];
-            }
-        }
+    if (pageSize > 0) {
+        NSUInteger startingIndexForPage = (pageIndex - 1) * pageSize;
+        NSUInteger totalContactCount = [matchingData count];
         
-        [NSThread sleepForTimeInterval:0.1];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            success(result, status);
-        });
+        if (startingIndexForPage < totalContactCount) {
+            NSUInteger remainingContacts = totalContactCount - startingIndexForPage;
+            NSUInteger count = MIN(remainingContacts, pageSize);
+            status.page = pageIndex;
+            
+            result = [matchingData subarrayWithRange:NSMakeRange(startingIndexForPage, count)];
+        }
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        success(result, status);
+    });
+}
+
+- (void) findOrCreateContactWithChannelTypeID:(NSString *)channelTypeId andChannelValue:(NSString *)channelValue success:(void (^)(ZNGContact *, ZNGStatus *))success failure:(void (^)(ZNGError *))failure
+{
+    if (success == nil) {
+        return;
+    }
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        ZNGStatus * status = [[ZNGStatus alloc] init];
+        status.statusCode = 200;
+        status.totalRecords = (BOOL)self.contact;
+        status.page = 1;
+        status.totalPages = 1;
+        
+        success(self.contact, status);
     });
 }
 

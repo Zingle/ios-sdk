@@ -70,7 +70,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         self.availableContactServices = contactServices;
         
         if (self.contactServiceChooser != nil) {
-            self.contactServiceChooser(contactServices);
+            self.contactService = self.contactServiceChooser(contactServices);
         }
     } failure:^(ZNGError *error) {
         ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", self.channelValue, self.channelTypeID);
@@ -150,7 +150,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     dispatch_semaphore_signal(messageAndEventClientSemaphore);
-    self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
+    
+    // Prevent overwriting a contact client to facilitate some testing via dependency injection
+    if ((self.contactClient == nil) || (![self.contactClient.serviceId isEqualToString:serviceId])) {
+        self.contactClient = [[ZNGContactClient alloc] initWithSession:self serviceId:serviceId];
+    }
 }
 
 - (void) findOrCreateContactForContactService

@@ -109,6 +109,60 @@
     [super tearDown];
 }
 
+- (void) testSimpleSDKConvenienceInitializer
+{
+    ZingleContactSession * session = [ZingleSDK contactSessionWithToken:@"token" key:@"key" channelTypeId:@"channelType" channelValue:@"value"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        if ([session.availableContactServices count] > 0) {
+            ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+            contactClient.contact = me;
+            
+            session.contactClient = contactClient;
+            session.contactService = contactService1;
+            
+            return YES;
+        }
+        
+        return NO;
+    }];
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
+    
+    [session connect];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testSDKConvenienceInitializerSetsBlocks
+{
+    ZingleContactSession * session = [ZingleSDK contactSessionWithToken:@"token" key:@"key" channelTypeId:@"channelType" channelValue:@"value" contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        return nil;
+    } errorHandler:^(ZNGError * _Nonnull error) {
+        return;
+    }];
+    
+    XCTAssertNotNil(session.contactServiceChooser);
+    XCTAssertNotNil(session.errorHandler);
+}
+
 - (void) testSuccessfulSingleContactSession
 {
     ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:nil errorHandler:nil];
@@ -226,6 +280,30 @@
     }];
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(contactService)) expectedValue:contactService1];
     
+    [session connect];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testErrorHandlingBlock
+{
+    XCTestExpectation * errorBlockCalledExpectation = [self expectationWithDescription:@"Error handling block is called"];
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"avalue" contactServiceChooser:nil errorHandler:^(ZNGError * _Nonnull error) {
+        [errorBlockCalledExpectation fulfill];
+    }];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    NSArray<ZNGContactService *> * contactServices = @[contactService1, contactService2];
+    contactServiceClient.error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Test error" }];
+    contactServiceClient.contactServices = contactServices;
+    session.contactServiceClient = contactServiceClient;
+
     [session connect];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];

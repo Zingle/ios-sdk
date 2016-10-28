@@ -321,8 +321,13 @@
     session.sessionManager = nil;
 #pragma clang diagnostic pop
     
+    // Remove first name and last name fields to ensure the contact session is enforcing their existence
+    ZNGContact * contact = [me copy];
+    contact.customFieldValues = @[];
+
+    
     ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
-    authClient.contact = me;
+    authClient.contact = contact;
     session.userAuthorizationClient = authClient;
     
     ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
@@ -353,19 +358,16 @@
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@(YES)];
 
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-    
-    // Remove first name and last name fields to ensure the contact session is enforcing their existence
-    ZNGContact * contact = [me copy];
-    contact.customFieldValues = @[];
     contactClient.contact = contact;
     
     session.contactClient = contactClient;
     session.contactService = contactService1;
     
-    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    [self keyValueObservingExpectationForObject:session keyPath:@"contact.customFieldValues" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return (([session.contact firstNameFieldValue] != nil) && ([session.contact lastNameFieldValue] != nil));
+    }];
     
-    XCTAssertNotNil([session.contact firstNameFieldValue]);
-    XCTAssertNotNil([session.contact lastNameFieldValue]);
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
 

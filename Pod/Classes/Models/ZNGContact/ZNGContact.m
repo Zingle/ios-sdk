@@ -177,14 +177,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
             return fieldValue;
         }
     }
-    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
-    fieldValue.customField = [[ZNGContactField alloc] init];
-    fieldValue.customField.displayName = @"Title";
     
-    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
-    [array addObject:fieldValue];
-    self.customFieldValues = array;
-    return fieldValue;
+    return nil;
 }
 
 -(ZNGContactFieldValue *)firstNameFieldValue
@@ -194,14 +188,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
             return fieldValue;
         }
     }
-    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
-    fieldValue.customField = [[ZNGContactField alloc] init];
-    fieldValue.customField.displayName = @"First Name";
     
-    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
-    [array addObject:fieldValue];
-    self.customFieldValues = array;
-    return fieldValue;
+    return nil;
 }
 
 -(ZNGContactFieldValue *)lastNameFieldValue
@@ -211,14 +199,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
             return fieldValue;
         }
     }
-    ZNGContactFieldValue *fieldValue = [[ZNGContactFieldValue alloc] init];
-    fieldValue.customField = [[ZNGContactField alloc] init];
-    fieldValue.customField.displayName = @"Last Name";
     
-    NSMutableArray *array = [NSMutableArray arrayWithArray:self.customFieldValues];
-    [array addObject:fieldValue];
-    self.customFieldValues = array;
-    return fieldValue;
+    return nil;
 }
 
 - (nullable ZNGContactFieldValue *) contactFieldValueForType:(ZNGContactField *)field

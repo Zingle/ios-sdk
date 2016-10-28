@@ -73,6 +73,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             self.contactService = self.contactServiceChooser(contactServices);
         }
     } failure:^(ZNGError *error) {
+        self.mostRecentError = error;
         ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", self.channelValue, self.channelTypeID);
     }];
 }
@@ -173,6 +174,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         // Set the conversation up if we did not do so already
         [self setConversationForContactService];
     } failure:^(ZNGError *error) {
+        self.mostRecentError = error;
         ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
     }];
 }
@@ -192,6 +194,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [self ensureContactHasAllDefaultCustomFields];
         
     } failure:^(ZNGError *error) {
+        self.mostRecentError = error;
         ZNGLogError(@"Unable to retrieve %@ service: %@", self.contactService.serviceId, error);
     }];
 }
@@ -265,6 +268,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         
         dispatch_semaphore_signal(userHeaderSetSemaphore);
     } failure:^(ZNGError *error) {
+        self.mostRecentError = error;
         ZNGLogError(@"Unable to check user authorization status.");
         
         // Even though we failed, we will still signal the semaphore since we never expect to recover while anyone is waiting on it

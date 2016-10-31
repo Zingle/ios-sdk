@@ -33,51 +33,51 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Sets the background color of the incoming bubble.
  *
- *  @param incomingBubbleColor Will use default Zingle light gray if not set.
+ *  @param incomingBubbleColor Defaults to Zingle light gray.
  */
-@property (nonatomic, strong, nullable) UIColor *incomingBubbleColor;
+@property (nonatomic, strong) UIColor *incomingBubbleColor;
 
 /**
  *  Sets the background color of the outgoing bubble.
  *
- *  @param outgoingBubbleColor Will use default Zingle blue if not set.
+ *  @param outgoingBubbleColor Defaults to default Zingle blue
  */
-@property (nonatomic, strong, nullable) UIColor *outgoingBubbleColor;
+@property (nonatomic, strong) UIColor *outgoingBubbleColor;
 
 /**
  *  Sets the background color of internal note bubbles.
  *
- *  @param internalNoteColor will use default zng_note_yellow if not set.
+ *  @param internalNoteColor Defaults to zng_note_yellow
  */
-@property (nonatomic, strong, nullable) UIColor * internalNoteColor;
+@property (nonatomic, strong) UIColor * internalNoteColor;
 
 /**
  *  Sets the text color of the incoming message text.
  *
- *  @param incomingTextColor Will use default Zingle gray text color if not set.
+ *  @param incomingTextColor Defaults to Zingle gray text color
  */
-@property (nonatomic, strong, nullable) UIColor *incomingTextColor;
+@property (nonatomic, strong) UIColor *incomingTextColor;
 
 /**
  *  Sets the text color of the outgoing message text.
  *
- *  @param outgoingTextColor Will use default Zingle gray text color if not set.
+ *  @param outgoingTextColor Defaults to Zingle gray text color
  */
-@property (nonatomic ,strong, nullable) UIColor *outgoingTextColor;
+@property (nonatomic ,strong) UIColor *outgoingTextColor;
 
 /**
  *  Sets the text color of internal notes.
  *
- *  @param internalNoteTextColor will use default Zingle gray text color if not set.
+ *  @param internalNoteTextColor Defaults to Zingle gray text color
  */
-@property (nonatomic, strong, nullable) UIColor * internalNoteTextColor;
+@property (nonatomic, strong) UIColor * internalNoteTextColor;
 
 /**
  *  Sets the text color of the label on top of the message bubble.
  *
- *  @param authorTextColor Will use [UIColor lightGrayColor] if not set.
+ *  @param authorTextColor Defaults to [UIColor lightGrayColor]
  */
-@property (nonatomic, strong, nullable) UIColor *authorTextColor;
+@property (nonatomic, strong) UIColor *authorTextColor;
 
 /**
  *  Sets the name of the sender to be displayed above message bubbles.

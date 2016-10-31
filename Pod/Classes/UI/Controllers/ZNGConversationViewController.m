@@ -901,12 +901,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
+        UIColor * textColor;
+        
         if ([event isNote]) {
-            cell.textView.textColor = self.internalNoteTextColor;
+            textColor = self.internalNoteTextColor;
         } else if ([self weAreSendingOutbound] == [event.message isOutbound]) {
-            cell.textView.textColor = self.outgoingTextColor;
+            textColor = self.outgoingTextColor;
         } else {
-            cell.textView.textColor = self.incomingTextColor;
+            textColor = self.incomingTextColor;
         }
         
         cell.textView.linkTextAttributes = @{
@@ -919,6 +921,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         NSMutableAttributedString * text = [[event attributedText] mutableCopy];
         JSQMessagesCollectionViewFlowLayout * layout = (JSQMessagesCollectionViewFlowLayout *)collectionView.collectionViewLayout;
         [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
+        [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
         
         cell.textView.attributedText = text;
         

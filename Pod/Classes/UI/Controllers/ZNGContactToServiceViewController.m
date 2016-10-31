@@ -58,11 +58,6 @@
     [photoButton setImage:photoImage forState:UIControlStateNormal];
     [photoButton addTarget:self action:@selector(pressedAttachImage:) forControlEvents:UIControlEventTouchUpInside];
     self.inputToolbar.contentView.leftBarButtonItem = photoButton;
-    
-    UIButton * sendButton = self.inputToolbar.contentView.rightBarButtonItem;
-    [sendButton setTitleColor:[UIColor zng_green] forState:UIControlStateNormal];
-    [sendButton setTitleColor:[[UIColor zng_green] zng_colorByDarkeningColorWithValue:0.1f] forState:UIControlStateHighlighted];
-    sendButton.tintColor = [UIColor zng_green];
 }
 
 - (BOOL) weAreSendingOutbound

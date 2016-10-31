@@ -104,22 +104,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) UIFont * sendButtonFont;
 
 /**
- *  Sets the name of the sender to be displayed above message bubbles.
- *
- *  @param senderName If this is not set the label on top of the sender's message
- *  bubble will be hidden.
- */
-@property (nonatomic, copy, nullable) NSString *senderName;
-
-/**
- *  Sets the name of the receiver to be displayed above message bubbles.
- *
- *  @param receiverName If this is not set the label on top of the receiver's message
- *  bubble will say "Received".
- */
-@property (nonatomic, copy, nullable) NSString *receiverName;
-
-/**
  *  Additional inset between the toolbar and the bottom most message bubble.
  *
  *  Defaults to 0.0

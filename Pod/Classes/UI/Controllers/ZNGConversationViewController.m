@@ -267,14 +267,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     moreMessagesAvailableRemotely = (self.conversation.totalEventCount > [self.conversation.events count]);
 }
 
--(NSString *)receiverName
-{
-    if (_receiverName == nil) {
-        _receiverName = @"Received";
-    }
-    return _receiverName;
-}
-
 #pragma mark - Actions
 - (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender { /* unused */ }
 

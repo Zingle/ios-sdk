@@ -41,6 +41,7 @@
 - (void) commonInit
 {
     _allowDeletion = YES;
+    _showEmployeeNamesOverMessages = YES;
 }
 
 - (void) viewDidLoad
@@ -63,6 +64,29 @@
 - (BOOL) weAreSendingOutbound
 {
     return NO;
+}
+
+- (NSString *) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (!self.showEmployeeNamesOverMessages) {
+        // Names are disabled
+        return nil;
+    }
+    
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    
+    if (![event.message isOutbound]) {
+        // This message was sent by us.
+        return nil;
+    }
+    
+    NSString * name = [event.message.triggeredByUser fullName];
+    
+    if ([name length] == 0) {
+        return nil;
+    }
+    
+    return name;
 }
 
 - (void) pressedAttachImage:(id)sender

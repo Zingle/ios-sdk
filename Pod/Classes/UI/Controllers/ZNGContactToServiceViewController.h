@@ -21,4 +21,9 @@
  */
 @property (nonatomic, assign) BOOL allowDeletion;
 
+/**
+ *  If set, employee names will appear over each incoming message.  Defaults to YES.
+ */
+@property (nonatomic, assign) BOOL showEmployeeNamesOverMessages;
+
 @end

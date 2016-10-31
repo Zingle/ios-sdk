@@ -557,7 +557,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems
 {
-    if ([[self alertActionsForDetailsButton] count] > 0) {
+    // Check if we have at least two items (since one will be cancel)
+    if ([[self alertActionsForDetailsButton] count] > 1) {
         NSBundle * bundle = [NSBundle bundleForClass:[self class]];
         UIImage * detailsImage = [UIImage imageNamed:@"detailsButton" inBundle:bundle compatibleWithTraitCollection:nil];
         UIBarButtonItem * detailsButton = [[UIBarButtonItem alloc] initWithImage:detailsImage style:UIBarButtonItemStylePlain target:self action:@selector(detailsButtonPressed:)];

@@ -16,10 +16,40 @@
 
 @dynamic conversation;
 
+- (id) initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super initWithCoder:aDecoder];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (id) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    _allowDeletion = YES;
+}
+
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
+    
+    if (self.allowDeletion) {
+        [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
+    }
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UIImage * photoImage = [UIImage imageNamed:@"attachImage" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -49,8 +79,15 @@
 - (NSArray<UIAlertAction *> *)alertActionsForDetailsButton
 {
     NSArray<UIAlertAction *> * superActions = [super alertActionsForDetailsButton];
-    NSMutableArray<UIAlertAction *> * actions = ([superActions count] > 0) ? [superActions mutableCopy] : [[NSMutableArray alloc] init];
     
+    // Deletion is our only action.  If it is not allowed, return the super implementation
+    if (!self.allowDeletion) {
+        return superActions;
+    }
+    
+    
+    NSMutableArray<UIAlertAction *> * actions = ([superActions count] > 0) ? [superActions mutableCopy] : [[NSMutableArray alloc] init];
+
     UIAlertAction * deleteAllMessages = [UIAlertAction actionWithTitle:@"Delete all messages" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
         [conversation deleteAllMessages];
@@ -65,7 +102,7 @@
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender;
 {
     if (action == @selector(delete:)) {
-        return YES;
+        return self.allowDeletion;
     }
     
     return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
@@ -76,7 +113,7 @@
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
     ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
     
-    if (event.message != nil) {
+    if ((event.message != nil) && (self.allowDeletion)) {
         [conversation deleteMessage:event.message];
     }
 }

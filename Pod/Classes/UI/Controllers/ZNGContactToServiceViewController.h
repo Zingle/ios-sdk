@@ -14,4 +14,11 @@
 
 @property (nonatomic, strong, nullable) ZNGConversationContactToService * conversation;
 
+#pragma mark - Configuration
+
+/**
+ *  Whether messages can be marked as deleted by contact and hidden.  Defaults to YES.
+ */
+@property (nonatomic, assign) BOOL allowDeletion;
+
 @end

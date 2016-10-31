@@ -22,4 +22,7 @@
 @property (nonatomic, assign) BOOL inputEnabled;
 @property (nonatomic, readonly) UIButton * sendButton;
 
+@property (nonatomic, strong) UIColor * sendButtonColor;
+@property (nonatomic, strong) UIFont * sendButtonFont;
+
 @end

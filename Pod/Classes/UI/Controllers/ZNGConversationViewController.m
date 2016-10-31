@@ -132,6 +132,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     self.inputToolbar.contentView.textView.font = self.textInputFont;
+    self.inputToolbar.sendButtonColor = self.sendButtonColor;
+    self.inputToolbar.sendButtonFont = self.sendButtonFont;
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;

@@ -7,6 +7,7 @@
 //
 
 #import "ZNGConversationInputToolbar.h"
+#import "UIColor+ZingleSDK.h"
 
 @implementation ZNGConversationInputToolbar
 
@@ -32,9 +33,43 @@
     return self;
 }
 
+- (void) setSendButtonColor:(UIColor *)sendButtonColor
+{
+    _sendButtonColor = sendButtonColor;
+    
+    if (sendButtonColor != nil) {
+        [[self sendButton] setTitleColor:sendButtonColor forState:UIControlStateNormal];
+        [[self sendButton] setTitleColor:[sendButtonColor zng_colorByDarkeningColorWithValue:0.1] forState:UIControlStateHighlighted];
+        [[self sendButton] setTintColor:sendButtonColor];
+    }
+}
+
+- (void) setSendButtonFont:(UIFont *)sendButtonFont
+{
+    _sendButtonFont = sendButtonFont;
+    
+    if (sendButtonFont != nil) {
+        UIButton * sendButton = [self sendButton];
+        
+        sendButton.titleLabel.font = sendButtonFont;
+        
+        CGSize sendButtonSize = [sendButton intrinsicContentSize];
+        self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
+    }
+}
+
 - (void) commonInit
 {
     _inputEnabled = YES;
+    
+    // Call the send button color setter again to actually color the button.
+    if (self.sendButtonColor) {
+        self.sendButtonColor = self.sendButtonColor;
+    }
+    
+    if (self.sendButtonFont) {
+        self.sendButtonFont = self.sendButtonFont;
+    }
 }
 
 - (void) setInputEnabled:(BOOL)inputEnabled

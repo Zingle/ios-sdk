@@ -94,6 +94,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIFont * textInputFont;
 
 /**
+ *  The color of the send button when enabled.
+ */
+@property (nonatomic, strong, nullable) UIColor * sendButtonColor;
+
+/**
+ *  The font of the send button.
+ */
+@property (nonatomic, strong, nullable) UIFont * sendButtonFont;
+
+/**
  *  Sets the name of the sender to be displayed above message bubbles.
  *
  *  @param senderName If this is not set the label on top of the sender's message

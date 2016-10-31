@@ -80,6 +80,20 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIColor *authorTextColor;
 
 /**
+ *  The font used for incoming and outgoing message text.
+ *
+ *  Defaults to Lato 17pt.
+ */
+@property (nonatomic, strong) UIFont * messageFont;
+
+/**
+ *  The font used for message input.
+ *
+ *  Defaults to Lato 14pt.
+ */
+@property (nonatomic, strong) UIFont * textInputFont;
+
+/**
  *  Sets the name of the sender to be displayed above message bubbles.
  *
  *  @param senderName If this is not set the label on top of the sender's message

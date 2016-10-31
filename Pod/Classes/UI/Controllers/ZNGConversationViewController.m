@@ -112,6 +112,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _outgoingTextColor = [UIColor zng_text_gray];
     _internalNoteTextColor = [UIColor zng_text_gray];
     _authorTextColor = [UIColor lightGrayColor];
+    _messageFont = [UIFont latoFontOfSize:17.0];
+    _textInputFont = [UIFont latoFontOfSize:14.0];
     
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
@@ -129,10 +131,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         self.collectionView.contentInset = UIEdgeInsetsMake(defaultInsets.top, defaultInsets.left, defaultInsets.bottom + self.additionalBottomInset, defaultInsets.right);
     }
     
+    self.inputToolbar.contentView.textView.font = self.textInputFont;
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
-    self.collectionView.collectionViewLayout.messageBubbleFont = [UIFont latoFontOfSize:17.0];
+    self.collectionView.collectionViewLayout.messageBubbleFont = self.messageFont;
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     UINib * nib = [UINib nibWithNibName:NSStringFromClass([ZNGEventCollectionViewCell class]) bundle:bundle];
@@ -228,6 +232,20 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     self.navigationItem.rightBarButtonItems = barItems;
+}
+
+- (void) setMessageFont:(UIFont *)messageFont
+{
+    _messageFont = messageFont;
+    
+    self.collectionView.collectionViewLayout.messageBubbleFont = messageFont;
+    [self.collectionView.collectionViewLayout invalidateLayout];
+}
+
+- (void) setTextInputFont:(UIFont *)textInputFont
+{
+    _textInputFont = textInputFont;
+    self.inputToolbar.contentView.textView.font = textInputFont;
 }
 
 #pragma mark - Data properties

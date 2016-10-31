@@ -51,7 +51,7 @@
         [JSQMessagesCollectionViewCell registerMenuAction:@selector(delete:)];
     }
     
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactToServiceViewController class]];
     UIImage * photoImage = [UIImage imageNamed:@"attachImage" inBundle:bundle compatibleWithTraitCollection:nil];
     UIButton * photoButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
     photoButton.tintColor = [UIColor zng_gray];

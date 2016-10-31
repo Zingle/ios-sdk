@@ -85,7 +85,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self = [super initWithCoder:aDecoder];
     
     if (self != nil) {
-        [self commonInit];
+        [self _conv_commonInit];
     }
     
     return self;
@@ -96,13 +96,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if (self != nil) {
-        [self commonInit];
+        [self _conv_commonInit];
     }
     
     return self;
 }
 
-- (void) commonInit
+- (void) _conv_commonInit
 {
     // Default property values
     _outgoingBubbleColor = [UIColor zng_messageBubbleBlueColor];
@@ -138,6 +138,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
+    
     self.collectionView.collectionViewLayout.messageBubbleFont = self.messageFont;
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];

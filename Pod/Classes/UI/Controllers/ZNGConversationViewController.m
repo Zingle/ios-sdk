@@ -104,6 +104,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) commonInit
 {
+    // Default property values
+    _outgoingBubbleColor = [UIColor zng_messageBubbleBlueColor];
+    _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
+    _internalNoteColor = [UIColor zng_note_yellow];
+    _incomingTextColor = [UIColor zng_text_gray];
+    _outgoingTextColor = [UIColor zng_text_gray];
+    _internalNoteTextColor = [UIColor zng_text_gray];
+    _authorTextColor = [UIColor lightGrayColor];
+    
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
@@ -235,65 +244,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) checkForMoreRemoteMessagesAvailable
 {
     moreMessagesAvailableRemotely = (self.conversation.totalEventCount > [self.conversation.events count]);
-}
-
-#pragma mark - UI properties
-
--(UIColor *)outgoingBubbleColor
-{
-    if (_outgoingBubbleColor == nil) {
-        _outgoingBubbleColor = [UIColor zng_messageBubbleBlueColor];
-    }
-    return _outgoingBubbleColor;
-}
-
--(UIColor *)incomingBubbleColor
-{
-    if (_incomingBubbleColor == nil) {
-        _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
-    }
-    return _incomingBubbleColor;
-}
-
--(UIColor *)internalNoteColor
-{
-    if (_internalNoteColor == nil) {
-        _internalNoteColor = [UIColor zng_note_yellow];
-    }
-    return _internalNoteColor;
-}
-
-- (UIColor *)incomingTextColor
-{
-    if (_incomingTextColor == nil) {
-        _incomingTextColor = [UIColor zng_text_gray];
-    }
-    return _incomingTextColor;
-}
-
--(UIColor *)outgoingTextColor
-{
-    if (_outgoingTextColor == nil) {
-        _outgoingTextColor = [UIColor zng_text_gray];
-    }
-    return _outgoingTextColor;
-}
-
-- (UIColor *)internalNoteTextColor
-{
-    if (_internalNoteTextColor == nil) {
-        _internalNoteTextColor = [UIColor zng_text_gray];
-    }
-    
-    return _internalNoteTextColor;
-}
-
--(UIColor *)authorTextColor
-{
-    if (_authorTextColor == nil) {
-        _authorTextColor = [UIColor lightGrayColor];
-    }
-    return _authorTextColor;
 }
 
 -(NSString *)receiverName

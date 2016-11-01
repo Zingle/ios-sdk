@@ -130,12 +130,14 @@ static const int zngLogLevel = ZNGLogLevelDebug;
                     
                     if (self.completion != nil) {
                         self.completion(self.contactService, self.service, nil);
+                        self.completion = nil;
                     }
                 } else {
                     ZNGLogWarn(@"Initialization failed.  Unable to create conversation.");
                     
                     if (self.completion != nil) {
                         self.completion(nil, nil, self.mostRecentError);
+                        self.completion = nil;
                     }
                 }
             });

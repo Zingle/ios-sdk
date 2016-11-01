@@ -161,21 +161,62 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void) testSDKConvenienceInitializerSetsBlocks
+/**
+ *  Connect using the contact selection completion block
+ */
+- (void) testSuccessfulSingleContactSessionWithCompletionBlock
 {
-    ZingleContactSession * session = [ZingleSDK contactSessionWithToken:@"token" key:@"key" channelTypeId:@"channelType" channelValue:@"value" contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        return nil;
-    } errorHandler:^(ZNGError * _Nonnull error) {
-        return;
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return [session.availableContactServices isEqualToArray:@[contactService1]];
     }];
     
-    XCTAssertNotNil(session.contactServiceChooser);
-    XCTAssertNotNil(session.errorHandler);
+    [session connect];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connection completed"];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+    contactClient.contact = me;
+    
+    session.contactClient = contactClient;
+    
+    [session setContactService:contactService1 completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        [connected fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void) testSuccessfulSingleContactSession
+/**
+ *  Observe the available flag instead of relying on the completion block
+ */
+- (void) testSuccessfulSingleContactSessionViaKVO
 {
-    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:nil errorHandler:nil];
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -220,7 +261,7 @@
 
 - (void) testMultipleContactSessions
 {
-    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:nil errorHandler:nil];
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -267,10 +308,11 @@
 - (void) testContactServiceChoosingBlock
 {
     XCTestExpectation * contactServiceChooserExpectation = [self expectationWithDescription:@"Contact chooser block is called"];
-    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    session.contactServiceChooser = ^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
         [contactServiceChooserExpectation fulfill];
         return contactService1;
-    } errorHandler:nil];
+    };
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -308,9 +350,10 @@
 - (void) testErrorHandlingBlock
 {
     XCTestExpectation * errorBlockCalledExpectation = [self expectationWithDescription:@"Error handling block is called"];
-    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"avalue" contactServiceChooser:nil errorHandler:^(ZNGError * _Nonnull error) {
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"avalue"];
+    session.errorHandler = ^(ZNGError * _Nonnull error) {
         [errorBlockCalledExpectation fulfill];
-    }];
+    };
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -334,7 +377,7 @@
  */
 - (void) testContactWellFormed
 {
-    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:nil errorHandler:nil];
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -393,7 +436,7 @@
 
 - (void) testAllDataAvailableWhenAvailableFlagSet
 {
-    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue" contactServiceChooser:nil errorHandler:nil];
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push

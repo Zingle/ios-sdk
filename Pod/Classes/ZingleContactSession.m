@@ -154,11 +154,8 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     
-    ZNGLogDebug(@"Sending find or create contact request");
     [self.contactClient findOrCreateContactWithChannelTypeID:_channelTypeID andChannelValue:_channelValue success:^(ZNGContact *contact, ZNGStatus *status) {
-        ZNGLogDebug(@"Successful find or create contact response.  Jumping onto main thread to save data...");
         dispatch_async(dispatch_get_main_queue(), ^{
-            ZNGLogDebug(@"Setting contact object on main thread and signalling semaphore.");
             contact.contactClient = self.contactClient;
             self.contact = contact;
             dispatch_semaphore_signal(semaphore);
@@ -177,7 +174,6 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     long timedOut = dispatch_semaphore_wait(semaphore, tenSecondsFromNow);
     
     if (timedOut) {
-        ZNGLogDebug(@"Timed out waiting for find or create contact semaphore.");
         dispatch_async(dispatch_get_main_queue(), ^{
             ZNGLogError(@"Timed out waiting for findOrcreateContactWithChannelTypeID:");
             ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for find or create contact request response semaphore" }];

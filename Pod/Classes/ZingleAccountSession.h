@@ -49,6 +49,25 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 @property (nonatomic, strong, nullable) ZNGService * service;
 
+/**
+ *  The block called if multiple accounts exist on connection.
+ *
+ *  This is set to nil after initial connection.
+ */
+@property (nonatomic, copy, nullable) ZNGAccountChooser accountChooser;
+
+/**
+ *  The block called if multiple services exist on connection.
+ *
+ *  This is set to nil after initial connection.
+ */
+@property (nonatomic, copy, nullable) ZNGServiceChooser serviceChooser;
+
+/**
+ *  Completion block called once connecting succeeds or fails.  This will be set to nil after a connection success or failure.
+ */
+@property (nonatomic, copy, nullable) ZNGAccountSessionCallback completion;
+
 #pragma mark - Clients
 @property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
@@ -59,29 +78,13 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 @property (nonatomic, assign) BOOL showDetailedEvents;
 
 #pragma mark - Initialization
-/**
- *  Constructor for a Zingle account-level session object.  Includes optional parameters which may be used to provide callbacks to select
- *   an account and service if more than one of either is available.  These blocks will be unused and dealloced if there is only one account
- *   or service.
- *
- *  The block parameters will be called a maximum of one time and will be dealloced after being called or after they are deemed unnecessary (e.g.
- *   we got our list of available accounts, and there is only one available account; we have no need for the account chooser callback.)
- *
- *  These blocks are free to return nil.  If they return nil, someone must set or account and service properties later.
- *
- *  @param token Token for Zingle API user
- *  @param key Security key for Zingle API user
- *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple (or zero) accounts are available to this user
- *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple (or zero) services are available to this user
- *  @param errorHandler Optional block that is called every time an error is received.
- */
-- (instancetype) initWithToken:(NSString *)token
-                           key:(NSString *)key
-                accountChooser:(nullable ZNGAccountChooser)accountChooser
-                serviceChooser:(nullable ZNGServiceChooser)serviceChooser
-                  errorHandler:(nullable ZNGErrorHandler)errorHandler NS_DESIGNATED_INITIALIZER;
+- (id) initWithToken:(NSString *)token key:(NSString *)key;
 
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_UNAVAILABLE;
+- (void) connect;
+
+- (void) connectWithCompletion:(nullable ZNGAccountSessionCallback)completion;
+
+- (void) connectWithAccountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser completion:(nullable ZNGAccountSessionCallback)completion;
 
 #pragma mark - Messaging methods
 

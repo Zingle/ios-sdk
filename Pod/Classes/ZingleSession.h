@@ -83,7 +83,7 @@
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
  */
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_DESIGNATED_INITIALIZER;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_DESIGNATED_INITIALIZER;
 
 /**
  *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.

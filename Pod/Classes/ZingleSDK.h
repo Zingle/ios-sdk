@@ -25,7 +25,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef ZNGAccount * _Nullable (^ZNGAccountChooser)(NSArray<ZNGAccount *> * availableAccounts);
 typedef ZNGService * _Nullable (^ZNGServiceChooser)(NSArray<ZNGService *> * availableServices);
+typedef void (^ZNGAccountSessionCallback)(ZNGService * _Nullable service, ZNGError * _Nullable error);
+
 typedef ZNGContactService * _Nullable (^ZNGContactServiceChooser)(NSArray<ZNGContactService *> * availableContactServices);
+typedef void (^ZNGContactSessionCallback)(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error);
+
 typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
 
 @interface ZingleSDK : NSObject
@@ -50,23 +54,6 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
  */
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue;
 
-/**
- *  The initializer for a Zingle session in the Contact domain.  This includes both authentication information for the API user (i.e. the develoepr) and a set of identifying
- *   information for the contact to be sending messages, etc.
- *
- *  Once a list of available, matching contact services has been returned by the server, the availableContactServices array will be populated and the contactServiceChooser will
- *   be called if one was provided.
- *
- *  @param token Token for Zingle API user
- *  @param key Security key for Zingle API user
- *  @param channelTypeId An identifier for the channel type, e.g. the identifier for Big Hotel Messaging System
- *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
- *  @param contactServiceChooser Optional block to be used to select a contact service once we obtain the list of available contact services.  May be neglected or return nil.
- *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
- *  @param errorHandler Optional block that is called every time an error is received.
- */
-+ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser errorHandler:(nullable ZNGErrorHandler)errorHandler;
-
 #pragma mark - Account access
 /**
  *  Provides a session object with the provided API credentials.  This is an account type session that is used by a specific service.
@@ -76,26 +63,8 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
  *
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
- *  @param errorHandler Optional block that is called every time an error is received.
  */
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key errorHandler:(ZNGErrorHandler)errorHandler;
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key;
 
-/**
- *  Provides a session object with the provided API credentials.  This is an account type session that is used by a specific service.
- *
- *  The chooser blocks are optional and will only be called if multiple accounts or services are available to the current user.  Both blocks are released
- *   once they are used or ruled unneeded (e.g. only one account is available.)
- *
- *  @param token Token for Zingle API user
- *  @param key Security key for Zingle API user
- *  @param accountChooser The optional block which will be called and asked for a choice of account if multiple accounts are available to this user
- *  @param serviceChooser The optional block which will be called and asked for a choice of service if multiple services are available to this user
- *  @param errorHandler Optional block that is called every time an error is received.
- */
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token
-                                               key:(NSString *)key
-                                    accountChooser:(nullable ZNGAccountChooser)accountChooser
-                                    serviceChooser:(nullable ZNGServiceChooser)serviceChooser
-                                      errorHandler:(ZNGErrorHandler)errorHandler;
 @end
 NS_ASSUME_NONNULL_END

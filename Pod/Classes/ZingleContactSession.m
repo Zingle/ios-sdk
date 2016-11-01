@@ -38,19 +38,16 @@ static const int zngLogLevel = ZNGLogLevelDebug;
                            key:(NSString *)key
                  channelTypeId:(NSString *)channelTypeId
                   channelValue:(NSString *)channelValue
-         contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
-                  errorHandler:(nullable ZNGErrorHandler)errorHandler
 {
     NSParameterAssert(channelTypeId);
     NSParameterAssert(channelValue);
     
-    self = [super initWithToken:token key:key errorHandler:errorHandler];
+    self = [super initWithToken:token key:key];
     
     if (self != nil) {
         _channelTypeID = [channelTypeId copy];
         _channelValue = [channelValue copy];
         _onlyRegisterPushNotificationsForCurrentContactService = YES;
-        self.contactServiceChooser = contactServiceChooser;
     }
     
     return self;
@@ -58,6 +55,15 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 - (void) connect
 {
+    [self connectWithContactServiceChooser:nil];
+}
+
+- (void) connectWithContactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
+{
+    if (contactServiceChooser != nil) {
+        self.contactServiceChooser = contactServiceChooser;
+    }
+    
     // First we must populate our list of available contact services
     NSDictionary *parameters = @{ @"channel_value" : self.channelValue,
                                   @"channel_type_id" : self.channelTypeID };
@@ -75,6 +81,15 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 - (void) setContactService:(ZNGContactService *)contactService
 {
+    [self setContactService:contactService completion:nil];
+}
+
+- (void) setContactService:(ZNGContactService *)contactService completion:(ZNGContactSessionCallback)completion
+{
+    if (completion != nil) {
+        self.completion = completion;
+    }
+    
     ZNGContactService * selectedContactService = contactService;
     
     if ((![self.availableContactServices containsObject:selectedContactService]) && (selectedContactService != nil)) {
@@ -108,8 +123,16 @@ static const int zngLogLevel = ZNGLogLevelDebug;
                 
                 if (self.conversation != nil) {
                     self.available = YES;
+                    
+                    if (self.completion != nil) {
+                        self.completion(self.contactService, self.service, nil);
+                    }
                 } else {
                     ZNGLogWarn(@"Initialization failed.  Unable to create conversation.");
+                    
+                    if (self.completion != nil) {
+                        self.completion(nil, nil, self.mostRecentError);
+                    }
                 }
             });
         });

@@ -47,6 +47,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy, nullable) ZNGContactServiceChooser contactServiceChooser;
 
 /**
+ *  An optional callback that is called after a contact service is selected, either providing the ZNGContactService and ZNGService of a successful connection
+ *   or a ZNGError object with the reason for failure.
+ */
+@property (nonatomic, copy, nullable) ZNGContactSessionCallback completion;
+
+/**
  *  The getter and setter for the current contactService selection.  When setting, the value must be present in availableContactServices.
  *
  *  Setting this value resets the contact and conversation properties to nil until they can be retrieved from the server a few moments later.
@@ -95,15 +101,27 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype) initWithToken:(NSString *)token
                            key:(NSString *)key
                  channelTypeId:(NSString *)channelTypeId
-                  channelValue:(NSString *)channelValue
-         contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
-                  errorHandler:(nullable ZNGErrorHandler)errorHandler;
+                  channelValue:(NSString *)channelValue;
 
 /**
  *  Initializing without specifying channel info is not allowed for a contact session.
  */
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler NS_UNAVAILABLE;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_UNAVAILABLE;
 
+/**
+ *  Connect.  A contact service will have to be selected, either via KVO or a contactServiceChooser block, once the availableContactServices array is populated.
+ */
+- (void) connect;
+
+/**
+ *  Connect and call the optionally provided block when available contact services are retrieved.
+ */
+- (void) connectWithContactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser;
+
+/**
+ *  Select a contact service from the available contact services and call the optional completion handler when the selection succeeds or fails.
+ */
+- (void) setContactService:(ZNGContactService *)contactService completion:(nullable ZNGContactSessionCallback)completion;
 
 /**
  *  Constructs and returns a view controller for the current conversation.

@@ -40,7 +40,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 }
 
 #pragma mark - Initializers
-- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key errorHandler:(nullable ZNGErrorHandler)errorHandler;
+- (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key
 {
     NSParameterAssert(token);
     NSParameterAssert(key);
@@ -50,8 +50,6 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     if (self != nil) {
         _token = [token copy];
         _key = [key copy];
-        _errorHandler = [errorHandler copy];
-        
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         

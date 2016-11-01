@@ -31,7 +31,11 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
 
 - (void) viewDidLoad
 {
-    session = [ZingleSDK contactSessionWithToken:kZNGToken key:kZNGKey channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull theContactServices) {
+    session = [ZingleSDK contactSessionWithToken:kZNGToken key:kZNGKey channelTypeId:kZNGChannelTypeId channelValue:kZNGChannelValue];
+    
+    __weak ContactServiceChoosingViewController * weakSelf = self;
+    
+    session.contactServiceChooser = ^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull theContactServices) {
         contactServices = theContactServices;
         
         if ([theContactServices count] > 0) {
@@ -41,11 +45,11 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
                 [indexes addObject:[NSIndexPath indexPathForRow:i inSection:0]];
             }
             
-            [self.tableView insertRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationAutomatic];
+            [weakSelf.tableView insertRowsAtIndexPaths:indexes withRowAnimation:UITableViewRowAnimationAutomatic];
         }
         
         return nil;
-    } errorHandler:nil];
+    };
     
     [session addObserver:self forKeyPath:NSStringFromSelector(@selector(conversation)) options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
     

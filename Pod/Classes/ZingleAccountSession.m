@@ -36,9 +36,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 
 @implementation ZingleAccountSession
 {
-    ZNGAccountChooser accountChooser;
-    ZNGServiceChooser serviceChooser;
-    
     dispatch_semaphore_t contactClientSemaphore;
     
     ZNGAccount * _account;
@@ -49,19 +46,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     UIStoryboard * _storyboard;
 }
 
-
-- (instancetype) initWithToken:(NSString *)token key:(nonnull NSString *)key
+- (id) initWithToken:(NSString *)token key:(NSString *)key
 {
-    return [self initWithToken:token key:key accountChooser:nil serviceChooser:nil errorHandler:nil];
-}
-
-- (instancetype) initWithToken:(NSString *)token
-                           key:(NSString *)key
-                accountChooser:(nullable ZNGAccountChooser)anAccountChooser
-                serviceChooser:(nullable ZNGServiceChooser)aServiceChooser
-                  errorHandler:(nullable ZNGErrorHandler)errorHandler
-{
-    self = [super initWithToken:token key:key errorHandler:errorHandler];
+    self = [super initWithToken:token key:key];
     
     if (self != nil) {
         contactClientSemaphore = dispatch_semaphore_create(0);
@@ -70,9 +57,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
-        
-        accountChooser = anAccountChooser;
-        serviceChooser = aServiceChooser;
     }
     
     return self;
@@ -85,6 +69,28 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 
 - (void) connect
 {
+    [self connectWithCompletion:nil];
+}
+
+- (void) connectWithCompletion:(nullable ZNGAccountSessionCallback)completion
+{
+    [self connectWithAccountChooser:nil serviceChooser:nil completion:completion];
+}
+
+- (void) connectWithAccountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser completion:(nullable ZNGAccountSessionCallback)completion
+{
+    if (accountChooser != nil) {
+        self.accountChooser = accountChooser;
+    }
+    
+    if (serviceChooser != nil ) {
+        self.serviceChooser = serviceChooser;
+    }
+    
+    if (completion != nil) {
+        self.completion = completion;
+    }
+    
     [self retrieveAvailableAccounts];
 }
 
@@ -138,6 +144,28 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     }
     
     return nil;
+}
+
+- (void) setAvailable:(BOOL)available
+{
+    BOOL justConnected = !(self.available) && available;
+    
+    [super setAvailable:available];
+    
+    if ((self.completion != nil) && (justConnected)) {
+        self.completion(self.service, nil);
+        self.completion = nil;
+    }
+}
+
+- (void) setMostRecentError:(ZNGError *)mostRecentError
+{
+    [super setMostRecentError:mostRecentError];
+    
+    if (self.completion != nil) {
+        self.completion(nil, mostRecentError);
+        self.completion = nil;
+    }
 }
 
 - (void) setService:(ZNGService *)service
@@ -202,15 +230,15 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         if (self.availableAccounts == nil) {
             // We have no available accounts.  Go request them.
             [self retrieveAvailableAccounts];
-        } else if (accountChooser != nil) {
+        } else if (self.accountChooser != nil) {
             // We have just gotten a list of available accounts.
             
             // If there is anything in the list (other than the obvious case of a single available account,) we will ask our chooser to pick one
             if ([self.availableAccounts count] != 1) {
-                self.account = accountChooser(self.availableAccounts);
+                self.account = self.accountChooser(self.availableAccounts);
             }
             
-            accountChooser = nil;
+            self.accountChooser = nil;
         }
         return;
     }
@@ -220,15 +248,15 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         if (self.availableServices == nil) {
             // We have no available services.  Go request them.
             [self retrieveAvailableServices];
-        } else if (serviceChooser != nil) {
+        } else if (self.serviceChooser != nil) {
             // We have just gotten a list of services
             
             // If there is anything in the list (other than the obvious case of a single available service,) we will ask our chooser to pick one
             if ([self.availableServices count] != 1) {
-                self.service = serviceChooser(self.availableServices);
+                self.service = self.serviceChooser(self.availableServices);
             }
             
-            serviceChooser = nil;
+            self.serviceChooser = nil;
         }
         return;
     }

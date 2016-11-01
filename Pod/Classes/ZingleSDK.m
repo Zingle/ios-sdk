@@ -22,26 +22,12 @@ NSString * const ZNGPushNotificationReceived = @"ZNGPushNotificationReceived";
 
 + (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue
 {
-    return [self contactSessionWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:nil errorHandler:nil];
+    return [[ZingleContactSession alloc] initWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue];
 }
 
-+ (ZingleContactSession *) contactSessionWithToken:(NSString *)token key:(NSString *)key channelTypeId:(NSString *)channelTypeId channelValue:(NSString *)channelValue contactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser errorHandler:(ZNGErrorHandler)errorHandler
++ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key
 {
-    return [[ZingleContactSession alloc] initWithToken:token key:key channelTypeId:channelTypeId channelValue:channelValue contactServiceChooser:contactServiceChooser errorHandler:errorHandler];
-}
-
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token key:(NSString *)key errorHandler:(ZNGErrorHandler)errorHandler
-{
-    return [self accountSessionWithToken:token key:key accountChooser:nil serviceChooser:nil errorHandler:errorHandler];
-}
-
-+ (ZingleAccountSession *) accountSessionWithToken:(NSString *)token
-                                               key:(NSString *)key
-                                    accountChooser:(nullable ZNGAccountChooser)accountChooser
-                                    serviceChooser:(nullable ZNGServiceChooser)serviceChooser
-                                      errorHandler:(ZNGErrorHandler)errorHandler
-{
-    return [[ZingleAccountSession alloc] initWithToken:token key:key accountChooser:accountChooser serviceChooser:serviceChooser errorHandler:errorHandler];
+    return [[ZingleAccountSession alloc] initWithToken:token key:key];
 }
 
 @end

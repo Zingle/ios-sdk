@@ -48,12 +48,13 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     self = [super init];
     
     if (self != nil) {
+        _urlString = LiveBaseURL;
         _token = [token copy];
         _key = [key copy];
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
-        _sessionManager = [[self class] anonymousSessionManager];
+        _sessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:self.urlString]];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
         
         self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
@@ -80,20 +81,29 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [self _unregisterForAllPushNotifications];
 }
 
+- (void) setUrlString:(NSString *)urlString
+{
+    NSURL * url = [NSURL URLWithString:urlString];
+    
+    if (url == nil) {
+        ZNGLogError(@"Unable to set URL to %@", urlString);
+        return;
+    }
+    
+    _urlString = urlString;
+    
+    if (![self.sessionManager.baseURL isEqual:url]) {
+        ZNGLogInfo(@"Creating new AF HTTP session manager for new URL of %@", urlString);
+        self.sessionManager = [[self class] anonymousSessionManagerWithURL:url];
+        [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
+    }
+}
+
 /**
  *  Returns a session manager with all appropriate meta data.  Can be used for a normal login session or for an anonymous request such as a password reset.
  */
-+ (AFHTTPSessionManager *) anonymousSessionManager
++ (AFHTTPSessionManager *) anonymousSessionManagerWithURL:(NSURL *)url
 {
-    NSString * defaultURL;
-#ifdef DEBUG
-    defaultURL = DebugBaseURL;
-#else
-    defaultURL = LiveBaseURL;
-#endif
-    
-    NSString * urlString = [self urlOverride] ?: defaultURL;
-    NSURL * url = [NSURL URLWithString:urlString];
     [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
 
     AFHTTPSessionManager * session = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
@@ -117,7 +127,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         return;
     }
     
-    AFHTTPSessionManager * session = [self anonymousSessionManager];
+    AFHTTPSessionManager * session = [self anonymousSessionManagerWithURL:[NSURL URLWithString:LiveBaseURL]];
     NSString * path = @"reset-password";
     NSDictionary * parameters = @{ @"email" : emailMinusWhitespace };
     
@@ -152,17 +162,6 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 - (void) connect
 {
     ZNGLogError(@"Connect called on abstract ZingleSession class.");
-}
-
-+ (NSString *) urlOverride
-{
-    NSString * prefix = [[NSUserDefaults standardUserDefaults] valueForKey:@"zingle_server_prefix"];
-    
-    if ([prefix length] == 0) {
-        return nil;
-    }
-    
-    return [NSString stringWithFormat:@"https://%@-api.zingle.me/v1/", prefix];
 }
 
 #pragma mark - Setters

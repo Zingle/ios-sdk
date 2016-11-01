@@ -55,9 +55,11 @@
 @property (nonatomic, copy, nullable) ZNGErrorHandler errorHandler;
 
 /**
- *  The base URL.  Can be overridden only in debug builds.  Immutable after initialization.
+ *  The base URL.  Immutable after initialization.
+ *
+ *  Defaults to "https://api.zingle.me/v1/"
  */
-@property (nonatomic, readonly, nullable) NSString * baseUrl;
+@property (nonatomic, copy, nonnull) NSString * urlString;
 
 @property (nonatomic, copy, nullable) NSData * pushNotificationDeviceToken;
 

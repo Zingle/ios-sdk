@@ -72,7 +72,8 @@ session = [ZingleSDK contactSessionWithToken:myToken
 							   channelTypeId:channelId
 							    channelValue:username];
 								
-// Optionally set an error-handling block
+// Optionally set an error-handling block.
+// (You may alternatively use the completion block with its error property if you only wish to explicitly handle connection errors.)
 session.error = ^(ZNGError * _Nonnull error) {
     // Do something with the error
 };
@@ -94,8 +95,8 @@ void userDidSelectContactService:(ZNGContactService *)selectedContactService
 {
 	// Choose a contact service if it was not done in the block above, optionally providing a completion block
 	[session setContactService:selectedContactService completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-	    if (error == nil) {
-			NSLog(@"Something went wrong")
+	    if (error != nil) {
+			// Something went wrong
 		} else {
 			// You did it!
 			
@@ -140,7 +141,7 @@ session = [ZingleSDK contactSessionWithToken:myToken
 void userDidSelectContactService:(ZNGContactService *)selectedContactService
 {
 	[session setContactService:selectedContactService completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-	    if (error == nil) {
+	    if (error != nil) {
 			NSLog(@"Something went wrong")
 		} else {
 			// You did it!
@@ -168,9 +169,15 @@ session = [ZingleSDK contactSessionWithToken:myToken
 							    channelValue:username];
 
 [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-    return preselectedContactService;
+	if ([availableContactServices containsObject:preselectedContactService]) {
+    	return preselectedContactService;
+	} else {
+		// The preselected contact service is not available.  Where did it all go wrong?
+		[self manuallySelectContactService];
+		return nil;
+	}
 } completion: ^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-	if (error != nil) {
+	if (error == nil) {
 		// You did it!
 	}
 }];

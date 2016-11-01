@@ -161,6 +161,55 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
+- (void) testSuccessfulSingleContactSessionWithContactSelectionBlock
+{
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    XCTestExpectation * contactSelectionBlockCalled = [self expectationWithDescription:@"Contact selection block called"];
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connection completed"];
+
+    
+    [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        [contactSelectionBlockCalled fulfill];
+        XCTAssertEqual([availableContactServices firstObject], contactService1);
+        
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+        contactClient.contact = me;
+        
+        session.contactClient = contactClient;
+        
+        return contactService1;
+    } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if (([contactService isEqual:contactService1]) && (error == nil)) {
+            [connected fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
 /**
  *  Connect using the contact selection completion block
  */
@@ -205,7 +254,9 @@
     session.contactClient = contactClient;
     
     [session setContactService:contactService1 completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        [connected fulfill];
+        if (([contactService isEqual:contactService1]) && (error == nil)) {
+            [connected fulfill];
+        }
     }];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];

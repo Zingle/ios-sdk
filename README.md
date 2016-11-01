@@ -66,34 +66,47 @@ Several pieces of data will be required to initialize a contact class session.
 
 #### Using contact selection and error handling blocks
 ```objective-c
-// Initialize the session object.  This will send off a request for all available contact services.
+// Initialize the session object.
 session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
 							   channelTypeId:channelId
-							    channelValue:username
-					   contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-							// Present UI to the user to choose a service from availableContactServices
-							// ...
-							// Return nil from this block since we are waiting for user input and do not yet have a selected contact service.
-							return nil;
-						} errorHandler:^(ZNGError * _Nonnull error) {
-							// Handle an error
-						}];
+							    channelValue:username];
+								
+// Optionally set an error-handling block
+session.error = ^(ZNGError * _Nonnull error) {
+    // Do something with the error
+};
+	
+// Connect, optionally providing a block to be called once all available contact services have been found
+[session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+    // Choose a contact service and return it immediately or present the user with a choice and return nil
+	//
+	[self presentContactServiceChoiceToUser];
+	return nil;
+} completion:nil];
+
+// ... Wait for user input ...
+
 ```
 
 ```objective-c
 void userDidSelectContactService:(ZNGContactService *)selectedContactService
 {
-	// Select a contact service.  As long as this contact service exists in the availableContactServices array,
-	//  the session object will immediately be ready to go.
-	session.contactService = selectedContactService;
+	// Choose a contact service if it was not done in the block above, optionally providing a completion block
+	[session setContactService:selectedContactService completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+	    if (error == nil) {
+			NSLog(@"Something went wrong")
+		} else {
+			// You did it!
+			
+			// If you would like to access the data directly, you may grab a conversation object.
+		    ZNGConversation * conversation = session.conversation;
 
-	// If you would like to access the data directly, you may grab a conversation object.
-    ZNGConversation * conversation = session.conversation;
-
-	// You may also grab a view controller that will handle message displaying and sending messages.
-	ZNGConversationViewController * conversationViewController = session.conversationViewController;
-	[self presentViewController:conversationViewController animated:YES completion:nil];
+			// You may also grab a view controller that will handle message displaying and sending messages.
+			ZNGConversationViewController * conversationViewController = session.conversationViewController;
+			[self presentViewController:conversationViewController animated:YES completion:nil];
+		}
+	}];
 }
 ```
 
@@ -107,7 +120,9 @@ session = [ZingleSDK contactSessionWithToken:myToken
 							   channelTypeId:channelId
 							    channelValue:username];
 [session addObserver:self forKeyPath:@"availableContactServices" options:0 context:NULL];
-[session addObserver:self forKeyPath:@"mostRecentError" options:0 context:NULL];								
+[session addObserver:self forKeyPath:@"mostRecentError" options:0 context:NULL];
+
+[session connect];								
 ```
 
 ```objective-c
@@ -124,16 +139,20 @@ session = [ZingleSDK contactSessionWithToken:myToken
 ```objective-c
 void userDidSelectContactService:(ZNGContactService *)selectedContactService
 {
-	// Select a contact service.  As long as this contact service exists in the availableContactServices array,
-	//  the session object will immediately be ready to go.
-	session.contactService = selectedContactService;
+	[session setContactService:selectedContactService completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+	    if (error == nil) {
+			NSLog(@"Something went wrong")
+		} else {
+			// You did it!
+			
+			// If you would like to access the data directly, you may grab a conversation object.
+		    ZNGConversation * conversation = session.conversation;
 
-	// If you would like to access the data directly, you may grab a conversation object.
-    ZNGConversation * conversation = session.conversation;
-
-	// You may also grab a view controller that will handle message displaying and sending messages.
-	ZNGConversationViewController * conversationViewController = session.conversationViewController;
-	[self presentViewController:conversationViewController animated:YES completion:nil];
+			// You may also grab a view controller that will handle message displaying and sending messages.
+			ZNGConversationViewController * conversationViewController = session.conversationViewController;
+			[self presentViewController:conversationViewController animated:YES completion:nil];
+		}
+	}];
 }
 ```
 
@@ -146,15 +165,16 @@ You may wish to immediately select a contact service on login.
 session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
 							   channelTypeId:channelId
-							    channelValue:username
-					   contactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-							return preselectedContactService;
-						} errorHandler:^(ZNGError * _Nonnull error) {
-							// Handle an error
-						}];
-```
+							    channelValue:username];
 
-Assuming preselectedContactService is present in the availableContactServices array, the session object will now immediately be ready for use.
+[session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+    return preselectedContactService;
+} completion: ^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+	if (error != nil) {
+		// You did it!
+	}
+}];
+```
 
 ## Push Notifications
 

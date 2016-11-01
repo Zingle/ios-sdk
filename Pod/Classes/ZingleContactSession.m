@@ -19,21 +19,19 @@
 #import "ZNGConversationContactToService.h"
 #import "ZNGContactToServiceViewController.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 // Override our read only array properties to get free KVO compliant setters
 @interface ZingleContactSession ()
 @property (nonatomic, strong, nullable) NSArray<ZNGContactService *> * availableContactServices;
 @property (nonatomic, strong, nullable) ZNGConversationContactToService * conversation;
 @property (nonatomic, strong, nullable) ZNGContact * contact;
+@property (nonatomic, strong, nullable) ZNGService * service;
 @end
 
 @implementation ZingleContactSession
 {
     BOOL _onlyRegisterPushNotificationsForCurrentContactService;    // Flag that will be tied to support for multiple push notification registrations in the future
-    
-    dispatch_semaphore_t messageAndEventClientSemaphore;
-    dispatch_semaphore_t userHeaderSetSemaphore;
 }
 
 - (instancetype) initWithToken:(NSString *)token
@@ -49,9 +47,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     self = [super initWithToken:token key:key errorHandler:errorHandler];
     
     if (self != nil) {
-        messageAndEventClientSemaphore = dispatch_semaphore_create(0);
-        userHeaderSetSemaphore = dispatch_semaphore_create(0);
-        
         _channelTypeID = [channelTypeId copy];
         _channelValue = [channelValue copy];
         _onlyRegisterPushNotificationsForCurrentContactService = YES;
@@ -94,14 +89,31 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     _contactService = selectedContactService;
     _contact = nil;
     _service = nil;
-    [self setConversationForContactService];
+    _conversation = nil;
     [self didChangeValueForKey:NSStringFromSelector(@selector(conversation))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contact))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contactService))];
     
     if (selectedContactService != nil) {
         [self initializeClients];
-        [self findOrCreateContactForContactService];
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            [self synchronouslyFindOrCreateContact];
+            [self synchronouslySetAuthorizationHeader];
+            [self synchronouslyRetrieveServiceObject];
+            
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                [self ensureContactHasAllDefaultCustomFields];
+                [self setConversationForContactService];
+                
+                if (self.conversation != nil) {
+                    self.available = YES;
+                } else {
+                    ZNGLogWarn(@"Initialization failed.  Unable to create conversation.");
+                }
+            });
+        });
+
     } else if (_onlyRegisterPushNotificationsForCurrentContactService) {
         // We are deselecting the current contact service and we are only maintaining push notifications for currently selected contact services.  We need to
         //  deregister for pushes.
@@ -112,33 +124,14 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 - (void) setConversationForContactService
 {
     if (self.contact.contactId != nil) {
-        _conversation = nil;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
-            
-            long success = dispatch_semaphore_wait(messageAndEventClientSemaphore, fiveSeconds);
-            
-            if (success == 0) {
-                success = dispatch_semaphore_wait(userHeaderSetSemaphore, fiveSeconds);
-            }
-            
-            if (success == 0) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    ZNGLogDebug(@"Creating conversation object.");
-                    self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
-                                                                                               channelTypeId:self.channelTypeID
-                                                                                                   contactId:self.contact.contactId
-                                                                                            toContactService:self.contactService
-                                                                                           withMessageClient:self.messageClient
-                                                                                                 eventClient:self.eventClient];
-                    [self.conversation loadRecentEventsErasingOlderData:NO];
-                    
-                    self.available = YES;
-                });
-            } else {
-                ZNGLogError(@"No message client was ever created.  We are unable to setup our conversation object.");
-            }
-        });
+        ZNGLogDebug(@"Creating conversation object.");
+        self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
+                                                                                   channelTypeId:self.channelTypeID
+                                                                                       contactId:self.contact.contactId
+                                                                                toContactService:self.contactService
+                                                                               withMessageClient:self.messageClient
+                                                                                     eventClient:self.eventClient];
+        [self.conversation loadRecentEventsErasingOlderData:NO];
 
     } else {
         self.conversation = nil;
@@ -150,7 +143,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     NSString * serviceId = self.contactService.serviceId;
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
-    dispatch_semaphore_signal(messageAndEventClientSemaphore);
     
     // Prevent overwriting a contact client to facilitate some testing via dependency injection
     if ((self.contactClient == nil) || (![self.contactClient.serviceId isEqualToString:serviceId])) {
@@ -158,45 +150,75 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
 }
 
-- (void) findOrCreateContactForContactService
+- (void) synchronouslyFindOrCreateContact
 {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
+    ZNGLogDebug(@"Sending find or create contact request");
     [self.contactClient findOrCreateContactWithChannelTypeID:_channelTypeID andChannelValue:_channelValue success:^(ZNGContact *contact, ZNGStatus *status) {
-        if (contact == nil) {
-            ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request returned no result.", _channelValue, _channelTypeID);
-            return;
-        }
+        ZNGLogDebug(@"Successful find or create contact response.  Jumping onto main thread to save data...");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ZNGLogDebug(@"Setting contact object on main thread and signalling semaphore.");
+            contact.contactClient = self.contactClient;
+            self.contact = contact;
+            dispatch_semaphore_signal(semaphore);
+        });
         
-        // We have a contact!  Now we need to set our header.
-        contact.contactClient = self.contactClient;
-        self.contact = contact;
-        [self setAuthorizationHeader];
-        
-        // Set the conversation up if we did not do so already
-        [self setConversationForContactService];
     } failure:^(ZNGError *error) {
-        self.mostRecentError = error;
-        ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.mostRecentError = error;
+            ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
+            dispatch_semaphore_signal(semaphore);
+        });
     }];
+    
+    dispatch_time_t tenSecondsFromNow = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+    long timedOut = dispatch_semaphore_wait(semaphore, tenSecondsFromNow);
+    
+    if (timedOut) {
+        ZNGLogDebug(@"Timed out waiting for find or create contact semaphore.");
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ZNGLogError(@"Timed out waiting for findOrcreateContactWithChannelTypeID:");
+            ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for find or create contact request response semaphore" }];
+            self.mostRecentError = error;
+        });
+    }
 }
 
-- (void) retrieveServiceObject
+- (void) synchronouslyRetrieveServiceObject
 {
     if ([self.contactService.serviceId length] == 0) {
         ZNGLogWarn(@"retrieveServiceObject was called, but we do not have a service ID in our %@ contact service", self.contactService.serviceDisplayName);
         return;
     }
     
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
     [self.serviceClient serviceWithId:self.contactService.serviceId success:^(ZNGService *service, ZNGStatus *status) {
-        [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
-        _service = service;
-        [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
-        
-        [self ensureContactHasAllDefaultCustomFields];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.service = service;
+            dispatch_semaphore_signal(semaphore);
+        });
         
     } failure:^(ZNGError *error) {
-        self.mostRecentError = error;
-        ZNGLogError(@"Unable to retrieve %@ service: %@", self.contactService.serviceId, error);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.mostRecentError = error;
+            ZNGLogError(@"Unable to retrieve %@ service: %@", self.contactService.serviceId, error);
+            dispatch_semaphore_signal(semaphore);
+        });
     }];
+    
+    dispatch_time_t tenSecondsFromNow = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+    long timedOut = dispatch_semaphore_wait(semaphore, tenSecondsFromNow);
+    
+    if (timedOut) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ZNGLogError(@"Timed out waiting for GET service object response");
+            ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for a service object GET response" }];
+            self.mostRecentError = error;
+        });
+    }
 }
 
 - (void) ensureContactHasAllDefaultCustomFields
@@ -248,32 +270,48 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return @[@"Title", @"First Name", @"Last Name"];
 }
 
-- (void) setAuthorizationHeader
+- (void) synchronouslySetAuthorizationHeader
 {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
-        if (userAuthorization == nil) {
-            ZNGLogError(@"Server did not respond with a user authorization object.");
-            return;
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (userAuthorization == nil) {
+                ZNGLogError(@"Server did not respond with a user authorization object.");
+                ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Server did not respond with a user authorization object" }];
+                self.mostRecentError = error;
+                dispatch_semaphore_signal(semaphore);
+                return;
+            }
+            
+            if ([userAuthorization.authorizationClass isEqualToString:@"contact"]) {
+                [self.sessionManager.requestSerializer setValue:self.contact.contactId forHTTPHeaderField:@"x-zingle-contact-id"];
+            } else {
+                ZNGLogWarn(@"User is of type \"%@,\" not contact.  Is the wrong type of session object being used?", userAuthorization.authorizationClass);
+                [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
+            }
         
-        if ([userAuthorization.authorizationClass isEqualToString:@"contact"]) {
-            [self.sessionManager.requestSerializer setValue:self.contact.contactId forHTTPHeaderField:@"x-zingle-contact-id"];
-        } else {
-            ZNGLogWarn(@"User is of type \"%@,\" not contact.  Is the wrong type of session object being used?", userAuthorization.authorizationClass);
-            [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
-        }
-        
-        [self retrieveServiceObject];
-        [self registerForPushNotifications];
-        
-        dispatch_semaphore_signal(userHeaderSetSemaphore);
+            dispatch_semaphore_signal(semaphore);
+            
+        });
     } failure:^(ZNGError *error) {
-        self.mostRecentError = error;
-        ZNGLogError(@"Unable to check user authorization status.");
-        
-        // Even though we failed, we will still signal the semaphore since we never expect to recover while anyone is waiting on it
-        dispatch_semaphore_signal(userHeaderSetSemaphore);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.mostRecentError = error;
+            ZNGLogError(@"Unable to check user authorization status: %@", error);
+            dispatch_semaphore_signal(semaphore);
+        });
     }];
+    
+    dispatch_time_t tenSecondsFromNow = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+    long timedOut = dispatch_semaphore_wait(semaphore, tenSecondsFromNow);
+    
+    if (timedOut) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            ZNGLogError(@"Timed out waiting for user auth header");
+            ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for user authorization response semaphore" }];
+            self.mostRecentError = error;
+        });
+    }
 }
 
 - (void) registerForPushNotifications

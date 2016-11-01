@@ -133,6 +133,10 @@
     accountClient.accounts = @[account1];
     session.accountClient = accountClient;
     
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
     ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
     contactServiceClient.contactServices = @[contactService1];
     session.contactServiceClient = contactServiceClient;
@@ -187,6 +191,10 @@
     accountClient.accounts = @[account1];
     session.accountClient = accountClient;
     
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
     ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
     contactServiceClient.contactServices = @[contactService1];
     session.contactServiceClient = contactServiceClient;
@@ -227,6 +235,10 @@
     ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
     accountClient.accounts = @[account1];
     session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
     
     ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
     NSArray<ZNGContactService *> * contactServices = @[contactService1, contactService2];
@@ -273,6 +285,10 @@
     ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
     accountClient.accounts = @[account1];
     session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
     
     ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
     NSArray<ZNGContactService *> * contactServices = @[contactService1, contactService2];

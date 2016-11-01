@@ -116,7 +116,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Connect and call the optionally provided block when available contact services are retrieved.
  */
-- (void) connectWithContactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser;
+- (void) connectWithContactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser completion:(nullable ZNGContactSessionCallback)completion;
 
 /**
  *  Select a contact service from the available contact services and call the optional completion handler when the selection succeeds or fails.

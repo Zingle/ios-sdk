@@ -55,13 +55,17 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 - (void) connect
 {
-    [self connectWithContactServiceChooser:nil];
+    [self connectWithContactServiceChooser:nil completion:nil];
 }
 
-- (void) connectWithContactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser
+- (void) connectWithContactServiceChooser:(nullable ZNGContactServiceChooser)contactServiceChooser completion:(nullable ZNGContactSessionCallback)completion
 {
     if (contactServiceChooser != nil) {
         self.contactServiceChooser = contactServiceChooser;
+    }
+    
+    if (completion != nil) {
+        self.completion = completion;
     }
     
     // First we must populate our list of available contact services

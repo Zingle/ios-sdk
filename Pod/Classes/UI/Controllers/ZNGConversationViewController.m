@@ -422,8 +422,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self.collectionView performBatchUpdates:updates completion:^(BOOL finished) {
         self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentSize.height - bottomOffset);
-        [CATransaction commit];
     }];
+    
+    [CATransaction commit];
 }
 
 - (void) insertEventsAtIndexesWithoutScrolling:(NSArray<NSIndexPath *> *)indexes

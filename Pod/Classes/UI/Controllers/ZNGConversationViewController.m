@@ -448,12 +448,23 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGMessage * message = notification.object;
     NSIndexPath * indexPath = [self indexPathForEventWithId:message.messageId];
     
-    if (indexPath != nil) {
-        
-        [self performCollectionViewUpdatesWithoutScrolling:^{
-            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        }];
+    if (indexPath == nil) {
+        // This cell is not even in our collection view.  We do not care.
+        return;
     }
+    
+    ZNGLogDebug(@"Reloading cell %llu due to image load", (unsigned long long)indexPath.row);
+    
+    NSArray<NSIndexPath *> * visibleCellIndexPaths = [self.collectionView indexPathsForVisibleItems];
+    NSIndexPath * bottomVisibleCellIndexPath = [[visibleCellIndexPaths sortedArrayUsingSelector:@selector(compare:)] lastObject];
+
+    [CATransaction begin];
+    [CATransaction setDisableActions:YES];
+
+    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    [self.collectionView scrollToItemAtIndexPath:bottomVisibleCellIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+
+    [CATransaction commit];
 }
 
 #pragma mark - Text view delegate

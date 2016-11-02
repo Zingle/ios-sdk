@@ -50,6 +50,13 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 @property (nonatomic, strong, nullable) ZNGService * service;
 
 /**
+ *  If set, the service object will be refreshed whenever returning from the background (but no more often than every ten minutes.)
+ *
+ *  Defaults to YES.
+ */
+@property (nonatomic, assign) BOOL automaticallyUpdateServiceWhenReturningFromBackground;
+
+/**
  *  The block called if multiple accounts exist on connection.
  *
  *  This is set to nil after initial connection.

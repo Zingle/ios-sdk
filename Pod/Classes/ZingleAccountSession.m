@@ -40,6 +40,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     ZNGAccount * _account;
     ZNGService * _service;
+    NSDate * serviceSetDate;
     
     ZNGUserAuthorization * userAuthorization;
     
@@ -54,9 +55,12 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         contactClientSemaphore = dispatch_semaphore_create(0);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
         
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
+        
+        _automaticallyUpdateServiceWhenReturningFromBackground = YES;
     }
     
     return self;
@@ -140,7 +144,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     }
     
     if ([self.availableServices count] == 1) {
-        return [self.availableServices firstObject];
+        self.service = [self.availableServices firstObject];
+        return _service;
     }
     
     return nil;
@@ -172,11 +177,20 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 {
     if (service == nil) {
         _service = nil;
+        serviceSetDate = nil;
         return;
     }
     
-    if ((_service != nil) && (![_service isEqual:service])) {
-        ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
+    serviceSetDate = [NSDate date];
+    
+    if (_service != nil) {
+        if ([_service isEqual:service]) {
+            // We are simply updating our current service.  Do it and return.
+            _service = service;
+            return;
+        } else {
+            ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
+        }
     }
     
     NSUInteger serviceIndex = [self.availableServices indexOfObject:service];
@@ -194,6 +208,68 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
  
     if (_service != nil) {
         [self updateStateForNewAccountOrService];
+    }
+}
+
+#pragma mark - Service updating
+/**
+ *  Refreshes our current service object if the data is older than ten minutes old.
+ */
+- (void) updateServiceIfOldData
+{
+    if (self.service == nil) {
+        return;
+    }
+    
+    BOOL shouldRefresh = NO;
+    
+    if (serviceSetDate == nil) {
+        ZNGLogError(@"Our service object is set, but we do not have a timestamp of our last update.  Refreshing.");
+        shouldRefresh = YES;
+    } else {
+        NSTimeInterval timeSinceUpdate = [[NSDate date] timeIntervalSinceDate:serviceSetDate];
+        NSTimeInterval tenMinutes = (10.0 * 60.0);
+        shouldRefresh = (timeSinceUpdate > tenMinutes);
+    }
+    
+    if (shouldRefresh) {
+        [self updateCurrentService];
+    }
+}
+
+- (void) updateCurrentService
+{
+    if (self.service == nil) {
+        ZNGLogInfo(@"updateCurrentService was called, but we do not have a service selected.");
+        return;
+    }
+    
+    [self.serviceClient serviceWithId:self.service.serviceId success:^(ZNGService *service, ZNGStatus *status) {
+        if (service != nil) {
+            
+            NSUInteger serviceIndex = [self.availableServices indexOfObject:service];
+            
+            if (serviceIndex == NSNotFound) {
+                ZNGLogWarn(@"Successfully refreshed our current service, but it does not appear in our %llu availableServices.  This is odd.", (unsigned long long)[self.availableServices count]);
+            } else {
+                NSMutableArray<ZNGService *> * newAvailableServices = [self mutableArrayValueForKey:NSStringFromSelector(@selector(availableServices))];
+                [newAvailableServices replaceObjectAtIndex:serviceIndex withObject:service];
+            }
+            
+            self.service = service;
+        } else {
+            ZNGLogError(@"Service update request returned 200 but no service object.  Help.");
+        }
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Failed to refresh current service of %@ (%@): %@", self.service.displayName, self.service.serviceId, error);
+        self.mostRecentError = error;
+    }];
+}
+
+- (void) notifyBecameActive:(NSNotification *)notification
+{
+    if (self.automaticallyUpdateServiceWhenReturningFromBackground) {
+        [self updateServiceIfOldData];
     }
 }
 

@@ -27,6 +27,7 @@
 		9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3561DC2BA2600957C5F /* ZNGMockAccountClient.m */; };
 		9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */; };
 		9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B35F1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m */; };
+		964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */; };
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
@@ -85,6 +86,8 @@
 		9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockServiceClient.m; path = mocks/ZNGMockServiceClient.m; sourceTree = "<group>"; };
 		9622B35E1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockUserAuthorizationClient.h; path = mocks/ZNGMockUserAuthorizationClient.h; sourceTree = "<group>"; };
 		9622B35F1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockUserAuthorizationClient.m; path = mocks/ZNGMockUserAuthorizationClient.m; sourceTree = "<group>"; };
+		964E99C61DCAACA000A22CD5 /* ZNGMockNotificationsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockNotificationsClient.h; path = mocks/ZNGMockNotificationsClient.h; sourceTree = "<group>"; };
+		964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockNotificationsClient.m; path = mocks/ZNGMockNotificationsClient.m; sourceTree = "<group>"; };
 		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
@@ -232,6 +235,8 @@
 				9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */,
 				9622B33F1DC2852200957C5F /* ZNGMockContactServiceClient.h */,
 				9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */,
+				964E99C61DCAACA000A22CD5 /* ZNGMockNotificationsClient.h */,
+				964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */,
 				9622B3571DC2BA2600957C5F /* ZNGMockServiceClient.h */,
 				9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */,
 				9622B35E1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.h */,
@@ -308,6 +313,7 @@
 				ORGANIZATIONNAME = Zingle;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
+						DevelopmentTeam = EME9422BAK;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
 								enabled = 0;
@@ -480,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
+				964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */,
 				9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */,
 				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,
 				9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */,
@@ -595,6 +602,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
+				DEVELOPMENT_TEAM = EME9422BAK;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZingleSDK/ZingleSDK-Prefix.pch";
 				INFOPLIST_FILE = "ZingleSDK/ZingleSDK-Info.plist";
@@ -614,6 +622,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				DEVELOPMENT_TEAM = EME9422BAK;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ZingleSDK/ZingleSDK-Prefix.pch";
 				INFOPLIST_FILE = "ZingleSDK/ZingleSDK-Info.plist";

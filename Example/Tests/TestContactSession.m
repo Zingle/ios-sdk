@@ -7,12 +7,14 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "ZingleSDK/ZingleSDK.h"
 #import "ZingleSDK/ZingleContactSession.h"
 #import "ZNGMockAccountClient.h"
 #import "ZNGMockContactClient.h"
 #import "ZNGMockServiceClient.h"
 #import "ZNGMockContactServiceClient.h"
 #import "ZNGMockUserAuthorizationClient.h"
+#import "ZNGMockNotificationsClient.h"
 @import CocoaLumberjack;
 
 @interface TestContactSession : XCTestCase
@@ -28,6 +30,8 @@
     ZNGService * account2service2;
     ZNGContactService * contactService1;
     ZNGContactService * contactService2;
+    
+    NSData * deviceToken;
     
     ZNGContact * me;
 }
@@ -48,6 +52,9 @@
     NSString * service3FileName = @"luisIOSTest";
     NSString * contactService1FileName = @"devEnterpriseService-contactService";
     NSString * contactService2FileName = @"luisTestService-contactService";
+    
+    NSString * deviceTokenString = @"123456789abcdef123456789abcdef";
+    deviceToken = [deviceTokenString dataUsingEncoding:NSUTF8StringEncoding];
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     
@@ -158,6 +165,121 @@
     
     [session connect];
     
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testNotificationRegistration
+{
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+
+    [ZingleSDK setPushNotificationDeviceToken:deviceToken];
+    
+    ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
+    session.notificationsClient = notificationsClient;
+    
+    XCTAssertEqual(0, [notificationsClient.registeredServiceIds count], @"Mocked notifications client starts with no registrations.");
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected"];
+    [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return [notificationsClient.registeredServiceIds containsObject:account1service1.serviceId];
+    }];
+    
+    [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+        contactClient.contact = me;
+        
+        session.contactClient = contactClient;
+        
+        return contactService1;
+    } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if (([contactService isEqual:contactService1]) && (error == nil)) {
+            [connected fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testLogoutRemovesNotification
+{
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    [ZingleSDK setPushNotificationDeviceToken:deviceToken];
+    
+    ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
+    session.notificationsClient = notificationsClient;
+    
+    XCTAssertEqual(0, [notificationsClient.registeredServiceIds count], @"Mocked notifications client starts with no registrations.");
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected"];
+    [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return [notificationsClient.registeredServiceIds containsObject:account1service1.serviceId];
+    }];
+    
+    [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+        contactClient.contact = me;
+        
+        session.contactClient = contactClient;
+        
+        return contactService1;
+    } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if (([contactService isEqual:contactService1]) && (error == nil)) {
+            [connected fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ![notificationsClient.registeredServiceIds containsObject:account1service1.serviceId];
+    }];
+    
+    [session logout];
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 

@@ -67,6 +67,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     BOOL moreMessagesAvailableRemotely;
     BOOL hasDisplayedInitialData;
     
+    BOOL showingImageView;
+    
     ZNGGradientLoadingView * loadingGradient;
     
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
@@ -189,6 +191,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     [super viewDidAppear:animated];
     self.isVisible = YES;
+    
+    if (showingImageView) {
+        self.automaticallyScrollsToMostRecentMessage = YES;
+    }
     
     [self markAllVisibleMessagesAsRead];
     checkedInitialVisibleCells = YES;
@@ -505,6 +511,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 imageView.image = attachment.image;
                 imageView.navigationItem.title = self.navigationItem.title;
                 
+                // Prevent JSQMessagesViewController from being an absolute ass and scrolling to the bottom when we come back.
+                showingImageView = YES;
+                self.automaticallyScrollsToMostRecentMessage = NO;
                 [self.navigationController pushViewController:imageView animated:YES];
             }
         }

@@ -144,7 +144,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     }
     
     if ([self.availableServices count] == 1) {
-        self.service = [self.availableServices firstObject];
+        [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
+        _service = self.availableServices[0];
+        [self didChangeValueForKey:NSStringFromSelector(@selector(service))];
         return _service;
     }
     

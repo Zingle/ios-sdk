@@ -19,6 +19,8 @@ static NSString * const ZNGEventConversationStarred = @"starred";
 static NSString * const ZNGEventConversationUnstarred = @"unstarred";
 static NSString * const ZNGEventWorkflowStarted = @"workflow_started";
 static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
+static NSString * const ZNGEventFeedReopened = @"feed_reopened";
+static NSString * const ZNGEventFeedClosed = @"feed_closed";
 
 @implementation ZNGEvent
 
@@ -36,7 +38,9 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
                   ZNGEventConversationStarred,
                   ZNGEventConversationUnstarred,
                   ZNGEventWorkflowStarted,
-                  ZNGEventWorkflowEnded
+                  ZNGEventWorkflowEnded,
+                  ZNGEventFeedClosed,
+                  ZNGEventFeedReopened
                   ];
     });
     
@@ -178,6 +182,10 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
         return @"Automation started";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowEnded]) {
         return @"Automation ended";
+    } else if ([self.eventType isEqualToString:ZNGEventFeedClosed]) {
+        return @"Closed";
+    } else if ([self.eventType isEqualToString:ZNGEventFeedReopened]) {
+        return @"Reopened";
     }
     
     return @"Unknown event";

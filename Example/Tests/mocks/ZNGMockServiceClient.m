@@ -50,6 +50,13 @@
               success:(void (^)(ZNGService* service, ZNGStatus* status))success
               failure:(void (^)(ZNGError* error))failure
 {
+    [self.serviceRequestedExpectation fulfill];
+    self.serviceRequestedExpectation = nil;
+    
+    if (self.throwExceptionOnAnyServiceRequest) {
+        [NSException raise:@"Refreshed with do not refresh flag set in mock object" format:@"Service was requested with the triggerTestFailOnAnyServiceRequest flag set to YES :("];
+    }
+    
     if (success == nil) {
         return;
     }

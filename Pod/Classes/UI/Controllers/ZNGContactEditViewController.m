@@ -347,7 +347,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         
         // If we're in a simulator, we will fake a push notification so our UI gets updated
 #ifdef TARGET_IPHONE_SIMULATOR
-        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:contact];
+        NSDictionary * userInfo = @{ @"aps" : @{ @"contact" : contact.contactId } };
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:contact userInfo:userInfo];
 #endif
         
         [self dismissViewControllerAnimated:YES completion:nil];

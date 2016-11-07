@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 
-@interface ZingleAccountSession : ZingleSession
+@interface ZingleAccountSession : ZingleSession <NSCacheDelegate>
 
 #pragma mark - Account/Service selection
 /**

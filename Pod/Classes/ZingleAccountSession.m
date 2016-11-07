@@ -42,6 +42,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     ZNGService * _service;
     NSDate * serviceSetDate;
     
+    NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
+    
     ZNGUserAuthorization * userAuthorization;
     
     UIStoryboard * _storyboard;
@@ -56,9 +58,12 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
         
+        allLoadedConversationIds = [[NSMutableSet alloc] init];
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
+        _conversationCache.delegate = self;
         
         _automaticallyUpdateServiceWhenReturningFromBackground = YES;
     }
@@ -102,6 +107,15 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 {
     [_conversationCache removeAllObjects];
     [super logout];
+}
+
+- (void) cache:(NSCache *)cache willEvictObject:(id)obj
+{
+    ZNGConversationServiceToContact * conversation = obj;
+    
+    if ([conversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
+        [allLoadedConversationIds removeObject:conversation.contact.contactId];
+    }
 }
 
 #pragma mark - Service/Account setters
@@ -259,6 +273,11 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
             }
             
             self.service = service;
+            
+            for (NSString * conversationId in allLoadedConversationIds) {
+                ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:conversationId];
+                conversation.service = service;
+            }
         } else {
             ZNGLogError(@"Service update request returned 200 but no service object.  Help.");
         }
@@ -266,6 +285,20 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         ZNGLogError(@"Failed to refresh current service of %@ (%@): %@", self.service.displayName, self.service.serviceId, error);
         self.mostRecentError = error;
     }];
+}
+
+- (BOOL) notificationRelevantToCurrentService:(NSNotification *)notification
+{
+    NSString * serviceId = notification.userInfo[@"aps"][@"service"];
+    return [serviceId isEqualToString:self.service.serviceId];
+}
+
+- (void) _notifyPushNotificationReceived:(NSNotification *)notification
+{
+    if ([self notificationRelevantToCurrentService:notification]) {
+        ZNGLogInfo(@"Refreshing current service due to push notification");
+        [self updateCurrentService];
+    }
 }
 
 - (void) notifyBecameActive:(NSNotification *)notification
@@ -430,6 +463,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
                                                               withMessageClient:self.messageClient
                                                                     eventClient:self.eventClient
                                                                   contactClient:self.contactClient];
+        [allLoadedConversationIds addObject:contact.contactId];
     }
     
     // Do we need to switch from detailed events to non detailed events or vice versa?

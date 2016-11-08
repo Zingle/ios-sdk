@@ -8,6 +8,10 @@
 
 #import <Mantle/Mantle.h>
 
+extern NSString * const ZNGTemplateTypeAutomatedWelcome;
+extern NSString * const ZNGTemplateTypeWelcome;
+extern NSString * const ZNGTemplateTypeGeneral;
+
 @interface ZNGTemplate : MTLModel<MTLJSONSerializing>
 
 @property (nonatomic, strong) NSString *templateId;

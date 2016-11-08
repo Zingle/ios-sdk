@@ -10,6 +10,10 @@
 
 static NSString * const ResponseTimeMagicString = @"{response_time}";
 
+NSString * const ZNGTemplateTypeAutomatedWelcome = @"automated_welcome";
+NSString * const ZNGTemplateTypeWelcome = @"welcome";
+NSString * const ZNGTemplateTypeGeneral = @"general";
+
 @implementation ZNGTemplate
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey

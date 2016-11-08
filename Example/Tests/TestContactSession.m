@@ -662,5 +662,124 @@
     XCTAssertNotNil(session.service);
 }
 
+- (void) testPushNotifcationTriggersServiceRefresh
+{
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
+    
+    [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+        contactClient.contact = me;
+        
+        session.contactClient = contactClient;
+        
+        serviceClient.throwExceptionOnAnyServiceRequest = NO;
+        
+        return contactService1;
+    } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if ([contactService isEqual:contactService1]) {
+            [connected fulfill];
+        } else {
+            XCTFail(@"Contact service was not %@ as expected.  Contact service: %@, service: %@, error: %@", contactService1.serviceId, contactService.serviceId, service.serviceId, error);
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    XCTestExpectation * serviceRefreshedExpectation = [self expectationWithDescription:@"Service was refreshed due to push notification"];
+    serviceClient.serviceRequestedExpectation = serviceRefreshedExpectation;
+    
+    NSDictionary * userInfo = @{ @"aps" : @{ @"service" : contactService1.serviceId } };
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:nil userInfo:userInfo];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testIrrelevantPushNotificationDoesNotTriggerRefresh
+{
+    ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockUserAuthorizationClient * authClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    authClient.contact = me;
+    session.userAuthorizationClient = authClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockContactServiceClient * contactServiceClient = [[ZNGMockContactServiceClient alloc] initWithSession:session];
+    contactServiceClient.contactServices = @[contactService1];
+    session.contactServiceClient = contactServiceClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
+    
+    [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
+        contactClient.contact = me;
+        
+        session.contactClient = contactClient;
+        
+        return contactService1;
+    } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if ([contactService isEqual:contactService1]) {
+            [connected fulfill];
+        } else {
+            XCTFail(@"Contact service was not %@ as expected.  Contact service: %@, service: %@, error: %@", contactService1.serviceId, contactService.serviceId, service.serviceId, error);
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    serviceClient.throwExceptionOnAnyServiceRequest = YES;
+    NSDictionary * userInfo = @{ @"aps" : @{ @"service" : contactService2.serviceId } };
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:nil userInfo:userInfo];
+    
+    
+    // Wait a couple of seconds to ensure that we do not call service client and throw an exception
+    XCTestExpectation * waitedForExceptionSuccessfully = [self expectationWithDescription:@"Waited for an exception to be thrown from an errant service request without one being thrown."];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1.0];
+        [waitedForExceptionSuccessfully fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    serviceClient.throwExceptionOnAnyServiceRequest = NO;
+}
 
 @end

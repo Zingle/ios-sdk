@@ -15,8 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The receiving contact.  This is set on initialization and cannot be changed.
  */
-@property (nonatomic, readonly) ZNGContact * contact;
-@property (nonatomic, readonly) ZNGService * service;
+@property (nonatomic, strong) ZNGContact * contact;
+@property (nonatomic, strong) ZNGService * service;
 @property (nonatomic, readonly) NSString * myUserId;
 
 @property (nonnull, strong) ZNGContactClient * contactClient;

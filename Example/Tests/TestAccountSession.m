@@ -285,5 +285,86 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
+- (void) testRelevantPushNotifcationTriggersServieRefresh
+{
+    ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
+    
+    [session connectWithAccountChooser:nil serviceChooser:nil completion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if ([service isEqual:account1service1]) {
+            [connected fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    XCTestExpectation * serviceRefreshedExpectation = [self expectationWithDescription:@"Service was refreshed due to push notification"];
+    serviceClient.serviceRequestedExpectation = serviceRefreshedExpectation;
+    
+    NSDictionary * userInfo = @{ @"aps" : @{ @"service" : account1service1.serviceId } };
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:nil userInfo:userInfo];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testIrrelevantPushNotificationDoesNotTriggerServiceRequest
+{
+    ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
+    
+    [session connectWithAccountChooser:nil serviceChooser:nil completion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        if ([service isEqual:account1service1]) {
+            [connected fulfill];
+        }
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    XCTestExpectation * waitedLongEnough = [self expectationWithDescription:@"Enough time passed that we can be sure the notification did not trigger an unneeded refresh"];
+    
+    serviceClient.throwExceptionOnAnyServiceRequest = YES;
+    NSDictionary * userInfo = @{ @"aps" : @{ @"service" : account2service2.serviceId } };   // A different service
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:nil userInfo:userInfo];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [NSThread sleepForTimeInterval:1.0];
+        [waitedLongEnough fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
 
 @end

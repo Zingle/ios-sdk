@@ -135,8 +135,6 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         if (contactIndex != NSNotFound) {
             NSUInteger pageIndex = contactIndex / self.pageSize + 1;
             
-            refreshed = YES;
-            
             // This delay is needed because the server sends us a push slightly before it updates the last message data in Elastic Cloud.
             // Yell at a server developer for this, not me :(
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{

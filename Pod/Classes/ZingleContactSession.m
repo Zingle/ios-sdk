@@ -32,6 +32,8 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 @implementation ZingleContactSession
 {
     BOOL _onlyRegisterPushNotificationsForCurrentContactService;    // Flag that will be tied to support for multiple push notification registrations in the future
+    
+    NSDate * serviceUpdateTime;
 }
 
 - (instancetype) initWithToken:(NSString *)token
@@ -48,9 +50,17 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         _channelTypeID = [channelTypeId copy];
         _channelValue = [channelValue copy];
         _onlyRegisterPushNotificationsForCurrentContactService = YES;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyReturnedFromBackground:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSessionPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) connect
@@ -83,6 +93,59 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     }];
 }
 
+- (void) setService:(ZNGService *)service
+{
+    _service = service;
+    serviceUpdateTime = [NSDate date];
+}
+
+- (void) notifyReturnedFromBackground:(NSNotification *)notification
+{
+    [self updateServiceIfOldData];
+}
+
+- (void) notifyContactSessionPushNotificationReceived:(NSNotification *)notification
+{
+    // We only care about push notifications that specify our current service ID
+    NSString * serviceId = notification.userInfo[@"aps"][@"service"];
+    
+    if ([serviceId isEqualToString:self.contactService.serviceId]) {
+        [self updateCurrentService];
+    }
+}
+
+/**
+ *  Refreshes our current service object if the data is older than ten minutes old.
+ */
+- (void) updateServiceIfOldData
+{
+    if (self.service == nil) {
+        return;
+    }
+    
+    BOOL shouldRefresh = NO;
+    
+    if (serviceUpdateTime == nil) {
+        ZNGLogError(@"Our service object is set, but we do not have a timestamp of our last update.  Refreshing.");
+        shouldRefresh = YES;
+    } else {
+        NSTimeInterval timeSinceUpdate = [[NSDate date] timeIntervalSinceDate:serviceUpdateTime];
+        NSTimeInterval tenMinutes = (10.0 * 60.0);
+        shouldRefresh = (timeSinceUpdate > tenMinutes);
+    }
+    
+    if (shouldRefresh) {
+        [self updateCurrentService];
+    }
+}
+
+- (void) updateCurrentService
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self synchronouslyRetrieveServiceObject];
+    });
+}
+
 - (void) setContactService:(ZNGContactService *)contactService
 {
     [self setContactService:contactService completion:nil];
@@ -108,6 +171,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     _contactService = selectedContactService;
     _contact = nil;
     _service = nil;
+    serviceUpdateTime = nil;
     _conversation = nil;
     [self didChangeValueForKey:NSStringFromSelector(@selector(conversation))];
     [self didChangeValueForKey:NSStringFromSelector(@selector(contact))];

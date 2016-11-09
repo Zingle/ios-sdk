@@ -357,7 +357,15 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         self.saveButton.enabled = YES;
         ZNGLogError(@"Unable to save contact: %@", error);
         
-        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to save contact" message:error.errorDescription preferredStyle:UIAlertControllerStyleAlert];
+        NSString * description;
+        
+        if (error.zingleErrorCode == ZINGLE_ERROR_CHANNEL_MISSING_COUNTRY) {
+            description = @"Invalid phone number.  A country code may be missing.";
+        } else {
+            description = error.errorDescription;
+        }
+        
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to save contact" message:description preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:ok];
         [self presentViewController:alert animated:YES completion:nil];

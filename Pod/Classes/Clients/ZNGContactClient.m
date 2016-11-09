@@ -280,6 +280,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }
     }
     
+    BOOL creatingNewContact = ([newContact.contactId length] == 0);
+    
     void (^contactUpdateSuccessBlock)(ZNGContact *, ZNGStatus *) = ^void(ZNGContact * contact, ZNGStatus * status) {
         ZNGLogDebug(@"Updating %@ (%@) (but not yet labels or channels if present) succeeded.", [contact fullName], contact.isConfirmed ? @"confirmed" : @"unconfirmed");
         contact.contactClient = self;
@@ -365,7 +367,25 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                         }];
                     }
                 } else {
-                    if (failure != nil) {
+                    
+                    // We failed, if we were creating a new contact, we need to roll back the creation
+                    if (creatingNewContact) {
+                        [self deleteContactWithId:contact.contactId success:^(ZNGStatus *status) {
+                            ZNGLogWarn(@"Creating the new contact succeeded, but one of the follow up requests to add channel or label information failed: %@\n\nContact was deleted successfully after the error.", error);
+                            
+                            if (failure != nil) {
+                                failure(error);
+                            }
+                        } failure:^(ZNGError *deletionError) {
+                            ZNGLogError(@"An error was encountered while adding labels or channels after successfully creating a contact: %@", error);
+                            ZNGLogError(@"Additionally, an error was encountered while attempting to clean up and delete this contact: %@", deletionError);
+                            
+                            if (failure != nil) {
+                                failure(error);
+                            }
+                        }];
+                    } else if (failure != nil) {
+                        // Standard failure when updating a pre-existing contact
                         failure(error);
                     }
                 }
@@ -374,7 +394,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     };
     
     // Are we updating or creating?
-    if ([newContact.contactId length] == 0) {
+    if (creatingNewContact) {
         // Creating
         [self saveContact:changedContact success:contactUpdateSuccessBlock failure:failure];
     } else {

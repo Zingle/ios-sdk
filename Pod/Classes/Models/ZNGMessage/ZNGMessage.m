@@ -164,7 +164,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     for (UIImage * image in self.imageAttachments) {
         ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
         attachment.image = image;
-        attachment.maxDisplayHeight = 200.0;
+        attachment.maxDisplayHeight = 120.0;
         
         NSString * spacingString = bodyPresent ? @"\n\n" : @"";
         NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:spacingString];

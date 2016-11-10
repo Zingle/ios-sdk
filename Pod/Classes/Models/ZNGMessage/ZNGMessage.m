@@ -77,6 +77,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             
             UIImage * theImage = [[UIImage alloc] initWithData:imageData];
             
+            if (theImage == nil) {
+                ZNGLogWarn(@"Unable to initialize an image from %llu bytes of attachment data.", (unsigned long long)[imageData length]);
+            }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 NSMutableArray<UIImage *> * mutableImages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(imageAttachments))];

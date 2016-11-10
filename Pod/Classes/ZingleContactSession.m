@@ -179,10 +179,10 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     if (selectedContactService != nil) {
         [self initializeClients];
-        [self registerForPushNotifications];
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self synchronouslyFindOrCreateContact];
+            [self registerForPushNotifications];    // Note that we are waiting to register for pushes until after we get our contact object and set our auth header as a contact.
             [self synchronouslySetAuthorizationHeader];
             [self synchronouslyRetrieveServiceObject];
             

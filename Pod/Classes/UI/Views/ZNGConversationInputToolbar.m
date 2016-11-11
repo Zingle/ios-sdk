@@ -85,7 +85,6 @@
         [super toggleSendButtonEnabled];
     } else {
         self.contentView.textView.editable = NO;
-        self.contentView.textView.text = @"";
         self.sendButton.enabled = NO;
     }
 }

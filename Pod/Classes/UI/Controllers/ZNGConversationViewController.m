@@ -952,17 +952,24 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             textColor = self.incomingTextColor;
         }
         
-        cell.textView.linkTextAttributes = @{
-                                             NSForegroundColorAttributeName : cell.textView.textColor,
-                                             NSUnderlineStyleAttributeName : @(NSUnderlineStyleSingle | NSUnderlinePatternSolid)
-                                             };
-        
-        cell.messageBubbleTopLabel.textColor = self.authorTextColor;
-        
         NSMutableAttributedString * text = [[event attributedText] mutableCopy];
         JSQMessagesCollectionViewFlowLayout * layout = (JSQMessagesCollectionViewFlowLayout *)collectionView.collectionViewLayout;
-        [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
-        [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
+        
+        NSMutableDictionary * linkAttributes = [[NSMutableDictionary alloc] init];
+        linkAttributes[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle | NSUnderlinePatternSolid);
+        
+        if (textColor != nil) {
+            linkAttributes[NSForegroundColorAttributeName] = textColor;
+            [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
+        }
+        
+        if (layout.messageBubbleFont != nil) {
+            [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
+        }
+        
+        cell.textView.linkTextAttributes = linkAttributes;
+        
+        cell.messageBubbleTopLabel.textColor = self.authorTextColor;
         
         cell.textView.attributedText = text;
         

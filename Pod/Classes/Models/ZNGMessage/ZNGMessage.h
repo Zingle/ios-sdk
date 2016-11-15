@@ -35,6 +35,11 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
 
+/**
+ *  Flag indicating that this message is being sent but does not yet exist on the server
+ */
+@property (nonatomic) BOOL sending;
+
 #pragma mark - Properties added by containing Conversation
 @property (nonatomic, copy) NSString * senderDisplayName;
 

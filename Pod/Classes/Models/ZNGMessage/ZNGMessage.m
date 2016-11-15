@@ -209,6 +209,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
+             @"sending" : [NSNull null],
              @"imageAttachments" : [NSNull null]
              };
 }

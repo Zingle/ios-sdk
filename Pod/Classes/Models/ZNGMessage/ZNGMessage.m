@@ -79,6 +79,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             
             if (theImage == nil) {
                 ZNGLogWarn(@"Unable to initialize an image from %llu bytes of attachment data.", (unsigned long long)[imageData length]);
+                return;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{

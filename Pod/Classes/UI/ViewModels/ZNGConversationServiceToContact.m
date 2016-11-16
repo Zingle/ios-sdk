@@ -157,6 +157,12 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
             message.senderDisplayName = [self remoteName];
         } else {
             
+            // If this is a pending outgoing message from us, we can shove a "Me" in there.
+            if (message.sending) {
+                message.senderDisplayName = @"Me";
+                continue;
+            }
+            
             NSString * userId = event.triggeredByUser.userId ?: event.message.triggeredByUser.userId ?: event.message.triggeredByUserId;
             ZNGUser * triggerer = message.triggeredByUser;
             

@@ -295,6 +295,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     text = [text stringByReplacingOccurrencesOfString:replacementCharacterString withString:@""];
     
     self.inputToolbar.inputEnabled = NO;
+    self.inputToolbar.contentView.textView.text = @"";
     
     [self.conversation sendMessageWithBody:text images:attachments success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;

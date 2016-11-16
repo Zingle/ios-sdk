@@ -106,7 +106,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
             if (status.totalRecords != self.totalEventCount) {
-                ZNGLogDebug(@"There appears to be more event data available.  Fetching...");
+                ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)self.totalEventCount, (long long)status.totalRecords);
                 self.loading = YES;
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];

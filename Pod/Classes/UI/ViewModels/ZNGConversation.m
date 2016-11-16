@@ -100,18 +100,22 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 #pragma mark - Refreshing latest data
 - (void)loadRecentEventsErasingOlderData:(BOOL)replace
 {
+    if (self.loading) {
+        ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
+        return;
+    }
+    
     // If we already have some data, and the caller does not wish old data blown away, we will first fetch a page size of 0 to see if we have more data
     if ((!replace) && (self.totalEventCount > 0)) {
         NSDictionary * parameters = [self parametersForPageSize:0 pageIndex:1];
         
         [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-            if (status.totalRecords != self.totalEventCount) {
-                ZNGLogDebug(@"There appears to be more event data available.  Fetching...");
-                self.loading = YES;
+            if (status.totalRecords > self.totalEventCount) {
+                ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
             } else {
-                ZNGLogDebug(@"There are still only %llu events available.", (unsigned long long)status.totalRecords);
+                ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
         } failure:^(ZNGError *error) {
             ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
@@ -125,6 +129,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void)_loadRecentEventsErasing:(BOOL)replace
 {
+    if (self.loading) {
+        ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
+        return;
+    }
+    
     NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
     self.loading = YES;
     
@@ -430,6 +439,23 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self markMessagesAsRead:allMessages];
 }
 
+- (void) removeAnyPendingMessages
+{
+    NSMutableIndexSet * pendingIndexes = [[NSMutableIndexSet alloc] init];
+    
+    [self.events enumerateObjectsUsingBlock:^(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (event.message.sending) {
+            [pendingIndexes addIndex:idx];
+        }
+    }];
+    
+    if ([pendingIndexes count] > 0) {
+        ZNGLogDebug(@"Removing %llu pending messages.", (unsigned long long)[pendingIndexes count]);
+        NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+        [mutableEvents removeObjectsAtIndexes:pendingIndexes];
+    }
+}
+
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
@@ -452,6 +478,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
     
     newMessage.body = body;
+    newMessage.outgoingImageAttachments = images;
     
     self.loading = YES;
     
@@ -481,16 +508,51 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
 }
 
+- (ZNGEvent *)pendingMessageEventForOutgoingMessage:(ZNGNewMessage *)newMessage
+{
+    BOOL outbound = [newMessage.recipientType isEqualToString:ZNGConversationParticipantTypeContact];
+    
+    ZNGMessage * message = [[ZNGMessage alloc] init];
+    message.sending = YES;
+    message.body = newMessage.body;
+    message.communicationDirection = outbound ? @"outbound" : @"inbound";
+    message.senderType = outbound ? @"service" : @"contact";
+    message.createdAt = [NSDate date];
+    
+    if ([newMessage.outgoingImageAttachments count] > 0) {
+        NSMutableArray * nullImageLinks = [[NSMutableArray alloc] initWithCapacity:[newMessage.outgoingImageAttachments count]];
+        
+        for (NSUInteger i=0; i < [newMessage.outgoingImageAttachments count]; i++) {
+            [nullImageLinks addObject:[NSNull null]];
+        }
+        
+        message.attachments = nullImageLinks;
+        message.imageAttachments = newMessage.outgoingImageAttachments;
+    }
+    
+    ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
+    [self addSenderNameToEvents:@[event]];
+    
+    return event;
+}
+
 - (void) _sendMessage:(ZNGNewMessage *)message success:(void (^)(ZNGStatus* status))success failure:(void (^) (ZNGError *error))failure
 {
+    ZNGEvent * pendingEvent = [self pendingMessageEventForOutgoingMessage:message];
+    
+    if (pendingEvent != nil) {
+        NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+        [mutableEvents addObject:pendingEvent];
+    } else {
+        ZNGLogError(@"Unable to generate pending message event object.  Message will not appear as an in progress message.");
+    }
+    
     [self.messageClient sendMessage:message success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
         
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
         
         if (![messageId isKindOfClass:[NSString class]]) {
             ZNGLogError(@"Message send reported success, but we did not receive a message ID in response.  Our new message will not appear in the conversation until it is refreshed elsewhere.");
-            
-            self.loading = NO;
             
             if (success) {
                 success(status);
@@ -502,6 +564,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
             ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
             [self addSenderNameToEvents:@[event]];
+            [self removeAnyPendingMessages];
             [self appendEvents:@[event]];
             self.totalEventCount = self.totalEventCount + 1;
             self.loading = NO;
@@ -517,6 +580,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         } failure:^(ZNGError *error) {
             ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
             
+            [self removeAnyPendingMessages];
             self.loading = NO;
             
             if (failure) {
@@ -524,6 +588,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             }
         }];
     } failure:^(ZNGError *error) {
+        [self removeAnyPendingMessages];
         self.loading = NO;
         
         if (failure != nil) {

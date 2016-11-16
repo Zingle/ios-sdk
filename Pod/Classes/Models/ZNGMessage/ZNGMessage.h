@@ -35,13 +35,18 @@
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
 
+/**
+ *  Flag indicating that this message is being sent but does not yet exist on the server
+ */
+@property (nonatomic) BOOL sending;
+
 #pragma mark - Properties added by containing Conversation
 @property (nonatomic, copy) NSString * senderDisplayName;
 
 /**
  *  KVO compliant array that will be loaded with image data from attachments
  */
-@property (nonatomic, readonly) NSArray<UIImage *> * imageAttachments;
+@property (nonatomic, strong) NSArray<UIImage *> * imageAttachments;
 
 /**
  *  If this message was sent from a service and has trigger-er information, that will be returned.  Otherwise, the sender ID will be returned.

@@ -81,11 +81,15 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
 
 /**
  *  Populates the events array with the most recent data.
+ *
+ *  Has no effect if the loading flag is already set.
  */
 - (void)loadRecentEventsErasingOlderData:(BOOL)replace;
 
 /**
  *  Fetches one more page of older data if available.
+ *
+ *  Has no effect if the loading flag is already set.
  */
 - (void)loadOlderData;
 

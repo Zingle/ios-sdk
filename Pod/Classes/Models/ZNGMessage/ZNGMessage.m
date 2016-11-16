@@ -28,6 +28,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     if (self != nil) {
         if ([self isMediaMessage]) {
+            self.imageAttachments = @[];
             [self downloadAttachmentsIfNecessary];
         }
     }
@@ -83,7 +84,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                
                 NSMutableArray<UIImage *> * mutableImages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(imageAttachments))];
                 [mutableImages addObject:theImage];
                 [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
@@ -209,6 +209,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
+             @"sending" : [NSNull null],
              @"imageAttachments" : [NSNull null]
              };
 }

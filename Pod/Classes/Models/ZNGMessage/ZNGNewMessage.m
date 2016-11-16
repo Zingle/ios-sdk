@@ -20,7 +20,8 @@
              @"recipients" : @"recipients",
              @"channelTypeIds" : @"channel_type_ids",
              @"body" : @"body",
-             @"attachments" : @"attachments"
+             @"attachments" : @"attachments",
+             @"outgoingImageAttachments" : [NSNull null]
              };
 }
 

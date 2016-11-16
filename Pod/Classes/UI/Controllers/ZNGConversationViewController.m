@@ -296,6 +296,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     text = [[text componentsSeparatedByCharactersInSet:attachmentCharacterSet] componentsJoinedByString:@""];
     
     self.inputToolbar.inputEnabled = NO;
+    self.inputToolbar.contentView.textView.text = @"";
     
     [self.conversation sendMessageWithBody:text images:attachments success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
@@ -942,6 +943,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if ([event isMessage] || [event isNote]) {
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
+        
+        cell.alpha = event.message.sending ? 0.5 : 1.0;
         
         UIColor * textColor;
         

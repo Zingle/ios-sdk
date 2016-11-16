@@ -291,8 +291,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }];
     
     // Remove any attachment sentinels
-    NSString * replacementCharacterString = [NSString stringWithFormat:@"%c", NSAttachmentCharacter];
-    text = [text stringByReplacingOccurrencesOfString:replacementCharacterString withString:@""];
+    NSString * attachmentCharacters = [NSString stringWithFormat:@"%c\ufffc", NSAttachmentCharacter];
+    NSCharacterSet * attachmentCharacterSet = [NSCharacterSet characterSetWithCharactersInString:attachmentCharacters];
+    text = [[text componentsSeparatedByCharactersInSet:attachmentCharacterSet] componentsJoinedByString:@""];
     
     self.inputToolbar.inputEnabled = NO;
     

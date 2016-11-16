@@ -430,6 +430,23 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self markMessagesAsRead:allMessages];
 }
 
+- (void) removeAnyPendingMessages
+{
+    NSMutableIndexSet * pendingIndexes = [[NSMutableIndexSet alloc] init];
+    
+    [self.events enumerateObjectsUsingBlock:^(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (event.message.sending) {
+            [pendingIndexes addIndex:idx];
+        }
+    }];
+    
+    if ([pendingIndexes count] > 0) {
+        ZNGLogDebug(@"Removing %llu pending messages.", (unsigned long long)[pendingIndexes count]);
+        NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+        [mutableEvents removeObjectsAtIndexes:pendingIndexes];
+    }
+}
+
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
@@ -481,8 +498,34 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
 }
 
+- (ZNGEvent *)pendingMessageEventForOutgoingMessage:(ZNGNewMessage *)newMessage
+{
+    BOOL outbound = [newMessage.recipientType isEqualToString:ZNGConversationParticipantTypeContact];
+    
+    ZNGMessage * message = [[ZNGMessage alloc] init];
+    message.sending = YES;
+    message.body = newMessage.body;
+    message.communicationDirection = outbound ? @"outbound" : @"inbound";
+    message.senderType = outbound ? @"service" : @"contact";
+    message.createdAt = [NSDate date];
+    
+    ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
+    [self addSenderNameToEvents:@[event]];
+    
+    return event;
+}
+
 - (void) _sendMessage:(ZNGNewMessage *)message success:(void (^)(ZNGStatus* status))success failure:(void (^) (ZNGError *error))failure
 {
+    ZNGEvent * pendingEvent = [self pendingMessageEventForOutgoingMessage:message];
+    
+    if (pendingEvent != nil) {
+        NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+        [mutableEvents addObject:pendingEvent];
+    } else {
+        ZNGLogError(@"Unable to generate pending message event object.  Message will not appear as an in progress message.");
+    }
+    
     [self.messageClient sendMessage:message success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
         
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
@@ -502,6 +545,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
             ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
             [self addSenderNameToEvents:@[event]];
+            [self removeAnyPendingMessages];
             [self appendEvents:@[event]];
             self.totalEventCount = self.totalEventCount + 1;
             self.loading = NO;
@@ -517,6 +561,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         } failure:^(ZNGError *error) {
             ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
             
+            [self removeAnyPendingMessages];
             self.loading = NO;
             
             if (failure) {
@@ -524,6 +569,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             }
         }];
     } failure:^(ZNGError *error) {
+        [self removeAnyPendingMessages];
         self.loading = NO;
         
         if (failure != nil) {

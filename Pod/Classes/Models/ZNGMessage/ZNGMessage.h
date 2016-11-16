@@ -46,7 +46,7 @@
 /**
  *  KVO compliant array that will be loaded with image data from attachments
  */
-@property (nonatomic, readonly) NSArray<UIImage *> * imageAttachments;
+@property (nonatomic, strong) NSArray<UIImage *> * imageAttachments;
 
 /**
  *  If this message was sent from a service and has trigger-er information, that will be returned.  Otherwise, the sender ID will be returned.

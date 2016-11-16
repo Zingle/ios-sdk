@@ -19,4 +19,9 @@
 @property(nonatomic, strong) NSString* body;
 @property(nonatomic, strong) NSArray* attachments;
 
+/**
+ *  Outgoing image attachments for local rendering
+ */
+@property(nonatomic, strong) NSArray<UIImage *> * outgoingImageAttachments;
+
 @end

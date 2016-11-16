@@ -469,6 +469,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
     
     newMessage.body = body;
+    newMessage.outgoingImageAttachments = images;
     
     self.loading = YES;
     
@@ -508,6 +509,17 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     message.communicationDirection = outbound ? @"outbound" : @"inbound";
     message.senderType = outbound ? @"service" : @"contact";
     message.createdAt = [NSDate date];
+    
+    if ([newMessage.outgoingImageAttachments count] > 0) {
+        NSMutableArray * nullImageLinks = [[NSMutableArray alloc] initWithCapacity:[newMessage.outgoingImageAttachments count]];
+        
+        for (NSUInteger i=0; i < [newMessage.outgoingImageAttachments count]; i++) {
+            [nullImageLinks addObject:[NSNull null]];
+        }
+        
+        message.attachments = nullImageLinks;
+        message.imageAttachments = newMessage.outgoingImageAttachments;
+    }
     
     ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
     [self addSenderNameToEvents:@[event]];

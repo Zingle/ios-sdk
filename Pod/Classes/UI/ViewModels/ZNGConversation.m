@@ -100,6 +100,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 #pragma mark - Refreshing latest data
 - (void)loadRecentEventsErasingOlderData:(BOOL)replace
 {
+    if (self.loading) {
+        ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
+        return;
+    }
+    
     // If we already have some data, and the caller does not wish old data blown away, we will first fetch a page size of 0 to see if we have more data
     if ((!replace) && (self.totalEventCount > 0)) {
         NSDictionary * parameters = [self parametersForPageSize:0 pageIndex:1];
@@ -124,6 +129,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void)_loadRecentEventsErasing:(BOOL)replace
 {
+    if (self.loading) {
+        ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
+        return;
+    }
+    
     NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
     self.loading = YES;
     
@@ -543,8 +553,6 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         
         if (![messageId isKindOfClass:[NSString class]]) {
             ZNGLogError(@"Message send reported success, but we did not receive a message ID in response.  Our new message will not appear in the conversation until it is refreshed elsewhere.");
-            
-            self.loading = NO;
             
             if (success) {
                 success(status);

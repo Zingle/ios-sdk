@@ -105,13 +105,12 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         NSDictionary * parameters = [self parametersForPageSize:0 pageIndex:1];
         
         [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-            if (status.totalRecords != self.totalEventCount) {
-                ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)self.totalEventCount, (long long)status.totalRecords);
-                self.loading = YES;
+            if (status.totalRecords > self.totalEventCount) {
+                ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
             } else {
-                ZNGLogDebug(@"There are still only %llu events available.", (unsigned long long)status.totalRecords);
+                ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
         } failure:^(ZNGError *error) {
             ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");

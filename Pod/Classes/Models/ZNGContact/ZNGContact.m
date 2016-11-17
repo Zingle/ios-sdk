@@ -110,6 +110,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
              @"isConfirmed" : @"is_confirmed",
              @"isStarred" : @"is_starred",
              @"isClosed" : @"is_closed",
+             @"isMessageable" : @"is_messageable",
              @"lockedBySource" : @"locked_by_source",
              @"lastMessage" : @"last_message",
              @"channels" : @"channels",

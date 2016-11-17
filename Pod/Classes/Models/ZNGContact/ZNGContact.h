@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic) BOOL isConfirmed;
 @property(nonatomic) BOOL isStarred;
 @property(nonatomic) BOOL isClosed;
+@property(nonatomic) BOOL isMessageable;
 @property(nonatomic, copy, nullable) NSString * lockedBySource;
 @property(nonatomic, strong, nullable) ZNGMessage* lastMessage;
 @property(nonatomic, strong, nullable) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel

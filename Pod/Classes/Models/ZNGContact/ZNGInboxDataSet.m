@@ -398,6 +398,13 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         }
         
         if (!simpleReorderingOrRefresh) {
+            // Sanity check
+            if ((overlapRange.location + overlapRange.length) >= [mutableContacts count]) {
+                ZNGLogError(@"New inbox data overlap range is out of bounds.  Help.  Refreshing all data.");
+                [self refresh];
+                return;
+            }
+            
             // Replace the overlapping objects
             NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRange];
             [mutableContacts replaceObjectsAtIndexes:indexSet withObjects:replacements];

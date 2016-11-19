@@ -373,6 +373,16 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         return;
     }
     
+    // Sanity check to prevent https://fabric.io/zingle/ios/apps/com.zingleme.zingle/issues/582f5a410aeb16625b04605e
+    if (self.service.serviceId == nil) {
+        ZNGLogError(@"We have selected a service with a null service ID.  This is irrecoverable.");
+        self.account = nil;
+        self.service == nil;
+        ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"No service ID could be found on the selected service." }];
+        self.mostRecentError = error;
+        return;
+    }
+    
     // We now have both an account and a service selected.
     
     [self initializeAllClients];

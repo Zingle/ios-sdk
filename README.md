@@ -74,7 +74,7 @@ session = [ZingleSDK contactSessionWithToken:myToken
 								
 // Optionally set an error-handling block.
 // (You may alternatively use the completion block with its error property if you only wish to explicitly handle connection errors.)
-session.error = ^(ZNGError * _Nonnull error) {
+session.errorHandler = ^(ZNGError * _Nonnull error) {
     // Do something with the error
 };
 	

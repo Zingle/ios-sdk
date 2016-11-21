@@ -28,6 +28,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 @end
 
 @implementation ZNGBaseClient
+{
+    dispatch_queue_t jsonProcessingQueue;
+}
 
 NSString *const kBaseClientStatus = @"status";
 NSString *const kBaseClientResult = @"result";
@@ -39,6 +42,12 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     
     if (self != nil) {
         _session = aSession;
+        jsonProcessingQueue = aSession.jsonProcessingQueue;
+        
+        if (jsonProcessingQueue == nil) {
+            ZNGLogError(@"Initialized a %@, but it cannot find a valid JSON processing queue.  We will create a background queue of our own.", [self class]);
+            jsonProcessingQueue = dispatch_queue_create("com.zingleme.ZNGBaseClient.backupJsonQueue", 0);
+        }
     }
     
     return self;
@@ -77,7 +86,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             return;
         }
         
-        dispatch_async(self.session.jsonProcessingQueue, ^{
+        dispatch_async(jsonProcessingQueue, ^{
             NSError * error;
             NSArray* result = responseObject[kBaseClientResult];
             NSArray* responseObj = [MTLJSONAdapter modelsOfClass:responseClass fromJSONArray:result error:&error];
@@ -141,7 +150,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             return;
         }
         
-        dispatch_async(self.session.jsonProcessingQueue, ^{
+        dispatch_async(jsonProcessingQueue, ^{
             NSError * error;
             NSDictionary* result = responseObject[responseKey];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
@@ -216,7 +225,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             return;
         }
         
-        dispatch_async(self.session.jsonProcessingQueue, ^{
+        dispatch_async(jsonProcessingQueue, ^{
             NSError * error;
             NSDictionary* result = responseObject[kBaseClientResult];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
@@ -304,7 +313,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             return;
         }
         
-        dispatch_async(self.session.jsonProcessingQueue, ^{
+        dispatch_async(jsonProcessingQueue, ^{
             NSError * error;
             NSDictionary* result = responseObject[kBaseClientResult];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
@@ -369,7 +378,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             return;
         }
         
-        dispatch_async(self.session.jsonProcessingQueue, ^{
+        dispatch_async(jsonProcessingQueue, ^{
             NSError * error;
             NSDictionary* result = responseObject[kBaseClientResult];
             id responseObj = [MTLJSONAdapter modelOfClass:responseClass fromJSONDictionary:result error:&error];
@@ -418,7 +427,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     ZNGLogDebug(@"Sending DELETE to %@%@", self.session.sessionManager.baseURL, path);
     
     return [self.session.sessionManager DELETE:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
-        dispatch_async(self.session.jsonProcessingQueue, ^{
+        dispatch_async(jsonProcessingQueue, ^{
             NSError* error = nil;
             NSDictionary* statusDict = responseObject[kBaseClientStatus];
             ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:&error];

@@ -344,6 +344,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             
             if (([paths count] == 1) && (!pendingReloadBlockedBySwipe)) {
                 [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+                [self retainSelection];
             } else {
                 [self reloadTableData];
             }
@@ -371,10 +372,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
  */
 - (void) reloadTableData
 {
-    [self retainSelection];
-    
     if (!swipeActive) {
         [self.tableView reloadData];
+        [self retainSelection];
     } else {
         ZNGLogDebug(@"Delaying refresh while some swiping is happening.");
         ZNGLogVerbose(@"Setting pendingReloadBlockedBySwipe to YES due to active swipe during a reload");

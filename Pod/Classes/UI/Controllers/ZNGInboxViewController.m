@@ -468,6 +468,20 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void) _doRefresh
 {
+    NSArray<NSIndexPath *> * visibleIndexPaths = [[self.tableView indexPathsForVisibleRows] sortedArrayUsingSelector:@selector(compare:)];
+    
+    if ([visibleIndexPaths count] > 0) {
+        NSUInteger topVisibleIndex = [[visibleIndexPaths firstObject] row];
+        NSUInteger page = topVisibleIndex / self.data.pageSize;
+        
+        if (page != 0) {
+            // We have scrolled past the first page.  Refresh the current page without removing tail
+            [self.data refreshStartingAtIndex:topVisibleIndex removingTail:NO];
+            return;
+        }
+    }
+    
+    // Standard refresh from the top
     [self.data refresh];
 }
 

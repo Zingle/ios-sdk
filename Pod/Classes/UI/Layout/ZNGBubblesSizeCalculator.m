@@ -112,9 +112,9 @@
         NSMutableAttributedString * string = [[event attributedText] mutableCopy];
         [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
 
-        // We have to add 1 to the height for Apple reasons.  Don't ask.
+        // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
         stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil];
-        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + 1.0);
+        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + self.additionalInset);
     } else {
         stringRect = [[messageData text] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
                                                       options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)

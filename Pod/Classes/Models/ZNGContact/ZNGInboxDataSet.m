@@ -359,41 +359,61 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
         ZNGLogVerbose(@"We received %ld contacts, %ld of which extend past our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
         
         // We have two very specific simple cases that result from refreshes.
+        //  1) Some data disappeared
         //  1) One message has moved to the head
         //  2) All messages are still in order, but one (almost always one) or more needs to be refreshed
         BOOL simpleReorderingOrRefresh = NO;
-        if ((overflowCount == 0) && ([incomingContacts count] >= 2)) {
-            NSArray<ZNGContact *> * oldPage = [[mutableContacts array] subarrayWithRange:overlapRange];
+        if (overflowCount == 0) {
             
-            if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
-                // This looks like a simple new-contact-to-head move so far.  Our first object has moved down by one.
-                // If we can find our new head somewhere else, we can do a simple swap.
-                ZNGContact * firstNewContact = [incomingContacts firstObject];
-                BOOL newHeadFoundInOldData = [mutableContacts containsObject:firstNewContact];
+            if ((status.totalRecords < self.pageSize) && ([incomingContacts count] < [mutableContacts count])) {
+                // We lost someone
+                NSMutableIndexSet * removedIndexes = [[NSMutableIndexSet alloc] init];
                 
-                if (newHeadFoundInOldData) {
-                    // This looks like a simple reordering!  Hooray!
-                    simpleReorderingOrRefresh = YES;
-                    ZNGLogVerbose(@"Moving contact from a later position to head");
-                    
-                    [mutableContacts removeObject:firstNewContact];
-                    [mutableContacts insertObject:firstNewContact atIndex:0];
-                }
-            } else if ([oldPage isEqualToArray:incomingContacts]) {
-                simpleReorderingOrRefresh = YES;
-                
-                // Our contacts are all the same.  Replace any of the ones that need refreshing.  In practice, this will only be the very first object
-                //  99% of the time.  It's technically possible for messages to be received in inbox order to cause refreshes in place for more than one.
-                [oldPage enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
-                    ZNGContact * newContact = incomingContacts[idx];
-                    
-                    if ([newContact changedSince:contact]) {
-                        ZNGLogDebug(@"Refreshing %@, last updated %.0f seconds ago", [newContact fullName], [[NSDate date] timeIntervalSinceDate:newContact.updatedAt]);
-                        [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
-                    } else {
-                        ZNGLogVerbose(@"Failing to replace %@ since the updated at timestamp has not changed.", [contact fullName]);
+                [mutableContacts enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
+                    if (![incomingContacts containsObject:contact]) {
+                        [removedIndexes addIndex:idx];
                     }
                 }];
+                
+                if ([removedIndexes count] == 0) {
+                    ZNGLogWarn(@"Our incoming data shows %llu contacts vs. our %llu, but we were unable to find which contacts have disappeared.  Logic no longer applies.",
+                               (unsigned long long)[incomingContacts count], (unsigned long long)[mutableContacts count]);
+                } else {
+                    [mutableContacts removeObjectsAtIndexes:removedIndexes];
+                }
+            } else if ([incomingContacts count] >= 2) {
+                NSArray<ZNGContact *> * oldPage = [[mutableContacts array] subarrayWithRange:overlapRange];
+                
+                if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
+                    // This looks like a simple new-contact-to-head move so far.  Our first object has moved down by one.
+                    // If we can find our new head somewhere else, we can do a simple swap.
+                    ZNGContact * firstNewContact = [incomingContacts firstObject];
+                    BOOL newHeadFoundInOldData = [mutableContacts containsObject:firstNewContact];
+                    
+                    if (newHeadFoundInOldData) {
+                        // This looks like a simple reordering!  Hooray!
+                        simpleReorderingOrRefresh = YES;
+                        ZNGLogVerbose(@"Moving contact from a later position to head");
+                        
+                        [mutableContacts removeObject:firstNewContact];
+                        [mutableContacts insertObject:firstNewContact atIndex:0];
+                    }
+                } else if ([oldPage isEqualToArray:incomingContacts]) {
+                    simpleReorderingOrRefresh = YES;
+                    
+                    // Our contacts are all the same.  Replace any of the ones that need refreshing.  In practice, this will only be the very first object
+                    //  99% of the time.  It's technically possible for messages to be received in inbox order to cause refreshes in place for more than one.
+                    [oldPage enumerateObjectsUsingBlock:^(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
+                        ZNGContact * newContact = incomingContacts[idx];
+                        
+                        if ([newContact changedSince:contact]) {
+                            ZNGLogDebug(@"Refreshing %@, last updated %.0f seconds ago", [newContact fullName], [[NSDate date] timeIntervalSinceDate:newContact.updatedAt]);
+                            [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
+                        } else {
+                            ZNGLogVerbose(@"Failing to replace %@ since the updated at timestamp has not changed.", [contact fullName]);
+                        }
+                    }];
+                }
             }
         }
         

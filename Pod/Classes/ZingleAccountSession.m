@@ -377,7 +377,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     if (self.service.serviceId == nil) {
         ZNGLogError(@"We have selected a service with a null service ID.  This is irrecoverable.");
         self.account = nil;
-        self.service == nil;
+        self.service = nil;
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"No service ID could be found on the selected service." }];
         self.mostRecentError = error;
         return;

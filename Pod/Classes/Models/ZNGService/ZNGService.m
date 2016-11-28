@@ -180,7 +180,8 @@
 {
     ZNGChannel * chosenChannel = nil;
     
-    for (ZNGChannel * channel in self.channels) {
+    // Enumerate the channels backwards so we end up with the first channel if none are marked as default
+    for (ZNGChannel * channel in [self.channels reverseObjectEnumerator]) {
         if ([channel.channelType.channelTypeId isEqualToString:channelType.channelTypeId]) {
             chosenChannel = channel;
             

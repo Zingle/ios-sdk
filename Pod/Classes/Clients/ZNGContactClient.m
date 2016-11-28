@@ -167,6 +167,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.serviceId, contactId];
     
+    ZNGLogVerbose(@"Updating contact %@ with parameters: %@", contactId, parameters);
+    
     [self putWithPath:path
            parameters:parameters
         responseClass:[ZNGContact class]

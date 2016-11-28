@@ -143,7 +143,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self.textField.clearButtonMode = UITextFieldViewModeNever;
 
         // This is text input
-        // Is it numeric of text?
+        // Is it numeric or text?
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeNumber]) {
             self.textField.keyboardType = UIKeyboardTypeNumberPad;
             numericOnly = YES;

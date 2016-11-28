@@ -218,14 +218,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) datePickerSelectedDate:(UIDatePicker *)sender
 {
-    // The user has selected a day.  We will use date components to find the UTC time at noon on that day.
-    NSCalendar * calendar = [NSCalendar currentCalendar];
-    NSDateComponents * components = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:datePicker.date];
-    components.hour = 12;
-    NSDate * noonThatDay = [calendar dateFromComponents:components];
-    
     // Set our string to the UTC timestamp in seconds
-    NSNumber * seconds = @((unsigned long long)[noonThatDay timeIntervalSince1970]);
+    NSNumber * seconds = @((unsigned long long)[sender.date timeIntervalSince1970]);
     self.customFieldValue.value = [seconds stringValue];
     [self updateDisplay];
 }

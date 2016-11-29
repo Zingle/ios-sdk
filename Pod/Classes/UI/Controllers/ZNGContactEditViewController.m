@@ -345,12 +345,16 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             [[ZNGAnalytics sharedAnalytics] trackEditedExistingContact:contact];
         }
         
-        // If we're in a simulator, we will fake a push notification so our UI gets updated
-#ifdef TARGET_IPHONE_SIMULATOR
-        NSDictionary * userInfo = @{ @"aps" : @{ @"contact" : contact.contactId } };
-        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:contact userInfo:userInfo];
-#endif
-        
+        // If we do not have push notifications, we will fake a push notification so our UI gets updated
+        if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
+            NSDictionary * userInfo = @{ @"aps" : @{ @"contact" : contact.contactId } };
+            
+            // Delay to give the magic elastic data time to catch up.  A GET soon enough after a POST will have the old data for Zingle server reasons.
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:contact userInfo:userInfo];
+            });
+        }
+     
         [self dismissViewControllerAnimated:YES completion:nil];
     } failure:^(ZNGError * _Nonnull error) {
         [self.loadingGradient stopAnimating];

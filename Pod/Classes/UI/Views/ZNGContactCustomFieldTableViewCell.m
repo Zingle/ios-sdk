@@ -319,6 +319,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if ([self isDateOrTimeType]) {
         justClearedDateOrTime = YES;
+        self.customFieldValue.value = nil;
     }
     
     return YES;

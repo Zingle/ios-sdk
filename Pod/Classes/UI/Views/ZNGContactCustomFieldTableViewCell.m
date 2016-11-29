@@ -315,16 +315,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return YES;
 }
 
-- (void) textFieldDidBeginEditing:(UITextField *)textField
-{
-    // We will select the date picker's starting date when the user first begins editing.
-    if ([self isTimeType]) {
-        [self datePickerSelectedTime:datePicker];
-    } else if ([self isDateType]) {
-        [self datePickerSelectedDate:datePicker];
-    }
-}
-
 - (BOOL) textFieldShouldClear:(UITextField *)textField
 {
     if ([self isDateOrTimeType]) {

@@ -94,7 +94,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     } else {
         
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
-            datePicker.date = [self dateObjectForTimeString:self.customFieldValue.value];
+            NSDate * date = [self dateObjectForTimeString:self.customFieldValue.value];
+            
+            if (date != nil) {
+                datePicker.date = date;
+            }
         } else {
             NSUInteger index = [self indexOfCurrentValue];
             

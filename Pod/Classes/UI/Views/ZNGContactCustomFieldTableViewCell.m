@@ -22,7 +22,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     UIDatePicker * datePicker;
     
     NSDateFormatter * dateFormatter;
-    NSDateFormatter * _timeFormatter;
+    NSDateFormatter * timeFormatter24Hour;
+    NSDateFormatter * timeFormatter12HourAMPM;
     
     UIColor * defaultTextFieldBackgroundColor;
     
@@ -93,12 +94,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
     } else {
         
+        NSString * value = self.customFieldValue.value;
+        
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
             NSDate * date = [self dateObjectForTimeString:self.customFieldValue.value];
             
             if (date != nil) {
                 datePicker.date = date;
             }
+            
+            value = [timeFormatter12HourAMPM stringFromDate:date];
         } else {
             NSUInteger index = [self indexOfCurrentValue];
             
@@ -106,8 +111,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                 [pickerView selectRow:index inComponent:0 animated:NO];
             }
         }
-        
-        NSString * value = self.customFieldValue.value;
         
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
             BOOL asBool = [self.customFieldValue.value boolValue];
@@ -124,9 +127,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     // Do we need a picker?
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
+        [self setupTimeFormatters];
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeTime;
+        datePicker.timeZone = [NSTimeZone localTimeZone];
         [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
@@ -156,6 +161,20 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             self.textField.autocorrectionType = UITextAutocorrectionTypeNo;
             self.textField.autocapitalizationType = ([self.customFieldValue.customField shouldCapitalizeEveryWord]) ? UITextAutocapitalizationTypeWords : UITextAutocapitalizationTypeSentences;
         }
+    }
+}
+
+- (void) setupTimeFormatters
+{
+    if (timeFormatter24Hour == nil) {
+        timeFormatter24Hour = [[NSDateFormatter alloc] init];
+        timeFormatter24Hour.dateFormat = @"HH:mm";
+    }
+    
+    if (timeFormatter12HourAMPM == nil) {
+        timeFormatter12HourAMPM = [[NSDateFormatter alloc] init];
+        timeFormatter12HourAMPM.dateStyle = NSDateFormatterNoStyle;
+        timeFormatter12HourAMPM.timeStyle = NSDateFormatterShortStyle;
     }
 }
 
@@ -199,25 +218,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }];
 }
 
-- (NSDateFormatter *) timeFormatter
-{
-    if (_timeFormatter == nil) {
-        _timeFormatter = [[NSDateFormatter alloc] init];
-        _timeFormatter.dateFormat = @"HH:mm:ss";
-    }
-    
-    return _timeFormatter;
-}
-
 - (NSDate *) dateObjectForTimeString:(NSString *)string
 {
-    return [[self timeFormatter] dateFromString:string];
+    return [timeFormatter24Hour dateFromString:string];
 }
 
 - (void) datePickerSelectedTime:(UIDatePicker *)sender
 {
-    NSDateFormatter * timeFormatter = [self timeFormatter];
-    self.customFieldValue.value = [timeFormatter stringFromDate:datePicker.date];
+    self.customFieldValue.value = [timeFormatter24Hour stringFromDate:datePicker.date];
+    [self updateDisplay];
 }
 
 - (void) datePickerSelectedDate:(UIDatePicker *)sender

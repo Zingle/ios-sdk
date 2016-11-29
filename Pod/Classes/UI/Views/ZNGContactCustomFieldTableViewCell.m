@@ -74,7 +74,31 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     _customFieldValue = customFieldValue;
     
     [self configureInput];
+    [self configureTimeOrDatePickerWithInitialValue];
     [self updateDisplay];
+}
+
+- (void) configureTimeOrDatePickerWithInitialValue
+{
+    if (![self isDateOrTimeType]) {
+        return;
+    }
+
+    NSDate * date = nil;
+    
+    if ([self isTimeType]) {
+        date = [self dateObjectForTimeString:self.customFieldValue.value];
+    } else {
+        double dateUTCDouble = [self.customFieldValue.value doubleValue];
+        
+        if (dateUTCDouble > 0.0) {
+            date = [NSDate dateWithTimeIntervalSince1970:dateUTCDouble];
+        }
+    }
+    
+    if (date != nil) {
+        datePicker.date = date;
+    }
 }
 
 - (void) updateDisplay
@@ -87,7 +111,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         if ([self.customFieldValue.value length] > 0) {
             double dateUTCDouble = [self.customFieldValue.value doubleValue];
             NSDate * date = [NSDate dateWithTimeIntervalSince1970:dateUTCDouble];
-            datePicker.date = date;
             self.textField.text = [self displayStringForDate:date];
         } else {
             self.textField.text = @"";
@@ -98,11 +121,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
             NSDate * date = [self dateObjectForTimeString:self.customFieldValue.value];
-            
-            if (date != nil) {
-                datePicker.date = date;
-            }
-            
             value = [timeFormatter12HourAMPM stringFromDate:date];
         } else {
             NSUInteger index = [self indexOfCurrentValue];
@@ -132,6 +150,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeTime;
         datePicker.timeZone = [NSTimeZone localTimeZone];
+        datePicker.minuteInterval = 5;
         [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {

@@ -19,4 +19,17 @@
              };
 }
 
++ (NSValueTransformer *)valueJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(id jsonValue) {
+        return jsonValue;
+    } reverseBlock:^id(NSString * localValue) {
+        if ([localValue length] == 0) {
+            return [NSNull null];
+        }
+        
+        return localValue;
+    }];
+}
+
 @end

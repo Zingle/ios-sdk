@@ -129,11 +129,13 @@
 
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
-    ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
-    
-    if ((event.message != nil) && (self.allowDeletion)) {
-        [conversation deleteMessage:event.message];
+    if (action == @selector(delete:)) {
+        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
+        
+        if ((event.message != nil) && (self.allowDeletion)) {
+            [conversation deleteMessage:event.message];
+        }
     }
 }
 

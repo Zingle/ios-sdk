@@ -2,28 +2,27 @@
 //  ZNGSetting.m
 //  Pods
 //
-//  Created by Ryan Farley on 2/8/16.
+//  Created by Jason Neel on 12/1/16.
 //
 //
 
 #import "ZNGSetting.h"
-#import "ZNGFieldOption.h"
+#import "ZNGSettingsField.h"
 
 @implementation ZNGSetting
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
-             @"settingId" : @"id",
-             @"displayName" : @"display_name",
-             @"dataType" : @"data_type",
-             @"options" : @"options"
+             NSStringFromSelector(@selector(value)) : @"value",
+             NSStringFromSelector(@selector(settingsFieldOptionId)) : @"settings_field_option_id",
+             NSStringFromSelector(@selector(settingsField)) : @"settings_field"
              };
 }
 
-+ (NSValueTransformer*)optionsJSONTransformer
++ (NSValueTransformer *) settingsFieldJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGFieldOption class]];
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGSettingsField class]];
 }
 
 @end

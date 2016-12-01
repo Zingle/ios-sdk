@@ -51,6 +51,11 @@
 - (ZNGChannel * _Nullable)defaultChannelForType:(ZNGChannelType * _Nonnull)channelType;
 
 /**
+ *  The service's HOTSOS username or nil if none is configured.
+ */
+- (NSString * _Nullable)hotsosUserName;
+
+/**
  *  Thanks to http://jira.zinglecorp.com:8080/browse/TECH-1970, there is logic for displaying a channel
  *   that depends on the country code for the channel vs. the service.  This is gross and I hate it.
  */

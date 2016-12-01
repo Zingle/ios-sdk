@@ -15,6 +15,7 @@
 #import "ZNGServiceClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGAnalytics.h"
+#import <objc/runtime.h>
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -37,6 +38,54 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     // If we try to register for push notifications but do not have a device token, the relevant service IDs will be saved here.
     // If our device token is then set later, we will register for these services.
     NSArray<NSString *> * pushNotificationQueuedServiceIds;
+}
+
+#pragma mark - Push notification swizzle magic
+static void (*_originalDidReceiveRemoteNotificationImplementation)(id, SEL, id, id) = NULL;
+
+void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication * application, NSDictionary * userInfo)
+{
+    [ZingleSession handlePushNotifcation:userInfo];
+    
+    if (_originalDidReceiveRemoteNotificationImplementation != NULL) {
+        _originalDidReceiveRemoteNotificationImplementation(self, _cmd, application, userInfo);
+    }
+}
+
++ (void) handlePushNotifcation:(NSDictionary *)userInfo
+{
+    if ([self pushNotificationIsRelevantToZingle:userInfo]) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:nil userInfo:userInfo];
+    }
+}
+
++ (void) load
+{
+    // A somewhat arbitrary delay to ensure that the app delegate class has loaded.  Removing this delay frequently (maybe always) results in this class
+    //  loading before the [[UIApplication sharedApplication] delegate] is set to a non nil value.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self swizzlePushNotificationMethods];
+    });
+}
+
++ (void) swizzlePushNotificationMethods
+{
+    Class appDelegateClass = [[[UIApplication sharedApplication] delegate] class];
+    
+    if (appDelegateClass == nil) {
+        ZNGLogError(@"Unable to find app delegate class.  Push notifications cannot be swizzled.");
+        return;
+    }
+    
+    IMP replacementApplicationDidReceiveRemoteNotification = (IMP)__applicationDidReceiveRemoteNotification;
+    Method didReceiveRemoteNotificationMethod = class_getInstanceMethod(appDelegateClass, NSSelectorFromString(@"application:didReceiveRemoteNotification:"));
+    IMP originalIMP = method_setImplementation(didReceiveRemoteNotificationMethod, replacementApplicationDidReceiveRemoteNotification);
+    _originalDidReceiveRemoteNotificationImplementation = (void (*)(id, SEL, id, id))originalIMP;
+}
+        
++ (BOOL) pushNotificationIsRelevantToZingle:(NSDictionary *)userInfo
+{
+    return [userInfo[@"aps"][@"category"] isEqualToString:@"Zingle"];
 }
 
 #pragma mark - Initializers

@@ -185,7 +185,7 @@ session = [ZingleSDK contactSessionWithToken:myToken
 
 ## Push Notifications
 
-Conversation objects and Conversation View Controller objects will refresh data whenever a push notification is received and sent to the SDK via NSNotification (see Receiving push notifications below)
+Conversation objects and Conversation View Controller objects will automatically refresh data whenever a push notification is received (via [safe method swizzling](https://blog.newrelic.com/2014/04/16/right-way-to-swizzle/) of UIApplicationDelegate methods.)
 
 ### Preparing to receive push notifications
 
@@ -195,7 +195,7 @@ The user of the SDK must have a valid push notification entitlement/certificate 
 
 #### Setting the token
 
-Once the application has successfully registered for push notifications, the device token needs to be set within the ZingleSDK before a ZingleSession is created.
+Once the application has successfully registered for push notifications, the device token needs to be set within the ZingleSDK.
 
 ```swift
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -211,9 +211,9 @@ Once the application has successfully registered for push notifications, the dev
 
 ### Receiving push notifications
 
-Once a ZingleSession with a valid push notification entitlement and a set device token has connected through the SDK, push notifications will be sent to the device whenever new data is received.  It is up to the SDK user to post an NSNotification so that the SDK elements can accept and react to the notification.
+Once a ZingleSession with a valid push notification entitlement and a set device token has connected through the SDK, push notifications will be sent to the device whenever new data is received.   The ZingleSDK uses [safe method swizzling](https://blog.newrelic.com/2014/04/16/right-way-to-swizzle/) to receive push notifications as they arrive and update data accordingly.
 
-All ZingleSDK push notifications should include the Category value of ZingleSDK.  A push notification regarding a message will also include the contact service ID of the sender of the message as 'feedId.'  Following is a sample push notification dictionary and the Swift code to post an NSNotificationCenter notification to allow ZingleSDK elements to react to the new data.
+All ZingleSDK push notifications will include the Category value of Zingle.  A push notification regarding a message will also include the contact service ID of the sender of the message as 'feedId.'  Following is a sample push notification dictionary.
 
 ```
 {
@@ -224,14 +224,8 @@ All ZingleSDK push notifications should include the Category value of ZingleSDK.
         sound = default;
     };
     feedId = "28e02b1d-a38e-4e6b-85d1-95fe29983a7d";
-	category = "ZingleSDK";
+	category = "Zingle";
 }
-```
-
-```swift
-    func handleRemoteNotificationDictionary(userInfo: [NSObject : AnyObject], fromApplicationState state: UIApplicationState) {
-        NSNotificationCenter.defaultCenter().postNotificationName(ZNGPushNotificationReceived, object: nil, userInfo: userInfo)
-	}
 ```
 
 ## Logging

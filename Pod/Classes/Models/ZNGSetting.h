@@ -2,17 +2,18 @@
 //  ZNGSetting.h
 //  Pods
 //
-//  Created by Ryan Farley on 2/8/16.
+//  Created by Jason Neel on 12/1/16.
 //
 //
 
 #import <Mantle/Mantle.h>
 
+@class ZNGSettingsField;
+
 @interface ZNGSetting : MTLModel<MTLJSONSerializing>
 
-@property(nonatomic, strong) NSString* settingId;
-@property(nonatomic, strong) NSString* displayName;
-@property(nonatomic, strong) NSString* dataType;
-@property(nonatomic, strong) NSArray* options;// Array of ZNGFieldOption
+@property (nonatomic, strong, nullable) NSString * value;
+@property (nonatomic, strong, nullable) NSString * settingsFieldOptionId;
+@property (nonatomic, strong, nullable) ZNGSettingsField * settingsField;
 
 @end

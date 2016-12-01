@@ -76,6 +76,7 @@ static void * KVOContext = &KVOContext;
     self = [super initWithCoder:aDecoder];
     
     if (self != nil) {
+        _allowForwarding = YES;
         [self setupKVO];
     }
     
@@ -87,6 +88,7 @@ static void * KVOContext = &KVOContext;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if (self != nil) {
+        _allowForwarding = YES;
         [self setupKVO];
     }
     
@@ -144,6 +146,11 @@ static void * KVOContext = &KVOContext;
     [self updateInputStatus];
     
     [self startEmphasisTimer];
+    
+    // Add forward menu item
+    UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
+    [[UIMenuController sharedMenuController] setMenuItems:@[forward]];
+    [JSQMessagesCollectionViewCell registerMenuAction:@selector(forwardMessage:)];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
@@ -646,6 +653,28 @@ static void * KVOContext = &KVOContext;
     return height;
 }
 
+- (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(forwardMessage:)) {
+        return self.allowForwarding;
+    }
+    
+    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+}
+
+- (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(forwardMessage:)) {
+        ZNGMessage * message = [[self eventAtIndexPath:indexPath] message];
+        
+        if (message != nil) {
+            [self forwardMessage:message];
+        }
+    } else {
+        [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
+    }
+}
+
 #pragma mark - Actions
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel
 {
@@ -862,6 +891,11 @@ static void * KVOContext = &KVOContext;
     }
     
     [self performSegueWithIdentifier:@"editContact" sender:self];
+}
+
+- (void) forwardMessage:(ZNGMessage *)message
+{
+    NSLog(@"We would consider forwarding a message here");
 }
 
 @end

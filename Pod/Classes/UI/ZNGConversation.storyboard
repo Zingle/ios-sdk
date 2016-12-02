@@ -66,7 +66,7 @@
             </objects>
             <point key="canvasLocation" x="1193" y="437"/>
         </scene>
-        <!--Forward-->
+        <!--Forward Message-->
         <scene sceneID="ckw-5B-vgj">
             <objects>
                 <viewController id="9Vu-yg-VoU" customClass="ZNGForwardingViewController" sceneMemberID="viewController">
@@ -89,17 +89,21 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="NTY-5f-YkE" firstAttribute="leading" secondItem="TVJ-16-N7s" secondAttribute="leading" id="8bf-FR-saL"/>
+                            <constraint firstItem="dOw-w9-YZu" firstAttribute="top" secondItem="NTY-5f-YkE" secondAttribute="bottom" id="MIk-bb-rEg"/>
                             <constraint firstAttribute="trailing" secondItem="NTY-5f-YkE" secondAttribute="trailing" id="hk9-OT-VlU"/>
-                            <constraint firstItem="dOw-w9-YZu" firstAttribute="top" secondItem="NTY-5f-YkE" secondAttribute="bottom" id="tia-PP-a9T"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Forward" id="gfS-Mh-tyl">
+                    <navigationItem key="navigationItem" title="Forward Message" id="gfS-Mh-tyl">
                         <barButtonItem key="rightBarButtonItem" title="Cancel" id="X1l-5T-BuP">
                             <connections>
                                 <action selector="pressedCancel:" destination="9Vu-yg-VoU" id="Dg8-uc-hVB"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <outlet property="inputToolbar" destination="NTY-5f-YkE" id="vOn-W5-a4H"/>
+                        <outlet property="toolbarHeightConstraint" destination="aiC-Ra-uIx" id="UnT-Em-RD1"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="R5c-QC-TCa" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

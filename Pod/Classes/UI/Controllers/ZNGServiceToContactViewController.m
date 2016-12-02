@@ -25,6 +25,7 @@
 #import "ZNGAnalytics.h"
 #import "ZingleAccountSession.h"
 #import "ZNGLogging.h"
+#import "ZNGForwardingViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -54,6 +55,8 @@ static void * KVOContext = &KVOContext;
     
     NSMutableArray<NSDate *> * touchTimes;
     NSUInteger spamZIndex;
+    
+    ZNGMessage * messageToForward;
 }
 
 @dynamic conversation;
@@ -727,6 +730,10 @@ static void * KVOContext = &KVOContext;
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
+    } else if ([segue.identifier isEqualToString:@"forward"]) {
+        UINavigationController * navController = segue.destinationViewController;
+        ZNGForwardingViewController * forwardingView = [navController.viewControllers firstObject];
+        forwardingView.message = messageToForward;
     }
 }
 
@@ -895,7 +902,8 @@ static void * KVOContext = &KVOContext;
 
 - (void) forwardMessage:(ZNGMessage *)message
 {
-    NSLog(@"We would consider forwarding a message here");
+    messageToForward = message;
+    [self performSegueWithIdentifier:@"forward" sender:self];
 }
 
 @end

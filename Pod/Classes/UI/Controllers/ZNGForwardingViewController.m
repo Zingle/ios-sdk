@@ -32,11 +32,14 @@
     self.inputToolbar.contentView.textView.text = self.message.body;
     
     [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
 }
 
 - (void) dealloc
 {
-    [self removeObserver:self forKeyPath:kToolbarHeightKVOPath];
+    [self.inputToolbar removeObserver:self forKeyPath:kToolbarHeightKVOPath];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Toolbar height
@@ -73,6 +76,42 @@
     [self.view setNeedsUpdateConstraints];
     [self.view layoutIfNeeded];
 }
+
+#pragma mark - Keyboard handling
+- (void) keyboardAppearingOrDisappearing:(NSNotification *)notification
+{
+    double duration = [notification.userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
+    CGRect keyboardEndFrame = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
+    CGRect keyboardLocalFrame = [self.view convertRect:keyboardEndFrame fromView:nil];
+    CGFloat keyboardTop = CGRectGetMaxY(self.view.bounds) - CGRectGetMinY(keyboardLocalFrame);
+    UIViewAnimationCurve animationCurve = [notification.userInfo[UIKeyboardAnimationCurveUserInfoKey] intValue];
+    
+    self.toolbarBottomSpaceConstraint.constant = keyboardTop;
+    [self.view setNeedsUpdateConstraints];
+    
+    [UIView animateWithDuration:duration delay:0.0 options:(UIViewAnimationOptionBeginFromCurrentState|(animationCurve << 16)) animations:^{
+        [self.view layoutIfNeeded];
+    } completion:nil];
+}
+
+/*
+ func keyboardAppearingOrDisappearing(notification: NSNotification) {
+ let duration = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
+ let keyboardEndFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
+ let keyboardLocalFrame = view.convertRect(keyboardEndFrame, fromView: view.window)
+ let keyboardTop = CGRectGetMaxY(view.bounds) - CGRectGetMinY(keyboardLocalFrame)
+ 
+ let rawAnimationCurve = (notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedIntValue << 16
+ let animationCurve = UIViewAnimationOptions(rawValue: UInt(rawAnimationCurve))
+ 
+ inputToolbarBottomSpaceConstraint.constant = keyboardTop
+ view.setNeedsUpdateConstraints()
+ 
+ UIView.animateWithDuration(duration, delay: 0.0, options: [.BeginFromCurrentState, animationCurve], animations: {
+ self.view.layoutIfNeeded()
+ }, completion: nil)
+ }
+ */
 
 #pragma mark - Actions
 - (IBAction) pressedCancel:(id)sender

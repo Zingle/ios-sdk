@@ -16,6 +16,7 @@
 @property (nonatomic, strong) ZNGMessage * message;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * toolbarHeightConstraint;
+@property (nonatomic, strong) IBOutlet NSLayoutConstraint * toolbarBottomSpaceConstraint;
 @property (nonatomic, strong) IBOutlet ZNGForwardingInputToolbar * inputToolbar;
 
 - (IBAction) pressedCancel:(id)sender;

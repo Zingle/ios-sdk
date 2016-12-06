@@ -149,6 +149,11 @@ static void * KVOContext = &KVOContext;
     [self updateInputStatus];
     
     [self startEmphasisTimer];
+}
+
+- (void) viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
     
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];

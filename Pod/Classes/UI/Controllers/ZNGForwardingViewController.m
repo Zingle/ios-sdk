@@ -94,25 +94,6 @@
     } completion:nil];
 }
 
-/*
- func keyboardAppearingOrDisappearing(notification: NSNotification) {
- let duration = (notification.userInfo![UIKeyboardAnimationDurationUserInfoKey] as! NSNumber).doubleValue
- let keyboardEndFrame = (notification.userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue).CGRectValue()
- let keyboardLocalFrame = view.convertRect(keyboardEndFrame, fromView: view.window)
- let keyboardTop = CGRectGetMaxY(view.bounds) - CGRectGetMinY(keyboardLocalFrame)
- 
- let rawAnimationCurve = (notification.userInfo![UIKeyboardAnimationCurveUserInfoKey] as! NSNumber).unsignedIntValue << 16
- let animationCurve = UIViewAnimationOptions(rawValue: UInt(rawAnimationCurve))
- 
- inputToolbarBottomSpaceConstraint.constant = keyboardTop
- view.setNeedsUpdateConstraints()
- 
- UIView.animateWithDuration(duration, delay: 0.0, options: [.BeginFromCurrentState, animationCurve], animations: {
- self.view.layoutIfNeeded()
- }, completion: nil)
- }
- */
-
 #pragma mark - Actions
 - (IBAction) pressedCancel:(id)sender
 {

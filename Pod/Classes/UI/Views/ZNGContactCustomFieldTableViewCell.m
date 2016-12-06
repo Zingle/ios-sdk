@@ -28,7 +28,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     UIColor * defaultTextFieldBackgroundColor;
     
     BOOL numericOnly;
-    BOOL justClearedDateOrTime;
+    BOOL justCleared;
 }
 
 - (void) awakeFromNib
@@ -131,8 +131,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
         
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-            BOOL asBool = [self.customFieldValue.value boolValue];
-            value = asBool ? @"Yes" : @"No";
+            if ([self.customFieldValue.value length] == 0) {
+                value = nil;
+            } else {
+                BOOL asBool = [self.customFieldValue.value boolValue];
+                value = asBool ? @"Yes" : @"No";
+            }
         }
         
         self.textField.text = value;
@@ -162,7 +166,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self.textField.inputView = datePicker;
 
     } else if ((optionsExist) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
-        self.textField.clearButtonMode = UITextFieldViewModeNever;
+        self.textField.clearButtonMode = UITextFieldViewModeAlways;
         pickerView = [[UIPickerView alloc] init];
         pickerView.delegate = self;
         pickerView.dataSource = self;
@@ -244,14 +248,24 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) datePickerSelectedTime:(UIDatePicker *)sender
 {
-    self.customFieldValue.value = [timeFormatter24Hour stringFromDate:datePicker.date];
+    [self selectTime:datePicker.date];
+}
+
+- (void) selectTime:(NSDate *)time
+{
+    self.customFieldValue.value = [timeFormatter24Hour stringFromDate:time];
     [self updateDisplay];
 }
 
 - (void) datePickerSelectedDate:(UIDatePicker *)sender
 {
+    [self selectDate:datePicker.date];
+}
+
+- (void) selectDate:(NSDate *)date
+{
     // Set our string to the UTC timestamp in seconds
-    NSNumber * seconds = @((unsigned long long)[sender.date timeIntervalSince1970]);
+    NSNumber * seconds = @((unsigned long long)[date timeIntervalSince1970]);
     self.customFieldValue.value = [seconds stringValue];
     [self updateDisplay];
 }
@@ -259,7 +273,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Picker view
 - (NSArray<NSString *> *) booleanSelections
 {
-    return @[@"", @"No", @"Yes"];
+    return @[@"No", @"Yes"];
+}
+
+// When the user starts editing a bool custom field with no existing value, what should we show before they move the picker?
+- (NSString *) initialBooleanSelection
+{
+    return @"Yes";
 }
 
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -326,21 +346,68 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     // If this text field is not already first responder and the user hits clear, we do not want that itself to
     //  make the text field first responder.  This only occurs for date/time fields.
-    if (justClearedDateOrTime) {
-        justClearedDateOrTime = NO;
+    if (justCleared) {
+        justCleared = NO;
         return NO;
     }
     
     return YES;
 }
 
-- (BOOL) textFieldShouldClear:(UITextField *)textField
+- (void) textFieldDidBeginEditing:(UITextField *)textField
 {
-    if ([self isDateOrTimeType]) {
-        justClearedDateOrTime = YES;
-        self.customFieldValue.value = nil;
+    if (([self.textField.inputView isKindOfClass:[UIPickerView class]]) || ([self.textField.inputView isKindOfClass:[UIDatePicker class]])) {
+        // This is a picker type field.  If no value is selected, we will select the first value.
+        if ([self.customFieldValue.value length] == 0) {
+            [self selectInitialValue];
+        }
+    }
+}
+
+- (void) selectInitialValue
+{
+    if ([self isTimeType]) {
+        [self selectInitialTime];
+    } else if ([self isDateType]) {
+        [self selectInitialDate];
+    } else {
+        [self selectInitialPickerValue];
+    }
+}
+
+- (void) selectInitialTime
+{
+    NSDate * date = [NSDate date];
+    [self selectTime:date];
+    datePicker.date = date;
+}
+
+- (void) selectInitialDate
+{
+    NSDate * date = [NSDate date];
+    [self selectDate:date];
+    datePicker.date = date;
+}
+
+- (void) selectInitialPickerValue
+{
+    NSString * initialValue;
+    
+    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+        initialValue = [self initialBooleanSelection];
+    } else {
+        initialValue = [[self.customFieldValue.customField.options firstObject] value];
     }
     
+    self.customFieldValue.value = initialValue;
+    [self updateDisplay];
+}
+
+- (BOOL) textFieldShouldClear:(UITextField *)textField
+{
+    justCleared = YES;
+    self.customFieldValue.value = nil;
+
     return YES;
 }
 

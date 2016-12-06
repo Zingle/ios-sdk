@@ -29,7 +29,9 @@
     
     initialToolbarHeight = self.toolbarHeightConstraint.constant;
     
-    self.inputToolbar.contentView.textView.text = self.message.body;
+    UITextView * textView = self.inputToolbar.contentView.textView;
+    textView.text = self.message.body;
+    textView.delegate = self;
     
     [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
@@ -94,6 +96,16 @@
     } completion:nil];
 }
 
+#pragma mark - Text field
+- (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ([text length] > 0) {
+        userHasInteracted = YES;
+    }
+    
+    return YES;
+}
+
 #pragma mark - Actions
 - (IBAction) pressedCancel:(id)sender
 {
@@ -102,7 +114,7 @@
     } else {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Cancel forwarding?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         
-        UIAlertAction * leave = [UIAlertAction actionWithTitle:@"Discard" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction * leave = [UIAlertAction actionWithTitle:@"Discard and exit" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             [self dismissViewControllerAnimated:YES completion:nil];
         }];
         [alert addAction:leave];

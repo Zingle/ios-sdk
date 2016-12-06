@@ -11,7 +11,7 @@
 @class ZNGMessage;
 @class ZNGForwardingInputToolbar;
 
-@interface ZNGForwardingViewController : UIViewController
+@interface ZNGForwardingViewController : UIViewController <UITextViewDelegate>
 
 @property (nonatomic, strong) ZNGMessage * message;
 

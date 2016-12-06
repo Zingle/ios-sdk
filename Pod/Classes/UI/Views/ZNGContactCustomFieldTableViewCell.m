@@ -377,12 +377,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) selectInitialTime
 {
-    [self selectTime:[NSDate date]];
+    NSDate * date = [NSDate date];
+    [self selectTime:date];
+    datePicker.date = date;
 }
 
 - (void) selectInitialDate
 {
-    [self selectDate:[NSDate date]];
+    NSDate * date = [NSDate date];
+    [self selectDate:date];
+    datePicker.date = date;
 }
 
 - (void) selectInitialPickerValue

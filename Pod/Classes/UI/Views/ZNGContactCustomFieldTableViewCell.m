@@ -28,7 +28,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     UIColor * defaultTextFieldBackgroundColor;
     
     BOOL numericOnly;
-    BOOL justClearedDateOrTime;
+    BOOL justCleared;
 }
 
 - (void) awakeFromNib
@@ -162,7 +162,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self.textField.inputView = datePicker;
 
     } else if ((optionsExist) || ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool])) {
-        self.textField.clearButtonMode = UITextFieldViewModeNever;
+        self.textField.clearButtonMode = UITextFieldViewModeAlways;
         pickerView = [[UIPickerView alloc] init];
         pickerView.delegate = self;
         pickerView.dataSource = self;
@@ -326,8 +326,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     // If this text field is not already first responder and the user hits clear, we do not want that itself to
     //  make the text field first responder.  This only occurs for date/time fields.
-    if (justClearedDateOrTime) {
-        justClearedDateOrTime = NO;
+    if (justCleared) {
+        justCleared = NO;
         return NO;
     }
     
@@ -336,11 +336,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField
 {
-    if ([self isDateOrTimeType]) {
-        justClearedDateOrTime = YES;
-        self.customFieldValue.value = nil;
-    }
-    
+    justCleared = YES;
+    self.customFieldValue.value = nil;
+
     return YES;
 }
 

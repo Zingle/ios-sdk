@@ -116,6 +116,8 @@ static void * KVOContext = &KVOContext;
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL) weAreSendingOutbound
@@ -149,12 +151,19 @@ static void * KVOContext = &KVOContext;
     [self updateInputStatus];
     
     [self startEmphasisTimer];
+    
+    [self restoreMenuItems];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDisappeared:) name:UIMenuControllerDidHideMenuNotification object:nil];
 }
 
-- (void) viewWillAppear:(BOOL)animated
+- (void) menuDisappeared:(NSNotification *)notification
 {
-    [super viewWillAppear:animated];
-    
+    [self restoreMenuItems];
+}
+
+- (void) restoreMenuItems
+{
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
     [[UIMenuController sharedMenuController] setMenuItems:@[forward]];

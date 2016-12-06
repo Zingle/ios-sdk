@@ -63,10 +63,11 @@
 - (void) resizeToolbarWithDY:(CGFloat)dy
 {
     CGFloat targetHeight = self.toolbarHeightConstraint.constant + dy;
+    static const CGFloat maxHeight = 400.0;
     
     // Are we getting too tall?
-    if ((dy > 0.0) && (targetHeight >= 400.0)) {
-        return;
+    if ((dy > 0.0) && (targetHeight > maxHeight)) {
+        targetHeight = maxHeight;
     }
     
     // Too small?

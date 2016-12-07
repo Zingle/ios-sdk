@@ -29,6 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable) ZNGChannel * channel;
 
+/**
+ *  Convenience getter to retrieve the current session from our client.
+ */
+@property (nonatomic, readonly) ZingleAccountSession * session;
+
 - (id) initFromService:(ZNGService*)aService
              toContact:(ZNGContact *)aContact
      withCurrentUserId:(NSString *)userId

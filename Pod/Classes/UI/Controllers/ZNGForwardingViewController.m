@@ -9,8 +9,17 @@
 #import "ZNGForwardingViewController.h"
 #import "ZNGForwardingInputToolbar.h"
 #import "ZNGMessage.h"
+#import "ZNGService.h"
 
 #define kToolbarHeightKVOPath @"contentView.textView.contentSize"
+
+enum {
+    RECIPIENT_TYPE_NONE,
+    RECIPIENT_TYPE_SERVICE,
+    RECIPIENT_TYPE_SMS,
+    RECIPIENT_TYPE_EMAIL,
+    RECIPIENT_TYPE_HOTSOS
+};
 
 @interface ZNGForwardingViewController ()
 
@@ -19,6 +28,8 @@
 @implementation ZNGForwardingViewController
 {
     BOOL userHasInteracted; // Flag used to determine if we should confirm before dismissing
+    
+    uint8_t recipientType;
     
     CGFloat initialToolbarHeight;
 }
@@ -36,6 +47,8 @@
     [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
+    
+    [self selectRecipientType:self];
 }
 
 - (void) dealloc
@@ -125,6 +138,81 @@
         
         [self presentViewController:alert animated:YES completion:nil];
     }
+}
+
+- (IBAction) selectRecipientType:(id)sender
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select recipient type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    UIAlertAction * sms = [UIAlertAction actionWithTitle:@"SMS" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self changeRecipientType:RECIPIENT_TYPE_SMS];
+    }];
+    [alert addAction:sms];
+    
+    UIAlertAction * email = [UIAlertAction actionWithTitle:@"Email" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self changeRecipientType:RECIPIENT_TYPE_EMAIL];
+    }];
+    [alert addAction:email];
+    
+    UIAlertAction * hotsos = [UIAlertAction actionWithTitle:@"HotSOS" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self changeRecipientType:RECIPIENT_TYPE_HOTSOS];
+    }];
+    [alert addAction:hotsos];
+    
+    for (ZNGService * service in self.availableServices) {
+        NSString * title = [NSString stringWithFormat:@"Service: %@", service.displayName];
+        UIAlertAction * serviceAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            self.selectedService = service;
+            [self changeRecipientType:RECIPIENT_TYPE_SERVICE];
+        }];
+        [alert addAction:serviceAction];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) changeRecipientType:(uint8_t)newRecipientType
+{
+    if (recipientType == newRecipientType) {
+        return;
+    }
+    
+    recipientType = newRecipientType;
+    NSString * description;
+    
+    userHasInteracted |= (recipientType != RECIPIENT_TYPE_NONE);
+    
+    self.textField.text = @"";
+    self.textField.hidden = ![self recipientTypeRequiresSingleTextInput];
+    
+    switch(recipientType) {
+        case RECIPIENT_TYPE_SERVICE:
+            description = [NSString stringWithFormat:@"Service: %@", self.selectedService.displayName ?: @""];
+            break;
+        case RECIPIENT_TYPE_SMS:
+            self.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            description = @"SMS";
+            break;
+        case RECIPIENT_TYPE_EMAIL:
+            self.textField.keyboardType = UIKeyboardTypeEmailAddress;
+            description = @"Email";
+            break;
+        case RECIPIENT_TYPE_HOTSOS:
+            description = @"HotSOS";
+            break;
+        default:
+            description = @"Select";
+    }
+    
+    [self.selectRecipientTypeButton setTitle:description forState:UIControlStateNormal];
+}
+
+- (BOOL) recipientTypeRequiresSingleTextInput
+{
+    return ((recipientType == RECIPIENT_TYPE_EMAIL) || (recipientType == RECIPIENT_TYPE_SMS));
 }
 
 @end

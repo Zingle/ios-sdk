@@ -745,9 +745,19 @@ static void * KVOContext = &KVOContext;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
     } else if ([segue.identifier isEqualToString:@"forward"]) {
+        // Build a list of all services available to the current account other than the current one
+        NSMutableArray<ZNGService *> * availableServices = [[NSMutableArray alloc] initWithCapacity:[self.conversation.session.availableServices count]];
+        
+        for (ZNGService * service in self.conversation.session.availableServices) {
+            if (![service isEqual:self.conversation.session.service]) {
+                [availableServices addObject:service];
+            }
+        }
+        
         UINavigationController * navController = segue.destinationViewController;
         ZNGForwardingViewController * forwardingView = [navController.viewControllers firstObject];
         forwardingView.message = messageToForward;
+        forwardingView.availableServices = availableServices;
     }
 }
 

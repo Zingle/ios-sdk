@@ -109,6 +109,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     }
 }
 
+- (ZingleAccountSession *) session
+{
+    return (ZingleAccountSession *)self.eventClient.session;
+}
+
 - (void) setChannel:(ZNGChannel *)channel
 {
     if ((_channel != nil) && (channel != nil) && (![channel isEqual:_channel])) {

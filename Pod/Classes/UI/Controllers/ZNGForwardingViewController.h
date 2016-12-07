@@ -12,7 +12,7 @@
 @class ZNGForwardingInputToolbar;
 @class ZNGService;
 
-@interface ZNGForwardingViewController : UIViewController <UITextViewDelegate>
+@interface ZNGForwardingViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate>
 
 @property (nonatomic, strong) ZNGMessage * message;
 @property (nonatomic, strong) NSArray<ZNGService *> * availableServices;

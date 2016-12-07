@@ -10,6 +10,9 @@
 #import "ZNGForwardingInputToolbar.h"
 #import "ZNGMessage.h"
 #import "ZNGService.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 #define kToolbarHeightKVOPath @"contentView.textView.contentSize"
 
@@ -48,7 +51,19 @@ enum {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
     
-    [self selectRecipientType:self];
+    // Check if we actually have a message to forward
+    if ([self.message.body length] == 0) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to forward message" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self dismissViewControllerAnimated:YES completion:nil];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    } else {
+        
+        [self selectRecipientType:self];
+    }
 }
 
 - (void) dealloc
@@ -110,7 +125,7 @@ enum {
     } completion:nil];
 }
 
-#pragma mark - Text field
+#pragma mark - Text view
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
     if ([text length] > 0) {
@@ -118,6 +133,25 @@ enum {
     }
     
     return YES;
+}
+
+#pragma mark - Text field
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    BOOL shouldChange = YES;
+    NSString * resultString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+
+    if (recipientType == RECIPIENT_TYPE_SMS) {
+        // Only allow phone number characters
+        NSCharacterSet * phoneNumberCharacters = [NSCharacterSet characterSetWithCharactersInString:@"0123456789-() *#+"];
+        NSCharacterSet * disallowedCharacters = [phoneNumberCharacters invertedSet];
+        NSRange disallowedRange = [string rangeOfCharacterFromSet:disallowedCharacters];
+        shouldChange = (disallowedRange.location == NSNotFound);
+    }
+    
+    [[self.inputToolbar sendButton] setEnabled:[self sufficientRecipientDataExistsWithRecipientString:resultString]];
+    
+    return shouldChange;
 }
 
 #pragma mark - Actions
@@ -184,9 +218,10 @@ enum {
     NSString * description;
     
     userHasInteracted |= (recipientType != RECIPIENT_TYPE_NONE);
+    BOOL requiresSingleTextInput = [self recipientTypeRequiresSingleTextInput];
     
     self.textField.text = @"";
-    self.textField.hidden = ![self recipientTypeRequiresSingleTextInput];
+    self.textField.hidden = !requiresSingleTextInput;
     
     switch(recipientType) {
         case RECIPIENT_TYPE_SERVICE:
@@ -208,11 +243,54 @@ enum {
     }
     
     [self.selectRecipientTypeButton setTitle:description forState:UIControlStateNormal];
+    
+    if (requiresSingleTextInput) {
+        [self.textField becomeFirstResponder];
+    }
 }
 
 - (BOOL) recipientTypeRequiresSingleTextInput
 {
     return ((recipientType == RECIPIENT_TYPE_EMAIL) || (recipientType == RECIPIENT_TYPE_SMS));
+}
+
+/**
+ *  Do we have a selected recipient?
+ */
+- (BOOL) sufficientRecipientDataExistsWithRecipientString:(NSString *)recipientString
+{
+    NSString * recipient = recipientString ?: self.textField.text;
+    
+    if (recipientType == RECIPIENT_TYPE_EMAIL) {
+        NSString * emailRegex = @"^.+@([A-Za-z0-9-]+\\.)+[A-Za-z]{2}[A-Za-z]*$";
+        NSPredicate * emailTest = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", emailRegex];
+        return [emailTest evaluateWithObject:recipient];
+    } else if (recipientType == RECIPIENT_TYPE_SMS) {
+        // Check for at least five numbers
+        static const NSUInteger minimumDigitsInPhoneNumber = 5;
+        NSUInteger numberCount = 0;
+        NSCharacterSet * numberSet = [NSCharacterSet characterSetWithCharactersInString:@"0123456789"];
+        for (NSUInteger i=0; i < [recipient length]; i++) {
+            if ([numberSet characterIsMember:[recipient characterAtIndex:i]]) {
+                numberCount++;
+                
+                if (numberCount >= minimumDigitsInPhoneNumber) {
+                    return YES;
+                }
+            }
+        }
+        
+        ZNGLogDebug(@"Only found %llu numbers in the recipient field.  We require at least %llu for a phone number.", (unsigned long long)numberCount, (unsigned long long)minimumDigitsInPhoneNumber);
+        return NO;
+    }
+    
+    // TODO: Finish implementation
+    return NO;
+}
+
+- (BOOL) sufficientRecipientDataExists
+{
+    return [self sufficientRecipientDataExistsWithRecipientString:nil];
 }
 
 @end

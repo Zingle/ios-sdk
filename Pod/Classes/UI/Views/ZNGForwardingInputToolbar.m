@@ -7,6 +7,8 @@
 //
 
 #import "ZNGForwardingInputToolbar.h"
+#import "UIColor+ZingleSDK.h"
+#import "UIFont+Lato.h"
 
 @implementation ZNGForwardingInputToolbar
 
@@ -16,6 +18,8 @@
     
     UIButton * sendButton = self.contentView.rightBarButtonItem;
     [sendButton setTitle:@"Forward" forState:UIControlStateNormal];
+    self.sendButtonColor = [UIColor zng_green];
+    self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
 }

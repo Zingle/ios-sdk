@@ -16,6 +16,8 @@
 {
     [super awakeFromNib];
     
+    self.barTintColor = [UIColor whiteColor];
+    
     UIButton * sendButton = self.contentView.rightBarButtonItem;
     [sendButton setTitle:@"Forward" forState:UIControlStateNormal];
     self.sendButtonColor = [UIColor zng_green];

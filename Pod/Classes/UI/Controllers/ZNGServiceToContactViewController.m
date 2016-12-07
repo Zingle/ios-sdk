@@ -758,6 +758,7 @@ static void * KVOContext = &KVOContext;
         ZNGForwardingViewController * forwardingView = [navController.viewControllers firstObject];
         forwardingView.message = messageToForward;
         forwardingView.availableServices = availableServices;
+        forwardingView.contact = self.conversation.contact;
     }
 }
 

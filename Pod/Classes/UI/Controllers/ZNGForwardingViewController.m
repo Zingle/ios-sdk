@@ -8,6 +8,7 @@
 
 #import "ZNGForwardingViewController.h"
 #import "ZNGForwardingInputToolbar.h"
+#import "ZNGContact.h"
 #import "ZNGMessage.h"
 #import "ZNGService.h"
 #import "ZNGLogging.h"
@@ -50,6 +51,8 @@ enum {
     [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
+
+    self.roomNumberLabel.text = [[self.contact roomFieldValue] value] ?: @"none";
     
     // Check if we actually have a message to forward
     if ([self.message.body length] == 0) {
@@ -222,6 +225,7 @@ enum {
     
     self.textField.text = @"";
     self.textField.hidden = !requiresSingleTextInput;
+    self.hotsosInputView.hidden = (recipientType != RECIPIENT_TYPE_HOTSOS);
     
     switch(recipientType) {
         case RECIPIENT_TYPE_SERVICE:

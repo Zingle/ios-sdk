@@ -167,6 +167,9 @@ enum {
         [[self.inputToolbar sendButton] setEnabled:[self sufficientRecipientDataExistsWithRecipientString:resultString]];
         
         return shouldChange;
+    } else if (textField == self.hotsosIssueTextField) {
+        selectedHotsosIssueName = nil;
+        [[self.inputToolbar sendButton] setEnabled:NO];
     }
     
     return YES;
@@ -176,6 +179,16 @@ enum {
 {
     if (textField == self.hotsosIssueTextField) {
         [self searchForHotsosIssue];
+    }
+    
+    return YES;
+}
+
+- (BOOL) textFieldShouldClear:(UITextField *)textField
+{
+    if (textField == self.hotsosIssueTextField) {
+        selectedHotsosIssueName = nil;
+        [[self.inputToolbar sendButton] setEnabled:NO];
     }
     
     return YES;

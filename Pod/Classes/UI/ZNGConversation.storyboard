@@ -108,7 +108,7 @@
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="4eI-y5-Pku"/>
                                 </connections>
                             </button>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
+                            <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
                                 <rect key="frame" x="159" y="83" width="200" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
@@ -126,11 +126,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR">
                                         <rect key="frame" x="72" y="11" width="236" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="9Vu-yg-VoU" id="uFK-pQ-Gxs"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
                                         <rect key="frame" x="316" y="8" width="51" height="33"/>
@@ -154,12 +157,17 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
+                                        <rect key="frame" x="331" y="14" width="20" height="20"/>
+                                    </activityIndicatorView>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="SVm-1k-Gft" firstAttribute="leading" secondItem="wk5-1s-9rR" secondAttribute="trailing" constant="8" id="1ha-hs-B7n"/>
+                                    <constraint firstItem="j1t-J3-wcW" firstAttribute="centerX" secondItem="SVm-1k-Gft" secondAttribute="centerX" id="2b0-Wc-nuu"/>
                                     <constraint firstItem="SVm-1k-Gft" firstAttribute="baseline" secondItem="wk5-1s-9rR" secondAttribute="baseline" id="4Fu-E1-EoX"/>
                                     <constraint firstItem="ewp-an-dYP" firstAttribute="leading" secondItem="raY-Ot-4yE" secondAttribute="leading" constant="16" id="8Zj-WA-23Q"/>
+                                    <constraint firstItem="j1t-J3-wcW" firstAttribute="centerY" secondItem="SVm-1k-Gft" secondAttribute="centerY" id="BJW-U2-SIi"/>
                                     <constraint firstAttribute="bottom" secondItem="pfu-Ld-m81" secondAttribute="bottom" constant="11" id="DiE-Yg-2o5"/>
                                     <constraint firstItem="ewp-an-dYP" firstAttribute="top" secondItem="raY-Ot-4yE" secondAttribute="top" constant="14" id="Rwf-IA-Nnt"/>
                                     <constraint firstItem="ZSE-6B-X72" firstAttribute="baseline" secondItem="pfu-Ld-m81" secondAttribute="baseline" id="Ur5-OV-ptK"/>
@@ -202,6 +210,8 @@
                         <outlet property="hotsosInputView" destination="raY-Ot-4yE" id="YnS-pq-vKW"/>
                         <outlet property="hotsosIssueTextField" destination="wk5-1s-9rR" id="gdl-cx-6bI"/>
                         <outlet property="inputToolbar" destination="NTY-5f-YkE" id="vOn-W5-a4H"/>
+                        <outlet property="issueSearchActivityIndicator" destination="j1t-J3-wcW" id="jDT-8f-tWJ"/>
+                        <outlet property="issueSearchButton" destination="SVm-1k-Gft" id="qXC-Ny-9Wl"/>
                         <outlet property="roomNumberLabel" destination="ZSE-6B-X72" id="ZCl-R4-PxM"/>
                         <outlet property="selectRecipientTypeButton" destination="IYt-3Q-GWh" id="MjX-ny-Ktu"/>
                         <outlet property="textField" destination="ZNP-BR-bAW" id="wFf-vG-nRW"/>
@@ -398,7 +408,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
-                                                    <rect key="frame" x="37" y="18" width="22" height="22"/>
+                                                    <rect key="frame" x="37" y="18.5" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
                                                         <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
@@ -409,7 +419,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="14" width="45" height="30"/>
+                                                    <rect key="frame" x="71" y="14.5" width="46" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -419,7 +429,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="120" y="22" width="14" height="14"/>
+                                                    <rect key="frame" x="121" y="22.5" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
@@ -430,7 +440,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="142" y="8" width="225" height="43"/>
+                                                    <rect key="frame" x="143" y="8" width="224" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="Yjv-O7-T28"/>
                                                     </constraints>

@@ -29,6 +29,8 @@
 @property (nonatomic, strong) IBOutlet UIButton * selectRecipientTypeButton;
 @property (nonatomic, strong) IBOutlet UITextField * textField;
 @property (nonatomic, strong) IBOutlet UITextField * hotsosIssueTextField;
+@property (nonatomic, strong) IBOutlet UIButton * issueSearchButton;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView * issueSearchActivityIndicator;
 
 - (IBAction) pressedCancel:(id)sender;
 - (IBAction) selectRecipientType:(id)sender;

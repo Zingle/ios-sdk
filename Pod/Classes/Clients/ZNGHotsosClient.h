@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGHotsosClient : NSObject
+@interface ZNGHotsosClient : NSObject <NSXMLParserDelegate>
 
 - (id) init NS_UNAVAILABLE;
 - (id) initWithService:(ZNGService *)service;

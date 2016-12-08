@@ -37,6 +37,7 @@ enum {
     BOOL serviceSupportsHotsos;
     
     ZNGHotsosClient * hotsosClient;
+    NSString * selectedHotsosIssueName;
     
     uint8_t recipientType;
     
@@ -142,30 +143,42 @@ enum {
 #pragma mark - Text view
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
-    if ([text length] > 0) {
-        userHasInteracted = YES;
-    }
-    
+    userHasInteracted = YES;
     return YES;
 }
 
 #pragma mark - Text field
 - (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
 {
-    BOOL shouldChange = YES;
-    NSString * resultString = [textField.text stringByReplacingCharactersInRange:range withString:string];
+    userHasInteracted = YES;
+    
+    if (textField == self.textField) {
+        BOOL shouldChange = YES;
+        NSString * resultString = [textField.text stringByReplacingCharactersInRange:range withString:string];
 
-    if (recipientType == RECIPIENT_TYPE_SMS) {
-        // Only allow phone number characters
-        NSCharacterSet * phoneNumberCharacters = [NSCharacterSet characterSetWithCharactersInString:@"0123456789-() *#+"];
-        NSCharacterSet * disallowedCharacters = [phoneNumberCharacters invertedSet];
-        NSRange disallowedRange = [string rangeOfCharacterFromSet:disallowedCharacters];
-        shouldChange = (disallowedRange.location == NSNotFound);
+        if (recipientType == RECIPIENT_TYPE_SMS) {
+            // Only allow phone number characters
+            NSCharacterSet * phoneNumberCharacters = [NSCharacterSet characterSetWithCharactersInString:@"0123456789-() *#+"];
+            NSCharacterSet * disallowedCharacters = [phoneNumberCharacters invertedSet];
+            NSRange disallowedRange = [string rangeOfCharacterFromSet:disallowedCharacters];
+            shouldChange = (disallowedRange.location == NSNotFound);
+        }
+        
+        [[self.inputToolbar sendButton] setEnabled:[self sufficientRecipientDataExistsWithRecipientString:resultString]];
+        
+        return shouldChange;
     }
     
-    [[self.inputToolbar sendButton] setEnabled:[self sufficientRecipientDataExistsWithRecipientString:resultString]];
+    return YES;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    if (textField == self.hotsosIssueTextField) {
+        [self searchForHotsosIssue];
+    }
     
-    return shouldChange;
+    return YES;
 }
 
 #pragma mark - Actions
@@ -190,6 +203,14 @@ enum {
 
 - (IBAction) pressedHotsosIssueSearch:(id)sender
 {
+    [self searchForHotsosIssue];
+}
+
+#pragma mark - Delicious HotSOS
+- (void) searchForHotsosIssue
+{
+    userHasInteracted = YES;
+    
     NSString * term = self.hotsosIssueTextField.text;
     
     if ([term length] == 0) {
@@ -198,13 +219,64 @@ enum {
         return;
     }
     
+    self.issueSearchButton.hidden = YES;
+    [self.issueSearchActivityIndicator startAnimating];
+    
     [hotsosClient getIssuesLike:term completion:^(NSArray<NSString *> * _Nullable matchingIssueNames, NSError * _Nullable error) {
-        // TODO: Implement
+        self.issueSearchButton.hidden = NO;
+        [self.issueSearchActivityIndicator stopAnimating];
+        
+        if (error != nil) {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to search for HotSOS issues" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else if ([matchingIssueNames count] == 0) {
+            UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"No matching HotSOS issues were found" message:nil preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:ok];
+            [self presentViewController:alert animated:YES completion:nil];
+        } else {
+            [self chooseHotsosIssue:matchingIssueNames];
+        }
     }];
 }
 
+- (void) chooseHotsosIssue:(NSArray<NSString *> *)issues
+{
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Matching issues" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    
+    for (NSString * issueName in issues) {
+        UIAlertAction * action = [UIAlertAction actionWithTitle:issueName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self didSelectHotsosIssue:issueName];
+        }];
+        [alert addAction:action];
+    }
+    
+    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        [self didSelectHotsosIssue:nil];
+    }];
+    [alert addAction:cancel];
+    
+    [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void) didSelectHotsosIssue:(NSString *)issueName
+{
+    self.hotsosIssueTextField.text = issueName;
+    selectedHotsosIssueName = issueName;
+    [[self.inputToolbar sendButton] setEnabled:[self sufficientRecipientDataExists]];
+    
+    if ([issueName length] > 0) {
+        [self.hotsosIssueTextField resignFirstResponder];
+    }
+}
+
+#pragma mark - Recipient type changing
 - (IBAction) selectRecipientType:(id)sender
 {
+    userHasInteracted = YES;
+    
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select recipient type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
     UIAlertAction * sms = [UIAlertAction actionWithTitle:@"SMS" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -251,6 +323,9 @@ enum {
     userHasInteracted |= (recipientType != RECIPIENT_TYPE_NONE);
     BOOL requiresSingleTextInput = [self recipientTypeRequiresSingleTextInput];
     
+    selectedHotsosIssueName = nil;
+    self.hotsosIssueTextField.text = @"";
+    
     self.textField.text = @"";
     self.textField.hidden = !requiresSingleTextInput;
     self.hotsosInputView.hidden = (recipientType != RECIPIENT_TYPE_HOTSOS);
@@ -260,7 +335,7 @@ enum {
             description = [NSString stringWithFormat:@"Service: %@", self.forwardTargetService.displayName ?: @""];
             break;
         case RECIPIENT_TYPE_SMS:
-            self.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+            self.textField.keyboardType = UIKeyboardTypePhonePad;
             description = @"SMS";
             break;
         case RECIPIENT_TYPE_EMAIL:
@@ -276,9 +351,20 @@ enum {
     
     [self.selectRecipientTypeButton setTitle:description forState:UIControlStateNormal];
     
+    // Which text field wants to be first responder?  Anyone?
     if (requiresSingleTextInput) {
         [self.textField becomeFirstResponder];
+        [self.textField reloadInputViews];
+    } else {
+        if (recipientType == RECIPIENT_TYPE_HOTSOS) {
+            [self.hotsosIssueTextField becomeFirstResponder];
+        } else {
+            [self.textField resignFirstResponder];
+            [self.hotsosIssueTextField resignFirstResponder];
+        }
     }
+    
+    [[self.inputToolbar sendButton] setEnabled:[self sufficientRecipientDataExists]];
 }
 
 - (BOOL) recipientTypeRequiresSingleTextInput
@@ -314,9 +400,12 @@ enum {
         
         ZNGLogDebug(@"Only found %llu numbers in the recipient field.  We require at least %llu for a phone number.", (unsigned long long)numberCount, (unsigned long long)minimumDigitsInPhoneNumber);
         return NO;
+    } else if (recipientType == RECIPIENT_TYPE_HOTSOS) {
+        return ([selectedHotsosIssueName length] > 0);
+    } else if (recipientType == RECIPIENT_TYPE_SERVICE) {
+        return (self.forwardTargetService != nil);
     }
-    
-    // TODO: Finish implementation
+
     return NO;
 }
 

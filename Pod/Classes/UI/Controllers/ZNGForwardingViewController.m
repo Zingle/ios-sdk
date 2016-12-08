@@ -12,6 +12,8 @@
 #import "ZNGMessage.h"
 #import "ZNGService.h"
 #import "ZNGLogging.h"
+#import "UIColor+ZingleSDK.h"
+#import "ZNGHotsosClient.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -32,6 +34,9 @@ enum {
 @implementation ZNGForwardingViewController
 {
     BOOL userHasInteracted; // Flag used to determine if we should confirm before dismissing
+    BOOL serviceSupportsHotsos;
+    
+    ZNGHotsosClient * hotsosClient;
     
     uint8_t recipientType;
     
@@ -48,6 +53,12 @@ enum {
     textView.text = self.message.body;
     textView.delegate = self;
     
+    serviceSupportsHotsos = (([[self.activeService hotsosHostName] length]) && ([[self.activeService hotsosUserName] length]) && ([[self.activeService hotsosPassword] length]));
+    
+    if (serviceSupportsHotsos) {
+        hotsosClient = [[ZNGHotsosClient alloc] initWithService:self.activeService];
+    }
+        
     [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
@@ -177,6 +188,21 @@ enum {
     }
 }
 
+- (IBAction) pressedHotsosIssueSearch:(id)sender
+{
+    NSString * term = self.hotsosIssueTextField.text;
+    
+    if ([term length] == 0) {
+        // It should be pretty self explanatory if there is no text entered.  I'd rather not honk away with a modal alert.
+        ZNGLogInfo(@"User pressed \"search\" in the HotSOS issue box, but there is no text entered.  Ignoring.");
+        return;
+    }
+    
+    [hotsosClient getIssuesLike:term completion:^(NSArray<NSString *> * _Nullable matchingIssueNames, NSError * _Nullable error) {
+        // TODO: Implement
+    }];
+}
+
 - (IBAction) selectRecipientType:(id)sender
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select recipient type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
@@ -191,15 +217,17 @@ enum {
     }];
     [alert addAction:email];
     
-    UIAlertAction * hotsos = [UIAlertAction actionWithTitle:@"HotSOS" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self changeRecipientType:RECIPIENT_TYPE_HOTSOS];
-    }];
-    [alert addAction:hotsos];
+    if (serviceSupportsHotsos) {
+        UIAlertAction * hotsos = [UIAlertAction actionWithTitle:@"HotSOS" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self changeRecipientType:RECIPIENT_TYPE_HOTSOS];
+        }];
+        [alert addAction:hotsos];
+    }
     
     for (ZNGService * service in self.availableServices) {
         NSString * title = [NSString stringWithFormat:@"Service: %@", service.displayName];
         UIAlertAction * serviceAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            self.selectedService = service;
+            self.forwardTargetService = service;
             [self changeRecipientType:RECIPIENT_TYPE_SERVICE];
         }];
         [alert addAction:serviceAction];
@@ -229,7 +257,7 @@ enum {
     
     switch(recipientType) {
         case RECIPIENT_TYPE_SERVICE:
-            description = [NSString stringWithFormat:@"Service: %@", self.selectedService.displayName ?: @""];
+            description = [NSString stringWithFormat:@"Service: %@", self.forwardTargetService.displayName ?: @""];
             break;
         case RECIPIENT_TYPE_SMS:
             self.textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;

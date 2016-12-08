@@ -759,6 +759,7 @@ static void * KVOContext = &KVOContext;
         forwardingView.message = messageToForward;
         forwardingView.availableServices = availableServices;
         forwardingView.contact = self.conversation.contact;
+        forwardingView.activeService = self.conversation.service;
     }
 }
 

@@ -18,7 +18,8 @@
 @property (nonatomic, strong) ZNGMessage * message;
 @property (nonatomic, strong) ZNGContact * contact;
 @property (nonatomic, strong) NSArray<ZNGService *> * availableServices;
-@property (nonatomic, strong) ZNGService * selectedService;
+@property (nonatomic, strong) ZNGService * activeService;
+@property (nonatomic, strong) ZNGService * forwardTargetService;
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * toolbarHeightConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * toolbarBottomSpaceConstraint;
@@ -27,8 +28,10 @@
 @property (nonatomic, strong) IBOutlet UILabel * roomNumberLabel;
 @property (nonatomic, strong) IBOutlet UIButton * selectRecipientTypeButton;
 @property (nonatomic, strong) IBOutlet UITextField * textField;
+@property (nonatomic, strong) IBOutlet UITextField * hotsosIssueTextField;
 
 - (IBAction) pressedCancel:(id)sender;
 - (IBAction) selectRecipientType:(id)sender;
+- (IBAction) pressedHotsosIssueSearch:(id)sender;
 
 @end

@@ -16,7 +16,9 @@
 #import "ZNGTemplate.h"
 #import "ZNGSettingsField.h"
 
+#define kServiceSettingHotsosURLKey         @"hotsos_url"
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
+#define kServiceSettingHotsosPasswordKey    @"hotsos_password"
 
 @implementation ZNGService
 
@@ -213,15 +215,30 @@
     return (([country length] > 0) && ([channelCountry length] > 0) && (![country isEqualToString:channelCountry]));
 }
 
-- (NSString *)hotsosUserName
+- (NSString *) settingValueForCode:(NSString *)code
 {
     for (ZNGSetting * setting in self.settings) {
-        if ([setting.settingsField.code isEqualToString:kServiceSettingHotsosUserNameKey]) {
+        if ([setting.settingsField.code isEqualToString:code]) {
             return setting.value;
         }
     }
     
     return nil;
+}
+
+- (NSString *)hotsosHostName
+{
+    return [self settingValueForCode:kServiceSettingHotsosURLKey];
+}
+
+- (NSString *)hotsosUserName
+{
+    return [self settingValueForCode:kServiceSettingHotsosUserNameKey];
+}
+
+- (NSString *)hotsosPassword
+{
+    return [self settingValueForCode:kServiceSettingHotsosPasswordKey];
 }
 
 @end

@@ -175,6 +175,16 @@ enum {
     return YES;
 }
 
+- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField
+{
+    if (textField == self.hotsosIssueTextField) {
+        // If they have selected an issue, we do not want their cursor entering the field unless they do so by hitting clear
+        return (selectedHotsosIssueName == nil);
+    }
+    
+    return YES;
+}
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     if (textField == self.hotsosIssueTextField) {

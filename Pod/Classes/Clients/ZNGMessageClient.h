@@ -11,6 +11,7 @@
 #import "ZNGNewMessage.h"
 
 @class ZNGNewMessageResponse;
+@class ZNGMessageForwardingRequest;
 
 @interface ZNGMessageClient : ZNGBaseClientService
 
@@ -29,6 +30,10 @@
 - (void)sendMessage:(ZNGNewMessage*)newMessage
             success:(void (^)(ZNGNewMessageResponse * message, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure;
+
+- (void) forwardMessage:(ZNGMessageForwardingRequest *)forwardingRequest
+                success:(void (^)(ZNGStatus* status))success
+                failure:(void (^)(ZNGError* error))failure;
 
 - (void)markMessageReadWithId:(NSString*)messageId
                        readAt:(NSDate *)readAt

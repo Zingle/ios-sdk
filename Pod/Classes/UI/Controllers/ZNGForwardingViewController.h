@@ -7,15 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JSQMessagesViewController/JSQMessagesInputToolbar.h"
+#import "ZNGConversationServiceToContact.h"
 
 @class ZNGContact;
 @class ZNGMessage;
 @class ZNGForwardingInputToolbar;
 @class ZNGService;
 
-@interface ZNGForwardingViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate>
+@interface ZNGForwardingViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, JSQMessagesInputToolbarDelegate>
 
 @property (nonatomic, strong) ZNGMessage * message;
+@property (nonatomic, strong) ZNGConversationServiceToContact * conversation;
 @property (nonatomic, strong) ZNGContact * contact;
 @property (nonatomic, strong) NSArray<ZNGService *> * availableServices;
 @property (nonatomic, strong) ZNGService * activeService;

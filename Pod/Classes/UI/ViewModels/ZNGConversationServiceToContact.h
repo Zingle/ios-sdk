@@ -59,6 +59,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion;
 
+- (void) forwardMessage:(ZNGMessage *)message toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message toService:(ZNGService *)service success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+
 /**
  *  Returns all remote channels that have been used by this contact in our current data.  Note that, if the contact has used a channel in messages
  *   older than our current data, that channel will *not* be included in this array.

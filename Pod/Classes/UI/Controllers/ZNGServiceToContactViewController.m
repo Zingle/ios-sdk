@@ -757,6 +757,7 @@ static void * KVOContext = &KVOContext;
         UINavigationController * navController = segue.destinationViewController;
         ZNGForwardingViewController * forwardingView = [navController.viewControllers firstObject];
         forwardingView.message = messageToForward;
+        forwardingView.conversation = self.conversation;
         forwardingView.availableServices = availableServices;
         forwardingView.contact = self.conversation.contact;
         forwardingView.activeService = self.conversation.service;

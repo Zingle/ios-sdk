@@ -437,4 +437,51 @@ enum {
     return [self sufficientRecipientDataExistsWithRecipientString:nil];
 }
 
+#pragma mark - Sending
+- (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender
+{
+    // Unused but required delegate method
+}
+
+- (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
+{
+    if (![self sufficientRecipientDataExists]) {
+        ZNGLogError(@"Insufficient recipient data exists, but the user was still able to press the forward button.  This is odd.");
+        return;
+    }
+    
+    [[[self inputToolbar] sendButton] setEnabled:NO];
+
+    void (^success)(ZNGStatus * status) = ^void(ZNGStatus * status) {
+        [self dismissViewControllerAnimated:YES completion:nil];
+    };
+    
+    void (^failure)(ZNGError * error) = ^void(ZNGError * error) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to forward message" message:error.localizedDescription preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [[[self inputToolbar] sendButton] setEnabled:YES];
+        }];
+        [alert addAction:ok];
+        
+        [self presentViewController:alert animated:YES completion:nil];
+    };
+    
+    switch(recipientType) {
+        case RECIPIENT_TYPE_SMS:
+            [self.conversation forwardMessage:self.message toSMS:self.textField.text success:success failure:failure];
+            break;
+        case RECIPIENT_TYPE_EMAIL:
+            [self.conversation forwardMessage:self.message toEmail:self.textField.text success:success failure:failure];
+            break;
+        case RECIPIENT_TYPE_SERVICE:
+            [self.conversation forwardMessage:self.message toService:self.forwardTargetService success:success failure:failure];
+            break;
+        case RECIPIENT_TYPE_HOTSOS:
+            [self.conversation forwardMessage:self.message toHotsosWithHotsosIssueName:selectedHotsosIssueName success:success failure:failure];
+            break;
+        default:
+            ZNGLogError(@"Something horrible is happening.  They hit forward without selecting a forward type.  Help.");
+    }
+}
+
 @end

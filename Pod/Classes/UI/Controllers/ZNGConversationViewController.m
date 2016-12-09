@@ -849,6 +849,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    return 0.0;
+}
+
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
     NSString * name = [self nameForMessageAtIndexPath:indexPath];
     
     if (name == nil) {
@@ -856,12 +862,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     return 16.0;
-}
-
-- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
-                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 0.0f;
 }
 
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
@@ -921,14 +921,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString * name = [self nameForMessageAtIndexPath:indexPath];
-    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
-    return (name != nil) ? [[NSAttributedString alloc] initWithString:name attributes:attributes] : nil;
+    return nil;
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    NSString * name = [self nameForMessageAtIndexPath:indexPath];
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    return (name != nil) ? [[NSAttributedString alloc] initWithString:name attributes:attributes] : nil;
 }
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section

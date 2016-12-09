@@ -31,4 +31,7 @@
 
 @property (nonatomic, weak, nullable) id <ZNGServiceToContactViewDelegate> delegate;
 
+// Defaults to YES
+@property (nonatomic, assign) BOOL allowForwarding;
+
 @end

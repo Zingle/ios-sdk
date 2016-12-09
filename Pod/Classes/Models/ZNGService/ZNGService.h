@@ -50,10 +50,11 @@
 - (ZNGChannel * _Nullable)defaultPhoneNumberChannel;
 - (ZNGChannel * _Nullable)defaultChannelForType:(ZNGChannelType * _Nonnull)channelType;
 
-/**
- *  The service's HOTSOS username or nil if none is configured.
- */
+// HotSOS settings
 - (NSString * _Nullable)hotsosUserName;
+- (NSString * _Nullable)hotsosHostName;
+- (NSString * _Nullable)hotsosPassword;
+
 
 /**
  *  Thanks to http://jira.zinglecorp.com:8080/browse/TECH-1970, there is logic for displaying a channel

@@ -204,6 +204,15 @@ static NSString * const ParameterNameClosed = @"is_closed";
     return nil;
 }
 
+-(nullable ZNGContactFieldValue *)roomFieldValue
+{
+    NSUInteger index = [self.customFieldValues indexOfObjectPassingTest:^BOOL(ZNGContactFieldValue * fieldValue, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [fieldValue.customField.code isEqualToString:@"room"];
+    }];
+    
+    return (index != NSNotFound) ? self.customFieldValues[index] : nil;
+}
+
 - (nullable ZNGContactFieldValue *) contactFieldValueForType:(ZNGContactField *)field
 {
     for (ZNGContactFieldValue * value in self.customFieldValues) {

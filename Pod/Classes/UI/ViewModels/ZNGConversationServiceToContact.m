@@ -12,6 +12,7 @@
 #import "ZNGEventClient.h"
 #import "ZNGContactClient.h"
 #import "ZNGAnalytics.h"
+#import "ZNGMessageForwardingRequest.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -107,6 +108,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
             }
         }
     }
+}
+
+- (ZingleAccountSession *) session
+{
+    return (ZingleAccountSession *)self.eventClient.session;
 }
 
 - (void) setChannel:(ZNGChannel *)channel
@@ -349,6 +355,61 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     _usedChannels = [channels allObjects];
     
     return _usedChannels;
+}
+
+#pragma mark - Forwarding
+- (void) forwardMessage:(ZNGMessage *)message toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+{
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    request.recipientType = ZNGMessageForwardingRecipientTypeSMS;
+    request.recipient = phoneNumberString;
+    
+    [self _sendForwardingRequest:request success:success failure:failure];
+}
+
+- (void) forwardMessage:(ZNGMessage *)message toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+{
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    request.recipientType = ZNGMessageForwardingRecipientTypeEmail;
+    request.recipient = email;
+    
+    [self _sendForwardingRequest:request success:success failure:failure];
+}
+
+- (void) forwardMessage:(ZNGMessage *)message toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+{
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    request.recipientType = ZNGMessageForwardingRecipientTypeHotsos;
+    request.hotsosIssue = hotsosIssueName;
+    
+    [self _sendForwardingRequest:request success:success failure:failure];
+}
+
+- (void) forwardMessage:(ZNGMessage *)message toService:(ZNGService *)service success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+{
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    request.recipientType = ZNGMessageForwardingRecipientTypeService;
+    request.recipient = service.serviceId;
+    
+    [self _sendForwardingRequest:request success:success failure:failure];
+}
+
+- (ZNGMessageForwardingRequest *) forwardingRequestForMessage:(ZNGMessage  *)message
+{
+    ZNGMessageForwardingRequest * request = [[ZNGMessageForwardingRequest alloc] init];
+    request.message = message;
+    
+    // Add room number if this looks like our same guy
+    if ([[[message contactCorrespondent] correspondentId] isEqualToString:self.contact.contactId]) {
+        request.room = [[self.contact roomFieldValue] value];
+    }
+    
+    return request;
+}
+
+- (void) _sendForwardingRequest:(ZNGMessageForwardingRequest *)request success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+{
+    [self.messageClient forwardMessage:request success:success failure:failure];
 }
 
 @end

@@ -25,6 +25,7 @@
 #import "ZNGAnalytics.h"
 #import "ZingleAccountSession.h"
 #import "ZNGLogging.h"
+#import "ZNGForwardingViewController.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -54,6 +55,8 @@ static void * KVOContext = &KVOContext;
     
     NSMutableArray<NSDate *> * touchTimes;
     NSUInteger spamZIndex;
+    
+    ZNGMessage * messageToForward;
 }
 
 @dynamic conversation;
@@ -76,6 +79,7 @@ static void * KVOContext = &KVOContext;
     self = [super initWithCoder:aDecoder];
     
     if (self != nil) {
+        _allowForwarding = YES;
         [self setupKVO];
     }
     
@@ -87,6 +91,7 @@ static void * KVOContext = &KVOContext;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     
     if (self != nil) {
+        _allowForwarding = YES;
         [self setupKVO];
     }
     
@@ -111,6 +116,8 @@ static void * KVOContext = &KVOContext;
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL) weAreSendingOutbound
@@ -144,6 +151,23 @@ static void * KVOContext = &KVOContext;
     [self updateInputStatus];
     
     [self startEmphasisTimer];
+    
+    [self restoreMenuItems];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDisappeared:) name:UIMenuControllerDidHideMenuNotification object:nil];
+}
+
+- (void) menuDisappeared:(NSNotification *)notification
+{
+    [self restoreMenuItems];
+}
+
+- (void) restoreMenuItems
+{
+    // Add forward menu item
+    UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
+    [[UIMenuController sharedMenuController] setMenuItems:@[forward]];
+    [JSQMessagesCollectionViewCell registerMenuAction:@selector(forwardMessage:)];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
@@ -646,6 +670,28 @@ static void * KVOContext = &KVOContext;
     return height;
 }
 
+- (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(forwardMessage:)) {
+        return self.allowForwarding;
+    }
+    
+    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+}
+
+- (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(forwardMessage:)) {
+        ZNGMessage * message = [[self eventAtIndexPath:indexPath] message];
+        
+        if (message != nil) {
+            [self forwardMessage:message];
+        }
+    } else {
+        [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
+    }
+}
+
 #pragma mark - Actions
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel
 {
@@ -698,6 +744,23 @@ static void * KVOContext = &KVOContext;
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
+    } else if ([segue.identifier isEqualToString:@"forward"]) {
+        // Build a list of all services available to the current account other than the current one
+        NSMutableArray<ZNGService *> * availableServices = [[NSMutableArray alloc] initWithCapacity:[self.conversation.session.availableServices count]];
+        
+        for (ZNGService * service in self.conversation.session.availableServices) {
+            if (![service isEqual:self.conversation.session.service]) {
+                [availableServices addObject:service];
+            }
+        }
+        
+        UINavigationController * navController = segue.destinationViewController;
+        ZNGForwardingViewController * forwardingView = [navController.viewControllers firstObject];
+        forwardingView.message = messageToForward;
+        forwardingView.conversation = self.conversation;
+        forwardingView.availableServices = availableServices;
+        forwardingView.contact = self.conversation.contact;
+        forwardingView.activeService = self.conversation.service;
     }
 }
 
@@ -862,6 +925,12 @@ static void * KVOContext = &KVOContext;
     }
     
     [self performSegueWithIdentifier:@"editContact" sender:self];
+}
+
+- (void) forwardMessage:(ZNGMessage *)message
+{
+    messageToForward = message;
+    [self performSegueWithIdentifier:@"forward" sender:self];
 }
 
 @end

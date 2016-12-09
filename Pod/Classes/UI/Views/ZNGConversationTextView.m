@@ -7,6 +7,9 @@
 //
 
 #import "ZNGConversationTextView.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 // Private method to configure views because JSQ is a jerk
 @interface JSQMessagesComposerTextView()
@@ -24,6 +27,38 @@
     self.layer.cornerRadius = 0.0;
     
     self.scrollIndicatorInsets = UIEdgeInsetsZero;
+}
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    
+    // This feels dirty, but this is the only way to prevent "forwardMessage:" from showing up in the text entry box.  I hate everything.
+    [[UIMenuController sharedMenuController] setMenuItems:nil];
+    
+    BOOL canPerform = NO;
+    
+    if ([self.text length] == 0) {
+        if (action == @selector(paste:)) {
+            canPerform = YES;
+        }
+    } else  {
+        NSRange range = self.selectedRange;
+        if (range.length > 0) {
+            if (action == @selector(cut:) || action == @selector(copy:) ||
+                action == @selector(select:) || action == @selector(selectAll:) ||
+                action == @selector(paste:) || action ==@selector(delete:)) {
+                canPerform = YES;
+            }
+        } else {
+            if ( action == @selector(select:) || action == @selector(selectAll:) ||
+                action == @selector(paste:)) {
+                canPerform = YES;
+            }
+        }
+    }
+    
+    ZNGLogVerbose(@"Returning %@ for %@ %@", canPerform ? @"YES" : @"NO", NSStringFromSelector(_cmd), NSStringFromSelector(action));
+    
+    return canPerform;
 }
 
 @end

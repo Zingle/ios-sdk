@@ -9,6 +9,11 @@
 #import "ZNGMessageClient.h"
 #import "ZNGMessageRead.h"
 #import "ZNGNewMessageResponse.h"
+#import "ZNGMessageForwardingRequest.h"
+#import "ZNGError.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGMessageClient
 
@@ -72,6 +77,29 @@
           responseClass:[ZNGNewMessageResponse class]
                 success:success
                 failure:failure];
+}
+
+- (void) forwardMessage:(ZNGMessageForwardingRequest *)forwardingRequest
+                success:(void (^)(ZNGStatus* status))success
+                failure:(void (^)(ZNGError* error))failure
+{
+    if ([forwardingRequest.message.messageId length] == 0) {
+        ZNGLogError(@"Unable to forward message with no message ID.");
+        
+        if (failure != nil) {
+            ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Unable to forward a message with no message ID" }];
+            failure(error);
+            return;
+        }
+    }
+    
+    NSString * path = [NSString stringWithFormat:@"services/%@/messages/%@/forward", self.serviceId, forwardingRequest.message.messageId];
+    
+    [self postWithModel:forwardingRequest path:path responseClass:nil success:^(id  _Nonnull responseObject, ZNGStatus * _Nonnull status) {
+        if (success != nil) {
+            success(status);
+        }
+    } failure:failure];
 }
 
 - (void)markMessageReadWithId:(NSString*)messageId

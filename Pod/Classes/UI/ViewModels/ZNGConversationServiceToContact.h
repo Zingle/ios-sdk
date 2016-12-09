@@ -29,6 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, strong, nullable) ZNGChannel * channel;
 
+/**
+ *  Convenience getter to retrieve the current session from our client.
+ */
+@property (nonatomic, readonly) ZingleAccountSession * session;
+
 - (id) initFromService:(ZNGService*)aService
              toContact:(ZNGContact *)aContact
      withCurrentUserId:(NSString *)userId
@@ -53,6 +58,11 @@ NS_ASSUME_NONNULL_BEGIN
                  failure:(void (^ _Nullable) (ZNGError *error))failure;
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion;
+
+- (void) forwardMessage:(ZNGMessage *)message toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message toService:(ZNGService *)service success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
 
 /**
  *  Returns all remote channels that have been used by this contact in our current data.  Note that, if the contact has used a channel in messages

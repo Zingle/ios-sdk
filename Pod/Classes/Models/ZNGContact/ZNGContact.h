@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 -(nullable ZNGContactFieldValue *)titleFieldValue;
 -(nullable ZNGContactFieldValue *)firstNameFieldValue;
 -(nullable ZNGContactFieldValue *)lastNameFieldValue;
+-(nullable ZNGContactFieldValue *)roomFieldValue;
 
 /**
  *  Returns the contact field of the specified type if present in this contact.  Nil if there is no existing value.

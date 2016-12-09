@@ -29,6 +29,11 @@
                            alpha:1.0f];
 }
 
++ (UIColor *)zng_outgoingMessageBubbleColor
+{
+    return [UIColor colorFromHexString:@"#00A0DE"];
+}
+
 + (UIColor *)zng_messageBubbleLightGrayColor
 {
     return [UIColor colorWithRed:225.0f/255.0f

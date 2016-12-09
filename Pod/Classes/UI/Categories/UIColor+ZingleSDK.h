@@ -22,6 +22,8 @@
  */
 + (UIColor *)zng_messageBubbleBlueColor;
 
++ (UIColor *)zng_outgoingMessageBubbleColor;
+
 /**
  *  @return A color object containing HSB values similar to the iOS red color.
  */

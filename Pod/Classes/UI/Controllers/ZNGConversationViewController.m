@@ -107,11 +107,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) _conv_commonInit
 {
     // Default property values
-    _outgoingBubbleColor = [UIColor zng_messageBubbleBlueColor];
+    _outgoingBubbleColor = [UIColor zng_outgoingMessageBubbleColor];
     _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
     _internalNoteColor = [UIColor zng_note_yellow];
     _incomingTextColor = [UIColor zng_text_gray];
-    _outgoingTextColor = [UIColor zng_text_gray];
+    _outgoingTextColor = [UIColor whiteColor];
     _internalNoteTextColor = [UIColor zng_text_gray];
     _authorTextColor = [UIColor lightGrayColor];
     _messageFont = [UIFont latoFontOfSize:17.0];

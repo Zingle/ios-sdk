@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Analytics (3.5.2)
+  - Analytics (3.5.5)
   - CocoaLumberjack (2.3.0):
     - CocoaLumberjack/Default (= 2.3.0)
     - CocoaLumberjack/Extensions (= 2.3.0)
@@ -37,7 +37,7 @@ PODS:
     - Mantle/extobjc (= 1.5.8)
   - Mantle/extobjc (1.5.8)
   - MGSwipeTableCell (1.5.6)
-  - ZingleSDK (1.0.7):
+  - ZingleSDK (1.1.0):
     - AFNetworking (~> 2.5)
     - Analytics (~> 3.0)
     - CocoaLumberjack (= 2.3)
@@ -55,15 +55,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Analytics: 0bf6c9302dcde2bdd9fc410ef2685ad8a1c804dd
+  Analytics: af1da699765b652112483847ea73ad7c6adbd0e9
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
   Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
-  ZingleSDK: 52e2052f4f52104de444b2a5abce81e63801e829
+  ZingleSDK: 1ed0df2b30437ea22f94b34646c3da857784ae85
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 
-COCOAPODS: 1.0.1
+COCOAPODS: 1.2.0.beta.1

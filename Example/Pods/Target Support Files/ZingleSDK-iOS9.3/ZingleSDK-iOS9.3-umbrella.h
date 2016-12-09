@@ -1,4 +1,14 @@
+#ifdef __OBJC__
 #import <UIKit/UIKit.h>
+#else
+#ifndef FOUNDATION_EXPORT
+#if defined(__cplusplus)
+#define FOUNDATION_EXPORT extern "C"
+#else
+#define FOUNDATION_EXPORT extern
+#endif
+#endif
+#endif
 
 #import "ZNGAccountClient.h"
 #import "ZNGAutomationClient.h"
@@ -7,6 +17,7 @@
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"
 #import "ZNGEventClient.h"
+#import "ZNGHotsosClient.h"
 #import "ZNGLabelClient.h"
 #import "ZNGMessageClient.h"
 #import "ZNGNotificationsClient.h"
@@ -43,6 +54,7 @@
 #import "ZNGFieldOption.h"
 #import "ZNGLabel.h"
 #import "ZNGMessage.h"
+#import "ZNGMessageForwardingRequest.h"
 #import "ZNGNewMessage.h"
 #import "ZNGNewMessageResponse.h"
 #import "ZNGMessageRead.h"
@@ -54,6 +66,7 @@
 #import "ZNGService.h"
 #import "ZNGServiceAddress.h"
 #import "ZNGSetting.h"
+#import "ZNGSettingsField.h"
 #import "ZNGStatus.h"
 #import "ZNGTemplate.h"
 #import "ZNGUser.h"
@@ -65,6 +78,7 @@
 #import "ZNGContactEditViewController.h"
 #import "ZNGContactToServiceViewController.h"
 #import "ZNGConversationViewController.h"
+#import "ZNGForwardingViewController.h"
 #import "ZNGImageViewController.h"
 #import "ZNGInboxViewController.h"
 #import "ZNGLabelSelectViewController.h"
@@ -90,6 +104,7 @@
 #import "ZNGDashedBorderLabel.h"
 #import "ZNGEditContactHeader.h"
 #import "ZNGEventCollectionViewCell.h"
+#import "ZNGForwardingInputToolbar.h"
 #import "ZNGGradientLoadingView.h"
 #import "ZNGLabelCollectionViewCell.h"
 #import "ZNGLabelCollectionViewFlowLayout.h"

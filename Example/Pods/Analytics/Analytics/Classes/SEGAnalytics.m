@@ -422,7 +422,7 @@ NSString *const SEGBuildKey = @"SEGBuildKey";
     if ([activity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         NSMutableDictionary *properties = [NSMutableDictionary dictionaryWithCapacity:activity.userInfo.count + 2];
         [properties addEntriesFromDictionary:activity.userInfo];
-        properties[@"url"] = activity.webpageURL;
+        properties[@"url"] = activity.webpageURL.absoluteString;
         properties[@"title"] = activity.title ?: @"";
         [self track:@"Deep Link Opened" properties:[properties copy]];
     }
@@ -562,8 +562,16 @@ NSString *const SEGBuildKey = @"SEGBuildKey";
     self.settingsRequest = [self.httpClient settingsForWriteKey:self.configuration.writeKey completionHandler:^(BOOL success, NSDictionary *settings) {
         if (success) {
             [self setCachedSettings:settings];
+        } else {
+            // TODO: If settings request fail, fall back to using just Segment integration
+            // Won't catch situation where this callback never gets called - that will get addressed separately in regular dev
+            [self setCachedSettings:@{
+                @"integrations" : @{
+                    @"Segment.io" : @{@"apiKey" : self.configuration.writeKey},
+                },
+                @"plan" : @{@"track" : @{}}
+            }];
         }
-
         self.settingsRequest = nil;
     }];
 }
@@ -583,7 +591,7 @@ NSString *const SEGBuildKey = @"SEGBuildKey";
 
 + (NSString *)version
 {
-    return @"3.5.1";
+    return @"3.5.5";
 }
 
 #pragma mark - Private

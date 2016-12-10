@@ -10,6 +10,10 @@
 #import "ZNGEvent.h"
 #import "ZNGBubblesSizeCalculator.h"
 
+@interface JSQMessagesCollectionViewFlowLayout ()
+- (void)jsq_configureFlowLayout;
+@end
+
 @implementation ZNGConversationFlowLayout
 
 - (id) init
@@ -37,6 +41,13 @@
 - (void) commonInit
 {
     self.bubbleSizeCalculator = [[ZNGBubblesSizeCalculator alloc] init];
+}
+
+- (void) jsq_configureFlowLayout
+{
+    [super jsq_configureFlowLayout];
+
+    self.messageBubbleLeftRightMargin = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? 50.0 : 25.0;
 }
 
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath

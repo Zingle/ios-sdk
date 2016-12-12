@@ -152,18 +152,6 @@ static void * KVOContext = &KVOContext;
     
     [self startEmphasisTimer];
     
-    [self restoreMenuItems];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDisappeared:) name:UIMenuControllerDidHideMenuNotification object:nil];
-}
-
-- (void) menuDisappeared:(NSNotification *)notification
-{
-    [self restoreMenuItems];
-}
-
-- (void) restoreMenuItems
-{
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
     [[UIMenuController sharedMenuController] setMenuItems:@[forward]];
@@ -673,7 +661,8 @@ static void * KVOContext = &KVOContext;
 - (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(forwardMessage:)) {
-        return self.allowForwarding;
+        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        return (self.allowForwarding && event.isMessage);
     }
     
     return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
@@ -685,7 +674,7 @@ static void * KVOContext = &KVOContext;
         ZNGMessage * message = [[self eventAtIndexPath:indexPath] message];
         
         if (message != nil) {
-            [self forwardMessage:message];
+            [self _doForwardMessage:message];
         }
     } else {
         [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
@@ -928,6 +917,26 @@ static void * KVOContext = &KVOContext;
 }
 
 - (void) forwardMessage:(ZNGMessage *)message
+{
+    // This really shouldn't exist and shows a probable misunderstanding of the canPerformAction: flow on my part.
+    // We need this selector to exist somewhere so we can use @selector(forwardMessage:) in the UIMenuAction, but we do not want
+    //  the selector actually implemented to prevent the responder chain from automatically enabling forwardMessage for all of our
+    //  collection view cells, regardless of our canPerformAction: return value.
+    // To achieve this, we define the method here but override respondsToSelector below to prevent it from actually being called.
+    //
+    // This could also be achieved by defining a forwardMessage: method in some other class, but it's all ugly. :(
+}
+
+- (BOOL) respondsToSelector:(SEL)aSelector
+{
+    if (aSelector == @selector(forwardMessage:)) {
+        return NO;
+    }
+    
+    return [super respondsToSelector:aSelector];
+}
+
+- (void) _doForwardMessage:(ZNGMessage *)message
 {
     messageToForward = message;
     [self performSegueWithIdentifier:@"forward" sender:self];

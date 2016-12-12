@@ -31,9 +31,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     
-    // This feels dirty, but this is the only way to prevent "forwardMessage:" from showing up in the text entry box.  I hate everything.
-    [[UIMenuController sharedMenuController] setMenuItems:nil];
-    
     BOOL canPerform = NO;
     
     if ([self.text length] == 0) {

@@ -152,18 +152,6 @@ static void * KVOContext = &KVOContext;
     
     [self startEmphasisTimer];
     
-    [self restoreMenuItems];
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(menuDisappeared:) name:UIMenuControllerDidHideMenuNotification object:nil];
-}
-
-- (void) menuDisappeared:(NSNotification *)notification
-{
-    [self restoreMenuItems];
-}
-
-- (void) restoreMenuItems
-{
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
     [[UIMenuController sharedMenuController] setMenuItems:@[forward]];

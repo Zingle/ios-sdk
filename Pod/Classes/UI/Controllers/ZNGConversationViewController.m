@@ -149,7 +149,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self setupBarButtonItems];
     
-    JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:[UIImage jsq_bubbleCompactTaillessImage] capInsets:UIEdgeInsetsZero];
+    UIImage * bubbleImage = [UIImage imageNamed:@"zingleBubble" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:bubbleImage capInsets:UIEdgeInsetsZero];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     self.intenralNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];

@@ -46,7 +46,8 @@
 - (void) jsq_configureFlowLayout
 {
     [super jsq_configureFlowLayout];
-
+    
+    self.messageBubbleTextViewTextContainerInsets = UIEdgeInsetsMake(10.0, 15.0, 10.0, 15.0);
     self.messageBubbleLeftRightMargin = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? 50.0 : 25.0;
 }
 

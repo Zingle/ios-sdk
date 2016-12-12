@@ -50,6 +50,8 @@ enum {
     
     initialToolbarHeight = self.toolbarHeightConstraint.constant;
     
+    [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
+    
     UITextView * textView = self.inputToolbar.contentView.textView;
     textView.text = self.message.body;
     textView.delegate = self;
@@ -60,7 +62,6 @@ enum {
         hotsosClient = [[ZNGHotsosClient alloc] initWithService:self.activeService];
     }
         
-    [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
 

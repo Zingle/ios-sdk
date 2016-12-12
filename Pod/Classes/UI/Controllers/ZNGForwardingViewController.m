@@ -360,10 +360,12 @@ enum {
             break;
         case RECIPIENT_TYPE_SMS:
             self.textField.keyboardType = UIKeyboardTypePhonePad;
+            self.textField.placeholder = @"Enter phone number";
             description = @"SMS";
             break;
         case RECIPIENT_TYPE_EMAIL:
             self.textField.keyboardType = UIKeyboardTypeEmailAddress;
+            self.textField.placeholder = @"Enter email address";
             description = @"Email";
             break;
         case RECIPIENT_TYPE_HOTSOS:

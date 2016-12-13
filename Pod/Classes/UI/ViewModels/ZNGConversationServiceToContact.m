@@ -11,6 +11,7 @@
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
 #import "ZNGContactClient.h"
+#import "ZNGPrinter.h"
 #import "ZNGAnalytics.h"
 #import "ZNGMessageForwardingRequest.h"
 
@@ -390,6 +391,15 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
     request.recipientType = ZNGMessageForwardingRecipientTypeService;
     request.recipient = service.serviceId;
+    
+    [self _sendForwardingRequest:request success:success failure:failure];
+}
+
+- (void) forwardMessage:(ZNGMessage *)message toPrinter:(ZNGPrinter *)printer success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+{
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    request.recipientType = ZNGMessageForwardingRecipientTypePrinter;
+    request.recipient = printer.printerId;
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }

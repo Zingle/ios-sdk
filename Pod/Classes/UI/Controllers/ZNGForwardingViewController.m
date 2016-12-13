@@ -10,6 +10,7 @@
 #import "ZNGForwardingInputToolbar.h"
 #import "ZNGContact.h"
 #import "ZNGMessage.h"
+#import "ZNGPrinter.h"
 #import "ZNGService.h"
 #import "ZNGLogging.h"
 #import "UIColor+ZingleSDK.h"
@@ -24,7 +25,8 @@ enum {
     RECIPIENT_TYPE_SERVICE,
     RECIPIENT_TYPE_SMS,
     RECIPIENT_TYPE_EMAIL,
-    RECIPIENT_TYPE_HOTSOS
+    RECIPIENT_TYPE_HOTSOS,
+    RECIPIENT_TYPE_PRINTER
 };
 
 @interface ZNGForwardingViewController ()
@@ -38,6 +40,8 @@ enum {
     
     ZNGHotsosClient * hotsosClient;
     NSString * selectedHotsosIssueName;
+    
+    ZNGPrinter * selectedPrinter;
     
     uint8_t recipientType;
     
@@ -320,6 +324,21 @@ enum {
         [alert addAction:hotsos];
     }
     
+    for (ZNGPrinter * printer in self.activeService.printers) {
+        
+        if (printer.printerId == nil) {
+            ZNGLogWarn(@"Printer does not have an ID.  Not listing as a forwarding option.");
+            continue;
+        }
+        
+        NSString * title = [NSString stringWithFormat:@"Printer: %@", printer.displayName ?: printer.printerId];
+        UIAlertAction * printerAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            selectedPrinter = printer;
+            [self changeRecipientType:RECIPIENT_TYPE_PRINTER];
+        }];
+        [alert addAction:printerAction];
+    }
+    
     for (ZNGService * service in self.availableServices) {
         NSString * title = [NSString stringWithFormat:@"Service: %@", service.displayName];
         UIAlertAction * serviceAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -365,6 +384,9 @@ enum {
     switch(recipientType) {
         case RECIPIENT_TYPE_SERVICE:
             description = [NSString stringWithFormat:@"Service: %@", self.forwardTargetService.displayName ?: @""];
+            break;
+        case RECIPIENT_TYPE_PRINTER:
+            description = [NSString stringWithFormat:@"Printer: %@", selectedPrinter.displayName ?: selectedPrinter.printerId];
             break;
         case RECIPIENT_TYPE_SMS:
             self.textField.keyboardType = UIKeyboardTypePhonePad;
@@ -438,6 +460,8 @@ enum {
         return ([selectedHotsosIssueName length] > 0);
     } else if (recipientType == RECIPIENT_TYPE_SERVICE) {
         return (self.forwardTargetService != nil);
+    } else if (recipientType == RECIPIENT_TYPE_PRINTER) {
+        return (selectedPrinter != nil);
     }
 
     return NO;
@@ -486,6 +510,9 @@ enum {
             break;
         case RECIPIENT_TYPE_SERVICE:
             [self.conversation forwardMessage:self.message toService:self.forwardTargetService success:success failure:failure];
+            break;
+        case RECIPIENT_TYPE_PRINTER:
+            [self.conversation forwardMessage:self.message toPrinter:selectedPrinter success:success failure:failure];
             break;
         case RECIPIENT_TYPE_HOTSOS:
             [self.conversation forwardMessage:self.message toHotsosWithHotsosIssueName:selectedHotsosIssueName success:success failure:failure];

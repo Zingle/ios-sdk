@@ -14,6 +14,7 @@ extern NSString * const ZNGMessageForwardingRecipientTypeSMS;
 extern NSString * const ZNGMessageForwardingRecipientTypeEmail;
 extern NSString * const ZNGMessageForwardingRecipientTypeHotsos;
 extern NSString * const ZNGMessageForwardingRecipientTypeService;
+extern NSString * const ZNGMessageForwardingRecipientTypePrinter;
 
 @interface ZNGMessageForwardingRequest : MTLModel <MTLJSONSerializing>
 

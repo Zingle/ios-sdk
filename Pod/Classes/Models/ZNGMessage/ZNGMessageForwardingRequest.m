@@ -13,6 +13,7 @@ NSString * const ZNGMessageForwardingRecipientTypeSMS = @"sms";
 NSString * const ZNGMessageForwardingRecipientTypeEmail = @"email";
 NSString * const ZNGMessageForwardingRecipientTypeHotsos = @"hotsos";
 NSString * const ZNGMessageForwardingRecipientTypeService = @"service";
+NSString * const ZNGMessageForwardingRecipientTypePrinter = @"printer";
 
 @implementation ZNGMessageForwardingRequest
 

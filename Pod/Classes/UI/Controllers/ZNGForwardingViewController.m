@@ -338,7 +338,15 @@ enum {
 - (void) changeRecipientType:(uint8_t)newRecipientType
 {
     if (recipientType == newRecipientType) {
-        return;
+        switch (recipientType) {
+            case RECIPIENT_TYPE_SMS:
+            case RECIPIENT_TYPE_EMAIL:
+            case RECIPIENT_TYPE_HOTSOS:
+                return;
+            default:
+                // Yes, we have the same general recipient type selected, but they may be moving from service 1 to service 2, etc.  Continue as normal.
+                break;
+        }
     }
     
     recipientType = newRecipientType;

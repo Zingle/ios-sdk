@@ -17,8 +17,10 @@
 @class ZNGChannelType;
 @class ZNGLabel;
 @class ZNGContactField;
+@class ZNGPrinter;
 @class ZNGSetting;
 @class ZNGTemplate;
+
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -35,6 +37,7 @@
 @property(nonatomic, strong, nullable) NSArray<ZNGSetting *> * settings;
 @property(nonatomic, strong, nullable) NSArray<ZNGAutomation *> * automations;
 @property(nonatomic, strong, nullable) NSArray<ZNGTemplate *> * templates;
+@property(nonatomic, strong, nullable) NSArray<ZNGPrinter *> * printers;
 @property(nonatomic, strong, nullable) ZNGServiceAddress* serviceAddress;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;

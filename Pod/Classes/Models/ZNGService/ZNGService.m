@@ -15,6 +15,7 @@
 #import "ZNGAutomation.h"
 #import "ZNGTemplate.h"
 #import "ZNGSettingsField.h"
+#import "ZNGPrinter.h"
 
 #define kServiceSettingHotsosURLKey         @"hotsos_url"
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
@@ -51,6 +52,7 @@
              @"contactCustomFields" : @"contact_custom_fields",
              @"settings" : @"settings",
              @"automations" : @"automations",
+             @"printers" : @"printers",
              @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
              @"createdAt" : @"created_at",
@@ -108,6 +110,11 @@
 + (NSValueTransformer *)templatesJSONTransformer
 {
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGTemplate class]];
+}
+
++ (NSValueTransformer *)printersJSONTransformer
+{
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGPrinter class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer

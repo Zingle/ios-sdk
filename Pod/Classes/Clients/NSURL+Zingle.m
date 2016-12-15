@@ -13,7 +13,7 @@
 - (NSString *)zingleServerPrefix
 {
     NSString * path = self.absoluteString;
-    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^((\\w+)-)?\\w+.zingle.me$" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^(https?:\\/\\/)?((\\w+)-)?\\w+.zingle.me(\\/.*)?$" options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:path options:0 range:NSMakeRange(0, [path length])];
     NSTextCheckingResult * match = [matches firstObject];
     
@@ -22,13 +22,19 @@
         return nil;
     }
     
-    if (match.numberOfRanges < 3) {
-        // We did not find capture group 2.  This indicates a production Zingle URL with no prefix.
+    if (match.numberOfRanges < 4) {
+        // We did not find capture group 3.  This indicates a production Zingle URL with no prefix.
         return @"";
     }
     
     // We found a prefix.  Return it.
-    NSRange prefixRange = [match rangeAtIndex:2];
+    NSRange prefixRange = [match rangeAtIndex:3];
+    
+    if (prefixRange.location == NSNotFound) {
+        // We did not find capture group 3.  This indicates a production Zingle URL with no prefix.
+        return @"";
+    }
+    
     return [path substringWithRange:prefixRange];
 }
 

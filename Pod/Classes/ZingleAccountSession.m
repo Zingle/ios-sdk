@@ -22,6 +22,7 @@
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
+#import "ZNGSocketClient.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -400,6 +401,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
+    
+    self.socketClient = [[ZNGSocketClient alloc] initWithSession:self];
+    [self.socketClient connect];
     
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }

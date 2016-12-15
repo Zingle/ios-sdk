@@ -18,6 +18,7 @@
 #import "ZNGConversationViewController.h"
 #import "ZNGConversationContactToService.h"
 #import "ZNGContactToServiceViewController.h"
+#import "ZNGSocketClient.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -183,6 +184,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             [self synchronouslyFindOrCreateContact];
             [self synchronouslySetAuthorizationHeader];
+            [self connectSocket];
             [self registerForPushNotifications];    // Note that we are waiting to register for pushes until after we get our contact object and set our auth header as a contact.
             [self synchronouslyRetrieveServiceObject];
             
@@ -413,6 +415,12 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     NSArray * serviceIds = @[self.contactService.serviceId];
     [self _registerForPushNotificationsForServiceIds:serviceIds removePreviousSubscriptions:_onlyRegisterPushNotificationsForCurrentContactService];
+}
+
+- (void) connectSocket
+{
+    self.socketClient = [[ZNGSocketClient alloc] initWithSession:self];
+    [self.socketClient connect];
 }
 
 #pragma mark - UI convenience

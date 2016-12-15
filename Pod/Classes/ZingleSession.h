@@ -17,6 +17,7 @@
 @class ZNGMessageClient;
 @class ZNGNotificationsClient;
 @class ZNGServiceClient;
+@class ZNGSocketClient;
 @class ZNGUserAuthorizationClient;
 @class ZNGError;
 
@@ -71,6 +72,7 @@
 @property (nonatomic, strong, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, strong, nullable) ZNGNotificationsClient * notificationsClient;
 @property (nonatomic, strong, nullable) ZNGServiceClient * serviceClient;
+@property (nonatomic, strong, nullable) ZNGSocketClient * socketClient;
 @property (nonatomic, strong, nullable) ZNGUserAuthorizationClient * userAuthorizationClient;
 
 #pragma mark - Properties used by client objects
@@ -119,5 +121,7 @@
  *  @note Use _registerForPushNotificationsForServiceIds:removePreviousSubscriptions: instead if new subscriptions should be added simultaneously.
  */
 - (void) _unregisterForAllPushNotifications;
+
++ (nonnull AFHTTPSessionManager *) anonymousSessionManagerWithURL:(nonnull NSURL *)url;
 
 @end

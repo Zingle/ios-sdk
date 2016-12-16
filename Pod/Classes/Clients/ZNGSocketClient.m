@@ -11,6 +11,7 @@
 #import "ZingleSession.h"
 #import <AFNetworking/AFNetworking.h>
 #import "NSURL+Zingle.h"
+@import SocketIO;
 
 #if DEBUG
 static const int zngLogLevel = ZNGLogLevelVerbose;
@@ -20,7 +21,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGSocketClient
 {
-    SRWebSocket * webSocket;
+    SocketIOClient * socketClient;
+    
     NSString * authPath;
     NSString * nodePath;
     
@@ -68,12 +70,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (BOOL) active
 {
-    return ((initializingSession) || (webSocket.readyState == SR_OPEN) || (webSocket.readyState == SR_CONNECTING));
+    return ((socketClient.status == SocketIOClientStatusConnected) || (socketClient.status == SocketIOClientStatusConnecting) || (initializingSession));
 }
 
 - (BOOL) connected
 {
-    return (webSocket.readyState == SR_OPEN);
+    return (socketClient.status == SocketIOClientStatusConnected);
 }
 
 #pragma mark - Actions
@@ -90,6 +92,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) _authenticateAndConnect
 {
     authSucceeded = NO;
+    initializingSession = YES;
     
     NSURL * url = [NSURL URLWithString:authPath];
     
@@ -101,7 +104,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         ZNGLogDebug(@"Auth request succeeded.");
         authSucceeded = YES;
         [self _connectSocket];
+        initializingSession = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        initializingSession = NO;
+        
         if (error != nil) {
             
             NSData * errorData = error.userInfo[NSURLErrorFailingURLStringErrorKey];
@@ -117,24 +123,44 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) _connectSocket
 {
-    [webSocket close];
-    
-    NSURL * url = [NSURL URLWithString:nodePath];
-    NSURL * authURL = [NSURL URLWithString:authPath];
-    webSocket = [[SRWebSocket alloc] initWithURL:url];
-    
-    // Copy our cookies, most importantly including our session cookie, to the web socket before opening
-    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:authURL];
+    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:authPath]];
     ZNGLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
-    webSocket.requestCookies = cookies;
     
-    webSocket.delegate = self;
-    [webSocket open];
+#if DEBUG
+    NSNumber * log = @YES;
+#else
+    NSNumber * log = @NO;
+#endif
+    
+    socketClient = [[SocketIOClient alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : log }];
+    
+    __weak ZNGSocketClient * weakSelf = self;
+    
+    [socketClient onAny:^(SocketAnyEvent * _Nonnull event) {
+        [weakSelf socketEvent:event];
+    }];
+    
+    [socketClient on:@"connect" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf socketDidConnectWithData:data ackEmitter:ackEmitter];
+    }];
+    
+    [socketClient connect];
 }
 
 - (void) disconnect
 {
-    [webSocket close];
+    [socketClient disconnect];
+}
+
+#pragma mark - Sockety goodness
+- (void) socketEvent:(SocketAnyEvent *)event
+{
+    ZNGLogVerbose(@"Socket event of type %@: %@", [event class], event);
+}
+
+- (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    ZNGLogInfo(@"Web socket connected.");
 }
 
 #pragma mark - Background handling
@@ -150,27 +176,5 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
 }
 
-#pragma mark - SRWebSocket delegate
-- (void) webSocketDidOpen:(SRWebSocket *)aWebSocket
-{
-    ZNGLogInfo(@"Web socket connection opened to %@", webSocket.url.absoluteString);
-}
-
-- (void) webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
-{
-    ZNGLogInfo(@"Web socket closed because: %lld %@", (long long)code, reason);
-}
-
-- (void) webSocket:(SRWebSocket *)aWebSocket didFailWithError:(NSError *)error
-{
-    ZNGLogInfo(@"Web socket connection failed: %@", error.localizedDescription);
-    
-    // TODO: Detect an auth failure and try to re-request auth
-}
-
-- (void) webSocket:(SRWebSocket *)aWebSocket didReceiveMessage:(id)message
-{
-    ZNGLogVerbose(@"Received a %@", [message class]);
-}
 
 @end

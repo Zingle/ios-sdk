@@ -7,13 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "SocketRocket/SRWebSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZingleSession;
 
-@interface ZNGSocketClient : NSObject <SRWebSocketDelegate>
+@interface ZNGSocketClient : NSObject
 
 - (id) init NS_UNAVAILABLE;
 

@@ -13,7 +13,7 @@
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
-             NSStringFromSelector(@selector(printerID)) : @"id",
+             NSStringFromSelector(@selector(printerId)) : @"id",
              NSStringFromSelector(@selector(displayName)) : @"display_name"
              };
 }

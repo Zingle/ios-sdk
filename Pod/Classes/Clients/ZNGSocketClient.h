@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ZNGConversation;
 @class ZingleSession;
 
 @interface ZNGSocketClient : NSObject
@@ -21,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) disconnect;
 
 @property (nonatomic, weak, nullable) ZingleSession * session;
+
+/**
+ *  Any conversation set in this property will be subscribed for asynchronous updates.  Updates will be sent to the conversation as they arrive.
+ */
+@property (nonatomic, weak, nullable) ZNGConversation * activeConversation;
 
 /**
  *  Are we either connected or in the process of connecting?

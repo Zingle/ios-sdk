@@ -11,6 +11,8 @@
 #import "ZingleSession.h"
 #import <AFNetworking/AFNetworking.h>
 #import "NSURL+Zingle.h"
+#import "ZNGConversationServiceToContact.h"
+#import "ZNGConversationContactToService.h"
 @import SocketIO;
 
 #if DEBUG
@@ -78,6 +80,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return (socketClient.status == SocketIOClientStatusConnected);
 }
 
+- (void) setActiveConversation:(ZNGConversation *)activeConversation
+{
+    _activeConversation = activeConversation;
+    [self subscribeForFeedUpdatesForConversation:activeConversation];
+}
+
 #pragma mark - Actions
 - (void) connect
 {
@@ -109,10 +117,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         initializingSession = NO;
         
         if (error != nil) {
-            
-            NSData * errorData = error.userInfo[NSURLErrorFailingURLStringErrorKey];
-            NSString * errorString = [[NSString alloc] initWithData:errorData encoding:NSUTF8StringEncoding];
-            
             ZNGLogWarn(@"Error sending request to auth URL: %@", error.localizedDescription);
             return;
         }
@@ -144,12 +148,59 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf socketDidConnectWithData:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"feedLocked" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf feedLocked:data];
+    }];
+    
+    [socketClient on:@"feedUnlocked" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf feedUnlocked:data];
+    }];
+    
+    [socketClient on:@"nodeControllerBindSuccess" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf socketDidBindNodeController];
+    }];
+    
+    [socketClient on:@"error" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf socketDidEncounterErrorWithData:data];
+    }];
+    
+    [socketClient on:@"disconnect" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf socketDidDisconnect];
+    }];
+    
     [socketClient connect];
 }
 
 - (void) disconnect
 {
     [socketClient disconnect];
+}
+
+- (void) subscribeForFeedUpdatesForConversation:(ZNGConversation *)conversation
+{
+    if (![self connected]) {
+        // We're not yet connected.  We will subscribe to an active conversation as soon as we connect.
+        return;
+    }
+    
+    id feedId = [NSNull null];
+    
+    if ([conversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
+        ZNGConversationServiceToContact * contactConversation = (ZNGConversationServiceToContact *)conversation;
+        feedId = contactConversation.contact.contactId;
+    } else if ([conversation isKindOfClass:[ZNGConversationContactToService class]]) {
+        ZNGConversationContactToService * serviceConversation = (ZNGConversationContactToService *)conversation;
+        feedId = serviceConversation.contactService.serviceId;
+    } else if (conversation != nil) {
+        ZNGLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
+    }
+    
+    [socketClient emit:@"setActiveFeed" withItems:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
+}
+
+- (void) unsubscribeFromFeedUpdates
+{
+    [self subscribeForFeedUpdatesForConversation:nil];
 }
 
 #pragma mark - Sockety goodness
@@ -161,6 +212,43 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
     ZNGLogInfo(@"Web socket connected.");
+    [socketClient emit:@"bindNodeController" withItems:@[@"dashboard.inbox"]];
+}
+
+- (void) socketDidBindNodeController
+{
+    if (self.activeConversation != nil) {
+        [self subscribeForFeedUpdatesForConversation:self.activeConversation];
+    }
+}
+
+- (void) socketDidEncounterErrorWithData:(NSArray *)data
+{
+    ZNGLogWarn(@"Web socket did receive error: %@", data);
+}
+
+- (void) socketDidDisconnect
+{
+    ZNGLogInfo(@"Web socket disconnected");
+}
+
+- (void) feedLocked:(NSArray *)data
+{
+    if (self.activeConversation == nil) {
+        // We don't a conversation.  Who cares?
+        return;
+    }
+    
+    NSDictionary * info = [data firstObject];
+    NSString * description = info[@"description"];
+    self.activeConversation.lockedDescription = description;
+    
+    ZNGLogInfo(@"Conversation was locked: %@", description);
+}
+
+- (void) feedUnlocked:(NSArray *)data
+{
+    self.activeConversation.lockedDescription = nil;
 }
 
 #pragma mark - Background handling

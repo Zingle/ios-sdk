@@ -232,6 +232,8 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     } else {
         self.conversation = nil;
     }
+    
+    self.socketClient.activeConversation = self.conversation;
 }
 
 - (void) initializeClients

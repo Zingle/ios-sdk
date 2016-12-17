@@ -493,6 +493,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     // This may or may not actually have an effect, depending on if we initialized a new conversation or switched types above.q
     [self.conversationCache setObject:conversation forKey:contact.contactId];
 
+    self.socketClient.activeConversation = conversation;
+    
     [conversation loadRecentEventsErasingOlderData:NO];
     return conversation;
 }
@@ -507,6 +509,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         BOOL correctType = (self.showDetailedEvents == isDetailedEvents);
         
         if (correctType) {
+            self.socketClient.activeConversation = conversation;
             [conversation loadRecentEventsErasingOlderData:NO];
             completion(conversation);
             return;

@@ -225,6 +225,17 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) socketDidEncounterErrorWithData:(NSArray *)data
 {
     ZNGLogWarn(@"Web socket did receive error: %@", data);
+    
+    if ([[data firstObject] isKindOfClass:[NSString class]]) {
+        NSString * errorString = [data firstObject];
+        
+        if ([errorString.lowercaseString containsString:@"session became invalid"]) {
+            authSucceeded = NO;
+            initializingSession = YES;
+            [socketClient disconnect];
+            [self connect];
+        }
+    }
 }
 
 - (void) socketDidDisconnect
@@ -248,6 +259,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) feedUnlocked:(NSArray *)data
 {
+    ZNGLogInfo(@"Conversation was unlocked");
     self.activeConversation.lockedDescription = nil;
 }
 

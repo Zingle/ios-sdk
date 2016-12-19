@@ -62,6 +62,7 @@
 #import "ZNGNewEvent.h"
 #import "ZNGNotificationRegistration.h"
 #import "ZNGParticipant.h"
+#import "ZNGPrinter.h"
 #import "ZNGNewService.h"
 #import "ZNGService.h"
 #import "ZNGServiceAddress.h"

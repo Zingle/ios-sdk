@@ -34,6 +34,7 @@
 		969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AC8F31DC1600600D0E5D8 /* TestContactSession.m */; };
 		96A05BCE1DCBA68700E0E6D8 /* TestAccountSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */; };
 		96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */; };
+		96EBB5691E0877900048218C /* TestTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBB5681E0877900048218C /* TestTemplate.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
 		DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7FF2561C87671800BC720E /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
@@ -97,6 +98,7 @@
 		969AC8F31DC1600600D0E5D8 /* TestContactSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestContactSession.m; sourceTree = "<group>"; };
 		96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAccountSession.m; sourceTree = "<group>"; };
 		96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestInboxDataSet.m; sourceTree = "<group>"; };
+		96EBB5681E0877900048218C /* TestTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestTemplate.m; sourceTree = "<group>"; };
 		AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		D3014CCAB506BA98DAAAD88B /* Pods_ZingleSDK_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -208,9 +210,10 @@
 				9622B33C1DC284F700957C5F /* Mock Clients */,
 				9622B3371DC2848800957C5F /* Data */,
 				960FCBB21D0F6E9C00B7E82C /* Info.plist */,
-				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
-				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
 				96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */,
+				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
+				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
+				96EBB5681E0877900048218C /* TestTemplate.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				96A05BCE1DCBA68700E0E6D8 /* TestAccountSession.m in Sources */,
 				9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */,
 				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,
+				96EBB5691E0877900048218C /* TestTemplate.m in Sources */,
 				9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */,
 				9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */,
 				9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */,

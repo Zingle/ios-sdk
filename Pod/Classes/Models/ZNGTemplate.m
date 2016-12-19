@@ -30,7 +30,7 @@ NSString * const ZNGTemplateTypeGeneral = @"general";
 
 - (BOOL) requiresResponseTime
 {
-    return [self.body containsString:ResponseTimeMagicString];
+    return [[self.body lowercaseString] containsString:ResponseTimeMagicString];
 }
 
 - (NSArray<NSString *> *) responseTimeChoices
@@ -50,7 +50,21 @@ NSString * const ZNGTemplateTypeGeneral = @"general";
         return self.body;
     }
     
-    return [self.body stringByReplacingOccurrencesOfString:ResponseTimeMagicString withString:responseTimeString];
+    NSRegularExpression * responseTimeRegex = [NSRegularExpression regularExpressionWithPattern:@"\\{response_time\\}" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSMutableString * mutableBody = [self.body mutableCopy];
+    NSArray<NSTextCheckingResult *> * matches;
+    
+    do {
+        matches = [responseTimeRegex matchesInString:mutableBody options:0 range:NSMakeRange(0, [mutableBody length])];
+        NSTextCheckingResult * firstMatch = [matches firstObject];
+        
+        if (firstMatch != nil) {
+            NSRange matchRange = firstMatch.range;
+            [mutableBody replaceCharactersInRange:matchRange withString:responseTimeString];
+        }
+    } while ([matches count] > 0);
+    
+    return mutableBody;
 }
 
 @end

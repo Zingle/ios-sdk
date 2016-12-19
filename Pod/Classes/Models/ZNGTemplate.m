@@ -50,16 +50,18 @@ NSString * const ZNGTemplateTypeGeneral = @"general";
         return self.body;
     }
     
-    NSRegularExpression * responseTimeRegex = [NSRegularExpression regularExpressionWithPattern:@"{response_time}" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSRegularExpression * responseTimeRegex = [NSRegularExpression regularExpressionWithPattern:@"\\{response_time\\}" options:NSRegularExpressionCaseInsensitive error:nil];
     NSMutableString * mutableBody = [self.body mutableCopy];
     NSArray<NSTextCheckingResult *> * matches;
     
     do {
         matches = [responseTimeRegex matchesInString:mutableBody options:0 range:NSMakeRange(0, [mutableBody length])];
         NSTextCheckingResult * firstMatch = [matches firstObject];
-        NSRange matchRange = firstMatch.range;
         
-        [mutableBody replaceCharactersInRange:matchRange withString:responseTimeString];
+        if (firstMatch != nil) {
+            NSRange matchRange = firstMatch.range;
+            [mutableBody replaceCharactersInRange:matchRange withString:responseTimeString];
+        }
     } while ([matches count] > 0);
     
     return mutableBody;

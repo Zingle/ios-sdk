@@ -115,7 +115,7 @@ static void * KVOContext = &KVOContext;
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
-    [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
 }
 
 - (void) dealloc
@@ -186,6 +186,16 @@ static void * KVOContext = &KVOContext;
         } else if ([keyPath isEqualToString:KVOContactCustomFieldsPath]) {
             [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
         } else if ([keyPath isEqualToString:KVOInputLockedPath]) {
+            NSString * oldLockedString = change[NSKeyValueChangeOldKey];
+            NSString * lockedString = change[NSKeyValueChangeNewKey];
+            
+            if (![oldLockedString isKindOfClass:[NSString class]]) {
+                oldLockedString = nil;
+            }
+            if (![lockedString isKindOfClass:[NSString class]]) {
+                lockedString = nil;
+            }
+            
             NSAttributedString * message = nil;
             
             if ([self.conversation.lockedDescription length] > 0) {
@@ -194,7 +204,20 @@ static void * KVOContext = &KVOContext;
             
             self.typingIndicatorLabel.attributedText = message;
             self.typingIndicatorContainerView.hidden = ([message length] == 0);
+            
+            BOOL justBecameLocked = (([oldLockedString length] == 0) && ([lockedString length] > 0));
+            BOOL needToScrollBackToBottom = NO;
+            
+            if (justBecameLocked) {
+                // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
+                needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
+            }
+            
             [self jsq_updateCollectionViewInsets];
+            
+            if (needToScrollBackToBottom) {
+                [self scrollToBottomAnimated:YES];
+            }
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

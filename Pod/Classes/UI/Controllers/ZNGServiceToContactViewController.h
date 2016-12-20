@@ -31,6 +31,12 @@
 
 @property (nonatomic, weak, nullable) id <ZNGServiceToContactViewDelegate> delegate;
 
+@property (nonatomic, strong, nullable) IBOutlet UILabel * typingIndicatorLabel;
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * typingIndicatorBottomSpaceConstraint;
+
+// Extra space to allow between a typing indicator message and the collection view.  Defaults to 6.0.
+@property (nonatomic, assign) CGFloat extraSpaceAboveTypingIndicator;
+
 // Defaults to YES
 @property (nonatomic, assign) BOOL allowForwarding;
 

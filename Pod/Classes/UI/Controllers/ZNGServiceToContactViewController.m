@@ -36,8 +36,17 @@ static NSString * const KVOContactChannelsPath = @"conversation.contact.channels
 static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
+static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
+
 
 static void * KVOContext = &KVOContext;
+
+@interface JSQMessagesViewController (PrivateInsetManipulation)
+
+- (void)jsq_updateCollectionViewInsets;
+- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
+
+@end
 
 @implementation ZNGServiceToContactViewController
 {
@@ -80,6 +89,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
+        _extraSpaceAboveTypingIndicator = 6.0;
         [self setupKVO];
     }
     
@@ -92,6 +102,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
+        _extraSpaceAboveTypingIndicator = 6.0;
         [self setupKVO];
     }
     
@@ -104,6 +115,7 @@ static void * KVOContext = &KVOContext;
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
 - (void) dealloc
@@ -112,6 +124,7 @@ static void * KVOContext = &KVOContext;
         dispatch_source_cancel(emphasizeTimer);
     }
     
+    [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
@@ -169,10 +182,41 @@ static void * KVOContext = &KVOContext;
             [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactCustomFieldsPath]) {
             [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
+        } else if ([keyPath isEqualToString:KVOInputLockedPath]) {
+            NSAttributedString * message = nil;
+            
+            if ([self.conversation.lockedDescription length] > 0) {
+                message = [self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription];
+            }
+            
+            self.typingIndicatorLabel.attributedText = message;
+            [self jsq_updateCollectionViewInsets];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)description
+{
+    // We'll try to find a typical "is responding" string and bold the name before it.
+    NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
+    
+    if (isRespondingRange.location == NSNotFound) {
+        // This description is not a "is responding" deal.  We will just return the raw string.
+        return [[NSAttributedString alloc] initWithString:description];
+    }
+    
+    NSRange rangeBeforeIsResponding = NSMakeRange(0, isRespondingRange.location);
+    CGFloat fontSize = self.typingIndicatorLabel.font.pointSize;
+    
+    UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
+    
+    NSString * descriptionWithEmoji = [NSString stringWithFormat:@"%@  \U0001F4AC", description];
+    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:descriptionWithEmoji];
+    [text addAttribute:NSFontAttributeName value:boldFont range:rangeBeforeIsResponding];
+    
+    return text;
 }
 
 - (ZNGContact *) contact
@@ -573,6 +617,18 @@ static void * KVOContext = &KVOContext;
     }];
 }
 
+#pragma mark - Inset manipulation
+- (void) jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
+{
+    CGFloat extraHeightForTypingIndicator = 0.0;
+    CGFloat typingIndicatorHeight = [self.typingIndicatorLabel intrinsicContentSize].height;
+    
+    if (typingIndicatorHeight > 0.0) {
+        extraHeightForTypingIndicator = typingIndicatorHeight + self.typingIndicatorBottomSpaceConstraint.constant + self.extraSpaceAboveTypingIndicator;
+    }
+    
+    [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraHeightForTypingIndicator];
+}
 #pragma mark - Collection view shenanigans
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {

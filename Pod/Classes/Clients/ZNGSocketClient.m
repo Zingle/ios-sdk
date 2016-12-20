@@ -33,8 +33,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     // YES if we have completed an auth request and set our session cookies
     BOOL authSucceeded;
-    
-    BOOL wasConnectedWhenEnteringBackground;
 }
 
 - (id) initWithSession:(ZingleSession *)session
@@ -42,9 +40,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self = [super init];
     
     if (self != nil) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-        
         _session = session;
         
         NSString * zinglePrefix = [session.sessionManager.baseURL zingleServerPrefix];
@@ -63,11 +58,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     return self;
-}
-
-- (void) dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (BOOL) active
@@ -99,6 +89,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) _authenticateAndConnect
 {
+    ZNGLogVerbose(@"Request session cookie through a POST...");
+    
     authSucceeded = NO;
     initializingSession = YES;
     
@@ -180,6 +172,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if (![self connected]) {
         // We're not yet connected.  We will subscribe to an active conversation as soon as we connect.
+        ZNGLogVerbose(@"%@ was called, but we are not yet connected.  Delaying subscription until a successful connection.", NSStringFromSelector(_cmd));
         return;
     }
     
@@ -195,6 +188,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         ZNGLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
     }
     
+    ZNGLogDebug(@"Setting active feed to %@", feedId);
     [socketClient emit:@"setActiveFeed" withItems:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
 }
 
@@ -217,6 +211,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) socketDidBindNodeController
 {
+    ZNGLogDebug(@"Node controller bind succeeded.");
     if (self.activeConversation != nil) {
         [self subscribeForFeedUpdatesForConversation:self.activeConversation];
     }
@@ -261,19 +256,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     ZNGLogInfo(@"Conversation was unlocked");
     self.activeConversation.lockedDescription = nil;
-}
-
-#pragma mark - Background handling
-- (void) notifyDidEnterBackground:(NSNotification *)notification
-{
-    wasConnectedWhenEnteringBackground = [self connected];
-}
-
-- (void) notifyWillEnterForeground:(NSNotification *)notification
-{
-    if (wasConnectedWhenEnteringBackground) {
-        [self connect];
-    }
 }
 
 

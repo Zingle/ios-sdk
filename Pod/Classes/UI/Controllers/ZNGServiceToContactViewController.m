@@ -89,7 +89,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 10.0;
+        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -102,7 +102,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 10.0;
+        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -155,6 +155,7 @@ static void * KVOContext = &KVOContext;
     touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
     spamZIndex = INT_MAX;
     
+    self.typingIndicatorContainerView.hidden = YES;
     self.typingIndicatorLabel.text = nil;
     
     [self updateConfirmedButton];
@@ -192,6 +193,7 @@ static void * KVOContext = &KVOContext;
             }
             
             self.typingIndicatorLabel.attributedText = message;
+            self.typingIndicatorContainerView.hidden = ([message length] == 0);
             [self jsq_updateCollectionViewInsets];
         }
     } else {
@@ -625,7 +627,7 @@ static void * KVOContext = &KVOContext;
     CGFloat extraBottom = 0.0;
     
     if ([self.typingIndicatorLabel.text length] > 0) {
-        extraBottom = self.typingIndicatorBlurView.frame.size.height + self.extraSpaceAboveTypingIndicator;
+        extraBottom = self.typingIndicatorContainerView.frame.size.height + self.extraSpaceAboveTypingIndicator;
     }
     
     return [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraBottom];

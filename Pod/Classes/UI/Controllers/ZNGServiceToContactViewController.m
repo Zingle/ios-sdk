@@ -89,7 +89,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 6.0;
+        _extraSpaceAboveTypingIndicator = 10.0;
         [self setupKVO];
     }
     
@@ -102,7 +102,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 6.0;
+        _extraSpaceAboveTypingIndicator = 10.0;
         [self setupKVO];
     }
     
@@ -154,6 +154,8 @@ static void * KVOContext = &KVOContext;
     
     touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
     spamZIndex = INT_MAX;
+    
+    self.typingIndicatorLabel.text = nil;
     
     [self updateConfirmedButton];
     [self setupBannerContainer];
@@ -620,15 +622,15 @@ static void * KVOContext = &KVOContext;
 #pragma mark - Inset manipulation
 - (void) jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
 {
-    CGFloat extraHeightForTypingIndicator = 0.0;
-    CGFloat typingIndicatorHeight = [self.typingIndicatorLabel intrinsicContentSize].height;
+    CGFloat extraBottom = 0.0;
     
-    if (typingIndicatorHeight > 0.0) {
-        extraHeightForTypingIndicator = typingIndicatorHeight + self.typingIndicatorBottomSpaceConstraint.constant + self.extraSpaceAboveTypingIndicator;
+    if ([self.typingIndicatorLabel.text length] > 0) {
+        extraBottom = self.typingIndicatorBlurView.frame.size.height + self.extraSpaceAboveTypingIndicator;
     }
     
-    [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraHeightForTypingIndicator];
+    return [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraBottom];
 }
+
 #pragma mark - Collection view shenanigans
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {

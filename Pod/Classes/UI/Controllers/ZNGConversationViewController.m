@@ -37,6 +37,7 @@ static const uint64_t PollingIntervalSeconds = 30;
 
 static NSString * const EventsKVOPath = @"conversation.events";
 static NSString * const LoadingKVOPath = @"conversation.loading";
+static NSString * const InputLockedKVOPath = @"conversation.lockedDescription";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface JSQMessagesViewController ()
@@ -119,6 +120,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
+    [self addObserver:self forKeyPath:InputLockedKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
 }
 
@@ -227,6 +229,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];
+    [self removeObserver:self forKeyPath:InputLockedKVOPath context:ZNGConversationKVOContext];
     
     if (pollingTimerSource != nil) {
         dispatch_source_cancel(pollingTimerSource);
@@ -351,7 +354,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         } else if ((wasLoading) && (!isLoading)) {
             [loadingGradient stopAnimating];
         }
+    } else if ([keyPath isEqualToString:InputLockedKVOPath]) {
+        [self updateTypingIndicator];
     }
+}
+
+- (void) updateTypingIndicator
+{
 }
 
 - (void) showOrHideLoadEarlierMessagesButton

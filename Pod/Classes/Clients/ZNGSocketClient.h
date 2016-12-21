@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) connect;
 - (void) disconnect;
 
+- (void) userDidType:(nullable NSString *)input;
+- (void) userClearedInput;
+
 @property (nonatomic, weak, nullable) ZingleSession * session;
 
 /**

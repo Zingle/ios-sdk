@@ -54,6 +54,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (ZNGChannel *) defaultChannelForContact;
 
+/**
+ *  Tell the server that the user is typing a response
+ */
+- (void) userDidType:(nullable NSString *)pendingInput;
+
+/**
+ *  Tell the server that the user cleared the input field.  This is called automatically whenever a message is sent.
+ */
+- (void) userClearedInput;
+
 - (void) addInternalNote:(NSString *)note
                  success:(void (^ _Nullable)(ZNGStatus* status))success
                  failure:(void (^ _Nullable) (ZNGError *error))failure;

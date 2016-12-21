@@ -362,6 +362,29 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return _usedChannels;
 }
 
+#pragma mark - Typing indicators
+- (void) userDidType:(NSString *)pendingInput
+{
+    [self.socketClient userDidType:pendingInput];
+}
+
+- (void) userClearedInput
+{
+    [self.socketClient userClearedInput];
+}
+
+- (void) sendMessageWithBody:(NSString *)body success:(void (^)(ZNGStatus * _Nullable))success failure:(void (^)(ZNGError * _Nullable))failure
+{
+    [self userClearedInput];
+    [super sendMessageWithBody:body success:success failure:failure];
+}
+
+- (void) sendMessageWithBody:(NSString *)body images:(NSArray<UIImage *> *)images success:(void (^)(ZNGStatus * _Nullable))success failure:(void (^)(ZNGError * _Nullable))failure
+{
+    [self userClearedInput];
+    [super sendMessageWithBody:body images:images success:success failure:failure];
+}
+
 #pragma mark - Forwarding
 - (void) forwardMessage:(ZNGMessage *)message toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {

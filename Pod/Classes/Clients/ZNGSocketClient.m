@@ -13,6 +13,8 @@
 #import "NSURL+Zingle.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGConversationContactToService.h"
+#import "ZingleAccountSession.h"
+#import "ZNGUserAuthorization.h"
 @import SocketIO;
 
 #if DEBUG
@@ -195,6 +197,38 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) unsubscribeFromFeedUpdates
 {
     [self subscribeForFeedUpdatesForConversation:nil];
+}
+
+#pragma mark - Typing indicator
+- (void) userDidType:(NSString *)input
+{
+    if (![self.activeConversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
+        ZNGLogWarn(@"%@ was called, but the current conversation is a %@.  Ignoring.", NSStringFromSelector(_cmd), [self.activeConversation class]);
+        return;
+    }
+    
+    ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.activeConversation;
+
+    NSString * description = nil;
+    
+    if (([input length] > 0) && (conversation.session.userAuthorization != nil)) {
+        description = [NSString stringWithFormat:@"%@ is responding", [conversation.session.userAuthorization displayName]];
+    }
+    
+    NSString * event = ([input length] > 0) ? @"lockFeed" : @"unlockFeed";
+    
+    NSMutableDictionary * payload = [[NSMutableDictionary alloc] init];
+    payload[@"feedId"] = conversation.contact.contactId;
+    payload[@"serviceId"] = conversation.service.serviceId;
+    payload[@"pendingResponse"] = input;
+    payload[@"description"] = description;
+    
+    [socketClient emit:event withItems:@[payload]];
+}
+
+- (void) userClearedInput
+{
+    [self userDidType:nil];
 }
 
 #pragma mark - Sockety goodness

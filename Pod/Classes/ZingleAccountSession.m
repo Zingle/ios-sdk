@@ -45,8 +45,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
     
-    ZNGUserAuthorization * userAuthorization;
-    
     UIStoryboard * _storyboard;
 }
 
@@ -411,7 +409,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 - (void) retrieveUserObject
 {
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
-        userAuthorization = theUserAuthorization;
+        self.userAuthorization = theUserAuthorization;
         [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to retrieve current user info from the root URL: %@", error);
@@ -473,7 +471,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     if (conversation == nil) {
         conversation = [[ZNGConversationServiceToContact alloc] initFromService:self.service
                                                                       toContact:contact
-                                                              withCurrentUserId:userAuthorization.userId
+                                                              withCurrentUserId:self.userAuthorization.userId
                                                                    usingChannel:nil
                                                               withMessageClient:self.messageClient
                                                                     eventClient:self.eventClient

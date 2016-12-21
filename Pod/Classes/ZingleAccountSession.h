@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGAutomationClient, ZNGContactClient, ZNGLabelClient, ZNGMessageClient;
 @class ZNGServiceToContactViewController;
 @class ZNGContactEditViewController;
+@class ZNGUserAuthorization;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -48,6 +49,11 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *  The current service.  This may be set to any value in availableServices.  Setting it multiple times has undefined behavior.
  */
 @property (nonatomic, strong, nullable) ZNGService * service;
+
+/**
+ *  Meta data about the current user.
+ */
+@property (nonatomic, strong, nullable) ZNGUserAuthorization * userAuthorization;
 
 /**
  *  If set, the service object will be refreshed whenever returning from the background (but no more often than every ten minutes.)

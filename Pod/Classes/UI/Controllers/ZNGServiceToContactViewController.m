@@ -231,7 +231,7 @@ static void * KVOContext = &KVOContext;
 {
     NSString * lowercaseLockedDescription = [self.conversation.lockedDescription lowercaseString];
     BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
-    BOOL inAutomation = [lowercaseLockedDescription containsString:@"in automation:"];
+    BOOL inAutomation = [lowercaseLockedDescription containsString:@"in automation:"];
     static NSString * const wiggleKey = @"wiggle";
     BOOL shouldWiggle = userResponding;
     BOOL isWiggling = ([self.typingIndicatorEmojiLabel.layer animationForKey:wiggleKey] != nil);

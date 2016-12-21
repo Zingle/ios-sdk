@@ -14,6 +14,7 @@
 #import "ZNGPrinter.h"
 #import "ZNGAnalytics.h"
 #import "ZNGMessageForwardingRequest.h"
+#import "ZNGSocketClient.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -33,6 +34,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
      withMessageClient:(ZNGMessageClient *)messageClient
            eventClient:(ZNGEventClient *)eventClient
          contactClient:(ZNGContactClient *)contactClient
+          socketClient:(ZNGSocketClient *)socketClient
 {
     self = [super initWithMessageClient:messageClient eventClient:eventClient];
     
@@ -43,6 +45,8 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         _myUserId = [theUserId copy];
         _channel = aChannel;
         _contactClient = contactClient;
+        
+        self.socketClient = socketClient;
         
         if (_channel == nil) {
             // Can we auto select a channel?
@@ -60,7 +64,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (id) initWithConversation:(ZNGConversationServiceToContact *)conversation
 {
-    return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient eventClient:conversation.eventClient contactClient:conversation.contactClient];
+    return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient eventClient:conversation.eventClient contactClient:conversation.contactClient socketClient:conversation.socketClient];
 }
 
 - (void) dealloc

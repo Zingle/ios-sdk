@@ -475,7 +475,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
                                                                    usingChannel:nil
                                                               withMessageClient:self.messageClient
                                                                     eventClient:self.eventClient
-                                                                  contactClient:self.contactClient];
+                                                                  contactClient:self.contactClient
+                                                                   socketClient:self.socketClient];
         [allLoadedConversationIds addObject:contact.contactId];
     }
     

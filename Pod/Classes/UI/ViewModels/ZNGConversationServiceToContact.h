@@ -40,7 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
           usingChannel:(ZNGChannel * __nullable)aChannel
      withMessageClient:(ZNGMessageClient *)messageClient
            eventClient:(ZNGEventClient *)eventClient
-         contactClient:(ZNGContactClient *)contactClient NS_DESIGNATED_INITIALIZER;
+         contactClient:(ZNGContactClient *)contactClient
+          socketClient:(ZNGSocketClient *)socketClient NS_DESIGNATED_INITIALIZER;
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient NS_UNAVAILABLE;
 

@@ -18,6 +18,7 @@
 @class ZNGEvent;
 @class ZingleSession;
 @class ZNGEventClient;
+@class ZNGSocketClient;
 
 extern NSString * _Nonnull const ZNGConversationParticipantTypeContact;
 extern NSString * _Nonnull const ZNGConversationParticipantTypeService;
@@ -57,6 +58,7 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 
 @property (nonatomic, readonly, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, readonly, nullable) ZNGEventClient * eventClient;
+@property (nonatomic, strong, nullable) ZNGSocketClient * socketClient;
 
 /**
  *  The display name for the other end of this conversation.

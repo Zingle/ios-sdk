@@ -66,6 +66,8 @@ static void * KVOContext = &KVOContext;
     NSUInteger spamZIndex;
     
     ZNGMessage * messageToForward;
+    
+    NSTimer * textViewChangeTimer;
 }
 
 @dynamic conversation;
@@ -815,6 +817,28 @@ static void * KVOContext = &KVOContext;
     } else {
         [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
     }
+}
+
+#pragma mark - Text view delegate
+- (void) textViewDidChange:(UITextView *)textView
+{
+    if (textView == self.inputToolbar.contentView.textView) {
+        [textViewChangeTimer invalidate];
+        
+        if ([textView.text length] == 0) {
+            textViewChangeTimer = nil;
+            [self.conversation userClearedInput];
+        } else {
+            textViewChangeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_textChanged) userInfo:nil repeats:NO];
+        }
+    }
+    
+    [super textViewDidChange:textView];
+}
+
+- (void) _textChanged
+{
+    [self.conversation userDidType:self.inputToolbar.contentView.textView.text];
 }
 
 #pragma mark - Actions

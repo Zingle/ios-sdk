@@ -31,7 +31,8 @@
 
 @property (nonatomic, weak, nullable) id <ZNGServiceToContactViewDelegate> delegate;
 
-@property (nonatomic, strong, nullable) IBOutlet UILabel * typingIndicatorLabel;
+@property (nonatomic, strong, nullable) IBOutlet UILabel * typingIndicatorTextLabel;
+@property (nonatomic, strong, nullable) IBOutlet UILabel * typingIndicatorEmojiLabel;
 @property (nonatomic, strong, nullable) IBOutlet UIView * typingIndicatorContainerView;
 @property (nonatomic, assign) CGFloat extraSpaceAboveTypingIndicator;   // Defaults to 20.0
 

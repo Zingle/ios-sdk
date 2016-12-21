@@ -36,8 +36,14 @@
                             <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="iWA-dO-3bV">
                                 <rect key="frame" x="0.0" y="530" width="375" height="24"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Someone is responding  💬" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHX-Je-yfE">
-                                        <rect key="frame" x="236" y="5" width="133" height="14"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="💬" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qsr-lM-mNk">
+                                        <rect key="frame" x="354" y="5" width="15" height="14"/>
+                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="11"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Someone is responding" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHX-Je-yfE">
+                                        <rect key="frame" x="236" y="5" width="112" height="14"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="11"/>
                                         <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -47,8 +53,10 @@
                                 <constraints>
                                     <constraint firstItem="WHX-Je-yfE" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="top" constant="5" id="FXV-56-Pbs"/>
                                     <constraint firstAttribute="bottom" secondItem="WHX-Je-yfE" secondAttribute="bottom" constant="5" id="RTx-Mo-5Ul"/>
-                                    <constraint firstAttribute="trailing" secondItem="WHX-Je-yfE" secondAttribute="trailing" constant="6" id="cX5-7N-bCL"/>
+                                    <constraint firstItem="qsr-lM-mNk" firstAttribute="baseline" secondItem="WHX-Je-yfE" secondAttribute="baseline" id="VWT-CR-0uo"/>
+                                    <constraint firstItem="qsr-lM-mNk" firstAttribute="leading" secondItem="WHX-Je-yfE" secondAttribute="trailing" constant="6" id="ca3-8Y-T85"/>
                                     <constraint firstItem="WHX-Je-yfE" firstAttribute="centerY" secondItem="iWA-dO-3bV" secondAttribute="centerY" id="mJa-8H-Ha4"/>
+                                    <constraint firstAttribute="trailing" secondItem="qsr-lM-mNk" secondAttribute="trailing" constant="6" id="sPc-9k-ixE"/>
                                 </constraints>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqn-aA-lFp" customClass="ZNGServiceConversationInputToolbar">
@@ -80,7 +88,8 @@
                         <outlet property="toolbarBottomLayoutGuide" destination="wV1-0d-sIq" id="xSh-Mk-TTu"/>
                         <outlet property="toolbarHeightConstraint" destination="gry-0L-4u8" id="5h1-71-KIe"/>
                         <outlet property="typingIndicatorContainerView" destination="iWA-dO-3bV" id="57A-Ya-pZB"/>
-                        <outlet property="typingIndicatorLabel" destination="WHX-Je-yfE" id="If5-kD-G8i"/>
+                        <outlet property="typingIndicatorEmojiLabel" destination="qsr-lM-mNk" id="ixN-Rj-REX"/>
+                        <outlet property="typingIndicatorTextLabel" destination="WHX-Je-yfE" id="QhX-Hi-TH3"/>
                         <segue destination="EHd-00-ynV" kind="presentation" identifier="editContact" id="phR-j8-hwa"/>
                         <segue destination="ZM1-vb-ioJ" kind="presentation" identifier="forward" id="IQl-0u-ULV"/>
                     </connections>
@@ -118,7 +127,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYt-3Q-GWh">
-                                <rect key="frame" x="50" y="81" width="46" height="33"/>
+                                <rect key="frame" x="50" y="80.5" width="46" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Select">
                                     <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -128,14 +137,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-wd-LW9">
-                                <rect key="frame" x="106" y="87" width="14" height="22"/>
+                                <rect key="frame" x="106" y="86.5" width="14" height="22"/>
                                 <state key="normal" image="chevronRight"/>
                                 <connections>
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="4eI-y5-Pku"/>
                                 </connections>
                             </button>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
-                                <rect key="frame" x="139" y="83" width="220" height="30"/>
+                                <rect key="frame" x="139" y="82.5" width="220" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
@@ -144,10 +153,10 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="132" width="375" height="99"/>
+                                <rect key="frame" x="0.0" y="131.5" width="375" height="83"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="HotSOS issue name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR" customClass="ZNGContactEditFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="0.0" width="284" height="46"/>
+                                        <rect key="frame" x="16" y="0.0" width="284" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
@@ -161,7 +170,7 @@
                                         </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
-                                        <rect key="frame" x="312" y="4.5" width="51" height="33"/>
+                                        <rect key="frame" x="312" y="-3.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
                                             <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -171,16 +180,16 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Room:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pfu-Ld-m81">
-                                        <rect key="frame" x="22" y="57" width="31" height="14"/>
+                                        <rect key="frame" x="22" y="41" width="31" height="14"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="11"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
-                                        <rect key="frame" x="327" y="11.5" width="20" height="20"/>
+                                        <rect key="frame" x="327" y="3.5" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="none" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZSE-6B-X72">
-                                        <rect key="frame" x="22" y="71" width="33" height="17"/>
+                                        <rect key="frame" x="22" y="55" width="33" height="17"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -431,7 +440,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
-                                                    <rect key="frame" x="37" y="18.5" width="22" height="22"/>
+                                                    <rect key="frame" x="37" y="18" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
                                                         <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
@@ -442,7 +451,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="14.5" width="45" height="30"/>
+                                                    <rect key="frame" x="71" y="14" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -452,7 +461,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="120" y="22.5" width="14" height="14"/>
+                                                    <rect key="frame" x="120" y="22" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>

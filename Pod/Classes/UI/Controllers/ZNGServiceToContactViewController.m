@@ -156,7 +156,7 @@ static void * KVOContext = &KVOContext;
     spamZIndex = INT_MAX;
     
     self.typingIndicatorContainerView.hidden = YES;
-    self.typingIndicatorLabel.text = nil;
+    self.typingIndicatorTextLabel.text = nil;
     
     [self updateConfirmedButton];
     [self setupBannerContainer];
@@ -202,8 +202,9 @@ static void * KVOContext = &KVOContext;
                 message = [self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription];
             }
             
-            self.typingIndicatorLabel.attributedText = message;
+            self.typingIndicatorTextLabel.attributedText = message;
             self.typingIndicatorContainerView.hidden = ([message length] == 0);
+            [self updateTypingIndicatorEmoji];
             
             BOOL justBecameLocked = (([oldLockedString length] == 0) && ([lockedString length] > 0));
             BOOL needToScrollBackToBottom = NO;
@@ -224,24 +225,76 @@ static void * KVOContext = &KVOContext;
     }
 }
 
+- (void) updateTypingIndicatorEmoji
+{
+    NSString * lowercaseLockedDescription = [self.conversation.lockedDescription lowercaseString];
+    BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
+    BOOL inAutomation = [lowercaseLockedDescription containsString:@"in automation:"];
+    static NSString * const wiggleKey = @"wiggle";
+    BOOL shouldWiggle = userResponding;
+    BOOL isWiggling = ([self.typingIndicatorEmojiLabel.layer animationForKey:wiggleKey] != nil);
+    
+    if (userResponding) {
+        self.typingIndicatorEmojiLabel.text = @"\U0001F4AC";
+    } else if (inAutomation) {
+        self.typingIndicatorEmojiLabel.text = @"\U0001F916";
+    } else {
+        self.typingIndicatorEmojiLabel.text = nil;
+    }
+    
+    if ((shouldWiggle) && (!isWiggling)) {
+        if (!isWiggling) {
+            CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
+            wiggle.keyPath = @"transform";
+            
+            CGFloat wiggleAngle = 0.42;
+            NSValue * noWiggle = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+            NSValue * leftWiggle = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wiggleAngle, 0.0, 0.0, 1.0)];
+            NSValue * rightWiggle = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wiggleAngle, 0.0, 0.0, 1.0)];
+            
+            wiggle.values = @[noWiggle, noWiggle, leftWiggle, rightWiggle, noWiggle];
+            wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
+            
+            wiggle.duration = 2.0;
+            wiggle.repeatCount = FLT_MAX;
+            
+            [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];
+        }
+    } else {
+        [self.typingIndicatorEmojiLabel.layer removeAllAnimations];
+    }
+}
+
 - (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)description
 {
     // We'll try to find a typical "is responding" string and bold the name before it.
     NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
+    NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
     
-    if (isRespondingRange.location == NSNotFound) {
-        // This description is not a "is responding" deal.  We will just return the raw string.
+    if (isRespondingRange.location != NSNotFound) {
+        rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
+    } else {
+        // This description is not a "is responding" deal.  Check for automation.
+        NSRange inAutomationRange = [description rangeOfString:@"in automation:" options:NSCaseInsensitiveSearch];
+        
+        if (inAutomationRange.location != NSNotFound) {
+            NSUInteger firstCharacterToBold = inAutomationRange.location + inAutomationRange.length;
+            
+            if (firstCharacterToBold < [description length]) {
+                rangeToBoldify = NSMakeRange(firstCharacterToBold, ([description length] - firstCharacterToBold));
+            }
+        }
+    }
+    
+    if (rangeToBoldify.location == NSNotFound) {
         return [[NSAttributedString alloc] initWithString:description];
     }
     
-    NSRange rangeBeforeIsResponding = NSMakeRange(0, isRespondingRange.location);
-    CGFloat fontSize = self.typingIndicatorLabel.font.pointSize;
-    
+    CGFloat fontSize = self.typingIndicatorTextLabel.font.pointSize;
     UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
     
-    NSString * descriptionWithEmoji = [NSString stringWithFormat:@"%@  \U0001F4AC", description];
-    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:descriptionWithEmoji];
-    [text addAttribute:NSFontAttributeName value:boldFont range:rangeBeforeIsResponding];
+    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:description];
+    [text addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
     
     return text;
 }
@@ -649,7 +702,7 @@ static void * KVOContext = &KVOContext;
 {
     CGFloat extraBottom = 0.0;
     
-    if ([self.typingIndicatorLabel.text length] > 0) {
+    if ([self.typingIndicatorTextLabel.text length] > 0) {
         extraBottom = self.typingIndicatorContainerView.frame.size.height + self.extraSpaceAboveTypingIndicator;
     }
     

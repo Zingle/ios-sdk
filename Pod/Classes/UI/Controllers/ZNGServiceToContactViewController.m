@@ -244,7 +244,7 @@ static void * KVOContext = &KVOContext;
         self.typingIndicatorEmojiLabel.text = nil;
     }
     
-    if ((shouldWiggle) && (!isWiggling)) {
+    if (shouldWiggle) {
         if (!isWiggling) {
             CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
             wiggle.keyPath = @"transform";

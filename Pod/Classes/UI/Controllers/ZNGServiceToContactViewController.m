@@ -234,7 +234,6 @@ static void * KVOContext = &KVOContext;
     BOOL inAutomation = [lowercaseLockedDescription containsString:@"in automation:"];
     static NSString * const wiggleKey = @"wiggle";
     BOOL shouldWiggle = userResponding;
-    BOOL isWiggling = ([self.typingIndicatorEmojiLabel.layer animationForKey:wiggleKey] != nil);
     
     if (userResponding) {
         self.typingIndicatorEmojiLabel.text = @"\U0001F4AC";
@@ -245,23 +244,27 @@ static void * KVOContext = &KVOContext;
     }
     
     if (shouldWiggle) {
-        if (!isWiggling) {
-            CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
-            wiggle.keyPath = @"transform";
-            
-            CGFloat wiggleAngle = 0.42;
-            NSValue * noWiggle = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-            NSValue * leftWiggle = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(wiggleAngle, 0.0, 0.0, 1.0)];
-            NSValue * rightWiggle = [NSValue valueWithCATransform3D:CATransform3DMakeRotation(-wiggleAngle, 0.0, 0.0, 1.0)];
-            
-            wiggle.values = @[noWiggle, noWiggle, leftWiggle, rightWiggle, noWiggle];
-            wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
-            
-            wiggle.duration = 2.0;
-            wiggle.repeatCount = FLT_MAX;
-            
-            [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];
-        }
+        CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
+        wiggle.keyPath = @"transform";
+        
+        CGFloat wiggleAngle = 0.42;
+        NSValue * noWiggle = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+        
+        CATransform3D leftWiggleTransform = CATransform3DMakeRotation(wiggleAngle, 0.0, 0.0, 1.0);
+        leftWiggleTransform = CATransform3DScale(leftWiggleTransform, 1.2, 1.2, 1.0);
+        CATransform3D rightWiggleTransform = CATransform3DMakeRotation(-wiggleAngle, 0.0, 0.0, 1.0);
+        rightWiggleTransform = CATransform3DScale(rightWiggleTransform, 1.2, 1.2, 1.0);
+        
+        NSValue * leftWiggle = [NSValue valueWithCATransform3D:leftWiggleTransform];
+        NSValue * rightWiggle = [NSValue valueWithCATransform3D:rightWiggleTransform];
+        
+        wiggle.values = @[noWiggle, noWiggle, leftWiggle, rightWiggle, noWiggle];
+        wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
+        
+        wiggle.duration = 2.0;
+        wiggle.repeatCount = FLT_MAX;
+        
+        [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];
     } else {
         [self.typingIndicatorEmojiLabel.layer removeAllAnimations];
     }

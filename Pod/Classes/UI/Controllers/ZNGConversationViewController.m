@@ -146,7 +146,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;
-    self.collectionView.collectionViewLayout.messageBubbleTextViewFrameInsets = UIEdgeInsetsZero;
     
     self.collectionView.collectionViewLayout.messageBubbleFont = self.messageFont;
     

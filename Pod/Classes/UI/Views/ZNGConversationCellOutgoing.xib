@@ -82,7 +82,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell bottom label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Uc-dI-YDD" userLabel="Cell bottom label" customClass="JSQMessagesLabel">
-                        <rect key="frame" x="36" y="134" width="238" height="20"/>
+                        <rect key="frame" x="172.5" y="134" width="107.5" height="20"/>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="cPs-M4-tjX"/>
@@ -96,11 +96,10 @@
             <constraints>
                 <constraint firstItem="2zh-vR-QJW" firstAttribute="top" secondItem="p52-YN-yLu" secondAttribute="bottom" id="3Wx-g0-fTc"/>
                 <constraint firstAttribute="trailing" secondItem="jxM-YD-sVG" secondAttribute="trailing" id="AwY-g7-f1T"/>
-                <constraint firstItem="7Uc-dI-YDD" firstAttribute="leading" secondItem="vLY-aM-0Dr" secondAttribute="leading" id="FLB-TV-NRK"/>
                 <constraint firstItem="jxM-YD-sVG" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="HYT-Tw-whz"/>
                 <constraint firstAttribute="trailing" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" id="KLt-Ix-wDa"/>
                 <constraint firstItem="7Uc-dI-YDD" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" id="Ngq-ew-t2K"/>
-                <constraint firstItem="7Uc-dI-YDD" firstAttribute="trailing" secondItem="vLY-aM-0Dr" secondAttribute="trailing" constant="-6" id="bUc-CW-ZG8"/>
+                <constraint firstItem="7Uc-dI-YDD" firstAttribute="trailing" secondItem="vLY-aM-0Dr" secondAttribute="trailing" id="bUc-CW-ZG8"/>
                 <constraint firstAttribute="bottom" secondItem="7Uc-dI-YDD" secondAttribute="bottom" id="gXo-9b-b1W"/>
                 <constraint firstAttribute="trailing" secondItem="p52-YN-yLu" secondAttribute="trailing" id="gen-N0-uZj"/>
                 <constraint firstItem="7Uc-dI-YDD" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="bottom" id="iiF-tn-5Ir"/>

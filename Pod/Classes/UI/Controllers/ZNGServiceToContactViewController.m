@@ -26,6 +26,7 @@
 #import "ZingleAccountSession.h"
 #import "ZNGLogging.h"
 #import "ZNGForwardingViewController.h"
+#import "ZNGAvatarCache.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -151,6 +152,17 @@ static void * KVOContext = &KVOContext;
     [self updateInputStatus];
     
     [self startEmphasisTimer];
+    
+    // Avatars
+    ZNGAvatarCache * avatarCache = [ZNGAvatarCache sharedCache];
+    avatarCache.incomingTextColor = self.incomingTextColor;
+    avatarCache.outgoingTextColor = self.outgoingTextColor;
+    avatarCache.outgoingBackgroundColor = self.outgoingBubbleColor;
+    avatarCache.incomingBackgroundColor = self.incomingBubbleColor;
+    CGSize avatarSize = CGSizeMake(32.0, 32.0);
+    avatarCache.avatarSize = avatarSize;
+    self.collectionView.collectionViewLayout.incomingAvatarViewSize = avatarSize;
+    self.collectionView.collectionViewLayout.outgoingAvatarViewSize = avatarSize;
     
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
@@ -607,6 +619,25 @@ static void * KVOContext = &KVOContext;
     }
     
     return NO;
+}
+
+
+- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    NSString * name = [self nameForMessageAtIndexPath:indexPath];
+    NSString * senderUUID = [event senderId];
+    
+    if (name == nil) {
+        // This likely means the message is incoming.  Our implementation of nameForMessageAtIndexPath does not provide a name for incoming messages.
+        if ((event.isMessage) && (!event.message.isOutbound)) {
+            NSString * firstName = [[self.conversation.contact firstNameFieldValue] value];
+            NSString * lastName = [[self.conversation.contact lastNameFieldValue] value];
+            name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        }
+    }
+    
+    return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID name:name outgoing:[self isOutgoingMessage:event]];
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath

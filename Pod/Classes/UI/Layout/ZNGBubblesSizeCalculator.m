@@ -96,10 +96,11 @@
     
     //  from the cell xibs, there is a 2 point space between avatar and bubble
     CGFloat spacingBetweenAvatarAndBubble = 2.0f;
+    CGFloat spacingBetweenAvatarAndEdgeOfCollectionView = 4.0;
     CGFloat horizontalContainerInsets = layout.messageBubbleTextViewTextContainerInsets.left + layout.messageBubbleTextViewTextContainerInsets.right;
     CGFloat horizontalFrameInsets = layout.messageBubbleTextViewFrameInsets.left + layout.messageBubbleTextViewFrameInsets.right;
     
-    CGFloat horizontalInsetsTotal = horizontalContainerInsets + horizontalFrameInsets + spacingBetweenAvatarAndBubble;
+    CGFloat horizontalInsetsTotal = horizontalContainerInsets + horizontalFrameInsets + spacingBetweenAvatarAndBubble + spacingBetweenAvatarAndEdgeOfCollectionView;
     CGFloat maximumTextWidth = [self textBubbleWidthForLayout:layout] - avatarSize.width - layout.messageBubbleLeftRightMargin - horizontalInsetsTotal;
     
     CGRect stringRect;

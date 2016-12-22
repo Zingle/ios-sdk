@@ -14,6 +14,6 @@
 + (instancetype) new NS_UNAVAILABLE;
 - (id) init NS_UNAVAILABLE;
 
-- (id) initWithInitials:(NSString *)initials textColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor size:(CGSize)size;
+- (id) initWithInitials:(NSString *)initials textColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor size:(CGSize)size font:(UIFont *)font;
 
 @end

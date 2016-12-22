@@ -38,6 +38,8 @@
         outgoingCache = [[NSCache alloc] init];
         outgoingCache.countLimit = 20;
         _avatarSize = CGSizeMake(32.0, 32.0);
+        
+        _font = [UIFont systemFontOfSize:13.0];
     }
     
     return self;
@@ -46,6 +48,11 @@
 
 - (NSString *)initialsForName:(NSString *)theName
 {
+    // If we have fewer than three characters, we can safely return the entire name.  This solves the case of an emoji for free.
+    if ([theName length] <= 2) {
+        return theName;
+    }
+    
     NSArray<NSString *> * names = [theName componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     NSMutableString * initials = [[NSMutableString alloc] initWithCapacity:3];
     
@@ -79,7 +86,7 @@
             textColor = [UIColor whiteColor];
         }
         
-        avatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials textColor:textColor backgroundColor:backgroundColor size:self.avatarSize];
+        avatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials textColor:textColor backgroundColor:backgroundColor size:self.avatarSize font:self.font];
         [cache setObject:avatar forKey:uuid];
     }
     

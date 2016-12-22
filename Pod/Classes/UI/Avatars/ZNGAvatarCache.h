@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) UIColor * outgoingTextColor;
 @property (nonatomic, strong, nullable) UIColor * incomingBackgroundColor;
 @property (nonatomic, strong, nullable) UIColor * incomingTextColor;
+@property (nonatomic, strong, nullable) UIFont * font;
 @property (nonatomic, assign) CGSize avatarSize;
 
 NS_ASSUME_NONNULL_END

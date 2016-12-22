@@ -159,8 +159,9 @@ static void * KVOContext = &KVOContext;
     avatarCache.outgoingTextColor = self.outgoingTextColor;
     avatarCache.outgoingBackgroundColor = self.outgoingBubbleColor;
     avatarCache.incomingBackgroundColor = self.incomingBubbleColor;
-    CGSize avatarSize = CGSizeMake(32.0, 32.0);
+    CGSize avatarSize = CGSizeMake(28.0, 28.0);
     avatarCache.avatarSize = avatarSize;
+    avatarCache.font = [UIFont latoSemiBoldFontOfSize:12.0];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = avatarSize;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = avatarSize;
     
@@ -625,16 +626,18 @@ static void * KVOContext = &KVOContext;
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
-    NSString * name = [self nameForMessageAtIndexPath:indexPath];
     NSString * senderUUID = [event senderId];
+    NSString * name;
     
-    if (name == nil) {
-        // This likely means the message is incoming.  Our implementation of nameForMessageAtIndexPath does not provide a name for incoming messages.
-        if ((event.isMessage) && (!event.message.isOutbound)) {
-            NSString * firstName = [[self.conversation.contact firstNameFieldValue] value];
-            NSString * lastName = [[self.conversation.contact lastNameFieldValue] value];
-            name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        }
+    if ([event isMessage] && !event.message.isOutbound) {
+        NSString * firstName = [[self.conversation.contact firstNameFieldValue] value];
+        NSString * lastName = [[self.conversation.contact lastNameFieldValue] value];
+        name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    } else if (event.automation.automationId != nil) {
+        name = @"\U0001F916";   // Robot face emoji for an automation
+        senderUUID = event.automation.automationId;
+    } else if (event.triggeredByUser.userId != nil) {
+        name = [[NSString stringWithFormat:@"%@ %@", event.triggeredByUser.firstName, event.triggeredByUser.lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
     
     return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID name:name outgoing:[self isOutgoingMessage:event]];

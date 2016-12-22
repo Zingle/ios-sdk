@@ -56,7 +56,7 @@
         
         // this extra inset value is needed because `boundingRectWithSize:` is slightly off
         // see comment below
-        _additionalInset = 2;
+        _additionalInset = 3.0;
     }
     return self;
 }

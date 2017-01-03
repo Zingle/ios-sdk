@@ -96,7 +96,7 @@
     ZNGLabel * label = [self labelForIndexPath:indexPath];
     cell.textLabel.text = label.displayName;
     
-    UIImage * labelImage = [UIImage imageNamed:@"labelFilled" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImage * labelImage = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
     UIImageView * imageView = [[UIImageView alloc] initWithImage:labelImage];
     imageView.tintColor = label.backgroundUIColor;
     

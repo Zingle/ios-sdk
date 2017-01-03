@@ -112,10 +112,12 @@
         loadedImagesCount = [event.message.imageAttachments count];
         NSMutableAttributedString * string = [[event attributedText] mutableCopy];
         [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
+        
+        CGFloat additionalHeight = ((loadedImagesCount + 1.0) * self.additionalInset * 2.0);
 
         // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
         stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
-        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + self.additionalInset);
+        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + additionalHeight);
     } else {
         stringRect = [[messageData text] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
                                                       options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics)

@@ -155,7 +155,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (NSAttributedString *) attributedText
 {
-    
     NSString * nonWhitespaceBody = [self.body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     BOOL bodyPresent = ([nonWhitespaceBody length] > 0);
     NSString * bodyString = bodyPresent ? self.body : @"";
@@ -167,7 +166,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         attachment.image = image;
         attachment.maxDisplayHeight = 200.0;
         
-        NSString * spacingString = bodyPresent ? @"\n\n" : @"";
+        NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
         NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:spacingString];
         NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
         [string appendAttributedString:spacing];

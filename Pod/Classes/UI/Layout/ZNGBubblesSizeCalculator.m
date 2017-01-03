@@ -114,11 +114,11 @@
         [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
 
         // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
-        stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil];
+        stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
         stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + self.additionalInset);
     } else {
         stringRect = [[messageData text] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
-                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics)
                                                    attributes:@{ NSFontAttributeName : layout.messageBubbleFont }
                                                       context:nil];
     }

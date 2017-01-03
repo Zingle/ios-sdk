@@ -255,7 +255,7 @@ static void * KVOContext = &KVOContext;
     smoulderer.emitterPosition = CGPointMake(x, y);
     
     
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     UIImage * particle = [UIImage imageNamed:@"particle" inBundle:bundle compatibleWithTraitCollection:nil];
     
     CAEmitterCell * cell = [CAEmitterCell emitterCell];

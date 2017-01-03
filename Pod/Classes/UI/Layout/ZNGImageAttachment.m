@@ -36,7 +36,7 @@
     }
     
     CGFloat downscale = MIN(downscaleWidth, downscaleHeight);
-    return CGRectMake(0.0, 0.0, self.image.size.width * downscale, self.image.size.height * downscale);
+    return CGRectIntegral(CGRectMake(0.0, 0.0, self.image.size.width * downscale, self.image.size.height * downscale));
 }
 
 @end

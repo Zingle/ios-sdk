@@ -8,9 +8,10 @@
 
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
 #import "ZNGServiceConversationInputToolbar.h"
+#import "ZNGConversationCollectionView.h"
 
 @class ZNGConversation;
-@class ZNGConversationViewController;
+@class ZNGConversationCollectionView;
 @class ZNGMessage;
 @class ZNGEvent;
 
@@ -25,6 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  This view controller is the toolbar's delegate.
  */
 @property (weak, nonatomic, readonly) ZNGConversationInputToolbar * inputToolbar;
+
+/**
+ *  Returns the collection view object managed by this view controller.
+ *  This view controller is the collection view's data source and delegate.
+ */
+@property (weak, nonatomic, readonly) IBOutlet ZNGConversationCollectionView *collectionView;
 
 /**
  * OPTIONAL UI SETTINGS

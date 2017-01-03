@@ -56,7 +56,7 @@
         
         // this extra inset value is needed because `boundingRectWithSize:` is slightly off
         // see comment below
-        _additionalInset = 2;
+        _additionalInset = 3.0;
     }
     return self;
 }
@@ -96,10 +96,11 @@
     
     //  from the cell xibs, there is a 2 point space between avatar and bubble
     CGFloat spacingBetweenAvatarAndBubble = 2.0f;
+    CGFloat spacingBetweenAvatarAndEdgeOfCollectionView = 4.0;
     CGFloat horizontalContainerInsets = layout.messageBubbleTextViewTextContainerInsets.left + layout.messageBubbleTextViewTextContainerInsets.right;
     CGFloat horizontalFrameInsets = layout.messageBubbleTextViewFrameInsets.left + layout.messageBubbleTextViewFrameInsets.right;
     
-    CGFloat horizontalInsetsTotal = horizontalContainerInsets + horizontalFrameInsets + spacingBetweenAvatarAndBubble;
+    CGFloat horizontalInsetsTotal = horizontalContainerInsets + horizontalFrameInsets + spacingBetweenAvatarAndBubble + spacingBetweenAvatarAndEdgeOfCollectionView;
     CGFloat maximumTextWidth = [self textBubbleWidthForLayout:layout] - avatarSize.width - layout.messageBubbleLeftRightMargin - horizontalInsetsTotal;
     
     CGRect stringRect;
@@ -111,13 +112,15 @@
         loadedImagesCount = [event.message.imageAttachments count];
         NSMutableAttributedString * string = [[event attributedText] mutableCopy];
         [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
+        
+        CGFloat additionalHeight = ((loadedImagesCount + 1.0) * self.additionalInset * 2.0);
 
         // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
-        stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading) context:nil];
-        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + self.additionalInset);
+        stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
+        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + additionalHeight);
     } else {
         stringRect = [[messageData text] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
-                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading)
+                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics)
                                                    attributes:@{ NSFontAttributeName : layout.messageBubbleFont }
                                                       context:nil];
     }

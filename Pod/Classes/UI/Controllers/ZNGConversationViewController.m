@@ -23,6 +23,8 @@
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"
 #import "ZNGImageAttachment.h"
+#import "ZNGConversationCellOutgoing.h"
+#import "ZNGConversationCellIncoming.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -74,6 +76,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
 }
 
+@dynamic collectionView;
 @dynamic inputToolbar;
 
 + (UINib *)nib
@@ -136,6 +139,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.contentView.textView.font = self.textInputFont;
     self.inputToolbar.sendButtonColor = self.sendButtonColor;
     self.inputToolbar.sendButtonFont = self.sendButtonFont;
+    
+    self.outgoingCellIdentifier = [ZNGConversationCellOutgoing cellReuseIdentifier];
+    self.incomingCellIdentifier = [ZNGConversationCellIncoming cellReuseIdentifier];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;

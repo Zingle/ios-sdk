@@ -281,9 +281,21 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     NSDictionary * info = [data firstObject];
     NSString * description = info[@"description"];
-    self.activeConversation.lockedDescription = description;
     
-    ZNGLogInfo(@"Conversation was locked: %@", description);
+    ZingleAccountSession * accountSession = ([self.session isKindOfClass:[ZingleAccountSession class]]) ? (ZingleAccountSession *)self.session : nil;
+    
+    NSString * lockedByUserID = info[@"lockedByUuid"];
+    NSString * meId = accountSession.userAuthorization.userId;
+    
+    BOOL lockedByMeMyselfAndI = (([meId length] > 0) && ([lockedByUserID isEqualToString:meId]));
+    
+    if (lockedByMeMyselfAndI) {
+        ZNGLogVerbose(@"Received a feedLocked event, but it appears to be from our own typing.  Clearing any existing locked description.");
+        self.activeConversation.lockedDescription = nil;
+    } else {
+        ZNGLogInfo(@"Conversation was locked: %@", description);
+        self.activeConversation.lockedDescription = description;
+    }
 }
 
 - (void) feedUnlocked:(NSArray *)data

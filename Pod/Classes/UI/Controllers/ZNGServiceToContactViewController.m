@@ -626,7 +626,7 @@ static void * KVOContext = &KVOContext;
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEvent * event = [self eventAtIndexPath:indexPath];
-    NSString * senderUUID = [event senderId];
+    NSString * senderUUID = event.message.triggeredByUser.userId ?: [event senderId];
     NSString * name;
     
     if ([event isMessage] && !event.message.isOutbound) {

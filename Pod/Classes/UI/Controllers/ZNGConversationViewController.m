@@ -360,6 +360,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
+
 - (void) showOrHideLoadEarlierMessagesButton
 {
     BOOL moreEventsExist = (self.conversation.events != 0) && ([self.conversation.events count] < self.conversation.totalEventCount);

@@ -17,4 +17,6 @@
 @property (nonatomic, strong) NSString * lastName;
 @property (nonatomic, strong) NSString * title;
 
+- (NSString *) displayName;
+
 @end

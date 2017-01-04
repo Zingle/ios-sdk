@@ -37,6 +37,7 @@ PODS:
     - Mantle/extobjc (= 1.5.8)
   - Mantle/extobjc (1.5.8)
   - MGSwipeTableCell (1.5.6)
+  - SocketRocket (0.5.1)
   - ZingleSDK (1.1.0):
     - AFNetworking (~> 2.5)
     - Analytics (~> 3.0)
@@ -45,6 +46,7 @@ PODS:
     - JVFloatLabeledTextField
     - Mantle (~> 1.0)
     - MGSwipeTableCell
+    - SocketRocket
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -62,7 +64,8 @@ SPEC CHECKSUMS:
   JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
   Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
-  ZingleSDK: 1ed0df2b30437ea22f94b34646c3da857784ae85
+  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+  ZingleSDK: b23fe35f918de4ceed7850e2a1586f774a3914d1
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

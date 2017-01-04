@@ -18,10 +18,11 @@
 @class ZNGEvent;
 @class ZingleSession;
 @class ZNGEventClient;
+@class ZNGSocketClient;
 
-extern NSString * const ZNGConversationParticipantTypeContact;
-extern NSString * const ZNGConversationParticipantTypeService;
-extern NSString * const ZNGConversationParticipantTypeLabel;
+extern NSString * _Nonnull const ZNGConversationParticipantTypeContact;
+extern NSString * _Nonnull const ZNGConversationParticipantTypeService;
+extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 
 @interface ZNGConversation : NSObject
 {
@@ -34,7 +35,7 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  *  Depending on the concrete subclass, this array may contain only messages, messages and notes, all events,
  *   or something different depending on the implementation of eventTypes.
  */
-@property (nonatomic, strong) NSArray<ZNGEvent *> * events;
+@property (nonatomic, strong, nullable) NSArray<ZNGEvent *> * events;
 
 @property (nonatomic) NSInteger totalEventCount;
 
@@ -55,29 +56,36 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  */
 @property (nonatomic) BOOL automaticallyRefreshesOnPushNotification;
 
-@property (nonatomic, readonly) ZNGMessageClient * messageClient;
-@property (nonatomic, readonly) ZNGEventClient * eventClient;
+@property (nonatomic, readonly, nullable) ZNGMessageClient * messageClient;
+@property (nonatomic, readonly, nullable) ZNGEventClient * eventClient;
+@property (nonatomic, strong, nullable) ZNGSocketClient * socketClient;
 
 /**
  *  The display name for the other end of this conversation.
  *  e.g. if this is a person messaging Hotel Chicago Front Desk, "Hotel Chicago Front Desk"
  */
-@property (nonatomic, readonly) NSString * remoteName;
+@property (nonatomic, readonly, nullable) NSString * remoteName;
+
+/**
+ *  If this conversation is locked by someone else's input or by an automation, a description of the cause will be in this string.
+ *  This is usually nil, indicating an unlocked conversation.
+ */
+@property (nonatomic, strong, nullable) NSString * lockedDescription;
 
 /**
  *  Initializing without a ZNGMessageClient is disallowed
  */
-- (id) init NS_UNAVAILABLE;
+- (nonnull id) init NS_UNAVAILABLE;
 
 /**
  *  Initializer.  This is intended to be subclassed and should never be called directly.
  */
-- (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient;
+- (nonnull id) initWithMessageClient:(nonnull ZNGMessageClient *)messageClient eventClient:(nonnull ZNGEventClient *)eventClient;
 
 /**
  *  Initializer to copy details from an existing conversation.  This is used for convenience to switch to and from detailed event conversations.
  */
-- (id) initWithConversation:(ZNGConversation *)conversation;
+- (nonnull id) initWithConversation:(nonnull ZNGConversation *)conversation;
 
 /**
  *  Populates the events array with the most recent data.
@@ -97,43 +105,43 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  *  Marks the specified messages as read, only if they do not already have read_at dates.
  *  Messages that have already been marked read are ignored.
  */
-- (void)markMessagesAsRead:(NSArray<ZNGMessage *> *)messages;
+- (void)markMessagesAsRead:(nullable NSArray<ZNGMessage *> *)messages;
 
 /**
  *  Marks all unread messages as read.
  */
 - (void)markAllUnreadMessagesAsRead;
 
-- (void)sendMessageWithBody:(NSString *)body
-                    success:(void (^)(ZNGStatus* status))success
-                    failure:(void (^) (ZNGError *error))failure;
+- (void)sendMessageWithBody:(nonnull NSString *)body
+                    success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
+                    failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;
 
-- (void)sendMessageWithBody:(NSString *)body
-                     images:(NSArray<UIImage *> *)images
-                    success:(void (^)(ZNGStatus* status))success
-                    failure:(void (^) (ZNGError *error))failure;
+- (void)sendMessageWithBody:(nonnull NSString *)body
+                     images:(NSArray<UIImage *> * _Nullable)images
+                    success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
+                    failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;
 
-- (ZNGEvent *) priorEvent:(ZNGEvent *)event;
+- (nullable ZNGEvent *) priorEvent:(nonnull ZNGEvent *)event;
 
 /**
  *  Returns the last message sent by the same type of person, meaning this will be the prior message sent by the contact
  *   if the supplied message is sent by a contact.  If it is a service, this will likely be the prior message sent by the
  *   same person as a service, but it may also be a different employee.
  */
-- (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message;
+- (nullable ZNGMessage *) priorMessageWithSameDirection:(nonnull ZNGMessage *)message;
 
 /**
  *  @returns The most recent message sent from the contact to a service
  */
-- (ZNGMessage *) mostRecentInboundMessage;
+- (nullable ZNGMessage *) mostRecentInboundMessage;
 
 /**
  *  @returns The most recent message in either direction
  */
-- (ZNGMessage *) mostRecentMessage;
+- (nullable ZNGMessage *) mostRecentMessage;
 
 #pragma mark - Protected methods that can be called by subclasses
-- (void) appendEvents:(NSArray<ZNGEvent *> *)events;
+- (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;
 
 #pragma mark - Protected methods to be overridden by subclasses
 
@@ -143,17 +151,17 @@ extern NSString * const ZNGConversationParticipantTypeLabel;
  *
  *  Default implementation returns @[@"message"]
  */
-- (NSArray<NSString *> *)eventTypes;
+- (nullable NSArray<NSString *> *)eventTypes;
 
-- (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification;
+- (BOOL) pushNotificationRelevantToThisConversation:(nonnull NSNotification *)notification;
 
-- (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events;
-- (ZNGNewMessage *)freshMessage;
-- (ZNGParticipant *)sender;
-- (ZNGParticipant *)receiver;
+- (void) addSenderNameToEvents:(nullable NSArray<ZNGEvent *> *)events;
+- (nonnull ZNGNewMessage *)freshMessage;
+- (nonnull ZNGParticipant *)sender;
+- (nonnull ZNGParticipant *)receiver;
 
 // The ID of the local user, either contact ID or service ID
-- (NSString *)meId;
+- (nonnull NSString *)meId;
 
 
 @end

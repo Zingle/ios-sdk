@@ -10,6 +10,7 @@
 #endif
 #endif
 
+#import "NSURL+Zingle.h"
 #import "ZNGAccountClient.h"
 #import "ZNGAutomationClient.h"
 #import "ZNGBaseClient.h"
@@ -22,6 +23,7 @@
 #import "ZNGMessageClient.h"
 #import "ZNGNotificationsClient.h"
 #import "ZNGServiceClient.h"
+#import "ZNGSocketClient.h"
 #import "ZNGTemplateClient.h"
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGAnalytics.h"

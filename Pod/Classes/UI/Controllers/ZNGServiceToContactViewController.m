@@ -37,8 +37,17 @@ static NSString * const KVOContactChannelsPath = @"conversation.contact.channels
 static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
+static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
+
 
 static void * KVOContext = &KVOContext;
+
+@interface JSQMessagesViewController (PrivateInsetManipulation)
+
+- (void)jsq_updateCollectionViewInsets;
+- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
+
+@end
 
 @implementation ZNGServiceToContactViewController
 {
@@ -58,6 +67,8 @@ static void * KVOContext = &KVOContext;
     NSUInteger spamZIndex;
     
     ZNGMessage * messageToForward;
+    
+    NSTimer * textViewChangeTimer;
 }
 
 @dynamic conversation;
@@ -81,6 +92,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
+        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -93,6 +105,7 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
+        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -105,6 +118,7 @@ static void * KVOContext = &KVOContext;
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
 }
 
 - (void) dealloc
@@ -113,6 +127,7 @@ static void * KVOContext = &KVOContext;
         dispatch_source_cancel(emphasizeTimer);
     }
     
+    [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
@@ -142,6 +157,9 @@ static void * KVOContext = &KVOContext;
     
     touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
     spamZIndex = INT_MAX;
+    
+    self.typingIndicatorContainerView.hidden = YES;
+    self.typingIndicatorTextLabel.text = nil;
     
     [self updateConfirmedButton];
     [self setupBannerContainer];
@@ -182,10 +200,121 @@ static void * KVOContext = &KVOContext;
             [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactCustomFieldsPath]) {
             [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
+        } else if ([keyPath isEqualToString:KVOInputLockedPath]) {
+            NSString * oldLockedString = change[NSKeyValueChangeOldKey];
+            NSString * lockedString = change[NSKeyValueChangeNewKey];
+            
+            if (![oldLockedString isKindOfClass:[NSString class]]) {
+                oldLockedString = nil;
+            }
+            if (![lockedString isKindOfClass:[NSString class]]) {
+                lockedString = nil;
+            }
+            
+            NSAttributedString * message = nil;
+            
+            if ([self.conversation.lockedDescription length] > 0) {
+                message = [self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription];
+            }
+            
+            self.typingIndicatorTextLabel.attributedText = message;
+            self.typingIndicatorContainerView.hidden = ([message length] == 0);
+            [self updateTypingIndicatorEmoji];
+            
+            BOOL justBecameLocked = (([oldLockedString length] == 0) && ([lockedString length] > 0));
+            BOOL needToScrollBackToBottom = NO;
+            
+            if (justBecameLocked) {
+                // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
+                needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
+            }
+            
+            [self jsq_updateCollectionViewInsets];
+            
+            if (needToScrollBackToBottom) {
+                [self scrollToBottomAnimated:YES];
+            }
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void) updateTypingIndicatorEmoji
+{
+    NSString * lowercaseLockedDescription = [self.conversation.lockedDescription lowercaseString];
+    BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
+    BOOL inAutomation = [lowercaseLockedDescription containsString:@"in automation:"];
+    static NSString * const wiggleKey = @"wiggle";
+    BOOL shouldWiggle = userResponding;
+    
+    if (userResponding) {
+        self.typingIndicatorEmojiLabel.text = @"\U0001F4AC";
+    } else if (inAutomation) {
+        self.typingIndicatorEmojiLabel.text = @"\U0001F916";
+    } else {
+        self.typingIndicatorEmojiLabel.text = nil;
+    }
+    
+    if (shouldWiggle) {
+        CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
+        wiggle.keyPath = @"transform";
+        
+        CGFloat wiggleAngle = 0.42;
+        NSValue * noWiggle = [NSValue valueWithCATransform3D:CATransform3DIdentity];
+        
+        CATransform3D leftWiggleTransform = CATransform3DMakeRotation(wiggleAngle, 0.0, 0.0, 1.0);
+        leftWiggleTransform = CATransform3DScale(leftWiggleTransform, 1.2, 1.2, 1.0);
+        CATransform3D rightWiggleTransform = CATransform3DMakeRotation(-wiggleAngle, 0.0, 0.0, 1.0);
+        rightWiggleTransform = CATransform3DScale(rightWiggleTransform, 1.2, 1.2, 1.0);
+        
+        NSValue * leftWiggle = [NSValue valueWithCATransform3D:leftWiggleTransform];
+        NSValue * rightWiggle = [NSValue valueWithCATransform3D:rightWiggleTransform];
+        
+        wiggle.values = @[noWiggle, noWiggle, leftWiggle, rightWiggle, noWiggle];
+        wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
+        
+        wiggle.duration = 2.0;
+        wiggle.repeatCount = FLT_MAX;
+        
+        [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];
+    } else {
+        [self.typingIndicatorEmojiLabel.layer removeAllAnimations];
+    }
+}
+
+- (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)description
+{
+    // We'll try to find a typical "is responding" string and bold the name before it.
+    NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
+    NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
+    
+    if (isRespondingRange.location != NSNotFound) {
+        rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
+    } else {
+        // This description is not a "is responding" deal.  Check for automation.
+        NSRange inAutomationRange = [description rangeOfString:@"in automation:" options:NSCaseInsensitiveSearch];
+        
+        if (inAutomationRange.location != NSNotFound) {
+            NSUInteger firstCharacterToBold = inAutomationRange.location + inAutomationRange.length;
+            
+            if (firstCharacterToBold < [description length]) {
+                rangeToBoldify = NSMakeRange(firstCharacterToBold, ([description length] - firstCharacterToBold));
+            }
+        }
+    }
+    
+    if (rangeToBoldify.location == NSNotFound) {
+        return [[NSAttributedString alloc] initWithString:description];
+    }
+    
+    CGFloat fontSize = self.typingIndicatorTextLabel.font.pointSize;
+    UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
+    
+    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:description];
+    [text addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
+    
+    return text;
 }
 
 - (ZNGContact *) contact
@@ -586,6 +715,18 @@ static void * KVOContext = &KVOContext;
     }];
 }
 
+#pragma mark - Inset manipulation
+- (void) jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
+{
+    CGFloat extraBottom = 0.0;
+    
+    if ([self.typingIndicatorTextLabel.text length] > 0) {
+        extraBottom = self.typingIndicatorContainerView.frame.size.height + self.extraSpaceAboveTypingIndicator;
+    }
+    
+    return [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraBottom];
+}
+
 #pragma mark - Collection view shenanigans
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
@@ -713,6 +854,28 @@ static void * KVOContext = &KVOContext;
     } else {
         [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
     }
+}
+
+#pragma mark - Text view delegate
+- (void) textViewDidChange:(UITextView *)textView
+{
+    if (textView == self.inputToolbar.contentView.textView) {
+        [textViewChangeTimer invalidate];
+        
+        if ([textView.text length] == 0) {
+            textViewChangeTimer = nil;
+            [self.conversation userClearedInput];
+        } else {
+            textViewChangeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_textChanged) userInfo:nil repeats:NO];
+        }
+    }
+    
+    [super textViewDidChange:textView];
+}
+
+- (void) _textChanged
+{
+    [self.conversation userDidType:self.inputToolbar.contentView.textView.text];
 }
 
 #pragma mark - Actions

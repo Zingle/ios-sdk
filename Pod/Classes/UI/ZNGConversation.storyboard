@@ -33,6 +33,32 @@
                                 <collectionViewLayout key="collectionViewLayout" id="3QA-vc-BCn" customClass="ZNGConversationFlowLayout"/>
                                 <cells/>
                             </collectionView>
+                            <view opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="iWA-dO-3bV">
+                                <rect key="frame" x="0.0" y="528" width="375" height="26"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="💬" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qsr-lM-mNk">
+                                        <rect key="frame" x="350" y="5" width="17" height="16"/>
+                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Someone is responding" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHX-Je-yfE">
+                                        <rect key="frame" x="209.5" y="5" width="132.5" height="16"/>
+                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                                        <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="WHX-Je-yfE" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="top" constant="5" id="FXV-56-Pbs"/>
+                                    <constraint firstAttribute="bottom" secondItem="WHX-Je-yfE" secondAttribute="bottom" constant="5" id="RTx-Mo-5Ul"/>
+                                    <constraint firstItem="qsr-lM-mNk" firstAttribute="baseline" secondItem="WHX-Je-yfE" secondAttribute="baseline" id="VWT-CR-0uo"/>
+                                    <constraint firstItem="qsr-lM-mNk" firstAttribute="leading" secondItem="WHX-Je-yfE" secondAttribute="trailing" constant="8" id="ca3-8Y-T85"/>
+                                    <constraint firstItem="WHX-Je-yfE" firstAttribute="centerY" secondItem="iWA-dO-3bV" secondAttribute="centerY" id="mJa-8H-Ha4"/>
+                                    <constraint firstAttribute="trailing" secondItem="qsr-lM-mNk" secondAttribute="trailing" constant="8" id="sPc-9k-ixE"/>
+                                </constraints>
+                            </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqn-aA-lFp" customClass="ZNGServiceConversationInputToolbar">
                                 <rect key="frame" x="0.0" y="554" width="375" height="113"/>
                                 <constraints>
@@ -43,9 +69,12 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="iWA-dO-3bV" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="7dA-3e-6d0"/>
                             <constraint firstAttribute="trailing" secondItem="G72-K8-cSu" secondAttribute="trailing" id="COI-bv-zcs"/>
+                            <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="bottom" id="JvL-Pt-bfH"/>
                             <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="n5E-he-CGo"/>
+                            <constraint firstAttribute="trailing" secondItem="iWA-dO-3bV" secondAttribute="trailing" id="oym-kt-s8p"/>
                             <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="sKk-9e-V7y"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="top" secondItem="eYw-Gk-ZwV" secondAttribute="top" id="sPw-m9-Cyf"/>
                             <constraint firstAttribute="bottom" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="wV1-0d-sIq"/>
@@ -58,13 +87,16 @@
                         <outlet property="inputToolbar" destination="Uqn-aA-lFp" id="vJK-sj-akg"/>
                         <outlet property="toolbarBottomLayoutGuide" destination="wV1-0d-sIq" id="xSh-Mk-TTu"/>
                         <outlet property="toolbarHeightConstraint" destination="gry-0L-4u8" id="5h1-71-KIe"/>
+                        <outlet property="typingIndicatorContainerView" destination="iWA-dO-3bV" id="57A-Ya-pZB"/>
+                        <outlet property="typingIndicatorEmojiLabel" destination="qsr-lM-mNk" id="ixN-Rj-REX"/>
+                        <outlet property="typingIndicatorTextLabel" destination="WHX-Je-yfE" id="QhX-Hi-TH3"/>
                         <segue destination="EHd-00-ynV" kind="presentation" identifier="editContact" id="phR-j8-hwa"/>
                         <segue destination="ZM1-vb-ioJ" kind="presentation" identifier="forward" id="IQl-0u-ULV"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kff-vr-U3e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1193" y="437"/>
+            <point key="canvasLocation" x="1192.8" y="436.73163418290858"/>
         </scene>
         <!--Forward Message-->
         <scene sceneID="ckw-5B-vgj">

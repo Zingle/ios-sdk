@@ -144,6 +144,7 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
     if (![self.sessionManager.baseURL isEqual:url]) {
         ZNGLogInfo(@"Creating new AF HTTP session manager for new URL of %@", urlString);
         self.sessionManager = [[self class] anonymousSessionManagerWithURL:url];
+        [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
     }
 }
@@ -153,8 +154,6 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
  */
 + (AFHTTPSessionManager *) anonymousSessionManagerWithURL:(NSURL *)url
 {
-    [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
-
     AFHTTPSessionManager * session = [[AFHTTPSessionManager alloc] initWithBaseURL:url];
     session.responseSerializer = [AFJSONResponseSerializer serializer];
     session.requestSerializer = [AFJSONRequestSerializer serializer];

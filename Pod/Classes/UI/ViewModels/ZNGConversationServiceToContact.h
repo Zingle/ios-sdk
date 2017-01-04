@@ -40,7 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
           usingChannel:(ZNGChannel * __nullable)aChannel
      withMessageClient:(ZNGMessageClient *)messageClient
            eventClient:(ZNGEventClient *)eventClient
-         contactClient:(ZNGContactClient *)contactClient NS_DESIGNATED_INITIALIZER;
+         contactClient:(ZNGContactClient *)contactClient
+          socketClient:(ZNGSocketClient *)socketClient NS_DESIGNATED_INITIALIZER;
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient NS_UNAVAILABLE;
 
@@ -52,6 +53,16 @@ NS_ASSUME_NONNULL_BEGIN
  *   should not be called until conversation data has loaded.)
  */
 - (ZNGChannel *) defaultChannelForContact;
+
+/**
+ *  Tell the server that the user is typing a response
+ */
+- (void) userDidType:(nullable NSString *)pendingInput;
+
+/**
+ *  Tell the server that the user cleared the input field.  This is called automatically whenever a message is sent.
+ */
+- (void) userClearedInput;
 
 - (void) addInternalNote:(NSString *)note
                  success:(void (^ _Nullable)(ZNGStatus* status))success

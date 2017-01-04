@@ -97,6 +97,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/JVFloatLabeledTextField-iOS9.3/JVFloatLabeledTextField.framework"
   install_framework "$BUILT_PRODUCTS_DIR/MGSwipeTableCell-iOS9.3/MGSwipeTableCell.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/SocketRocket-iOS9.3/SocketRocket.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
@@ -108,6 +109,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "$BUILT_PRODUCTS_DIR/JVFloatLabeledTextField-iOS9.3/JVFloatLabeledTextField.framework"
   install_framework "$BUILT_PRODUCTS_DIR/MGSwipeTableCell-iOS9.3/MGSwipeTableCell.framework"
   install_framework "$BUILT_PRODUCTS_DIR/Mantle-iOS9.3/Mantle.framework"
+  install_framework "$BUILT_PRODUCTS_DIR/SocketRocket-iOS9.3/SocketRocket.framework"
   install_framework "$BUILT_PRODUCTS_DIR/ZingleSDK-iOS9.3/ZingleSDK.framework"
 fi
 if [ "${COCOAPODS_PARALLEL_CODE_SIGN}" == "true" ]; then

@@ -22,6 +22,7 @@
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
+#import "ZNGSocketClient.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -43,8 +44,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     NSDate * serviceSetDate;
     
     NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
-    
-    ZNGUserAuthorization * userAuthorization;
     
     UIStoryboard * _storyboard;
 }
@@ -401,13 +400,16 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     
+    self.socketClient = [[ZNGSocketClient alloc] initWithSession:self];
+    [self.socketClient connect];
+    
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }
 
 - (void) retrieveUserObject
 {
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
-        userAuthorization = theUserAuthorization;
+        self.userAuthorization = theUserAuthorization;
         [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to retrieve current user info from the root URL: %@", error);
@@ -469,11 +471,12 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     if (conversation == nil) {
         conversation = [[ZNGConversationServiceToContact alloc] initFromService:self.service
                                                                       toContact:contact
-                                                              withCurrentUserId:userAuthorization.userId
+                                                              withCurrentUserId:self.userAuthorization.userId
                                                                    usingChannel:nil
                                                               withMessageClient:self.messageClient
                                                                     eventClient:self.eventClient
-                                                                  contactClient:self.contactClient];
+                                                                  contactClient:self.contactClient
+                                                                   socketClient:self.socketClient];
         [allLoadedConversationIds addObject:contact.contactId];
     }
     
@@ -489,6 +492,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     // This may or may not actually have an effect, depending on if we initialized a new conversation or switched types above.q
     [self.conversationCache setObject:conversation forKey:contact.contactId];
 
+    self.socketClient.activeConversation = conversation;
+    
     [conversation loadRecentEventsErasingOlderData:NO];
     return conversation;
 }
@@ -503,6 +508,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         BOOL correctType = (self.showDetailedEvents == isDetailedEvents);
         
         if (correctType) {
+            self.socketClient.activeConversation = conversation;
             [conversation loadRecentEventsErasingOlderData:NO];
             completion(conversation);
             return;

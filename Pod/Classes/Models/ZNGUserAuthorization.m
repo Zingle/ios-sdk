@@ -22,4 +22,26 @@
              };
 }
 
+- (NSString *)displayName
+{
+    NSMutableString * name = [[NSMutableString alloc] init];
+    
+    if ([self.firstName length] > 0) {
+        [name appendString:self.firstName];
+        [name appendString:@" "];
+    }
+    
+    if ([self.lastName length] > 0) {
+        [name appendString:self.lastName];
+    }
+    
+    NSString * displayName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+
+    if ([displayName length] > 0) {
+        return displayName;
+    }
+    
+    return @"Someone";
+}
+
 @end

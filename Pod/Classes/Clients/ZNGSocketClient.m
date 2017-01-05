@@ -93,6 +93,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     ZNGLogVerbose(@"Request session cookie through a POST...");
     
+    if (initializingSession) {
+        ZNGLogDebug(@"Already starting connection.  Ignoring call to %s", __func__);
+    }
+    
     authSucceeded = NO;
     initializingSession = YES;
     

@@ -19,6 +19,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 @implementation ZNGMessage
 {
     BOOL startedDownloadingAttachments;
+    
+    NSAttributedString * attributedText;
+    NSUInteger numLoadedImagesInAttributedText;
 }
 
 #pragma mark - Initialization
@@ -155,27 +158,34 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (NSAttributedString *) attributedText
 {
+    NSUInteger numLoadedImages = [self.imageAttachments count];
+    NSUInteger loadingImageCount = [self.attachments count] - numLoadedImages;
+
+    if ((attributedText != nil) && (numLoadedImagesInAttributedText == [self.imageAttachments count])) {
+        return attributedText;
+    }
+    
     NSString * nonWhitespaceBody = [self.body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     BOOL bodyPresent = ([nonWhitespaceBody length] > 0);
     NSString * bodyString = bodyPresent ? self.body : @"";
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:bodyString];
     
     // Attach any loaded images
-    for (UIImage * image in self.imageAttachments) {
+    [self.imageAttachments enumerateObjectsUsingBlock:^(UIImage * _Nonnull image, NSUInteger idx, BOOL * _Nonnull stop) {
         ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
         attachment.image = image;
         attachment.maxDisplayHeight = 200.0;
+        
+        ZNGLogVerbose(@"Initializing a text attachment for %@", self.attachments[idx]);
         
         NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
         NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:spacingString];
         NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
         [string appendAttributedString:spacing];
         [string appendAttributedString:imageString];
-    }
+    }];
     
     // Add a loading indicator
-    NSUInteger loadingImageCount = [self.attachments count] - [self.imageAttachments count];
-    
     if (loadingImageCount > 0) {
         NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
         NSString * placeholderString = [NSString stringWithFormat:@"%@<Loading %llu image attachment%@>", spacingString, (unsigned long long)loadingImageCount, (loadingImageCount != 1) ? @"s" : @""];
@@ -183,6 +193,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         NSAttributedString * placeholderAttributedString = [[NSAttributedString alloc] initWithString:placeholderString attributes:attributes];
         [string appendAttributedString:placeholderAttributedString];
     }
+    
+    attributedText = string;
+    numLoadedImagesInAttributedText = numLoadedImages;
     
     return string;
 }

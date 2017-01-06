@@ -36,20 +36,26 @@
 
 @end
 
+static const int zngLogLevel = ZNGLogLevelVerbose;
+
 
 @implementation ZNGBubblesSizeCalculator
+{
+    NSCache * cache;
+}
 
 #pragma mark - Init
 
-- (instancetype)initWithCache:(NSCache *)cache
+- (instancetype)initWithCache:(NSCache *)theCache
            minimumBubbleWidth:(NSUInteger)minimumBubbleWidth
         usesFixedWidthBubbles:(BOOL)usesFixedWidthBubbles
 {
-    NSParameterAssert(cache != nil);
+    NSParameterAssert(theCache != nil);
     NSParameterAssert(minimumBubbleWidth > 0);
     
     self = [super init];
     if (self) {
+        cache = theCache;
         _minimumBubbleWidth = minimumBubbleWidth;
         _usesFixedWidthBubbles = usesFixedWidthBubbles;
         _layoutWidthForFixedWidthBubbles = 0.0f;
@@ -63,10 +69,10 @@
 
 - (instancetype)init
 {
-    NSCache *cache = [NSCache new];
-    cache.name = @"ZNGBubblesSizeCalculator";
-    cache.countLimit = 200;
-    return [self initWithCache:cache
+    NSCache * aCache = [[NSCache alloc] init];
+    aCache.name = @"ZNGBubblesSizeCalculator";
+    aCache.countLimit = 200;
+    return [self initWithCache:aCache
             minimumBubbleWidth:[UIImage jsq_bubbleCompactImage].size.width
          usesFixedWidthBubbles:NO];
 }
@@ -90,6 +96,31 @@
                               atIndexPath:(NSIndexPath *)indexPath
                                withLayout:(JSQMessagesCollectionViewFlowLayout *)layout
 {
+    ZNGEvent * event = (ZNGEvent *)messageData;
+    
+    if (![event isKindOfClass:[ZNGEvent class]]) {
+        ZNGLogError(@"Non-ZNGEvent object used as message data for a message bubble.  This is unexpected.");
+        return CGSizeZero;
+    }
+    
+    NSString * idIncludingImageCount;
+    
+    if ([event.message.attachments count] == 0) {
+        idIncludingImageCount = event.eventId;
+    } else {
+        // We have one or more attachments
+        idIncludingImageCount = [NSString stringWithFormat:@"%@-%llu", event.eventId, (unsigned long long)[event.message.imageAttachments count]];
+    }
+    
+    NSValue * cachedSize = [cache objectForKey:idIncludingImageCount];
+    
+    if (cachedSize != nil) {
+        ZNGLogVerbose(@"Using cached size value");
+        return [cachedSize CGSizeValue];
+    }
+    
+    ZNGLogVerbose(@"No cached size value could be found.  Calculating message size.");
+    
     CGSize finalSize = CGSizeZero;
     
     CGSize avatarSize = [self jsq_avatarSizeForMessageData:messageData withLayout:layout];
@@ -107,23 +138,15 @@
     
     NSUInteger loadedImagesCount = 0;
     
-    if ([messageData isKindOfClass:[ZNGEvent class]]) {
-        ZNGEvent * event = (ZNGEvent *)messageData;
-        loadedImagesCount = [event.message.imageAttachments count];
-        NSMutableAttributedString * string = [[event attributedText] mutableCopy];
-        [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
-        
-        CGFloat additionalHeight = ((loadedImagesCount + 1.0) * self.additionalInset * 2.0);
+    loadedImagesCount = [event.message.imageAttachments count];
+    NSMutableAttributedString * string = [[event attributedText] mutableCopy];
+    [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
+    
+    CGFloat additionalHeight = ((loadedImagesCount + 1.0) * self.additionalInset * 2.0);
 
-        // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
-        stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
-        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + additionalHeight);
-    } else {
-        stringRect = [[messageData text] boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX)
-                                                      options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics)
-                                                   attributes:@{ NSFontAttributeName : layout.messageBubbleFont }
-                                                      context:nil];
-    }
+    // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
+    stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
+    stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + additionalHeight);
     
     CGSize stringSize = CGRectIntegral(stringRect).size;
     
@@ -139,6 +162,8 @@
     
     finalSize = CGSizeMake(finalWidth, stringSize.height + verticalInsets);
 
+    [cache setObject:[NSValue valueWithCGSize:finalSize] forKey:idIncludingImageCount];
+    
     return finalSize;
 }
 

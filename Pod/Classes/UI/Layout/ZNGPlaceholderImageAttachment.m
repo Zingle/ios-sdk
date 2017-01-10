@@ -28,7 +28,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self = [super init];
     
     if (self != nil) {
-        imageSize = theImageSize;
+        
+        CGSize size = theImageSize;
+        
+        if (CGSizeEqualToSize(size, CGSizeZero)) {
+            size = kDefaultPlaceholderSize;
+        }
+        
+        imageSize = size;
         _backgroundColor = [UIColor lightGrayColor];
 //        _iconTintColor = [UIColor grayColor];
         

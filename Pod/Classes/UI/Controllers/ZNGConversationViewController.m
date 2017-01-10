@@ -203,7 +203,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.isVisible = YES;
     
     if (showingImageView) {
+        // Reset the scroll setting to normal now that we have returned from an image view.
         self.automaticallyScrollsToMostRecentMessage = YES;
+        showingImageView = NO;
     }
     
     [self markAllVisibleMessagesAsRead];
@@ -410,6 +412,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             
             ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
+            
+            if (!hasDisplayedInitialData) {
+                // We have to manually scroll to the bottom for mystery UICollectionView/JSQMessagesViewController reasons.
+                // finishReceivingMessageAnimated: never actually scrolls down below our bottom content inset.  I tried so hard to fix it and failed.  :(
+                //
+                // I suspect that the core problem here is that our content inset is not properly taken into account until one time through the run loop.  We load
+                //  too fast for UIKit to have all of our positioning and sizing data.  Silly UIKit.
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
+                    [self.collectionView setContentOffset:bottomOffset animated:NO];
+                });
+            }
+            
             break;
         }
             
@@ -421,14 +436,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             ZNGLogVerbose(@"Reloading collection view with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self.collectionView reloadData];
     }
-}
-
-// Remove after temporary debugging
-- (void)finishReceivingMessageAnimated:(BOOL)animated {
-    
-    ZNGLogVerbose(@"Finish receiving messages called with %llu items", (unsigned long long)[self collectionView:self.collectionView numberOfItemsInSection:0]);
-    
-    [super finishReceivingMessageAnimated:animated];
 }
 
 // Using method stolen from http://stackoverflow.com/a/26401767/3470757 to insert/reload without scrolling

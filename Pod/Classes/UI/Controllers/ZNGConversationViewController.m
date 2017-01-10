@@ -430,7 +430,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 // Using method stolen from http://stackoverflow.com/a/26401767/3470757 to insert/reload without scrolling
-- (void) performCollectionViewUpdatesWithoutScrolling:(void (^)())updates
+- (void) performCollectionViewUpdatesWithoutScrollingFromBottom:(void (^)())updates
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y;
 
@@ -448,7 +448,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     pendingInsertionCount = [indexes count];
     
-    [self performCollectionViewUpdatesWithoutScrolling:^{
+    [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
         [self.collectionView insertItemsAtIndexPaths:indexes];
         pendingInsertionCount = 0;
     }];
@@ -459,23 +459,24 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGMessage * message = notification.object;
     NSIndexPath * indexPath = [self indexPathForEventWithId:message.messageId];
     
-    if (indexPath == nil) {
-        // This cell is not even in our collection view.  We do not care.
-        return;
+    NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
+    NSIndexPath * topPath = [visibleIndexPaths firstObject];
+    NSComparisonResult comparison = [topPath compare:indexPath];
+    
+    if (comparison == NSOrderedAscending) {
+        // The cell we are refreshing is above our current screen.  We need to keep our bottom offset.
+        [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
+            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        }];
+    } else {
+        // The cell we are refreshing is below.  Do not scroll.
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        
+        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        
+        [CATransaction commit];
     }
-    
-    ZNGLogDebug(@"Reloading cell %llu due to image load", (unsigned long long)indexPath.row);
-    
-    NSArray<NSIndexPath *> * visibleCellIndexPaths = [self.collectionView indexPathsForVisibleItems];
-    NSIndexPath * bottomVisibleCellIndexPath = [[visibleCellIndexPaths sortedArrayUsingSelector:@selector(compare:)] lastObject];
-
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
-
-    [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-    [self.collectionView scrollToItemAtIndexPath:bottomVisibleCellIndexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
-
-    [CATransaction commit];
 }
 
 #pragma mark - Text view delegate

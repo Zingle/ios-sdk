@@ -527,7 +527,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         message.attachments = nullImageLinks;
-        message.imageAttachments = newMessage.outgoingImageAttachments;
+        message.outgoingImageAttachments = newMessage.outgoingImageAttachments;
     }
     
     ZNGEvent * event = [ZNGEvent eventForNewMessage:message];

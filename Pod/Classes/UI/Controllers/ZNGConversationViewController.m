@@ -988,7 +988,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         // Disable text view user interaction to prevent nonsense touch interception on devices when touching images.  If this is left as YES,
         //  the cell's tap gesture recognizer never fires when touching an image.
-        cell.textView.userInteractionEnabled = ([event.message.imageAttachments count] == 0);
+        NSUInteger loadedImageCount = [event.message.imageAttachmentsByName count] + [event.message.outgoingImageAttachments count];
+        cell.textView.userInteractionEnabled = (loadedImageCount == 0);
 
         [cell.tapGestureRecognizer addTarget:self action:@selector(handleTouchInMessageBubble:)];
         return cell;

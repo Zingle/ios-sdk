@@ -16,6 +16,7 @@
 #import "ZNGUserAuthorizationClient.h"
 #import "ZNGAnalytics.h"
 #import <objc/runtime.h>
+#import "ZNGImageSizeCache.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -115,6 +116,9 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDeviceTokenRegistered:) name:DeviceTokenUpdatedNotification object:nil];
+        
+        // Allow our image size cache to load well ahead of it when it will be needed.
+        [ZNGImageSizeCache sharedCache];
     }
     
     return self;

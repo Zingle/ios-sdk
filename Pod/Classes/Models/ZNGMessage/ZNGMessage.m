@@ -13,8 +13,10 @@
 #import "JSQMessagesMediaPlaceholderView.h"
 #import "ZNGImageAttachment.h"
 #import "UIColor+ZingleSDK.h"
+#import "ZNGImageSizeCache.h"
+#import "ZNGPlaceholderImageAttachment.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelVerbose;
 
 @implementation ZNGMessage
 {
@@ -31,12 +33,25 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     if (self != nil) {
         if ([self isMediaMessage]) {
-            self.imageAttachments = @[];
+            self.imageAttachmentsByName = [[NSMutableDictionary alloc] init];
             [self downloadAttachmentsIfNecessary];
         }
     }
     
     return self;
+}
+
++ (dispatch_queue_t) imageDownloadingQueue
+{
+    static dispatch_once_t onceToken;
+    static dispatch_queue_t queue;
+    
+    dispatch_once(&onceToken, ^{
+        queue = dispatch_queue_create("com.zingleme.ZNGMessage.imageDownloadingQueue", 0);
+        dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
+    });
+    
+    return queue;
 }
 
 + (NSValueTransformer *) bodyJSONTransformer
@@ -63,7 +78,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     startedDownloadingAttachments = YES;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
+    dispatch_async([[self class] imageDownloadingQueue], ^{
         for (NSString * path in self.attachments) {
             NSURL * url = [NSURL URLWithString:path];
             
@@ -87,8 +102,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             }
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSMutableArray<UIImage *> * mutableImages = [self mutableArrayValueForKey:NSStringFromSelector(@selector(imageAttachments))];
-                [mutableImages addObject:theImage];
+                self.imageAttachmentsByName[path] = theImage;
                 [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
             });
         }
@@ -158,10 +172,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (NSAttributedString *) attributedText
 {
-    NSUInteger numLoadedImages = [self.imageAttachments count];
-    NSUInteger loadingImageCount = [self.attachments count] - numLoadedImages;
+    NSUInteger numLoadedImages = [self.imageAttachmentsByName count];
 
-    if ((attributedText != nil) && (numLoadedImagesInAttributedText == [self.imageAttachments count])) {
+    if ((attributedText != nil) && (numLoadedImagesInAttributedText == [self.imageAttachmentsByName count])) {
         return attributedText;
     }
     
@@ -170,13 +183,38 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     NSString * bodyString = bodyPresent ? self.body : @"";
     NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:bodyString];
     
-    // Attach any loaded images
-    [self.imageAttachments enumerateObjectsUsingBlock:^(UIImage * _Nonnull image, NSUInteger idx, BOOL * _Nonnull stop) {
-        ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
-        attachment.image = image;
+    __block NSUInteger outgoingImageAttachmentIndex = 0;
+    
+    // Attach images and placeholders
+    [self.attachments enumerateObjectsUsingBlock:^(NSString *  _Nonnull path, NSUInteger idx, BOOL * _Nonnull stop) {
+        UIImage * image;
+        
+        if ([path isKindOfClass:[NSNull class]]) {
+            // This may be an outgoing message with attached images.
+            if (outgoingImageAttachmentIndex < [self.outgoingImageAttachments count]) {
+                image = self.outgoingImageAttachments[outgoingImageAttachmentIndex];
+                outgoingImageAttachmentIndex++;
+            }
+        } else {
+            image = self.imageAttachmentsByName[path];
+        }
+        
+        ZNGImageAttachment * attachment;
+        
+        if (image != nil) {
+            attachment = [[ZNGImageAttachment alloc] init];
+            attachment.image = image;
+            ZNGLogVerbose(@"Initializing a text attachment for %@", [path lastPathComponent]);
+        } else {
+            // We do not have the image loaded.  Load a placeholder.  Use correct size data if we have it cached.
+            CGSize imageSize = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:path];
+            attachment = [[ZNGPlaceholderImageAttachment alloc] initWithSize:imageSize];
+            
+            ZNGLogVerbose(@"Initializing a placeholder image attachment for %@", [path lastPathComponent]);
+        }
+        
         attachment.maxDisplayHeight = 200.0;
         
-        ZNGLogVerbose(@"Initializing a text attachment for %@", self.attachments[idx]);
         
         NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
         NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:spacingString];
@@ -184,15 +222,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [string appendAttributedString:spacing];
         [string appendAttributedString:imageString];
     }];
-    
-    // Add a loading indicator
-    if (loadingImageCount > 0) {
-        NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
-        NSString * placeholderString = [NSString stringWithFormat:@"%@<Loading %llu image attachment%@>", spacingString, (unsigned long long)loadingImageCount, (loadingImageCount != 1) ? @"s" : @""];
-        NSDictionary * attributes = @{ NSForegroundColorAttributeName : [UIColor zng_gray] };
-        NSAttributedString * placeholderAttributedString = [[NSAttributedString alloc] initWithString:placeholderString attributes:attributes];
-        [string appendAttributedString:placeholderAttributedString];
-    }
     
     attributedText = string;
     numLoadedImagesInAttributedText = numLoadedImages;
@@ -222,7 +251,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
              @"sending" : [NSNull null],
-             @"imageAttachments" : [NSNull null]
+             NSStringFromSelector(@selector(imageAttachmentsByName)) : [NSNull null],
+             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null]
              };
 }
 

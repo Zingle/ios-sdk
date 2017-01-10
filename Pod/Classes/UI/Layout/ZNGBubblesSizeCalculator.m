@@ -36,7 +36,7 @@
 
 @end
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 
 @implementation ZNGBubblesSizeCalculator
@@ -109,7 +109,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
         idIncludingImageCount = event.eventId;
     } else {
         // We have one or more attachments
-        idIncludingImageCount = [NSString stringWithFormat:@"%@-%llu", event.eventId, (unsigned long long)[event.message.imageAttachments count]];
+        idIncludingImageCount = [NSString stringWithFormat:@"%@-%llu", event.eventId, (unsigned long long)[event.message.imageAttachmentsByName count]];
     }
     
     NSValue * cachedSize = [cache objectForKey:idIncludingImageCount];
@@ -138,7 +138,7 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
     
     NSUInteger loadedImagesCount = 0;
     
-    loadedImagesCount = [event.message.imageAttachments count];
+    loadedImagesCount = [event.message.imageAttachmentsByName count];
     NSMutableAttributedString * string = [[event attributedText] mutableCopy];
     [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
     

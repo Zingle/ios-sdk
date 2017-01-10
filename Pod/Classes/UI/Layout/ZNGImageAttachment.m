@@ -7,10 +7,12 @@
 //
 
 #import "ZNGImageAttachment.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZNGImageAttachment
 {
-    CGFloat imageScale;
     UIImage * scaledImage;
 }
 
@@ -32,15 +34,16 @@
 
 - (void) setImageScale:(CGFloat)newImageScale
 {
-    if (imageScale == newImageScale) {
+    if (_imageScale == newImageScale) {
         return;
     }
     
-    imageScale = newImageScale;
+    _imageScale = newImageScale;
     scaledImage = nil;
     
-    if ((newImageScale == 0.0) || (newImageScale == 1.0)) {
+    if ((newImageScale <= 0.0) || (newImageScale >= 1.0)) {
         // We can use default scale.
+        _imageScale = 0.0;
         return;
     }
     
@@ -63,7 +66,9 @@
 - (CGRect) attachmentBoundsForTextContainer:(NSTextContainer *)textContainer proposedLineFragment:(CGRect)lineFrag glyphPosition:(CGPoint)position characterIndex:(NSUInteger)charIndex
 {
     if ((self.image.size.height == 0) || (self.image.size.width == 0)) {
-        return [super attachmentBoundsForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
+        CGRect bounds = [super attachmentBoundsForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
+        ZNGLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
+        return bounds;
     }
     
     CGFloat downscaleHeight = self.maxDisplayHeight / self.image.size.height;
@@ -79,7 +84,9 @@
     
     [self setImageScale:downscale];
     
-    return CGRectIntegral(CGRectMake(0.0, 0.0, self.image.size.width * downscale, self.image.size.height * downscale));
+    CGRect bounds = CGRectIntegral(CGRectMake(0.0, 0.0, self.image.size.width * downscale, self.image.size.height * downscale));
+    ZNGLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
+    return bounds;
 }
 
 @end

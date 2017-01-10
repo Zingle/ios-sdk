@@ -44,9 +44,14 @@
 @property (nonatomic, copy) NSString * senderDisplayName;
 
 /**
- *  KVO compliant array that will be loaded with image data from attachments
+ *  KVO compliant dictionary that will be loaded with image data from attachments
  */
-@property (nonatomic, strong) NSArray<UIImage *> * imageAttachments;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> * imageAttachmentsByName;
+
+/**
+ *  Used only for transient outgoing message data objects.  This entire ZNGMessage object will be replaced once the server acknowledges the outbound message.
+ */
+@property (nonatomic, strong) NSArray<UIImage *> * outgoingImageAttachments;
 
 /**
  *  If this message was sent from a service and has trigger-er information, that will be returned.  Otherwise, the sender ID will be returned.

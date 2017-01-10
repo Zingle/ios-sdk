@@ -74,6 +74,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGGradientLoadingView * loadingGradient;
     
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
+    
+    BOOL caTransactionToDisableAnimationsPushed;
 }
 
 @dynamic collectionView;
@@ -434,14 +436,17 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y;
 
-    [CATransaction begin];
-    [CATransaction setDisableActions:YES];
+    if (!caTransactionToDisableAnimationsPushed) {
+        [CATransaction begin];
+        [CATransaction setDisableActions:YES];
+        caTransactionToDisableAnimationsPushed = YES;
+    }
     
     [self.collectionView performBatchUpdates:updates completion:^(BOOL finished) {
         self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentSize.height - bottomOffset);
+        [CATransaction commit];
+        caTransactionToDisableAnimationsPushed = NO;
     }];
-    
-    [CATransaction commit];
 }
 
 - (void) insertEventsAtIndexesWithoutScrolling:(NSArray<NSIndexPath *> *)indexes
@@ -463,19 +468,25 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSIndexPath * topPath = [visibleIndexPaths firstObject];
     NSComparisonResult comparison = [topPath compare:indexPath];
     
-    if (comparison == NSOrderedAscending) {
+    if (comparison == NSOrderedDescending) {
         // The cell we are refreshing is above our current screen.  We need to keep our bottom offset.
         [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
             [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
         }];
     } else {
         // The cell we are refreshing is below.  Do not scroll.
-        [CATransaction begin];
-        [CATransaction setDisableActions:YES];
-        
-        [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-        
-        [CATransaction commit];
+        if (!caTransactionToDisableAnimationsPushed) {
+            [CATransaction begin];
+            [CATransaction setDisableActions:YES];
+            caTransactionToDisableAnimationsPushed = YES;
+        }
+
+        [self.collectionView performBatchUpdates:^{
+            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+        } completion:^(BOOL finished) {
+            caTransactionToDisableAnimationsPushed = NO;
+            [CATransaction commit];
+        }];
     }
 }
 

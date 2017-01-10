@@ -465,7 +465,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSIndexPath * indexPath = [self indexPathForEventWithId:message.messageId];
     
     NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
-    NSIndexPath * topPath = [visibleIndexPaths firstObject];
+    NSIndexPath * topPath = [visibleIndexPaths lastObject];
     NSComparisonResult comparison = [topPath compare:indexPath];
     
     if (comparison == NSOrderedDescending) {
@@ -474,7 +474,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
         }];
     } else {
-        // The cell we are refreshing is below.  Do not scroll.
+        // The cell we are refreshing is below or on screen.  Do not scroll.
         if (!caTransactionToDisableAnimationsPushed) {
             [CATransaction begin];
             [CATransaction setDisableActions:YES];

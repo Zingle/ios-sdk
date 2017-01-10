@@ -9,7 +9,7 @@
 #import "ZNGImageAttachment.h"
 #import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGImageAttachment
 {

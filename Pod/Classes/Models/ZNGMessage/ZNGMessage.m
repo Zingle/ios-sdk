@@ -16,7 +16,7 @@
 #import "ZNGImageSizeCache.h"
 #import "ZNGPlaceholderImageAttachment.h"
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGMessage
 {

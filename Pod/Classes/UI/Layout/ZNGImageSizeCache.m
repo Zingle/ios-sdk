@@ -10,7 +10,7 @@
 #import "ZNGLogging.h"
 #import "ZNGMessage.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 #define kCacheFileName @"imageSizeCache.dat"
 

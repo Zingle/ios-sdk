@@ -9,7 +9,7 @@
 #import "ZNGPlaceholderImageAttachment.h"
 #import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 #define kDefaultPlaceholderSize CGSizeMake(250.0, 250.0)
 

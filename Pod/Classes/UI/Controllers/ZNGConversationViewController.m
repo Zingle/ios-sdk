@@ -471,6 +471,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGMessage * message = notification.object;
     NSIndexPath * indexPath = [self indexPathForEventWithId:message.messageId];
     
+    if (indexPath == nil) {
+        // This message is not in our conversation
+        return;
+    }
+    
     NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
     NSIndexPath * topPath = [visibleIndexPaths lastObject];
     NSComparisonResult comparison = [topPath compare:indexPath];

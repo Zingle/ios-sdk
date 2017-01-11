@@ -208,7 +208,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         } else {
             // We do not have the image loaded.  Load a placeholder.  Use correct size data if we have it cached.
             CGSize imageSize = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:path];
-            attachment = [[ZNGPlaceholderImageAttachment alloc] initWithSize:imageSize];
+            ZNGPlaceholderImageAttachment * placeholderAttachment = [[ZNGPlaceholderImageAttachment alloc] initWithSize:imageSize];
+            placeholderAttachment.iconTintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
+            placeholderAttachment.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
+            
+            attachment = placeholderAttachment;
             
             ZNGLogVerbose(@"Initializing a placeholder image attachment for %@", [path lastPathComponent]);
         }

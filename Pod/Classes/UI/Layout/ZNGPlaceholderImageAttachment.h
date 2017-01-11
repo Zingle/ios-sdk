@@ -19,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  The color shown behind the small placeholderImage asset before the image has been set.  This can be set to either nil or [UIColor clearColor] for none.
  *
- *  Defaults to [UIColor lightGrayColor];
+ *  Defaults to [UIColor clearColor];
  */
 @property (nonatomic, strong, nullable) UIColor * backgroundColor;
 
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///**
 // *  Tint color applied to the iconImage.  Defaults to [UIColor grayColor].
 // */
-//@property (nonatomic, strong, nullable) UIColor * iconTintColor;
+@property (nonatomic, strong, nullable) UIColor * iconTintColor;
 
 
 NS_ASSUME_NONNULL_END

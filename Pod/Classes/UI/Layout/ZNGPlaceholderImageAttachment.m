@@ -36,11 +36,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
         
         imageSize = size;
-        _backgroundColor = [UIColor lightGrayColor];
-//        _iconTintColor = [UIColor grayColor];
+        _backgroundColor = [UIColor clearColor];
         
         NSBundle * bundle = [NSBundle bundleForClass:[ZNGPlaceholderImageAttachment class]];
-        _iconImage = [[UIImage imageNamed:@"attachImage" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        _iconImage = [[UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        _iconTintColor = [UIColor grayColor];
         
         [self renderPlaceholder];
     }
@@ -62,6 +62,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) setBackgroundColor:(UIColor *)backgroundColor
 {
     _backgroundColor = backgroundColor;
+    [self renderPlaceholder];
+}
+
+- (void) setIconTintColor:(UIColor *)iconTintColor
+{
+    _iconTintColor = iconTintColor;
     [self renderPlaceholder];
 }
 
@@ -91,12 +97,25 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     CGContextSetFillColorWithColor(context, backgroundColor.CGColor);
     CGContextAddRect(context, rect);
     CGContextDrawPath(context, kCGPathFill);
-    
+
     // Placeholder icon
-    if (self.iconImage != nil) {
+    if ((self.iconImage != nil) && (self.iconTintColor != nil)) {
         CGPoint center = CGPointMake(CGRectGetMidX(rect), CGRectGetMidY(rect));
-        CGRect placeholderRect = CGRectIntegral(CGRectMake(center.x - (self.iconImage.size.width * 0.5), center.y - (self.iconImage.size.height * 0.5), self.iconImage.size.width, self.iconImage.size.height));
-        [self.iconImage drawInRect:placeholderRect];
+
+        // Translate our origin to the bottom left corner of where we want the image in our center
+        CGContextTranslateCTM(context, center.x - (self.iconImage.size.width * 0.5), center.y + (self.iconImage.size.height * 0.5));
+        
+        // Flip our scale since BMPs love being upside down
+        CGContextScaleCTM(context, 1.0, -1.0);
+        
+        // Apply image as a mask
+        CGContextClipToMask(context, CGRectMake(0.0, 0.0, self.iconImage.size.width, self.iconImage.size.height), [self.iconImage CGImage]);
+
+        // Fill the masked space
+        [self.iconTintColor setFill];
+        CGContextFillRect(context, rect);
+        
+        // Drink a beer.
     }
     
     self.image = UIGraphicsGetImageFromCurrentImageContext();

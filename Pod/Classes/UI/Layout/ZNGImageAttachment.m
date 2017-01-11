@@ -73,14 +73,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     CGFloat downscaleHeight = self.maxDisplayHeight / self.image.size.height;
     CGFloat downscaleWidth = lineFrag.size.width / self.image.size.width;
+    CGFloat downscale = MIN(downscaleWidth, downscaleHeight);
     
-    if ((downscaleHeight >= 1.0) && (downscaleWidth >= 1.0)) {
+    if (downscale >= 1.0) {
         // Our image will fit as is
         [self setImageScale:1.0];
         return [super attachmentBoundsForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
     }
-    
-    CGFloat downscale = MIN(downscaleWidth, downscaleHeight);
     
     [self setImageScale:downscale];
     

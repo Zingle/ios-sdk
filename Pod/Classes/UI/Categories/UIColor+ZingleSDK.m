@@ -36,10 +36,7 @@
 
 + (UIColor *)zng_messageBubbleLightGrayColor
 {
-    return [UIColor colorWithRed:225.0f/255.0f
-                           green:225.0f/255.0f
-                            blue:225.0f/255.0f
-                           alpha:1.0f];
+    return [UIColor colorFromHexString:@"#F2F2F2"];
 }
 
 + (UIColor *)zng_unconfirmedMessageGreen

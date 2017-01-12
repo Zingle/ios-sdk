@@ -8,6 +8,7 @@
 
 #import "ZNGAvatarCache.h"
 #import "ZNGInitialsAvatar.h"
+#import "ZNGImageAvatar.h"
 #import "ZNGParticipant.h"
 
 @implementation ZNGAvatarCache
@@ -69,7 +70,25 @@
     return initials;
 }
 
-- (nullable id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid image:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing
+{
+    NSCache * cache = (isOutgoing) ? outgoingCache : incomingCache;
+    id <JSQMessageAvatarImageDataSource> avatar = [cache objectForKey:uuid];
+    
+    if (avatar == nil) {
+        UIColor * backgroundColor = nil;
+        
+        if (circleBackground) {
+            backgroundColor = (isOutgoing) ? self.outgoingBackgroundColor : self.incomingBackgroundColor;
+        }
+        
+        avatar = [[ZNGImageAvatar alloc] initWithImage:image backgroundColor:backgroundColor size:self.avatarSize];
+    }
+    
+    return avatar;
+}
+
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
 {
     NSCache * cache = (isOutgoing) ? outgoingCache : incomingCache;
     id <JSQMessageAvatarImageDataSource> avatar = [cache objectForKey:uuid];

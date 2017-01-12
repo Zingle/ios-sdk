@@ -773,7 +773,18 @@ static void * KVOContext = &KVOContext;
     if ([event isMessage] && !event.message.isOutbound) {
         NSString * firstName = [[self.conversation.contact firstNameFieldValue] value];
         NSString * lastName = [[self.conversation.contact lastNameFieldValue] value];
-        name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        
+        NSUInteger nameLength = [firstName length] + [lastName length];
+        
+        if (nameLength > 0) {
+            name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        } else {
+            // We do not have a name for this contact.
+            NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+            UIImage * avatarImage = [UIImage imageNamed:@"anonymousAvatar" inBundle:bundle compatibleWithTraitCollection:nil];
+            
+            return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID image:avatarImage useCircleBackground:NO outgoing:NO];
+        }
     } else if (event.automation.automationId != nil) {
         name = @"\U0001F916";   // Robot face emoji for an automation
         senderUUID = event.automation.automationId;
@@ -811,7 +822,7 @@ static void * KVOContext = &KVOContext;
             }
             
             NSString * displayString = [NSString stringWithFormat:@"\n%@",channelString];
-            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:12.0] };
+            NSDictionary * attributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:10.0] };
             NSAttributedString * attributedChannelString = [[NSAttributedString alloc] initWithString:displayString attributes:attributes];
             NSMutableAttributedString * mutableString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
             [mutableString appendAttributedString:attributedChannelString];

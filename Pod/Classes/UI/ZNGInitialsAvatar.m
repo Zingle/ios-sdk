@@ -19,7 +19,7 @@
     
     if (self != nil) {
         CGRect rect = CGRectMake(0.0, 0.0, size.width, size.height);
-        UIGraphicsBeginImageContextWithOptions(size, NO, [[UIScreen mainScreen] scale]);
+        UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
         CGContextRef context = UIGraphicsGetCurrentContext();
      
         CGContextSetFillColorWithColor(context, [backgroundColor CGColor]);

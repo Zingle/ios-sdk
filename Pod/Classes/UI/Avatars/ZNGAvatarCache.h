@@ -18,9 +18,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype) sharedCache;
 
 /**
+ *  Returns a cached avatar for this user if available, otherwise an avatar using the provided image.
+ *
+ *  @param circleBackground If this is set, the supplied image is drawn over a circle similar to an initials avatar.  Otherwise, the raw image is used (sized appropriately.)
+ */
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid image:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing;
+
+/**
  *  Returns an avatar image of the user's initials, either for an employee or a contact.  Results are cached and reused via provided UUID.
  */
-- (nullable id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
 
 @property (nonatomic, strong, nullable) UIColor * outgoingBackgroundColor;
 @property (nonatomic, strong, nullable) UIColor * outgoingTextColor;

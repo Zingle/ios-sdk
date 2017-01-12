@@ -32,11 +32,11 @@
         NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.alignment = NSTextAlignmentCenter;
         
-        self.dateTextAttributes = @{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14.0f],
+        self.dateTextAttributes = @{ NSFontAttributeName : [UIFont boldSystemFontOfSize:12.0f],
                                  NSForegroundColorAttributeName : color,
                                  NSParagraphStyleAttributeName : paragraphStyle };
         
-        self.timeTextAttributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:14.0f],
+        self.timeTextAttributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:12.0f],
                                  NSForegroundColorAttributeName : color,
                                  NSParagraphStyleAttributeName : paragraphStyle };
     }

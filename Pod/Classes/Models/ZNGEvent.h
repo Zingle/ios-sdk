@@ -12,6 +12,7 @@
 #import "ZNGMessage.h"
 
 @class ZNGContact;
+@class ZNGEventViewModel;
 
 @interface ZNGEvent : MTLModel<MTLJSONSerializing, JSQMessageData>
 
@@ -23,6 +24,11 @@
 @property(nonatomic, strong) ZNGUser* triggeredByUser;
 @property(nonatomic, strong) ZNGAutomation* automation;
 @property(nonatomic, strong) ZNGMessage* message;
+
+/**
+ *  An array of one ZNGEventViewModel in the case of an event with no attachments, up to at most one per attachment plus one text for a non-nil body.
+ */
+@property (nonatomic, readonly) NSArray<ZNGEventViewModel *> * viewModels;
 
 // Added after parsing:
 @property (nonatomic, copy) NSString * senderDisplayName;

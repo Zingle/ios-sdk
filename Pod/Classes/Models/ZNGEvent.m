@@ -7,6 +7,7 @@
 //
 
 #import "ZNGEvent.h"
+#import "ZNGEventViewModel.h"
 #import "ZNGContact.h"
 #import "ZingleValueTransformers.h"
 
@@ -57,8 +58,54 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
              @"createdAt" : @"created_at",
              @"triggeredByUser" : @"triggered_by_user",
              @"automation" : @"automation",
-             @"message" : @"message"
+             @"message" : @"message",
+             NSStringFromSelector(@selector(viewModels)) : [NSNull null]
              };
+}
+
+- (id) initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError *__autoreleasing *)error
+{
+    self = [super initWithDictionary:dictionaryValue error:error];
+    
+    if (self != nil) {
+        [self createViewModels];
+    }
+    
+    return self;
+}
+
+- (id) initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    
+    if (self != nil) {
+        [self createViewModels];
+    }
+    
+    return self;
+}
+
+- (void) createViewModels
+{
+    NSUInteger attachmentCount = [self.message.attachments count];
+    NSMutableArray<ZNGEventViewModel *> * viewModels = [[NSMutableArray alloc] initWithCapacity:(1 + attachmentCount)];
+    
+    NSUInteger viewModelIndex = 0;
+    
+    while (viewModelIndex < attachmentCount) {
+        ZNGEventViewModel * viewModel = [[ZNGEventViewModel alloc] initWithEvent:self index:viewModelIndex];
+        [viewModels addObject:viewModel];
+        viewModelIndex++;
+    }
+    
+    // If we had no attachments, we will always return one view model.
+    // If we have a body, we also have this one more view model.
+    if ((viewModelIndex == 0) || ([self.body length] > 0)) {
+        ZNGEventViewModel * viewModel = [[ZNGEventViewModel alloc] initWithEvent:self index:viewModelIndex];
+        [viewModels addObject:viewModel];
+    }
+    
+    _viewModels = viewModels;
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

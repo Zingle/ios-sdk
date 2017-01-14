@@ -16,6 +16,7 @@
 
 @class ZNGContact;
 @class ZNGEvent;
+@class ZNGEventViewModel;
 @class ZingleSession;
 @class ZNGEventClient;
 @class ZNGSocketClient;
@@ -36,6 +37,13 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
  *   or something different depending on the implementation of eventTypes.
  */
 @property (nonatomic, strong, nullable) NSArray<ZNGEvent *> * events;
+
+/**
+ *  KVO compliant array of events, expressed as ZNGEventViewModel objects.
+ *  Each ZNGEvent in the events array will have at least one ZNGEventViewModel in this array.
+ *  In the case of a message event with at least one image attachment, two or more ZNGEventViewModels will exist.
+ */
+@property (nonatomic, strong, nullable) NSArray<ZNGEventViewModel *> * eventViewModels;
 
 @property (nonatomic) NSInteger totalEventCount;
 

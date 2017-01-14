@@ -9,6 +9,7 @@
 #import "ZNGConversation.h"
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
+#import "ZNGEventViewModel.h"
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
 #import "ZingleSession.h"
@@ -192,10 +193,20 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (void) appendEvents:(NSArray<ZNGEvent *> *)events
 {
+    NSMutableArray<ZNGEventViewModel *> * viewModels = [[NSMutableArray alloc] init];
+    
+    for (ZNGEvent * event in events) {
+        [viewModels addObjectsFromArray:event.viewModels];
+    }
+    
     // Use insertion instead of addObjectsFromArray to get one batched KVO update
     NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([mutableEvents count], [events count])];
     [mutableEvents insertObjects:events atIndexes:indexSet];
+    
+    NSMutableArray<ZNGEventViewModel *> * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+    indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([mutableViewModels count], [viewModels count])];
+    [mutableViewModels insertObjects:viewModels atIndexes:indexSet];
 }
 
 #pragma mark - Grabbing older data
@@ -265,8 +276,17 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         return;
     }
     
+    NSMutableArray<ZNGEventViewModel *> * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+    NSMutableArray<ZNGEventViewModel *> * newViewModels = [[NSMutableArray alloc] init];
+    for (ZNGEvent * event in incomingEventsMinusOverlap) {
+        [newViewModels addObjectsFromArray:event.viewModels];
+    }
+    
     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [incomingEventsMinusOverlap count])];
     [mutableEvents insertObjects:incomingEventsMinusOverlap atIndexes:indexSet];
+    
+    indexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [newViewModels count])];
+    [mutableViewModels insertObjects:newViewModels atIndexes:indexSet];
 }
 
 #pragma mark - Parameters/Settings
@@ -442,6 +462,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 - (void) removeAnyPendingMessages
 {
     NSMutableIndexSet * pendingIndexes = [[NSMutableIndexSet alloc] init];
+    NSMutableIndexSet * pendingViewModelIndexes = [[NSMutableIndexSet alloc] init];
     
     [self.events enumerateObjectsUsingBlock:^(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
         if (event.message.sending) {
@@ -449,10 +470,19 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
     }];
     
+    [self.eventViewModels enumerateObjectsUsingBlock:^(ZNGEventViewModel * _Nonnull viewModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (viewModel.event.message.sending) {
+            [pendingViewModelIndexes addIndex:idx];
+        }
+    }];
+    
     if ([pendingIndexes count] > 0) {
         ZNGLogDebug(@"Removing %llu pending messages.", (unsigned long long)[pendingIndexes count]);
         NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
         [mutableEvents removeObjectsAtIndexes:pendingIndexes];
+        
+        NSMutableArray * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+        [mutableViewModels removeObjectsAtIndexes:pendingViewModelIndexes];
     }
 }
 
@@ -543,6 +573,9 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     if (pendingEvent != nil) {
         NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
         [mutableEvents addObject:pendingEvent];
+        
+        NSMutableArray * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+        [mutableViewModels addObjectsFromArray:pendingEvent.viewModels];
     } else {
         ZNGLogError(@"Unable to generate pending message event object.  Message will not appear as an in progress message.");
     }

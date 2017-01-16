@@ -9,12 +9,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JSQMessagesViewController/JSQMessageData.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZNGEvent;
 
-@interface ZNGEventViewModel : NSObject
+@interface ZNGEventViewModel : NSObject <JSQMessageData, JSQMessageMediaData>
 
 /**
  *  The index of this view model within the originiating event.

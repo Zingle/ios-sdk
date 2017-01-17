@@ -21,6 +21,10 @@ forCellWithReuseIdentifier:[ZNGConversationCellIncoming cellReuseIdentifier]];
     
     [self registerNib:[ZNGConversationCellOutgoing nib]
 forCellWithReuseIdentifier:[ZNGConversationCellOutgoing cellReuseIdentifier]];
+    
+    [self registerNib:[ZNGConversationCellIncoming nib] forCellWithReuseIdentifier:[ZNGConversationCellIncoming mediaCellReuseIdentifier]];
+    
+    [self registerNib:[ZNGConversationCellOutgoing nib] forCellWithReuseIdentifier:[ZNGConversationCellOutgoing mediaCellReuseIdentifier]];
 }
 
 @end

@@ -170,69 +170,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return self.body;
 }
 
-- (NSAttributedString *) attributedText
-{
-    NSUInteger numLoadedImages = [self.imageAttachmentsByName count];
-
-    if ((attributedText != nil) && (numLoadedImagesInAttributedText == [self.imageAttachmentsByName count])) {
-        return attributedText;
-    }
-    
-    NSString * nonWhitespaceBody = [self.body stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    BOOL bodyPresent = ([nonWhitespaceBody length] > 0);
-    NSString * bodyString = bodyPresent ? self.body : @"";
-    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:bodyString];
-    
-    __block NSUInteger outgoingImageAttachmentIndex = 0;
-    
-    // Attach images and placeholders
-    [self.attachments enumerateObjectsUsingBlock:^(NSString *  _Nonnull path, NSUInteger idx, BOOL * _Nonnull stop) {
-        UIImage * image;
-        
-        if ([path isKindOfClass:[NSNull class]]) {
-            // This may be an outgoing message with attached images.
-            if (outgoingImageAttachmentIndex < [self.outgoingImageAttachments count]) {
-                image = self.outgoingImageAttachments[outgoingImageAttachmentIndex];
-                outgoingImageAttachmentIndex++;
-            }
-        } else {
-            image = self.imageAttachmentsByName[path];
-        }
-        
-        ZNGImageAttachment * attachment;
-        
-        if (image != nil) {
-            attachment = [[ZNGImageAttachment alloc] init];
-            attachment.image = image;
-            ZNGLogVerbose(@"Initializing a text attachment for %@", [path lastPathComponent]);
-        } else {
-            // We do not have the image loaded.  Load a placeholder.  Use correct size data if we have it cached.
-            CGSize imageSize = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:path];
-            ZNGPlaceholderImageAttachment * placeholderAttachment = [[ZNGPlaceholderImageAttachment alloc] initWithSize:imageSize];
-            placeholderAttachment.iconTintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
-            placeholderAttachment.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
-            
-            attachment = placeholderAttachment;
-            
-            ZNGLogVerbose(@"Initializing a placeholder image attachment for %@", [path lastPathComponent]);
-        }
-        
-        attachment.maxDisplayHeight = 200.0;
-        
-        
-        NSString * spacingString = ([string length] > 0) ? @"\n\n" : @"";
-        NSAttributedString * spacing = [[NSAttributedString alloc] initWithString:spacingString];
-        NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
-        [string appendAttributedString:spacing];
-        [string appendAttributedString:imageString];
-    }];
-    
-    attributedText = string;
-    numLoadedImagesInAttributedText = numLoadedImages;
-    
-    return string;
-}
-
 #pragma mark - Serialization
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {

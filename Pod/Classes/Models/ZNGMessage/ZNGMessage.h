@@ -67,9 +67,4 @@
  */
 - (ZNGCorrespondent *) contactCorrespondent;
 
-/**
- *  An attributed string containing the body text plus any image attachments or loading image placeholders
- */
-- (NSAttributedString *) attributedText;
-
 @end

@@ -41,9 +41,4 @@
 - (BOOL) isMessage;
 - (BOOL) isNote;
 
-/**
- *  If this is a message with attachments, this attributedText will return all images in line in as text attachments.
- */
-- (NSAttributedString *) attributedText;
-
 @end

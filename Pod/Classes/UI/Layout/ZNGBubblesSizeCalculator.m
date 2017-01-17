@@ -20,6 +20,7 @@
 #import "UIImage+JSQMessages.h"
 
 #import "ZNGEvent.h"
+#import "ZNGEventViewModel.h"
 #import "ZNGMessage.h"
 
 #import "ZNGLogging.h"
@@ -96,23 +97,17 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                               atIndexPath:(NSIndexPath *)indexPath
                                withLayout:(JSQMessagesCollectionViewFlowLayout *)layout
 {
-    ZNGEvent * event = (ZNGEvent *)messageData;
+    ZNGEventViewModel * viewModel = (ZNGEventViewModel *)messageData;
     
-    if (![event isKindOfClass:[ZNGEvent class]]) {
-        ZNGLogError(@"Non-ZNGEvent object used as message data for a message bubble.  This is unexpected.");
+    if (![viewModel isKindOfClass:[ZNGEventViewModel class]]) {
+        ZNGLogError(@"Non-ZNGEventViewModel object (%@) used as message data for a message bubble.  This is unexpected.", NSStringFromClass([messageData class]));
         return CGSizeZero;
     }
     
-    NSString * idIncludingImageCount;
-    
-    if ([event.message.attachments count] == 0) {
-        idIncludingImageCount = event.eventId;
-    } else {
-        // We have one or more attachments
-        idIncludingImageCount = [NSString stringWithFormat:@"%@-%llu", event.eventId, (unsigned long long)[event.message.imageAttachmentsByName count]];
-    }
-    
-    NSValue * cachedSize = [cache objectForKey:idIncludingImageCount];
+    // Cache ID is event ID-itemIndex-number of loaded items.
+    // This means that, every time an image is loaded, all sizes for bubbles related to that message will be recalculated.
+    NSString * cacheID = [NSString stringWithFormat:@"%@-%llu-%llu", viewModel.event.eventId, (unsigned long long)viewModel.index, (unsigned long long)[viewModel.event.message.imageAttachmentsByName count]];
+    NSValue * cachedSize = [cache objectForKey:cacheID];
     
     if (cachedSize != nil) {
         ZNGLogVerbose(@"Using cached size value");
@@ -121,9 +116,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     ZNGLogVerbose(@"No cached size value could be found.  Calculating message size.");
     
-    CGSize finalSize = CGSizeZero;
-    
-    CGSize avatarSize = [self jsq_avatarSizeForMessageData:messageData withLayout:layout];
+    CGSize avatarSize = [self jsq_avatarSizeForMessageData:viewModel withLayout:layout];
     
     //  from the cell xibs, there is a 2 point space between avatar and bubble
     CGFloat spacingBetweenAvatarAndBubble = 2.0f;
@@ -132,23 +125,28 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     CGFloat horizontalFrameInsets = layout.messageBubbleTextViewFrameInsets.left + layout.messageBubbleTextViewFrameInsets.right;
     
     CGFloat horizontalInsetsTotal = horizontalContainerInsets + horizontalFrameInsets + spacingBetweenAvatarAndBubble + spacingBetweenAvatarAndEdgeOfCollectionView;
-    CGFloat maximumTextWidth = [self textBubbleWidthForLayout:layout] - avatarSize.width - layout.messageBubbleLeftRightMargin - horizontalInsetsTotal;
     
-    CGRect stringRect;
-    
-    NSUInteger loadedImagesCount = 0;
-    
-    loadedImagesCount = [event.message.imageAttachmentsByName count];
-    NSMutableAttributedString * string = [[event attributedText] mutableCopy];
-    [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
-    
-    CGFloat additionalHeight = ((loadedImagesCount + 1.0) * self.additionalInset * 2.0);
+    CGFloat additionalHeight = self.additionalInset * 2.0;
 
-    // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
-    stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
-    stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + additionalHeight);
     
-    CGSize stringSize = CGRectIntegral(stringRect).size;
+    CGSize finalSize = CGSizeZero;
+    
+    CGSize contentSize = CGSizeZero;
+    
+    if ([viewModel isMediaMessage]) {
+        contentSize = [viewModel mediaViewDisplaySize];
+    } else {
+        NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:[viewModel text]];
+        [string addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [string length])];
+        
+        CGFloat maximumTextWidth = [self textBubbleWidthForLayout:layout] - avatarSize.width - layout.messageBubbleLeftRightMargin - horizontalInsetsTotal;
+        
+        // We have to add 2 to the height for Apple reasons.  Don't ask.  See similar comment below from original JSQMessages code.
+        CGRect stringRect = [string boundingRectWithSize:CGSizeMake(maximumTextWidth, CGFLOAT_MAX) options:(NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading | NSStringDrawingUsesDeviceMetrics) context:nil];
+        stringRect = CGRectMake(stringRect.origin.x, stringRect.origin.y, stringRect.size.width, stringRect.size.height + additionalHeight);
+        
+        contentSize = stringRect.size;
+    }
     
     CGFloat verticalContainerInsets = layout.messageBubbleTextViewTextContainerInsets.top + layout.messageBubbleTextViewTextContainerInsets.bottom;
     CGFloat verticalFrameInsets = layout.messageBubbleTextViewFrameInsets.top + layout.messageBubbleTextViewFrameInsets.bottom;
@@ -158,11 +156,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     CGFloat verticalInsets = verticalContainerInsets + verticalFrameInsets + self.additionalInset;
     
     //  same as above, an extra 2 points of magix
-    CGFloat finalWidth = MAX(stringSize.width + horizontalInsetsTotal, self.minimumBubbleWidth) + self.additionalInset;
+    CGFloat finalWidth = MAX(contentSize.width + horizontalInsetsTotal, self.minimumBubbleWidth) + self.additionalInset;
     
-    finalSize = CGSizeMake(finalWidth, stringSize.height + verticalInsets);
+    finalSize = CGSizeMake(finalWidth, contentSize.height + verticalInsets);
 
-    [cache setObject:[NSValue valueWithCGSize:finalSize] forKey:idIncludingImageCount];
+    [cache setObject:[NSValue valueWithCGSize:finalSize] forKey:cacheID];
     
     return finalSize;
 }

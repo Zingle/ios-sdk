@@ -25,6 +25,7 @@
 #import "ZNGImageAttachment.h"
 #import "ZNGConversationCellOutgoing.h"
 #import "ZNGConversationCellIncoming.h"
+#import "ZNGEventViewModel.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -37,7 +38,7 @@ static const uint64_t PollingIntervalSeconds = 10;
 static const uint64_t PollingIntervalSeconds = 30;
 #endif
 
-static NSString * const EventsKVOPath = @"conversation.events";
+static NSString * const EventsKVOPath = @"conversation.eventViewModels";
 static NSString * const LoadingKVOPath = @"conversation.loading";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
@@ -144,6 +145,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     self.outgoingCellIdentifier = [ZNGConversationCellOutgoing cellReuseIdentifier];
     self.incomingCellIdentifier = [ZNGConversationCellIncoming cellReuseIdentifier];
+    self.outgoingMediaCellIdentifier = [ZNGConversationCellOutgoing cellReuseIdentifier];
+    self.incomingMediaCellIdentifier = [ZNGConversationCellIncoming cellReuseIdentifier];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
@@ -469,7 +472,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) notifyMediaMessageMediaDownloaded:(NSNotification *)notification
 {
     ZNGMessage * message = notification.object;
-    NSIndexPath * indexPath = [self indexPathForEventWithId:message.messageId];
+    NSArray<NSIndexPath *> * indexPaths = [self indexPathsForEventWithId:message.messageId];
+    NSIndexPath * indexPath = [indexPaths firstObject];
     
     if (indexPath == nil) {
         // This message is not in our conversation
@@ -483,7 +487,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if (comparison == NSOrderedDescending) {
         // The cell we are refreshing is above our current screen.  We need to keep our bottom offset.
         [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
-            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
         }];
     } else {
         // The cell we are refreshing is below or on screen.  Do not scroll.
@@ -494,7 +498,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
 
         [self.collectionView performBatchUpdates:^{
-            [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
+            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
         } completion:^(BOOL finished) {
             caTransactionToDisableAnimationsPushed = NO;
             [CATransaction commit];
@@ -707,17 +711,17 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) markAllVisibleMessagesAsRead
 {
     NSArray<NSIndexPath *> * visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
-    NSMutableArray<ZNGMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:[visibleIndexPaths count]];
+    NSMutableOrderedSet<ZNGMessage *> * messages = [[NSMutableOrderedSet alloc] initWithCapacity:[visibleIndexPaths count]];
     
     for (NSIndexPath * indexPath in visibleIndexPaths) {
-        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
         
         if ([event isMessage]) {
             [messages addObject:event.message];
         }
     }
     
-    [self markMessagesReadIfNecessary:messages];
+    [self markMessagesReadIfNecessary:[messages array]];
 }
 
 - (void) markMessagesReadIfNecessary:(NSArray<ZNGMessage *> *)messages
@@ -772,39 +776,54 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return [super isOutgoingMessage:messageItem];
 }
 
-- (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath
+- (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSArray<ZNGEvent *> * events = self.conversation.events;
-    return (indexPath.row < [events count]) ? events[indexPath.row] : nil;
+    NSArray<ZNGEventViewModel *> * viewModels = self.conversation.eventViewModels;
+    return (indexPath.row < [viewModels count]) ? viewModels[indexPath.row] : nil;
 }
 
-- (NSIndexPath *) indexPathForEventWithId:(NSString *)eventId
+- (NSArray<NSIndexPath *> *) indexPathsForEventWithId:(NSString *)eventId
 {
-    NSUInteger index = [self.conversation.events indexOfObjectPassingTest:^BOOL(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
-        return [event.eventId isEqualToString:eventId];
+    NSIndexSet * eventIndexSet = [self.conversation.eventViewModels indexesOfObjectsPassingTest:^BOOL(ZNGEventViewModel * _Nonnull viewModel, NSUInteger idx, BOOL * _Nonnull stop) {
+        return [viewModel.event.eventId isEqualToString:eventId];
     }];
-    return (index != NSNotFound) ? [NSIndexPath indexPathForRow:index inSection:0] : nil;
-}
-
-- (NSIndexPath *) indexPathForEvent:(ZNGEvent *)event
-{
-    return [self indexPathForEventWithId:event.eventId];
+    
+    if ([eventIndexSet count] == 0) {
+        return nil;
+    }
+    
+    NSMutableArray<NSIndexPath *> * paths = [[NSMutableArray alloc] initWithCapacity:[eventIndexSet count]];
+    for (NSUInteger i = [eventIndexSet firstIndex]; i <= [eventIndexSet lastIndex]; i++) {
+        [paths addObject:[NSIndexPath indexPathForRow:i inSection:0]];
+    }
+    
+    return paths;
 }
 
 - (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath
 {
-    NSIndexPath * backOne = [NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section];
-    return [self eventAtIndexPath:backOne];
+    ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
+    
+    for (NSInteger i = indexPath.row - 1; i >= 0; i--) {
+        // Is this event for the same event (i.e. an attachment for that same message)
+        ZNGEventViewModel * viewModel = self.conversation.eventViewModels[i];
+        if (![viewModel.event isEqual:thisEvent]) {
+            // No, it's a different one.  Hooray.
+            return viewModel.event;
+        }
+    }
+    
+    return nil;
 }
 
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self eventAtIndexPath:indexPath];
+    return [self eventViewModelAtIndexPath:indexPath];
 }
 
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
  
     if ([event.message isOutbound] == [self weAreSendingOutbound]) {
         return self.outgoingBubbleImageData;
@@ -842,7 +861,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     
     if ([event isMessage]) {
         [self markMessagesReadIfNecessary:@[event.message]];
@@ -853,7 +872,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (BOOL)collectionView:(JSQMessagesCollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     
     if ([event isMessage]) {
         return [super collectionView:collectionView shouldShowMenuForItemAtIndexPath:indexPath];
@@ -864,7 +883,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     
     if ([event isMessage]) {
         return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
@@ -904,7 +923,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return YES;
     }
     
-    ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
+    ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
     ZNGEvent * priorEvent = [self priorEventToIndexPath:indexPath];
     NSDate * thisEventTime = thisEvent.createdAt;
     NSDate * priorEventTime = priorEvent.createdAt;
@@ -923,7 +942,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 // Returns nil if we do not need to show a time this soon
 - (NSDate *) timeForEventAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * thisEvent = [self eventAtIndexPath:indexPath];
+    ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
     NSDate * thisEventTime = thisEvent.createdAt;
     return thisEventTime;
 }
@@ -966,12 +985,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return [self.conversation.events count] - pendingInsertionCount;
+    return [self.conversation.eventViewModels count] - pendingInsertionCount;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    ZNGEvent * event = viewModel.event;
     
     if ([event isMessage] || [event isNote]) {
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
@@ -979,43 +999,38 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         cell.alpha = event.message.sending ? 0.5 : 1.0;
         
-        UIColor * textColor;
-        
-        if ([event isNote]) {
-            textColor = self.internalNoteTextColor;
-        } else if ([self weAreSendingOutbound] == [event.message isOutbound]) {
-            textColor = self.outgoingTextColor;
-        } else {
-            textColor = self.incomingTextColor;
+        if (![viewModel isMediaMessage]) {
+            UIColor * textColor;
+            
+            if ([event isNote]) {
+                textColor = self.internalNoteTextColor;
+            } else if ([self weAreSendingOutbound] == [event.message isOutbound]) {
+                textColor = self.outgoingTextColor;
+            } else {
+                textColor = self.incomingTextColor;
+            }
+            
+            NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:[event text]];
+            JSQMessagesCollectionViewFlowLayout * layout = (JSQMessagesCollectionViewFlowLayout *)collectionView.collectionViewLayout;
+            
+            NSMutableDictionary * linkAttributes = [[NSMutableDictionary alloc] init];
+            linkAttributes[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle | NSUnderlinePatternSolid);
+            
+            if (textColor != nil) {
+                linkAttributes[NSForegroundColorAttributeName] = textColor;
+                [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
+            }
+            
+            if (layout.messageBubbleFont != nil) {
+                [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
+            }
+            
+            cell.textView.linkTextAttributes = linkAttributes;
+            cell.textView.attributedText = text;
         }
-        
-        NSMutableAttributedString * text = [[event attributedText] mutableCopy];
-        JSQMessagesCollectionViewFlowLayout * layout = (JSQMessagesCollectionViewFlowLayout *)collectionView.collectionViewLayout;
-        
-        NSMutableDictionary * linkAttributes = [[NSMutableDictionary alloc] init];
-        linkAttributes[NSUnderlineStyleAttributeName] = @(NSUnderlineStyleSingle | NSUnderlinePatternSolid);
-        
-        if (textColor != nil) {
-            linkAttributes[NSForegroundColorAttributeName] = textColor;
-            [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
-        }
-        
-        if (layout.messageBubbleFont != nil) {
-            [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
-        }
-        
-        cell.textView.linkTextAttributes = linkAttributes;
         
         cell.messageBubbleTopLabel.textColor = self.authorTextColor;
         
-        cell.textView.attributedText = text;
-        
-        // Disable text view user interaction to prevent nonsense touch interception on devices when touching images.  If this is left as YES,
-        //  the cell's tap gesture recognizer never fires when touching an image.
-        NSUInteger loadedImageCount = [event.message.imageAttachmentsByName count] + [event.message.outgoingImageAttachments count];
-        cell.textView.userInteractionEnabled = (loadedImageCount == 0);
-
-        [cell.tapGestureRecognizer addTarget:self action:@selector(handleTouchInMessageBubble:)];
         return cell;
     }
     

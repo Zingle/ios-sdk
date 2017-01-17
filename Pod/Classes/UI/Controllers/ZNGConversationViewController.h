@@ -14,6 +14,7 @@
 @class ZNGConversationCollectionView;
 @class ZNGMessage;
 @class ZNGEvent;
+@class ZNGEventViewModel;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -146,7 +147,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark - Protected methods used by subclasses
-- (ZNGEvent *) eventAtIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark - Abstract methods that must be overridden by subclasses
 - (BOOL) weAreSendingOutbound;

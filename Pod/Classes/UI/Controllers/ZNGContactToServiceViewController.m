@@ -10,6 +10,7 @@
 #import <JSQMessagesViewController/JSQMessagesCollectionViewCell.h>
 #import "ZNGConversationContactToService.h"
 #import "ZNGEvent.h"
+#import "ZNGEventViewModel.h"
 #import "UIColor+ZingleSDK.h"
 
 @implementation ZNGContactToServiceViewController
@@ -73,7 +74,7 @@
         return nil;
     }
     
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     
     if (![event.message isOutbound]) {
         // This message was sent by us.
@@ -130,7 +131,7 @@
 - (void)collectionView:(JSQMessagesCollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(delete:)) {
-        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
         ZNGConversationContactToService * conversation = (ZNGConversationContactToService *)self.conversation;
         
         if ((event.message != nil) && (self.allowDeletion)) {

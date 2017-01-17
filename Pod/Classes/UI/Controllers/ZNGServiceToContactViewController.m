@@ -27,6 +27,7 @@
 #import "ZNGLogging.h"
 #import "ZNGForwardingViewController.h"
 #import "ZNGAvatarCache.h"
+#import "ZNGEventViewModel.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -482,7 +483,7 @@ static void * KVOContext = &KVOContext;
 
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     
     BOOL isOutboundMessage = ([event isMessage] && [event.message isOutbound]);
     BOOL isInternalNote = [event isNote];
@@ -748,7 +749,7 @@ static void * KVOContext = &KVOContext;
 
 - (BOOL) contactChannelAtIndexPathChangedSincePriorMessage:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     ZNGEvent * priorEvent = [self.conversation priorEvent:event];
     
     // Have channels changed?
@@ -766,7 +767,7 @@ static void * KVOContext = &KVOContext;
 
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = [self eventAtIndexPath:indexPath];
+    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     NSString * senderUUID = event.message.triggeredByUser.userId ?: [event senderId];
     NSString * name;
     
@@ -801,7 +802,7 @@ static void * KVOContext = &KVOContext;
     
     // Check if we are showing a timestamp (i.e. super returned a string) and we want to display channel info (i.e. this user has more than one channel available)
     if (([attributedString length] > 0) && ([self shouldShowChannelInfoUnderTimestamps])) {
-        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
         ZNGChannel * channel = [[event.message contactCorrespondent] channel];
         
         if (channel != nil) {
@@ -847,7 +848,7 @@ static void * KVOContext = &KVOContext;
 - (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(forwardMessage:)) {
-        ZNGEvent * event = [self eventAtIndexPath:indexPath];
+        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
         return (self.allowForwarding && event.isMessage);
     }
     
@@ -857,7 +858,7 @@ static void * KVOContext = &KVOContext;
 - (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(forwardMessage:)) {
-        ZNGMessage * message = [[self eventAtIndexPath:indexPath] message];
+        ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
         
         if (message != nil) {
             [self _doForwardMessage:message];

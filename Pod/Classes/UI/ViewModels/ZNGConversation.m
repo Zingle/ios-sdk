@@ -53,6 +53,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     
     if (self != nil) {
         _events = @[];
+        _eventViewModels = @[];
         _messageClient = messageClient;
         _eventClient = eventClient;
         _pageSize = kDefaultPageSize;

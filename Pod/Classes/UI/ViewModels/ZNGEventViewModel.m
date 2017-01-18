@@ -124,6 +124,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
  
     if (image != nil) {
         imageView = [[UIImageView alloc] initWithImage:image];
+        
+        // Really we want aspect fit, but there are often some very small sizing mistakes when it comes to the interaction between the image sizing and the
+        //  collection view layout calculations.  Since we are adding a rounded corner mask to the image view anyway, it's OK if we slightly crop the edges here.
+        imageView.contentMode = UIViewContentModeScaleAspectFill;
+        
         return imageView;
     }
     
@@ -176,6 +181,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
         UIImage * placeholderIcon = [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
         UIImageView * placeholderIconImageView = [[UIImageView alloc] initWithImage:placeholderIcon];
+        placeholderIconImageView.translatesAutoresizingMaskIntoConstraints = NO;
         placeholderIconImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
         
         [placeholderView addSubview:placeholderIconImageView];

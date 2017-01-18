@@ -57,6 +57,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleMediaMaskData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleMediaMaskData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
@@ -166,6 +168,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     self.intenralNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
+    self.outgoingBubbleMediaMaskData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor blackColor]];
+    self.incomingBubbleMediaMaskData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor blackColor]];
     
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
@@ -395,8 +399,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             NSArray * insertions = [change[NSKeyValueChangeNewKey] isKindOfClass:[NSArray class]] ? change[NSKeyValueChangeNewKey] : nil;
                         
             // Check for the special case of messages being inserted at the head of our data
-            BOOL newDataIsAtHead = [[self.conversation.events firstObject] isEqual:[insertions firstObject]];
-            BOOL someDataAlreadyExisted = (([self.conversation.events count] - [insertions count]) > 0);
+            BOOL newDataIsAtHead = [[self.conversation.eventViewModels firstObject] isEqual:[insertions firstObject]];
+            BOOL someDataAlreadyExisted = (([self.conversation.eventViewModels count] - [insertions count]) > 0);
             if (newDataIsAtHead && someDataAlreadyExisted) {
                 NSIndexSet * indexes = [change[NSKeyValueChangeIndexesKey] isKindOfClass:[NSIndexSet class]] ? change[NSKeyValueChangeIndexesKey] : nil;
                 
@@ -836,6 +840,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return self.incomingBubbleImageData;
 }
 
+- (id<JSQMessageBubbleImageDataSource>) messageBubbleMediaMaskDataForEvent:(ZNGEvent *)event
+{
+    if ([event.message isOutbound] == [self weAreSendingOutbound]) {
+        return self.outgoingBubbleMediaMaskData;
+    }
+    
+    return self.incomingBubbleMediaMaskData;
+}
+
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     // No avatars
@@ -999,7 +1012,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         cell.alpha = event.message.sending ? 0.5 : 1.0;
         
-        if (![viewModel isMediaMessage]) {
+        if ([viewModel isMediaMessage]) {
+            if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {
+                ZNGConversationCellOutgoing * mediaCell = (ZNGConversationCellOutgoing *)cell;
+                id<JSQMessageBubbleImageDataSource> bubbleImageDataSource = [self messageBubbleMediaMaskDataForEvent:event];
+                mediaCell.mediaViewMaskingImage = [bubbleImageDataSource messageBubbleImage];
+            } else {
+                ZNGLogError(@"Collection view cell of type %@ does not respond to %@ as expected.", [cell class], NSStringFromSelector(@selector(setMediaViewMaskingImage:)));
+            }
+        } else {
             UIColor * textColor;
             
             if ([event isNote]) {

@@ -82,7 +82,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell bottom label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7Uc-dI-YDD" userLabel="Cell bottom label" customClass="JSQMessagesLabel">
-                        <rect key="frame" x="172" y="134" width="108" height="20"/>
+                        <rect key="frame" x="164" y="134" width="108" height="20"/>
                         <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" identifier="cell bottom label height" id="cPs-M4-tjX"/>
@@ -99,9 +99,9 @@
                 <constraint firstItem="jxM-YD-sVG" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" identifier="cell top label top" id="HYT-Tw-whz"/>
                 <constraint firstAttribute="trailing" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" identifier="space between avatar container and edge of cell" id="KLt-Ix-wDa"/>
                 <constraint firstItem="7Uc-dI-YDD" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" identifier="space between bottom label and bubble container" id="Ngq-ew-t2K"/>
-                <constraint firstItem="7Uc-dI-YDD" firstAttribute="trailing" secondItem="vLY-aM-0Dr" secondAttribute="trailing" identifier="cell bottom label right aligned with text view right" id="bUc-CW-ZG8"/>
                 <constraint firstAttribute="bottom" secondItem="7Uc-dI-YDD" secondAttribute="bottom" identifier="bottom label bottom space" id="gXo-9b-b1W"/>
                 <constraint firstAttribute="trailing" secondItem="p52-YN-yLu" secondAttribute="trailing" identifier="bubble top label right" id="gen-N0-uZj"/>
+                <constraint firstItem="y9b-D9-Q7W" firstAttribute="leading" secondItem="7Uc-dI-YDD" secondAttribute="trailing" constant="10" id="hzu-Cn-s67"/>
                 <constraint firstItem="7Uc-dI-YDD" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="bottom" identifier="vert. space between avatar container and bottom label" id="iiF-tn-5Ir"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="jxM-YD-sVG" secondAttribute="bottom" identifier="spacing between bubble top label and cell top label" id="jBD-JV-AWk"/>
                 <constraint firstItem="jxM-YD-sVG" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="cell top label left" id="qeB-G5-1Wq"/>

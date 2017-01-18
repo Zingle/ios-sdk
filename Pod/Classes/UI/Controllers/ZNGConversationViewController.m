@@ -164,7 +164,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     UIImage * bubbleImage = [UIImage imageNamed:@"zingleBubble" inBundle:bundle compatibleWithTraitCollection:nil];
     
-    JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:bubbleImage capInsets:UIEdgeInsetsZero];
+    UIEdgeInsets bubbleImageInsets = UIEdgeInsetsMake(6.0, 6.0, 7.0, 12.0);
+    
+    JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:bubbleImage capInsets:bubbleImageInsets];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
     self.intenralNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];

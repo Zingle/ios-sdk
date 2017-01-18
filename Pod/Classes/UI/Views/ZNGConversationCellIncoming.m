@@ -13,19 +13,25 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGConversationCellIncoming
 {
-    UIEdgeInsets mediaMaskCapInsets;
     CALayer * mediaMask;
 }
 
 - (void) setMediaViewMaskingImage:(UIImage *)mediaViewMaskingImage
 {
     _mediaViewMaskingImage = mediaViewMaskingImage;
-    mediaMaskCapInsets = mediaViewMaskingImage.capInsets;
     
     if (self.mediaView != nil) {
         mediaMask = [[CALayer alloc] init];
         mediaMask.contents = (id)[mediaViewMaskingImage CGImage];
         mediaMask.contentsScale = mediaViewMaskingImage.scale;
+        
+        if ((mediaViewMaskingImage.size.height > 0.0) && (mediaViewMaskingImage.size.width > 0.0)) {
+            mediaMask.contentsCenter = CGRectMake(mediaViewMaskingImage.capInsets.left / mediaViewMaskingImage.size.width,
+                                                  mediaViewMaskingImage.capInsets.top / mediaViewMaskingImage.size.height,
+                                                  (mediaViewMaskingImage.size.width - mediaViewMaskingImage.capInsets.right - mediaViewMaskingImage.capInsets.left) / mediaViewMaskingImage.size.width,
+                                                  (mediaViewMaskingImage.size.height - mediaViewMaskingImage.capInsets.bottom - mediaViewMaskingImage.capInsets.top) / mediaViewMaskingImage.size.height);
+            
+        }
         
         [self applyMediaViewMask];
     }
@@ -61,14 +67,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) applyMediaViewMask
 {
     mediaMask.frame = self.mediaView.layer.bounds;
-    mediaMask.contentsCenter = CGRectMake(mediaMaskCapInsets.left / mediaMask.frame.size.width,
-                                          mediaMaskCapInsets.top / mediaMask.frame.size.height,
-                                          1.0 / mediaMask.frame.size.width,
-                                          1.0/ mediaMask.frame.size.height);
+    
     self.mediaView.layer.mask = mediaMask;
     self.mediaView.layer.masksToBounds = YES;
     
-    ZNGLogDebug(@"Setting a %@ mask onto a %@ %@ media view", NSStringFromCGSize(mediaMask.frame.size), NSStringFromCGSize(self.mediaView.frame.size), [self.mediaView class]);
+    ZNGLogDebug(@"%p Setting a %@ mask with contentsCenter of %@ onto a %@ %@ media view", self, NSStringFromCGSize(mediaMask.frame.size), NSStringFromCGRect(mediaMask.contentsCenter), NSStringFromCGSize(self.mediaView.frame.size), [self.mediaView class]);
 }
 
 @end

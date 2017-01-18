@@ -812,6 +812,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return paths;
 }
 
+/**
+ *  The event prior to the supplied index path.  This may be multiple indexes behind the supplied index path if there are other event view model objects
+ *   for the same event above the index path
+ */
 - (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
@@ -823,6 +827,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             // No, it's a different one.  Hooray.
             return viewModel.event;
         }
+    }
+    
+    return nil;
+}
+
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row > 0) {
+        return [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
     }
     
     return nil;
@@ -945,9 +958,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    ZNGEvent * priorEvent = [self priorEventToIndexPath:indexPath];
+    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath];
+    
+    if ([thisEvent isEqual:priorEventViewModel.event]) {
+        // The bubble above this one is for the same event.  Don't break them up with a timestamp, you maniac.
+        return NO;
+    }
+    
     NSDate * thisEventTime = thisEvent.createdAt;
-    NSDate * priorEventTime = priorEvent.createdAt;
+    NSDate * priorEventTime = priorEventViewModel.event.createdAt;
     
     if ((thisEventTime != nil) && (priorEventTime != nil)) {
         NSTimeInterval timeSinceLastEvent = [thisEventTime timeIntervalSinceDate:priorEventTime];

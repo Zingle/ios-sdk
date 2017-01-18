@@ -158,6 +158,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     event.body = message.body;
     event.eventType = ZNGEventTypeMessage;
     event.createdAt = [NSDate date];
+    [event createViewModels];
     return event;
 }
 
@@ -169,6 +170,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     event.contactId = contact.contactId;
     event.createdAt = [NSDate date];
     event.senderDisplayName = @"Me";
+    [event createViewModels];
     return event;
 }
 

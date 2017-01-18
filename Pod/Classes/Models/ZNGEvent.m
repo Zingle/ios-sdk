@@ -90,17 +90,20 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     NSUInteger attachmentCount = [self.message.attachments count];
     NSUInteger outgoingAttachmentCount = [self.message.outgoingImageAttachments count];
     NSMutableArray<ZNGEventViewModel *> * viewModels = [[NSMutableArray alloc] initWithCapacity:(1 + attachmentCount)];
-    
+
     NSUInteger viewModelIndex = 0;
     
-    while (viewModelIndex < attachmentCount) {
+    // First we will make view models for any outgoing image attachments (since outgoing image attachments include both a nonsense [NSNull null] attachment object
+    //  and a usuable outgoingAttachment object.
+    while (viewModelIndex < outgoingAttachmentCount) {
         ZNGEventViewModel * viewModel = [[ZNGEventViewModel alloc] initWithEvent:self index:viewModelIndex];
         [viewModels addObject:viewModel];
         viewModelIndex++;
     }
     
-    if ((attachmentCount == 0) && (outgoingAttachmentCount > 0)) {
-        while (viewModelIndex < outgoingAttachmentCount) {
+    // If we had no outgoing attachments, we can now add the actual image attachments.
+    if (outgoingAttachmentCount == 0) {
+        while (viewModelIndex < attachmentCount) {
             ZNGEventViewModel * viewModel = [[ZNGEventViewModel alloc] initWithEvent:self index:viewModelIndex];
             [viewModels addObject:viewModel];
             viewModelIndex++;

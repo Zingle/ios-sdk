@@ -28,6 +28,7 @@
 #import "ZNGForwardingViewController.h"
 #import "ZNGAvatarCache.h"
 #import "ZNGEventViewModel.h"
+#import "ZNGUserAuthorization.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -791,6 +792,10 @@ static void * KVOContext = &KVOContext;
         senderUUID = event.automation.automationId;
     } else if (event.triggeredByUser.userId != nil) {
         name = [[NSString stringWithFormat:@"%@ %@", event.triggeredByUser.firstName, event.triggeredByUser.lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    } else if (event.message.sending) {
+        // This message is outbound from us.
+        name = [self.conversation.session.userAuthorization displayName];
+        senderUUID = self.conversation.session.userAuthorization.userId;
     }
     
     return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID name:name outgoing:[self isOutgoingMessage:event]];

@@ -41,6 +41,10 @@
         return displayName;
     }
     
+    if ([self.email length] > 0) {
+        return self.email;
+    }
+    
     return @"Someone";
 }
 

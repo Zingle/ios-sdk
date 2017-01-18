@@ -564,6 +564,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
     [self addSenderNameToEvents:@[event]];
     
+    [event createViewModels];
+    
     return event;
 }
 

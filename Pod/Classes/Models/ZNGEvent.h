@@ -38,6 +38,11 @@
 
 + (NSArray<NSString *> *) recognizedEventTypes;
 
+/**
+ *  Should only be explicitly called while creating outbound messages.
+ */
+- (void) createViewModels;
+
 - (BOOL) isMessage;
 - (BOOL) isNote;
 

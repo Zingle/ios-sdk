@@ -765,9 +765,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (BOOL)isOutgoingMessage:(id<JSQMessageData>)messageItem
 {
-    ZNGEvent * event = (ZNGEvent *)messageItem;
+    ZNGEvent * event;
     
-    if ([event isKindOfClass:[ZNGEvent class]]) {
+    if ([messageItem isKindOfClass:[ZNGEvent class]]) {
+        event = (ZNGEvent *)messageItem;
+    } else if ([messageItem isKindOfClass:[ZNGEventViewModel class]]) {
+        event = (ZNGEvent *)((ZNGEventViewModel *)(messageItem)).event;
+    }
+    
+    if (event != nil) {
         if ([event isNote]) {
             return YES;
         }

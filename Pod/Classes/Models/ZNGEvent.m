@@ -88,6 +88,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 - (void) createViewModels
 {
     NSUInteger attachmentCount = [self.message.attachments count];
+    NSUInteger outgoingAttachmentCount = [self.message.outgoingImageAttachments count];
     NSMutableArray<ZNGEventViewModel *> * viewModels = [[NSMutableArray alloc] initWithCapacity:(1 + attachmentCount)];
     
     NSUInteger viewModelIndex = 0;
@@ -96,6 +97,14 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
         ZNGEventViewModel * viewModel = [[ZNGEventViewModel alloc] initWithEvent:self index:viewModelIndex];
         [viewModels addObject:viewModel];
         viewModelIndex++;
+    }
+    
+    if ((attachmentCount == 0) && (outgoingAttachmentCount > 0)) {
+        while (viewModelIndex < outgoingAttachmentCount) {
+            ZNGEventViewModel * viewModel = [[ZNGEventViewModel alloc] initWithEvent:self index:viewModelIndex];
+            [viewModels addObject:viewModel];
+            viewModelIndex++;
+        }
     }
     
     // If we had no attachments, we will always return one view model.

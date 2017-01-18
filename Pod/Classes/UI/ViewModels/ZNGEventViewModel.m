@@ -47,7 +47,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 // Our text body will always be the last entry
 - (NSUInteger) textIndex
 {
-    return [self.event.message.attachments count];
+    return [self.event.message.attachments count] + [self.event.message.outgoingImageAttachments count];
 }
 
 // The name/URL string of the attachment represented by this ZNGEventViewModel.  nil if this is a text entry.
@@ -57,9 +57,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         return nil;
     }
     
-    // Sanity check.  This should never pass if the above did not pass.
+    // Are we within bounds for normal message attachments?
     if (self.index >= [self.event.message.attachments count]) {
-        ZNGLogWarn(@"Our event view model index is %llu, but we only have %llu attachments.  This is odd.", (unsigned long long)self.index, (unsigned long long)[self.event.message.attachments count]);
+        // Check if we are in a total nonsense situation.
+        if (self.index >= [self.event.message.outgoingImageAttachments count]) {
+            ZNGLogError(@"Our %@ index is %llu, but we only have %llu image attachments and %llu outgoing image attachments.  This is odd.", [self class], (unsigned long long)self.index, (unsigned long long)[self.event.message.attachments count], (unsigned long long)[self.event.message.outgoingImageAttachments count]);
+        }
+        
         return nil;
     }
     
@@ -121,6 +125,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     // Has our image loaded?
     UIImage * image = self.event.message.imageAttachmentsByName[[self attachmentName]];
+    
+    // Outgoing image?
+    if ((image == nil) && ([self.event.message.outgoingImageAttachments count] > self.index)) {
+        image = self.event.message.outgoingImageAttachments[self.index];
+    }
  
     if (image != nil) {
         imageView = [[UIImageView alloc] initWithImage:image];
@@ -145,7 +154,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     CGSize size = CGSizeZero;
     NSString * attachmentName = [self attachmentName];
-    UIImage * image = self.event.message.imageAttachmentsByName[attachmentName];
+    UIImage * image;
+    
+    if (self.index < [self.event.message.outgoingImageAttachments count]) {
+        image = self.event.message.outgoingImageAttachments[self.index];
+    } else {
+        image = self.event.message.imageAttachmentsByName[attachmentName];
+    }
     
     if (image != nil) {
         size = image.size;

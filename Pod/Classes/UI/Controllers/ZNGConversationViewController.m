@@ -27,7 +27,7 @@
 #import "ZNGConversationCellIncoming.h"
 #import "ZNGEventViewModel.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 static NSString * const EventCellIdentifier = @"EventCell";
 
@@ -385,9 +385,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self checkForMoreRemoteMessagesAvailable];
     
     if (!hasDisplayedInitialData) {
-        // Delay the setting of this flag to allow the view to scroll to this new data.  This delay could probably be less than one second, but that
-        //  is fine for the current use of this flag (loading older data when scrolling back to the top.)
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        // Delay the setting of this flag to allow the view to scroll to this new data.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             hasDisplayedInitialData = YES;
         });
     }

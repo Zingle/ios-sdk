@@ -13,10 +13,6 @@
 static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGEventViewModel
-{
-    UIImageView * imageView;
-    UIView * placeholderView;
-}
 
 - (id) initWithEvent:(ZNGEvent *)event index:(NSUInteger)index
 {
@@ -115,11 +111,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (UIView *)mediaView
 {
-    // Return the cached image view if we already have it
-    if (imageView != nil) {
-        return imageView;
-    }
-    
     // Has our image loaded?
     UIImage * image = self.event.message.imageAttachmentsByName[[self attachmentName]];
     
@@ -129,16 +120,18 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
  
     if (image != nil) {
-        imageView = [[UIImageView alloc] initWithImage:image];
+        UIImageView * imageView = [[UIImageView alloc] initWithImage:image];
         
         // Really we want aspect fit, but there are often some very small sizing mistakes when it comes to the interaction between the image sizing and the
         //  collection view layout calculations.  Since we are adding a rounded corner mask to the image view anyway, it's OK if we slightly crop the edges here.
         imageView.contentMode = UIViewContentModeScaleAspectFill;
         
+        ZNGLogVerbose(@"%@-%llu created and returned image view", self.event.eventId, (unsigned long long)self.index);
         return imageView;
     }
     
     // No media yet
+    ZNGLogVerbose(@"%@-%llu has no image yet available.  Returning nil for media view.", self.event.eventId, (unsigned long long)self.index);
     return nil;
 }
 
@@ -184,25 +177,24 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (UIView *)mediaPlaceholderView
 {
-    if (placeholderView == nil) {
-        CGSize imageSize = [self mediaViewDisplaySize];
-        placeholderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, imageSize.width, imageSize.height)];
-        placeholderView.translatesAutoresizingMaskIntoConstraints = NO;
-        placeholderView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
-        
-        NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
-        UIImage * placeholderIcon = [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
-        UIImageView * placeholderIconImageView = [[UIImageView alloc] initWithImage:placeholderIcon];
-        placeholderIconImageView.translatesAutoresizingMaskIntoConstraints = NO;
-        placeholderIconImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
-        
-        [placeholderView addSubview:placeholderIconImageView];
-        
-        NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:placeholderIconImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:placeholderView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-        NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:placeholderIconImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:placeholderView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-        
-        [placeholderView addConstraints:@[centerX, centerY]];
-    }
+    CGSize imageSize = [self mediaViewDisplaySize];
+    UIView * placeholderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, imageSize.width, imageSize.height)];
+    placeholderView.translatesAutoresizingMaskIntoConstraints = NO;
+    placeholderView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
+    UIImage * placeholderIcon = [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
+    UIImageView * placeholderIconImageView = [[UIImageView alloc] initWithImage:placeholderIcon];
+    placeholderIconImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    placeholderIconImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
+    
+    [placeholderView addSubview:placeholderIconImageView];
+    
+    NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:placeholderIconImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:placeholderView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:placeholderIconImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:placeholderView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    
+    [placeholderView addConstraints:@[centerX, centerY]];
+    ZNGLogVerbose(@"%@-%llu creating and returning media placeholder view", self.event.eventId, (unsigned long long)self.index);
     
     return placeholderView;
 }

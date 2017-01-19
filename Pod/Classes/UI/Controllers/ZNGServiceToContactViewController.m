@@ -484,6 +484,10 @@ static void * KVOContext = &KVOContext;
 
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
+        return nil;
+    }
+    
     ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     
     BOOL isOutboundMessage = ([event isMessage] && [event.message isOutbound]);
@@ -765,10 +769,42 @@ static void * KVOContext = &KVOContext;
     return NO;
 }
 
+/**
+ *  Returns YES if the sender name/avatar should be shown based on adjacent messages.
+ *  (There is either a message from a different sender below this message or there is a timestamp on the message below this one.)
+ */
+- (BOOL) shouldShowSenderInfoForIndexPath:(NSIndexPath *)indexPath
+{
+    // Is this the last message?
+    if (indexPath.row == ([self.conversation.eventViewModels count] - 1)) {
+        return YES;
+    }
+    
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    ZNGEventViewModel * nextViewModel = [self nextEventViewModelBelowIndexPath:indexPath];
+    
+    // Is the next message from someone different?
+    if (![viewModel.event.triggeredByUser.userId isEqualToString:nextViewModel.event.triggeredByUser.userId]) {
+        return YES;
+    }
+    
+    // Is there a timestamp between us and the next message?
+    if ([self shouldShowTimestampAboveIndexPath:[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]]) {
+        return YES;
+    }
+    
+    // This message is part of a similar group.  No sender info needed.
+    return NO;
+}
 
 - (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
+        return nil;
+    }
+    
     ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
+    
     NSString * senderUUID = event.message.triggeredByUser.userId ?: [event senderId];
     NSString * name;
     

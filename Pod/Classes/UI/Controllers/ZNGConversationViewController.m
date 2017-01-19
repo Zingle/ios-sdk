@@ -832,6 +832,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
+- (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < ([self.conversation.eventViewModels count] - 1)) {
+        return self.conversation.eventViewModels[indexPath.row + 1];
+    }
+    
+    return nil;
+}
+
 - (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row > 0) {

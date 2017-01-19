@@ -148,6 +148,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Protected methods used by subclasses
 - (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath;
 
 #pragma mark - Abstract methods that must be overridden by subclasses
 - (BOOL) weAreSendingOutbound;

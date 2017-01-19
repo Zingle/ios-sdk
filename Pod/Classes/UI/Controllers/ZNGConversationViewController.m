@@ -27,7 +27,7 @@
 #import "ZNGConversationCellIncoming.h"
 #import "ZNGEventViewModel.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 static NSString * const EventCellIdentifier = @"EventCell";
 
@@ -485,6 +485,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         // This message is not in our conversation
         return;
     }
+    
+    ZNGLogDebug(@"Reloading message %@ due to an image load", message.messageId);
     
     NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
     NSIndexPath * topPath = [visibleIndexPaths lastObject];

@@ -809,8 +809,8 @@ static void * KVOContext = &KVOContext;
     NSString * name;
     
     if ([event isMessage] && !event.message.isOutbound) {
-        NSString * firstName = [[self.conversation.contact firstNameFieldValue] value];
-        NSString * lastName = [[self.conversation.contact lastNameFieldValue] value];
+        NSString * firstName = [[self.conversation.contact firstNameFieldValue] value] ?: @"";
+        NSString * lastName = [[self.conversation.contact lastNameFieldValue] value] ?: @"";
         
         NSUInteger nameLength = [firstName length] + [lastName length];
         
@@ -827,7 +827,7 @@ static void * KVOContext = &KVOContext;
         name = @"\U0001F916";   // Robot face emoji for an automation
         senderUUID = event.automation.automationId;
     } else if (event.triggeredByUser.userId != nil) {
-        name = [[NSString stringWithFormat:@"%@ %@", event.triggeredByUser.firstName, event.triggeredByUser.lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+        name = [event.triggeredByUser fullName];
     } else if (event.message.sending) {
         // This message is outbound from us.
         name = [self.conversation.session.userAuthorization displayName];

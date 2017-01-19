@@ -35,6 +35,8 @@
         name = self.lastName;
     } else if ([self.username length] > 0) {
         name = self.username;
+    } else if ([self.email length] > 0) {
+        name = self.email;
     }
     
     return name;

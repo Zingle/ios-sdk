@@ -24,6 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) ZNGEvent * event;
 
+/**
+ *  The name/URL string of the attachment represented by this ZNGEventViewModel.  nil if this is a text entry.
+ */
+@property (nonatomic, readonly) NSString * attachmentName;
+
 - (id) initWithEvent:(ZNGEvent *)event index:(NSUInteger)index;
 
 @end

@@ -544,37 +544,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return YES;
 }
 
-#pragma mark - Buttons'
-- (void) handleTouchInMessageBubble:(UITapGestureRecognizer *)tapper
-{
-    JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)tapper.view;
-    UITextView * textView = cell.textView;
-    CGPoint location = [tapper locationInView:cell.textView];
-    
-    if (CGRectContainsPoint(cell.textView.bounds, location)) {
-        // They touched the text view.  Did they touch an image attachment?
-        NSTextContainer * textContainer = textView.textContainer;
-        NSLayoutManager * layoutManager = textView.layoutManager;
-        CGPoint textLocation = CGPointMake(location.x - textView.textContainerInset.left, location.y - textView.textContainerInset.top);
-
-        NSUInteger characterIndex = [layoutManager characterIndexForPoint:textLocation inTextContainer:textContainer fractionOfDistanceBetweenInsertionPoints:NULL];
-        
-        if (characterIndex < [textView.text length]) {
-            NSTextAttachment * attachment = [textView.attributedText attribute:NSAttachmentAttributeName atIndex:characterIndex effectiveRange:NULL];
-            
-            if (attachment.image != nil) {
-                ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
-                imageView.image = attachment.image;
-                imageView.navigationItem.title = self.navigationItem.title;
-                
-                // Prevent JSQMessagesViewController from being an absolute ass and scrolling to the bottom when we come back.
-                showingImageView = YES;
-                self.automaticallyScrollsToMostRecentMessage = NO;
-                [self.navigationController pushViewController:imageView animated:YES];
-            }
-        }
-    }
-}
+#pragma mark - Buttons
 
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
@@ -1035,6 +1005,27 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.conversation.eventViewModels count] - pendingInsertionCount;
+}
+
+- (void) collectionView:(JSQMessagesCollectionView *)collectionView didTapMessageBubbleAtIndexPath:(NSIndexPath *)indexPath
+{
+    // Is there an image here?
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    UIImage * image = viewModel.event.message.imageAttachmentsByName[viewModel.attachmentName];
+    
+    if (image == nil) {
+        return;
+    }
+    
+    ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
+    imageView.image = image;
+    imageView.navigationItem.title = self.navigationItem.title;
+    
+    // Prevent JSQMessagesViewController from being an absolute ass and scrolling to the bottom when we come back.
+    showingImageView = YES;
+    self.automaticallyScrollsToMostRecentMessage = NO;
+    
+    [self.navigationController pushViewController:imageView animated:YES];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath

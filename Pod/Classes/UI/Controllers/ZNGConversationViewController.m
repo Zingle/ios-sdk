@@ -230,7 +230,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     checkedInitialVisibleCells = NO;
     
     [self.inputToolbar.contentView.textView resignFirstResponder];
-    self.conversation.automaticallyRefreshesOnPushNotification = NO;
     
     self.isVisible = NO;
     [super viewWillDisappear:animated];
@@ -243,6 +242,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) dealloc
 {
+    self.conversation.automaticallyRefreshesOnPushNotification = NO;
+    
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];

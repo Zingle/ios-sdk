@@ -783,8 +783,11 @@ static void * KVOContext = &KVOContext;
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     ZNGEventViewModel * nextViewModel = [self nextEventViewModelBelowIndexPath:indexPath];
     
-    // Is the next message from someone different?
-    if (![viewModel.event.triggeredByUser.userId isEqualToString:nextViewModel.event.triggeredByUser.userId]) {
+    NSString * thisSenderId = [viewModel.event.message senderPersonId];
+    NSString * nextSenderId = [nextViewModel.event.message senderPersonId];
+    
+    // Different person?
+    if (![thisSenderId isEqualToString:nextSenderId]) {
         return YES;
     }
     

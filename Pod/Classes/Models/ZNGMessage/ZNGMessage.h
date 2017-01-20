@@ -36,6 +36,11 @@
 @property(nonatomic, strong) NSDate* readAt;
 
 /**
+ *  If this is an inbound, this is the contact ID.  Outbound, it is the triggered by user ID.
+ */
+@property (nonatomic, readonly) NSString * senderPersonId;
+
+/**
  *  Flag indicating that this message is being sent but does not yet exist on the server
  */
 @property (nonatomic) BOOL sending;

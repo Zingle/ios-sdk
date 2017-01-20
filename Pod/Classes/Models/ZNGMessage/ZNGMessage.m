@@ -144,6 +144,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return ([self isOutbound]) ? self.recipient : self.sender;
 }
 
+- (NSString *) senderPersonId
+{
+    if (![self isOutbound]) {
+        return self.sender.correspondentId;
+    }
+    
+    return self.triggeredByUser.userId;
+}
+
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {

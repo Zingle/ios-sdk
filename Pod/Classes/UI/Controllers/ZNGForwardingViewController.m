@@ -273,6 +273,8 @@ enum {
 - (void) chooseHotsosIssue:(NSArray<NSString *> *)issues
 {
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Matching issues" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    alert.popoverPresentationController.sourceRect = self.hotsosInputView.bounds;
+    alert.popoverPresentationController.sourceView = self.hotsosInputView;
     
     for (NSString * issueName in issues) {
         UIAlertAction * action = [UIAlertAction actionWithTitle:issueName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -306,6 +308,8 @@ enum {
     userHasInteracted = YES;
     
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select recipient type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    alert.popoverPresentationController.sourceRect = self.selectRecipientTypeButton.bounds;
+    alert.popoverPresentationController.sourceView = self.selectRecipientTypeButton;
     
     UIAlertAction * sms = [UIAlertAction actionWithTitle:@"SMS" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self changeRecipientType:RECIPIENT_TYPE_SMS];

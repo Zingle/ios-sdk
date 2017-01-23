@@ -22,16 +22,17 @@ NSString * const ZNGMessageForwardingRecipientTypePrinter = @"printer";
     return @{
              NSStringFromSelector(@selector(body)) : @"body",
              NSStringFromSelector(@selector(recipientType)) : @"recipient_type",
-             NSStringFromSelector(@selector(recipient)) : @"recipient",
+             NSStringFromSelector(@selector(recipients)) : @"recipients",
              NSStringFromSelector(@selector(hotsosIssue)) : @"hotsos_issue",
              NSStringFromSelector(@selector(room)) : @"room",
              NSStringFromSelector(@selector(message)) : [NSNull null]
              };
 }
 
-- (NSString *)body
+- (void) setMessage:(ZNGMessage *)message
 {
-    return self.message.body;
+    _message = message;
+    self.body = message.body;
 }
 
 @end

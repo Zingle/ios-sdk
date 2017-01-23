@@ -390,7 +390,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 {
     ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
     request.recipientType = ZNGMessageForwardingRecipientTypeSMS;
-    request.recipient = phoneNumberString;
+    request.recipients = @[phoneNumberString];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
@@ -399,7 +399,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 {
     ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
     request.recipientType = ZNGMessageForwardingRecipientTypeEmail;
-    request.recipient = email;
+    request.recipients = @[email];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
@@ -417,7 +417,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 {
     ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
     request.recipientType = ZNGMessageForwardingRecipientTypeService;
-    request.recipient = service.serviceId;
+    request.recipients = @[service.serviceId];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
@@ -426,7 +426,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 {
     ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
     request.recipientType = ZNGMessageForwardingRecipientTypePrinter;
-    request.recipient = printer.printerId;
+    request.recipients = @[printer.printerId];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }

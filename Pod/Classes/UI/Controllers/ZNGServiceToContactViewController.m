@@ -811,7 +811,8 @@ static void * KVOContext = &KVOContext;
     NSString * senderUUID = event.message.triggeredByUser.userId ?: [event senderId];
     NSString * name;
     
-    if ([event isMessage] && !event.message.isOutbound) {
+    if (![event.message isOutbound]) {
+        // Inbound
         NSString * firstName = [[self.conversation.contact firstNameFieldValue] value] ?: @"";
         NSString * lastName = [[self.conversation.contact lastNameFieldValue] value] ?: @"";
         
@@ -826,15 +827,29 @@ static void * KVOContext = &KVOContext;
             
             return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID image:avatarImage useCircleBackground:NO outgoing:NO];
         }
-    } else if (event.automation.automationId != nil) {
-        name = @"\U0001F916";   // Robot face emoji for an automation
-        senderUUID = event.automation.automationId;
-    } else if (event.triggeredByUser.userId != nil) {
-        name = [event.triggeredByUser fullName];
-    } else if (event.message.sending) {
-        // This message is outbound from us.
-        name = [self.conversation.session.userAuthorization displayName];
-        senderUUID = self.conversation.session.userAuthorization.userId;
+    } else {
+        // Outbound.
+        NSString * robotName =  @"\U0001F916";   // Robot face emoji
+        
+        // Is it from us?  (current user)
+        if (event.message.sending) {
+            name = [self.conversation.session.userAuthorization displayName];
+            senderUUID = self.conversation.session.userAuthorization.userId;
+        } else {
+            // If it's an automation, use the robot
+            if (event.automation.automationId != nil) {
+                name = robotName;
+                senderUUID = event.automation.automationId;
+            } else {
+                // Find who triggered the event and use their name.
+                name = [event.triggeredByUser fullName];
+                
+                if ([name length] == 0) {
+                    // We have no triggering user.  Robot it is.
+                    name = robotName;
+                }
+            }
+        }
     }
     
     return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID name:name outgoing:[self isOutgoingMessage:event]];

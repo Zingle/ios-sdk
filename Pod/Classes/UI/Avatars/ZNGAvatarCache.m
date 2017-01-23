@@ -91,7 +91,8 @@
 - (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
 {
     NSCache * cache = (isOutgoing) ? outgoingCache : incomingCache;
-    id <JSQMessageAvatarImageDataSource> avatar = [cache objectForKey:uuid];
+    id key = uuid ?: [NSNull null];
+    id <JSQMessageAvatarImageDataSource> avatar = [cache objectForKey:key];
     
     if (avatar == nil) {
         NSString * initials = [self initialsForName:name];
@@ -106,7 +107,7 @@
         }
         
         avatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials textColor:textColor backgroundColor:backgroundColor size:self.avatarSize font:self.font];
-        [cache setObject:avatar forKey:uuid];
+        [cache setObject:avatar forKey:key];
     }
     
     return avatar;

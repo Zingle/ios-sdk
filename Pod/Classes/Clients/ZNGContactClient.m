@@ -342,8 +342,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                 }
                 
                 syncSuccess = [self _synchronouslyRemoveChannel:channel fromContact:contact timeout:timeout error:&error];
-                channel.channelId = nil;
-                syncSuccess &= [self _synchronouslyAddChannel:channel toContact:contact timeout:timeout error:&error];
+                
+                // Only add the channel with its new value if removing the old value succeeded.
+                if (syncSuccess) {
+                    channel.channelId = nil;
+                    syncSuccess = [self _synchronouslyAddChannel:channel toContact:contact timeout:timeout error:&error];
+                }
             }
             
             for (ZNGChannel * channel in changedOtherwiseChannels) {

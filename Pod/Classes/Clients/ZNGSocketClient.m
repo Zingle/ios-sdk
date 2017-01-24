@@ -35,6 +35,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     // YES if we have completed an auth request and set our session cookies
     BOOL authSucceeded;
+    
+    NSUInteger authFailureCount;
+    NSTimer * authRetryTimer;
 }
 
 - (id) initWithSession:(ZingleSession *)session
@@ -165,6 +168,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) disconnect
 {
+    authFailureCount = 0;
+    [authRetryTimer invalidate];
+    authRetryTimer = nil;
     [socketClient disconnect];
 }
 
@@ -237,6 +243,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
+    authFailureCount = 0;
+    [authRetryTimer invalidate];
+    authRetryTimer = nil;
+    
     ZNGLogInfo(@"Web socket connected.");
     [socketClient emit:@"bindNodeController" withItems:@[@"dashboard.inbox"]];
 }
@@ -260,8 +270,29 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             authSucceeded = NO;
             initializingSession = YES;
             [socketClient disconnect];
-            [self connect];
+            
+            authFailureCount++;
+            [authRetryTimer invalidate];
+            authRetryTimer = [NSTimer scheduledTimerWithTimeInterval:[self authRetryDelay] target:self selector:@selector(connect) userInfo:nil repeats:NO];
         }
+    }
+}
+
+- (NSTimeInterval) authRetryDelay
+{
+    switch (authFailureCount) {
+        case 0:
+        case 1:
+            return 1.0;
+            
+        case 2:
+            return 5.0;
+            
+        case 4:
+            return 10.0;
+            
+        default:
+            return 30.0;
     }
 }
 

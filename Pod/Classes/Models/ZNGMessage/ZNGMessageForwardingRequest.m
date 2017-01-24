@@ -32,7 +32,10 @@ NSString * const ZNGMessageForwardingRecipientTypePrinter = @"printer";
 - (void) setMessage:(ZNGMessage *)message
 {
     _message = message;
-    self.body = message.body;
+    
+    if ([self.body length] == 0) {
+        self.body = message.body;
+    }
 }
 
 @end

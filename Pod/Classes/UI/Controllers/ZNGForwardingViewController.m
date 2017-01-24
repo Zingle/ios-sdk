@@ -505,21 +505,27 @@ enum {
         [self presentViewController:alert animated:YES completion:nil];
     };
     
+    // Accept any auto-corrections
+    [self.inputToolbar.contentView.textView.inputDelegate selectionWillChange:self.inputToolbar.contentView.textView];
+    [self.inputToolbar.contentView.textView.inputDelegate selectionDidChange:self.inputToolbar.contentView.textView];
+    
+    NSString * body = self.inputToolbar.contentView.textView.text;
+    
     switch(recipientType) {
         case RECIPIENT_TYPE_SMS:
-            [self.conversation forwardMessage:self.message toSMS:self.textField.text success:success failure:failure];
+            [self.conversation forwardMessage:self.message withBody:body toSMS:self.textField.text success:success failure:failure];
             break;
         case RECIPIENT_TYPE_EMAIL:
-            [self.conversation forwardMessage:self.message toEmail:self.textField.text success:success failure:failure];
+            [self.conversation forwardMessage:self.message withBody:body toEmail:self.textField.text success:success failure:failure];
             break;
         case RECIPIENT_TYPE_SERVICE:
-            [self.conversation forwardMessage:self.message toService:self.forwardTargetService success:success failure:failure];
+            [self.conversation forwardMessage:self.message withBody:body toService:self.forwardTargetService success:success failure:failure];
             break;
         case RECIPIENT_TYPE_PRINTER:
-            [self.conversation forwardMessage:self.message toPrinter:selectedPrinter success:success failure:failure];
+            [self.conversation forwardMessage:self.message withBody:body toPrinter:selectedPrinter success:success failure:failure];
             break;
         case RECIPIENT_TYPE_HOTSOS:
-            [self.conversation forwardMessage:self.message toHotsosWithHotsosIssueName:selectedHotsosIssueName success:success failure:failure];
+            [self.conversation forwardMessage:self.message withBody:body toHotsosWithHotsosIssueName:selectedHotsosIssueName success:success failure:failure];
             break;
         default:
             ZNGLogError(@"Something horrible is happening.  They hit forward without selecting a forward type.  Help.");

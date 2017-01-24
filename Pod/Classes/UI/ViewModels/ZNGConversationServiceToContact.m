@@ -386,55 +386,56 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 }
 
 #pragma mark - Forwarding
-- (void) forwardMessage:(ZNGMessage *)message toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {
-    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message withBody:body];
     request.recipientType = ZNGMessageForwardingRecipientTypeSMS;
     request.recipients = @[phoneNumberString];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
 
-- (void) forwardMessage:(ZNGMessage *)message toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {
-    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message withBody:body];
     request.recipientType = ZNGMessageForwardingRecipientTypeEmail;
     request.recipients = @[email];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
 
-- (void) forwardMessage:(ZNGMessage *)message toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {
-    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message withBody:body];
     request.recipientType = ZNGMessageForwardingRecipientTypeHotsos;
     request.hotsosIssue = hotsosIssueName;
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
 
-- (void) forwardMessage:(ZNGMessage *)message toService:(ZNGService *)service success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toService:(ZNGService *)service success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {
-    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message withBody:body];
     request.recipientType = ZNGMessageForwardingRecipientTypeService;
     request.recipients = @[service.serviceId];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
 
-- (void) forwardMessage:(ZNGMessage *)message toPrinter:(ZNGPrinter *)printer success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toPrinter:(ZNGPrinter *)printer success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {
-    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message];
+    ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message withBody:body];
     request.recipientType = ZNGMessageForwardingRecipientTypePrinter;
     request.recipients = @[printer.printerId];
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }
 
-- (ZNGMessageForwardingRequest *) forwardingRequestForMessage:(ZNGMessage  *)message
+- (ZNGMessageForwardingRequest *) forwardingRequestForMessage:(ZNGMessage  *)message withBody:(NSString *)body
 {
     ZNGMessageForwardingRequest * request = [[ZNGMessageForwardingRequest alloc] init];
     request.message = message;
+    request.body = body;
     
     // Add room number if this looks like our same guy
     if ([[[message contactCorrespondent] correspondentId] isEqualToString:self.contact.contactId]) {

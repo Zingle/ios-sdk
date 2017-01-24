@@ -179,7 +179,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 
 - (BOOL) isMessage
 {
-    return [self.eventType isEqualToString:ZNGEventTypeMessage];
+    return [self.eventType isEqualToString:ZNGEventTypeMessage] || self.message.sending;
 }
 
 - (BOOL) isNote

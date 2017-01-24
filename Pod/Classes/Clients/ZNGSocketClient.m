@@ -109,6 +109,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [session.requestSerializer setAuthorizationHeaderFieldWithUsername:self.session.token password:self.session.key];
     session.responseSerializer = [AFHTTPResponseSerializer serializer];
     
+    // If we have ever switched from, for example, qa-zingle.zingle.me to zingle.zingle.me, NSHTTPCookieStorage will give us the cookie from the old instance since they share a domain.
+    // Bad NSHTTPCookieStorage.  Bad.
+    [[NSHTTPCookieStorage sharedHTTPCookieStorage] removeCookiesSinceDate:[NSDate dateWithTimeIntervalSince1970:0.0]];
+    
     [session POST:@"auth" parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         ZNGLogDebug(@"Auth request succeeded.");
         authSucceeded = YES;

@@ -113,4 +113,10 @@
     return avatar;
 }
 
+- (void) clearCache
+{
+    [incomingCache removeAllObjects];
+    [outgoingCache removeAllObjects];
+}
+
 @end

@@ -129,6 +129,8 @@ static void * KVOContext = &KVOContext;
         dispatch_source_cancel(emphasizeTimer);
     }
     
+    [[ZNGAvatarCache sharedCache] clearCache];
+    
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];

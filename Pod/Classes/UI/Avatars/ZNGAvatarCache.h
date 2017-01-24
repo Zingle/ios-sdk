@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
 
+- (void) clearCache;
+
 @property (nonatomic, strong, nullable) UIColor * outgoingBackgroundColor;
 @property (nonatomic, strong, nullable) UIColor * outgoingTextColor;
 @property (nonatomic, strong, nullable) UIColor * incomingBackgroundColor;

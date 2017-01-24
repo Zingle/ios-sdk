@@ -404,11 +404,15 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     [self _sendForwardingRequest:request success:success failure:failure];
 }
 
-- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName room:(NSString *)room success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure
 {
     ZNGMessageForwardingRequest * request = [self forwardingRequestForMessage:message withBody:body];
     request.recipientType = ZNGMessageForwardingRecipientTypeHotsos;
     request.hotsosIssue = hotsosIssueName;
+    
+    if ([room length] > 0) {
+        request.room = room;
+    }
     
     [self _sendForwardingRequest:request success:success failure:failure];
 }

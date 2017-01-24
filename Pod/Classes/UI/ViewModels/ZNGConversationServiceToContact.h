@@ -72,7 +72,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
 - (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
-- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
+- (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toHotsosWithHotsosIssueName:(NSString *)hotsosIssueName room:(nullable NSString *)room success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
 - (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toService:(ZNGService *)service success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
 - (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toPrinter:(ZNGPrinter *)printer success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
 

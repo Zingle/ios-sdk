@@ -69,7 +69,7 @@ enum {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardAppearingOrDisappearing:) name:UIKeyboardWillHideNotification object:nil];
 
-    self.roomNumberLabel.text = [[self.contact roomFieldValue] value] ?: @"none";
+    self.roomNumberTextField.text = [[self.contact roomFieldValue] value];
     
     // Check if we actually have a message to forward
     if ([self.message.body length] == 0) {
@@ -525,7 +525,7 @@ enum {
             [self.conversation forwardMessage:self.message withBody:body toPrinter:selectedPrinter success:success failure:failure];
             break;
         case RECIPIENT_TYPE_HOTSOS:
-            [self.conversation forwardMessage:self.message withBody:body toHotsosWithHotsosIssueName:selectedHotsosIssueName success:success failure:failure];
+            [self.conversation forwardMessage:self.message withBody:body toHotsosWithHotsosIssueName:selectedHotsosIssueName room:self.roomNumberTextField.text success:success failure:failure];
             break;
         default:
             ZNGLogError(@"Something horrible is happening.  They hit forward without selecting a forward type.  Help.");

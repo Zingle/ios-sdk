@@ -824,7 +824,7 @@ static void * KVOContext = &KVOContext;
     NSString * senderUUID = event.message.triggeredByUser.userId ?: [event senderId];
     NSString * name;
     
-    if (![event.message isOutbound]) {
+    if (([event isMessage]) && (![event.message isOutbound])) {
         // Inbound
         NSString * firstName = [[self.conversation.contact firstNameFieldValue] value] ?: @"";
         NSString * lastName = [[self.conversation.contact lastNameFieldValue] value] ?: @"";

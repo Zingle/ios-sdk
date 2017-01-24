@@ -736,6 +736,13 @@ static void * KVOContext = &KVOContext;
 #pragma mark - Collection view shenanigans
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    
+    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+        // This is some kind of detailed event.  No timestamp.
+        return NO;
+    }
+    
     BOOL shouldShowTimestamp = [super shouldShowTimestampAboveIndexPath:indexPath];
     
     if (!shouldShowTimestamp) {
@@ -775,12 +782,18 @@ static void * KVOContext = &KVOContext;
  */
 - (BOOL) shouldShowSenderInfoForIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+    // If this is not a message nor a note, we do not have sender info
+    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+        return NO;
+    }
+    
     // Is this the last message?
     if (indexPath.row == ([self.conversation.eventViewModels count] - 1)) {
         return YES;
     }
     
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     ZNGEventViewModel * nextViewModel = [self nextEventViewModelBelowIndexPath:indexPath];
     
     NSString * thisSenderId = [viewModel.event.message senderPersonId];

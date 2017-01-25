@@ -45,5 +45,6 @@
 
 - (BOOL) isMessage;
 - (BOOL) isNote;
+- (BOOL) isInboundMessage;
 
 @end

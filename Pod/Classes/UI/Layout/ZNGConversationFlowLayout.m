@@ -49,7 +49,7 @@
     
     self.messageBubbleTextViewTextContainerInsets = UIEdgeInsetsMake(10.0, 15.0, 10.0, 8.0);
     self.messageBubbleLeftRightMargin = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad) ? 50.0 : 25.0;
-    self.minimumLineSpacing = 10.0;
+    self.minimumLineSpacing = 6.0;
 }
 
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath

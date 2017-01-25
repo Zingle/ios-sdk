@@ -187,6 +187,11 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     return [self.eventType isEqualToString:ZNGEventTypeNote];
 }
 
+- (BOOL) isInboundMessage
+{
+    return (([self isMessage]) && (![self.message isOutbound]));
+}
+
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {

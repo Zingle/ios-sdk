@@ -925,10 +925,20 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSString * name = [self nameForMessageAtIndexPath:indexPath];
     
     if (name == nil) {
+        
+        // If this is the last message in an inbound group, add some spacing
+        ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+        ZNGEventViewModel * nextViewModel = [self nextEventViewModelBelowIndexPath:indexPath];
+        
+        if (([viewModel.event isInboundMessage]) && (![nextViewModel.event isInboundMessage])) {
+            // Add some extra spacing between this message and the next outbound message/detailed event
+            return 14.0;
+        }
+        
         return 0.0;
     }
     
-    return 16.0;
+    return 22.0;
 }
 
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath

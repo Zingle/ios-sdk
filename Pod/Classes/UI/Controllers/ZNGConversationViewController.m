@@ -452,7 +452,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y;
 
-    if (!caTransactionToDisableAnimationsPushed) {
+    if ((!caTransactionToDisableAnimationsPushed) && (self.collectionView != nil)) {
         [CATransaction begin];
         [CATransaction setDisableActions:YES];
         caTransactionToDisableAnimationsPushed = YES;
@@ -499,7 +499,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }];
     } else {
         // The cell we are refreshing is below or on screen.  Do not scroll.
-        if (!caTransactionToDisableAnimationsPushed) {
+        if ((!caTransactionToDisableAnimationsPushed) && (self.collectionView != nil)) {
             [CATransaction begin];
             [CATransaction setDisableActions:YES];
             caTransactionToDisableAnimationsPushed = YES;

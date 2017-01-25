@@ -123,7 +123,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _internalNoteTextColor = [UIColor zng_text_gray];
     _authorTextColor = [UIColor lightGrayColor];
     _messageFont = [UIFont latoFontOfSize:17.0];
-    _textInputFont = [UIFont latoFontOfSize:14.0];
+    _textInputFont = [UIFont latoFontOfSize:16.0];
     
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];

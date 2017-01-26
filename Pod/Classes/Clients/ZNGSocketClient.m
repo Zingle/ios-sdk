@@ -58,10 +58,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             nodePath = [NSString stringWithFormat:@"https://%@-socket.zingle.me:8000", zinglePrefix];
         } else {
             authPath = @"https://secure.zingle.me/";
-//            nodePath = @"https://socket.zingle.me/";
-            
-#warning - Replace this temporary socket server with the real one before release
-            nodePath = @"https://socket01.zingle.me/";
+            nodePath = @"https://socket.zingle.me/";
         }
     }
     

@@ -259,25 +259,35 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void) setSelectedContact:(ZNGContact *)selectedContact
 {
-    _selectedContact = selectedContact;
-    NSIndexPath * newSelection = [self indexPathForContact:selectedContact];
-    NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
+    // This delay is to prevent us from trying to show the first contact before our table view has been refreshed.
+    // Our KVO-triggered logic here is often hit before the logic to update the table view, causing a NSIndexPath out of bounds
+    //  crash when attempting to select a row.
+    // Seen as https://fabric.io/zingle/ios/apps/com.zingleme.zingle/issues/5877e6420aeb16625b0ae506 and
+    //  https://fabric.io/zingle/ios/apps/com.zingleme.zingle/issues/583490700aeb16625b2a4c0d and
+    //  http://jira.zinglecorp.com:8080/browse/MOBILE-496 and
+    //  http://jira.zinglecorp.com:8080/browse/MOBILE-518
     
-    if ([newSelection isEqual:oldSelection]) {
-        [self.tableView scrollToRowAtIndexPath:newSelection atScrollPosition:UITableViewScrollPositionNone animated:NO];
-        return;
-    }
-    
-    if (oldSelection != nil) {
-        [self.tableView deselectRowAtIndexPath:oldSelection animated:NO];
-    }
-    
-    if (newSelection != nil) {
-        // As per UIKit documentation for selectRowAtIndexPath:animated:scrollPosition:, calling select row with None for scroll position
-        //  followed by scrollToRowAtIndexPath... with None for scroll position will do the minimum amount of scrolling to put the selected row on screen.
-        [self.tableView selectRowAtIndexPath:newSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
-        [self.tableView scrollToRowAtIndexPath:newSelection atScrollPosition:UITableViewScrollPositionNone animated:NO];
-    }
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        _selectedContact = selectedContact;
+        NSIndexPath * newSelection = [self indexPathForContact:selectedContact];
+        NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
+        
+        if ([newSelection isEqual:oldSelection]) {
+            [self.tableView scrollToRowAtIndexPath:newSelection atScrollPosition:UITableViewScrollPositionNone animated:NO];
+            return;
+        }
+        
+        if (oldSelection != nil) {
+            [self.tableView deselectRowAtIndexPath:oldSelection animated:NO];
+        }
+        
+        if (newSelection != nil) {
+            // As per UIKit documentation for selectRowAtIndexPath:animated:scrollPosition:, calling select row with None for scroll position
+            //  followed by scrollToRowAtIndexPath... with None for scroll position will do the minimum amount of scrolling to put the selected row on screen.
+            [self.tableView selectRowAtIndexPath:newSelection animated:NO scrollPosition:UITableViewScrollPositionNone];
+            [self.tableView scrollToRowAtIndexPath:newSelection atScrollPosition:UITableViewScrollPositionNone animated:NO];
+        }
+    });
 }
 
 #pragma mark - Key Value Observing

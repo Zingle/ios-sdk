@@ -15,6 +15,8 @@
 #import "UIColor+ZingleSDK.h"
 #import "ZNGImageSizeCache.h"
 #import "ZNGPlaceholderImageAttachment.h"
+#import <ImageIO/ImageIO.h>
+#import "UIImage+animatedGIF.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -94,7 +96,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                 return;
             }
             
-            UIImage * theImage = [[UIImage alloc] initWithData:imageData];
+            UIImage * theImage = [self imageFromData:imageData path:path];
             
             if (theImage == nil) {
                 ZNGLogWarn(@"Unable to initialize an image from %llu bytes of attachment data.", (unsigned long long)[imageData length]);
@@ -107,6 +109,27 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             });
         }
     });
+}
+
+- (UIImage *) imageFromData:(NSData *)data path:(NSString *)path
+{
+    NSString * extension = [[path pathExtension] lowercaseString];
+    
+    if (![extension isEqualToString:@"gif"]) {
+        // This is (probably) not a GIF.
+        return [UIImage imageWithData:data];
+    }
+    
+    // Use CG to check for more than one frame
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)data, NULL);
+    size_t const frameCount = CGImageSourceGetCount(imageSource);
+    CFRelease(imageSource);
+    
+    if (frameCount > 1) {
+        return [UIImage animatedImageWithAnimatedGIFData:data];
+    } else {
+        return [[UIImage alloc] initWithData:data];
+    }
 }
 
 #pragma mark - Utility

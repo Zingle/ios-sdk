@@ -378,10 +378,6 @@ static NSString * const ParameterNameClosed = @"is_closed";
                         break;
                     }
                 }
-                
-                if (deletedField.customFieldOptionId == nil) {
-                    ZNGLogWarn(@"Deleting %@ custom field, but it is a single selection field with no empty option.  This will probably not work.", oldField.displayName);
-                }
             }
             
             [deletedFields addObject:deletedField];

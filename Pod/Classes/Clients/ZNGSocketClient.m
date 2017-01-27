@@ -98,6 +98,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     if (initializingSession) {
         ZNGLogDebug(@"Already starting connection.  Ignoring call to %s", __func__);
+        return;
     }
     
     authSucceeded = NO;

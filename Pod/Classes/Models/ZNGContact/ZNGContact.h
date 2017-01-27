@@ -104,6 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Converts the custom field values into the stripped down "new value" objects for sending to the server.
+ *  Note that any fields that are locked for editing will be excluded from the resulting array.
  */
 - (NSArray<ZNGNewContactFieldValue *> *) customFieldsWithValuesAsNewValueObjects;
 

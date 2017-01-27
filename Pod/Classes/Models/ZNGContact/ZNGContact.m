@@ -337,6 +337,11 @@ static NSString * const ParameterNameClosed = @"is_closed";
     NSMutableArray<ZNGNewContactFieldValue *> * values = [[NSMutableArray alloc] initWithCapacity:[customFields count]];
     
     for (ZNGContactFieldValue * customField in customFields) {
+        // Check if it is editable
+        if ([self editingCustomFieldIsLocked:customField]) {
+            continue;
+        }
+        
         ZNGNewContactFieldValue * newValue = [[ZNGNewContactFieldValue alloc] init];
         newValue.value = customField.value;
         newValue.customFieldOptionId = customField.selectedCustomFieldOptionId;

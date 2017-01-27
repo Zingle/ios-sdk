@@ -13,7 +13,7 @@
 #import "ZNGError.h"
 #import "ZNGNewChannel.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZNGContactClient
 
@@ -415,6 +415,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         parameters[@"is_starred"] = changedContact.isStarred ? @YES : @NO;
         parameters[@"is_confirmed"] = changedContact.isConfirmed ? @YES : @NO;
         
+        ZNGLogDebug(@"Updating contact %@ with: %@", changedContact.contactId, parameters);
         
         [self updateContactWithId:newContact.contactId withParameters:parameters success:contactUpdateSuccessBlock failure:failure];
     }

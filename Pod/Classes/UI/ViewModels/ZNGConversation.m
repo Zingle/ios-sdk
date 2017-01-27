@@ -16,6 +16,8 @@
 #import "ZNGLogging.h"
 #import "ZNGNewMessageResponse.h"
 #import "ZNGAnalytics.h"
+#import <ImageIO/ImageIO.h>
+#import "UIImage+animatedGIF.h"
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
@@ -491,13 +493,13 @@ NSString *const kMessageDirectionOutbound = @"outbound";
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
 {
-    [self sendMessageWithBody:body images:nil success:success failure:failure];
+    [self sendMessageWithBody:body imageData:nil success:success failure:failure];
 }
 
-- (void)sendMessageWithBody:(NSString *)body
-                     images:(NSArray<UIImage *> *)images
-                    success:(void (^)(ZNGStatus* status))success
-                    failure:(void (^) (ZNGError *error))failure
+- (void) sendMessageWithBody:(nonnull NSString *)body
+                   imageData:(nullable NSArray<NSData *> *)imageDatas
+                     success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
+                     failure:(void (^_Nullable) (ZNGError * _Nullable error))failure
 {
     ZNGNewMessage *newMessage = [self freshMessage];
     
@@ -509,34 +511,58 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }
     
     newMessage.body = body;
-    newMessage.outgoingImageAttachments = images;
-    
     self.loading = YES;
-    
     ZNGParticipant * recipient = [newMessage.recipients firstObject];
     ZNGLogVerbose(@"Sending \"%@\" to %@", body, recipient.channelValue);
     
-    if ([images count] == 0) {
+    if ([imageDatas count] == 0) {
         [self _sendMessage:newMessage success:success failure:failure];
-    } else {
+        return;
+    }
+    
+    // We have one or more image attachments
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        // We need the image data in two places for each image:
+        //  1) an array of UIImage objects that our UI can display as the image sends
+        //  2) a base 64 encoded image attachment in an attachment dictionary
+        NSMutableArray<UIImage *> * outgoingImageObjects = [[NSMutableArray alloc] initWithCapacity:[imageDatas count]];
+        NSMutableArray<NSDictionary *> * outgoingAttachments = [[NSMutableArray alloc] initWithCapacity:[imageDatas count]];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            NSMutableArray<NSDictionary *> * attachments = [[NSMutableArray alloc] initWithCapacity:[images count]];
-            
-            for (UIImage * image in images) {
-                UIImage *imageForUpload = [self resizeImage:image];
-                NSData *base64Data = [UIImagePNGRepresentation(imageForUpload) base64EncodedDataWithOptions:0];
-                NSString *encodedString = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
-                NSDictionary * attachment = @{ kAttachementContentTypeKey : kAttachementContentTypeParam, kAttachementBase64 : encodedString };
-                [attachments addObject:attachment];
+        for (NSData * imageData in imageDatas) {
+            // Sanity check
+            if ([imageData length] == 0) {
+                continue;
             }
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                newMessage.attachments = attachments;
-                [self _sendMessage:newMessage success:success failure:failure];
-            });
+            CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)imageData, NULL);
+            size_t const frameCount = CGImageSourceGetCount(imageSource);
+            UIImage * image;
+            
+            if (frameCount > 1) {
+                // This is an animated GIF.  We need to make an animated UIImage for display while the message sends
+                image = [UIImage animatedImageWithAnimatedGIFData:imageData];
+            } else {
+                // This is a single image.  We will resize if necessary.
+                image = [[UIImage alloc] initWithData:imageData];
+                image = [self resizeImage:image];
+            }
+            
+            [outgoingImageObjects addObject:image];
+            
+            NSData * base64Data = [imageData base64EncodedDataWithOptions:0];
+            NSString * base64String = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
+            NSDictionary * attachment = @{ kAttachementContentTypeKey : kAttachementContentTypeParam, kAttachementBase64 : base64String };
+            
+            [outgoingAttachments addObject:attachment];
+        }
+        
+        newMessage.outgoingImageAttachments = outgoingImageObjects;
+        newMessage.attachments = outgoingAttachments;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self _sendMessage:newMessage success:success failure:failure];
         });
-    }
+    });
 }
 
 - (ZNGEvent *)pendingMessageEventForOutgoingMessage:(ZNGNewMessage *)newMessage
@@ -635,6 +661,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 -(UIImage *)resizeImage:(UIImage *)image
 {
+    // If the image is animated, abandon all hope (of resize)
+    if ([image.images count] > 1) {
+        return image;
+    }
+    
     float actualHeight = image.size.height;
     float actualWidth = image.size.width;
     float maxHeight = 800.0;
@@ -664,6 +695,8 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             actualHeight = maxHeight;
             actualWidth = maxWidth;
         }
+    } else {
+        return image;
     }
     
     CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);

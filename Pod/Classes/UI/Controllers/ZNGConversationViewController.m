@@ -26,6 +26,9 @@
 #import "ZNGConversationCellOutgoing.h"
 #import "ZNGConversationCellIncoming.h"
 #import "ZNGEventViewModel.h"
+#import "UIImage+animatedGIF.h"
+@import Photos;
+
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -79,6 +82,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
     
     BOOL caTransactionToDisableAnimationsPushed;
+    
+    NSMutableArray<NSData *> * outgoingImageAttachments;
 }
 
 @dynamic collectionView;
@@ -124,6 +129,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _authorTextColor = [UIColor lightGrayColor];
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
+    
+    outgoingImageAttachments = [[NSMutableArray alloc] initWithCapacity:2];
     
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
@@ -300,18 +307,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
 {
-    NSMutableArray<UIImage *> * attachments = [[NSMutableArray alloc] init];
-    
-    // Check for image attachments
-    [self.inputToolbar.contentView.textView.attributedText enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, [self.inputToolbar.contentView.textView.attributedText length]) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-        NSTextAttachment * attachment = (NSTextAttachment *)value;
-        UIImage * image = attachment.image;
-        
-        if (image != nil) {
-            [attachments addObject:image];
-        }
-    }];
-    
     // Remove any attachment sentinels
     NSString * attachmentCharacters = [NSString stringWithFormat:@"%c\ufffc", NSAttachmentCharacter];
     NSCharacterSet * attachmentCharacterSet = [NSCharacterSet characterSetWithCharactersInString:attachmentCharacters];
@@ -320,7 +315,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.inputEnabled = NO;
     self.inputToolbar.contentView.textView.text = @"";
     
-    [self.conversation sendMessageWithBody:text images:attachments success:^(ZNGStatus *status) {
+    [self.conversation sendMessageWithBody:text imageData:outgoingImageAttachments success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
@@ -350,6 +345,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         [self presentViewController:alert animated:YES completion:nil];
     }];
+}
+
+- (void) finishSendingMessageAnimated:(BOOL)animated
+{
+    [outgoingImageAttachments removeAllObjects];
+    [super finishSendingMessageAnimated:animated];
 }
 
 #pragma mark - Data notifications
@@ -517,10 +518,37 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 #pragma mark - Text view delegate
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    // Are they deleting an image?
+    if ((textView == self.inputToolbar.contentView.textView) && ([text isEqualToString:@""])) {
+        // They are deleting.  Check for an image.
+        
+        __block BOOL deletingImageAttachment = NO;
+        [textView.attributedText enumerateAttributesInRange:range options:0 usingBlock:^(NSDictionary<NSString *,id> * _Nonnull attrs, NSRange attrRange, BOOL * _Nonnull stop) {
+            if (attrs[NSAttachmentAttributeName] != nil) {
+                deletingImageAttachment = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (deletingImageAttachment) {
+            // They are deleting at least one image attachment.  Clear them all.
+            [outgoingImageAttachments removeAllObjects];
+            
+            // Note that mutation *is* allowed during this enumeration, per the documentation as of iOS 10.2.
+            // We will remove any other image attachments that happen to be in this string.
+            NSMutableAttributedString * result = [textView.attributedText mutableCopy];
+            [result enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, [result length]) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+                [result deleteCharactersInRange:range];
+            }];
+            
+            textView.attributedText = result;
+            [self textViewDidChange:textView];
+            return NO;
+        }
+    }
+    
     // We want to detect if they are starting to delete a custom field such as {FIRST_NAME}.
     // If they delete the right brace, it should delete the entire placeholder.
-    
-    // Detect a backspace
     if ((range.length == 1) && ([text isEqualToString:@""])) {
         // This is a backspace.  Are they deleting a }?
         char deletingChar = [textView.text characterAtIndex:range.location];
@@ -658,8 +686,48 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    [self dismissViewControllerAnimated:YES completion:^{
-        [self attachImage:image];
+    NSURL * url = info[UIImagePickerControllerReferenceURL];
+    
+    PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
+    
+    if (asset == nil) {
+        // We were unable to retrieve a PHAsset from the supplied image.
+        [self showImageAttachmentError];
+        return;
+    }
+    
+    PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
+    options.synchronous = NO;
+    options.networkAccessAllowed = NO;
+    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    
+    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+        if ([imageData length] == 0) {
+            // We did not get image data.  Show an error.
+            [self showImageAttachmentError];
+        } else {
+            [outgoingImageAttachments addObject:imageData];
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                UIImage * image = [UIImage animatedImageWithAnimatedGIFData:imageData];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self dismissViewControllerAnimated:YES completion:^{
+                        [self attachImage:image];
+                    }];
+                });
+            });
+        }
+    }];
+}
+
+- (void) showImageAttachmentError
+{
+    [self dismissViewControllerAnimated:NO completion:^{
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Unable to load image" message:nil preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:NO completion:nil];
     }];
 }
 

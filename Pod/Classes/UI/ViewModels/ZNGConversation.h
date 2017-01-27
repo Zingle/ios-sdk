@@ -124,10 +124,10 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
                     success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
                     failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;
 
-- (void)sendMessageWithBody:(nonnull NSString *)body
-                     images:(NSArray<UIImage *> * _Nullable)images
-                    success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
-                    failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;
+- (void) sendMessageWithBody:(nonnull NSString *)body
+                   imageData:(nullable NSArray<NSData *> *)imageData
+                     success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
+                     failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;
 
 - (nullable ZNGEvent *) priorEvent:(nonnull ZNGEvent *)event;
 

@@ -96,7 +96,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                 return;
             }
             
-            UIImage * theImage = [self imageFromData:imageData path:path];
+            UIImage * theImage = [self imageFromData:imageData];
             
             if (theImage == nil) {
                 ZNGLogWarn(@"Unable to initialize an image from %llu bytes of attachment data.", (unsigned long long)[imageData length]);
@@ -111,15 +111,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     });
 }
 
-- (UIImage *) imageFromData:(NSData *)data path:(NSString *)path
+- (UIImage *) imageFromData:(NSData *)data
 {
-    NSString * extension = [[path pathExtension] lowercaseString];
-    
-    if (![extension isEqualToString:@"gif"]) {
-        // This is (probably) not a GIF.
-        return [UIImage imageWithData:data];
-    }
-    
     // Use CG to check for more than one frame
     CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)data, NULL);
     size_t const frameCount = CGImageSourceGetCount(imageSource);

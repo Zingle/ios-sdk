@@ -200,7 +200,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     ZNGLogDebug(@"Setting active feed to %@", feedId);
-    [socketClient emit:@"setActiveFeed" withItems:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
+    [socketClient emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
 }
 
 - (void) unsubscribeFromFeedUpdates
@@ -232,7 +232,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     payload[@"pendingResponse"] = input;
     payload[@"description"] = description;
     
-    [socketClient emit:event withItems:@[payload]];
+    [socketClient emit:event with:@[payload]];
 }
 
 - (void) userClearedInput
@@ -253,7 +253,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     authRetryTimer = nil;
     
     ZNGLogInfo(@"Web socket connected.");
-    [socketClient emit:@"bindNodeController" withItems:@[@"dashboard.inbox"]];
+    [socketClient emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
 }
 
 - (void) socketDidBindNodeController

@@ -38,17 +38,16 @@
 {
     switch (logMessage->_flag) {
         case DDLogFlagError:
-            return @"ERROR";
+            return @"\u26D4 ERROR";
         case DDLogFlagWarning:
-            return @"WARNING";
+            return @"\u26A0\uFE0F WARNING";
         case DDLogFlagInfo:
-            return @"INFO";
+            return @"\U0001F539 INFO";
         case DDLogFlagDebug:
-            return @"DEBUG";
+            return @"\u26AC DEBUG";
         default:
             return @"VERBOSE";
     }
 }
-
 
 @end

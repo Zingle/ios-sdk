@@ -17,6 +17,7 @@
 #import "ZNGAnalytics.h"
 #import <objc/runtime.h>
 #import "ZNGImageSizeCache.h"
+#import "ZNGLogFormatter.h"
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -101,6 +102,11 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
         _urlString = LiveBaseURL;
         _token = [token copy];
         _key = [key copy];
+        
+        // Logging
+        DDTTYLogger * logger = [DDTTYLogger sharedInstance];
+        logger.logFormatter = [[ZNGLogFormatter alloc] init];
+        [DDLog addLogger:logger];
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         

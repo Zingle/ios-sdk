@@ -110,6 +110,8 @@
 {
     ZNGLabel * label = [self labelForIndexPath:indexPath];
     [self.delegate labelSelectViewController:self didSelectLabel:label];
+    
+    [searchController dismissViewControllerAnimated:NO completion:nil];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

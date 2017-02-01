@@ -30,7 +30,7 @@
 @import Photos;
 
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const EventCellIdentifier = @"EventCell";
 
@@ -84,6 +84,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     BOOL caTransactionToDisableAnimationsPushed;
     
     NSMutableArray<NSData *> * outgoingImageAttachments;
+    
+    /**
+     *  YES if the last scrolling action left us at the bottom of our content (within a few points)
+     */
+    BOOL isScrolledToBottom;
+    
+    /**
+     *  The number of new events that have arrived under our current scroll position
+     */
+    NSUInteger newEventsSinceLastScrolledToBottom;
 }
 
 @dynamic collectionView;
@@ -147,6 +157,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         UIEdgeInsets defaultInsets = self.collectionView.contentInset;
         self.collectionView.contentInset = UIEdgeInsetsMake(defaultInsets.top, defaultInsets.left, defaultInsets.bottom + self.additionalBottomInset, defaultInsets.right);
     }
+    
+    self.automaticallyScrollsToMostRecentMessage = NO;
     
     self.inputToolbar.contentView.textView.font = self.textInputFont;
     self.inputToolbar.sendButtonColor = self.sendButtonColor;
@@ -291,6 +303,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     _conversation = conversation;
     hasDisplayedInitialData = NO;
+    newEventsSinceLastScrolledToBottom = 0;
     
     // Update title and collection view
     [self.navigationItem setTitle:conversation.remoteName];
@@ -433,6 +446,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                     CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
                     [self.collectionView setContentOffset:bottomOffset animated:NO];
                 });
+            } else {
+                if (!isScrolledToBottom) {
+                    newEventsSinceLastScrolledToBottom += [insertions count];
+                    [self updateUnreadBanner];
+                }
             }
             
             break;
@@ -753,6 +771,37 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self.inputToolbar toggleSendButtonEnabled];
 }
 
+#pragma mark - Unread banner
+- (void) updateUnreadBanner
+{
+    if (newEventsSinceLastScrolledToBottom == 0) {
+        // Hide the banner if necessary
+        if (self.moreMessagesViewOnScreenConstraint.isActive) {
+            [self.moreMessagesContainerView layoutIfNeeded];
+            [UIView animateWithDuration:0.5 animations:^{
+                self.moreMessagesViewOffScreenConstraint.active = YES;
+                self.moreMessagesViewOnScreenConstraint.active = NO;
+                [self.moreMessagesContainerView layoutIfNeeded];
+            }];
+        }
+        
+        return;
+    }
+    
+    // Update the text
+    self.moreMessagesLabel.text = [NSString stringWithFormat:@"%llu new message%@", (unsigned long long)newEventsSinceLastScrolledToBottom, (newEventsSinceLastScrolledToBottom == 1) ? @"" : @"s"];
+    
+    // Show the banner if necessary
+    if (self.moreMessagesViewOffScreenConstraint.isActive) {
+        [self.moreMessagesContainerView layoutIfNeeded];
+        [UIView animateWithDuration:0.5 animations:^{
+            self.moreMessagesViewOnScreenConstraint.active = YES;
+            self.moreMessagesViewOffScreenConstraint.active = NO;
+            [self.moreMessagesContainerView layoutIfNeeded];
+        }];
+    }
+}
+
 #pragma mark - Message read marking
 - (void) markAllVisibleMessagesAsRead
 {
@@ -792,6 +841,28 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if ([unreadMessages count] > 0) {
         [self.conversation markMessagesAsRead:unreadMessages];
     }
+}
+
+#pragma mark - Scrolling
+- (void) scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
+    BOOL isNowScrolledToBottom = (bottomOffset < 12.0);
+    BOOL changed = isScrolledToBottom != isNowScrolledToBottom;
+    isScrolledToBottom = isNowScrolledToBottom;
+    
+    if (isScrolledToBottom) {
+        newEventsSinceLastScrolledToBottom = 0;
+    }
+    
+    if (changed) {
+        [self updateUnreadBanner];
+    }
+}
+
+- (BOOL) automaticallyScrollsToMostRecentMessage
+{
+    return isScrolledToBottom;
 }
 
 #pragma mark - Data source

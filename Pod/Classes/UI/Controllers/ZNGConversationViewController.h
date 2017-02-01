@@ -34,6 +34,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (weak, nonatomic, readonly) IBOutlet ZNGConversationCollectionView *collectionView;
 
+@property (nonatomic, strong, nullable) IBOutlet UIView * moreMessagesContainerView;
+@property (nonatomic, strong, nullable) IBOutlet UIView * moreMessagesView;
+@property (nonatomic, strong, nullable) IBOutlet UILabel * moreMessagesLabel;
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * moreMessagesViewOnScreenConstraint;
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * moreMessagesViewOffScreenConstraint;
+
 /**
  * OPTIONAL UI SETTINGS
  */

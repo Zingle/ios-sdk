@@ -623,31 +623,20 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             return;
         }
         
-        [self.messageClient messageWithId:messageId success:^(ZNGMessage *message, ZNGStatus *status) {
-            ZNGEvent * event = [ZNGEvent eventForNewMessage:message];
-            [self addSenderNameToEvents:@[event]];
+        NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
+        [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
             [self removeAnyPendingMessages];
-            [self appendEvents:@[event]];
-            self.totalEventCount = self.totalEventCount + 1;
+            self.totalEventCount = status.totalRecords;
+            
+            // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
+            NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
+            
+            [self mergeNewDataAtTail:sortedEvents];
             self.loading = NO;
-            
-            ZNGCorrespondent * correspondant = message.recipient;
-            ZNGLogVerbose(@"After sending message, recipient channel value is %@", correspondant.channel.value);
-            
-            if (success) {
-                success(status);
-            }
-            
-            [[ZNGAnalytics sharedAnalytics] trackSentMessage:message inConversation:self];
         } failure:^(ZNGError *error) {
-            ZNGLogWarn(@"Message send reported success, but we were unable to retrieve the message with the supplied ID of %@", messageId);
-            
             [self removeAnyPendingMessages];
+            ZNGLogError(@"Message send reported success, but we were unable to load event data afterwards.  This is odd.  %@", error);
             self.loading = NO;
-            
-            if (failure) {
-                failure(error);
-            }
         }];
     } failure:^(ZNGError *error) {
         [self removeAnyPendingMessages];

@@ -623,21 +623,24 @@ NSString *const kMessageDirectionOutbound = @"outbound";
             return;
         }
         
-        NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
-        [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-            [self removeAnyPendingMessages];
-            self.totalEventCount = status.totalRecords;
-            
-            // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
-            NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
-            
-            [self mergeNewDataAtTail:sortedEvents];
-            self.loading = NO;
-        } failure:^(ZNGError *error) {
-            [self removeAnyPendingMessages];
-            ZNGLogError(@"Message send reported success, but we were unable to load event data afterwards.  This is odd.  %@", error);
-            self.loading = NO;
-        }];
+        // Slight delay so we're not 2fast2furious for the server.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
+            [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+                [self removeAnyPendingMessages];
+                self.totalEventCount = status.totalRecords;
+                
+                // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
+                NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
+                
+                [self mergeNewDataAtTail:sortedEvents];
+                self.loading = NO;
+            } failure:^(ZNGError *error) {
+                [self removeAnyPendingMessages];
+                ZNGLogError(@"Message send reported success, but we were unable to load event data afterwards.  This is odd.  %@", error);
+                self.loading = NO;
+            }];
+        });
     } failure:^(ZNGError *error) {
         [self removeAnyPendingMessages];
         self.loading = NO;

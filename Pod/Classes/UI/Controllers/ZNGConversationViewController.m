@@ -192,6 +192,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.outgoingBubbleMediaMaskData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor blackColor]];
     self.incomingBubbleMediaMaskData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor blackColor]];
     
+    // Add tappa tappa tappa to the new message deal
+    UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedNewMessageBanner:)];
+    [self.moreMessagesView addGestureRecognizer:tapper];
+    
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
     __weak ZNGConversationViewController * weakSelf = self;
@@ -366,6 +370,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [super finishSendingMessageAnimated:animated];
 }
 
+- (void) pressedNewMessageBanner:(UITapGestureRecognizer *)tapper
+{
+    if ([self.conversation.events count] == 0) {
+        return;
+    }
+    
+    [self scrollToBottomAnimated:YES];
+}
+
 #pragma mark - Data notifications
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
@@ -387,7 +400,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
     }
 }
-
 
 - (void) showOrHideLoadEarlierMessagesButton
 {

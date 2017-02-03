@@ -68,6 +68,9 @@ static void * KVOContext = &KVOContext;
     NSMutableArray<NSDate *> * touchTimes;
     NSUInteger spamZIndex;
     
+    NSMutableArray<NSDate *> * robotTouchTimes;
+    NSDate * lastRobotVolleyTime;
+    
     ZNGMessage * messageToForward;
     
     NSTimer * textViewChangeTimer;
@@ -161,6 +164,7 @@ static void * KVOContext = &KVOContext;
     
     touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
     spamZIndex = INT_MAX;
+    robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
     
     self.typingIndicatorContainerView.hidden = YES;
     self.typingIndicatorTextLabel.text = nil;
@@ -186,6 +190,14 @@ static void * KVOContext = &KVOContext;
     avatarCache.font = [UIFont latoSemiBoldFontOfSize:12.0];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = avatarSize;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = avatarSize;
+    
+    // Robot touching
+    UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(someoneTouchedMyRobot:)];
+    UITapGestureRecognizer * tapper2 = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(someoneTouchedMyRobot:)];
+    [self.automationRobot addGestureRecognizer:tapper];
+    [self.automationLabel addGestureRecognizer:tapper2];
+    self.automationRobot.userInteractionEnabled = YES;
+    self.automationLabel.userInteractionEnabled = YES;
     
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
@@ -406,12 +418,6 @@ static void * KVOContext = &KVOContext;
 
 - (void) smoulderAtRandomPoint
 {
-    CAEmitterLayer * smoulderer = [CAEmitterLayer layer];
-    smoulderer.frame = self.view.layer.bounds;
-    smoulderer.renderMode = kCAEmitterLayerAdditive;
-    smoulderer.beginTime = CACurrentMediaTime();
-    smoulderer.zPosition = spamZIndex--;
-    
     u_int32_t minY = 64.0;
     u_int32_t maxY = minY + bannerContainer.frame.size.height + 50.0;
     u_int32_t minX = 20.0;
@@ -420,8 +426,18 @@ static void * KVOContext = &KVOContext;
     CGFloat y = minY + (arc4random() % (maxY - minY));
     CGFloat x = minX + (arc4random() % (maxX - minX));
     
-    smoulderer.emitterPosition = CGPointMake(x, y);
+    [self smoulderAtPoint:CGPointMake(x, y)];
+}
+
+- (void) smoulderAtPoint:(CGPoint)point
+{
+    CAEmitterLayer * smoulderer = [CAEmitterLayer layer];
+    smoulderer.frame = self.view.layer.bounds;
+    smoulderer.renderMode = kCAEmitterLayerAdditive;
+    smoulderer.beginTime = CACurrentMediaTime();
+    smoulderer.zPosition = spamZIndex--;
     
+    smoulderer.emitterPosition = point;
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     UIImage * particle = [UIImage imageNamed:@"particle" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -443,7 +459,7 @@ static void * KVOContext = &KVOContext;
     cell.name = @"fire";
     
     smoulderer.emitterCells = @[ cell ];
-
+    
     
     [self.view.layer addSublayer:smoulderer];
     
@@ -458,7 +474,214 @@ static void * KVOContext = &KVOContext;
             [smoulderer removeFromSuperlayer];
         });
     });
+}
+
+- (void) someoneTouchedMyRobot:(UITapGestureRecognizer *)tapper
+{
+    [robotTouchTimes addObject:[NSDate date]];
     
+    if ([robotTouchTimes count] > 18) {
+        [robotTouchTimes removeObjectAtIndex:0];
+    }
+    
+    if ([self robotShouldShoot]) {
+        [self activateLaserRobotEyes];
+        return;
+    }
+    
+    [self vibrateRobot];
+}
+
+- (void) vibrateRobot
+{
+    static NSString * const vibrationKey = @"vibrate";
+    
+    // Make sure he is not already vibrating
+    if ([self.automationRobot.layer animationForKey:vibrationKey] != nil) {
+        return;
+    }
+    
+    // Vibrate away
+    CAKeyframeAnimation * vibration = [[CAKeyframeAnimation alloc] init];
+    vibration.keyPath = @"transform";
+    
+    CATransform3D leftVibrateTransform = CATransform3DMakeTranslation(-2.0, 0.0, 0.0);
+    CATransform3D rightVibrateTransform = CATransform3DMakeTranslation(2.0, 0.0, 0.0);
+    
+    NSValue * leftVibrate = [NSValue valueWithCATransform3D:leftVibrateTransform];
+    NSValue * rightVibrate = [NSValue valueWithCATransform3D:rightVibrateTransform];
+    
+    vibration.values = @[ leftVibrate, rightVibrate, leftVibrate, rightVibrate, leftVibrate, rightVibrate, leftVibrate, rightVibrate, leftVibrate, rightVibrate ];
+    
+    vibration.duration = 0.5;
+    
+    [self.automationRobot.layer addAnimation:vibration forKey:vibrationKey];
+}
+
+- (void) vigorouslyVibrateRobotForDuration:(NSTimeInterval)duration
+{
+    static NSString * const vibrationKey = @"vibrate";
+
+    // Vibrate away
+    CAKeyframeAnimation * vibration = [[CAKeyframeAnimation alloc] init];
+    vibration.keyPath = @"transform";
+    
+    CATransform3D leftVibrateTransform = CATransform3DMakeTranslation(-4.0, 0.0, 0.0);
+    CATransform3D rightVibrateTransform = CATransform3DMakeTranslation(4.0, 0.0, 0.0);
+    
+    NSValue * leftVibrate = [NSValue valueWithCATransform3D:leftVibrateTransform];
+    NSValue * rightVibrate = [NSValue valueWithCATransform3D:rightVibrateTransform];
+    
+    vibration.values = @[ leftVibrate, rightVibrate, leftVibrate, rightVibrate, leftVibrate, rightVibrate, leftVibrate, rightVibrate, leftVibrate, rightVibrate ];
+    
+    vibration.duration = 0.5;
+    vibration.repeatCount = (duration / vibration.duration) - 1.0;
+    
+    [self.automationRobot.layer addAnimation:vibration forKey:vibrationKey];
+}
+
+- (BOOL) robotShouldShoot
+{
+    // Has he shot his load too recently?
+    if (lastRobotVolleyTime != nil) {
+        NSTimeInterval timeSinceLastVolley = [[NSDate date] timeIntervalSinceDate:lastRobotVolleyTime];
+        
+        if (timeSinceLastVolley < 30.0) {
+            return NO;
+        }
+    }
+    
+    // Have they touched him enough to make it happen?
+    if ([robotTouchTimes count] < 5) {
+        return NO;
+    }
+    
+    NSUInteger fifthMostRecentTouchTimeIndex = [robotTouchTimes count] - 5;
+    NSDate * fifthMostRecentTouchTime = robotTouchTimes[fifthMostRecentTouchTimeIndex];
+    NSTimeInterval spamTimeInterval = [[NSDate date] timeIntervalSinceDate:fifthMostRecentTouchTime];
+    
+    if (spamTimeInterval > 5.0) {
+        // Not fast enough
+        return NO;
+    }
+    
+    // 10% chance
+    return ((arc4random() % 10) == 0);
+}
+
+- (void) activateLaserRobotEyes
+{
+    lastRobotVolleyTime = [NSDate date];
+    
+    NSTimeInterval buildUpTime = 2.0;
+    
+    [self vigorouslyVibrateRobotForDuration:buildUpTime];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(buildUpTime * 0.95 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CGPoint robotCenter = [self.view convertPoint:self.automationRobot.center fromView:self.automationRobot.superview];
+        CGPoint leftEyeCenter = CGPointMake(robotCenter.x - 3.5, robotCenter.y);
+        CGPoint rightEyeCenter = CGPointMake(leftEyeCenter.x + 7.0, leftEyeCenter.y);
+        CGRect leftEyeRect = CGRectMake(leftEyeCenter.x - 3.0, leftEyeCenter.y - 3.0, 6.0, 6.0);
+        CGRect rightEyeRect = CGRectMake(rightEyeCenter.x - 3.0, rightEyeCenter.y - 3.0, 6.0, 6.0);
+        
+        CAShapeLayer * leftEyeCircle = [CAShapeLayer layer];
+        leftEyeCircle.opacity = 0.0;
+        [leftEyeCircle setPath:[[UIBezierPath bezierPathWithOvalInRect:leftEyeRect] CGPath]];
+        [leftEyeCircle setFillColor:[[UIColor yellowColor] CGColor]];
+        [self.view.layer addSublayer:leftEyeCircle];
+        
+        CAShapeLayer * rightEyeCircle = [CAShapeLayer layer];
+        rightEyeCircle.opacity = 0.0;
+        [rightEyeCircle setPath:[[UIBezierPath bezierPathWithOvalInRect:rightEyeRect] CGPath]];
+        [rightEyeCircle setFillColor:[[UIColor yellowColor] CGColor]];
+        [self.view.layer addSublayer:rightEyeCircle];
+        
+        CABasicAnimation * eyeCircleFadeIn = [CABasicAnimation animationWithKeyPath:@"opacity"];
+        eyeCircleFadeIn.duration = 2.0;
+        eyeCircleFadeIn.fromValue = @0.0;
+        eyeCircleFadeIn.toValue = @1.0;
+        [leftEyeCircle addAnimation:eyeCircleFadeIn forKey:@"opacity"];
+        [rightEyeCircle addAnimation:eyeCircleFadeIn forKey:@"opacity"];
+        
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [leftEyeCircle removeFromSuperlayer];
+            [rightEyeCircle removeFromSuperlayer];
+            
+            // First we want to find a random destination point somewhere near the center of the screen (inner 66%)
+            CGFloat minX = self.view.layer.bounds.size.width * 0.33;
+            CGFloat maxX = self.view.layer.bounds.size.width * 0.66;
+            CGFloat minY = self.view.layer.bounds.size.height * 0.33;
+            CGFloat maxY = self.view.layer.bounds.size.height * 0.66;
+            
+            CGFloat x = arc4random() % (uint32_t)(maxX - minX) + (uint32_t)minX;
+            CGFloat y = arc4random() % (uint32_t)(maxY - minY) + (uint32_t)minY;
+            CGPoint point = CGPointMake(x, y);
+            
+            
+            // White flash
+            CALayer * whiteFlash = [CALayer layer];
+            whiteFlash.frame = self.view.layer.bounds;
+            whiteFlash.backgroundColor = [[UIColor whiteColor] CGColor];
+            [self.view.layer addSublayer:whiteFlash];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [whiteFlash removeFromSuperlayer];
+            });
+            
+            
+            // Make the lasers
+            CGFloat initialLaserOpacity = 0.2;
+            CGFloat initialLaserWidth = 1.0;
+            CGFloat finalLaserWidth = 6.0;
+            CAShapeLayer * leftLaser = [CAShapeLayer layer];
+            leftLaser.opacity = initialLaserOpacity;
+            UIBezierPath * leftLaserPath = [UIBezierPath bezierPath];
+            [leftLaserPath moveToPoint:leftEyeCenter];
+            [leftLaserPath addLineToPoint:point];
+            leftLaser.path = [leftLaserPath CGPath];
+            leftLaser.strokeColor = [[UIColor yellowColor] CGColor];
+            leftLaser.lineWidth = initialLaserWidth;
+            [self.view.layer addSublayer:leftLaser];
+            
+            CAShapeLayer * rightLaser = [CAShapeLayer layer];
+            rightLaser.opacity = initialLaserOpacity;
+            UIBezierPath * rightLaserPath = [UIBezierPath bezierPath];
+            [rightLaserPath moveToPoint:rightEyeCenter];
+            [rightLaserPath addLineToPoint:point];
+            rightLaser.path = [rightLaserPath CGPath];
+            rightLaser.strokeColor = [[UIColor yellowColor] CGColor];
+            rightLaser.lineWidth = initialLaserWidth;
+            [self.view.layer addSublayer:rightLaser];
+            
+            
+            // Grow them over two seconds
+            CGFloat fadeInDuration = 1.0;
+            CABasicAnimation * laserFadeIn = [CABasicAnimation animationWithKeyPath:@"opacity"];
+            laserFadeIn.duration = fadeInDuration;
+            laserFadeIn.fromValue = @(initialLaserOpacity);
+            laserFadeIn.toValue = @1.0;
+            [leftLaser addAnimation:laserFadeIn forKey:@"fade"];
+            [rightLaser addAnimation:laserFadeIn forKey:@"fade"];
+            
+            CABasicAnimation * laserGrow = [CABasicAnimation animationWithKeyPath:@"lineWidth"];
+            laserGrow.duration = fadeInDuration;
+            laserGrow.fromValue = @(initialLaserWidth);
+            laserGrow.toValue = @(finalLaserWidth);
+            [leftLaser addAnimation:laserGrow forKey:@"fade"];
+            [rightLaser addAnimation:laserGrow forKey:@"fade"];
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self smoulderAtPoint:point];
+            });
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(fadeInDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [rightLaser removeFromSuperlayer];
+                [leftLaser removeFromSuperlayer];
+            });
+        });
+        
+    });
 }
 
 #pragma mark - Button items

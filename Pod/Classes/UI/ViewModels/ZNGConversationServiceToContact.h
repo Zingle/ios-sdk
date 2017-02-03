@@ -68,7 +68,8 @@ NS_ASSUME_NONNULL_BEGIN
                  success:(void (^ _Nullable)(ZNGStatus* status))success
                  failure:(void (^ _Nullable) (ZNGError *error))failure;
 
-- (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion;
+- (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^ _Nullable)(BOOL success))completion;
+- (void) stopAutomationWithCompletion:(void (^ _Nullable)(BOOL success))completion;
 
 - (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toSMS:(NSString *)phoneNumberString success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;
 - (void) forwardMessage:(ZNGMessage *)message withBody:(NSString *)body toEmail:(NSString *)email success:(void (^ _Nullable)(ZNGStatus* status))success failure:(void (^ _Nullable) (ZNGError *error))failure;

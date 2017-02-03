@@ -326,6 +326,15 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     }];
 }
 
+- (void) stopAutomationWithCompletion:(void (^)(BOOL success))completion
+{
+    [self.contactClient stopAutomationForContactId:self.contact.contactId success:^(ZNGStatus *status) {
+        completion(YES);
+    } failure:^(ZNGError *error) {
+        completion(NO);
+    }];
+}
+
 - (NSArray<ZNGChannel *> *)usedChannels
 {
     // Can we use our cached data?

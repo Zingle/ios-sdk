@@ -56,6 +56,10 @@
                         success:(void (^)(ZNGStatus* status))success
                         failure:(void (^)(ZNGError* error))failure;
 
+- (void) stopAutomationForContactId:(NSString *)contactId
+                            success:(void (^)(ZNGStatus* status))success
+                            failure:(void (^)(ZNGError* error))failure;
+
 - (void)addLabelWithId:(NSString*)labelId
          withContactId:(NSString*)contactId
                success:(void (^)(ZNGContact* contact, ZNGStatus* status))success

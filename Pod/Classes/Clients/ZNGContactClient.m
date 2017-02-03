@@ -13,7 +13,7 @@
 #import "ZNGError.h"
 #import "ZNGNewChannel.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @implementation ZNGContactClient
 
@@ -135,6 +135,20 @@ static const int zngLogLevel = ZNGLogLevelDebug;
                         failure:(void (^)(ZNGError* error))failure
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/automations/%@", self.serviceId, contactId, automationId];
+    
+    [self postWithModel:nil
+                   path:path
+          responseClass:nil
+                success:^(id responseObject, ZNGStatus *status) {
+                    success(status);
+                } failure:failure];
+}
+
+- (void) stopAutomationForContactId:(NSString *)contactId
+                            success:(void (^)(ZNGStatus* status))success
+                            failure:(void (^)(ZNGError* error))failure
+{
+    NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@/stop-automation", self.serviceId, contactId];
     
     [self postWithModel:nil
                    path:path

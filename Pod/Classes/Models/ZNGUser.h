@@ -8,6 +8,8 @@
 
 #import <Mantle/Mantle.h>
 
+@class ZNGUserAuthorization;
+
 @interface ZNGUser : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong) NSString* userId;
@@ -19,5 +21,7 @@
 @property(nonatomic, strong) NSArray* serviceIds;
 
 - (NSString *) fullName;
+
++ (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth;
 
 @end

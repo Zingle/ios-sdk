@@ -7,6 +7,7 @@
 //
 
 #import "ZNGConversation.h"
+#import "ZingleAccountSession.h"
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
 #import "ZNGEventViewModel.h"
@@ -575,6 +576,12 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     message.communicationDirection = outbound ? @"outbound" : @"inbound";
     message.senderType = outbound ? @"service" : @"contact";
     message.createdAt = [NSDate date];
+
+
+    if ([self.messageClient.session isKindOfClass:[ZingleAccountSession class]]) {
+        ZingleAccountSession * accountSession = (ZingleAccountSession *)self.messageClient.session;
+        message.triggeredByUser = [ZNGUser userFromUserAuthorization:accountSession.userAuthorization];
+    }
     
     if ([newMessage.outgoingImageAttachments count] > 0) {
         NSMutableArray * nullImageLinks = [[NSMutableArray alloc] initWithCapacity:[newMessage.outgoingImageAttachments count]];

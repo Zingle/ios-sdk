@@ -7,6 +7,7 @@
 //
 
 #import "ZNGUser.h"
+#import "ZNGUserAuthorization.h"
 
 @implementation ZNGUser
 
@@ -40,6 +41,19 @@
     }
     
     return name;
+}
+
++ (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth
+{
+    ZNGUser * user = [[self alloc] init];
+    
+    user.firstName = auth.firstName;
+    user.lastName = auth.lastName;
+    user.userId = auth.userId;
+    user.email = auth.email;
+    user.title = auth.title;
+    
+    return user;
 }
 
 @end

@@ -624,7 +624,7 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         }
         
         // Slight delay so we're not 2fast2furious for the server.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
             [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
                 [self removeAnyPendingMessages];

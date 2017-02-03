@@ -30,7 +30,7 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -215,28 +215,47 @@ static void * KVOContext = &KVOContext;
                 lockedString = nil;
             }
             
-            NSAttributedString * message = nil;
+            NSAttributedString * oldBottomString = [self attributedTextForTypingIndicatorDescription:oldLockedString];
+            NSAttributedString * bottomString = [self attributedTextForTypingIndicatorDescription:lockedString];
+            NSAttributedString * oldTopString = [self attributedTextForAutomationBanner:oldLockedString];
+            NSAttributedString * topString = [self attributedTextForAutomationBanner:lockedString];
             
-            if ([self.conversation.lockedDescription length] > 0) {
-                message = [self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription];
+            self.automationLabel.attributedText = topString;
+            self.typingIndicatorTextLabel.attributedText = bottomString;
+            self.typingIndicatorContainerView.hidden = ([bottomString length] == 0);
+            
+            BOOL topStatusChanged = (([topString length] == 0) != ([oldTopString length] == 0));
+            BOOL bottomStatusChanged = (([bottomString length] == 0) != ([oldBottomString length] == 0));
+            
+            if (topStatusChanged) {
+                ZNGLogDebug(@"Top automation banner is either appearing or disappearing.");
+                
+                [self.automationBannerContainerView layoutSubviews];
+                [UIView animateWithDuration:0.5 animations:^{
+                    BOOL automationTextExists = ([topString length] > 0);
+                    self.automationBannerOnScreenConstraint.active = automationTextExists;
+                    self.automationBannerOffScreenConstraint.active = !automationTextExists;
+                    [self.automationBannerContainerView layoutSubviews];
+                }];
             }
             
-            self.typingIndicatorTextLabel.attributedText = message;
-            self.typingIndicatorContainerView.hidden = ([message length] == 0);
-            [self updateTypingIndicatorEmoji];
-            
-            BOOL justBecameLocked = (([oldLockedString length] == 0) && ([lockedString length] > 0));
-            BOOL needToScrollBackToBottom = NO;
-            
-            if (justBecameLocked) {
-                // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
-                needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
-            }
-            
-            [self jsq_updateCollectionViewInsets];
-            
-            if (needToScrollBackToBottom) {
-                [self scrollToBottomAnimated:YES];
+            if (bottomStatusChanged) {
+                ZNGLogDebug(@"Typing indicator banner is either appearing or disappearing.");
+                
+                [self updateTypingIndicatorEmoji];
+                BOOL bottomJustAppeared = (([oldBottomString length] == 0) && ([bottomString length] > 0));
+                BOOL needToScrollBackToBottom = NO;
+                
+                if (bottomJustAppeared) {
+                    // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
+                    needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
+                }
+                
+                [self jsq_updateCollectionViewInsets];
+                
+                if (needToScrollBackToBottom) {
+                    [self scrollToBottomAnimated:YES];
+                }
             }
         }
     } else {
@@ -248,14 +267,11 @@ static void * KVOContext = &KVOContext;
 {
     NSString * lowercaseLockedDescription = [self.conversation.lockedDescription lowercaseString];
     BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
-    BOOL inAutomation = [lowercaseLockedDescription containsString:@"in automation:"];
     static NSString * const wiggleKey = @"wiggle";
     BOOL shouldWiggle = userResponding;
     
     if (userResponding) {
         self.typingIndicatorEmojiLabel.text = @"\U0001F4AC";
-    } else if (inAutomation) {
-        self.typingIndicatorEmojiLabel.text = @"\U0001F916";
     } else {
         self.typingIndicatorEmojiLabel.text = nil;
     }
@@ -291,26 +307,14 @@ static void * KVOContext = &KVOContext;
 {
     // We'll try to find a typical "is responding" string and bold the name before it.
     NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
+    
+    if ((description == nil) || (isRespondingRange.location == NSNotFound)) {
+        // This is not an 'is responding' string
+        return nil;
+    }
+    
     NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
-    
-    if (isRespondingRange.location != NSNotFound) {
-        rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
-    } else {
-        // This description is not a "is responding" deal.  Check for automation.
-        NSRange inAutomationRange = [description rangeOfString:@"in automation:" options:NSCaseInsensitiveSearch];
-        
-        if (inAutomationRange.location != NSNotFound) {
-            NSUInteger firstCharacterToBold = inAutomationRange.location + inAutomationRange.length;
-            
-            if (firstCharacterToBold < [description length]) {
-                rangeToBoldify = NSMakeRange(firstCharacterToBold, ([description length] - firstCharacterToBold));
-            }
-        }
-    }
-    
-    if (rangeToBoldify.location == NSNotFound) {
-        return [[NSAttributedString alloc] initWithString:description];
-    }
+    rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
     
     CGFloat fontSize = self.typingIndicatorTextLabel.font.pointSize;
     UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
@@ -319,6 +323,35 @@ static void * KVOContext = &KVOContext;
     [text addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
     
     return text;
+}
+
+- (NSAttributedString *) attributedTextForAutomationBanner:(NSString *)description
+{
+    NSRange inAutomationRange = [description rangeOfString:@"in automation:" options:NSCaseInsensitiveSearch];
+    
+    if ((description == nil) || (inAutomationRange.location == NSNotFound)) {
+        // This is not an 'in automation' lock string
+        return nil;
+    }
+    
+    NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc] initWithString:description];
+    
+    NSUInteger firstBoldIndex = inAutomationRange.location + inAutomationRange.length;
+    NSRange rangeToBoldify;
+    
+    // Bold the automation name
+    if (firstBoldIndex < [description length]) {
+        rangeToBoldify = NSMakeRange(firstBoldIndex, [description length] - firstBoldIndex);
+        
+        UIFont * normalFont = self.automationLabel.font ?: [UIFont systemFontOfSize:15.0];
+        UIFont * boldFont = [UIFont latoBoldFontOfSize:normalFont.pointSize];
+        [attributedString addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
+    }
+    
+    // Add a robot head emoji
+    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"\U0001F916  "];
+    [string appendAttributedString:attributedString];
+    return string;
 }
 
 - (ZNGContact *) contact
@@ -965,6 +998,16 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Actions
+
+- (IBAction)pressedCancelAutomation:(id)sender
+{
+    self.automationCancelButton.enabled = NO;
+    
+    [self.conversation stopAutomationWithCompletion:^(BOOL success) {
+        self.automationCancelButton.enabled = YES;
+    }];
+}
+
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel
 {
     return [self.conversation.service shouldDisplayRawValueForChannel:channel] ? [channel displayValueUsingRawValue] : [channel displayValueUsingFormattedValue];

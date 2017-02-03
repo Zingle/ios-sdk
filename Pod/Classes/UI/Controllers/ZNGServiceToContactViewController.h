@@ -36,6 +36,15 @@
 @property (nonatomic, strong, nullable) IBOutlet UIView * typingIndicatorContainerView;
 @property (nonatomic, assign) CGFloat extraSpaceAboveTypingIndicator;   // Defaults to 20.0
 
+@property (nonatomic, strong, nullable) IBOutlet UIView * automationBannerContainerView;
+@property (nonatomic, strong, nullable) IBOutlet UIView * automationBanner;
+@property (nonatomic, strong, nullable) IBOutlet UILabel * automationLabel;
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * automationBannerOnScreenConstraint;
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * automationBannerOffScreenConstraint;
+@property (nonatomic, strong, nullable) IBOutlet UIButton * automationCancelButton;
+
+- (IBAction)pressedCancelAutomation:(nullable id)sender;
+
 // Defaults to YES
 @property (nonatomic, assign) BOOL allowForwarding;
 

@@ -220,9 +220,13 @@ static void * KVOContext = &KVOContext;
             NSAttributedString * oldTopString = [self attributedTextForAutomationBanner:oldLockedString];
             NSAttributedString * topString = [self attributedTextForAutomationBanner:lockedString];
             
-            self.automationLabel.attributedText = topString;
             self.typingIndicatorTextLabel.attributedText = bottomString;
             self.typingIndicatorContainerView.hidden = ([bottomString length] == 0);
+            
+            // We only set the automation label text if it is not nil.  We want old text to continue to exist as the banner is animated away.
+            if ([topString length] > 0) {
+                self.automationLabel.attributedText = topString;
+            }
             
             BOOL topStatusChanged = (([topString length] == 0) != ([oldTopString length] == 0));
             BOOL bottomStatusChanged = (([bottomString length] == 0) != ([oldBottomString length] == 0));
@@ -348,10 +352,7 @@ static void * KVOContext = &KVOContext;
         [attributedString addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
     }
     
-    // Add a robot head emoji
-    NSMutableAttributedString * string = [[NSMutableAttributedString alloc] initWithString:@"\U0001F916  "];
-    [string appendAttributedString:attributedString];
-    return string;
+    return attributedString;
 }
 
 - (ZNGContact *) contact
@@ -360,6 +361,7 @@ static void * KVOContext = &KVOContext;
     return conversation.contact;
 }
 
+#pragma mark - Easter eggs
 - (void) checkForSpam
 {
     NSDate * mostRecentTouch = [NSDate date];
@@ -459,6 +461,7 @@ static void * KVOContext = &KVOContext;
     
 }
 
+#pragma mark - Button items
 - (NSArray<UIBarButtonItem *> *)rightBarButtonItems
 {
     NSArray<UIBarButtonItem *> * superButtonItems = [super rightBarButtonItems];

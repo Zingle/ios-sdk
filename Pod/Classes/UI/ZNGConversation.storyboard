@@ -50,9 +50,15 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In automation: None" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uwr-ad-H0w">
-                                                <rect key="frame" x="10" y="7" width="297" height="18"/>
+                                                <rect key="frame" x="36" y="7" width="271" height="18"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="255" verticalHuggingPriority="251" horizontalCompressionResistancePriority="800" text="🤖" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jm4-wX-hgr">
+                                                <rect key="frame" x="8" y="7" width="20" height="18"/>
+                                                <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
+                                                <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                         </subviews>
@@ -60,8 +66,10 @@
                                         <constraints>
                                             <constraint firstItem="2Hh-Uf-Tjj" firstAttribute="centerY" secondItem="59H-Kb-Pa5" secondAttribute="centerY" id="B23-EX-zi6"/>
                                             <constraint firstAttribute="trailing" secondItem="2Hh-Uf-Tjj" secondAttribute="trailing" constant="15" id="VSc-ta-sKO"/>
-                                            <constraint firstItem="uwr-ad-H0w" firstAttribute="leading" secondItem="59H-Kb-Pa5" secondAttribute="leading" constant="10" id="WWu-Hu-35A"/>
+                                            <constraint firstItem="uwr-ad-H0w" firstAttribute="leading" secondItem="Jm4-wX-hgr" secondAttribute="trailing" constant="8" id="W1a-i1-HHz"/>
+                                            <constraint firstItem="Jm4-wX-hgr" firstAttribute="baseline" secondItem="uwr-ad-H0w" secondAttribute="baseline" id="WNN-48-L5c"/>
                                             <constraint firstItem="uwr-ad-H0w" firstAttribute="baseline" secondItem="2Hh-Uf-Tjj" secondAttribute="baseline" id="liW-D0-8Vd"/>
+                                            <constraint firstItem="Jm4-wX-hgr" firstAttribute="leading" secondItem="59H-Kb-Pa5" secondAttribute="leading" constant="8" id="lzr-zR-Zio"/>
                                             <constraint firstItem="2Hh-Uf-Tjj" firstAttribute="leading" secondItem="uwr-ad-H0w" secondAttribute="trailing" constant="8" id="z5Q-w0-S56"/>
                                         </constraints>
                                     </view>
@@ -88,7 +96,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="123" y="4" width="129" height="21"/>
+                                                <rect key="frame" x="123.5" y="4.5" width="128.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -125,7 +133,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Someone is responding" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHX-Je-yfE">
-                                        <rect key="frame" x="209" y="5" width="133" height="16"/>
+                                        <rect key="frame" x="209.5" y="5" width="132.5" height="16"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                                         <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -177,6 +185,7 @@
                         <outlet property="automationBannerOnScreenConstraint" destination="Ops-CP-9QT" id="Nmc-Yb-gRZ"/>
                         <outlet property="automationCancelButton" destination="2Hh-Uf-Tjj" id="It4-a9-9v4"/>
                         <outlet property="automationLabel" destination="uwr-ad-H0w" id="Zhf-Tc-lHE"/>
+                        <outlet property="automationRobot" destination="Jm4-wX-hgr" id="eqm-Ff-baH"/>
                         <outlet property="collectionView" destination="G72-K8-cSu" id="m0g-gs-Y0W"/>
                         <outlet property="inputToolbar" destination="Uqn-aA-lFp" id="vJK-sj-akg"/>
                         <outlet property="moreMessagesContainerView" destination="1S3-q5-gQs" id="kVr-pd-0UU"/>
@@ -540,7 +549,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qMA-Ni-naT">
-                                                    <rect key="frame" x="37" y="18" width="22" height="22"/>
+                                                    <rect key="frame" x="37" y="18.5" width="22" height="22"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="22" id="Wvd-Qp-BSP"/>
                                                         <constraint firstAttribute="width" constant="22" id="gzX-qs-rKM"/>
@@ -551,7 +560,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="14" width="45" height="30"/>
+                                                    <rect key="frame" x="71" y="14.5" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -561,7 +570,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="120" y="22" width="14" height="14"/>
+                                                    <rect key="frame" x="120" y="22.5" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>

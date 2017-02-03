@@ -42,6 +42,7 @@
 @property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * automationBannerOnScreenConstraint;
 @property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * automationBannerOffScreenConstraint;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationCancelButton;
+@property (nonatomic, strong, nullable) IBOutlet UILabel * automationRobot;
 
 - (IBAction)pressedCancelAutomation:(nullable id)sender;
 

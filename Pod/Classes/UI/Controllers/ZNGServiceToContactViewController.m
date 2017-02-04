@@ -246,6 +246,8 @@ static void * KVOContext = &KVOContext;
             if (topStatusChanged) {
                 ZNGLogDebug(@"Top automation banner is either appearing or disappearing.");
                 
+                [self updateInputStatus];
+                
                 [self.automationBannerContainerView layoutSubviews];
                 [UIView animateWithDuration:0.5 animations:^{
                     BOOL automationTextExists = ([topString length] > 0);
@@ -997,6 +999,10 @@ static void * KVOContext = &KVOContext;
             } completion:nil];
         }
     }
+    
+    // Lock input if there is an automation lock message
+    NSAttributedString * automationLockText = [self attributedTextForAutomationBanner:self.conversation.lockedDescription];
+    shouldDisableInput |= ([automationLockText length] > 0);
     
     self.inputToolbar.inputEnabled = !shouldDisableInput;
 }

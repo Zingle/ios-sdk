@@ -30,7 +30,7 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
@@ -621,8 +621,6 @@ static void * KVOContext = &KVOContext;
             [particle addAnimation:move forKey:@"move"];
             [particle addAnimation:fadeIn forKey:@"fadeIn"];
             [self.view.layer addSublayer:particle];
-            
-            ZNGLogDebug(@"Moving particle from %@ to %@", move.fromValue, move.toValue);
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(particleLifetime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [particle removeFromSuperlayer];

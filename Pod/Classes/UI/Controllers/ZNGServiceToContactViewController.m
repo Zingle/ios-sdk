@@ -569,6 +569,68 @@ static void * KVOContext = &KVOContext;
     return ((arc4random() % 10) == 0);
 }
 
+- (void) shootParticlesIntoPoint:(CGPoint)point forDuration:(NSTimeInterval)duration
+{
+    NSTimeInterval particleLifetime = 0.75;
+    
+    if (duration < particleLifetime) {
+        ZNGLogError(@"Particle lifetime of %.2f seconds is too long to exist within the %.2f second duration.", particleLifetime, duration);
+        return;
+    }
+    
+    NSUInteger particleRatePerSecond = 30;
+    NSTimeInterval lastParticleBirthTime = duration - particleLifetime; // Our duration, allowing enough time for all particles to disipiate before our duration
+    NSTimeInterval timeInbetweenParticles = 1.0 / (NSTimeInterval)particleRatePerSecond;
+    NSTimeInterval time = 0.0;
+    CGFloat particleBirthRadius = 75.0;
+    CGFloat particleRadius = 2.0;
+    
+    UIColor * particleColor = [UIColor colorFromHexString:@"#e1a003"];
+    
+    CABasicAnimation * fadeIn = [CABasicAnimation animationWithKeyPath:@"opacity"];
+    fadeIn.fromValue = @0.2;
+    fadeIn.toValue = @1.0;
+    fadeIn.duration = 0.2;
+    fadeIn.removedOnCompletion = NO;
+    
+    while (time < lastParticleBirthTime) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // Vary particle distance within 10pt of edge of radius
+            CGFloat centerDistance = (arc4random() % 20 + 10) + particleBirthRadius;
+            
+            // Random direction in 360 degrees
+            CGFloat angle = M_PI * (arc4random() % 360) / 180.0;
+            CGFloat dx = centerDistance * cos(angle);
+            CGFloat dy = centerDistance * sin(angle);
+            CGPoint particleStartingPoint = CGPointMake(point.x + dx, point.y + dy);
+            
+            CGRect startingRect = CGRectMake(particleStartingPoint.x - particleRadius, particleStartingPoint.y - particleRadius, particleRadius * 2.0, particleRadius * 2.0);
+            
+            CAShapeLayer * particle = [CAShapeLayer layer];
+            UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:startingRect];
+            particle.path = [path CGPath];
+            particle.fillColor = [particleColor CGColor];
+            
+            CABasicAnimation * move = [CABasicAnimation animationWithKeyPath:@"position"];
+            move.fromValue = [NSValue valueWithCGPoint:particleStartingPoint];
+            move.toValue = [NSValue valueWithCGPoint:CGPointMake(-dx, -dy)];
+            move.duration = particleLifetime;
+            move.removedOnCompletion = NO;
+            [particle addAnimation:move forKey:@"move"];
+            [particle addAnimation:fadeIn forKey:@"fadeIn"];
+            [self.view.layer addSublayer:particle];
+            
+            ZNGLogDebug(@"Moving particle from %@ to %@", move.fromValue, move.toValue);
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(particleLifetime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [particle removeFromSuperlayer];
+            });
+        });
+        
+        time += timeInbetweenParticles;
+    }
+}
+
 - (void) activateLaserRobotEyes
 {
     lastRobotVolleyTime = [NSDate date];
@@ -596,15 +658,21 @@ static void * KVOContext = &KVOContext;
         [rightEyeCircle setFillColor:[[UIColor yellowColor] CGColor]];
         [self.view.layer addSublayer:rightEyeCircle];
         
+        
+        NSTimeInterval eyeLightUpDuration = 3.0;
+        
         CABasicAnimation * eyeCircleFadeIn = [CABasicAnimation animationWithKeyPath:@"opacity"];
-        eyeCircleFadeIn.duration = 2.0;
+        eyeCircleFadeIn.duration = eyeLightUpDuration;
         eyeCircleFadeIn.fromValue = @0.0;
         eyeCircleFadeIn.toValue = @1.0;
         [leftEyeCircle addAnimation:eyeCircleFadeIn forKey:@"opacity"];
         [rightEyeCircle addAnimation:eyeCircleFadeIn forKey:@"opacity"];
         
+        [self shootParticlesIntoPoint:leftEyeCenter forDuration:eyeLightUpDuration];
+        [self shootParticlesIntoPoint:rightEyeCenter forDuration:eyeLightUpDuration];
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(eyeLightUpDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [leftEyeCircle removeFromSuperlayer];
             [rightEyeCircle removeFromSuperlayer];
             

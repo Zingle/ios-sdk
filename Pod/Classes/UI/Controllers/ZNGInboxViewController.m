@@ -462,7 +462,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             if (![[self.tableView indexPathForSelectedRow] isEqual:selectedContactIndexPath]) {
                 [self.tableView selectRowAtIndexPath:selectedContactIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
             }
-        } else {
+        } else if (!self.data.loadingInitialData) {
             // Our selected contact is no longer in our data.  De-select it.
             self.selectedContact = nil;
         }

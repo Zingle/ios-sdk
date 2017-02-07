@@ -82,9 +82,11 @@
 {
     if (self.inputEnabled) {
         self.contentView.textView.editable = YES;
+        self.contentView.textView.userInteractionEnabled = YES;
         [super toggleSendButtonEnabled];
     } else {
         self.contentView.textView.editable = NO;
+        self.contentView.textView.userInteractionEnabled = NO;
         self.sendButton.enabled = NO;
     }
 }

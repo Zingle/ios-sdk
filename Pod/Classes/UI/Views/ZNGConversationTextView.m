@@ -29,7 +29,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self.scrollIndicatorInsets = UIEdgeInsetsZero;
 }
 
-- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender
+{
+    if (!self.editable) {
+        return NO;
+    }
     
     BOOL canPerform = NO;
     

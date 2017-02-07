@@ -232,6 +232,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     payload[@"pendingResponse"] = input;
     payload[@"description"] = description;
     
+    ZNGLogInfo(@"Emitting %@ for feed %@", event, conversation.contact.contactId);
     [socketClient emit:event with:@[payload]];
 }
 

@@ -362,6 +362,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         [self presentViewController:alert animated:YES completion:nil];
     }];
+    
+    [self finishSendingMessageAnimated:YES];
 }
 
 - (void) finishSendingMessageAnimated:(BOOL)animated
@@ -485,8 +487,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
-    CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
-    [self.collectionView setContentOffset:bottomOffset animated:animated];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
+        [self.collectionView setContentOffset:bottomOffset animated:animated];
+    });
 }
 
 // Using method stolen from http://stackoverflow.com/a/26401767/3470757 to insert/reload without scrolling
@@ -870,7 +874,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
-    BOOL isNowScrolledToBottom = (bottomOffset < 12.0);
+    BOOL isNowScrolledToBottom = (bottomOffset < 30.0);
     BOOL changed = isScrolledToBottom != isNowScrolledToBottom;
     isScrolledToBottom = isNowScrolledToBottom;
     
@@ -885,6 +889,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (BOOL) automaticallyScrollsToMostRecentMessage
 {
+    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", isScrolledToBottom ? @"YES" : @"NO");
+    
     return isScrolledToBottom;
 }
 

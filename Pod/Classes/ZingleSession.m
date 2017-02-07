@@ -108,6 +108,12 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
         logger.logFormatter = [[ZNGLogFormatter alloc] init];
         [DDLog addLogger:logger];
         
+        DDFileLogger * fileLogger = [[DDFileLogger alloc] init];
+        fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
+        fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
+        [DDLog addLogger:fileLogger];
+        
+        
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
         _sessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:self.urlString]];

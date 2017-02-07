@@ -456,16 +456,19 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void) retainSelection
 {
     if (self.selectedContact != nil) {
-        NSIndexPath * selectedContactIndexPath = [self indexPathForContact:self.selectedContact];
-        
-        if (selectedContactIndexPath != nil) {
-            if (![[self.tableView indexPathForSelectedRow] isEqual:selectedContactIndexPath]) {
-                [self.tableView selectRowAtIndexPath:selectedContactIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+        // This method call is being kicked off by KVO *just* before the data is actually in place for indexPathForContact to reflect reality.  This 0.0 delay "fixes" this.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSIndexPath * selectedContactIndexPath = [self indexPathForContact:self.selectedContact];
+            
+            if (selectedContactIndexPath != nil) {
+                if (![[self.tableView indexPathForSelectedRow] isEqual:selectedContactIndexPath]) {
+                    [self.tableView selectRowAtIndexPath:selectedContactIndexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+                }
+            } else if (!self.data.loadingInitialData) {
+                // Our selected contact is no longer in our data.  De-select it.
+                self.selectedContact = nil;
             }
-        } else if (!self.data.loadingInitialData) {
-            // Our selected contact is no longer in our data.  De-select it.
-            self.selectedContact = nil;
-        }
+        });
     }
 }
 

@@ -455,8 +455,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 // I suspect that the core problem here is that our content inset is not properly taken into account until one time through the run loop.  We load
                 //  too fast for UIKit to have all of our positioning and sizing data.  Silly UIKit.
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
-                    [self.collectionView setContentOffset:bottomOffset animated:NO];
+                    [self scrollToBottomAnimated:NO];
                 });
             } else {
                 if (!isScrolledToBottom) {
@@ -475,7 +474,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             // Any of these cases, we will be safe and reload
             ZNGLogVerbose(@"Reloading collection view with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self.collectionView reloadData];
+        
+            if (!hasDisplayedInitialData) {
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self scrollToBottomAnimated:NO];
+                });
+            }
     }
+}
+
+- (void) scrollToBottomAnimated:(BOOL)animated
+{
+    CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
+    [self.collectionView setContentOffset:bottomOffset animated:animated];
 }
 
 // Using method stolen from http://stackoverflow.com/a/26401767/3470757 to insert/reload without scrolling

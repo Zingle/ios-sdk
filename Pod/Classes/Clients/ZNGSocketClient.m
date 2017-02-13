@@ -60,6 +60,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             authPath = @"https://secure.zingle.me/";
             nodePath = @"https://socket.zingle.me/";
         }
+        
+        ZNGLogDebug(@"Auth path is %@, node path is %@", authPath, nodePath);
     }
     
     return self;

@@ -138,7 +138,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:authPath]];
     ZNGLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
     
-    socketClient = [[SocketIOClient alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : @NO }];
+    NSNumber * shouldLog = (zngLogLevel & DDLogFlagDebug) ? @YES : @NO;
+    
+    socketClient = [[SocketIOClient alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : shouldLog }];
     
     __weak ZNGSocketClient * weakSelf = self;
     

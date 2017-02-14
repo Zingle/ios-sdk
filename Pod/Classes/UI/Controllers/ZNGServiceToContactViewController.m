@@ -1059,7 +1059,7 @@ static void * KVOContext = &KVOContext;
 {
     CGFloat extraBottom = 0.0;
     
-    if ([self.typingIndicatorTextLabel.text length] > 0) {
+    if (!self.typingIndicatorContainerView.hidden) {
         extraBottom = self.typingIndicatorContainerView.frame.size.height + self.extraSpaceAboveTypingIndicator;
     }
     

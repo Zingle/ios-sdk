@@ -47,6 +47,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface JSQMessagesViewController ()
 
+// Public declaration of private inset updating methods.  Barf.
+- (void)jsq_updateCollectionViewInsets;
+- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
+
 // Public declarations of methods required by our input toolbar delegate protocol that are already implemented by the base JSQMessagesViewController privately
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender;
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender;
@@ -152,11 +156,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [super viewDidLoad];
     
     [self setupLoadingGradient];
-    
-    if (self.additionalBottomInset != 0.0) {
-        UIEdgeInsets defaultInsets = self.collectionView.contentInset;
-        self.collectionView.contentInset = UIEdgeInsetsMake(defaultInsets.top, defaultInsets.left, defaultInsets.bottom + self.additionalBottomInset, defaultInsets.right);
-    }
     
     self.automaticallyScrollsToMostRecentMessage = NO;
     
@@ -867,6 +866,27 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if ([unreadMessages count] > 0) {
         [self.conversation markMessagesAsRead:unreadMessages];
     }
+}
+
+#pragma mark - Insets
+- (void) jsq_updateCollectionViewInsets
+{
+    [self jsq_setCollectionViewInsetsTopValue:self.topLayoutGuide.length + self.topContentAdditionalInset
+                                  bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(self.inputToolbar.frame) + self.additionalBottomInset];
+}
+
+- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
+{
+    UIEdgeInsets insets = UIEdgeInsetsMake(top, 0.0, bottom, 0.0);
+    UIEdgeInsets scrollIndicatorInsets = insets;
+    self.collectionView.contentInset = insets;
+    
+    // If we have additional bottom space, subtract that from the scroll indidcator insets to keep the scroll bar from being odd.
+    if (self.additionalBottomInset > 0.0) {
+        scrollIndicatorInsets = UIEdgeInsetsMake(scrollIndicatorInsets.top, scrollIndicatorInsets.left, scrollIndicatorInsets.bottom - self.additionalBottomInset, scrollIndicatorInsets.right);
+    }
+    
+    self.collectionView.scrollIndicatorInsets = scrollIndicatorInsets;
 }
 
 #pragma mark - Scrolling

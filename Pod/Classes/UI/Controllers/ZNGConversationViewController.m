@@ -477,8 +477,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        CGPoint bottomOffset = CGPointMake(0.0, self.collectionView.contentSize.height - self.collectionView.bounds.size.height + self.collectionView.contentInset.bottom);
-        [self.collectionView setContentOffset:bottomOffset animated:animated];
+        CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
+        [self.collectionView scrollRectToVisible:bottomLeft animated:animated];
     });
 }
 

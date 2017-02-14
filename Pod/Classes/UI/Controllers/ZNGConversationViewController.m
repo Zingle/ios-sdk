@@ -86,9 +86,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSMutableArray<NSData *> * outgoingImageAttachments;
     
     /**
-     *  YES if the last scrolling action left us at the bottom of our content (within a few points)
+     *  YES if the last scrolling action left us at the bottom of our content (within a few points) or if there is another reason we now want to be bottom pinned (e.g. just sent a message)
      */
-    BOOL isScrolledToBottom;
+    BOOL stuckToBottom;
     
     /**
      *  The number of new events that have arrived under our current scroll position
@@ -368,6 +368,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) finishSendingMessageAnimated:(BOOL)animated
 {
+    stuckToBottom = YES;
     [outgoingImageAttachments removeAllObjects];
     [super finishSendingMessageAnimated:animated];
 }
@@ -450,7 +451,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             
-            if ((hasDisplayedInitialData) && (!isScrolledToBottom)) {
+            if ((hasDisplayedInitialData) && (!stuckToBottom)) {
                 newEventsSinceLastScrolledToBottom += [insertions count];
                 [self updateUnreadBanner];
             }
@@ -864,10 +865,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
     BOOL isNowScrolledToBottom = (bottomOffset < 60.0);
-    BOOL changed = isScrolledToBottom != isNowScrolledToBottom;
-    isScrolledToBottom = isNowScrolledToBottom;
+    BOOL changed = stuckToBottom != isNowScrolledToBottom;
+    stuckToBottom = isNowScrolledToBottom;
     
-    if (isScrolledToBottom) {
+    if (stuckToBottom) {
         newEventsSinceLastScrolledToBottom = 0;
     }
     
@@ -875,12 +876,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         [self updateUnreadBanner];
     }
 }
-
 - (BOOL) automaticallyScrollsToMostRecentMessage
 {
-    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", isScrolledToBottom ? @"YES" : @"NO");
-    
-    return isScrolledToBottom;
+    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", stuckToBottom ? @"YES" : @"NO");
+
+    return stuckToBottom;
 }
 
 #pragma mark - Data source

@@ -332,6 +332,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.inputEnabled = NO;
     self.inputToolbar.contentView.textView.text = @"";
     
+    stuckToBottom = YES;
+    
     [self.conversation sendMessageWithBody:text imageData:outgoingImageAttachments success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
@@ -477,6 +479,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
+    stuckToBottom = YES;
+    
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
         [self.collectionView scrollRectToVisible:bottomLeft animated:animated];
@@ -802,6 +806,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             }];
         }
         
+        return;
+    }
+    
+    // If we are stuck to the bottom, we will not show the banner
+    if (stuckToBottom) {
         return;
     }
     

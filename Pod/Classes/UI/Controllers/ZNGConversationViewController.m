@@ -863,7 +863,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
-    BOOL isNowScrolledToBottom = (bottomOffset < 30.0);
+    BOOL isNowScrolledToBottom = (bottomOffset < 60.0);
     BOOL changed = isScrolledToBottom != isNowScrolledToBottom;
     isScrolledToBottom = isNowScrolledToBottom;
     

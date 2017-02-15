@@ -8,6 +8,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -90,6 +95,12 @@
                             <constraint firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="trailing" id="w9X-3u-BNY"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:26 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MtA-aS-YIJ">
+                        <rect key="frame" x="316" y="124" width="57" height="16"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d5b-Qu-ohI" userLabel="Cell Bottom Label Container">
                         <rect key="frame" x="164" y="134" width="108" height="20"/>
                         <subviews>
@@ -113,13 +124,15 @@
             <constraints>
                 <constraint firstItem="2zh-vR-QJW" firstAttribute="top" secondItem="p52-YN-yLu" secondAttribute="bottom" identifier="space between bubble container and top label" id="3Wx-g0-fTc"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="bottom" id="GsO-H5-D3v"/>
-                <constraint firstAttribute="trailing" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" identifier="space between avatar container and edge of cell" id="KLt-Ix-wDa"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" id="U9s-lj-C7u"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" id="a35-gx-RGQ"/>
                 <constraint firstAttribute="bottom" secondItem="d5b-Qu-ohI" secondAttribute="bottom" id="gNU-zx-YAN"/>
                 <constraint firstAttribute="trailing" secondItem="p52-YN-yLu" secondAttribute="trailing" identifier="bubble top label right" id="gen-N0-uZj"/>
+                <constraint firstAttribute="trailing" secondItem="MtA-aS-YIJ" secondAttribute="leading" constant="4" id="hw4-d1-V8R"/>
+                <constraint firstItem="MtA-aS-YIJ" firstAttribute="bottom" secondItem="X89-B1-aAd" secondAttribute="bottom" constant="6" id="iVJ-ne-rHW"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="leading" constant="-10" id="ltP-jP-Llg"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="n9g-Vi-PyP"/>
+                <constraint firstItem="MtA-aS-YIJ" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="trailing" id="qjs-ir-Qic"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="bubble top label left" id="tTj-Mp-0va"/>
                 <constraint firstAttribute="trailing" secondItem="5Gk-Ay-M9X" secondAttribute="trailing" id="uCo-3l-Xom"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="bottom" id="uUe-xd-MHO"/>
@@ -135,6 +148,7 @@
                 <outlet property="cellBottomLabelHeightConstraint" destination="Uay-Ci-Liz" id="jFp-i2-mgK"/>
                 <outlet property="cellTopLabel" destination="vSO-G2-WG6" id="8cg-XN-aai"/>
                 <outlet property="cellTopLabelHeightConstraint" destination="n7t-KS-RUh" id="eUM-7v-DIG"/>
+                <outlet property="exactTimeLabel" destination="MtA-aS-YIJ" id="sm7-8r-ZbS"/>
                 <outlet property="messageBubbleContainerView" destination="2zh-vR-QJW" id="pu0-GU-eZl"/>
                 <outlet property="messageBubbleContainerWidthConstraint" destination="imD-52-K45" id="Xld-Pa-yJw"/>
                 <outlet property="messageBubbleImageView" destination="2qm-c6-OZf" id="bpy-Gv-jSh"/>

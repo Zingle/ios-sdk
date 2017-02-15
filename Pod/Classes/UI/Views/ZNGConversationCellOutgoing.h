@@ -15,5 +15,7 @@
  */
 @property (nonatomic, strong, nullable) UIImage * mediaViewMaskingImage;
 
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * timeOffScreenConstraint;
+@property (nonatomic, strong, nullable) IBOutlet UILabel * exactTimeLabel;
 
 @end

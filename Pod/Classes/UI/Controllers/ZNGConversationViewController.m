@@ -95,7 +95,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     BOOL stuckToBottom;
     
     /**
-     *  The number of new events that have arrived under our current scroll position
+     *  The number of new events that have arrived under our current scroll position.
+     *  This will count messages and internal notes but not other event types.
      */
     NSUInteger newEventsSinceLastScrolledToBottom;
 }
@@ -428,7 +429,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     {
         case NSKeyValueChangeInsertion:
         {
-            NSArray * insertions = [change[NSKeyValueChangeNewKey] isKindOfClass:[NSArray class]] ? change[NSKeyValueChangeNewKey] : nil;
+            NSArray<ZNGEventViewModel *> * insertions = [change[NSKeyValueChangeNewKey] isKindOfClass:[NSArray class]] ? change[NSKeyValueChangeNewKey] : nil;
                         
             // Check for the special case of messages being inserted at the head of our data
             BOOL newDataIsAtHead = [[self.conversation.eventViewModels firstObject] isEqual:[insertions firstObject]];
@@ -453,7 +454,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             
             if ((hasDisplayedInitialData) && (!stuckToBottom)) {
-                newEventsSinceLastScrolledToBottom += [insertions count];
+                
+                __block NSUInteger newMessagesAndNotesCount = 0;
+                
+                for (ZNGEventViewModel * eventViewModel in insertions) {
+                    if (([eventViewModel.event isMessage]) || ([eventViewModel.event isNote])) {
+                        newMessagesAndNotesCount++;
+                    }
+                }
+                
+                newEventsSinceLastScrolledToBottom += newMessagesAndNotesCount;
                 [self updateUnreadBanner];
             }
             

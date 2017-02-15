@@ -18,7 +18,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGServiceConversationInputToolbarDelegate>
+@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGServiceConversationInputToolbarDelegate, UIGestureRecognizerDelegate>
 
 @property (nonatomic, strong, nullable) ZNGConversation * conversation;
 

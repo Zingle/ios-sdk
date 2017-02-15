@@ -30,7 +30,7 @@
 @import Photos;
 
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 static NSString * const EventCellIdentifier = @"EventCell";
 
@@ -195,6 +195,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // Add tappa tappa tappa to the new message deal
     UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedNewMessageBanner:)];
     [self.moreMessagesView addGestureRecognizer:tapper];
+    
+    // Pan gesture recognizer for revealing times
+    UIPanGestureRecognizer * panner = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
+    panner.cancelsTouchesInView = NO;
+    panner.delaysTouchesEnded = NO;
+    panner.delegate = self;
+    [self.collectionView addGestureRecognizer:panner];
     
     // Use a weak timer so that we can have a refresh timer going that will continue to work even if the conversation
     //   object is changed out from under us, but we will also not leak.
@@ -382,6 +389,34 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     [self scrollToBottomAnimated:YES];
+}
+
+#pragma mark - Pan timestamps
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return (otherGestureRecognizer == self.collectionView.panGestureRecognizer);
+}
+
+- (BOOL) gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)panner
+{
+    CGPoint velocity = [panner velocityInView:self.collectionView];
+    CGFloat leftness = fabs(MIN(velocity.x, 0.0));
+    CGFloat verticalness = fabs(velocity.y);
+    CGFloat relativeLeftness = leftness - verticalness;
+    
+    // We must be going significantly leftward to start the gesture.
+    return (relativeLeftness > 25.0);
+}
+
+- (void) didPan:(UIPanGestureRecognizer *)panner
+{
+    if (panner.state == UIGestureRecognizerStateChanged) {
+        ZNGLogDebug(@"We be panning");
+    } else if (panner.state == UIGestureRecognizerStateBegan) {
+        ZNGLogDebug(@"I hope we start panning soon.");
+    } else if (panner.state == UIGestureRecognizerStateEnded) {
+        ZNGLogDebug(@"Panning over :(");
+    }
 }
 
 #pragma mark - Data notifications

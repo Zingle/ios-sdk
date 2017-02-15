@@ -1497,7 +1497,10 @@ static void * KVOContext = &KVOContext;
 {
     __weak ZNGServiceToContactViewController * weakSelf = self;
     
+    [self scrollToBottomAnimated:YES];
+    
     [self.conversation addInternalNote:note success:^(ZNGStatus * _Nonnull status) {
+        [weakSelf scrollToBottomAnimated:YES];
         [[ZNGAnalytics sharedAnalytics] trackAddedNote:note toConversation:weakSelf.conversation];
     } failure:^(ZNGError * _Nonnull error) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Failed to add note" message:nil preferredStyle:UIAlertControllerStyleAlert];

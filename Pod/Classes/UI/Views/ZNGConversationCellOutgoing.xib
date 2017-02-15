@@ -18,16 +18,25 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="jxM-YD-sVG" userLabel="Cell top label" customClass="JSQMessagesLabel">
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Gk-Ay-M9X" userLabel="Cell top label container">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
-                        <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vSO-G2-WG6" customClass="JSQMessagesLabel">
+                                <rect key="frame" x="0.0" y="8" width="320" height="12"/>
+                                <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <constraints>
-                            <constraint firstAttribute="height" constant="20" identifier="cell top label height" id="9oK-E7-iXA"/>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vSO-G2-WG6" secondAttribute="bottom" id="22C-tv-FDk"/>
+                            <constraint firstItem="vSO-G2-WG6" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="top" priority="900" constant="8" id="HMo-TY-Y4W"/>
+                            <constraint firstItem="vSO-G2-WG6" firstAttribute="leading" secondItem="5Gk-Ay-M9X" secondAttribute="leading" id="Zz8-Pr-0O1"/>
+                            <constraint firstAttribute="trailing" secondItem="vSO-G2-WG6" secondAttribute="trailing" id="l5p-vs-xZO"/>
+                            <constraint firstAttribute="height" constant="20" id="n7t-KS-RUh"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
+                    </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p52-YN-yLu" userLabel="Bubble top label" customClass="JSQMessagesLabel">
                         <rect key="frame" x="0.0" y="20" width="320" height="20"/>
                         <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -103,17 +112,17 @@
             </view>
             <constraints>
                 <constraint firstItem="2zh-vR-QJW" firstAttribute="top" secondItem="p52-YN-yLu" secondAttribute="bottom" identifier="space between bubble container and top label" id="3Wx-g0-fTc"/>
-                <constraint firstAttribute="trailing" secondItem="jxM-YD-sVG" secondAttribute="trailing" identifier="cell top label right space" id="AwY-g7-f1T"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="bottom" id="GsO-H5-D3v"/>
-                <constraint firstItem="jxM-YD-sVG" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" identifier="cell top label top" id="HYT-Tw-whz"/>
                 <constraint firstAttribute="trailing" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" identifier="space between avatar container and edge of cell" id="KLt-Ix-wDa"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" id="U9s-lj-C7u"/>
+                <constraint firstItem="5Gk-Ay-M9X" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" id="a35-gx-RGQ"/>
                 <constraint firstAttribute="bottom" secondItem="d5b-Qu-ohI" secondAttribute="bottom" id="gNU-zx-YAN"/>
                 <constraint firstAttribute="trailing" secondItem="p52-YN-yLu" secondAttribute="trailing" identifier="bubble top label right" id="gen-N0-uZj"/>
-                <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="jxM-YD-sVG" secondAttribute="bottom" identifier="spacing between bubble top label and cell top label" id="jBD-JV-AWk"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="leading" constant="-10" id="ltP-jP-Llg"/>
-                <constraint firstItem="jxM-YD-sVG" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="cell top label left" id="qeB-G5-1Wq"/>
+                <constraint firstItem="5Gk-Ay-M9X" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="n9g-Vi-PyP"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="bubble top label left" id="tTj-Mp-0va"/>
+                <constraint firstAttribute="trailing" secondItem="5Gk-Ay-M9X" secondAttribute="trailing" id="uCo-3l-Xom"/>
+                <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="bottom" id="uUe-xd-MHO"/>
                 <constraint firstItem="X89-B1-aAd" firstAttribute="leading" secondItem="2zh-vR-QJW" secondAttribute="trailing" constant="2" identifier="space between avatar container and bubble" id="vMz-Yi-B0w"/>
             </constraints>
             <size key="customSize" width="317" height="245"/>
@@ -124,13 +133,13 @@
                 <outlet property="avatarImageView" destination="y9b-D9-Q7W" id="cZo-SR-S9h"/>
                 <outlet property="cellBottomLabel" destination="Rxh-zX-vCu" id="7Q3-0N-ql0"/>
                 <outlet property="cellBottomLabelHeightConstraint" destination="Uay-Ci-Liz" id="jFp-i2-mgK"/>
-                <outlet property="cellTopLabel" destination="jxM-YD-sVG" id="acH-pr-spx"/>
-                <outlet property="cellTopLabelHeightConstraint" destination="9oK-E7-iXA" id="MZM-kV-2dI"/>
+                <outlet property="cellTopLabel" destination="vSO-G2-WG6" id="8cg-XN-aai"/>
+                <outlet property="cellTopLabelHeightConstraint" destination="n7t-KS-RUh" id="eUM-7v-DIG"/>
                 <outlet property="messageBubbleContainerView" destination="2zh-vR-QJW" id="pu0-GU-eZl"/>
                 <outlet property="messageBubbleContainerWidthConstraint" destination="imD-52-K45" id="Xld-Pa-yJw"/>
                 <outlet property="messageBubbleImageView" destination="2qm-c6-OZf" id="bpy-Gv-jSh"/>
-                <outlet property="messageBubbleTopLabel" destination="p52-YN-yLu" id="SLH-sA-Chu"/>
-                <outlet property="messageBubbleTopLabelHeightConstraint" destination="8TB-va-f8L" id="FNt-BS-Wxi"/>
+                <outlet property="messageBubbleTopLabel" destination="p52-YN-yLu" id="WyC-Au-w9T"/>
+                <outlet property="messageBubbleTopLabelHeightConstraint" destination="8TB-va-f8L" id="OEE-UN-JYn"/>
                 <outlet property="textView" destination="vLY-aM-0Dr" id="YEp-mW-xIY"/>
                 <outlet property="textViewAvatarHorizontalSpaceConstraint" destination="aVg-yy-8K7" id="CIe-Bi-eng"/>
                 <outlet property="textViewBottomVerticalSpaceConstraint" destination="UbF-Bl-Q7v" id="KHP-49-3u4"/>

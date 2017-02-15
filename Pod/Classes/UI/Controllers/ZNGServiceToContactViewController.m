@@ -824,7 +824,7 @@ static void * KVOContext = &KVOContext;
     
     // We will show an employee name for every outbound message and note
     if (isOutboundMessage || isInternalNote) {
-        return event.senderDisplayName;
+        return event.senderDisplayName ?: @"";
     }
     
     // This is probably an incoming message.  The contact's name is in the title bar; we do not need one above message bubbles.

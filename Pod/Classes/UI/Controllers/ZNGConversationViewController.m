@@ -69,6 +69,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 @property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
+/**
+ *  As this value climbs above its default (around -4.0,) the exact time label appears from the right of the screen as the user is panning left.
+ */
+@property (nonatomic, assign) CGFloat timeLabelPenetration;
+
 @end
 
 @implementation ZNGConversationViewController
@@ -99,6 +104,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
      *  This will count messages and internal notes but not other event types.
      */
     NSUInteger newEventsSinceLastScrolledToBottom;
+    
+    /**
+     *  The fully off-screen value for the off screen right time labels.
+     */
+    CGFloat offScreenTimeLabelPenetration;
+    
+    NSDateFormatter * timeFormatter;
 }
 
 @dynamic collectionView;
@@ -145,6 +157,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
     
+    offScreenTimeLabelPenetration = -4.0;
+    _timeLabelPenetration = offScreenTimeLabelPenetration;
+    
     outgoingImageAttachments = [[NSMutableArray alloc] initWithCapacity:2];
     
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
@@ -157,6 +172,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [super viewDidLoad];
     
     [self setupLoadingGradient];
+    
+    timeFormatter = [[NSDateFormatter alloc] init];
+    timeFormatter.dateStyle = NSDateFormatterNoStyle;
+    timeFormatter.timeStyle = NSDateFormatterShortStyle;
     
     self.automaticallyScrollsToMostRecentMessage = NO;
     
@@ -410,12 +429,73 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) didPan:(UIPanGestureRecognizer *)panner
 {
-    if (panner.state == UIGestureRecognizerStateChanged) {
-        ZNGLogDebug(@"We be panning");
-    } else if (panner.state == UIGestureRecognizerStateBegan) {
-        ZNGLogDebug(@"I hope we start panning soon.");
-    } else if (panner.state == UIGestureRecognizerStateEnded) {
-        ZNGLogDebug(@"Panning over :(");
+    switch (panner.state) {
+        case UIGestureRecognizerStateChanged:
+        {
+            CGPoint translation = [panner translationInView:self.collectionView];
+            CGFloat leftness = fabs(MIN(translation.x, 0.0)) + offScreenTimeLabelPenetration;
+            self.timeLabelPenetration = leftness;
+        }
+            return;
+            
+        case UIGestureRecognizerStateEnded:
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateCancelled:
+            self.timeLabelPenetration = offScreenTimeLabelPenetration;
+            return;
+            
+        default:
+            // Nothing to do
+            return;
+    }
+}
+
+- (void) setTimeLabelPenetration:(CGFloat)timeLabelPenetration
+{
+    if (timeLabelPenetration == _timeLabelPenetration) {
+        // No change.  Shortcut all display logic.
+        return;
+    }
+    
+    _timeLabelPenetration = timeLabelPenetration;
+    BOOL shouldAnimate = (timeLabelPenetration == offScreenTimeLabelPenetration);
+    [self updateVisibleTimeLabelLocationsAnimated:shouldAnimate];
+}
+
+- (void) updateVisibleTimeLabelLocationsAnimated:(BOOL)animated
+{
+    NSArray<JSQMessagesCollectionViewCell *> * visibleCells = [self.collectionView visibleCells];
+    
+    for (JSQMessagesCollectionViewCell * cell in visibleCells) {
+        NSIndexPath * indexPath = [self.collectionView indexPathForCell:cell];
+        ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+        [self updateTimeLabelLocationForCell:cell forEventViewModel:viewModel animated:animated];
+    }
+}
+
+- (void) updateTimeLabelLocationForCell:(JSQMessagesCollectionViewCell *)theCell forEventViewModel:(ZNGEventViewModel *)viewModel animated:(BOOL)animated
+{
+    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+        // This is not a message nor a note.  No time.
+        return;
+    }
+    
+    NSAssert([theCell respondsToSelector:@selector(timeOffScreenConstraint)] && [theCell respondsToSelector:@selector(exactTimeLabel)], @"Cell is expected to have properties for timeOffScreenConstraint and exactTimeLabel.  It is instead of type %@", [theCell class]);
+    
+    ZNGConversationCellOutgoing * cell = (ZNGConversationCellOutgoing *)theCell;
+    
+    CGFloat maxPenetration = cell.exactTimeLabel.frame.size.width + fabs(offScreenTimeLabelPenetration) * 2.0;
+    CGFloat penetration = -MAX(self.timeLabelPenetration, maxPenetration);
+    
+    if (animated) {
+        [cell layoutIfNeeded];
+        [UIView animateWithDuration:0.1 animations:^{
+            cell.timeOffScreenConstraint.constant = -penetration;
+            [cell layoutIfNeeded];
+        }];
+    } else {
+        cell.timeOffScreenConstraint.constant = -penetration;
+        [cell layoutIfNeeded];
     }
 }
 
@@ -1320,6 +1400,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
         
         cell.messageBubbleTopLabel.textColor = self.authorTextColor;
+        
+        if (event.createdAt != nil) {
+            // Both of our incoming and outgoing cell classes have properties for time label, so we'll just use outbound.
+            ZNGConversationCellOutgoing * outgoingCell = (ZNGConversationCellOutgoing *)cell;
+            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.createdAt];
+            [self updateTimeLabelLocationForCell:cell forEventViewModel:viewModel animated:NO];
+        }
         
         return cell;
     }

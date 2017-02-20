@@ -360,7 +360,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     stuckToBottom = YES;
     
-    [self.conversation sendMessageWithBody:text imageData:outgoingImageAttachments success:^(ZNGStatus *status) {
+    [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
@@ -843,13 +843,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     UIImage * image = info[UIImagePickerControllerOriginalImage];
+    NSURL * url = info[UIImagePickerControllerReferenceURL];
     
-    if (image == nil) {
+    if ((image == nil) || (url == nil)) {
         ZNGLogError(@"No image data was found after the user selected an image.");
         return;
     }
     
-    NSURL * url = info[UIImagePickerControllerReferenceURL];
     
     PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
     

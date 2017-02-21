@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Analytics (3.5.6)
+  - Analytics (3.5.7)
   - CocoaLumberjack (2.3.0):
     - CocoaLumberjack/Default (= 2.3.0)
     - CocoaLumberjack/Extensions (= 2.3.0)
@@ -57,7 +57,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Analytics: 3f083546175de3e62185a72c14670aa00ca6a201
+  Analytics: f00fcfd37d8b4dbe765021e22a497d6c2d3de39b
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
@@ -69,4 +69,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 
-COCOAPODS: 1.2.0.beta.1
+COCOAPODS: 1.2.0

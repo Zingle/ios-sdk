@@ -78,6 +78,7 @@
 #import "JSQMessagesCollectionViewCell+LayoutHack.h"
 #import "UIColor+ZingleSDK.h"
 #import "UIFont+Lato.h"
+#import "UIImage+animatedGIF.h"
 #import "UIImage+ZingleSDK.h"
 #import "UIViewController+ZNGSelectTemplate.h"
 #import "ZNGContactEditViewController.h"

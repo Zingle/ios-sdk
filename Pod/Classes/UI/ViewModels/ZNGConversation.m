@@ -684,55 +684,39 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }];
 }
 
--(UIImage *)resizeImage:(UIImage *)image
+-(NSData *)resizedJpegImageDataForImage:(UIImage *)image
 {
+    // Sanity check
+    if ((image.size.height == 0) || (image.size.width == 0)) {
+        return nil;
+    }
+    
     // If the image is animated, abandon all hope (of resize)
     if ([image.images count] > 1) {
-        return image;
+        return nil;
+    }
+
+    CGFloat widthDownscale = imageAttachmentMaxWidth / image.size.width;
+    CGFloat heightDownscale = imageAttachmentMaxHeight / image.size.height;
+    CGFloat downscale = MIN(widthDownscale, heightDownscale);
+    
+    if (downscale >= 1.0) {
+        // No need to resize
+        return nil;
     }
     
-    float actualHeight = image.size.height;
-    float actualWidth = image.size.width;
-    float maxHeight = 800.0;
-    float maxWidth = 800.0;
-    float imgRatio = actualWidth/actualHeight;
-    float maxRatio = maxWidth/maxHeight;
-    float compressionQuality = 0.5;//50 percent compression
+    CGFloat newWidth = image.size.width * downscale;
+    CGFloat newHeight = image.size.height * downscale;
     
-    if (actualHeight > maxHeight || actualWidth > maxWidth)
-    {
-        if(imgRatio < maxRatio)
-        {
-            //adjust width according to maxHeight
-            imgRatio = maxHeight / actualHeight;
-            actualWidth = imgRatio * actualWidth;
-            actualHeight = maxHeight;
-        }
-        else if(imgRatio > maxRatio)
-        {
-            //adjust height according to maxWidth
-            imgRatio = maxWidth / actualWidth;
-            actualHeight = imgRatio * actualHeight;
-            actualWidth = maxWidth;
-        }
-        else
-        {
-            actualHeight = maxHeight;
-            actualWidth = maxWidth;
-        }
-    } else {
-        return image;
-    }
-    
-    CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
+    CGRect rect = CGRectMake(0.0, 0.0, newWidth, newHeight);
     UIGraphicsBeginImageContext(rect.size);
     [image drawInRect:rect];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    NSData *imageData = UIImageJPEGRepresentation(img, compressionQuality);
+    UIImage * resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    float compressionQuality = 0.5;
+    NSData * imageData = UIImageJPEGRepresentation(resizedImage, compressionQuality);
     UIGraphicsEndImageContext();
     
-    return [UIImage imageWithData:imageData];
-    
+    return imageData;
 }
 
 #pragma mark - Protected/Abstract methods

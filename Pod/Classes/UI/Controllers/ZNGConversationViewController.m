@@ -1204,11 +1204,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    ZNGEvent * event = viewModel.event;
     
     if ([event isMessage]) {
         [self markMessagesReadIfNecessary:@[event.message]];
     }
+    
+    // Update the hidden time label.
+    [self updateTimeLabelLocationForCell:(JSQMessagesCollectionViewCell *)cell forEventViewModel:viewModel animated:NO];
 }
 
 #pragma mark - JSQMessagesViewController collection view shenanigans

@@ -162,7 +162,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
     
-    offScreenTimeLabelPenetration = -4.0;
+    offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
     
     outgoingImageAttachments = [[NSMutableArray alloc] initWithCapacity:2];

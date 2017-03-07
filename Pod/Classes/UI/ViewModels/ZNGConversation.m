@@ -70,7 +70,13 @@ NSString *const kMessageDirectionOutbound = @"outbound";
 
 - (id) initWithConversation:(ZNGConversation *)conversation
 {
-    return [self initWithMessageClient:conversation.messageClient eventClient:conversation.eventClient];
+    self = [self initWithMessageClient:conversation.messageClient eventClient:conversation.eventClient];
+
+    if (self != nil) {
+        self.lockedDescription = conversation.lockedDescription;
+    }
+    
+    return self;
 }
 
 - (void) dealloc

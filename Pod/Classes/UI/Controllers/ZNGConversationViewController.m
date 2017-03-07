@@ -494,10 +494,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     if (animated) {
         [cell layoutIfNeeded];
-        [UIView animateWithDuration:0.1 animations:^{
+        
+        [UIView animateWithDuration:0.38 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             cell.timeOffScreenConstraint.constant = -penetration;
             [cell layoutIfNeeded];
-        }];
+        } completion:nil];
     } else {
         cell.timeOffScreenConstraint.constant = -penetration;
         [cell layoutIfNeeded];

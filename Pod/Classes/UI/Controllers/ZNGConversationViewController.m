@@ -604,6 +604,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
     stuckToBottom = YES;
+    newEventsSinceLastScrolledToBottom = 0;
+    [self updateUnreadBanner];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
@@ -1019,7 +1021,17 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
     BOOL isNowScrolledToBottom = (bottomOffset < 60.0);
-    BOOL changed = stuckToBottom != isNowScrolledToBottom;
+    BOOL changed = (stuckToBottom != isNowScrolledToBottom);
+    
+    // If we're scrolling away from the bottom, we need to ensure that the scrolling is from user input and not some kind of refresh that may remove us from the bottom.
+    if ((changed) && (!isNowScrolledToBottom)) {
+        if ((!self.collectionView.isDragging) && (!self.collectionView.isDecelerating)) {
+            // Something other than user input is making us leave the bottom.  This is a mistake, probably from many events arriving simultaneously.
+            // (Put a break point here and investigate many simultaneous events before doing anything hasty like removing this check!)
+            return;
+        }
+    }
+    
     stuckToBottom = isNowScrolledToBottom;
     
     if (stuckToBottom) {

@@ -39,13 +39,19 @@ NSString *const kConversationSortDirectionAscending = @"asc";
 NSString *const kConversationSortDirectionDescending = @"desc";
 NSString *const kConversationCreatedAt = @"created_at";
 NSString *const kConversationEventType = @"event_type";
-NSString *const kAttachementContentTypeKey = @"content_type";
-NSString *const kAttachementContentTypeParam = @"image/png";
+NSString *const kAttachmentContentTypeKey = @"content_type";
+NSString *const kAttachmentContentTypePng = @"image/png";
+NSString *const kAttachmentContentTypeJpeg = @"image/jpeg";
+NSString *const kAttachmentContentTypeGif = @"image/gif";
+NSString *const kAttachmentContentTypeTiff = @"image/tiff";
 NSString *const kAttachementBase64 = @"base64";
 NSString *const kConversationService = @"service";
 NSString *const kConversationContact = @"contact";
 NSString *const kMessageDirectionInbound = @"inbound";
 NSString *const kMessageDirectionOutbound = @"outbound";
+
+static const CGFloat imageAttachmentMaxWidth = 800.0;
+static const CGFloat imageAttachmentMaxHeight = 800.0;
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient
 {
@@ -555,30 +561,48 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         NSMutableArray<UIImage *> * outgoingImageObjects = [[NSMutableArray alloc] initWithCapacity:[imageDatas count]];
         NSMutableArray<NSDictionary *> * outgoingAttachments = [[NSMutableArray alloc] initWithCapacity:[imageDatas count]];
         
-        for (NSData * imageData in imageDatas) {
+        for (NSData * originalImageData in imageDatas) {
             // Sanity check
-            if ([imageData length] == 0) {
+            if ([originalImageData length] == 0) {
                 continue;
             }
             
+            // Image data and content type will be the same as the original source unless we resize
+            NSData * imageData = originalImageData;
+            NSString * contentType = [self contentTypeForImageData:originalImageData];
+            
+            UIImage * imageForLocalDisplay;
+
             CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)imageData, NULL);
             size_t const frameCount = CGImageSourceGetCount(imageSource);
-            UIImage * image;
             
             if (frameCount > 1) {
                 // This is an animated GIF.  We need to make an animated UIImage for display while the message sends
-                image = [UIImage animatedImageWithAnimatedGIFData:imageData];
+                imageForLocalDisplay = [UIImage animatedImageWithAnimatedGIFData:originalImageData];
+                contentType = kAttachmentContentTypeGif;
             } else {
-                // This is a single image.  We will resize if necessary.
-                image = [[UIImage alloc] initWithData:imageData];
-                image = [self resizeImage:image];
+                // This is a single frame image.  We will resize if necessary.
+                
+                // Note that our locally-displayed copy (only while the message is being sent) is not the resized version.  This should not particularly matter.
+                imageForLocalDisplay = [[UIImage alloc] initWithData:imageData];
+                
+                if ((imageForLocalDisplay.size.height > imageAttachmentMaxHeight) || (imageForLocalDisplay.size.width > imageAttachmentMaxWidth)) {
+                    NSData * resizedData = [self resizedJpegImageDataForImage:imageForLocalDisplay];
+                    
+                    if (resizedData != nil) {
+                        imageData = resizedData;
+                        contentType = kAttachmentContentTypeJpeg;
+                    } else {
+                        ZNGLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
+                    }
+                }
             }
             
-            [outgoingImageObjects addObject:image];
+            [outgoingImageObjects addObject:imageForLocalDisplay];
             
             NSData * base64Data = [imageData base64EncodedDataWithOptions:0];
             NSString * base64String = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
-            NSDictionary * attachment = @{ kAttachementContentTypeKey : kAttachementContentTypeParam, kAttachementBase64 : base64String };
+            NSDictionary * attachment = @{ kAttachmentContentTypeKey : contentType, kAttachementBase64 : base64String };
             
             [outgoingAttachments addObject:attachment];
         }

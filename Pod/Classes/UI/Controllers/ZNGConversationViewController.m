@@ -32,6 +32,11 @@
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
+// How directly does the left panning gesture translate to speed of the time labels appearing on screen?
+// 1.0 is an exact match
+// The iOS 10 messages app appears to use something around 0.4
+static const CGFloat timeLabelPanSpeed = 0.4;
+
 static NSString * const EventCellIdentifier = @"EventCell";
 
 // We will use a more aggressive polling interval when testing on a simulator (that cannot support push notifications)
@@ -434,7 +439,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         {
             CGPoint translation = [panner translationInView:self.collectionView];
             CGFloat leftness = fabs(MIN(translation.x, 0.0)) + offScreenTimeLabelPenetration;
-            self.timeLabelPenetration = leftness;
+            self.timeLabelPenetration = leftness * timeLabelPanSpeed;
         }
             return;
             

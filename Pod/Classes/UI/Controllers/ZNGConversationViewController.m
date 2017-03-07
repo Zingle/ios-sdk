@@ -485,7 +485,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGConversationCellOutgoing * cell = (ZNGConversationCellOutgoing *)theCell;
     
     CGFloat maxPenetration = cell.exactTimeLabel.frame.size.width + fabs(offScreenTimeLabelPenetration) * 2.0;
-    CGFloat penetration = -MAX(self.timeLabelPenetration, maxPenetration);
+    CGFloat penetration = -MIN(self.timeLabelPenetration, maxPenetration);
     
     if (animated) {
         [cell layoutIfNeeded];

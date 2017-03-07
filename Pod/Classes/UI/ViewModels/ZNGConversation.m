@@ -503,6 +503,26 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self sendMessageWithBody:body imageData:nil success:success failure:failure];
 }
 
+- (NSString *) contentTypeForImageData:(NSData *)data
+{
+    uint8_t firstChar;
+    [data getBytes:&firstChar length:1];
+    
+    switch (firstChar) {
+        case 0xFF:
+            return kAttachmentContentTypeJpeg;
+        case 0x89:
+            return kAttachmentContentTypePng;
+        case 0x47:
+            return kAttachmentContentTypeGif;
+        case 0x49:
+        case 0x4D:
+            return kAttachmentContentTypeTiff;
+        default:
+            return nil;
+    }
+}
+
 - (void) sendMessageWithBody:(nonnull NSString *)body
                    imageData:(nullable NSArray<NSData *> *)imageDatas
                      success:(void (^_Nullable)(ZNGStatus* _Nullable status))success

@@ -8,6 +8,11 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -90,6 +95,12 @@
                             <constraint firstAttribute="height" constant="34" id="tZk-AK-JFa"/>
                         </constraints>
                     </view>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vvz-D1-DSw">
+                        <rect key="frame" x="320" y="112" width="30.5" height="16"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                        <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="gRE-Vl-pLy" userLabel="Bottom Label Container">
                         <rect key="frame" x="48" y="134" width="108" height="20"/>
                         <subviews>
@@ -113,15 +124,18 @@
             </view>
             <constraints>
                 <constraint firstItem="gRE-Vl-pLy" firstAttribute="top" secondItem="Da1-09-wR4" secondAttribute="bottom" id="FUy-Q2-LFq"/>
+                <constraint firstItem="Vvz-D1-DSw" firstAttribute="bottom" secondItem="btS-p8-B7Z" secondAttribute="bottom" constant="-6" id="IyD-pC-WBU"/>
                 <constraint firstItem="gRE-Vl-pLy" firstAttribute="top" secondItem="btS-p8-B7Z" secondAttribute="bottom" id="NNv-3Q-L52"/>
                 <constraint firstItem="gRE-Vl-pLy" firstAttribute="leading" secondItem="w23-sL-0Rh" secondAttribute="trailing" constant="10" id="OoP-99-cWy"/>
+                <constraint firstItem="Vvz-D1-DSw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="btS-p8-B7Z" secondAttribute="trailing" constant="4" id="S4h-Mn-5Ah"/>
                 <constraint firstItem="oJh-f1-j92" firstAttribute="top" secondItem="4lh-CK-yVn" secondAttribute="top" id="UzW-km-teJ"/>
                 <constraint firstItem="Ufa-bF-l1Y" firstAttribute="leading" secondItem="4lh-CK-yVn" secondAttribute="leading" id="Z5z-m3-8Ne"/>
                 <constraint firstAttribute="trailing" secondItem="Ufa-bF-l1Y" secondAttribute="trailing" id="cWQ-1Q-xOA"/>
                 <constraint firstAttribute="bottom" secondItem="gRE-Vl-pLy" secondAttribute="bottom" id="gtX-wr-wjR"/>
+                <constraint firstAttribute="trailing" secondItem="Vvz-D1-DSw" secondAttribute="leading" id="hu0-gA-xY4"/>
                 <constraint firstItem="btS-p8-B7Z" firstAttribute="leading" secondItem="Da1-09-wR4" secondAttribute="trailing" constant="2" id="j0I-pm-eex"/>
                 <constraint firstItem="btS-p8-B7Z" firstAttribute="top" secondItem="Ufa-bF-l1Y" secondAttribute="bottom" id="jAu-Dn-7rN"/>
-                <constraint firstItem="Da1-09-wR4" firstAttribute="leading" secondItem="4lh-CK-yVn" secondAttribute="leading" constant="4" id="jiu-B4-TSD"/>
+                <constraint firstItem="Da1-09-wR4" firstAttribute="leading" secondItem="4lh-CK-yVn" secondAttribute="leading" priority="900" constant="4" id="jiu-B4-TSD"/>
                 <constraint firstAttribute="trailing" secondItem="oJh-f1-j92" secondAttribute="trailing" id="lab-xK-7vY"/>
                 <constraint firstItem="oJh-f1-j92" firstAttribute="leading" secondItem="4lh-CK-yVn" secondAttribute="leading" id="rEU-IA-TJ7"/>
                 <constraint firstItem="Ufa-bF-l1Y" firstAttribute="top" secondItem="oJh-f1-j92" secondAttribute="bottom" id="yMu-bE-Ghw"/>
@@ -136,6 +150,7 @@
                 <outlet property="cellBottomLabelHeightConstraint" destination="7w7-4Q-L0v" id="kGu-VY-1EM"/>
                 <outlet property="cellTopLabel" destination="N5W-iC-GJ1" id="dac-0s-sOU"/>
                 <outlet property="cellTopLabelHeightConstraint" destination="uPP-Ly-3cq" id="gFd-Dm-Pyo"/>
+                <outlet property="exactTimeLabel" destination="Vvz-D1-DSw" id="oSk-f1-RBp"/>
                 <outlet property="messageBubbleContainerView" destination="btS-p8-B7Z" id="2sk-5p-NEd"/>
                 <outlet property="messageBubbleContainerWidthConstraint" destination="stE-iz-VHo" id="lle-iT-67d"/>
                 <outlet property="messageBubbleImageView" destination="OCS-Fu-acq" id="OuN-5t-30g"/>
@@ -146,6 +161,7 @@
                 <outlet property="textViewBottomVerticalSpaceConstraint" destination="B2v-Gq-Y1L" id="oKV-Ti-Oci"/>
                 <outlet property="textViewMarginHorizontalSpaceConstraint" destination="4qS-03-PFO" id="1Qe-Ee-fUO"/>
                 <outlet property="textViewTopVerticalSpaceConstraint" destination="aEL-yH-N1p" id="WPl-0b-tf1"/>
+                <outlet property="timeOffScreenConstraint" destination="hu0-gA-xY4" id="fQF-UO-G3P"/>
             </connections>
             <point key="canvasLocation" x="255" y="202"/>
         </collectionViewCell>

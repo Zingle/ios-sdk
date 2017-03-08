@@ -53,7 +53,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2zh-vR-QJW" userLabel="Bubble container">
-                        <rect key="frame" x="40" y="40" width="244" height="94"/>
+                        <rect key="frame" x="36" y="40" width="244" height="94"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2qm-c6-OZf" userLabel="Bubble Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="244" height="94"/>
@@ -79,7 +79,7 @@
                         </constraints>
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X89-B1-aAd" userLabel="Avatar container">
-                        <rect key="frame" x="286" y="100" width="34" height="34"/>
+                        <rect key="frame" x="282" y="100" width="34" height="34"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y9b-D9-Q7W" userLabel="Avatar Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
@@ -96,13 +96,13 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:26 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MtA-aS-YIJ">
-                        <rect key="frame" x="320" y="112" width="57" height="16"/>
+                        <rect key="frame" x="320" y="112" width="56" height="16"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d5b-Qu-ohI" userLabel="Cell Bottom Label Container">
-                        <rect key="frame" x="168" y="134" width="108" height="20"/>
+                        <rect key="frame" x="164" y="134" width="108" height="20"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell bottom label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxh-zX-vCu" customClass="JSQMessagesLabel">
                                 <rect key="frame" x="0.0" y="0.0" width="108" height="17"/>
@@ -132,7 +132,7 @@
                 <constraint firstItem="MtA-aS-YIJ" firstAttribute="bottom" secondItem="2zh-vR-QJW" secondAttribute="bottom" constant="-6" id="lB7-wl-MUa"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="leading" constant="-10" id="ltP-jP-Llg"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="n9g-Vi-PyP"/>
-                <constraint firstItem="MtA-aS-YIJ" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="trailing" id="qjs-ir-Qic"/>
+                <constraint firstItem="MtA-aS-YIJ" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" id="qjs-ir-Qic"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="bubble top label left" id="tTj-Mp-0va"/>
                 <constraint firstAttribute="trailing" secondItem="5Gk-Ay-M9X" secondAttribute="trailing" id="uCo-3l-Xom"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="bottom" id="uUe-xd-MHO"/>

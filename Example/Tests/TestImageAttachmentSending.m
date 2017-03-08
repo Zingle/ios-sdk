@@ -101,7 +101,7 @@
     XCTAssert(CGSizeEqualToSize(tinyJpg.size, image.size), @"Image size for a small JPEG was preserved.");
 }
 
-- (void) testLargeJpgResized
+- (void) testLargePngResized
 {
     NSBundle * bundle = [NSBundle bundleForClass:[TestImageAttachmentSending class]];
     UIImage * largePng = [UIImage imageNamed:@"1280.png" inBundle:bundle compatibleWithTraitCollection:nil];

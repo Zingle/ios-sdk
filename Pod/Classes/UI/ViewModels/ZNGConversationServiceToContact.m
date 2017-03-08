@@ -64,7 +64,13 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (id) initWithConversation:(ZNGConversationServiceToContact *)conversation
 {
-    return [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient eventClient:conversation.eventClient contactClient:conversation.contactClient socketClient:conversation.socketClient];
+    self = [self initFromService:conversation.service toContact:conversation.contact withCurrentUserId:conversation.myUserId usingChannel:conversation.channel withMessageClient:conversation.messageClient eventClient:conversation.eventClient contactClient:conversation.contactClient socketClient:conversation.socketClient];
+    
+    if (self != nil) {
+        self.lockedDescription = conversation.lockedDescription;
+    }
+    
+    return self;
 }
 
 - (void) dealloc

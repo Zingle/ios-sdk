@@ -39,13 +39,19 @@ NSString *const kConversationSortDirectionAscending = @"asc";
 NSString *const kConversationSortDirectionDescending = @"desc";
 NSString *const kConversationCreatedAt = @"created_at";
 NSString *const kConversationEventType = @"event_type";
-NSString *const kAttachementContentTypeKey = @"content_type";
-NSString *const kAttachementContentTypeParam = @"image/png";
+NSString *const kAttachmentContentTypeKey = @"content_type";
+NSString *const kAttachmentContentTypePng = @"image/png";
+NSString *const kAttachmentContentTypeJpeg = @"image/jpeg";
+NSString *const kAttachmentContentTypeGif = @"image/gif";
+NSString *const kAttachmentContentTypeTiff = @"image/tiff";
 NSString *const kAttachementBase64 = @"base64";
 NSString *const kConversationService = @"service";
 NSString *const kConversationContact = @"contact";
 NSString *const kMessageDirectionInbound = @"inbound";
 NSString *const kMessageDirectionOutbound = @"outbound";
+
+static const CGFloat imageAttachmentMaxWidth = 800.0;
+static const CGFloat imageAttachmentMaxHeight = 800.0;
 
 - (id) initWithMessageClient:(ZNGMessageClient *)messageClient eventClient:(ZNGEventClient *)eventClient
 {
@@ -503,6 +509,26 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     [self sendMessageWithBody:body imageData:nil success:success failure:failure];
 }
 
+- (NSString *) contentTypeForImageData:(NSData *)data
+{
+    uint8_t firstChar;
+    [data getBytes:&firstChar length:1];
+    
+    switch (firstChar) {
+        case 0xFF:
+            return kAttachmentContentTypeJpeg;
+        case 0x89:
+            return kAttachmentContentTypePng;
+        case 0x47:
+            return kAttachmentContentTypeGif;
+        case 0x49:
+        case 0x4D:
+            return kAttachmentContentTypeTiff;
+        default:
+            return nil;
+    }
+}
+
 - (void) sendMessageWithBody:(nonnull NSString *)body
                    imageData:(nullable NSArray<NSData *> *)imageDatas
                      success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
@@ -513,7 +539,11 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     if (newMessage == nil) {
         NSDictionary * userInfo = @{ NSLocalizedDescriptionKey : @"Unable to initialize a fresh outgoing message" };
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:userInfo];
-        failure(error);
+        
+        if (failure != nil) {
+            failure(error);
+        }
+        
         return;
     }
     
@@ -535,30 +565,48 @@ NSString *const kMessageDirectionOutbound = @"outbound";
         NSMutableArray<UIImage *> * outgoingImageObjects = [[NSMutableArray alloc] initWithCapacity:[imageDatas count]];
         NSMutableArray<NSDictionary *> * outgoingAttachments = [[NSMutableArray alloc] initWithCapacity:[imageDatas count]];
         
-        for (NSData * imageData in imageDatas) {
+        for (NSData * originalImageData in imageDatas) {
             // Sanity check
-            if ([imageData length] == 0) {
+            if ([originalImageData length] == 0) {
                 continue;
             }
             
+            // Image data and content type will be the same as the original source unless we resize
+            NSData * imageData = originalImageData;
+            NSString * contentType = [self contentTypeForImageData:originalImageData];
+            
+            UIImage * imageForLocalDisplay;
+
             CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)imageData, NULL);
             size_t const frameCount = CGImageSourceGetCount(imageSource);
-            UIImage * image;
             
             if (frameCount > 1) {
                 // This is an animated GIF.  We need to make an animated UIImage for display while the message sends
-                image = [UIImage animatedImageWithAnimatedGIFData:imageData];
+                imageForLocalDisplay = [UIImage animatedImageWithAnimatedGIFData:originalImageData];
+                contentType = kAttachmentContentTypeGif;
             } else {
-                // This is a single image.  We will resize if necessary.
-                image = [[UIImage alloc] initWithData:imageData];
-                image = [self resizeImage:image];
+                // This is a single frame image.  We will resize if necessary.
+                
+                // Note that our locally-displayed copy (only while the message is being sent) is not the resized version.  This should not particularly matter.
+                imageForLocalDisplay = [[UIImage alloc] initWithData:imageData];
+                
+                if ((imageForLocalDisplay.size.height > imageAttachmentMaxHeight) || (imageForLocalDisplay.size.width > imageAttachmentMaxWidth)) {
+                    NSData * resizedData = [self resizedJpegImageDataForImage:imageForLocalDisplay];
+                    
+                    if (resizedData != nil) {
+                        imageData = resizedData;
+                        contentType = kAttachmentContentTypeJpeg;
+                    } else {
+                        ZNGLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
+                    }
+                }
             }
             
-            [outgoingImageObjects addObject:image];
+            [outgoingImageObjects addObject:imageForLocalDisplay];
             
             NSData * base64Data = [imageData base64EncodedDataWithOptions:0];
             NSString * base64String = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
-            NSDictionary * attachment = @{ kAttachementContentTypeKey : kAttachementContentTypeParam, kAttachementBase64 : base64String };
+            NSDictionary * attachment = @{ kAttachmentContentTypeKey : contentType, kAttachementBase64 : base64String };
             
             [outgoingAttachments addObject:attachment];
         }
@@ -664,55 +712,39 @@ NSString *const kMessageDirectionOutbound = @"outbound";
     }];
 }
 
--(UIImage *)resizeImage:(UIImage *)image
+-(NSData *)resizedJpegImageDataForImage:(UIImage *)image
 {
+    // Sanity check
+    if ((image.size.height == 0) || (image.size.width == 0)) {
+        return nil;
+    }
+    
     // If the image is animated, abandon all hope (of resize)
     if ([image.images count] > 1) {
-        return image;
+        return nil;
+    }
+
+    CGFloat widthDownscale = imageAttachmentMaxWidth / image.size.width;
+    CGFloat heightDownscale = imageAttachmentMaxHeight / image.size.height;
+    CGFloat downscale = MIN(widthDownscale, heightDownscale);
+    
+    if (downscale >= 1.0) {
+        // No need to resize
+        return nil;
     }
     
-    float actualHeight = image.size.height;
-    float actualWidth = image.size.width;
-    float maxHeight = 800.0;
-    float maxWidth = 800.0;
-    float imgRatio = actualWidth/actualHeight;
-    float maxRatio = maxWidth/maxHeight;
-    float compressionQuality = 0.5;//50 percent compression
+    CGFloat newWidth = image.size.width * downscale;
+    CGFloat newHeight = image.size.height * downscale;
     
-    if (actualHeight > maxHeight || actualWidth > maxWidth)
-    {
-        if(imgRatio < maxRatio)
-        {
-            //adjust width according to maxHeight
-            imgRatio = maxHeight / actualHeight;
-            actualWidth = imgRatio * actualWidth;
-            actualHeight = maxHeight;
-        }
-        else if(imgRatio > maxRatio)
-        {
-            //adjust height according to maxWidth
-            imgRatio = maxWidth / actualWidth;
-            actualHeight = imgRatio * actualHeight;
-            actualWidth = maxWidth;
-        }
-        else
-        {
-            actualHeight = maxHeight;
-            actualWidth = maxWidth;
-        }
-    } else {
-        return image;
-    }
-    
-    CGRect rect = CGRectMake(0.0, 0.0, actualWidth, actualHeight);
+    CGRect rect = CGRectMake(0.0, 0.0, newWidth, newHeight);
     UIGraphicsBeginImageContext(rect.size);
     [image drawInRect:rect];
-    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
-    NSData *imageData = UIImageJPEGRepresentation(img, compressionQuality);
+    UIImage * resizedImage = UIGraphicsGetImageFromCurrentImageContext();
+    float compressionQuality = 0.5;
+    NSData * imageData = UIImageJPEGRepresentation(resizedImage, compressionQuality);
     UIGraphicsEndImageContext();
     
-    return [UIImage imageWithData:imageData];
-    
+    return imageData;
 }
 
 #pragma mark - Protected/Abstract methods

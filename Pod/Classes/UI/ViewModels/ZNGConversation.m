@@ -539,7 +539,11 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     if (newMessage == nil) {
         NSDictionary * userInfo = @{ NSLocalizedDescriptionKey : @"Unable to initialize a fresh outgoing message" };
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:userInfo];
-        failure(error);
+        
+        if (failure != nil) {
+            failure(error);
+        }
+        
         return;
     }
     

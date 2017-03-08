@@ -32,6 +32,11 @@
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
+// How directly does the left panning gesture translate to speed of the time labels appearing on screen?
+// 1.0 is an exact match
+// The iOS 10 messages app appears to use something around 0.4
+static const CGFloat timeLabelPanSpeed = 0.4;
+
 static NSString * const EventCellIdentifier = @"EventCell";
 
 // We will use a more aggressive polling interval when testing on a simulator (that cannot support push notifications)
@@ -157,7 +162,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
     
-    offScreenTimeLabelPenetration = -4.0;
+    offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
     
     outgoingImageAttachments = [[NSMutableArray alloc] initWithCapacity:2];
@@ -434,7 +439,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         {
             CGPoint translation = [panner translationInView:self.collectionView];
             CGFloat leftness = fabs(MIN(translation.x, 0.0)) + offScreenTimeLabelPenetration;
-            self.timeLabelPenetration = leftness;
+            self.timeLabelPenetration = leftness * timeLabelPanSpeed;
         }
             return;
             
@@ -485,14 +490,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGConversationCellOutgoing * cell = (ZNGConversationCellOutgoing *)theCell;
     
     CGFloat maxPenetration = cell.exactTimeLabel.frame.size.width + fabs(offScreenTimeLabelPenetration) * 2.0;
-    CGFloat penetration = -MAX(self.timeLabelPenetration, maxPenetration);
+    CGFloat penetration = -MIN(self.timeLabelPenetration, maxPenetration);
     
     if (animated) {
         [cell layoutIfNeeded];
-        [UIView animateWithDuration:0.1 animations:^{
+        
+        [UIView animateWithDuration:0.38 delay:0.0 options:UIViewAnimationOptionCurveEaseOut animations:^{
             cell.timeOffScreenConstraint.constant = -penetration;
             [cell layoutIfNeeded];
-        }];
+        } completion:nil];
     } else {
         cell.timeOffScreenConstraint.constant = -penetration;
         [cell layoutIfNeeded];
@@ -1199,11 +1205,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    ZNGEvent * event = viewModel.event;
     
     if ([event isMessage]) {
         [self markMessagesReadIfNecessary:@[event.message]];
     }
+    
+    // Update the hidden time label.
+    [self updateTimeLabelLocationForCell:(JSQMessagesCollectionViewCell *)cell forEventViewModel:viewModel animated:NO];
 }
 
 #pragma mark - JSQMessagesViewController collection view shenanigans

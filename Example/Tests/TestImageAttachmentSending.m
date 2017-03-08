@@ -56,12 +56,14 @@
     NSData * pngData = UIImagePNGRepresentation(tinyPng);
     messageClient.lastSentMessageAttachments = nil;
     
-    [self keyValueObservingExpectationForObject:messageClient keyPath:NSStringFromSelector(@selector(lastSentMessageAttachments)) handler:^BOOL(ZNGMockMessageClient * _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        NSDictionary * firstAttachment = [observedObject.lastSentMessageAttachments firstObject];
-        return (firstAttachment != nil);
+    XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
+    
+    [conversation sendMessageWithBody:@"" imageData:@[pngData] success:^(ZNGStatus * _Nullable status) {
+        [messageSent fulfill];
+    } failure:^(ZNGError * _Nullable error) {
+        XCTFail(@"Message sent failed: %@", [error localizedDescription]);
     }];
     
-    [conversation sendMessageWithBody:@"" imageData:@[pngData] success:nil failure:nil];
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     NSDictionary<NSString *, NSString *> * attachment = [messageClient.lastSentMessageAttachments firstObject];
@@ -83,12 +85,14 @@
     NSData * jpgData = UIImageJPEGRepresentation(tinyJpg, 0.5);
     messageClient.lastSentMessageAttachments = nil;
     
-    [self keyValueObservingExpectationForObject:messageClient keyPath:NSStringFromSelector(@selector(lastSentMessageAttachments)) handler:^BOOL(ZNGMockMessageClient * _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        NSDictionary * firstAttachment = [observedObject.lastSentMessageAttachments firstObject];
-        return (firstAttachment != nil);
+    XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
+    
+    [conversation sendMessageWithBody:@"" imageData:@[jpgData] success:^(ZNGStatus * _Nullable status) {
+        [messageSent fulfill];
+    } failure:^(ZNGError * _Nullable error) {
+        XCTFail(@"Message sent failed: %@", [error localizedDescription]);
     }];
     
-    [conversation sendMessageWithBody:@"" imageData:@[jpgData] success:nil failure:nil];
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     NSDictionary<NSString *, NSString *> * attachment = [messageClient.lastSentMessageAttachments firstObject];
@@ -110,12 +114,14 @@
     NSData * pngData = UIImagePNGRepresentation(largePng);
     messageClient.lastSentMessageAttachments = nil;
     
-    [self keyValueObservingExpectationForObject:messageClient keyPath:NSStringFromSelector(@selector(lastSentMessageAttachments)) handler:^BOOL(ZNGMockMessageClient * _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        NSDictionary * firstAttachment = [observedObject.lastSentMessageAttachments firstObject];
-        return (firstAttachment != nil);
+    XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
+    
+    [conversation sendMessageWithBody:@"" imageData:@[pngData] success:^(ZNGStatus * _Nullable status) {
+        [messageSent fulfill];
+    } failure:^(ZNGError * _Nullable error) {
+        XCTFail(@"Message sent failed: %@", [error localizedDescription]);
     }];
     
-    [conversation sendMessageWithBody:@"" imageData:@[pngData] success:nil failure:nil];
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     NSDictionary<NSString *, NSString *> * attachment = [messageClient.lastSentMessageAttachments firstObject];

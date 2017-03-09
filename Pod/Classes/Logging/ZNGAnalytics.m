@@ -126,12 +126,20 @@ static NSString * const HostPropertyName = @"Host";
     return nil;
 }
 
+#pragma mark - Tracking
+- (void) _track:(NSString *)event properties:(NSDictionary <NSString *, NSString *> *)properties
+{
+    // Segment does not give the product people any way to filter by platform or OS, so we have to prepend this ugly identifier :(
+    NSString * prefixedEventName = [NSString stringWithFormat:@"ios_%@", event];
+    [[self segment] track:prefixedEventName properties:properties];
+}
+
 #pragma mark - Login
 - (void) trackLoginFailureWithToken:(NSString *)token
 {
     NSString * event = @"Login failed";
     NSMutableDictionary * properties = [self defaultProperties];
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackLoginSuccessWithToken:(NSString *)token andUserAuthorizationObject:(ZNGUserAuthorization *)userAuthorization
@@ -152,12 +160,13 @@ static NSString * const HostPropertyName = @"Host";
     }
     
     [[self segment] identify:token traits:traits];
-    [[self segment] track:@"Login succeeded" properties:[self defaultProperties]];
+    [self _track:@"Login succeeded" properties:[self defaultProperties]];
+
 }
 
 - (void) trackLogout
 {
-    [[self segment] track:@"Logged out" properties:[self defaultProperties]];
+    [self _track:@"Logged out" properties:[self defaultProperties]];
     [[self segment] reset];
 }
 
@@ -168,7 +177,7 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"inboxType"] = [inboxData description];
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 #pragma mark - Conversation events
@@ -180,7 +189,7 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultPropertiesWithConversation:conversation];
     properties[@"customFieldName"] = customField.displayName;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackInsertedTemplate:(ZNGTemplate *)template intoConversation:(ZNGConversationServiceToContact *)conversation
@@ -191,7 +200,7 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultPropertiesWithConversation:conversation];
     properties[@"templateName"] = template.displayName;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackTriggeredAutomation:(ZNGAutomation *)automation onContact:(ZNGContact *)contact
@@ -201,17 +210,17 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     properties[@"automationName"] = automation.displayName;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackSentSavedImageToConversation:(ZNGConversation *)conversation
 {
-    [[self segment] track:@"Sent a saved image" properties:[self defaultPropertiesWithConversation:conversation]];
+    [self _track:@"Sent a saved image" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
 - (void) trackSentCameraImageToConversation:(ZNGConversation *)conversation
 {
-    [[self segment] track:@"Sent a camera image" properties:[self defaultPropertiesWithConversation:conversation]];
+    [self _track:@"Sent a camera image" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
 - (void) trackAddedNote:(NSString *)note toConversation:(ZNGConversationServiceToContact *)conversation
@@ -221,7 +230,7 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultPropertiesWithConversation:conversation];
     properties[@"noteText"] = note;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackSentMessage:(ZNGMessage *)message inConversation:(ZNGConversation *)conversation
@@ -233,7 +242,7 @@ static NSString * const HostPropertyName = @"Host";
     BOOL hasAttachment = ([message.attachments count] > 0);
     properties[@"hasAttachment"] = @(hasAttachment);
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackSentMessage:(NSString *)messageBody toContact:(ZNGContact *)contact
@@ -244,7 +253,7 @@ static NSString * const HostPropertyName = @"Host";
     [properties setValue:messageBody forKey:@"messageText"];
     properties[@"hasAttachment"] = @NO;
 
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackSentMessage:(NSString *)messageBody toMultipleContacts:(NSArray<ZNGContact *> *)contacts
@@ -264,7 +273,7 @@ static NSString * const HostPropertyName = @"Host";
     properties[@"contactNames"] = contactNames;
     properties[@"contactIds"] = contactIds;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackSentMessage:(NSString *)messageBody toLabels:(NSArray<ZNGLabel *> *)labels
@@ -284,7 +293,7 @@ static NSString * const HostPropertyName = @"Host";
     properties[@"labelNames"] = labelNames;
     properties[@"labelIds"] = labelIds;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackSentMessage:(NSString *)messageBody toPhoneNumbers:(NSArray<NSString *> *)phoneNumbers
@@ -294,14 +303,14 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"phoneNumbers"] = phoneNumbers;
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 
 - (void) trackChangedChannel:(ZNGChannel *)channel inConversation:(ZNGConversationServiceToContact *)conversation
 {
     // These conversation properties will include new channel info
-    [[self segment] track:@"Selected a channel" properties:[self defaultPropertiesWithConversation:conversation]];
+    [self _track:@"Selected a channel" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
 - (void) trackConfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
@@ -315,7 +324,7 @@ static NSString * const HostPropertyName = @"Host";
         event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackUnconfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
@@ -329,7 +338,7 @@ static NSString * const HostPropertyName = @"Host";
         event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackOpenedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
@@ -343,7 +352,7 @@ static NSString * const HostPropertyName = @"Host";
         event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackClosedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
@@ -357,28 +366,28 @@ static NSString * const HostPropertyName = @"Host";
         event = [event stringByAppendingFormat:@" by %@", sourceType];
     }
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackShowedConversationDetails:(ZNGConversationServiceToContact *)conversation
 {
-    [[self segment] track:@"Showed detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];
+    [self _track:@"Showed detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
 - (void) trackHidConversationDetails:(ZNGConversationServiceToContact *)conversation
 {
-    [[self segment] track:@"Hid detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];
+    [self _track:@"Hid detailed events in conversation" properties:[self defaultPropertiesWithConversation:conversation]];
 }
 
 #pragma mark - Contact management
 - (void) trackCreatedContact:(ZNGContact *)contact
 {
-    [[self segment] track:@"Created new contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
+    [self _track:@"Created new contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
 }
 
 - (void) trackEditedExistingContact:(ZNGContact *)contact
 {
-    [[self segment] track:@"Edited contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
+    [self _track:@"Edited contact" properties:[self defaultPropertiesWithDestinationContact:contact]];
 }
 
 - (void) trackAddedLabel:(ZNGLabel *)label toContact:(ZNGContact *)contact
@@ -388,7 +397,7 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     [properties setValue:label.displayName forKey:@"labelName"];
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 - (void) trackRemovedLabel:(ZNGLabel *)label fromContact:(ZNGContact *)contact
@@ -398,7 +407,7 @@ static NSString * const HostPropertyName = @"Host";
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     [properties setValue:label.displayName forKey:@"labelName"];
     
-    [[self segment] track:event properties:properties];
+    [self _track:event properties:properties];
 }
 
 

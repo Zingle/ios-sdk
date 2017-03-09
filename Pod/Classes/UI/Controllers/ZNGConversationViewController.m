@@ -850,14 +850,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
+    [self attachImageFromPhotoLibraryWithMediaInfo:info];
+}
+
+- (void) attachImageFromPhotoLibraryWithMediaInfo:(NSDictionary<NSString *,id> *)info
+{
     UIImage * image = info[UIImagePickerControllerOriginalImage];
     NSURL * url = info[UIImagePickerControllerReferenceURL];
     
     if ((image == nil) || (url == nil)) {
         ZNGLogError(@"No image data was found after the user selected an image.");
+        [self showImageAttachmentError];
         return;
     }
-    
     
     PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
     

@@ -131,7 +131,7 @@ static NSString * const HostPropertyName = @"Host";
 {
     // Segment does not give the product people any way to filter by platform or OS, so we have to prepend this ugly identifier :(
     NSString * prefixedEventName = [NSString stringWithFormat:@"ios_%@", event];
-    [self _track:prefixedEventName properties:properties];
+    [[self segment] track:prefixedEventName properties:properties];
 }
 
 #pragma mark - Login

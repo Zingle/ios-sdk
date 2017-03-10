@@ -365,7 +365,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     stuckToBottom = YES;
     
-    [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] success:^(ZNGStatus *status) {
+    [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] uuid:nil success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {

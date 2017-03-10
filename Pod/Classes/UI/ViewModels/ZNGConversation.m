@@ -502,13 +502,6 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
 }
 
-- (void)sendMessageWithBody:(NSString *)body
-                    success:(void (^)(ZNGStatus* status))success
-                    failure:(void (^) (ZNGError *error))failure
-{
-    [self sendMessageWithBody:body imageData:nil success:success failure:failure];
-}
-
 - (NSString *) contentTypeForImageData:(NSData *)data
 {
     uint8_t firstChar;
@@ -529,8 +522,16 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
 }
 
+- (void)sendMessageWithBody:(NSString *)body
+                    success:(void (^)(ZNGStatus* status))success
+                    failure:(void (^) (ZNGError *error))failure
+{
+    [self sendMessageWithBody:body imageData:nil uuid:nil success:success failure:failure];
+}
+
 - (void) sendMessageWithBody:(nonnull NSString *)body
                    imageData:(nullable NSArray<NSData *> *)imageDatas
+                        uuid:(NSString *)uuid
                      success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
                      failure:(void (^_Nullable) (ZNGError * _Nullable error))failure
 {

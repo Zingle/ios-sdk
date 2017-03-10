@@ -847,17 +847,47 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self inputToolbar:self.inputToolbar didPressAttachImageButton:sender];
 }
 
-
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    if (info[UIImagePickerControllerReferenceURL] != nil) {
+        // This is from the photo library.  We can load it from there.
+        [self attachImageFromPhotoLibraryWithInfo:info];
+    } else if (info[UIImagePickerControllerOriginalImage] != nil) {
+        // This is probably straight from the camera; we do not have PH asset info to go along with the image.
+        [self attachImageWithInfo:info];
+    } else {
+        ZNGLogError(@"Image picker did not return any any \"original image\" data.");
+        [self showImageAttachmentError];
+    }
+}
+
+- (void) attachImageWithInfo:(NSDictionary<NSString *,id> *)info
+{
+    UIImage * image = info[UIImagePickerControllerOriginalImage];
+    
+    if (image == nil) {
+        [self showImageAttachmentError];
+        return;
+    }
+    
+    NSData * imageData = UIImageJPEGRepresentation(image, 0.75);
+    [outgoingImageAttachments addObject:imageData];
+    
+    [self dismissViewControllerAnimated:YES completion:^{
+        [self attachImage:image];
+    }];
+}
+
+- (void) attachImageFromPhotoLibraryWithInfo:(NSDictionary<NSString *,id> *)info
 {
     UIImage * image = info[UIImagePickerControllerOriginalImage];
     NSURL * url = info[UIImagePickerControllerReferenceURL];
     
     if ((image == nil) || (url == nil)) {
         ZNGLogError(@"No image data was found after the user selected an image.");
+        [self showImageAttachmentError];
         return;
     }
-    
     
     PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
     

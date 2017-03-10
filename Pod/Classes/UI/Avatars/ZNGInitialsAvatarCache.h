@@ -22,14 +22,19 @@ NS_ASSUME_NONNULL_BEGIN
  *
  *  @param circleBackground If this is set, the supplied image is drawn over a circle similar to an initials avatar.  Otherwise, the raw image is used (sized appropriately.)
  */
-- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid image:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing;
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid fallbackImage:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing;
 
 /**
  *  Returns an avatar image of the user's initials, either for an employee or a contact.  Results are cached and reused via provided UUID.
  */
-- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid nameForFallbackAvatar:(NSString *)name outgoing:(BOOL)isOutgoing;
 
-- (void) clearCache;
+- (void) loadImage:(NSSTring *
+
+/**
+ *  Clears any cached avatar views, including rendered initials.  Does *not* clear remote avatar graphic data.
+ */
+- (void) clearRenderedAvatarCache;
 
 @property (nonatomic, strong, nullable) UIColor * outgoingBackgroundColor;
 @property (nonatomic, strong, nullable) UIColor * outgoingTextColor;

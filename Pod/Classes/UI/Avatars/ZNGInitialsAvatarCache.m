@@ -15,6 +15,12 @@
 {
     NSCache * incomingCache;
     NSCache * outgoingCache;
+    
+    // Avatar images, indexed by URI string
+    NSCache * avatarImageCache;
+    
+    // Avatar URIs, index by contact ID
+    NSCache * avatarURIs;
 }
 
 + (instancetype) sharedCache
@@ -38,6 +44,12 @@
         incomingCache.countLimit = 20;
         outgoingCache = [[NSCache alloc] init];
         outgoingCache.countLimit = 20;
+        
+        avatarImageCache = [[NSCache alloc] init];
+        avatarImageCache.countLimit = 15;
+        avatarURIs = [[NSCache alloc] init];
+        avatarURIs.countLimit = 100;
+        
         _avatarSize = CGSizeMake(32.0, 32.0);
         
         _font = [UIFont systemFontOfSize:13.0];
@@ -70,7 +82,7 @@
     return initials;
 }
 
-- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid image:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid fallbackImage:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing;
 {
     NSCache * cache = (isOutgoing) ? outgoingCache : incomingCache;
     id <JSQMessageAvatarImageDataSource> avatar = [cache objectForKey:uuid];
@@ -88,7 +100,7 @@
     return avatar;
 }
 
-- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid name:(NSString *)name outgoing:(BOOL)isOutgoing;
+- (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid nameForFallbackAvatar:(NSString *)name outgoing:(BOOL)isOutgoing;
 {
     NSCache * cache = (isOutgoing) ? outgoingCache : incomingCache;
     id key = uuid ?: [NSNull null];

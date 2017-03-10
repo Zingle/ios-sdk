@@ -1,17 +1,17 @@
 //
-//  ZNGAvatarCache.m
+//  ZNGInitialsAvatarCache.m
 //  Pods
 //
 //  Created by Jason Neel on 12/21/16.
 //
 //
 
-#import "ZNGAvatarCache.h"
+#import "ZNGInitialsAvatarCache.h"
 #import "ZNGInitialsAvatar.h"
 #import "ZNGImageAvatar.h"
 #import "ZNGParticipant.h"
 
-@implementation ZNGAvatarCache
+@implementation ZNGInitialsAvatarCache
 {
     NSCache * incomingCache;
     NSCache * outgoingCache;
@@ -25,7 +25,7 @@
 
 + (instancetype) sharedCache
 {
-    static ZNGAvatarCache * singleton;
+    static ZNGInitialsAvatarCache * singleton;
     static dispatch_once_t onceToken;
     
     dispatch_once(&onceToken, ^{

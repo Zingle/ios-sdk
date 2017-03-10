@@ -1,5 +1,5 @@
 //
-//  ZNGAvatarCache.h
+//  ZNGInitialsAvatarCache.h
 //  Pods
 //
 //  Created by Jason Neel on 12/21/16.
@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @class ZNGParticipant;
 
-@interface ZNGAvatarCache : NSObject
+@interface ZNGInitialsAvatarCache : NSObject
 
 + (instancetype) sharedCache;
 
@@ -29,12 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid nameForFallbackAvatar:(NSString *)name outgoing:(BOOL)isOutgoing;
 
-- (void) loadImage:(NSSTring *
-
-/**
- *  Clears any cached avatar views, including rendered initials.  Does *not* clear remote avatar graphic data.
- */
-- (void) clearRenderedAvatarCache;
+- (void) clearCache;
 
 @property (nonatomic, strong, nullable) UIColor * outgoingBackgroundColor;
 @property (nonatomic, strong, nullable) UIColor * outgoingTextColor;

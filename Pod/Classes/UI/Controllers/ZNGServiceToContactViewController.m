@@ -26,7 +26,7 @@
 #import "ZingleAccountSession.h"
 #import "ZNGLogging.h"
 #import "ZNGForwardingViewController.h"
-#import "ZNGAvatarCache.h"
+#import "ZNGInitialsAvatarCache.h"
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
 
@@ -132,7 +132,7 @@ static void * KVOContext = &KVOContext;
         dispatch_source_cancel(emphasizeTimer);
     }
     
-    [[ZNGAvatarCache sharedCache] clearCache];
+    [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
@@ -180,7 +180,7 @@ static void * KVOContext = &KVOContext;
     [self startEmphasisTimer];
     
     // Avatars
-    ZNGAvatarCache * avatarCache = [ZNGAvatarCache sharedCache];
+    ZNGInitialsAvatarCache * avatarCache = [ZNGInitialsAvatarCache sharedCache];
     avatarCache.incomingTextColor = self.incomingTextColor;
     avatarCache.outgoingTextColor = self.outgoingTextColor;
     avatarCache.outgoingBackgroundColor = self.outgoingBubbleColor;
@@ -1171,7 +1171,7 @@ static void * KVOContext = &KVOContext;
             NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
             UIImage * avatarImage = [UIImage imageNamed:@"anonymousAvatar" inBundle:bundle compatibleWithTraitCollection:nil];
             
-            return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID image:avatarImage useCircleBackground:NO outgoing:NO];
+            return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:senderUUID fallbackImage:avatarImage useCircleBackground:NO outgoing:NO];
         }
     } else {
         // Outbound.
@@ -1198,7 +1198,7 @@ static void * KVOContext = &KVOContext;
         }
     }
     
-    return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID name:name outgoing:[self isOutgoingMessage:event]];
+    return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:senderUUID nameForFallbackAvatar:name outgoing:[self isOutgoingMessage:event]];
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath

@@ -30,6 +30,8 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
 
+@import SDWebImage;
+
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const ConfirmedText = @" Confirmed ";
@@ -1146,7 +1148,7 @@ static void * KVOContext = &KVOContext;
     return NO;
 }
 
-- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+- (id<JSQMessageAvatarImageDataSource>) initialsAvatarForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
         return nil;
@@ -1271,6 +1273,41 @@ static void * KVOContext = &KVOContext;
     } else {
         [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
     }
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    
+    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
+    NSURL * avatarURL = nil;
+    
+    if (([viewModel.event isMessage]) && ([viewModel.event isInboundMessage])) {
+        // TODO: Plug this in once the avatar URI actually exists
+//        NSString * avatarPath = self.conversation.contact.avatarUri;
+//        
+//        if ([avatarPath length] > 0) {
+//            avatarURL = [NSURL URLWithString:avatarPath];
+//        }
+        
+        
+        // Temporary testing
+        avatarURL = [NSURL URLWithString:@"https://i.redd.it/y7pvm3gwvofy.jpg"];
+    }
+    
+    if (avatarURL != nil) {
+        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
+    } else {
+        cell.avatarImageView.image = [initialsAvatarData avatarImage];
+    }
+    
+    // Make it a circle, dog
+    CGSize avatarSize = ([viewModel.event.message isOutbound]) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
+    cell.avatarImageView.layer.masksToBounds = YES;
+    cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
+    
+    return cell;
 }
 
 #pragma mark - Text view delegate

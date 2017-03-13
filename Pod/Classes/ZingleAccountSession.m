@@ -586,7 +586,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return vc;
 }
 
-- (void) sendMessage:(NSString *)body toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion
+- (void) sendMessage:(NSString *)body withUUID:(nullable NSString *)uuid toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion;
 {
     NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[phoneNumbers count];
     
@@ -596,7 +596,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         return;
     }
     
-    if ([self _freshOutgoingMessage] == nil) {
+    if ([self _freshOutgoingMessageWithUUID:uuid] == nil) {
         ZNGLogError(@"Unable to generate a clean outgoing message.");
 
         if (completion != nil) {
@@ -609,15 +609,15 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     NSMutableArray<ZNGNewMessage *> * messages = [[NSMutableArray alloc] initWithCapacity:typeCount];
     
     if ([contacts count] > 0) {
-        [messages addObject:[self _messageToContacts:contacts]];
+        [messages addObject:[self _messageToContacts:contacts withUUID:uuid]];
     }
     
     if ([labels count] > 0) {
-        [messages addObject:[self _messageToLabels:labels]];
+        [messages addObject:[self _messageToLabels:labels withUUID:uuid]];
     }
     
     if ([phoneNumbers count] > 0) {
-        [messages addObject:[self _messageToPhoneNumbers:phoneNumbers]];
+        [messages addObject:[self _messageToPhoneNumbers:phoneNumbers withUUID:uuid]];
     }
     
     int64_t tenSeconds = 10 * NSEC_PER_SEC;
@@ -680,7 +680,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     });
 }
 
-- (ZNGNewMessage *) _freshOutgoingMessage
+- (ZNGNewMessage *) _freshOutgoingMessageWithUUID:(NSString *)uuid
 {
     ZNGNewMessage * message = [[ZNGNewMessage alloc] init];
     
@@ -710,9 +710,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return message;
 }
 
-- (ZNGNewMessage *) _messageToContacts:(NSArray<ZNGContact *> *)contacts
+- (ZNGNewMessage *) _messageToContacts:(NSArray<ZNGContact *> *)contacts withUUID:(NSString *)uuid
 {
-    ZNGNewMessage * message = [self _freshOutgoingMessage];
+    ZNGNewMessage * message = [self _freshOutgoingMessageWithUUID:uuid];
     message.recipientType = ZNGConversationParticipantTypeContact;
     
     NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[contacts count]];
@@ -735,9 +735,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return message;
 }
 
-- (ZNGNewMessage *) _messageToLabels:(NSArray<ZNGLabel *> *)labels
+- (ZNGNewMessage *) _messageToLabels:(NSArray<ZNGLabel *> *)labels withUUID:(NSString *)uuid
 {
-    ZNGNewMessage * message = [self _freshOutgoingMessage];
+    ZNGNewMessage * message = [self _freshOutgoingMessageWithUUID:uuid];
     message.recipientType = ZNGConversationParticipantTypeLabel;
     
     NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[labels count]];
@@ -751,9 +751,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return message;
 }
 
-- (ZNGNewMessage *) _messageToPhoneNumbers:(NSArray<NSString *> *)phoneNumbers
+- (ZNGNewMessage *) _messageToPhoneNumbers:(NSArray<NSString *> *)phoneNumbers withUUID:(NSString *)uuid
 {
-    ZNGNewMessage * message = [self _freshOutgoingMessage];
+    ZNGNewMessage * message = [self _freshOutgoingMessageWithUUID:uuid];
     message.recipientType = ZNGConversationParticipantTypeContact;
     
     NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[phoneNumbers count]];

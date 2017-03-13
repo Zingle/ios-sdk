@@ -1284,16 +1284,9 @@ static void * KVOContext = &KVOContext;
     NSURL * avatarURL = nil;
     
     if (([viewModel.event isMessage]) && ([viewModel.event isInboundMessage])) {
-        // TODO: Plug this in once the avatar URI actually exists
-//        NSString * avatarPath = self.conversation.contact.avatarUri;
-//        
-//        if ([avatarPath length] > 0) {
-//            avatarURL = [NSURL URLWithString:avatarPath];
-//        }
-        
-        
-        // Temporary testing
-        avatarURL = [NSURL URLWithString:@"https://i.redd.it/y7pvm3gwvofy.jpg"];
+        if ([self.conversation.contact.avatarUri length] > 0) {
+            avatarURL = [NSURL URLWithString:self.conversation.contact.avatarUri];
+        }
     }
     
     if (avatarURL != nil) {

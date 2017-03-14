@@ -1254,7 +1254,7 @@ static void * KVOContext = &KVOContext;
 {
     if (action == @selector(forwardMessage:)) {
         ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
-        return (self.allowForwarding && event.isMessage);
+        return (self.allowForwarding && event.isMessage && !event.message.isOutbound);
     }
     
     return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];

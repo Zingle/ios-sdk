@@ -54,10 +54,32 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     });
 }
 
+- (NSLayoutConstraint *) mediaViewLeftnessConstraint
+{
+    __block NSLayoutConstraint * leftness = nil;
+    
+    [[self.mediaView constraintsAffectingLayoutForAxis:UILayoutConstraintAxisHorizontal] enumerateObjectsUsingBlock:^(__kindof NSLayoutConstraint * _Nonnull constraint, NSUInteger idx, BOOL * _Nonnull stop) {
+        
+        if ((constraint.secondItem == self.mediaView) && (constraint.secondAttribute == NSLayoutAttributeLeading)) {
+            leftness = constraint;
+            *stop = YES;
+        }
+    }];
+    
+    return leftness;
+}
+
 - (void) setMediaView:(UIView *)mediaView
 {
     [self.mediaView removeFromSuperview];
     [super setMediaView:mediaView];
+    
+    // We need to shimmy our media views rightward for incoming media messages.  This is due to some very complicated relationships
+    //  between layer masks, resizeable images, cap insets, and the JSQMessagesViewController library.
+    // Trust me, this is easier.
+    // Removing this makes the images brush up against the avatars in incoming messges.
+    [[self mediaViewLeftnessConstraint] setConstant:-6.0];
+    [self.mediaView.superview layoutIfNeeded];
     
     if (mediaMask != nil) {
         [self applyMediaViewMask];

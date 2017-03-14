@@ -38,6 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray<ZNGLabel *> * labels; // Array of ZNGLabel
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;
+@property(nonatomic, strong, nullable) NSString * avatarUri;
 
 @property (nonatomic, weak, nullable) ZNGContactClient * contactClient;
 

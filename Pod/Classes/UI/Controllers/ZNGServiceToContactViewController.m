@@ -1277,8 +1277,15 @@ static void * KVOContext = &KVOContext;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+    // If this is not a message nor a note, we cannot add an avatar
+    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
+    
+    // This is a message or a note.  Add an avatar.
+    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
     id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
     NSURL * avatarURL = nil;

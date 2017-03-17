@@ -10,6 +10,7 @@
 #import "ZNGInitialsAvatar.h"
 #import "ZNGImageAvatar.h"
 #import "ZNGParticipant.h"
+#import "NSString+Initials.h"
 
 @implementation ZNGInitialsAvatarCache
 {
@@ -58,30 +59,6 @@
     return self;
 }
 
-
-- (NSString *)initialsForName:(NSString *)theName
-{
-    // If we have fewer than three characters, we can safely return the entire name.  This solves the case of an emoji for free.
-    if ([theName length] <= 2) {
-        return theName;
-    }
-    
-    NSArray<NSString *> * names = [theName componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    NSMutableString * initials = [[NSMutableString alloc] initWithCapacity:3];
-    
-    for (NSString * name in names) {
-        if ([name length] > 0) {
-            [initials appendFormat:@"%c", [[name uppercaseString] characterAtIndex:0]];
-        }
-    }
-    
-    if ([initials length] == 0) {
-        return @"";
-    }
-    
-    return initials;
-}
-
 - (id <JSQMessageAvatarImageDataSource>) avatarForUserUUID:(NSString *)uuid fallbackImage:(UIImage *)image useCircleBackground:(BOOL)circleBackground outgoing:(BOOL)isOutgoing;
 {
     NSCache * cache = (isOutgoing) ? outgoingCache : incomingCache;
@@ -107,7 +84,7 @@
     id <JSQMessageAvatarImageDataSource> avatar = [cache objectForKey:key];
     
     if (avatar == nil) {
-        NSString * initials = [self initialsForName:name];
+        NSString * initials = [name initials];
         UIColor * backgroundColor = (isOutgoing) ? self.outgoingBackgroundColor : self.incomingBackgroundColor;
         UIColor * textColor = (isOutgoing) ? self.outgoingTextColor : self.incomingTextColor;
         

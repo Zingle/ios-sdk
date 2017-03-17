@@ -26,10 +26,6 @@
         }
     }
     
-    if ([initials length] == 0) {
-        return @"";
-    }
-    
     return initials;
 }
 

@@ -18,6 +18,12 @@
     self = [super init];
     
     if (self != nil) {
+        _initials = initials;
+        _textColor = textColor;
+        _backgroundColor = backgroundColor;
+        _size = size;
+        _font = font;
+        
         CGRect rect = CGRectMake(0.0, 0.0, size.width, size.height);
         UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
         CGContextRef context = UIGraphicsGetCurrentContext();

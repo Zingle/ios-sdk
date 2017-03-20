@@ -118,6 +118,11 @@
     serviceClient.services = @[account1service1];
     session.serviceClient = serviceClient;
     
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
+    
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithAccountChooser:^ZNGAccount * _Nullable(NSArray<ZNGAccount *> * _Nonnull availableAccounts) {
@@ -182,6 +187,11 @@
     ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
     serviceClient.services = @[account2service1, account2service2];
     session.serviceClient = serviceClient;
+    
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
     
     XCTestExpectation * serviceChooserCalled = [self expectationWithDescription:@"Service chooser block called"];
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(service)) expectedValue:account2service1];
@@ -254,6 +264,11 @@
     ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
     session.notificationsClient = notificationsClient;
     
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
+    
     [ZingleSDK setPushNotificationDeviceToken:deviceToken];
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
@@ -291,6 +306,11 @@
     
     ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
     session.notificationsClient = notificationsClient;
+    
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
     
     [ZingleSDK setPushNotificationDeviceToken:deviceToken];
     
@@ -337,6 +357,11 @@
     serviceClient.services = @[account1service1];
     session.serviceClient = serviceClient;
     
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
+    
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithAccountChooser:nil serviceChooser:nil completion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
@@ -374,6 +399,11 @@
     ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
     serviceClient.services = @[account1service1];
     session.serviceClient = serviceClient;
+    
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     

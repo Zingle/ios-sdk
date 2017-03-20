@@ -199,6 +199,40 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
+- (void) testUserAuthorizationInfoAvailableImmediately
+{
+    ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+    
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
+    
+    [session connectWithCompletion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        [connected fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    XCTAssertNotNil([session.userAuthorization displayName], @"Authenticated user information should be available on login.");
+}
+
 - (void) testRegisteredForPushNotifications
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
@@ -285,7 +319,7 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void) testRelevantPushNotifcationTriggersServieRefresh
+- (void) testRelevantPushNotifcationTriggersServiceRefresh
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
     

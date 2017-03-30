@@ -90,7 +90,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void)prepareForResettingLayout:(JSQMessagesCollectionViewFlowLayout *)layout
 {
-
+    [cache removeAllObjects];
 }
 
 - (CGSize)messageBubbleSizeForMessageData:(id<JSQMessageData>)messageData

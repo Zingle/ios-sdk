@@ -385,8 +385,15 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     // We now have both an account and a service selected.
     
     [self initializeAllClients];
-    [self retrieveUserObject];
-    self.available = YES;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self synchronouslyRetrieveUserObject];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.available = YES;
+        });
+    });
+    
 }
 
 - (void) initializeAllClients
@@ -406,14 +413,25 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }
 
-- (void) retrieveUserObject
+- (void) synchronouslyRetrieveUserObject
 {
+    if (self.userAuthorizationClient == nil) {
+        return;
+    }
+    
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
         self.userAuthorization = theUserAuthorization;
         [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
+        dispatch_semaphore_signal(semaphore);
     } failure:^(ZNGError *error) {
         ZNGLogError(@"Unable to retrieve current user info from the root URL: %@", error);
+        dispatch_semaphore_signal(semaphore);
     }];
+    
+    dispatch_time_t twentySecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(20.0 * NSEC_PER_SEC));
+    dispatch_semaphore_wait(semaphore, twentySecondTimeout);
 }
 
 - (void) notifyShowDetailedEventsPreferenceChanged:(NSNotification *)notification

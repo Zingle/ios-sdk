@@ -33,5 +33,6 @@ Pod::Spec.new do |s|
   s.dependency 'JSQMessagesViewController'
   s.dependency 'Analytics', '~> 3.0'
   s.dependency 'MGSwipeTableCell'
+  s.dependency 'SDWebImage'
   s.dependency 'Socket.IO-Client-Swift'
 end

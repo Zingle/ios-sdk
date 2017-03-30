@@ -26,9 +26,11 @@
 #import "ZingleAccountSession.h"
 #import "ZNGLogging.h"
 #import "ZNGForwardingViewController.h"
-#import "ZNGAvatarCache.h"
+#import "ZNGInitialsAvatarCache.h"
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
+
+@import SDWebImage;
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -132,7 +134,7 @@ static void * KVOContext = &KVOContext;
         dispatch_source_cancel(emphasizeTimer);
     }
     
-    [[ZNGAvatarCache sharedCache] clearCache];
+    [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
@@ -180,7 +182,7 @@ static void * KVOContext = &KVOContext;
     [self startEmphasisTimer];
     
     // Avatars
-    ZNGAvatarCache * avatarCache = [ZNGAvatarCache sharedCache];
+    ZNGInitialsAvatarCache * avatarCache = [ZNGInitialsAvatarCache sharedCache];
     avatarCache.incomingTextColor = self.incomingTextColor;
     avatarCache.outgoingTextColor = self.outgoingTextColor;
     avatarCache.outgoingBackgroundColor = self.outgoingBubbleColor;
@@ -1146,7 +1148,7 @@ static void * KVOContext = &KVOContext;
     return NO;
 }
 
-- (id<JSQMessageAvatarImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView avatarImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+- (id<JSQMessageAvatarImageDataSource>) initialsAvatarForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
         return nil;
@@ -1171,7 +1173,7 @@ static void * KVOContext = &KVOContext;
             NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
             UIImage * avatarImage = [UIImage imageNamed:@"anonymousAvatar" inBundle:bundle compatibleWithTraitCollection:nil];
             
-            return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID image:avatarImage useCircleBackground:NO outgoing:NO];
+            return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:senderUUID fallbackImage:avatarImage useCircleBackground:NO outgoing:NO];
         }
     } else {
         // Outbound.
@@ -1198,7 +1200,7 @@ static void * KVOContext = &KVOContext;
         }
     }
     
-    return [[ZNGAvatarCache sharedCache] avatarForUserUUID:senderUUID name:name outgoing:[self isOutgoingMessage:event]];
+    return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:senderUUID nameForFallbackAvatar:name outgoing:[self isOutgoingMessage:event]];
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
@@ -1254,7 +1256,7 @@ static void * KVOContext = &KVOContext;
 {
     if (action == @selector(forwardMessage:)) {
         ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
-        return (self.allowForwarding && event.isMessage);
+        return (self.allowForwarding && event.isMessage && !event.message.isOutbound);
     }
     
     return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
@@ -1271,6 +1273,41 @@ static void * KVOContext = &KVOContext;
     } else {
         [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
     }
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+    // If this is not a message nor a note, we cannot add an avatar
+    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
+    
+    // This is a message or a note.  Add an avatar.
+    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    
+    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
+    NSURL * avatarURL = nil;
+    
+    if (([viewModel.event isMessage]) && ([viewModel.event isInboundMessage])) {
+        if ([self.conversation.contact.avatarUri length] > 0) {
+            avatarURL = [NSURL URLWithString:self.conversation.contact.avatarUri];
+        }
+    }
+    
+    if (avatarURL != nil) {
+        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
+    } else {
+        cell.avatarImageView.image = [initialsAvatarData avatarImage];
+    }
+    
+    // Make it a circle, dog
+    CGSize avatarSize = ([viewModel.event.message isOutbound]) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
+    cell.avatarImageView.layer.masksToBounds = YES;
+    cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
+    
+    return cell;
 }
 
 #pragma mark - Text view delegate

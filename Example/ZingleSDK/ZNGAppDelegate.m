@@ -58,39 +58,6 @@
     NSLog(@"Failed to get token, error: %@", error);
 }
 
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
-{
-    // Extract the notification payload.
-    
-    if (!userInfo) {
-        return;
-    }
-    
-    NSString *contactId = [userInfo objectForKey:@"feedId"];
-    if (!contactId) {
-        return;
-    }
-    
-    NSDictionary *aps = [userInfo objectForKey:@"aps"];
-    if (!aps) {
-        return;
-    }
-    
-    NSDictionary *alert = [aps objectForKey:@"alert"];
-    if (!alert) {
-        return;
-    }
-    
-    NSString *body = [alert objectForKey:@"body"];
-    if (!body) {
-        return;
-    }
-    
-    NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:@" \n"];
-    NSString *message = [body stringByTrimmingCharactersInSet:characterSet];
-
-}
-
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     application.applicationIconBadgeNumber = 0;

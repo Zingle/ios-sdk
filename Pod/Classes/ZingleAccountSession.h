@@ -130,7 +130,7 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *
  *  At least one value must be present in the contacts, labels, or phoneNumbers arrays.
  */
-- (void) sendMessage:(NSString *)body toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion;
+- (void) sendMessage:(NSString *)body withUUID:(nullable NSString *)uuid toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion;
 
 @end
 

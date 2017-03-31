@@ -394,10 +394,10 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     [super sendMessageWithBody:body success:success failure:failure];
 }
 
-- (void) sendMessageWithBody:(NSString *)body imageData:(NSArray<NSData *> *)imageData success:(void (^)(ZNGStatus * _Nullable))success failure:(void (^)(ZNGError * _Nullable))failure
+- (void) sendMessageWithBody:(NSString *)body imageData:(NSArray<NSData *> *)imageData uuid:(NSString *)uuid success:(void (^)(ZNGStatus * _Nullable))success failure:(void (^)(ZNGError * _Nullable))failure
 {
     [self userClearedInput];
-    [super sendMessageWithBody:body imageData:imageData success:success failure:failure];
+    [super sendMessageWithBody:body imageData:imageData uuid:uuid success:success failure:failure];
 }
 
 #pragma mark - Forwarding

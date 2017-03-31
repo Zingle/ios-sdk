@@ -58,7 +58,7 @@
     
     XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
     
-    [conversation sendMessageWithBody:@"" imageData:@[pngData] success:^(ZNGStatus * _Nullable status) {
+    [conversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:^(ZNGStatus * _Nullable status) {
         [messageSent fulfill];
     } failure:^(ZNGError * _Nullable error) {
         XCTFail(@"Message sent failed: %@", [error localizedDescription]);
@@ -87,7 +87,7 @@
     
     XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
     
-    [conversation sendMessageWithBody:@"" imageData:@[jpgData] success:^(ZNGStatus * _Nullable status) {
+    [conversation sendMessageWithBody:@"" imageData:@[jpgData] uuid:nil success:^(ZNGStatus * _Nullable status) {
         [messageSent fulfill];
     } failure:^(ZNGError * _Nullable error) {
         XCTFail(@"Message sent failed: %@", [error localizedDescription]);
@@ -116,7 +116,7 @@
     
     XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
     
-    [conversation sendMessageWithBody:@"" imageData:@[pngData] success:^(ZNGStatus * _Nullable status) {
+    [conversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:^(ZNGStatus * _Nullable status) {
         [messageSent fulfill];
     } failure:^(ZNGError * _Nullable error) {
         XCTFail(@"Message sent failed: %@", [error localizedDescription]);

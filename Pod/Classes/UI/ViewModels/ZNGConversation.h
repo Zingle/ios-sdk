@@ -126,6 +126,7 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 
 - (void) sendMessageWithBody:(nonnull NSString *)body
                    imageData:(nullable NSArray<NSData *> *)imageData
+                        uuid:(nullable NSString *)uuid
                      success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
                      failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;
 

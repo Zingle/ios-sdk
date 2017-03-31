@@ -91,6 +91,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     BOOL showingImageView;
     
+    /**
+     *  A UUID sent to the server with a message to prevent duplicate messages in the case of specific
+     *   timeout timing and the user hitting send again.
+     *  This value is changed any time the text is changed.
+     */
+    NSString * uuid;
+    
     ZNGGradientLoadingView * loadingGradient;
     
     NSUInteger pendingInsertionCount;   // See http://victorlin.me/posts/2016/04/29/uicollectionview-invalid-number-of-items-crash-issue for why this awful variable is required
@@ -177,6 +184,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [super viewDidLoad];
     
     [self setupLoadingGradient];
+    
+    [self updateUUID];
     
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
@@ -331,6 +340,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.contentView.textView.font = textInputFont;
 }
 
+- (void) updateUUID
+{
+    NSString * newUUID = [[[NSUUID alloc] init] UUIDString];
+    ZNGLogVerbose(@"Updating message UUID from %@ to %@", uuid, newUUID);
+    uuid = newUUID;
+}
+
 #pragma mark - Data properties
 - (void) setConversation:(ZNGConversation *)conversation
 {
@@ -363,7 +379,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     stuckToBottom = YES;
     
-    [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] success:^(ZNGStatus *status) {
+    [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] uuid:uuid success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
         [self finishSendingMessageAnimated:YES];
     } failure:^(ZNGError *error) {
@@ -687,6 +703,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 #pragma mark - Text view delegate
 - (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
+    [self updateUUID];
+    
     // Are they deleting an image?
     if ((textView == self.inputToolbar.contentView.textView) && ([text isEqualToString:@""])) {
         // They are deleting.  Check for an image.

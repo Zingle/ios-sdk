@@ -724,6 +724,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 
     message.sender = sender;
     message.senderType = ZNGConversationParticipantTypeService;
+    message.uuid = uuid;
     
     return message;
 }

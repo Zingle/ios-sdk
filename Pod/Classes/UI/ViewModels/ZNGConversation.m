@@ -549,6 +549,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
     
     newMessage.body = body;
+    newMessage.uuid = uuid;
     self.loading = YES;
     ZNGParticipant * recipient = [newMessage.recipients firstObject];
     ZNGLogVerbose(@"Sending \"%@\" to %@", body, recipient.channelValue);

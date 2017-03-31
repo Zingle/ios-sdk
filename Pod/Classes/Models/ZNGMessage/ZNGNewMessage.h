@@ -18,6 +18,7 @@
 @property(nonatomic, strong) NSArray* channelTypeIds; // Array of NSString
 @property(nonatomic, strong) NSString* body;
 @property(nonatomic, strong) NSArray* attachments;
+@property(nonatomic, strong) NSString * uuid;
 
 /**
  *  Outgoing image attachments for local rendering

@@ -91,16 +91,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
-    if ([keyPath isEqualToString:NSStringFromSelector(@selector(events))]) {
-        
-        ZNGMessage * lastMessage = [self mostRecentInboundMessage];
-        
-        if ((lastMessage.sender.channel != nil) && ([self.contact.channels containsObject:lastMessage.sender.channel])) {
-            self.channel = [self channelWithinContactMatchingChannel:lastMessage.sender.channel];
-        } else {
-            self.channel = [self defaultChannelForContact];
-        }
-    } else if ([keyPath isEqualToString:ChannelsKVOPath]) {
+    if ([keyPath isEqualToString:ChannelsKVOPath]) {
         // We may need to update our current channel
         if (self.channel != nil) {
             NSUInteger channelIndex = [self.contact.channels indexOfObject:self.channel];

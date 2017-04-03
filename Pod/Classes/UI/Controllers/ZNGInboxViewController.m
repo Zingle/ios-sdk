@@ -808,6 +808,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     ZNGConversationServiceToContact * conversation = [self.session conversationWithContact:contact];
     
     if ([self _shouldShowConversation:conversation]) {
+        conversation.channel = [conversation defaultChannelForContact];
+        
         ZNGConversationViewController * vc = [self.session conversationViewControllerForConversation:conversation];
         [self.navigationController pushViewController:vc animated:YES];
     }

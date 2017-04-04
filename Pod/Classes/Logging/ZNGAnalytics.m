@@ -410,5 +410,19 @@ static NSString * const HostPropertyName = @"Host";
     [self _track:event properties:properties];
 }
 
+#pragma mark - Easter eggs
+- (void) trackEasterEggNamed:(NSString *)eggName
+{
+    NSString * event = @"Easter egg triggered";
+    
+    NSMutableDictionary * properties = [self defaultProperties];
+    
+    if (eggName != nil) {
+        properties[@"easterEggName"] = eggName;
+    }
+    
+    [self _track:event properties:properties];
+}
+
 
 @end

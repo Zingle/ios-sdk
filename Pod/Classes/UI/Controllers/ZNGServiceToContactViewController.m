@@ -416,6 +416,7 @@ static void * KVOContext = &KVOContext;
     uint32_t token = arc4random() % 100;
     
     if (token <= percentChance) {
+        [[ZNGAnalytics sharedAnalytics] trackEasterEggNamed:@"Confirmation spam fire"];
         [self smoulderAtRandomPoint];
     }
 }
@@ -489,10 +490,12 @@ static void * KVOContext = &KVOContext;
     }
     
     if ([self robotShouldShoot]) {
+        [[ZNGAnalytics sharedAnalytics] trackEasterEggNamed:@"Automation robot ACTIVATE LASER EYES"];
         [self activateLaserRobotEyes];
         return;
     }
     
+    [[ZNGAnalytics sharedAnalytics] trackEasterEggNamed:@"Automation robot was tickled"];
     [self vibrateRobot];
 }
 

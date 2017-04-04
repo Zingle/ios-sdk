@@ -71,6 +71,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) trackAddedLabel:(ZNGLabel *)label toContact:(ZNGContact *)contact;
 - (void) trackRemovedLabel:(ZNGLabel *)label fromContact:(ZNGContact *)contact;
 
+#pragma mark - Easter eggs
+- (void) trackEasterEggNamed:(NSString *)eggName;
+
 NS_ASSUME_NONNULL_END
 
 

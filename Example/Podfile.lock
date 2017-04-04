@@ -40,7 +40,7 @@ PODS:
   - SDWebImage (4.0.0):
     - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
-  - Socket.IO-Client-Swift (8.3.0)
+  - Socket.IO-Client-Swift (8.3.3)
   - ZingleSDK (1.1.0):
     - AFNetworking (~> 2.5)
     - Analytics (~> 3.0)
@@ -69,7 +69,7 @@ SPEC CHECKSUMS:
   Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
-  Socket.IO-Client-Swift: 7ad3aded3c0f74d99555e950ac3aa82ca3eefbaf
+  Socket.IO-Client-Swift: a2faffdbde89c63aebc5d631041530c1068b02b8
   ZingleSDK: 9d4cfd96785f46cb360d43d2fcc159de70299ff6
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd

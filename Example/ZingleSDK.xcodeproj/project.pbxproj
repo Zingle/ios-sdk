@@ -15,6 +15,7 @@
 		6003F59E195388D20070C39A /* ZNGAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* ZNGAppDelegate.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		92E39693E54735C032BC69C0 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */; };
+		961847261E96CF9500AB3D45 /* TestMessageSending.m in Sources */ = {isa = PBXBuildFile; fileRef = 961847251E96CF9500AB3D45 /* TestMessageSending.m */; };
 		9622B33A1DC284A800957C5F /* devEnterpriseService.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3381DC284A800957C5F /* devEnterpriseService.json */; };
 		9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */; };
 		9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */; };
@@ -78,6 +79,7 @@
 		6003F5AF195388D20070C39A /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		960FCBAE1D0F6E9C00B7E82C /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		960FCBB21D0F6E9C00B7E82C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		961847251E96CF9500AB3D45 /* TestMessageSending.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestMessageSending.m; sourceTree = "<group>"; };
 		9622B3381DC284A800957C5F /* devEnterpriseService.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = devEnterpriseService.json; path = data/devEnterpriseService.json; sourceTree = "<group>"; };
 		9622B33D1DC2852200957C5F /* ZNGMockContactClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockContactClient.h; path = mocks/ZNGMockContactClient.h; sourceTree = "<group>"; };
 		9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockContactClient.m; path = mocks/ZNGMockContactClient.m; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
 				96E0AABB1E6F8D2400911146 /* TestImageAttachmentSending.m */,
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
+				961847251E96CF9500AB3D45 /* TestMessageSending.m */,
 				96EBB5681E0877900048218C /* TestTemplate.m */,
 				96C61E5F1E03434E00A38B5F /* TestURLParsing.m */,
 			);
@@ -529,6 +532,7 @@
 				96EBB5691E0877900048218C /* TestTemplate.m in Sources */,
 				9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */,
 				9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */,
+				961847261E96CF9500AB3D45 /* TestMessageSending.m in Sources */,
 				9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */,
 				96C61E601E03434E00A38B5F /* TestURLParsing.m in Sources */,
 				969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */,

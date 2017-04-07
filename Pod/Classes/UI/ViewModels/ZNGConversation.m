@@ -698,10 +698,18 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                 
                 [self mergeNewDataAtTail:sortedEvents];
                 self.loading = NO;
+                
+                if (success) {
+                    success(status);
+                }
             } failure:^(ZNGError *error) {
                 [self removeAnyPendingMessages];
                 ZNGLogError(@"Message send reported success, but we were unable to load event data afterwards.  This is odd.  %@", error);
                 self.loading = NO;
+                
+                if (success) {
+                    success(status);
+                }
             }];
         });
     } failure:^(ZNGError *error) {

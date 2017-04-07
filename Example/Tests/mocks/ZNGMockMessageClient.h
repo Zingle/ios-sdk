@@ -12,4 +12,9 @@
 
 @property (nonatomic, strong) NSArray<NSDictionary <NSString *, NSString *> *> * lastSentMessageAttachments;
 
+/**
+ *  If this flag is set, all message sending will call the failure block.
+ */
+@property (nonatomic, assign) BOOL alwaysFail;
+
 @end

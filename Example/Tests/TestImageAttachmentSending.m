@@ -41,6 +41,7 @@
     
     ZNGService * service = [[ZNGService alloc] init];
     ZNGContact * contact = [[ZNGContact alloc] init];
+    contact.contactId = @"1234-ABCDEFABCDEFABCD-EFABCDEFABCD-1234";
     ZNGStubbedEventClient * eventClient = [[ZNGStubbedEventClient alloc] init];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     

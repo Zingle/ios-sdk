@@ -9,6 +9,7 @@
 #import "ZNGMockMessageClient.h"
 #import <ZingleSDK/ZNGNewMessage.h>
 #import <ZingleSDK/ZNGStatus.h>
+#import <ZingleSDK/ZNGNewMessageResponse.h>
 
 @implementation ZNGMockMessageClient
 
@@ -20,8 +21,22 @@
     status.statusCode = 200;
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        self.lastSentMessageAttachments = newMessage.attachments;
-        success(nil, status);
+        
+        if (self.alwaysFail) {
+            if (failure) {
+                failure(nil);
+            }
+        } else {
+            NSUUID * messageUuid = [[NSUUID alloc] init];
+            ZNGNewMessageResponse * response = [[ZNGNewMessageResponse alloc] init];
+            response.messageIds = @[[messageUuid UUIDString]];
+            
+            self.lastSentMessageAttachments = newMessage.attachments;
+            
+            if (success) {
+                success(response, status);
+            }
+        }
     });
 }
 

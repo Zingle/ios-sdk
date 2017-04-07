@@ -6,11 +6,11 @@
 //
 //
 
-#import <ZingleSDK/ZingleSDK.h>
+#import <ZingleSDK/ZNGBaseClientAccount.h>
 
 @class ZNGUser;
 
-@interface ZNGUserClient : ZNGBaseClientService
+@interface ZNGUserClient : ZNGBaseClientAccount
 
 - (void) userWithId:(NSString *)userId
             success:(void (^)(ZNGUser* user, ZNGStatus* status))success

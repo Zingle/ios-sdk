@@ -225,7 +225,7 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
 }
 
-- (void) testUserAuthorizationInfoAvailableImmediately
+- (void) testUserAuthorizationAndUserInfoAvailableImmediately
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
     
@@ -260,7 +260,8 @@
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
-    XCTAssertNotNil([session.userAuthorization displayName], @"Authenticated user information should be available on login.");
+    XCTAssertNotNil([session.userAuthorization displayName], @"Authenticated user information (ZNGUserAuthorization) should be available on login.");
+    XCTAssertNotNil(session.user.userId, @"User information (ZNGUser) should be available on login.");
 }
 
 - (void) testRegisteredForPushNotifications

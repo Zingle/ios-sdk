@@ -14,7 +14,7 @@
             success:(void (^)(ZNGUser* user, ZNGStatus* status))success
             failure:(void (^)(ZNGError* error))failure
 {
-    NSString* path = [NSString stringWithFormat:@"services/%@/users/%@", self.accountId, userId];
+    NSString* path = [NSString stringWithFormat:@"accounts/%@/users/%@", self.accountId, userId];
 
     [self getWithResourcePath:path
                 responseClass:[ZNGUser class]

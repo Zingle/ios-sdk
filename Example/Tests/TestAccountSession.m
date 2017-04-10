@@ -14,6 +14,7 @@
 #import "ZNGMockNotificationsClient.h"
 #import "ZNGMockServiceClient.h"
 #import "ZNGMockUserAuthorizationClient.h"
+#import "ZNGMockUserClient.h"
 @import CocoaLumberjack;
 
 @interface TestAccountSession : XCTestCase
@@ -31,6 +32,7 @@
     ZNGAccount * account2;
     
     ZNGContact * contact1;
+    ZNGUser * user1;
 }
 
 - (void)setUp
@@ -98,6 +100,12 @@
     
     contact1.customFieldValues = @[firstName, lastName];
     contact1.contactId = @"00000000-0000-0000-0000-1234abcd1234";
+    
+    
+    user1 = [[ZNGUser alloc] init];
+    user1.firstName = [[contact1 firstNameFieldValue] value];
+    user1.lastName = [[contact1 lastNameFieldValue] value];
+    user1.userId = contact1.contactId;
 }
 
 - (void) testSingleAccountSingleServiceLogin
@@ -122,6 +130,10 @@
     userAuthClient.contact = contact1;
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
+    
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
@@ -193,6 +205,10 @@
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
     
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account2.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
+    
     XCTestExpectation * serviceChooserCalled = [self expectationWithDescription:@"Service chooser block called"];
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(service)) expectedValue:account2service1];
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(available)) expectedValue:@YES];
@@ -232,6 +248,10 @@
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
     
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
+    
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithCompletion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
@@ -268,6 +288,10 @@
     userAuthClient.contact = contact1;
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
+    
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
     
     [ZingleSDK setPushNotificationDeviceToken:deviceToken];
     
@@ -311,6 +335,10 @@
     userAuthClient.contact = contact1;
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
+    
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
     
     [ZingleSDK setPushNotificationDeviceToken:deviceToken];
     
@@ -362,6 +390,10 @@
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
     
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
+    
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithAccountChooser:nil serviceChooser:nil completion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
@@ -404,6 +436,10 @@
     userAuthClient.contact = contact1;
     userAuthClient.authorizationClass = @"account";
     session.userAuthorizationClient = userAuthClient;
+    
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     

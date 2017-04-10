@@ -407,7 +407,12 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
-    self.userClient = [[ZNGUserClient alloc] initWithSession:self accountId:self.account.accountId];
+    
+    // A lazy way to keep us from overwriting a mocked client in unit tests.
+    // This is a bit of a code smell :(
+    if (![self.userClient.accountId isEqualToString:self.account.accountId]) {
+        self.userClient = [[ZNGUserClient alloc] initWithSession:self accountId:self.account.accountId];
+    }
     
     self.socketClient = [[ZNGSocketClient alloc] initWithSession:self];
     [self.socketClient connect];

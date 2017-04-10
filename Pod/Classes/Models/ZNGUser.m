@@ -20,8 +20,14 @@
              @"firstName" : @"first_name",
              @"lastName" : @"last_name",
              @"title" : @"title",
-             @"serviceIds" : @"service_ids"
+             @"serviceIds" : @"service_ids",
+             @"avatarUri" : @"avatar_uri"
              };
+}
+
++ (NSValueTransformer *) avatarUriJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
 }
 
 - (NSString *) fullName

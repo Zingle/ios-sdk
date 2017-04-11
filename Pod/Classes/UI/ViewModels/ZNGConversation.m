@@ -19,6 +19,7 @@
 #import "ZNGAnalytics.h"
 #import <ImageIO/ImageIO.h>
 #import "UIImage+animatedGIF.h"
+#import "NSData+ImageType.h"
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
@@ -40,10 +41,6 @@ NSString *const kConversationSortDirectionDescending = @"desc";
 NSString *const kConversationCreatedAt = @"created_at";
 NSString *const kConversationEventType = @"event_type";
 NSString *const kAttachmentContentTypeKey = @"content_type";
-NSString *const kAttachmentContentTypePng = @"image/png";
-NSString *const kAttachmentContentTypeJpeg = @"image/jpeg";
-NSString *const kAttachmentContentTypeGif = @"image/gif";
-NSString *const kAttachmentContentTypeTiff = @"image/tiff";
 NSString *const kAttachementBase64 = @"base64";
 NSString *const kConversationService = @"service";
 NSString *const kConversationContact = @"contact";
@@ -502,26 +499,6 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
 }
 
-- (NSString *) contentTypeForImageData:(NSData *)data
-{
-    uint8_t firstChar;
-    [data getBytes:&firstChar length:1];
-    
-    switch (firstChar) {
-        case 0xFF:
-            return kAttachmentContentTypeJpeg;
-        case 0x89:
-            return kAttachmentContentTypePng;
-        case 0x47:
-            return kAttachmentContentTypeGif;
-        case 0x49:
-        case 0x4D:
-            return kAttachmentContentTypeTiff;
-        default:
-            return nil;
-    }
-}
-
 - (void)sendMessageWithBody:(NSString *)body
                     success:(void (^)(ZNGStatus* status))success
                     failure:(void (^) (ZNGError *error))failure
@@ -575,7 +552,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             
             // Image data and content type will be the same as the original source unless we resize
             NSData * imageData = originalImageData;
-            NSString * contentType = [self contentTypeForImageData:originalImageData];
+            NSString * contentType = [originalImageData imageContentType];
             
             UIImage * imageForLocalDisplay;
 
@@ -585,7 +562,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             if (frameCount > 1) {
                 // This is an animated GIF.  We need to make an animated UIImage for display while the message sends
                 imageForLocalDisplay = [UIImage animatedImageWithAnimatedGIFData:originalImageData];
-                contentType = kAttachmentContentTypeGif;
+                contentType = NSDataImageContentTypeGif;
             } else {
                 // This is a single frame image.  We will resize if necessary.
                 
@@ -597,7 +574,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                     
                     if (resizedData != nil) {
                         imageData = resizedData;
-                        contentType = kAttachmentContentTypeJpeg;
+                        contentType = NSDataImageContentTypeJpeg;
                     } else {
                         ZNGLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
                     }

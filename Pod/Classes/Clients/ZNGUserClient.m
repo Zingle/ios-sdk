@@ -67,7 +67,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         
         NSString * path = [NSString stringWithFormat:@"accounts/%@/users/%@/avatar", self.accountId, userId];
         NSDictionary * parameters = @{
-                                      @"content-type": contentType,
+                                      @"content_type": contentType,
                                       @"base64": [imageData base64EncodedStringWithOptions:0]
                                       };
         

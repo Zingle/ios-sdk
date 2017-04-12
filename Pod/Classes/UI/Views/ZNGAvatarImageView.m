@@ -26,10 +26,20 @@
     self = [super init];
     
     if (self != nil) {
-        ZNGInitialsAvatar * initialsAvatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials textColor:textColor backgroundColor:backgroundColor size:size font:font];
-        UIImage * initialsImage = [initialsAvatar avatarImage];
+        _avatarUrl = [avatarUrl copy];
+        _initials = [initials copy];
+        _size = size;
+        _backgroundColor = backgroundColor;
+        _textColor = textColor;
+        _font = font;
         
-        [self sd_setImageWithURL:avatarUrl placeholderImage:initialsImage];
+        ZNGInitialsAvatar * initialsAvatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials textColor:textColor backgroundColor:backgroundColor size:size font:font];
+        _placeholderImage = [initialsAvatar avatarImage];
+        
+        self.frame = CGRectMake(0.0, 0.0, size.width, size.height);
+        self.contentMode = UIViewContentModeScaleAspectFit;
+        
+        [self sd_setImageWithURL:avatarUrl placeholderImage:_placeholderImage];
     }
     
     return self;
@@ -84,7 +94,9 @@
     // Note that expandedSize adds double x and y of the overflow.  This is so our original image asset remains centered, even after adding overflow
     //  for the edit icon.
     CGSize superSize = [super intrinsicContentSize];
-    return CGSizeMake(superSize.width + (self.editImageEdgeOverflow.x * 2.0), superSize.height + (self.editImageEdgeOverflow.y * 2.0));
+    CGFloat width = superSize.width - self.insetsWhenEditIconPresent.left - self.insetsWhenEditIconPresent.right;
+    CGFloat height = superSize.height - self.insetsWhenEditIconPresent.top - self.insetsWhenEditIconPresent.bottom;
+    return CGSizeMake(width, height);
 }
 
 #pragma mark - Image manipulation
@@ -98,7 +110,8 @@
     
     // Draw the original image, allowing for padding
     UIGraphicsBeginImageContextWithOptions(totalSize, false, image.scale);
-    [image drawAtPoint:self.editImageEdgeOverflow];
+    CGPoint originalImageOrigin = CGPointMake(-self.insetsWhenEditIconPresent.left, -self.insetsWhenEditIconPresent.top);
+    [image drawAtPoint:originalImageOrigin];
     
     // Draw the edit icon
     [self.editIconImage drawAtPoint:[self editImageLocation]];

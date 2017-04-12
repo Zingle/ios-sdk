@@ -26,10 +26,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) UIImage * editIconImage;
 
 /**
- *  How far the edit image should extend beyond the normal edges of our image.
+ *  The padding to place around the view when showEditIcon is set to YES.  Note all numbers should be negative or 0.0
  */
-@property (nonatomic, assign) CGPoint editImageEdgeOverflow;
+@property (nonatomic, assign) UIEdgeInsets insetsWhenEditIconPresent;
 
+// Readonly properties set on init
+@property (nonatomic, readonly, nullable) NSURL * avatarUrl;
+@property (nonatomic, readonly) NSString * initials;
+@property (nonatomic, readonly) CGSize size;
+@property (nonatomic, readonly, nullable) UIColor * backgroundColor;
+@property (nonatomic, readonly) UIColor * textColor;
+@property (nonatomic, readonly) UIFont * font;
+@property (nonatomic, readonly) UIImage * placeholderImage;
 
 - (id) initWithAvatarUrl:(NSURL * _Nullable)avatarUrl initials:(NSString *)initials size:(CGSize)size backgroundColor:(UIColor * _Nullable)backgroundColor textColor:(UIColor *)textColor font:(UIFont *)font;
 

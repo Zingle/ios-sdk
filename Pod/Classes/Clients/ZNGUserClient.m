@@ -9,6 +9,7 @@
 #import "ZNGUserClient.h"
 #import "NSData+ImageType.h"
 #import "ZNGLogging.h"
+#import "ZingleAccountSession.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -33,6 +34,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * path = [NSString stringWithFormat:@"accounts/%@/users/%@/avatar", self.accountId, userId];
     
     [self deleteWithPath:path success:^(ZNGStatus * _Nonnull status) {
+        [self refreshUserData];
+        
         if (success != nil) {
             success();
         }
@@ -72,11 +75,20 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                                       };
         
         [self putWithPath:path parameters:parameters responseClass:nil success:^(id  _Nonnull responseObject, ZNGStatus * _Nonnull status) {
+            [self refreshUserData];
+            
             if (success != nil) {
                 success();
             }
         } failure:failure];
     });
+}
+
+- (void) refreshUserData
+{
+    if ([self.session isKindOfClass:[ZingleAccountSession class]]) {
+        [(ZingleAccountSession *)self.session updateUserData];
+    }
 }
 
 @end

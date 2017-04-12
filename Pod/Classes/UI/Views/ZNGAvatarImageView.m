@@ -73,11 +73,11 @@
 
 - (void) setImage:(UIImage *)image
 {
-    _rawImage = image;
-    UIImage * finalImage = image;
+    _rawImage = [self imageCroppedToCircle:image];;
+    UIImage * finalImage = _rawImage;
 
     if ((self.showEditIcon) && (self.editIconImage != nil)) {
-        finalImage = [self imageAddingEditIcon:image];
+        finalImage = [self imageAddingEditIcon:_rawImage];
     }
     
     [super setImage:finalImage];
@@ -93,13 +93,41 @@
 
     // Note that expandedSize adds double x and y of the overflow.  This is so our original image asset remains centered, even after adding overflow
     //  for the edit icon.
-    CGSize superSize = [super intrinsicContentSize];
-    CGFloat width = superSize.width - self.insetsWhenEditIconPresent.left - self.insetsWhenEditIconPresent.right;
-    CGFloat height = superSize.height - self.insetsWhenEditIconPresent.top - self.insetsWhenEditIconPresent.bottom;
+    CGFloat width = _rawImage.size.width - self.insetsWhenEditIconPresent.left - self.insetsWhenEditIconPresent.right;
+    CGFloat height = _rawImage.size.height - self.insetsWhenEditIconPresent.top - self.insetsWhenEditIconPresent.bottom;
     return CGSizeMake(width, height);
 }
 
 #pragma mark - Image manipulation
+- (UIImage *) imageCroppedToCircle:(UIImage * )image
+{
+    if (image == nil) {
+        return nil;
+    }
+    
+    CGFloat diameter = MIN(self.size.width, self.size.height);
+    CGFloat smallestDimension = MIN(image.size.width, image.size.height);
+    CGFloat scale = diameter / smallestDimension;
+    CGFloat scaledSmallestDimension = smallestDimension * scale;
+    
+    CGSize downscaledSize = CGSizeMake(image.size.width * scale, image.size.height * scale);
+    
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(scaledSmallestDimension, scaledSmallestDimension), false, 0.0);
+    CGRect rect = CGRectMake(0.0, 0.0, scaledSmallestDimension, scaledSmallestDimension);
+    [[UIBezierPath bezierPathWithOvalInRect:rect] addClip];
+    CGFloat radius = scaledSmallestDimension / 2.0;
+    CGFloat halfWidth = downscaledSize.width / 2.0;
+    CGFloat halfHeight = downscaledSize.height / 2.0;
+    CGPoint imageOrigin = CGPointMake(radius - halfWidth, radius - halfHeight);
+    
+    [image drawInRect:CGRectMake(imageOrigin.x, imageOrigin.y, downscaledSize.width, downscaledSize.height)];
+    
+    UIImage * result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return result;
+}
+
 - (UIImage *) imageAddingEditIcon:(UIImage *)image
 {
     if ((image == nil) || (self.editIconImage == nil)) {
@@ -109,7 +137,7 @@
     CGSize totalSize = [self intrinsicContentSize];
     
     // Draw the original image, allowing for padding
-    UIGraphicsBeginImageContextWithOptions(totalSize, false, image.scale);
+    UIGraphicsBeginImageContextWithOptions(totalSize, false, 0.0);
     CGPoint originalImageOrigin = CGPointMake(-self.insetsWhenEditIconPresent.left, -self.insetsWhenEditIconPresent.top);
     [image drawAtPoint:originalImageOrigin];
     

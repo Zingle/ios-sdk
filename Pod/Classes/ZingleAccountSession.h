@@ -102,6 +102,9 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 
 - (void) connectWithAccountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser completion:(nullable ZNGAccountSessionCallback)completion;
 
+#pragma mark - User data
+- (void) updateUserData;
+
 #pragma mark - Messaging methods
 
 /**

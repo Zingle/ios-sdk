@@ -420,6 +420,13 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }
 
+- (void) updateUserData
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self synchronouslyRetrieveUserData];
+    });
+}
+
 /**
  *  Retrieve ZNGUserAuthorization and ZNGUser objects.  Method returns once both requests complete.
  */

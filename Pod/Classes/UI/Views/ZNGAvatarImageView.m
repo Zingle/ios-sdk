@@ -8,9 +8,11 @@
 
 #import "ZNGAvatarImageView.h"
 #import "ZNGInitialsAvatar.h"
+#import "ZNGLogging.h"
 
 @import SDWebImage;
 
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGAvatarImageView
 {
@@ -45,7 +47,7 @@
     return self;
 }
 
-#pragma mark - Setters
+#pragma mark - Getters/Setters
 - (void) setShowEditIcon:(BOOL)showEditIcon
 {
     if (self.showEditIcon == showEditIcon) {
@@ -83,6 +85,45 @@
     [super setImage:finalImage];
 }
 
+- (void) setCenterOfImage:(CGPoint)centerOfImage
+{
+    if ((!self.showEditIcon) || (self.editIconImage == nil)) {
+        self.center = centerOfImage;
+        return;
+    }
+    
+    CGPoint boundsCenter = [self convertPoint:centerOfImage fromView:self.superview];
+    CGFloat boundsX = boundsCenter.x + self.insetsWhenEditIconPresent.left - (_rawImage.size.width / 2.0);
+    CGFloat boundsY = boundsCenter.y + self.insetsWhenEditIconPresent.top - (_rawImage.size.height  /2.0);
+    CGFloat boundsWidth = _rawImage.size.width - self.insetsWhenEditIconPresent.left - self.insetsWhenEditIconPresent.right;
+    CGFloat boundsHeight = _rawImage.size.height - self.insetsWhenEditIconPresent.bottom - self.insetsWhenEditIconPresent.top;
+    
+    CGRect newBounds = CGRectMake(boundsX, boundsY, boundsWidth, boundsHeight);
+    CGPoint newBoundsCenter = CGPointMake(CGRectGetMidX(newBounds), CGRectGetMidY(newBounds));
+    CGPoint newCenter = [self convertPoint:newBoundsCenter toView:self.superview];
+    
+    ZNGLogDebug(@"%@ %p: Request to set centerOfImage to %@ results in setting center to %@", [self class], self, NSStringFromCGPoint(centerOfImage), NSStringFromCGPoint(newCenter));
+    
+    self.center = newCenter;
+}
+
+- (CGPoint) centerOfImage
+{
+    if ((!self.showEditIcon) || (self.editIconImage == nil)) {
+        return self.center;
+    }
+    
+    CGFloat boundsCenterX = self.bounds.size.width + self.insetsWhenEditIconPresent.right - (_rawImage.size.width / 2.0);
+    CGFloat boundsCenterY = self.bounds.size.height + self.insetsWhenEditIconPresent.bottom - (_rawImage.size.height / 2.0);
+    CGPoint boundsCenter = CGPointMake(boundsCenterX, boundsCenterY);
+    
+    CGPoint centerOfImage = [self convertPoint:boundsCenter toView:self.superview];
+    
+    ZNGLogDebug(@"%@ %p: Current center is %@, making centerOfImage %@", [self class], self, NSStringFromCGPoint(self.center), NSStringFromCGPoint(centerOfImage));
+    
+    return centerOfImage;
+}
+
 #pragma mark - Sizing
 - (CGSize) intrinsicContentSize
 {
@@ -91,8 +132,6 @@
         return [super intrinsicContentSize];
     }
 
-    // Note that expandedSize adds double x and y of the overflow.  This is so our original image asset remains centered, even after adding overflow
-    //  for the edit icon.
     CGFloat width = _rawImage.size.width - self.insetsWhenEditIconPresent.left - self.insetsWhenEditIconPresent.right;
     CGFloat height = _rawImage.size.height - self.insetsWhenEditIconPresent.top - self.insetsWhenEditIconPresent.bottom;
     return CGSizeMake(width, height);

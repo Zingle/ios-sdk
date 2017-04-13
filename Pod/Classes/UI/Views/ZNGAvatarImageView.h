@@ -30,6 +30,12 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) UIEdgeInsets insetsWhenEditIconPresent;
 
+/**
+ *  Corresponding read/write property to center, taking into account any edit icon and its corresponding offset on our image.
+ *  Setting this property does not move the image within our view; it moves the view itself to position the image as specified in our superview.
+ */
+@property (nonatomic, assign) CGPoint centerOfImage;
+
 // Readonly properties set on init
 @property (nonatomic, readonly, nullable) NSURL * avatarUrl;
 @property (nonatomic, readonly) NSString * initials;

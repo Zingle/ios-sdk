@@ -48,7 +48,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
               failure:(void (^)(ZNGError * error))failure
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSData * imageData = UIImageJPEGRepresentation(avatarImage, 0.5);
+        NSData * imageData = UIImageJPEGRepresentation([self imageDownsizedToReasonableAvatarSize:avatarImage], 0.5);
         NSString * contentType = [imageData imageContentType];
         
         if (([imageData length] == 0) || ([contentType length] == 0)) {
@@ -82,6 +82,31 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             }
         } failure:failure];
     });
+}
+
+- (UIImage *) imageDownsizedToReasonableAvatarSize:(UIImage *)originalImage
+{
+    if (originalImage == nil) {
+        return nil;
+    }
+    
+    static const CGFloat maxDimension = 800.0;
+    CGFloat widthDownscale = maxDimension / originalImage.size.width;
+    CGFloat heightDownscale = maxDimension / originalImage.size.height;
+    CGFloat downscale = MIN(widthDownscale, heightDownscale);
+    
+    if (downscale >= 1.0) {
+        return originalImage;
+    }
+    
+    CGRect rect = CGRectMake(0.0, 0.0, originalImage.size.width * downscale, originalImage.size.height * downscale);
+    UIGraphicsBeginImageContextWithOptions(rect.size, false, originalImage.scale);
+    
+    [originalImage drawInRect:rect];
+    
+    UIImage * result = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return result;
 }
 
 - (void) refreshUserData

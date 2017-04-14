@@ -19,6 +19,7 @@
 @property(nonatomic, strong) NSString* lastName;
 @property(nonatomic, strong) NSString* title;
 @property(nonatomic, strong) NSArray* serviceIds;
+@property(nonatomic, strong) NSURL * avatarUri;
 
 - (NSString *) fullName;
 

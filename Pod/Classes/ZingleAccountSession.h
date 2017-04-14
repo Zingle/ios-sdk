@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGServiceToContactViewController;
 @class ZNGContactEditViewController;
 @class ZNGUserAuthorization;
+@class ZNGUserClient;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -54,6 +55,7 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *  Meta data about the current user.
  */
 @property (nonatomic, strong, nullable) ZNGUserAuthorization * userAuthorization;
+@property (nonatomic, strong, nullable) ZNGUser * user;
 
 /**
  *  If set, the service object will be refreshed whenever returning from the background (but no more often than every ten minutes.)
@@ -82,8 +84,9 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 @property (nonatomic, copy, nullable) ZNGAccountSessionCallback completion;
 
 #pragma mark - Clients
-@property (nonatomic, strong, nonnull) ZNGAutomationClient * automationClient;
-@property (nonatomic, strong, nonnull) ZNGLabelClient * labelClient;
+@property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
+@property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
+@property (nonatomic, strong, nullable) ZNGUserClient * userClient;
 
 /**
  *  If this flag is set, all conversation objects provided by this session will be detailed event conversations.
@@ -98,6 +101,9 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 - (void) connectWithCompletion:(nullable ZNGAccountSessionCallback)completion;
 
 - (void) connectWithAccountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser completion:(nullable ZNGAccountSessionCallback)completion;
+
+#pragma mark - User data
+- (void) updateUserData;
 
 #pragma mark - Messaging methods
 

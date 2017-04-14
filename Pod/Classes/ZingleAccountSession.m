@@ -20,6 +20,7 @@
 #import "ZNGContactClient.h"
 #import "ZNGLabelClient.h"
 #import "ZNGUserAuthorizationClient.h"
+#import "ZNGUserClient.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
 #import "ZNGSocketClient.h"
@@ -387,7 +388,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     [self initializeAllClients];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [self synchronouslyRetrieveUserObject];
+        [self synchronouslyRetrieveUserData];
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.available = YES;
@@ -407,14 +408,35 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     
+    // A lazy way to keep us from overwriting a mocked client in unit tests.
+    // This is a bit of a code smell :(
+    if (![self.userClient.accountId isEqualToString:self.account.accountId]) {
+        self.userClient = [[ZNGUserClient alloc] initWithSession:self accountId:self.account.accountId];
+    }
+    
     self.socketClient = [[ZNGSocketClient alloc] initWithSession:self];
     [self.socketClient connect];
     
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }
 
-- (void) synchronouslyRetrieveUserObject
+- (void) updateUserData
 {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [self synchronouslyRetrieveUserData];
+    });
+}
+
+/**
+ *  Retrieve ZNGUserAuthorization and ZNGUser objects.  Method returns once both requests complete.
+ */
+- (void) synchronouslyRetrieveUserData
+{
+    if ([[NSThread currentThread] isMainThread]) {
+        ZNGLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
     if (self.userAuthorizationClient == nil) {
         return;
     }
@@ -430,8 +452,25 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         dispatch_semaphore_signal(semaphore);
     }];
     
-    dispatch_time_t twentySecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(20.0 * NSEC_PER_SEC));
-    dispatch_semaphore_wait(semaphore, twentySecondTimeout);
+    dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+    dispatch_semaphore_wait(semaphore, tenSecondTimeout);
+    
+    if ([self.userAuthorization.userId length] == 0) {
+        // We failed to get the user ID; we cannot get the user object below.
+        return;
+    }
+    
+    semaphore = dispatch_semaphore_create(0);
+    
+    [self.userClient userWithId:self.userAuthorization.userId success:^(ZNGUser *user, ZNGStatus *status) {
+        self.user = user;
+        dispatch_semaphore_signal(semaphore);
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Unable to retrieve user object for user %@", self.userAuthorization.userId);
+        dispatch_semaphore_signal(semaphore);
+    }];
+    
+    dispatch_semaphore_wait(semaphore, tenSecondTimeout);
 }
 
 - (void) notifyShowDetailedEventsPreferenceChanged:(NSNotification *)notification

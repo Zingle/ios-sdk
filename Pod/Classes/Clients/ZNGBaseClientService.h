@@ -9,7 +9,7 @@
 #import "ZNGBaseClient.h"
 
 /**
- *  A Zingle SDK client that requires both an active service
+ *  A Zingle SDK client that requires an active service
  */
 @interface ZNGBaseClientService : ZNGBaseClient
 

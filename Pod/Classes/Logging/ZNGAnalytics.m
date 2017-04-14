@@ -148,7 +148,6 @@ static NSString * const HostPropertyName = @"Host";
     
     // Using setValue:forKey: instead of shorthand [] or setObject:forKey: so we do not have to check for nil values
     [traits setValue:token forKey:@"username"];
-    [traits setValue:userAuthorization.userId forKey:@"username"];
     [traits setValue:userAuthorization.email forKey:@"email"];
     [traits setValue:userAuthorization.firstName forKey:@"firstName"];
     [traits setValue:userAuthorization.lastName forKey:@"lastName"];
@@ -159,9 +158,8 @@ static NSString * const HostPropertyName = @"Host";
         traits[@"name"] = name;
     }
     
-    [[self segment] identify:token traits:traits];
+    [[self segment] identify:userAuthorization.userId traits:traits];
     [self _track:@"Login succeeded" properties:[self defaultProperties]];
-
 }
 
 - (void) trackLogout

@@ -92,11 +92,13 @@
     ZNGContactField * firstNameField = [[ZNGContactField alloc] init];
     firstNameField.displayName = @"First Name";
     firstName.value = @"Me";
+    firstName.customField = firstNameField;
     
     ZNGContactFieldValue * lastName = [[ZNGContactFieldValue alloc] init];
     ZNGContactField * lastNameField = [[ZNGContactField alloc] init];
     lastNameField.displayName = @"Last Name";
     lastName.value = @"McMoi";
+    lastName.customField = lastNameField;
     
     contact1.customFieldValues = @[firstName, lastName];
     contact1.contactId = @"00000000-0000-0000-0000-1234abcd1234";

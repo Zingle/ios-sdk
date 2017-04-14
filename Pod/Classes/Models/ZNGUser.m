@@ -32,21 +32,28 @@
 
 - (NSString *) fullName
 {
-    NSString * name = nil;
+    NSMutableString * name = [[NSMutableString alloc] init];
     
-    if (([self.firstName length] > 0) && ([self.lastName length] > 0)) {
-        name = [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
-    } else if ([self.firstName length] > 0) {
-        name = self.firstName;
-    } else if ([self.lastName length] > 0) {
-        name = self.lastName;
-    } else if ([self.username length] > 0) {
-        name = self.username;
-    } else if ([self.email length] > 0) {
-        name = self.email;
+    if ([self.firstName length] > 0) {
+        [name appendString:self.firstName];
+        [name appendString:@" "];
     }
     
-    return name;
+    if ([self.lastName length] > 0) {
+        [name appendString:self.lastName];
+    }
+    
+    NSString * displayName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if ([displayName length] > 0) {
+        return displayName;
+    }
+    
+    if ([self.email length] > 0) {
+        return self.email;
+    }
+    
+    return @"Someone";
 }
 
 + (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth

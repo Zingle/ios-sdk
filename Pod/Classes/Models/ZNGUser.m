@@ -53,7 +53,7 @@
         return self.email;
     }
     
-    return @"Someone";
+    return nil;
 }
 
 + (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth

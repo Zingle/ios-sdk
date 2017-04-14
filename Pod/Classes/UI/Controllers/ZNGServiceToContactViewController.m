@@ -1528,6 +1528,7 @@ static void * KVOContext = &KVOContext;
             [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
             [self presentViewController:alert animated:YES completion:nil];
         } else {
+            [self scrollToBottomAnimated:YES];
             [[ZNGAnalytics sharedAnalytics] trackTriggeredAutomation:automation onContact:self.conversation.contact];
         }
     }];

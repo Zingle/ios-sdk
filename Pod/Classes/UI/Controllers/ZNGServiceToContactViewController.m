@@ -654,13 +654,13 @@ static void * KVOContext = &KVOContext;
         CAShapeLayer * leftEyeCircle = [CAShapeLayer layer];
         leftEyeCircle.opacity = 0.0;
         [leftEyeCircle setPath:[[UIBezierPath bezierPathWithOvalInRect:leftEyeRect] CGPath]];
-        [leftEyeCircle setFillColor:[[UIColor yellowColor] CGColor]];
+        [leftEyeCircle setFillColor:[[UIColor redColor] CGColor]];
         [self.view.layer addSublayer:leftEyeCircle];
         
         CAShapeLayer * rightEyeCircle = [CAShapeLayer layer];
         rightEyeCircle.opacity = 0.0;
         [rightEyeCircle setPath:[[UIBezierPath bezierPathWithOvalInRect:rightEyeRect] CGPath]];
-        [rightEyeCircle setFillColor:[[UIColor yellowColor] CGColor]];
+        [rightEyeCircle setFillColor:[[UIColor redColor] CGColor]];
         [self.view.layer addSublayer:rightEyeCircle];
         
         
@@ -713,7 +713,7 @@ static void * KVOContext = &KVOContext;
             [leftLaserPath moveToPoint:leftEyeCenter];
             [leftLaserPath addLineToPoint:point];
             leftLaser.path = [leftLaserPath CGPath];
-            leftLaser.strokeColor = [[UIColor yellowColor] CGColor];
+            leftLaser.strokeColor = [[UIColor redColor] CGColor];
             leftLaser.lineWidth = initialLaserWidth;
             [self.view.layer addSublayer:leftLaser];
             
@@ -723,7 +723,7 @@ static void * KVOContext = &KVOContext;
             [rightLaserPath moveToPoint:rightEyeCenter];
             [rightLaserPath addLineToPoint:point];
             rightLaser.path = [rightLaserPath CGPath];
-            rightLaser.strokeColor = [[UIColor yellowColor] CGColor];
+            rightLaser.strokeColor = [[UIColor redColor] CGColor];
             rightLaser.lineWidth = initialLaserWidth;
             [self.view.layer addSublayer:rightLaser];
             

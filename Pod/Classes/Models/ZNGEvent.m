@@ -16,8 +16,6 @@ static NSString * const ZNGEventTypeNote = @"note";
 static NSString * const ZNGEventMarkConfirmed = @"mark_confirmed";
 static NSString * const ZNGEventMarkUnconfirmed = @"mark_unconfirmed";
 static NSString * const ZNGEventContactCreated = @"contact_created";
-static NSString * const ZNGEventConversationStarred = @"starred";
-static NSString * const ZNGEventConversationUnstarred = @"unstarred";
 static NSString * const ZNGEventWorkflowStarted = @"workflow_started";
 static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
 static NSString * const ZNGEventFeedReopened = @"feed_reopened";
@@ -36,8 +34,6 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
                   ZNGEventMarkConfirmed,
                   ZNGEventMarkUnconfirmed,
                   ZNGEventContactCreated,
-                  ZNGEventConversationStarred,
-                  ZNGEventConversationUnstarred,
                   ZNGEventWorkflowStarted,
                   ZNGEventWorkflowEnded,
                   ZNGEventFeedClosed,
@@ -240,10 +236,6 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
         return @"Unconfirmed";
     } else if ([self.eventType isEqualToString:ZNGEventContactCreated]) {
         return @"Contact created";
-    } else if ([self.eventType isEqualToString:ZNGEventConversationStarred]) {
-        return @"Conversation starred";
-    } else if ([self.eventType isEqualToString:ZNGEventConversationUnstarred]) {
-        return @"Conversation unstarred";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowStarted]) {
         return @"Automation started";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowEnded]) {

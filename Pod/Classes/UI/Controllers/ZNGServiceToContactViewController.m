@@ -1293,10 +1293,8 @@ static void * KVOContext = &KVOContext;
     id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
     NSURL * avatarURL = nil;
     
-    if (([viewModel.event isMessage]) && ([viewModel.event isInboundMessage])) {
-        if ([self.conversation.contact.avatarUri length] > 0) {
-            avatarURL = [NSURL URLWithString:self.conversation.contact.avatarUri];
-        }
+    if ([viewModel.event isMessage]) {
+        avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
     }
     
     if (avatarURL != nil) {

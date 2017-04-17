@@ -172,6 +172,11 @@ static NSString * const ParameterNameClosed = @"is_closed";
     return [ZingleValueTransformers dateValueTransformer];
 }
 
++ (NSValueTransformer *) avatarUriJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
+}
+
 -(ZNGContactFieldValue *)titleFieldValue
 {
     for (ZNGContactFieldValue *fieldValue in self.customFieldValues) {

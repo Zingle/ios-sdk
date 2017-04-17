@@ -8,6 +8,7 @@
 
 #import "ZNGConversationFlowLayout.h"
 #import "ZNGEvent.h"
+#import "ZNGEventViewModel.h"
 #import "ZNGBubblesSizeCalculator.h"
 
 @interface JSQMessagesCollectionViewFlowLayout ()
@@ -54,7 +55,8 @@
 
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = (ZNGEvent *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    ZNGEventViewModel * eventViewModel = (ZNGEventViewModel *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    ZNGEvent * event = eventViewModel.event;
     
     // If this is a message/note or an unknown class (not ZNGEvent,) let the default implementation handle it with bubble size witchcraft
     if ((![event isKindOfClass:[ZNGEvent class]]) || ([event isMessage]) || ([event isNote])) {

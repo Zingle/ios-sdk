@@ -10,6 +10,9 @@
 #import "ZNGEvent.h"
 #import "ZNGEventViewModel.h"
 #import "ZNGBubblesSizeCalculator.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @interface JSQMessagesCollectionViewFlowLayout ()
 - (void)jsq_configureFlowLayout;
@@ -58,8 +61,13 @@
     ZNGEventViewModel * eventViewModel = (ZNGEventViewModel *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
     ZNGEvent * event = eventViewModel.event;
     
-    // If this is a message/note or an unknown class (not ZNGEvent,) let the default implementation handle it with bubble size witchcraft
-    if ((![event isKindOfClass:[ZNGEvent class]]) || ([event isMessage]) || ([event isNote])) {
+    if (![eventViewModel isKindOfClass:[ZNGEventViewModel class]]) {
+        ZNGLogError(@"Unexpected %@ in data source.  You are not an event view model >:(", [eventViewModel class]);
+        return [super sizeForItemAtIndexPath:indexPath];
+    }
+    
+    // If this is a message/note, let the default implementation handle it with bubble size witchcraft
+    if (([event isMessage]) || ([event isNote])) {
         return [super sizeForItemAtIndexPath:indexPath];
     }
     

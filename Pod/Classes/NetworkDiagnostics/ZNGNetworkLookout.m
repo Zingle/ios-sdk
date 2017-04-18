@@ -20,11 +20,37 @@
 
 static const NSTimeInterval delayAfterLoginBeforeCheckingSocket = 3.0;
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZNGNetworkLookout
 {
     NSTimer * checkSocketAfterDelayTimer;
+}
+
+- (void) setStatus:(ZNGNetworkLookoutStatus)status
+{
+    if (_status != status) {
+        ZNGLogDebug(@"Status changing from %@ to %@", [self debugDescriptionForStatus:_status], [self debugDescriptionForStatus:status]);
+    }
+    
+    _status = status;
+}
+
+- (NSString *) debugDescriptionForStatus:(ZNGNetworkLookoutStatus)status
+{
+    switch (status) {
+        case ZNGNetworkStatusConnected:
+            return @"Connected";
+        case ZNGNetworkStatusZingleAPIUnreachable:
+            return @"API unreachable";
+        case ZNGNetworkStatusInternetUnreachable:
+            return @"Internet unreachable";
+        case ZNGNetworkStatusZingleSocketDisconnected:
+            return @"Socket disconnected";
+        case ZNGNetworkStatusUnknown:
+        default:
+            return @"Unknown";
+    }
 }
 
 #pragma mark - Status changes

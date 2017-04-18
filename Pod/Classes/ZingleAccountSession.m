@@ -24,6 +24,9 @@
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
 #import "ZNGSocketClient.h"
+#import "ZNGNetworkLookout.h"
+
+static NSString * const kSocketConnectedKeyPath = @"socketClient.connected";
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -60,6 +63,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
         
+        [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
+        
         allLoadedConversationIds = [[NSMutableSet alloc] init];
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
@@ -73,6 +78,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 
 - (void) dealloc
 {
+    [self removeObserver:self forKeyPath:kSocketConnectedKeyPath];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
@@ -115,6 +121,23 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     if ([conversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
         [allLoadedConversationIds removeObject:conversation.contact.contactId];
+    }
+}
+
+#pragma mark - Socket status
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context
+{
+    if ([keyPath isEqualToString:kSocketConnectedKeyPath]) {
+        NSNumber * oldNumber = change[NSKeyValueChangeOldKey];
+        NSNumber * newNumber = change[NSKeyValueChangeNewKey];
+        BOOL wasConnected = ([oldNumber isKindOfClass:[NSNumber class]]) ? [oldNumber boolValue] : NO;
+        BOOL connected = ([newNumber isKindOfClass:[NSNumber class]]) ? [newNumber boolValue] : NO;
+        
+        if ((!wasConnected) && (connected)) {
+            [self.networkLookout recordSocketConnected];
+        } else if ((wasConnected) && (!connected)) {
+            [self.networkLookout recordSocketDisconnected];
+        }
     }
 }
 
@@ -173,6 +196,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     BOOL justConnected = !(self.available) && available;
     
     [super setAvailable:available];
+    [self.networkLookout recordLogin];
     
     if ((self.completion != nil) && (justConnected)) {
         self.completion(self.service, nil);
@@ -413,6 +437,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     if (![self.userClient.accountId isEqualToString:self.account.accountId]) {
         self.userClient = [[ZNGUserClient alloc] initWithSession:self accountId:self.account.accountId];
     }
+    
+    self.networkLookout = [[ZNGNetworkLookout alloc] init];
+    self.networkLookout.session = self;
     
     self.socketClient = [[ZNGSocketClient alloc] initWithSession:self];
     [self.socketClient connect];

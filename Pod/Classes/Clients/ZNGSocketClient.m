@@ -167,6 +167,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf socketDidEncounterErrorWithData:data];
     }];
     
+    [socketClient on:@"reconnect" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf socketReconnecting];
+    }];
+    
     [socketClient on:@"disconnect" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidDisconnect];
     }];
@@ -306,9 +310,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
 }
 
+- (void) socketReconnecting
+{
+    self.connected = NO;
+}
+
 - (void) socketDidDisconnect
 {
     ZNGLogInfo(@"Web socket disconnected");
+    self.connected = NO;
 }
 
 - (void) feedLocked:(NSArray *)data

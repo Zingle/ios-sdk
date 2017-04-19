@@ -211,12 +211,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             [text appendAttributedString:oneSpaceString];
         }
         
-        UIColor * color = [label backgroundUIColor];
+        UIColor * textColor = [label textUIColor];
         labelView.font = self.font;
-        labelView.textColor = color;
-        labelView.borderColor = color;
-        labelView.backgroundColor = [color zng_colorByLighteningColor:0.5];
-        [text addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, [text length])];
+        labelView.textColor = textColor;
+        labelView.borderColor = textColor;
+        labelView.backgroundColor = [label backgroundUIColor];
+        [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
         labelView.attributedText = text;
         
         UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tappedLabel:)];

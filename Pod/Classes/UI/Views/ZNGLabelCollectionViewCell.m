@@ -32,10 +32,9 @@
 {
     NSString * paddedText = [NSString stringWithFormat:@" %@ ", [label.displayName uppercaseString]];
     self.label.text = paddedText;
-    UIColor * color = label.backgroundUIColor;
-    self.label.textColor = color;
-    self.label.borderColor = color;
-    self.label.backgroundColor = [color zng_colorByLighteningColor:0.5];
+    self.label.textColor = [label textUIColor];
+    self.label.borderColor = [label textUIColor];
+    self.label.backgroundColor = [label backgroundUIColor];
     [self.contentView setNeedsLayout];
 }
 

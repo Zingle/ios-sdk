@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGContactEditViewController;
 @class ZNGUserAuthorization;
 @class ZNGUserClient;
+@class ZNGNetworkLookout;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -87,6 +88,9 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nullable) ZNGUserClient * userClient;
+
+#pragma mark - Network diagnostics
+@property (nonatomic, strong, nullable) ZNGNetworkLookout * networkLookout;
 
 /**
  *  If this flag is set, all conversation objects provided by this session will be detailed event conversations.

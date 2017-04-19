@@ -23,6 +23,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 static const int zngLogLevel = ZNGLogLevelWarning;
 #endif
 
+@interface ZNGSocketClient()
+@property (nonatomic, assign) BOOL connected;
+@end
+
 @implementation ZNGSocketClient
 {
     SocketIOClient * socketClient;
@@ -70,11 +74,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (BOOL) active
 {
     return ((socketClient.status == SocketIOClientStatusConnected) || (socketClient.status == SocketIOClientStatusConnecting) || (initializingSession));
-}
-
-- (BOOL) connected
-{
-    return (socketClient.status == SocketIOClientStatusConnected);
 }
 
 - (void) setActiveConversation:(ZNGConversation *)activeConversation
@@ -168,6 +167,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf socketDidEncounterErrorWithData:data];
     }];
     
+    [socketClient on:@"reconnect" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf socketReconnecting];
+    }];
+    
     [socketClient on:@"disconnect" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidDisconnect];
     }];
@@ -256,6 +259,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     authFailureCount = 0;
     [authRetryTimer invalidate];
     authRetryTimer = nil;
+    self.connected = YES;
     
     ZNGLogInfo(@"Web socket connected.");
     [socketClient emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
@@ -306,9 +310,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
 }
 
+- (void) socketReconnecting
+{
+    self.connected = NO;
+}
+
 - (void) socketDidDisconnect
 {
     ZNGLogInfo(@"Web socket disconnected");
+    self.connected = NO;
 }
 
 - (void) feedLocked:(NSArray *)data

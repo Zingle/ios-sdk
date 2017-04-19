@@ -29,6 +29,7 @@
 #import "ZNGInitialsAvatarCache.h"
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
+#import "UILabel+NetworkStatus.h"
 
 @import SDWebImage;
 
@@ -42,6 +43,7 @@ static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfi
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
+static NSString * const KVONetworkStatusPath = @"conversation.session.networkLookout.status";
 
 
 static void * KVOContext = &KVOContext;
@@ -64,6 +66,8 @@ static void * KVOContext = &KVOContext;
     UILabel * blockedChannelLabel;
     NSLayoutConstraint * blockedChannelOnScreenConstraint;
     NSLayoutConstraint * blockedChannelOffScreenConstraint;
+    
+    UILabel * networkStatusLabel;
     
     dispatch_source_t emphasizeTimer;
     
@@ -126,6 +130,7 @@ static void * KVOContext = &KVOContext;
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
+    [self addObserver:self forKeyPath:KVONetworkStatusPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
 - (void) dealloc
@@ -136,6 +141,7 @@ static void * KVOContext = &KVOContext;
     
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
+    [self removeObserver:self forKeyPath:KVONetworkStatusPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
@@ -200,6 +206,22 @@ static void * KVOContext = &KVOContext;
     [self.automationLabel addGestureRecognizer:tapper2];
     self.automationRobot.userInteractionEnabled = YES;
     self.automationLabel.userInteractionEnabled = YES;
+    
+    // Network status label
+    networkStatusLabel = [[UILabel alloc] init];
+    networkStatusLabel.font = [UIFont latoFontOfSize:11.0];
+    networkStatusLabel.textColor = [UIColor whiteColor];
+    networkStatusLabel.textAlignment = NSTextAlignmentCenter;
+    networkStatusLabel.minimumScaleFactor = 0.75;
+    networkStatusLabel.adjustsFontSizeToFitWidth = YES;
+    networkStatusLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.view addSubview:networkStatusLabel];
+    [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
+    
+    NSLayoutConstraint * top = [NSLayoutConstraint constraintWithItem:networkStatusLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:networkStatusLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * right = [NSLayoutConstraint constraintWithItem:networkStatusLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
+    [self.view addConstraints:@[top, left, right]];
     
     // Add forward menu item
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
@@ -277,6 +299,8 @@ static void * KVOContext = &KVOContext;
                     [self scrollToBottomAnimated:YES];
                 }
             }
+        } else if ([keyPath isEqualToString:KVONetworkStatusPath]) {
+            [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

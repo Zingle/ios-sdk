@@ -31,9 +31,8 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 {
     if (_status != status) {
         ZNGLogDebug(@"Status changing from %@ to %@", [self debugDescriptionForStatus:_status], [self debugDescriptionForStatus:status]);
+        _status = status;
     }
-    
-    _status = status;
 }
 
 - (NSString *) debugDescriptionForStatus:(ZNGNetworkLookoutStatus)status

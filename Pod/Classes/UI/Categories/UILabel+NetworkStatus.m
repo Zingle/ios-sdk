@@ -10,8 +10,6 @@
 
 @implementation UILabel (NetworkStatus)
 
-
-
 - (void) updateWithNetworkStatus:(ZNGNetworkLookoutStatus)status
 {
     switch (status) {

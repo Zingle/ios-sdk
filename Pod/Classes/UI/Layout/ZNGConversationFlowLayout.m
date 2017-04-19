@@ -8,7 +8,12 @@
 
 #import "ZNGConversationFlowLayout.h"
 #import "ZNGEvent.h"
+#import "ZNGEventViewModel.h"
 #import "ZNGBubblesSizeCalculator.h"
+#import "UIFont+Lato.h"
+#import "ZNGLogging.h"
+
+static const int zngLogLevel = ZNGLogLevelWarning;
 
 @interface JSQMessagesCollectionViewFlowLayout ()
 - (void)jsq_configureFlowLayout;
@@ -54,19 +59,26 @@
 
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEvent * event = (ZNGEvent *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    ZNGEventViewModel * eventViewModel = (ZNGEventViewModel *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    ZNGEvent * event = eventViewModel.event;
     
-    // If this is a message/note or an unknown class (not ZNGEvent,) let the default implementation handle it with bubble size witchcraft
-    if ((![event isKindOfClass:[ZNGEvent class]]) || ([event isMessage]) || ([event isNote])) {
+    if (![eventViewModel isKindOfClass:[ZNGEventViewModel class]]) {
+        ZNGLogError(@"Unexpected %@ in data source.  You are not an event view model >:(", [eventViewModel class]);
+        return [super sizeForItemAtIndexPath:indexPath];
+    }
+    
+    // If this is a message/note, let the default implementation handle it with bubble size witchcraft
+    if (([event isMessage]) || ([event isNote])) {
         return [super sizeForItemAtIndexPath:indexPath];
     }
     
     // We have a non-message ZNGEvent
     NSString * text = [event text];
-    UIFont * font = [UIFont systemFontOfSize:15.0];
+    UIFont * font = [UIFont latoBoldFontOfSize:13.0];
     NSDictionary * attributes = @{ NSFontAttributeName : font };
     CGFloat width = [self itemWidth];
-    CGSize constraintSize = CGSizeMake(width - 16.0 /* Default UILabel margins */ - 64.0 /* margin between edge of cell and UILabel */, CGFLOAT_MAX);
+    CGFloat marginWithinCell = 22.0 + 32.0 + 20.0;
+    CGSize constraintSize = CGSizeMake(width - (marginWithinCell * 2.0), CGFLOAT_MAX);
     CGRect rect = [text boundingRectWithSize:constraintSize
                                      options:(NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading)
                                   attributes:attributes

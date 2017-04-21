@@ -123,6 +123,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     CGFloat offScreenTimeLabelPenetration;
     
     NSDateFormatter * timeFormatter;
+    
+    /**
+     *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
+     */
+    NSDateComponentsFormatter * nearFutureTimeFormatter;
 }
 
 @dynamic collectionView;
@@ -190,6 +195,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
     timeFormatter.timeStyle = NSDateFormatterShortStyle;
+    
+    nearFutureTimeFormatter = [[NSDateComponentsFormatter alloc] init];
+    nearFutureTimeFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyleFull;
+    nearFutureTimeFormatter.includesApproximationPhrase = YES;
+    nearFutureTimeFormatter.allowedUnits = (NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
+    nearFutureTimeFormatter.formattingContext = NSFormattingContextMiddleOfSentence;
     
     self.automaticallyScrollsToMostRecentMessage = NO;
     

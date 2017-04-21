@@ -29,6 +29,11 @@
                            alpha:1.0f];
 }
 
++ (UIColor *)zng_errorMessageBackgroundColor
+{
+    return [UIColor colorFromHexString:@"#2e3c54"];
+}
+
 + (UIColor *)zng_outgoingMessageBubbleColor
 {
     return [UIColor colorFromHexString:@"#00A0DE"];

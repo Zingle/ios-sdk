@@ -30,6 +30,7 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGUserAuthorization.h"
 #import "UILabel+NetworkStatus.h"
+#import "ZNGPaddedLabel.h"
 
 @import SDWebImage;
 
@@ -67,7 +68,7 @@ static void * KVOContext = &KVOContext;
     NSLayoutConstraint * blockedChannelOnScreenConstraint;
     NSLayoutConstraint * blockedChannelOffScreenConstraint;
     
-    UILabel * networkStatusLabel;
+    ZNGPaddedLabel * networkStatusLabel;
     
     dispatch_source_t emphasizeTimer;
     
@@ -208,7 +209,8 @@ static void * KVOContext = &KVOContext;
     self.automationLabel.userInteractionEnabled = YES;
     
     // Network status label
-    networkStatusLabel = [[UILabel alloc] init];
+    networkStatusLabel = [[ZNGPaddedLabel alloc] init];
+    networkStatusLabel.textInsets = UIEdgeInsetsMake(5.0, 0.0, 5.0, 0.0);
     networkStatusLabel.font = [UIFont latoFontOfSize:11.0];
     networkStatusLabel.textColor = [UIColor whiteColor];
     networkStatusLabel.textAlignment = NSTextAlignmentCenter;

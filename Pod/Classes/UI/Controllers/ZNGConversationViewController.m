@@ -128,6 +128,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
     NSDateComponentsFormatter * nearFutureTimeFormatter;
+    
+    NSMutableSet<NSIndexPath *> * indexPathsOfVisibleCellsWithRelativeTimesToRefresh;
 }
 
 @dynamic collectionView;
@@ -192,6 +194,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self updateUUID];
     
+    indexPathsOfVisibleCellsWithRelativeTimesToRefresh = [[NSMutableSet alloc] initWithCapacity:20];
+    
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
     timeFormatter.timeStyle = NSDateFormatterShortStyle;
@@ -253,8 +257,22 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     uint64_t pollingIntervalNanoseconds = PollingIntervalSeconds * NSEC_PER_SEC;
     dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
     dispatch_source_set_event_handler(pollingTimerSource, ^{
+        if (weakSelf == nil) {
+            return;
+        }
+        
         if (weakSelf.isVisible) {
             [weakSelf.conversation loadRecentEventsErasingOlderData:NO];
+        }
+        
+        ZNGConversationViewController * strongSelf = weakSelf;
+        if ([strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh count] > 0) {
+            NSMutableSet<NSIndexPath *> * visibleCells = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+            [visibleCells intersectSet:strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh];
+            
+            if ([visibleCells count] > 0) {
+                [self.collectionView reloadItemsAtIndexPaths:[visibleCells allObjects]];
+            }
         }
     });
     dispatch_resume(pollingTimerSource);
@@ -1245,6 +1263,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
+- (void) collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (![[collectionView indexPathsForVisibleItems] containsObject:indexPath]) {
+        [indexPathsOfVisibleCellsWithRelativeTimesToRefresh removeObject:indexPath];
+    }
+}
+
 // Used to mark messages as read
 - (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(nonnull UICollectionViewCell *)cell forItemAtIndexPath:(nonnull NSIndexPath *)indexPath
 {
@@ -1465,6 +1490,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
         cell.alpha = (event.message.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        
+        if (event.message.isDelayed) {
+            [indexPathsOfVisibleCellsWithRelativeTimesToRefresh addObject:indexPath];
+        } else {
+            [indexPathsOfVisibleCellsWithRelativeTimesToRefresh removeObject:indexPath];
+        }
         
         if ([viewModel isMediaMessage]) {
             if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {

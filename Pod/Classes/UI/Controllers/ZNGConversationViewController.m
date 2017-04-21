@@ -199,8 +199,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     nearFutureTimeFormatter = [[NSDateComponentsFormatter alloc] init];
     nearFutureTimeFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyleFull;
     nearFutureTimeFormatter.includesApproximationPhrase = YES;
-    nearFutureTimeFormatter.allowedUnits = (NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
+    nearFutureTimeFormatter.allowedUnits = (NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
     nearFutureTimeFormatter.formattingContext = NSFormattingContextMiddleOfSentence;
+    nearFutureTimeFormatter.maximumUnitCount = 1;
     
     self.automaticallyScrollsToMostRecentMessage = NO;
     

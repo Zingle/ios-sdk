@@ -1410,7 +1410,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             return [[NSAttributedString alloc] initWithString:@"Sending soon"];
         }
         
-        NSString * justTimeIntervalString = [nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending];
+        // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
+        NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
         NSString * fullString = [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
         return [[NSAttributedString alloc] initWithString:fullString];
     }

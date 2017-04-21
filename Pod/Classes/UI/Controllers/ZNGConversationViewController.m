@@ -1399,22 +1399,24 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     
     if (viewModel.event.message.isDelayed) {
+        NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+        
         if (viewModel.event.message.executeAt == nil) {
             ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", viewModel.event.eventId);
-            return [[NSAttributedString alloc] initWithString:@"Sending later"];
+            return [[NSAttributedString alloc] initWithString:@"Sending later" attributes:attributes];
         }
         
         NSTimeInterval timeUntilSending = [viewModel.event.message.executeAt timeIntervalSinceNow];
         
         if (timeUntilSending < 0.0) {
             ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", viewModel.event.eventId);
-            return [[NSAttributedString alloc] initWithString:@"Sending soon"];
+            return [[NSAttributedString alloc] initWithString:@"Sending soon" attributes:attributes];
         }
         
         // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
         NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
         NSString * fullString = [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
-        return [[NSAttributedString alloc] initWithString:fullString];
+        return [[NSAttributedString alloc] initWithString:fullString attributes:attributes];
     }
     
     return nil;

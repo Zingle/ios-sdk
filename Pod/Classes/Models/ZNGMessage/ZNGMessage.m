@@ -28,6 +28,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSUInteger numLoadedImagesInAttributedText;
 }
 
+#pragma mark - Temporary testing
+#warning Remove this, dumb dumb
+- (BOOL) isDelayed
+{
+    return [self isOutbound];
+}
+
 #pragma mark - Initialization
 - (instancetype) initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError *__autoreleasing *)error
 {
@@ -206,7 +213,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
              @"bodyLanguageCode" : @"body_language_code",
              @"translatedBody" : @"translated_body",
              @"translatedBodyLanguageCode" : @"translated_body_language_code",
-             @"triggeredByUserId" : @"triggered_by_user_id",
              @"triggeredByUser" : @"triggered_by_user",
              @"templateId" : @"template_id",
              @"senderType" : @"sender_type",

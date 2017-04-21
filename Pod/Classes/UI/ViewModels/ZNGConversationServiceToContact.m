@@ -171,7 +171,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
                 continue;
             }
             
-            NSString * userId = event.triggeredByUser.userId ?: event.message.triggeredByUser.userId ?: event.message.triggeredByUserId;
+            NSString * userId = event.triggeredByUser.userId ?: event.message.triggeredByUser.userId;
             ZNGUser * triggerer = message.triggeredByUser;
             
             if ([userId length] > 0) {

@@ -24,7 +24,6 @@
 @property(nonatomic, strong) NSString* bodyLanguageCode;
 @property(nonatomic, strong) NSString* translatedBody;
 @property(nonatomic, strong) NSString* translatedBodyLanguageCode;
-@property(nonatomic, strong) NSString* triggeredByUserId;
 @property(nonatomic, strong) ZNGUser* triggeredByUser;
 @property(nonatomic, strong) NSString* templateId;
 @property(nonatomic, strong) NSString* senderType;

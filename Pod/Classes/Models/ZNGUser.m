@@ -43,7 +43,7 @@
         [name appendString:self.lastName];
     }
     
-    NSString * displayName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * displayName = [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if ([displayName length] > 0) {
         return displayName;

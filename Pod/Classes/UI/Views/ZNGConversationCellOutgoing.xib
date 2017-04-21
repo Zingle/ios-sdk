@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -42,13 +42,13 @@
                             <constraint firstAttribute="height" constant="20" id="n7t-KS-RUh"/>
                         </constraints>
                     </view>
-                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p52-YN-yLu" userLabel="Bubble top label" customClass="JSQMessagesLabel">
-                        <rect key="frame" x="0.0" y="20" width="320" height="20"/>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p52-YN-yLu" userLabel="Bubble top label" customClass="JSQMessagesLabel">
+                        <rect key="frame" x="0.0" y="20" width="287" height="20"/>
                         <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" identifier="Message Bubble Top Label Height" id="8TB-va-f8L"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="12"/>
                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                         <nil key="highlightedColor"/>
                     </label>
@@ -96,7 +96,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:26 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MtA-aS-YIJ">
-                        <rect key="frame" x="320" y="112" width="56" height="16"/>
+                        <rect key="frame" x="320" y="112" width="57" height="16"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -127,12 +127,12 @@
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" id="U9s-lj-C7u"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" id="a35-gx-RGQ"/>
                 <constraint firstAttribute="bottom" secondItem="d5b-Qu-ohI" secondAttribute="bottom" id="gNU-zx-YAN"/>
-                <constraint firstAttribute="trailing" secondItem="p52-YN-yLu" secondAttribute="trailing" identifier="bubble top label right" id="gen-N0-uZj"/>
                 <constraint firstAttribute="trailing" secondItem="MtA-aS-YIJ" secondAttribute="leading" id="hw4-d1-V8R"/>
                 <constraint firstItem="MtA-aS-YIJ" firstAttribute="bottom" secondItem="2zh-vR-QJW" secondAttribute="bottom" constant="-6" id="lB7-wl-MUa"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="leading" constant="-10" id="ltP-jP-Llg"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="n9g-Vi-PyP"/>
                 <constraint firstItem="MtA-aS-YIJ" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" id="qjs-ir-Qic"/>
+                <constraint firstItem="X89-B1-aAd" firstAttribute="leading" secondItem="p52-YN-yLu" secondAttribute="trailing" constant="-5" id="rTs-BO-puW"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="bubble top label left" id="tTj-Mp-0va"/>
                 <constraint firstAttribute="trailing" secondItem="5Gk-Ay-M9X" secondAttribute="trailing" id="uCo-3l-Xom"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="bottom" id="uUe-xd-MHO"/>

@@ -1307,7 +1307,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 0.0;
+    ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
+    return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
@@ -1394,6 +1395,26 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    
+    if (viewModel.event.message.isDelayed) {
+        if (viewModel.event.message.executeAt == nil) {
+            ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", viewModel.event.eventId);
+            return [[NSAttributedString alloc] initWithString:@"Sending later"];
+        }
+        
+        NSTimeInterval timeUntilSending = [viewModel.event.message.executeAt timeIntervalSinceNow];
+        
+        if (timeUntilSending < 0.0) {
+            ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", viewModel.event.eventId);
+            return [[NSAttributedString alloc] initWithString:@"Sending soon"];
+        }
+        
+        NSString * justTimeIntervalString = [nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending];
+        NSString * fullString = [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
+        return [[NSAttributedString alloc] initWithString:fullString];
+    }
+    
     return nil;
 }
 
@@ -1439,7 +1460,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        cell.alpha = event.message.sending ? 0.5 : 1.0;
+        cell.alpha = (event.message.sending || event.message.isDelayed) ? 0.5 : 1.0;
         
         if ([viewModel isMediaMessage]) {
             if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {

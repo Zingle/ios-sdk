@@ -373,6 +373,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSString * attachmentCharacters = [NSString stringWithFormat:@"%c\ufffc", NSAttachmentCharacter];
     NSCharacterSet * attachmentCharacterSet = [NSCharacterSet characterSetWithCharactersInString:attachmentCharacters];
     text = [[text componentsSeparatedByCharactersInSet:attachmentCharacterSet] componentsJoinedByString:@""];
+    text = [text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     self.inputToolbar.inputEnabled = NO;
     self.inputToolbar.contentView.textView.text = @"";

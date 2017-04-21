@@ -290,7 +290,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
                  success:(void (^)(ZNGStatus* status))success
                  failure:(void (^) (ZNGError *error))failure
 {
-    NSString * nonWhiteNote = [note stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString * nonWhiteNote = [note stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if ([nonWhiteNote length] == 0) {
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedFailureReasonErrorKey : @"Cannot add an empty note" }];

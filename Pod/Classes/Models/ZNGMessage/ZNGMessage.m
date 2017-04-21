@@ -224,7 +224,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
              @"readAt" : @"read_at",
              @"sending" : [NSNull null],
              NSStringFromSelector(@selector(imageAttachmentsByName)) : [NSNull null],
-             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null]
+             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null],
+             NSStringFromSelector(@selector(isDelayed)) : @"is_delayed",
+             NSStringFromSelector(@selector(executeAt)) : @"execute_at",
+             NSStringFromSelector(@selector(executedAt)) : @"executed_at"
              };
 }
 
@@ -251,6 +254,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
+}
+
++ (NSValueTransformer *)executeAtJSONTransformer
+{
+    return [ZingleValueTransformers dateValueTransformer];
+}
+
++ (NSValueTransformer *)executedAtJSONTransformer
+{
+    return [ZingleValueTransformers dateValueTransformer];
 }
 
 @end

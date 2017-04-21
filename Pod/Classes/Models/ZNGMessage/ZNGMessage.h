@@ -33,6 +33,9 @@
 @property(nonatomic, strong) NSArray* attachments;
 @property(nonatomic, strong) NSDate* createdAt;
 @property(nonatomic, strong) NSDate* readAt;
+@property(nonatomic, assign) BOOL isDelayed;
+@property(nonatomic, strong) NSDate * executeAt;
+@property(nonatomic, strong) NSDate * executedAt;
 
 /**
  *  If this is an inbound, this is the contact ID.  Outbound, it is the triggered by user ID.

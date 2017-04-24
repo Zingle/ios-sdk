@@ -1438,6 +1438,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         NSTimeInterval timeUntilSending = [viewModel.event.message.executeAt timeIntervalSinceNow];
         
+        if (timeUntilSending < 60.0) {
+            return [[NSAttributedString alloc] initWithString:@"Sending in less than a minute" attributes:attributes];
+        }
+        
         if (timeUntilSending < 0.0) {
             ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", viewModel.event.eventId);
             return [[NSAttributedString alloc] initWithString:@"Sending soon" attributes:attributes];

@@ -271,7 +271,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             [visibleCells intersectSet:strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh];
             
             if ([visibleCells count] > 0) {
+                // Put the reloads into a CATransaction with actions disabled to prevent a flicker when reloading the cell.
+                // This flicker is due to alpha being set in the default layout attributes of collection view cells.
+                [CATransaction begin];
+                [CATransaction setDisableActions:YES];
                 [self.collectionView reloadItemsAtIndexPaths:[visibleCells allObjects]];
+                [CATransaction commit];
             }
         }
     });

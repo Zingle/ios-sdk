@@ -108,6 +108,12 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     return [NSString stringWithFormat:@"<%@: %p>", [self class], self];
 }
 
+- (NSString *) title
+{
+    // TODO: Return a title
+    return @"Contacts";
+}
+
 #pragma mark - Filtering
 - (nonnull NSMutableDictionary *) parameters
 {

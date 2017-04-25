@@ -45,6 +45,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSUInteger pageSize;
 
 /**
+ *  A human-readable title for the current filter set.
+ */
+@property (nonatomic, readonly, nonnull) NSString * title;
+
+/**
  *  All contacts matching this filter that have been successfully fetched.
  */
 @property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGContact *> * contacts;

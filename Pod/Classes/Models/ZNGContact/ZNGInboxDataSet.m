@@ -12,6 +12,7 @@
 #import "ZNGStatus.h"
 #import "ZingleSDK.h"
 #import "ZNGContactDataSetBuilder.h"
+#import "ZNGLabel.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -512,7 +513,53 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
 
 - (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
 {
-    // Default implementation is YES, since we do not yet discriminate.
+    if (contact.isClosed != self.closed) {
+        return NO;
+    }
+    
+    if ((self.unconfirmed) && (contact.isConfirmed)) {
+        return NO;
+    }
+    
+    if ([self.labelIds count] > 0) {
+        __block BOOL matchingLabelFound = NO;
+        
+        [contact.labels enumerateObjectsUsingBlock:^(ZNGLabel * _Nonnull contactLabel, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([self.labelIds containsObject:contactLabel.labelId]) {
+                matchingLabelFound = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (!matchingLabelFound) {
+            return NO;
+        }
+    }
+    
+    if ([self.groupIds count] > 0) {
+        // TODO: Support groups
+    }
+    
+    // It is unlikely that search text needs an accurate result here.  Take a shot just in case.
+    if ([self.searchText length] > 0) {
+        NSMutableString * allSearchableFields = [[contact fullName] mutableCopy];
+        
+        for (ZNGLabel * label in contact.labels) {
+            if (label.displayName != nil) {
+                [allSearchableFields appendString:label.displayName];
+            }
+        }
+        
+        // One message body is better than none, right?
+        if ((self.searchMessageBodies) && (contact.lastMessage.body != nil)) {
+            [allSearchableFields appendString:contact.lastMessage.body];
+        }
+        
+        if (![[allSearchableFields lowercaseString] containsString:[self.searchText lowercaseString]]) {
+            return NO;
+        }
+    }
+    
     return YES;
 }
 

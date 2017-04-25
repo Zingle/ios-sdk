@@ -90,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
 
 #pragma mark - Initialization
-+ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder *))builderBlock;
++ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder * builder))builderBlock;
 
 - (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder;
 

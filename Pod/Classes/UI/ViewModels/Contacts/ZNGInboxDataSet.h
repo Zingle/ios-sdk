@@ -71,6 +71,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL unconfirmed;
 
 /**
+ *  If this flag is set, matching contacts will be returned even if there is no message history.
+ */
+@property (nonatomic, readonly) BOOL allowContactsWithNoMessages;
+
+/**
  *  Array of label IDs used to filter contacts.
  */
 @property (nonatomic, readonly, nullable) NSArray<NSString *> * labelIds;

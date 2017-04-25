@@ -121,12 +121,15 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     parameters[ParameterKeyPageSize] = @(self.pageSize);
     parameters[ParameterKeySortField] = ParameterValueLastMessageCreatedAt;
     parameters[ParameterKeySortDirection] = ParameterValueDescending;
-    parameters[ParameterKeyLastMessageCreatedAt] = ParameterValueGreaterThanZero;
     
     parameters[ParameterKeyIsClosed] = self.closed ? ParameterValueTrue : ParameterValueFalse;
     
     if (self.unconfirmed) {
         parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
+    }
+    
+    if (!self.allowContactsWithNoMessages) {
+        parameters[ParameterKeyLastMessageCreatedAt] = ParameterValueGreaterThanZero;
     }
     
     if ([self.labelIds count] > 0) {

@@ -208,6 +208,12 @@ static void * KVOContext = &KVOContext;
     self.automationRobot.userInteractionEnabled = YES;
     self.automationLabel.userInteractionEnabled = YES;
     
+    // Fix for the robot not existing in iOS 9.0 and earlier
+    BOOL noRobotForMe = [[[UIDevice currentDevice] systemVersion] compare:@"9.1" options:NSNumericSearch] == NSOrderedAscending;
+    if (noRobotForMe) {
+        self.automationRobot.text = @"\U0001F4E1";
+    }
+    
     // Network status label
     networkStatusLabel = [[ZNGPaddedLabel alloc] init];
     networkStatusLabel.textInsets = UIEdgeInsetsMake(5.0, 0.0, 5.0, 0.0);
@@ -1218,6 +1224,12 @@ static void * KVOContext = &KVOContext;
     } else {
         // Outbound.
         NSString * robotName =  @"\U0001F916";   // Robot face emoji
+        
+        // Robot face did not exist prior to iOS 9.1.  Use a satellite antenna for earlier.
+        BOOL noRobotForMe = [[[UIDevice currentDevice] systemVersion] compare:@"9.1" options:NSNumericSearch] == NSOrderedAscending;
+        if (noRobotForMe) {
+            robotName = @"\U0001F4E1";  // Satellite antenna emoji
+        }
         
         // Is it from us?  (current user)
         if (event.message.sending) {

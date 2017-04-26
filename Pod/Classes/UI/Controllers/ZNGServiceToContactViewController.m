@@ -208,6 +208,12 @@ static void * KVOContext = &KVOContext;
     self.automationRobot.userInteractionEnabled = YES;
     self.automationLabel.userInteractionEnabled = YES;
     
+    // Fix for the robot not existing in iOS 9.0 and earlier
+    BOOL noRobotForMe = [[[UIDevice currentDevice] systemVersion] compare:@"9.1" options:NSNumericSearch] == NSOrderedAscending;
+    if (noRobotForMe) {
+        self.automationRobot.text = @"\U0001F4E1";
+    }
+    
     // Network status label
     networkStatusLabel = [[ZNGPaddedLabel alloc] init];
     networkStatusLabel.textInsets = UIEdgeInsetsMake(5.0, 0.0, 5.0, 0.0);
@@ -219,6 +225,12 @@ static void * KVOContext = &KVOContext;
     networkStatusLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:networkStatusLabel];
     [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
+    
+    // Locked status.
+    // This has to be at the end of the current run loop because viewDidLoad does not actually finish loading the view; adjusting constraints here has no effect.  <3 Apple
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self updateForInputLockedStatus:self.conversation.lockedDescription oldStatus:nil];
+    });
     
     NSLayoutConstraint * top = [NSLayoutConstraint constraintWithItem:networkStatusLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.topLayoutGuide attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
     NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:networkStatusLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
@@ -253,59 +265,64 @@ static void * KVOContext = &KVOContext;
                 lockedString = nil;
             }
             
-            NSAttributedString * oldBottomString = [self attributedTextForTypingIndicatorDescription:oldLockedString];
-            NSAttributedString * bottomString = [self attributedTextForTypingIndicatorDescription:lockedString];
-            NSAttributedString * oldTopString = [self attributedTextForAutomationBanner:oldLockedString];
-            NSAttributedString * topString = [self attributedTextForAutomationBanner:lockedString];
-            
-            self.typingIndicatorTextLabel.attributedText = bottomString;
-            self.typingIndicatorContainerView.hidden = ([bottomString length] == 0);
-            
-            // We only set the automation label text if it is not nil.  We want old text to continue to exist as the banner is animated away.
-            if ([topString length] > 0) {
-                self.automationLabel.attributedText = topString;
-            }
-            
-            BOOL topStatusChanged = (([topString length] == 0) != ([oldTopString length] == 0));
-            BOOL bottomStatusChanged = (([bottomString length] == 0) != ([oldBottomString length] == 0));
-            
-            if (topStatusChanged) {
-                ZNGLogDebug(@"Top automation banner is either appearing or disappearing.");
-                
-                [self updateInputStatus];
-                
-                [self.automationBannerContainerView layoutSubviews];
-                [UIView animateWithDuration:0.5 animations:^{
-                    BOOL automationTextExists = ([topString length] > 0);
-                    self.automationBannerOnScreenConstraint.active = automationTextExists;
-                    self.automationBannerOffScreenConstraint.active = !automationTextExists;
-                    [self.automationBannerContainerView layoutSubviews];
-                }];
-            }
-            
-            if (bottomStatusChanged) {
-                ZNGLogDebug(@"Typing indicator banner is either appearing or disappearing.");
-                
-                [self updateTypingIndicatorEmoji];
-                BOOL bottomJustAppeared = (([oldBottomString length] == 0) && ([bottomString length] > 0));
-                BOOL needToScrollBackToBottom = NO;
-                
-                if (bottomJustAppeared) {
-                    // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
-                    needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
-                }
-                
-                [self jsq_updateCollectionViewInsets];
-                
-                if (needToScrollBackToBottom) {
-                    [self scrollToBottomAnimated:YES];
-                }
-            }
+            [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
         } else if ([keyPath isEqualToString:KVONetworkStatusPath]) {
             [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription
+{
+    NSAttributedString * oldBottomString = [self attributedTextForTypingIndicatorDescription:oldLockedDescription];
+    NSAttributedString * bottomString = [self attributedTextForTypingIndicatorDescription:lockedDescription];
+    NSAttributedString * oldTopString = [self attributedTextForAutomationBanner:oldLockedDescription];
+    NSAttributedString * topString = [self attributedTextForAutomationBanner:lockedDescription];
+    
+    self.typingIndicatorTextLabel.attributedText = bottomString;
+    self.typingIndicatorContainerView.hidden = ([bottomString length] == 0);
+    
+    // We only set the automation label text if it is not nil.  We want old text to continue to exist as the banner is animated away.
+    if ([topString length] > 0) {
+        self.automationLabel.attributedText = topString;
+    }
+    
+    BOOL topStatusChanged = (([topString length] == 0) != ([oldTopString length] == 0));
+    BOOL bottomStatusChanged = (([bottomString length] == 0) != ([oldBottomString length] == 0));
+    
+    if (topStatusChanged) {
+        BOOL automationTextExists = ([topString length] > 0);
+        ZNGLogDebug(@"Top automation banner is %@", automationTextExists ? @"appearing" : @"disappearing");
+        
+        [self updateInputStatus];
+        
+        [self.automationBannerContainerView layoutSubviews];
+        [UIView animateWithDuration:0.5 animations:^{
+            self.automationBannerOnScreenConstraint.active = automationTextExists;
+            self.automationBannerOffScreenConstraint.active = !automationTextExists;
+            [self.automationBannerContainerView layoutSubviews];
+        }];
+    }
+    
+    if (bottomStatusChanged) {
+        ZNGLogDebug(@"Typing indicator banner is either appearing or disappearing.");
+        
+        [self updateTypingIndicatorEmoji];
+        BOOL bottomJustAppeared = (([oldBottomString length] == 0) && ([bottomString length] > 0));
+        BOOL needToScrollBackToBottom = NO;
+        
+        if (bottomJustAppeared) {
+            // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
+            needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
+        }
+        
+        [self jsq_updateCollectionViewInsets];
+        
+        if (needToScrollBackToBottom) {
+            [self scrollToBottomAnimated:YES];
+        }
     }
 }
 
@@ -1207,6 +1224,12 @@ static void * KVOContext = &KVOContext;
     } else {
         // Outbound.
         NSString * robotName =  @"\U0001F916";   // Robot face emoji
+        
+        // Robot face did not exist prior to iOS 9.1.  Use a satellite antenna for earlier.
+        BOOL noRobotForMe = [[[UIDevice currentDevice] systemVersion] compare:@"9.1" options:NSNumericSearch] == NSOrderedAscending;
+        if (noRobotForMe) {
+            robotName = @"\U0001F4E1";  // Satellite antenna emoji
+        }
         
         // Is it from us?  (current user)
         if (event.message.sending) {

@@ -1427,33 +1427,56 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * delayedDescription = [self delayedDescriptionForEvent:viewModel.event];
     
-    if (viewModel.event.message.isDelayed) {
-        NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
-        
-        if (viewModel.event.message.executeAt == nil) {
-            ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", viewModel.event.eventId);
-            return [[NSAttributedString alloc] initWithString:@"Sending later" attributes:attributes];
-        }
-        
-        NSTimeInterval timeUntilSending = [viewModel.event.message.executeAt timeIntervalSinceNow];
-        
-        if (timeUntilSending < 60.0) {
-            return [[NSAttributedString alloc] initWithString:@"Sending in less than a minute" attributes:attributes];
-        }
-        
-        if (timeUntilSending < 0.0) {
-            ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", viewModel.event.eventId);
-            return [[NSAttributedString alloc] initWithString:@"Sending soon" attributes:attributes];
-        }
-        
-        // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
-        NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
-        NSString * fullString = [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
-        return [[NSAttributedString alloc] initWithString:fullString attributes:attributes];
+    if (delayedDescription == nil) {
+        return nil;
+    }
+
+    // This message is indeed delayed
+    
+    // Begin the string with a clock icon
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    UIImage * clockIcon = [UIImage imageNamed:@"clockIcon" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * clockIconAttachment = [[NSTextAttachment alloc] init];
+    clockIconAttachment.image = clockIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:clockIconAttachment] mutableCopy];
+
+    // Append the words
+    NSString * words = [NSString stringWithFormat:@"  %@", delayedDescription]; // add space after icon
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    // Put it all together
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
+- (NSString *) delayedDescriptionForEvent:(ZNGEvent *)event
+{
+    if (!event.message.isDelayed) {
+        return nil;
     }
     
-    return nil;
+    if (event.message.executeAt == nil) {
+        ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", event.eventId);
+        return @"Sending later";
+    }
+    
+    NSTimeInterval timeUntilSending = [event.message.executeAt timeIntervalSinceNow];
+    
+    if (timeUntilSending < 60.0) {
+        return @"Sending in less than a minute";
+    }
+    
+    if (timeUntilSending < 0.0) {
+        ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", event.eventId);
+        return @"Sending soon";
+    }
+    
+    // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
+    NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
+    return [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath

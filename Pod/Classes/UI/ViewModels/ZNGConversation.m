@@ -31,21 +31,22 @@ NSString * const ZNGConversationParticipantTypeLabel = @"label";
 
 @implementation ZNGConversation
 
-NSString *const kConversationPage = @"page";
-NSString *const kConversationPageSize = @"page_size";
-NSString *const kConversationContactId = @"contact_id";
-NSString *const kConversationSortField = @"sort_field";
-NSString *const kConversationSortDirection = @"sort_direction";
-NSString *const kConversationSortDirectionAscending = @"asc";
-NSString *const kConversationSortDirectionDescending = @"desc";
-NSString *const kConversationCreatedAt = @"created_at";
-NSString *const kConversationEventType = @"event_type";
-NSString *const kAttachmentContentTypeKey = @"content_type";
-NSString *const kAttachementBase64 = @"base64";
-NSString *const kConversationService = @"service";
-NSString *const kConversationContact = @"contact";
-NSString *const kMessageDirectionInbound = @"inbound";
-NSString *const kMessageDirectionOutbound = @"outbound";
+NSString * const kConversationPage = @"page";
+NSString * const kConversationPageSize = @"page_size";
+NSString * const kConversationContactId = @"contact_id";
+NSString * const kConversationSortFields = @"sort_fields";
+NSString * const kConversationSortDirection = @"sort_direction";
+NSString * const kConversationSortDirectionAscending = @"asc";
+NSString * const kConversationSortDirectionDescending = @"desc";
+NSString * const kConversationIsDelayed = @"is_delayed";
+NSString * const kConversationCreatedAt = @"created_at";
+NSString * const kConversationEventType = @"event_type";
+NSString * const kAttachmentContentTypeKey = @"content_type";
+NSString * const kAttachementBase64 = @"base64";
+NSString * const kConversationService = @"service";
+NSString * const kConversationContact = @"contact";
+NSString * const kMessageDirectionInbound = @"inbound";
+NSString * const kMessageDirectionOutbound = @"outbound";
 
 static const CGFloat imageAttachmentMaxWidth = 800.0;
 static const CGFloat imageAttachmentMaxHeight = 800.0;
@@ -306,13 +307,16 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (NSDictionary *) parametersForPageSize:(NSUInteger)pageSize pageIndex:(NSUInteger)pageIndex
 {
     NSArray<NSString *> * eventTypes = [self eventTypes];
+    
+    NSString * delayedSort = [NSString stringWithFormat:@"%@ %@", kConversationIsDelayed, kConversationSortDirectionDescending];
+    NSString * createdAtSort = [NSString stringWithFormat:@"%@ %@", kConversationCreatedAt, kConversationSortDirectionDescending];
 
     // Note that sort order is set to descending so page 1 has most recent messages.  This data will then be reversed upon receipt.
     NSMutableDictionary * params = [@{
                                      kConversationPageSize : @(pageSize),
                                      kConversationContactId : contactId,
                                      kConversationPage: @(pageIndex),
-                                     kConversationSortField : kConversationCreatedAt,
+                                     kConversationSortFields : @[delayedSort, createdAtSort],
                                      kConversationSortDirection : kConversationSortDirectionDescending
                                      } mutableCopy];
     

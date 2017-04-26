@@ -40,6 +40,9 @@ NSString * const kConversationSortDirectionAscending = @"asc";
 NSString * const kConversationSortDirectionDescending = @"desc";
 NSString * const kConversationIsDelayed = @"is_delayed";
 NSString * const kConversationCreatedAt = @"created_at";
+NSString * const kConversationUpdatedAt = @"updated_at";
+NSString * const kConversationExecuteAt = @"execute_at";
+NSString * const kConversationId = @"id";
 NSString * const kConversationEventType = @"event_type";
 NSString * const kAttachmentContentTypeKey = @"content_type";
 NSString * const kAttachementBase64 = @"base64";
@@ -308,15 +311,17 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 {
     NSArray<NSString *> * eventTypes = [self eventTypes];
     
-    NSString * delayedSort = [NSString stringWithFormat:@"%@ %@", kConversationIsDelayed, kConversationSortDirectionDescending];
-    NSString * createdAtSort = [NSString stringWithFormat:@"%@ %@", kConversationCreatedAt, kConversationSortDirectionDescending];
+    NSString * isDelayedSort = [NSString stringWithFormat:@"%@ %@", kConversationIsDelayed, kConversationSortDirectionDescending];
+    NSString * executeAtSort = [NSString stringWithFormat:@"%@ %@", kConversationExecuteAt, kConversationSortDirectionDescending];
+    NSString * updatedAtSort = [NSString stringWithFormat:@"%@ %@", kConversationUpdatedAt, kConversationSortDirectionDescending];
+    NSString * idSort = [NSString stringWithFormat:@"%@ %@", kConversationId, kConversationSortDirectionDescending];
 
     // Note that sort order is set to descending so page 1 has most recent messages.  This data will then be reversed upon receipt.
     NSMutableDictionary * params = [@{
                                      kConversationPageSize : @(pageSize),
                                      kConversationContactId : contactId,
                                      kConversationPage: @(pageIndex),
-                                     kConversationSortFields : @[delayedSort, createdAtSort],
+                                     kConversationSortFields : @[isDelayedSort, executeAtSort, updatedAtSort, idSort],
                                      kConversationSortDirection : kConversationSortDirectionDescending
                                      } mutableCopy];
     

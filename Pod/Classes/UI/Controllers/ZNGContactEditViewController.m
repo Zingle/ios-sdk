@@ -482,6 +482,11 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    // All sections other than the top profile section will have headers
+    if (section == ContactSectionDefaultCustomFields) {
+        return 0.0;
+    }
+    
     return 30.0;
 }
 
@@ -497,9 +502,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     switch (section) {
         case ContactSectionDefaultCustomFields:
-            header.sectionLabel.text = @"PROFILE";
-            header.sectionImage.image = [UIImage imageNamed:@"editIconProfile" inBundle:bundle compatibleWithTraitCollection:nil];
-            break;
+            // No header for top section
+            return nil;
         case ContactSectionChannels:
             header.sectionLabel.text = @"CHANNELS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconChannels" inBundle:bundle compatibleWithTraitCollection:nil];

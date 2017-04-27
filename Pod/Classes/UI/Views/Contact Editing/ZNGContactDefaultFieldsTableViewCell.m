@@ -75,6 +75,28 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     _titleFieldValue = titleFieldValue;
     self.titleField.text = titleFieldValue.value;
+    
+    UIPickerView * pickerView = (UIPickerView *)self.titleField.inputView;
+    
+    if ([titleFieldValue.value length] > 0) {
+        // Attempt to find the current value in the set of options
+        __block BOOL weDidIt = NO;
+        [titleFieldValue.customField.options enumerateObjectsUsingBlock:^(ZNGFieldOption * _Nonnull option, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([option.value isEqualToString:titleFieldValue.value]) {
+                [pickerView selectRow:idx inComponent:0 animated:NO];
+                weDidIt = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (weDidIt) {
+            return;
+        }
+    }
+    
+    // Either there is no value set in the custom field or we were unable to find an option matching the current value.
+    // Select the first option.
+    [pickerView selectRow:0 inComponent:0 animated:NO];
 }
 
 - (void) setFirstNameFieldValue:(ZNGContactFieldValue *)firstNameFieldValue

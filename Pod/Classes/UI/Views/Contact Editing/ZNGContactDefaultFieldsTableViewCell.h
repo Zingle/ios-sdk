@@ -12,7 +12,7 @@
 @class ZNGContact;
 @class ZNGContactFieldValue;
 
-@interface ZNGContactDefaultFieldsTableViewCell : ZNGContactEditTableViewCell
+@interface ZNGContactDefaultFieldsTableViewCell : ZNGContactEditTableViewCell <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
 
 @property (nonatomic, strong, nullable) IBOutlet UIImageView * avatarImageView;
 @property (nonatomic, strong, nullable) IBOutlet JVFloatLabeledTextField * titleField;

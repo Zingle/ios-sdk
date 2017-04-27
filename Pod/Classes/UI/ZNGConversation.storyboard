@@ -444,14 +444,14 @@
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
                                                             <real key="value" value="4"/>
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                 </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7pc-rO-cRK" customClass="JVFloatLabeledTextField">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="7pc-rO-cRK" customClass="JVFloatLabeledTextField">
                                                     <rect key="frame" x="95" y="8" width="272" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="NeH-3j-aSB"/>
@@ -472,7 +472,7 @@
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
                                                             <real key="value" value="4"/>
@@ -490,6 +490,7 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="Ljm-8I-NYe" secondAttribute="trailing" id="QNk-hg-Is0"/>
                                                 <constraint firstItem="Ljm-8I-NYe" firstAttribute="top" secondItem="7pc-rO-cRK" secondAttribute="bottom" constant="14" id="YzA-jL-rvc"/>
                                                 <constraint firstItem="7pc-rO-cRK" firstAttribute="top" secondItem="ZlN-uS-4Wf" secondAttribute="topMargin" id="cSC-18-p7o"/>
+                                                <constraint firstAttribute="bottom" secondItem="kbt-DW-Nbq" secondAttribute="bottom" constant="7" id="f9S-8E-eWS"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="kbt-DW-Nbq" secondAttribute="trailing" id="skl-Nl-1Sn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="7pc-rO-cRK" secondAttribute="trailing" id="tEo-XJ-0og"/>
                                             </constraints>

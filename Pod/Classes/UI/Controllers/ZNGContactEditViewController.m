@@ -28,6 +28,7 @@
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"
 #import "ZNGLabelGridView.h"
+#import "ZNGContactDefaultFieldsTableViewCell.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -541,7 +542,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 {
     switch (section) {
         case ContactSectionDefaultCustomFields:
-            return [defaultCustomFields count];
+            return 1;
         case ContactSectionOptionalCustomFields:
             return [optionalCustomFields count];
         case ContactSectionLabels:
@@ -557,6 +558,27 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 {
     switch (indexPath.section) {
         case ContactSectionDefaultCustomFields:
+        {
+            ZNGContactDefaultFieldsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"defaultFields" forIndexPath:indexPath];
+            
+            ZNGContactFieldValue * titleFieldValue = self.contact.titleFieldValue;
+            ZNGContactFieldValue * firstNameFieldValue = self.contact.firstNameFieldValue;
+            ZNGContactFieldValue * lastNameFieldValue = self.contact.lastNameFieldValue;
+            
+            cell.contact = self.contact;
+            cell.titleFieldValue = titleFieldValue;
+            cell.firstNameFieldValue = firstNameFieldValue;
+            cell.lastNameFieldValue = lastNameFieldValue;
+            
+            BOOL locked = ([self.contact editingCustomFieldIsLocked:titleFieldValue]
+                           || [self.contact editingCustomFieldIsLocked:firstNameFieldValue]
+                           || [self.contact editingCustomFieldIsLocked:lastNameFieldValue]);
+            
+            cell.editingLocked = locked;
+            
+            return cell;
+        }
+            
         case ContactSectionOptionalCustomFields:
         {
             NSArray<ZNGContactFieldValue *> * customFields = (indexPath.section == ContactSectionDefaultCustomFields) ? defaultCustomFields : optionalCustomFields;

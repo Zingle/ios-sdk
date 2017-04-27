@@ -96,7 +96,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="124" y="4.5" width="128.5" height="20"/>
+                                                <rect key="frame" x="123.5" y="4.5" width="128.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -261,10 +261,10 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="131" width="375" height="84"/>
+                                <rect key="frame" x="0.0" y="131" width="375" height="100"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
-                                        <rect key="frame" x="312" y="-3.5" width="51" height="33"/>
+                                        <rect key="frame" x="312" y="4.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
                                             <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -274,10 +274,10 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
-                                        <rect key="frame" x="327.5" y="3" width="20" height="20"/>
+                                        <rect key="frame" x="327.5" y="11" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Room number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6v7-ZW-0uV" customClass="JVFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="38" width="110" height="46"/>
+                                        <rect key="frame" x="16" y="54" width="110" height="46"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="OAA-C6-Pj7"/>
                                             <constraint firstAttribute="height" constant="46" id="uhc-Yq-zGp"/>
@@ -292,7 +292,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="HotSOS issue name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR" customClass="ZNGContactEditFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="0.0" width="284" height="30"/>
+                                        <rect key="frame" x="16" y="0.0" width="284" height="46"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
@@ -423,8 +423,86 @@
                                 <rect key="frame" x="0.0" y="96" width="375" height="571"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="defaultFields" rowHeight="172" id="zLT-so-Bb8" userLabel="defaultFields" customClass="ZNGContactDefaultFieldsTableViewCell">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="172"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zLT-so-Bb8" id="ZlN-uS-4Wf">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="172"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="anonymousAvatar" translatesAutoresizingMaskIntoConstraints="NO" id="Fyn-VN-Ojh">
+                                                    <rect key="frame" x="14" y="8" width="64" height="64"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="64" id="d7b-LO-QdW"/>
+                                                        <constraint firstAttribute="height" constant="64" id="sUh-ID-wOf"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ljm-8I-NYe" customClass="JVFloatLabeledTextField">
+                                                    <rect key="frame" x="95" y="65" width="272" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="10f-6O-InA"/>
+                                                    </constraints>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </textField>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7pc-rO-cRK" customClass="JVFloatLabeledTextField">
+                                                    <rect key="frame" x="95" y="8" width="272" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="NeH-3j-aSB"/>
+                                                    </constraints>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </textField>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kbt-DW-Nbq" customClass="JVFloatLabeledTextField">
+                                                    <rect key="frame" x="95" y="122" width="272" height="43"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="43" id="hYq-xz-tS6"/>
+                                                    </constraints>
+                                                    <nil key="textColor"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Ljm-8I-NYe" firstAttribute="leading" secondItem="7pc-rO-cRK" secondAttribute="leading" id="13B-xu-RiQ"/>
+                                                <constraint firstItem="7pc-rO-cRK" firstAttribute="leading" secondItem="Fyn-VN-Ojh" secondAttribute="trailing" constant="17" id="18b-R4-Ynv"/>
+                                                <constraint firstItem="Fyn-VN-Ojh" firstAttribute="leading" secondItem="ZlN-uS-4Wf" secondAttribute="leadingMargin" constant="6" id="DqN-KG-sC3"/>
+                                                <constraint firstItem="kbt-DW-Nbq" firstAttribute="leading" secondItem="Ljm-8I-NYe" secondAttribute="leading" id="Hw1-8k-zdW"/>
+                                                <constraint firstItem="kbt-DW-Nbq" firstAttribute="top" secondItem="Ljm-8I-NYe" secondAttribute="bottom" constant="14" id="Kmo-3a-Ec9"/>
+                                                <constraint firstItem="Fyn-VN-Ojh" firstAttribute="top" secondItem="ZlN-uS-4Wf" secondAttribute="topMargin" id="Owj-01-PdO"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Ljm-8I-NYe" secondAttribute="trailing" id="QNk-hg-Is0"/>
+                                                <constraint firstItem="Ljm-8I-NYe" firstAttribute="top" secondItem="7pc-rO-cRK" secondAttribute="bottom" constant="14" id="YzA-jL-rvc"/>
+                                                <constraint firstItem="7pc-rO-cRK" firstAttribute="top" secondItem="ZlN-uS-4Wf" secondAttribute="topMargin" id="cSC-18-p7o"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="kbt-DW-Nbq" secondAttribute="trailing" id="skl-Nl-1Sn"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="7pc-rO-cRK" secondAttribute="trailing" id="tEo-XJ-0og"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="avatarImageView" destination="Fyn-VN-Ojh" id="uLb-f0-c9G"/>
+                                            <outlet property="firstNameField" destination="Ljm-8I-NYe" id="6SL-qr-Gqp"/>
+                                            <outlet property="lastNameField" destination="kbt-DW-Nbq" id="ADZ-tG-MsP"/>
+                                            <outlet property="titleField" destination="7pc-rO-cRK" id="LBB-Hr-D2Q"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="customField" rowHeight="62" id="B6y-R7-CYB" customClass="ZNGContactCustomFieldTableViewCell">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="200" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B6y-R7-CYB" id="Atk-yN-GZd">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -463,7 +541,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" rowHeight="62" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
-                                        <rect key="frame" x="0.0" y="90" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="262" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lGA-Qd-2RU" id="dZr-Pi-g0x">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -499,14 +577,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" rowHeight="62" id="B8x-FV-499">
-                                        <rect key="frame" x="0.0" y="152" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="324" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" ambiguous="YES" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
-                                                    <rect key="frame" x="71" y="10" width="72.5" height="43"/>
+                                                    <rect key="frame" x="71" y="10" width="70" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="oFc-Ld-Pad"/>
                                                     </constraints>
@@ -542,7 +620,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" rowHeight="62" id="yxw-oU-69S" customClass="ZNGContactPhoneNumberTableViewCell">
-                                        <rect key="frame" x="0.0" y="214" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="386" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yxw-oU-69S" id="kv6-um-SBV">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -560,7 +638,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="14.5" width="46" height="30"/>
+                                                    <rect key="frame" x="71" y="14.5" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -570,7 +648,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="121" y="22.5" width="14" height="14"/>
+                                                    <rect key="frame" x="120" y="22.5" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
@@ -581,7 +659,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="143" y="8" width="224" height="43"/>
+                                                    <rect key="frame" x="142" y="8" width="225" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="Yjv-O7-T28"/>
                                                     </constraints>
@@ -612,7 +690,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="labels" rowHeight="52" id="Gtr-ud-SDp" customClass="ZNGContactLabelsTableViewCell">
-                                        <rect key="frame" x="0.0" y="276" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="448" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gtr-ud-SDp" id="fa7-Yj-Urf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -704,7 +782,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2U0-LZ-jjh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1979" y="461"/>
+            <point key="canvasLocation" x="1978.4000000000001" y="460.11994002998506"/>
         </scene>
         <!--Label Select View Controller-->
         <scene sceneID="QNL-Ab-kiJ">
@@ -814,6 +892,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="anonymousAvatar" width="28" height="28"/>
         <image name="chevronRight" width="14" height="14"/>
         <image name="minusCircle" width="22" height="22"/>
         <image name="plusCircle" width="22" height="22"/>

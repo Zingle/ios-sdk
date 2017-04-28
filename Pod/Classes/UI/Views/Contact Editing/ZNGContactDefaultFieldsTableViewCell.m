@@ -160,8 +160,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (BOOL) textFieldShouldClear:(UITextField *)textField
 {
-    self.titleFieldValue.value = nil;
-    justClearedTitle = YES;
+    if (textField == self.titleField) {
+        self.titleFieldValue.value = nil;
+        justClearedTitle = YES;
+    }
+    
     return YES;
 }
 

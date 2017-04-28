@@ -182,7 +182,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if (row >= [self.titleFieldValue.customField.options count]) {
-        ZNGLogError(@"Out of bounds selecting a title option (%llu available)", (unsigned long long)[self.titleFieldValue.customField.options count]);
+        ZNGLogError(@"Out of bounds displaying a title option (%llu available)", (unsigned long long)[self.titleFieldValue.customField.options count]);
         return nil;
     }
     

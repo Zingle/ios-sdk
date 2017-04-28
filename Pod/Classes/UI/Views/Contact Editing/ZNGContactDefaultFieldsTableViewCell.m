@@ -57,7 +57,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     UIImage * placeholderImage;
     
     if ([initials length] > 0) {
-        // We have initials for this contact.  Use that as a placeholder image and load any remote avatar.
+        // We have initials for this contact.  Use that as a placeholder image.
         ZNGInitialsAvatar * initialsAvatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials
                                                                                textColor:[UIColor zng_text_gray]
                                                                          backgroundColor:[UIColor zng_messageBubbleLightGrayColor]
@@ -65,6 +65,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                                                                                     font:[UIFont latoFontOfSize:20.0]];
         placeholderImage = [initialsAvatar avatarImage];
     } else {
+        // We have no initials for this user.  Use the anonymous avatar image as a placeholder.
         NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactDefaultFieldsTableViewCell class]];
         placeholderImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     }

@@ -26,6 +26,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 @implementation ZNGContactDefaultFieldsTableViewCell
 {
     UIColor * defaultTextFieldBackgroundColor;
+    BOOL justClearedTitle;
 }
 
 - (void) awakeFromNib
@@ -143,6 +144,24 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     } else if (textField == self.lastNameField) {
         self.lastNameFieldValue.value = self.lastNameField.text;
     }
+}
+
+- (BOOL) textFieldShouldBeginEditing:(UITextField *)textField
+{
+    // Pressing the clear button in the title field should not bring up the title selections.
+    if ((textField == self.titleField) && (justClearedTitle)) {
+        justClearedTitle = NO;
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (BOOL) textFieldShouldClear:(UITextField *)textField
+{
+    self.titleFieldValue.value = nil;
+    justClearedTitle = YES;
+    return YES;
 }
 
 #pragma mark - Title field

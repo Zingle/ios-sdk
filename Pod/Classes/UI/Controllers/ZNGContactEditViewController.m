@@ -561,9 +561,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         {
             ZNGContactDefaultFieldsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"defaultFields" forIndexPath:indexPath];
             
-            ZNGContactFieldValue * titleFieldValue = self.contact.titleFieldValue;
-            ZNGContactFieldValue * firstNameFieldValue = self.contact.firstNameFieldValue;
-            ZNGContactFieldValue * lastNameFieldValue = self.contact.lastNameFieldValue;
+            ZNGContactFieldValue * titleFieldValue = [self.contact titleFieldValue];
+            ZNGContactFieldValue * firstNameFieldValue = [self.contact firstNameFieldValue];
+            ZNGContactFieldValue * lastNameFieldValue = [self.contact lastNameFieldValue];
             
             cell.contact = self.contact;
             cell.titleFieldValue = titleFieldValue;

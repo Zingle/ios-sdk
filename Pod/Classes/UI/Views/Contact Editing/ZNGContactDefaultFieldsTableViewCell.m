@@ -65,7 +65,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         placeholderImage = [initialsAvatar avatarImage];
     } else {
         NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactDefaultFieldsTableViewCell class]];
-        placeholderImage = [UIImage imageNamed:@"anonymousAvatar" inBundle:bundle compatibleWithTraitCollection:nil];
+        placeholderImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     }
     
     [self.avatarImageView sd_setImageWithURL:contact.avatarUri placeholderImage:placeholderImage];

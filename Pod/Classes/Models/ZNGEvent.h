@@ -47,4 +47,9 @@
 - (BOOL) isNote;
 - (BOOL) isInboundMessage;
 
+/**
+ *  Returns YES if this event type is deletable.  The only event type where this is true at the moment is delayed message.
+ */
+- (BOOL) mayBeDeleted;
+
 @end

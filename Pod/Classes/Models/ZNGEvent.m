@@ -249,4 +249,13 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     return @"Unknown event";
 }
 
+- (BOOL) mayBeDeleted
+{
+    if ([self.eventType isEqualToString:ZNGEventTypeMessage]) {
+        return self.message.isDelayed;
+    }
+    
+    return NO;
+}
+
 @end

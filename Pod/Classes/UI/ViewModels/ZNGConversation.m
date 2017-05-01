@@ -132,6 +132,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                 ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
+            } else if ((status.totalPages < self.totalEventCount) && ([self lastPageContainsDeletableMessage])) {
+                ZNGLogInfo(@"Our total event count has gone from %llu to %llu, and we have one or more deletable event types in data.\
+                             Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalPages);
+                [self _loadRecentEventsErasing:YES];
             } else {
                 ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
@@ -143,6 +147,21 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         // We have no special logic for this case.  Go get the data.
         [self _loadRecentEventsErasing:replace];
     }
+}
+
+- (BOOL) lastPageContainsDeletableMessage
+{
+    NSInteger i = ([self.events count] <= self.pageSize) ? 0 : ([self.events count] - self.pageSize);
+    
+    while (i < [self.events count]) {
+        if ([self.events[i] mayBeDeleted]) {
+            return YES;
+        }
+        
+        i++;
+    }
+    
+    return NO;
 }
 
 - (void)_loadRecentEventsErasing:(BOOL)replace

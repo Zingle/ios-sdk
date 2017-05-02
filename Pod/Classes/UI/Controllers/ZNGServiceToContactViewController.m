@@ -1344,6 +1344,8 @@ static void * KVOContext = &KVOContext;
     
     if ([viewModel.event isMessage]) {
         avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
+    } else {
+        avatarURL = viewModel.event.triggeredByUser.avatarUri;
     }
     
     if (avatarURL != nil) {

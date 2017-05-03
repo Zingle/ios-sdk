@@ -19,6 +19,7 @@
 @end
 
 static const NSTimeInterval delayAfterLoginBeforeCheckingSocket = 3.0;
+NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChanged";
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -32,6 +33,8 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     if (_status != status) {
         ZNGLogDebug(@"Status changing from %@ to %@", [self debugDescriptionForStatus:_status], [self debugDescriptionForStatus:status]);
         _status = status;
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGNetworkLookoutStatusChanged object:self];
     }
 }
 

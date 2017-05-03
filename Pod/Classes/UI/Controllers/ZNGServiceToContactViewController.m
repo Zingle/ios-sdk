@@ -44,8 +44,6 @@ static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfi
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
-static NSString * const KVONetworkStatusPath = @"conversation.session.networkLookout.status";
-
 
 static void * KVOContext = &KVOContext;
 
@@ -126,12 +124,13 @@ static void * KVOContext = &KVOContext;
 
 - (void) setupKVO
 {
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNetworkStatusChanged:) name:ZNGNetworkLookoutStatusChanged object:nil];
+    
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
-    [self addObserver:self forKeyPath:KVONetworkStatusPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
 - (void) dealloc
@@ -142,7 +141,6 @@ static void * KVOContext = &KVOContext;
     
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
-    [self removeObserver:self forKeyPath:KVONetworkStatusPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
@@ -266,12 +264,15 @@ static void * KVOContext = &KVOContext;
             }
             
             [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
-        } else if ([keyPath isEqualToString:KVONetworkStatusPath]) {
-            [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
     }
+}
+
+- (void) notifyNetworkStatusChanged:(NSNotification *)notification
+{
+    [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
 }
 
 - (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription

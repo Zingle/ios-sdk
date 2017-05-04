@@ -355,7 +355,9 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         }
     }
     
-    _availableServices = nonTextRelayServices;
+    _availableServices = [nonTextRelayServices sortedArrayUsingComparator:^NSComparisonResult(ZNGService * _Nonnull service1, ZNGService * _Nonnull service2) {
+        return [service1.displayName compare:service2.displayName options:NSCaseInsensitiveSearch];
+    }];
 }
 
 #pragma mark - Account/Service state management

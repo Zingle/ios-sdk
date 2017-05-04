@@ -10,6 +10,8 @@
 
 @class ZingleAccountSession;
 
+extern NSString * _Nonnull const ZNGNetworkLookoutStatusChanged;
+
 typedef enum {
     ZNGNetworkStatusUnknown,
     ZNGNetworkStatusInternetUnreachable,

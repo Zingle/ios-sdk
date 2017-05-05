@@ -219,7 +219,9 @@
         XCTFail(@"Account chooser called even though we only expect one available account.  We were given %llu accounts.", (unsigned long long)[availableAccounts count]);
         return nil;
     } serviceChooser:^ZNGService * _Nullable(NSArray<ZNGService *> * _Nonnull availableServices) {
-        XCTAssertEqualObjects(availableServices, serviceClient.services, @"Service chooser block provides expected services.");
+        NSSet * availableServicesSet = [NSSet setWithArray:availableServices];
+        NSSet * expectedServicesSet = [NSSet setWithArray:serviceClient.services];
+        XCTAssertEqualObjects(availableServicesSet, expectedServicesSet, @"Service chooser block provides expected services.");
         [serviceChooserCalled fulfill];
         return account2service1;
     } completion:nil];

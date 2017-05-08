@@ -299,10 +299,12 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     }
     
     ZNGEvent * outgoingNote = [self pendingEventForOutgoingNote:noteString];
+    self.loading = YES;
     
     [self appendEvents:@[outgoingNote]];
     
     [self.eventClient postInternalNote:noteString toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+        self.loading = NO;
         [self removeSendingEvents];
         [self addSenderNameToEvents:@[note]];
         [self appendEvents:@[note]];
@@ -312,6 +314,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
             success(status);
         }
     } failure:^(ZNGError *error) {
+        self.loading = NO;
         [self removeSendingEvents];
         
         if (failure != nil) {

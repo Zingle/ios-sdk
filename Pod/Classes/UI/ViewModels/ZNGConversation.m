@@ -478,13 +478,13 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     NSMutableIndexSet * pendingViewModelIndexes = [[NSMutableIndexSet alloc] init];
     
     [self.events enumerateObjectsUsingBlock:^(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (event.message.sending) {
+        if (event.sending) {
             [pendingIndexes addIndex:idx];
         }
     }];
     
     [self.eventViewModels enumerateObjectsUsingBlock:^(ZNGEventViewModel * _Nonnull viewModel, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (viewModel.event.message.sending) {
+        if (viewModel.event.sending) {
             [pendingViewModelIndexes addIndex:idx];
         }
     }];
@@ -604,7 +604,6 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     BOOL outbound = [newMessage.recipientType isEqualToString:ZNGConversationParticipantTypeContact];
     
     ZNGMessage * message = [[ZNGMessage alloc] init];
-    message.sending = YES;
     message.body = newMessage.body;
     message.communicationDirection = outbound ? @"outbound" : @"inbound";
     message.senderType = outbound ? @"service" : @"contact";

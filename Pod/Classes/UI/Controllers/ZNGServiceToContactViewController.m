@@ -1233,7 +1233,7 @@ static void * KVOContext = &KVOContext;
         }
         
         // Is it from us?  (current user)
-        if (event.message.sending) {
+        if (event.sending) {
             name = [self.conversation.session.userAuthorization displayName];
             senderUUID = self.conversation.session.userAuthorization.userId;
         } else {

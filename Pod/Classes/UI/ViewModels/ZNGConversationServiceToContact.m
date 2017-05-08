@@ -166,7 +166,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         } else {
             
             // If this is a pending outgoing message from us, we can shove a "Me" in there.
-            if (message.sending) {
+            if (event.sending) {
                 message.senderDisplayName = @"Me";
                 continue;
             }

@@ -167,6 +167,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
  */
 - (nullable NSArray<NSString *> *)eventTypes;
 
+/**
+ *  Used to generate an event with a 'sending' flag.  This can be overridden to add user meta data such as avatars.
+ */
+- (nonnull ZNGEvent *)pendingMessageEventForOutgoingMessage:(nonnull ZNGNewMessage *)newMessage;
+
 - (BOOL) pushNotificationRelevantToThisConversation:(nonnull NSNotification *)notification;
 
 - (void) addSenderNameToEvents:(nullable NSArray<ZNGEvent *> *)events;

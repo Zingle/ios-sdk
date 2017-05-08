@@ -1589,6 +1589,7 @@ static void * KVOContext = &KVOContext;
     __weak ZNGServiceToContactViewController * weakSelf = self;
     
     self.inputToolbar.inputEnabled = NO;
+    self.inputToolbar.sendButton.enabled = NO;
     [self scrollToBottomAnimated:YES];
     
     [self.conversation addInternalNote:note success:^(ZNGStatus * _Nonnull status) {

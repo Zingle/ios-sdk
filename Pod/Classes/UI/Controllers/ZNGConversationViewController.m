@@ -1429,7 +1429,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        cell.alpha = event.message.sending ? 0.5 : 1.0;
+        cell.alpha = event.sending ? 0.5 : 1.0;
         
         if ([viewModel isMediaMessage]) {
             if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {

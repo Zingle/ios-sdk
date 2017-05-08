@@ -216,7 +216,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
-             @"sending" : [NSNull null],
              NSStringFromSelector(@selector(imageAttachmentsByName)) : [NSNull null],
              NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null]
              };

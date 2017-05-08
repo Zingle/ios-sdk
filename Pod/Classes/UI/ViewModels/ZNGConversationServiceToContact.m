@@ -166,7 +166,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         } else {
             
             // If this is a pending outgoing message from us, we can shove a "Me" in there.
-            if (message.sending) {
+            if (event.sending) {
                 message.senderDisplayName = @"Me";
                 continue;
             }
@@ -286,19 +286,26 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return self.contact.channels[channelIndex];
 }
 
-- (void) addInternalNote:(NSString *)note
+- (void) addInternalNote:(NSString *)rawNoteString
                  success:(void (^)(ZNGStatus* status))success
                  failure:(void (^) (ZNGError *error))failure
 {
-    NSString * nonWhiteNote = [note stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString * noteString = [rawNoteString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    if ([nonWhiteNote length] == 0) {
+    if ([noteString length] == 0) {
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedFailureReasonErrorKey : @"Cannot add an empty note" }];
         failure(error);
         return;
     }
     
-    [self.eventClient postInternalNote:note toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+    ZNGEvent * outgoingNote = [self pendingEventForOutgoingNote:noteString];
+    self.loading = YES;
+    
+    [self appendEvents:@[outgoingNote]];
+    
+    [self.eventClient postInternalNote:noteString toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+        self.loading = NO;
+        [self removeSendingEvents];
         [self addSenderNameToEvents:@[note]];
         [self appendEvents:@[note]];
         self.totalEventCount = self.totalEventCount + 1;
@@ -307,11 +314,21 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
             success(status);
         }
     } failure:^(ZNGError *error) {
+        self.loading = NO;
+        [self removeSendingEvents];
         
         if (failure != nil) {
             failure(error);
         }
     }];
+}
+
+- (ZNGEvent *)pendingEventForOutgoingNote:(NSString *)noteString
+{
+    ZNGEvent * event = [ZNGEvent eventForNewNote:noteString toContact:self.contact];
+    [self addSenderNameToEvents:@[event]];
+    [event createViewModels];
+    return event;
 }
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion

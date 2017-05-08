@@ -26,6 +26,12 @@
 @property(nonatomic, strong) ZNGMessage* message;
 
 /**
+ *  Local flag indicating that the event is outbound but has not yet been seen in remote data.
+ *  e.g. The user hit send on a message, but the server has not yet acknowledged it.
+ */
+@property (nonatomic, assign) BOOL sending;
+
+/**
  *  An array of one ZNGEventViewModel in the case of an event with no attachments, up to at most one per attachment plus one text for a non-nil body.
  */
 @property (nonatomic, readonly) NSArray<ZNGEventViewModel *> * viewModels;

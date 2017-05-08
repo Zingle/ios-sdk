@@ -55,6 +55,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
              @"triggeredByUser" : @"triggered_by_user",
              @"automation" : @"automation",
              @"message" : @"message",
+             NSStringFromSelector(@selector(sending)) : [NSNull null],
              NSStringFromSelector(@selector(viewModels)) : [NSNull null]
              };
 }
@@ -153,6 +154,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 {
     ZNGEvent * event = [[ZNGEvent alloc] init];
     event.message = message;
+    event.sending = YES;
     event.eventId = message.messageId;
     event.body = message.body;
     event.eventType = ZNGEventTypeMessage;
@@ -165,6 +167,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 {
     ZNGEvent * event = [[ZNGEvent alloc] init];
     event.body = note;
+    event.sending = YES;
     event.eventType = ZNGEventTypeNote;
     event.contactId = contact.contactId;
     event.createdAt = [NSDate date];
@@ -175,7 +178,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 
 - (BOOL) isMessage
 {
-    return [self.eventType isEqualToString:ZNGEventTypeMessage] || self.message.sending;
+    return [self.eventType isEqualToString:ZNGEventTypeMessage];
 }
 
 - (BOOL) isNote

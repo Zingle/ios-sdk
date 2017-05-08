@@ -15,6 +15,7 @@
 #import "ZNGAnalytics.h"
 #import "ZNGMessageForwardingRequest.h"
 #import "ZNGSocketClient.h"
+#import "ZingleAccountSession.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -323,12 +324,25 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     }];
 }
 
+- (ZNGEvent *)pendingMessageEventForOutgoingMessage:(ZNGNewMessage *)newMessage
+{
+    ZNGEvent * event = [super pendingMessageEventForOutgoingMessage:newMessage];
+    [self addAvatarToSendingEvent:event];
+    return event;
+}
+
 - (ZNGEvent *)pendingEventForOutgoingNote:(NSString *)noteString
 {
     ZNGEvent * event = [ZNGEvent eventForNewNote:noteString toContact:self.contact];
     [self addSenderNameToEvents:@[event]];
+    [self addAvatarToSendingEvent:event];
     [event createViewModels];
     return event;
+}
+
+- (void) addAvatarToSendingEvent:(ZNGEvent *)event
+{
+    event.triggeredByUser = self.session.user;
 }
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion

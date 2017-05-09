@@ -157,6 +157,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath;
 - (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath;
 - (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath;
+- (void) updateUUID;
 
 #pragma mark - Abstract methods that must be overridden by subclasses
 - (BOOL) weAreSendingOutbound;

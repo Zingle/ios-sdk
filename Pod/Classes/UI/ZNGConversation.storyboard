@@ -18,7 +18,7 @@
         <!--Service To Contact View Controller-->
         <scene sceneID="88j-AX-uAy">
             <objects>
-                <viewController storyboardIdentifier="conversation" id="yXX-6h-nLe" customClass="ZNGServiceToContactViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="conversation" hidesBottomBarWhenPushed="YES" id="yXX-6h-nLe" customClass="ZNGServiceToContactViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TAM-AV-ud3"/>
                         <viewControllerLayoutGuide type="bottom" id="o2z-2D-qIc"/>
@@ -96,7 +96,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="123.5" y="4.5" width="128.5" height="20"/>
+                                                <rect key="frame" x="124" y="4.5" width="128.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -165,8 +165,8 @@
                             <constraint firstAttribute="trailing" secondItem="Vm4-GP-Tqx" secondAttribute="trailing" id="JDw-d0-zFU"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="bottom" id="JvL-Pt-bfH"/>
                             <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
-                            <constraint firstItem="o2z-2D-qIc" firstAttribute="top" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="dah-e2-JLn"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="1S3-q5-gQs" secondAttribute="bottom" id="e2q-0E-eOl"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="gMQ-Jk-t3t"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="n5E-he-CGo"/>
                             <constraint firstAttribute="trailing" secondItem="iWA-dO-3bV" secondAttribute="trailing" id="oym-kt-s8p"/>
                             <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="sKk-9e-V7y"/>

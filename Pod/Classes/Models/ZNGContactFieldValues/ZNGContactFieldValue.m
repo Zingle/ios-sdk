@@ -34,12 +34,23 @@
         return NO;
     }
     
-    return (([self.customField isEqual:object.customField]) && ([self.value isEqualToString:object.value]));
+    return (([self.customField isEqual:object.customField]) && ([[self comparableValue] isEqualToString:[object comparableValue]]));
+}
+
+- (NSString *) comparableValue
+{
+    if ([self.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+        return [@([self.value boolValue]) stringValue];
+    } else if ([self.customField.dataType isEqualToString:ZNGContactFieldDataTypeNumber]) {
+        return [@([self.value intValue]) stringValue];
+    }
+    
+    return self.value;
 }
 
 - (NSUInteger) hash
 {
-    return [self.value hash];
+    return [[self comparableValue] hash];
 }
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey

@@ -18,7 +18,7 @@
         <!--Service To Contact View Controller-->
         <scene sceneID="88j-AX-uAy">
             <objects>
-                <viewController storyboardIdentifier="conversation" id="yXX-6h-nLe" customClass="ZNGServiceToContactViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="conversation" hidesBottomBarWhenPushed="YES" id="yXX-6h-nLe" customClass="ZNGServiceToContactViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TAM-AV-ud3"/>
                         <viewControllerLayoutGuide type="bottom" id="o2z-2D-qIc"/>
@@ -166,12 +166,12 @@
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="bottom" id="JvL-Pt-bfH"/>
                             <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="1S3-q5-gQs" secondAttribute="bottom" id="e2q-0E-eOl"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="gMQ-Jk-t3t"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="n5E-he-CGo"/>
                             <constraint firstAttribute="trailing" secondItem="iWA-dO-3bV" secondAttribute="trailing" id="oym-kt-s8p"/>
                             <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="sKk-9e-V7y"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="top" secondItem="eYw-Gk-ZwV" secondAttribute="top" id="sPw-m9-Cyf"/>
                             <constraint firstItem="1S3-q5-gQs" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="sfA-yn-544"/>
-                            <constraint firstAttribute="bottom" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="wV1-0d-sIq"/>
                             <constraint firstItem="Vm4-GP-Tqx" firstAttribute="top" secondItem="TAM-AV-ud3" secondAttribute="bottom" id="xcs-Tv-MJM"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="y5U-NG-cZx"/>
                             <constraint firstItem="Vm4-GP-Tqx" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="ygn-fT-qvE"/>
@@ -193,7 +193,6 @@
                         <outlet property="moreMessagesView" destination="MTx-YX-esM" id="QdK-6v-gWE"/>
                         <outlet property="moreMessagesViewOffScreenConstraint" destination="ZNx-8Y-K9n" id="R6O-fx-X8L"/>
                         <outlet property="moreMessagesViewOnScreenConstraint" destination="fnt-qz-0f1" id="StC-8W-Pbz"/>
-                        <outlet property="toolbarBottomLayoutGuide" destination="wV1-0d-sIq" id="xSh-Mk-TTu"/>
                         <outlet property="toolbarHeightConstraint" destination="gry-0L-4u8" id="5h1-71-KIe"/>
                         <outlet property="typingIndicatorContainerView" destination="iWA-dO-3bV" id="57A-Ya-pZB"/>
                         <outlet property="typingIndicatorEmojiLabel" destination="qsr-lM-mNk" id="ixN-Rj-REX"/>
@@ -264,7 +263,7 @@
                                 <rect key="frame" x="0.0" y="130.5" width="375" height="84"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
-                                        <rect key="frame" x="312" y="-3.5" width="51" height="33"/>
+                                        <rect key="frame" x="312" y="4.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
                                             <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -274,10 +273,10 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
-                                        <rect key="frame" x="327.5" y="3" width="20" height="20"/>
+                                        <rect key="frame" x="327.5" y="11" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Room number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6v7-ZW-0uV" customClass="JVFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="38" width="110" height="46"/>
+                                        <rect key="frame" x="16" y="54" width="110" height="46"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="OAA-C6-Pj7"/>
                                             <constraint firstAttribute="height" constant="46" id="uhc-Yq-zGp"/>
@@ -292,7 +291,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="HotSOS issue name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR" customClass="ZNGContactEditFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="0.0" width="284" height="30"/>
+                                        <rect key="frame" x="16" y="0.0" width="284" height="46"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
@@ -630,7 +629,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="400" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pjn-y4-LVU">
-                                                    <rect key="frame" x="71" y="14.5" width="46" height="30"/>
+                                                    <rect key="frame" x="71" y="14.5" width="45" height="30"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <state key="normal" title="mobile">
                                                         <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -640,7 +639,7 @@
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WWh-6W-Omx">
-                                                    <rect key="frame" x="121" y="22.5" width="14" height="14"/>
+                                                    <rect key="frame" x="120" y="22.5" width="14" height="14"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="14" id="JoZ-LS-7GW"/>
                                                         <constraint firstAttribute="width" constant="14" id="Vke-XY-ruv"/>
@@ -651,7 +650,7 @@
                                                     </connections>
                                                 </button>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
-                                                    <rect key="frame" x="143" y="8" width="224" height="43"/>
+                                                    <rect key="frame" x="142" y="8" width="225" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="Yjv-O7-T28"/>
                                                     </constraints>

@@ -586,11 +586,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 }
             }
             
-            ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events.", (unsigned long long)[self.conversation.events count]);
+            ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events, %@ received data already.",
+                          (unsigned long long)[self.conversation.events count],
+                          hasDisplayedInitialData ? @"HAS" : @"HAS NOT");
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             
             if ((hasDisplayedInitialData) && (!stuckToBottom)) {
-                
                 __block NSUInteger newMessagesAndNotesCount = 0;
                 
                 for (ZNGEventViewModel * eventViewModel in insertions) {
@@ -1428,7 +1429,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        cell.alpha = event.message.sending ? 0.5 : 1.0;
+        cell.alpha = event.sending ? 0.5 : 1.0;
         
         if ([viewModel isMediaMessage]) {
             if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {

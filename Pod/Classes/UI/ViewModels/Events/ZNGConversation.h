@@ -152,6 +152,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 #pragma mark - Protected methods that can be called by subclasses
 - (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;
 
+/**
+ *  Removes any events with sending flags
+ */
+- (void) removeSendingEvents;
+
 #pragma mark - Protected methods to be overridden by subclasses
 
 /**
@@ -161,6 +166,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
  *  Default implementation returns @[@"message"]
  */
 - (nullable NSArray<NSString *> *)eventTypes;
+
+/**
+ *  Used to generate an event with a 'sending' flag.  This can be overridden to add user meta data such as avatars.
+ */
+- (nonnull ZNGEvent *)pendingMessageEventForOutgoingMessage:(nonnull ZNGNewMessage *)newMessage;
 
 - (BOOL) pushNotificationRelevantToThisConversation:(nonnull NSNotification *)notification;
 

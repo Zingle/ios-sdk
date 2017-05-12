@@ -37,7 +37,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     BOOL canPerform = NO;
     
-    if ([self.text length] == 0) {
+    if (action == NSSelectorFromString(@"replace:")) {
+        canPerform = YES;
+    } else if ([self.text length] == 0) {
         if (action == @selector(paste:)) {
             canPerform = YES;
         }

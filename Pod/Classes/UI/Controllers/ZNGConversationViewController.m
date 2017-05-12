@@ -586,11 +586,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 }
             }
             
-            ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events.", (unsigned long long)[self.conversation.events count]);
+            ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events, %@ received data already.",
+                          (unsigned long long)[self.conversation.events count],
+                          hasDisplayedInitialData ? @"HAS" : @"HAS NOT");
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             
             if ((hasDisplayedInitialData) && (!stuckToBottom)) {
-                
                 __block NSUInteger newMessagesAndNotesCount = 0;
                 
                 for (ZNGEventViewModel * eventViewModel in insertions) {

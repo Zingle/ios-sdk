@@ -11,7 +11,6 @@
 #import "ZNGContactClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGTableViewCell.h"
-#import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
@@ -21,6 +20,8 @@
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGAnalytics.h"
 #import "ZNGLabelGridView.h"
+#import "ZNGInboxDataSet.h"
+#import "ZNGContactDataSetBuilder.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -211,7 +212,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (ZNGInboxDataSet *) initialDataSet
 {
-    return [[ZNGInboxDataOpen alloc] initWithContactClient:self.session.contactClient];
+    return [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = self.session.contactClient;
+    }];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator

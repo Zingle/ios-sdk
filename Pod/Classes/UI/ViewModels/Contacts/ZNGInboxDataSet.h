@@ -9,24 +9,9 @@
 #import <Foundation/Foundation.h>
 @class ZNGContact;
 @class ZNGContactClient;
+@class ZNGContactDataSetBuilder;
 
-extern NSString * __nonnull const ParameterKeyPageIndex;
-extern NSString * __nonnull const ParameterKeyPageSize;
-extern NSString * __nonnull const ParameterKeySortField;
-extern NSString * __nonnull const ParameterKeySortDirection;
-extern NSString * __nonnull const ParameterKeyLastMessageCreatedAt;
-extern NSString * __nonnull const ParameterKeyIsConfirmed;
-extern NSString * __nonnull const ParameterKeyIsClosed;
-extern NSString * __nonnull const ParameterKeyLabelId;
-extern NSString * __nonnull const ParameterKeyQuery;
-extern NSString * __nonnull const ParameterKeyIsStarred;
-extern NSString * __nonnull const ParameterKeySearchMessageBodies;
-
-extern NSString * __nonnull const ParameterValueTrue;
-extern NSString * __nonnull const ParameterValueFalse;
-extern NSString * __nonnull const ParameterValueGreaterThanZero;
-extern NSString * __nonnull const ParameterValueDescending;
-extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
+NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Provides paginated data to be used by a UITableView.  Supports KVO on all properties.
@@ -35,6 +20,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  */
 @interface ZNGInboxDataSet : NSObject
 
+#pragma mark - Status and results
 /**
  *  Initially set to YES until the first set of paginated data arrives, allowing us to set the count value.
  */
@@ -58,21 +44,70 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  */
 @property (nonatomic, assign) NSUInteger pageSize;
 
+/**
+ *  A human-readable title for the current filter set.
+ */
+@property (nonatomic, readonly, nonnull) NSString * title;
 
 /**
  *  All contacts matching this filter that have been successfully fetched.
  */
 @property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGContact *> * contacts;
 
-@property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
+#pragma mark - Configuration properties
+/**
+ *  Readonly properties that determine the filtering done by this inbox data set.
+ *  These are set on initialization, usually by a ZNGInboxDataSetBuilder object.
+ */
 
 /**
- *  Designated initializer.
- *
- * @param theServiceId The service identifier string for the user's current service.
+ *  Closed or open conversations (can never be both simultaneously)
  */
-- (nonnull instancetype) initWithContactClient:(nonnull ZNGContactClient *)contactClient;
+@property (nonatomic, readonly) BOOL closed;
 
+/**
+ *  Show only unconfirmed contacts.  If this is not set, all contacts, both confirmed and unconfirmed, will be included.
+ */
+@property (nonatomic, readonly) BOOL unconfirmed;
+
+/**
+ *  If this flag is set, matching contacts will be returned even if there is no message history.
+ */
+@property (nonatomic, readonly) BOOL allowContactsWithNoMessages;
+
+/**
+ *  Array of label IDs used to filter contacts.
+ */
+@property (nonatomic, readonly, nullable) NSArray<NSString *> * labelIds;
+
+/**
+ *  Array of group IDs used to filter contacts.
+ */
+@property (nonatomic, readonly, nullable) NSArray<NSString *> * groupIds;
+
+/**
+ *  Search text.  searchMessageBodies determines whether this searches only contact fields or also message contents to/from that contact.
+ */
+@property (nonatomic, readonly, nullable) NSString * searchText;
+
+/**
+ *  Should searchText search message bodies to/from this contact in addition to contact fields?  Defaults to NO.
+ */
+@property (nonatomic, readonly) BOOL searchMessageBodies;
+
+#pragma mark -
+
+@property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
+
+#pragma mark - Initialization
+/**
+ *  Convenience constructor that provides a builder object and automatically calls build using it.
+ */
++ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder * builder))builderBlock;
+
+- (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder;
+
+#pragma mark - Actions
 /**
  *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loadingInitialData property.
  */
@@ -89,15 +124,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  */
 - (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail;
 
-/**
- *  Overridden by subclasses to effect filtering.
- *
- *  It is recommended that subclasses call [super parameters] to start building their own.
- *
- *  These default parameters include page size and sort order. 
- */
-- (nonnull NSMutableDictionary *) parameters;
-
+#pragma mark - Local contact filtering
 /**
  *  Notify this data set of a local change that has not yet propogated from the server.  If a call to contactBelongsInDataSet: for this contact returns NO, that contact
  *   will be excluded from this data set (until the next remote update.)
@@ -109,5 +136,7 @@ extern NSString * __nonnull const ParameterValueLastMessageCreatedAt;
  *   when a change is sent to the server.
  */
 - (BOOL) contactBelongsInDataSet:(nonnull ZNGContact *)contact;
+
+NS_ASSUME_NONNULL_END
 
 @end

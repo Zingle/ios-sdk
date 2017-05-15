@@ -10,6 +10,12 @@
 #import "ZingleSDK/ZNGInboxDataSet.h"
 #import "ZingleSDK/ZNGLabel.h"
 
+static NSString * const ParameterKeyPageIndex              = @"page";
+static NSString * const ParameterKeyPageSize               = @"page_size";
+static NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
+static NSString * const ParameterKeyIsClosed               = @"is_closed";
+static NSString * const ParameterKeyLabelId                = @"label_id";
+
 @implementation ZNGMockContactClient
 
 - (id) init

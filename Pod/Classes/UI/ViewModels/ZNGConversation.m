@@ -336,6 +336,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     NSString * updatedAtSort = [NSString stringWithFormat:@"%@ %@", kConversationUpdatedAt, kConversationSortDirectionDescending];
     NSString * idSort = [NSString stringWithFormat:@"%@ %@", kConversationId, kConversationSortDirectionDescending];
 
+    // TODO: Remove the top level sort_direction parameter below once the server actually starts respecting the per-field sort orders as specified above.
     NSMutableDictionary * params = [@{
                                      kConversationPageSize : @(pageSize),
                                      kConversationContactId : contactId,

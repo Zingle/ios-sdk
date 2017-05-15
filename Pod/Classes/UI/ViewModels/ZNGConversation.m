@@ -500,19 +500,19 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     [self markMessagesAsRead:allMessages];
 }
 
-- (void) removeAnyPendingMessages
+- (void) removeSendingEvents
 {
     NSMutableIndexSet * pendingIndexes = [[NSMutableIndexSet alloc] init];
     NSMutableIndexSet * pendingViewModelIndexes = [[NSMutableIndexSet alloc] init];
     
     [self.events enumerateObjectsUsingBlock:^(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (event.message.sending) {
+        if (event.sending) {
             [pendingIndexes addIndex:idx];
         }
     }];
     
     [self.eventViewModels enumerateObjectsUsingBlock:^(ZNGEventViewModel * _Nonnull viewModel, NSUInteger idx, BOOL * _Nonnull stop) {
-        if (viewModel.event.message.sending) {
+        if (viewModel.event.sending) {
             [pendingViewModelIndexes addIndex:idx];
         }
     }];
@@ -632,7 +632,6 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     BOOL outbound = [newMessage.recipientType isEqualToString:ZNGConversationParticipantTypeContact];
     
     ZNGMessage * message = [[ZNGMessage alloc] init];
-    message.sending = YES;
     message.body = newMessage.body;
     message.communicationDirection = outbound ? @"outbound" : @"inbound";
     message.senderType = outbound ? @"service" : @"contact";
@@ -695,7 +694,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
             [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-                [self removeAnyPendingMessages];
+                [self removeSendingEvents];
                 self.totalEventCount = status.totalRecords;
                 
                 // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
@@ -708,7 +707,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                     success(status);
                 }
             } failure:^(ZNGError *error) {
-                [self removeAnyPendingMessages];
+                [self removeSendingEvents];
                 ZNGLogError(@"Message send reported success, but we were unable to load event data afterwards.  This is odd.  %@", error);
                 self.loading = NO;
                 
@@ -718,7 +717,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             }];
         });
     } failure:^(ZNGError *error) {
-        [self removeAnyPendingMessages];
+        [self removeSendingEvents];
         self.loading = NO;
         
         if (failure != nil) {

@@ -330,12 +330,12 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 {
     NSArray<NSString *> * eventTypes = [self eventTypes];
     
+    // Note that sort order is set to descending so page 1 has most recent messages.  This data will then be reversed upon receipt.
     NSString * isDelayedSort = [NSString stringWithFormat:@"%@ %@", kConversationIsDelayed, kConversationSortDirectionDescending];
     NSString * executeAtSort = [NSString stringWithFormat:@"%@ %@", kConversationExecuteAt, kConversationSortDirectionDescending];
     NSString * updatedAtSort = [NSString stringWithFormat:@"%@ %@", kConversationUpdatedAt, kConversationSortDirectionDescending];
     NSString * idSort = [NSString stringWithFormat:@"%@ %@", kConversationId, kConversationSortDirectionDescending];
 
-    // Note that sort order is set to descending so page 1 has most recent messages.  This data will then be reversed upon receipt.
     NSMutableDictionary * params = [@{
                                      kConversationPageSize : @(pageSize),
                                      kConversationContactId : contactId,

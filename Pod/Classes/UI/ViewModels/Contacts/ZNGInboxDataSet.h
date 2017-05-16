@@ -103,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Convenience constructor that provides a builder object and automatically calls build using it.
  */
-+ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder * builder))builderBlock;
++ (nonnull instancetype) dataSetWithBlock:(__attribute__((noescape)) void (^ _Nonnull)(ZNGContactDataSetBuilder * builder))builderBlock;
 
 - (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder;
 

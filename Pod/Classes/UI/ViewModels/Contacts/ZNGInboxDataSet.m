@@ -125,7 +125,7 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     
     if (self.openStatus == ZNGInboxDataSetOpenStatusOpen) {
         parameters[ParameterKeyIsClosed] = ParameterValueFalse;
-    } else {
+    } else if (self.openStatus == ZNGInboxDataSetOpenStatusClosed) {
         parameters[ParameterKeyIsClosed] = ParameterValueTrue;
     } // else both, so no value for is_closed
     

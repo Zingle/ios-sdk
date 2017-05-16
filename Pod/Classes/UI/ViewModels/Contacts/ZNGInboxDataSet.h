@@ -11,6 +11,12 @@
 @class ZNGContactClient;
 @class ZNGContactDataSetBuilder;
 
+typedef enum {
+    ZNGInboxDataSetOpenStatusOpen = 0,
+    ZNGInboxDataSetOpenStatusClosed,
+    ZNGInboxDataSetOpenStatusBoth
+} ZNGInboxDataSetOpenStatus;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -61,9 +67,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 /**
- *  Closed or open conversations (can never be both simultaneously)
+ *  Whether to show contacts with open conversations only, closed only, or both.
  */
-@property (nonatomic, readonly) BOOL closed;
+@property (nonatomic, readonly) ZNGInboxDataSetOpenStatus openStatus;
 
 /**
  *  Show only unconfirmed contacts.  If this is not set, all contacts, both confirmed and unconfirmed, will be included.

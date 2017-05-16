@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZNGInboxDataSet.h"
 
 @class ZNGContactClient;
-@class ZNGInboxDataSet;
 
 @interface ZNGContactDataSetBuilder : NSObject
 
@@ -23,9 +23,9 @@
 @property (nonatomic, strong, nullable) ZNGInboxDataSet * baseDataSet;
 
 /**
- *  Closed or open conversations (can never be both simultaneously)
+ *  Whether to show contacts with open conversations only, closed only, or both.
  */
-@property (nonatomic, assign) BOOL closed;
+@property (nonatomic, assign) ZNGInboxDataSetOpenStatus openStatus;
 
 /**
  *  Show only unconfirmed contacts.  If this is not set, all contacts, both confirmed and unconfirmed, will be included.

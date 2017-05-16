@@ -72,7 +72,7 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     if (self != nil) {
         _contactClient = builder.contactClient;
         
-        _closed = builder.closed;
+        _openStatus = builder.openStatus;
         _unconfirmed = builder.unconfirmed;
         _labelIds = builder.labelIds;
         _groupIds = builder.groupIds;
@@ -122,7 +122,11 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     parameters[ParameterKeySortField] = ParameterValueLastMessageCreatedAt;
     parameters[ParameterKeySortDirection] = ParameterValueDescending;
     
-    parameters[ParameterKeyIsClosed] = self.closed ? ParameterValueTrue : ParameterValueFalse;
+    if (self.openStatus == ZNGInboxDataSetOpenStatusOpen) {
+        parameters[ParameterKeyIsClosed] = ParameterValueFalse;
+    } else {
+        parameters[ParameterKeyIsClosed] = ParameterValueTrue;
+    } // else both, so no value for is_closed
     
     if (self.unconfirmed) {
         parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
@@ -522,7 +526,11 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
 
 - (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
 {
-    if (contact.isClosed != self.closed) {
+    if ((self.openStatus == ZNGInboxDataSetOpenStatusOpen) && (contact.isClosed)) {
+        return NO;
+    }
+    
+    if ((self.openStatus == ZNGInboxDataSetOpenStatusClosed) && (!contact.isClosed)) {
         return NO;
     }
     

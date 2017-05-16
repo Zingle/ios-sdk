@@ -72,6 +72,7 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     if (self != nil) {
         _contactClient = builder.contactClient;
         
+        _allowContactsWithNoMessages = builder.allowContactsWithNoMessages;
         _openStatus = builder.openStatus;
         _unconfirmed = builder.unconfirmed;
         _labelIds = builder.labelIds;

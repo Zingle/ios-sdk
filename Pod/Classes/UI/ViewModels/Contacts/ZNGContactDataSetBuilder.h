@@ -38,6 +38,14 @@
 @property (nonatomic, assign) BOOL allowContactsWithNoMessages;
 
 /**
+ *  The fields used to sort contacts.  May include "asc" or "desc" after a space to define order.
+ *  e.g. "last_name asc", "created_at desc"
+ *
+ *  Defaults to ["last_message_created_at desc"]
+ */
+@property (nonatomic, copy, nullable) NSArray<NSString *> * sortFields;
+
+/**
  *  Array of label IDs used to filter contacts.
  */
 @property (nonatomic, copy, nullable) NSArray<NSString *> * labelIds;

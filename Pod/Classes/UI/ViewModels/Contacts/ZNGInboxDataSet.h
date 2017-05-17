@@ -17,6 +17,12 @@ typedef enum {
     ZNGInboxDataSetOpenStatusBoth
 } ZNGInboxDataSetOpenStatus;
 
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldContactCreatedAt;
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastMessageCreatedAt;
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastName;
+extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionAscending;
+extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionDescending;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -80,6 +86,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  If this flag is set, matching contacts will be returned even if there is no message history.
  */
 @property (nonatomic, readonly) BOOL allowContactsWithNoMessages;
+
+/**
+ *  The fields used to sort contacts.  May include "asc" or "desc" after a space to define order.
+ *  e.g. "last_name asc", "created_at desc"
+ *
+ *  Defaults to ["last_message_created_at desc"]
+ */
+@property (nonatomic, readonly, nonnull) NSArray<NSString *> * sortFields;
 
 /**
  *  Array of label IDs used to filter contacts.

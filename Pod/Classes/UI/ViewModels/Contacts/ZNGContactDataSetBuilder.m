@@ -27,6 +27,10 @@
     self.searchText = [baseDataSet.searchText copy];
     self.searchMessageBodies = baseDataSet.searchMessageBodies;
     
+    if ([baseDataSet.sortFields count] > 0) {
+        self.sortFields = baseDataSet.sortFields;
+    }
+    
     if (baseDataSet.contactClient != nil) {
         self.contactClient = baseDataSet.contactClient;
     }

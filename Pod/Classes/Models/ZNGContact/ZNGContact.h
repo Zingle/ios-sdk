@@ -78,6 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable ZNGChannel *)channelOfType:(ZNGChannelType *)type;
 
 - (nullable NSString *)fullName;
+- (nullable NSString *) initials;
 
 /**
  *  Returns YES if the contact has been changed since the old copy.

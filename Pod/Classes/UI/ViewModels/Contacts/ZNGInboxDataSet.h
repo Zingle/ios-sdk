@@ -11,6 +11,18 @@
 @class ZNGContactClient;
 @class ZNGContactDataSetBuilder;
 
+typedef enum {
+    ZNGInboxDataSetOpenStatusOpen = 0,
+    ZNGInboxDataSetOpenStatusClosed,
+    ZNGInboxDataSetOpenStatusBoth
+} ZNGInboxDataSetOpenStatus;
+
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldContactCreatedAt;
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastMessageCreatedAt;
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastName;
+extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionAscending;
+extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionDescending;
+
 NS_ASSUME_NONNULL_BEGIN
 
 /**
@@ -61,9 +73,9 @@ NS_ASSUME_NONNULL_BEGIN
  */
 
 /**
- *  Closed or open conversations (can never be both simultaneously)
+ *  Whether to show contacts with open conversations only, closed only, or both.
  */
-@property (nonatomic, readonly) BOOL closed;
+@property (nonatomic, readonly) ZNGInboxDataSetOpenStatus openStatus;
 
 /**
  *  Show only unconfirmed contacts.  If this is not set, all contacts, both confirmed and unconfirmed, will be included.
@@ -74,6 +86,14 @@ NS_ASSUME_NONNULL_BEGIN
  *  If this flag is set, matching contacts will be returned even if there is no message history.
  */
 @property (nonatomic, readonly) BOOL allowContactsWithNoMessages;
+
+/**
+ *  The fields used to sort contacts.  May include "asc" or "desc" after a space to define order.
+ *  e.g. "last_name asc", "created_at desc"
+ *
+ *  Defaults to ["last_message_created_at desc"]
+ */
+@property (nonatomic, readonly, nonnull) NSArray<NSString *> * sortFields;
 
 /**
  *  Array of label IDs used to filter contacts.
@@ -103,7 +123,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Convenience constructor that provides a builder object and automatically calls build using it.
  */
-+ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder * builder))builderBlock;
++ (nonnull instancetype) dataSetWithBlock:(__attribute__((noescape)) void (^ _Nonnull)(ZNGContactDataSetBuilder * builder))builderBlock;
 
 - (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder;
 

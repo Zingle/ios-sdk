@@ -18,21 +18,22 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 static NSString * const ParameterKeyPageIndex              = @"page";
 static NSString * const ParameterKeyPageSize               = @"page_size";
-static NSString * const ParameterKeySortField              = @"sort_field";
-static NSString * const ParameterKeySortDirection          = @"sort_direction";
+static NSString * const ParameterKeySortFields              = @"sort_fields";
 static NSString * const ParameterKeyLastMessageCreatedAt   = @"last_message_created_at";
 static NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
 static NSString * const ParameterKeyIsClosed               = @"is_closed";
 static NSString * const ParameterKeyLabelId                = @"label_id";
 static NSString * const ParameterKeyQuery                  = @"query";
 static NSString * const ParameterKeySearchMessageBodies    = @"search_message_bodies";
-
-
 static NSString * const ParameterValueTrue                 = @"true";
 static NSString * const ParameterValueFalse                = @"false";
 static NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
-static NSString * const ParameterValueDescending           = @"desc";
-static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
+
+NSString * const ZNGInboxDataSetSortFieldContactCreatedAt = @"created_at";
+NSString * const ZNGInboxDataSetSortFieldLastMessageCreatedAt = @"last_message_created_at";
+NSString * const ZNGInboxDataSetSortFieldLastName = @"last_name";
+NSString * const ZNGInboxDataSetSortDirectionAscending = @"asc";
+NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 
 // Readonly property re-declarations to ensure that they are properly backed with KVO compliant setters.
 @interface ZNGInboxDataSet ()
@@ -63,21 +64,37 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
     return [builder build];
 }
 
+- (nonnull instancetype) init
+{
+    self = [super init];
+    
+    if (self != nil) {
+        _sortFields = @[[NSString stringWithFormat:@"%@ %@", ZNGInboxDataSetSortFieldLastMessageCreatedAt, ZNGInboxDataSetSortDirectionDescending]];
+    }
+    
+    return self;
+}
+
 - (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder
 {
     NSParameterAssert(builder.contactClient);
     
-    self = [super init];
+    self = [self init];
     
     if (self != nil) {
         _contactClient = builder.contactClient;
         
-        _closed = builder.closed;
+        _allowContactsWithNoMessages = builder.allowContactsWithNoMessages;
+        _openStatus = builder.openStatus;
         _unconfirmed = builder.unconfirmed;
         _labelIds = builder.labelIds;
         _groupIds = builder.groupIds;
         _searchText = builder.searchText;
         _searchMessageBodies = builder.searchMessageBodies;
+        
+        if ([builder.sortFields count] > 0) {
+            _sortFields = builder.sortFields;
+        }
         
         fetchQueue = [[NSOperationQueue alloc] init];
         fetchQueue.name = @"Zingle Inbox fetching";
@@ -119,10 +136,14 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
 {
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
     parameters[ParameterKeyPageSize] = @(self.pageSize);
-    parameters[ParameterKeySortField] = ParameterValueLastMessageCreatedAt;
-    parameters[ParameterKeySortDirection] = ParameterValueDescending;
     
-    parameters[ParameterKeyIsClosed] = self.closed ? ParameterValueTrue : ParameterValueFalse;
+    parameters[ParameterKeySortFields] = self.sortFields;
+    
+    if (self.openStatus == ZNGInboxDataSetOpenStatusOpen) {
+        parameters[ParameterKeyIsClosed] = ParameterValueFalse;
+    } else if (self.openStatus == ZNGInboxDataSetOpenStatusClosed) {
+        parameters[ParameterKeyIsClosed] = ParameterValueTrue;
+    } // else both, so no value for is_closed
     
     if (self.unconfirmed) {
         parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
@@ -522,7 +543,11 @@ static NSString * const ParameterValueLastMessageCreatedAt = @"last_message_crea
 
 - (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
 {
-    if (contact.isClosed != self.closed) {
+    if ((self.openStatus == ZNGInboxDataSetOpenStatusOpen) && (contact.isClosed)) {
+        return NO;
+    }
+    
+    if ((self.openStatus == ZNGInboxDataSetOpenStatusClosed) && (!contact.isClosed)) {
         return NO;
     }
     

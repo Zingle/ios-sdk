@@ -31,14 +31,16 @@
         CGContextSetFillColorWithColor(context, [backgroundColor CGColor]);
         CGContextFillEllipseInRect(context, rect);
         
-        NSDictionary * textAttributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName : textColor };
-        CGSize initialsSize = [initials sizeWithAttributes:textAttributes];
-        
-        CGFloat heightDifference = rect.size.height - initialsSize.height;
-        CGFloat widthDifference = rect.size.width - initialsSize.width;
-        CGRect initialsRect = CGRectMake(widthDifference * 0.5, heightDifference * 0.5, rect.size.width - widthDifference, rect.size.height - heightDifference);
-        
-        [initials drawInRect:initialsRect withAttributes:textAttributes];
+        if ([initials length] > 0) {
+            NSDictionary * textAttributes = @{ NSFontAttributeName: font, NSForegroundColorAttributeName : textColor };
+            CGSize initialsSize = [initials sizeWithAttributes:textAttributes];
+            
+            CGFloat heightDifference = rect.size.height - initialsSize.height;
+            CGFloat widthDifference = rect.size.width - initialsSize.width;
+            CGRect initialsRect = CGRectMake(widthDifference * 0.5, heightDifference * 0.5, rect.size.width - widthDifference, rect.size.height - heightDifference);
+            
+            [initials drawInRect:initialsRect withAttributes:textAttributes];
+        }
         
         image = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

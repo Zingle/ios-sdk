@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype) new NS_UNAVAILABLE;
 - (id) init NS_UNAVAILABLE;
 
-- (id) initWithInitials:(NSString *)initials textColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor size:(CGSize)size font:(UIFont *)font;
+- (id) initWithInitials:(nullable NSString *)initials textColor:(UIColor *)textColor backgroundColor:(UIColor *)backgroundColor size:(CGSize)size font:(UIFont *)font;
 
-@property (nonatomic, readonly) NSString * initials;
+@property (nonatomic, readonly, nullable) NSString * initials;
 @property (nonatomic, readonly) UIColor * textColor;
 @property (nonatomic, readonly) UIColor * backgroundColor;
 @property (nonatomic, readonly) CGSize size;

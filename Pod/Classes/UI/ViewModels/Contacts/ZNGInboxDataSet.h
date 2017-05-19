@@ -54,7 +54,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Page size!
  */
-@property (nonatomic, assign) NSUInteger pageSize;
+@property (nonatomic, readonly) NSUInteger pageSize;
 
 /**
  *  A human-readable title for the current filter set.

@@ -20,6 +20,7 @@
 {
     _baseDataSet = baseDataSet;
     
+    self.pageSize = baseDataSet.pageSize;
     self.openStatus = baseDataSet.openStatus;
     self.unconfirmed = baseDataSet.unconfirmed;
     self.labelIds = [baseDataSet.labelIds copy];

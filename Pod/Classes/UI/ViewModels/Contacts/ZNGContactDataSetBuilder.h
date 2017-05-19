@@ -23,6 +23,11 @@
 @property (nonatomic, strong, nullable) ZNGInboxDataSet * baseDataSet;
 
 /**
+ *  How many contacts to load in each query.  Defaults to 25.
+ */
+@property (nonatomic, assign) NSUInteger pageSize;
+
+/**
  *  Whether to show contacts with open conversations only, closed only, or both.
  */
 @property (nonatomic, assign) ZNGInboxDataSetOpenStatus openStatus;

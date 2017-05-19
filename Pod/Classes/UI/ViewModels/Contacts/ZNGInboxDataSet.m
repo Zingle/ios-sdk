@@ -84,6 +84,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if (self != nil) {
         _contactClient = builder.contactClient;
         
+        _pageSize = builder.pageSize;
         _allowContactsWithNoMessages = builder.allowContactsWithNoMessages;
         _openStatus = builder.openStatus;
         _unconfirmed = builder.unconfirmed;
@@ -96,12 +97,15 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             _sortFields = builder.sortFields;
         }
         
+        if (_pageSize == 0) {
+            _pageSize = 25;
+        }
+        
         fetchQueue = [[NSOperationQueue alloc] init];
         fetchQueue.name = @"Zingle Inbox fetching";
         fetchQueue.maxConcurrentOperationCount = 1;
         
         _contacts = [[NSOrderedSet alloc] init];
-        _pageSize = 25;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
     }

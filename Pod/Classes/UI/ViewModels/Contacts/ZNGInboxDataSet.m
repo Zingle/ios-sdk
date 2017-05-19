@@ -172,7 +172,10 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     }
     
     if ([self.searchText length] > 0) {
-        parameters[ParameterKeySearchMessageBodies] = self.searchMessageBodies ? ParameterValueTrue : ParameterValueFalse;
+        if (self.searchMessageBodies) {
+           parameters[ParameterKeySearchMessageBodies] = ParameterValueTrue;
+        }
+        
         parameters[ParameterKeyQuery] = [self.searchText copy];
     }
 

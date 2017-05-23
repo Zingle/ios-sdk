@@ -15,6 +15,7 @@
 @class ZNGMessage;
 @class ZNGEvent;
 @class ZNGEventViewModel;
+@class FBShimmeringView;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -39,6 +40,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) IBOutlet UILabel * moreMessagesLabel;
 @property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * moreMessagesViewOnScreenConstraint;
 @property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * moreMessagesViewOffScreenConstraint;
+
+@property (nonatomic, strong, nullable) IBOutlet FBShimmeringView * skeletonView;
+@property (nonatomic, strong, nullable) IBOutlet UIView * skeletonContentView;
+@property (nonatomic, strong, nullable) IBOutletCollection(UIView) NSArray<UIView *> * skeletonCircles;
+@property (nonatomic, strong, nullable) IBOutletCollection(UIView) NSArray<UIView *> * skeletonRectangles;
 
 /**
  * OPTIONAL UI SETTINGS
@@ -123,6 +129,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  Defaults to 0.0
  */
 @property (nonatomic) CGFloat additionalBottomInset;
+
+/**
+ *  Whether a shimmering skeleton view when conversation data is loading.
+ * 
+ *  Defaults to YES
+ */
+@property (nonatomic, assign) BOOL showSkeletonViewWhenLoading;
 
 /**
  *  Sets whether or not the messages should be automatically marked as read.

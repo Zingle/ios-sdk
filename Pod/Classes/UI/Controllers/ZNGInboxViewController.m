@@ -30,7 +30,7 @@ static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadin
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loading";
 static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
-@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ZNGInboxViewController ()
 
 @end
 

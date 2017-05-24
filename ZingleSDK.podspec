@@ -35,4 +35,5 @@ Pod::Spec.new do |s|
   s.dependency 'MGSwipeTableCell'
   s.dependency 'SDWebImage'
   s.dependency 'Socket.IO-Client-Swift'
+  s.dependency 'Shimmer'
 end

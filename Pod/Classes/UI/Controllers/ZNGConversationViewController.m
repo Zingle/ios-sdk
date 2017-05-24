@@ -28,6 +28,7 @@
 #import "ZNGEventViewModel.h"
 #import "UIImage+animatedGIF.h"
 @import Photos;
+@import Shimmer;
 
 
 static const int zngLogLevel = ZNGLogLevelDebug;
@@ -48,6 +49,7 @@ static const uint64_t PollingIntervalSeconds = 30;
 
 static NSString * const EventsKVOPath = @"conversation.eventViewModels";
 static NSString * const LoadingKVOPath = @"conversation.loading";
+static NSString * const LoadedInitialDataKVOPath = @"conversation.loadedInitialData";
 static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface JSQMessagesViewController ()
@@ -168,6 +170,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _authorTextColor = [UIColor lightGrayColor];
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
+    _showSkeletonViewWhenLoading = YES;
     
     offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
@@ -176,6 +179,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
+    [self addObserver:self forKeyPath:LoadedInitialDataKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
 }
 
@@ -197,6 +201,30 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     timeFormatter.timeStyle = NSDateFormatterShortStyle;
     
     self.automaticallyScrollsToMostRecentMessage = NO;
+    
+    for (UIView * view in self.skeletonCircles) {
+        view.layer.cornerRadius = view.layer.frame.size.width / 2.0;
+        view.layer.masksToBounds = YES;
+    }
+    
+    for (UIView * view in self.skeletonRectangles) {
+        view.layer.cornerRadius = view.layer.frame.size.height / 2.0;
+        view.layer.masksToBounds = YES;
+    }
+    
+    self.skeletonView.hidden = YES;
+    self.skeletonView.contentView = self.skeletonContentView;
+    self.skeletonView.shimmeringSpeed = 300;
+    self.skeletonView.shimmeringPauseDuration = 0.15;
+    
+    if (self.showSkeletonViewWhenLoading) {
+        // A slight delay before showing the skeleton view allows auto layout to jiggle around while it comes to terms
+        //  with its existence within a navigation controller.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.skeletonView.shimmering = YES;
+            self.skeletonView.hidden = self.conversation.loadedInitialData;
+        });
+    }
     
     self.inputToolbar.contentView.textView.font = self.textInputFont;
     self.inputToolbar.sendButtonColor = self.sendButtonColor;
@@ -306,6 +334,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.conversation.automaticallyRefreshesOnPushNotification = NO;
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self removeObserver:self forKeyPath:LoadedInitialDataKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];
     
@@ -338,6 +367,19 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     _textInputFont = textInputFont;
     self.inputToolbar.contentView.textView.font = textInputFont;
+}
+
+- (void) setShowSkeletonViewWhenLoading:(BOOL)showSkeletonViewWhenLoading
+{
+    _showSkeletonViewWhenLoading = showSkeletonViewWhenLoading;
+    
+    self.skeletonView.shimmering = showSkeletonViewWhenLoading;
+    
+    if (!showSkeletonViewWhenLoading) {
+        self.skeletonView.hidden = YES;
+    } else {
+        self.skeletonView.hidden = self.conversation.loadedInitialData;
+    }
 }
 
 - (void) updateUUID
@@ -538,6 +580,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             [loadingGradient startAnimating];
         } else if ((wasLoading) && (!isLoading)) {
             [loadingGradient stopAnimating];
+        }
+    } else if ([keyPath isEqualToString:LoadedInitialDataKVOPath]) {
+        if (self.showSkeletonViewWhenLoading) {
+            self.skeletonView.hidden = self.conversation.loadedInitialData;
         }
     }
 }

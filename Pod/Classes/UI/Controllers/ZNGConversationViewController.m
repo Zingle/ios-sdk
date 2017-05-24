@@ -183,6 +183,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     [super viewDidLoad];
     
+    self.outgoingCellIdentifier = [ZNGConversationCellOutgoing cellReuseIdentifier];
+    self.incomingCellIdentifier = [ZNGConversationCellIncoming cellReuseIdentifier];
+    self.outgoingMediaCellIdentifier = [ZNGConversationCellOutgoing mediaCellReuseIdentifier];
+    self.incomingMediaCellIdentifier = [ZNGConversationCellIncoming mediaCellReuseIdentifier];
+    
     [self setupLoadingGradient];
     
     [self updateUUID];
@@ -196,11 +201,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.contentView.textView.font = self.textInputFont;
     self.inputToolbar.sendButtonColor = self.sendButtonColor;
     self.inputToolbar.sendButtonFont = self.sendButtonFont;
-    
-    self.outgoingCellIdentifier = [ZNGConversationCellOutgoing cellReuseIdentifier];
-    self.incomingCellIdentifier = [ZNGConversationCellIncoming cellReuseIdentifier];
-    self.outgoingMediaCellIdentifier = [ZNGConversationCellOutgoing mediaCellReuseIdentifier];
-    self.incomingMediaCellIdentifier = [ZNGConversationCellIncoming mediaCellReuseIdentifier];
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;

@@ -212,15 +212,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         view.layer.masksToBounds = YES;
     }
     
+    self.skeletonView.hidden = YES;
     self.skeletonView.contentView = self.skeletonContentView;
     self.skeletonView.shimmeringSpeed = 300;
     self.skeletonView.shimmeringPauseDuration = 0.15;
     
     if (self.showSkeletonViewWhenLoading) {
-        self.skeletonView.shimmering = YES;
-        self.skeletonView.hidden = self.conversation.loadedInitialData;
-    } else {
-        self.skeletonView.hidden = YES;
+        // A slight delay before showing the skeleton view allows auto layout to jiggle around while it comes to terms
+        //  with its existence within a navigation controller.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.skeletonView.shimmering = YES;
+            self.skeletonView.hidden = self.conversation.loadedInitialData;
+        });
     }
     
     self.inputToolbar.contentView.textView.font = self.textInputFont;

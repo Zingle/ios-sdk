@@ -192,6 +192,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.outgoingMediaCellIdentifier = [ZNGConversationCellOutgoing mediaCellReuseIdentifier];
     self.incomingMediaCellIdentifier = [ZNGConversationCellIncoming mediaCellReuseIdentifier];
     
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    UINib * headerNib = [UINib nibWithNibName:@"ZNGConversationHeader" bundle:bundle];
+    [self.collectionView registerNib:headerNib forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header"];
+    
     [self setupLoadingGradient];
     
     [self updateUUID];
@@ -236,9 +240,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     self.collectionView.collectionViewLayout.messageBubbleFont = self.messageFont;
     
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
-    UINib * nib = [UINib nibWithNibName:NSStringFromClass([ZNGEventCollectionViewCell class]) bundle:bundle];
-    [self.collectionView registerNib:nib forCellWithReuseIdentifier:EventCellIdentifier];
+    UINib * eventNib = [UINib nibWithNibName:NSStringFromClass([ZNGEventCollectionViewCell class]) bundle:bundle];
+    [self.collectionView registerNib:eventNib forCellWithReuseIdentifier:EventCellIdentifier];
     
     [self setupBarButtonItems];
     
@@ -1311,6 +1314,32 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 #pragma mark - JSQMessagesViewController collection view shenanigans
+
+- (CGSize) collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section
+{
+    // Should we show "This is the start of the conversation?"
+    
+    // If no data is yet loaded, no
+    if (!self.conversation.loadedInitialData) {
+        return CGSizeZero;
+    }
+    
+    // If we are showing the first page of data, yes
+    if ([self.conversation.events count] >= self.conversation.totalEventCount) {
+        return CGSizeMake(collectionView.bounds.size.width, 43.0);
+    }
+    
+    return CGSizeZero;
+}
+
+- (UICollectionReusableView *) collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if (![kind isEqualToString:UICollectionElementKindSectionHeader]) {
+        return [super collectionView:collectionView viewForSupplementaryElementOfKind:kind atIndexPath:indexPath];
+    }
+    
+    return [self.collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"header" forIndexPath:indexPath];
+}
 
 - (BOOL)collectionView:(JSQMessagesCollectionView *)collectionView shouldShowMenuForItemAtIndexPath:(NSIndexPath *)indexPath
 {

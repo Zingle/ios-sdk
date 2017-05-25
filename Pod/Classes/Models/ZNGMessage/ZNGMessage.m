@@ -7,7 +7,6 @@
 //
 
 #import "ZNGMessage.h"
-#import "ZNGLogging.h"
 #import "ZingleValueTransformers.h"
 #import "JSQPhotoMediaItem.h"
 #import "JSQMessagesMediaPlaceholderView.h"
@@ -17,8 +16,6 @@
 #import "ZNGPlaceholderImageAttachment.h"
 #import <ImageIO/ImageIO.h>
 #import "UIImage+animatedGIF.h"
-
-static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGMessage
 {

@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZNGInboxDataSet.h"
 
 @class ZNGContactClient;
-@class ZNGInboxDataSet;
 
 @interface ZNGContactDataSetBuilder : NSObject
 
@@ -23,9 +23,14 @@
 @property (nonatomic, strong, nullable) ZNGInboxDataSet * baseDataSet;
 
 /**
- *  Closed or open conversations (can never be both simultaneously)
+ *  How many contacts to load in each query.  Defaults to 25.
  */
-@property (nonatomic, assign) BOOL closed;
+@property (nonatomic, assign) NSUInteger pageSize;
+
+/**
+ *  Whether to show contacts with open conversations only, closed only, or both.
+ */
+@property (nonatomic, assign) ZNGInboxDataSetOpenStatus openStatus;
 
 /**
  *  Show only unconfirmed contacts.  If this is not set, all contacts, both confirmed and unconfirmed, will be included.
@@ -36,6 +41,14 @@
  *  If this flag is set, matching contacts will be returned even if there is no message history.
  */
 @property (nonatomic, assign) BOOL allowContactsWithNoMessages;
+
+/**
+ *  The fields used to sort contacts.  May include "asc" or "desc" after a space to define order.
+ *  e.g. "last_name asc", "created_at desc"
+ *
+ *  Defaults to ["last_message_created_at desc"]
+ */
+@property (nonatomic, copy, nullable) NSArray<NSString *> * sortFields;
 
 /**
  *  Array of label IDs used to filter contacts.

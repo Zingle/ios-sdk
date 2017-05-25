@@ -20,12 +20,17 @@
 {
     _baseDataSet = baseDataSet;
     
-    self.closed = baseDataSet.closed;
+    self.pageSize = baseDataSet.pageSize;
+    self.openStatus = baseDataSet.openStatus;
     self.unconfirmed = baseDataSet.unconfirmed;
     self.labelIds = [baseDataSet.labelIds copy];
     self.groupIds = [baseDataSet.groupIds copy];
     self.searchText = [baseDataSet.searchText copy];
     self.searchMessageBodies = baseDataSet.searchMessageBodies;
+    
+    if ([baseDataSet.sortFields count] > 0) {
+        self.sortFields = baseDataSet.sortFields;
+    }
     
     if (baseDataSet.contactClient != nil) {
         self.contactClient = baseDataSet.contactClient;

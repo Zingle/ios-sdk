@@ -45,7 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) UIFont * font;
 @property (nonatomic, readonly) UIImage * placeholderImage;
 
-- (id) initWithAvatarUrl:(NSURL * _Nullable)avatarUrl initials:(NSString *)initials size:(CGSize)size backgroundColor:(UIColor * _Nullable)backgroundColor textColor:(UIColor *)textColor font:(UIFont *)font;
+- (id) initWithAvatarUrl:(NSURL * _Nullable)avatarUrl initials:(NSString * _Nullable)initials size:(CGSize)size backgroundColor:(UIColor * _Nullable)backgroundColor textColor:(UIColor *)textColor font:(UIFont *)font;
 
 /**
  *  Can be overridden by subclasses to move the edit icon from its default position of lower right.

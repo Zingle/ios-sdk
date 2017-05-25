@@ -30,7 +30,7 @@ static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadin
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loading";
 static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
-@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ZNGInboxViewController ()
 
 @end
 
@@ -129,8 +129,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.tableView.hidden = YES;
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGInboxViewController class]];
     unconfirmedImage = [UIImage imageNamed:@"unconfirmedCircle" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -305,15 +303,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
         if ((!self.data.loading) && (refreshControl.isRefreshing)) {
             [refreshControl endRefreshing];
-        }
-    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingInitialDataPath]) {
-        if (self.data.loadingInitialData) {
-            self.tableView.hidden = YES;
-            [self showActivityIndicator];
-        } else {
-            // We just finished loading
-            [self hideActivityIndicator];
-            self.tableView.hidden = NO;
         }
     } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
         [self handleContactsUpdateWithChangeDictionary:change];

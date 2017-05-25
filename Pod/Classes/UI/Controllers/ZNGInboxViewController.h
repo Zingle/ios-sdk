@@ -28,7 +28,7 @@
 
 @end
 
-@interface ZNGInboxViewController : UIViewController <MGSwipeTableCellDelegate>
+@interface ZNGInboxViewController : UIViewController <MGSwipeTableCellDelegate, UITableViewDataSource, UITableViewDelegate>
 
 + (nonnull instancetype)inboxViewController;
 

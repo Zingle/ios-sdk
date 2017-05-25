@@ -90,8 +90,8 @@
     
     ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
         builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
     }];
-    data.pageSize = pageSize;
     [data refresh];
     
     NSArray<ZNGContact *> * expectedFirstPage = [hundredsOfDudes subarrayWithRange:NSMakeRange(0, pageSize)];
@@ -136,8 +136,8 @@
     contactClient.contacts = oneHundredDudes;
     ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
         builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
     }];
-    data.pageSize = pageSize;
     [data refresh];
     
     // Ensure he is indeed unconfirmed
@@ -196,8 +196,8 @@
     ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
         builder.contactClient = contactClient;
         builder.unconfirmed = YES;
+        builder.pageSize = pageSize;
     }];
-    data.pageSize = pageSize;
     [data refresh];
 
     
@@ -250,8 +250,8 @@
     ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
         builder.contactClient = contactClient;
         builder.unconfirmed = YES;
+        builder.pageSize = pageSize;
     }];
-    data.pageSize = pageSize;
     [data refresh];
     
     
@@ -309,8 +309,8 @@
     contactClient.contacts = twoDudes;
     ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
         builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
     }];
-    data.pageSize = pageSize;
     [data refresh];
     
     

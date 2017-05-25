@@ -16,6 +16,7 @@
 #import "ZNGNewChannel.h"
 #import "ZNGAnalytics.h"
 #import "ZNGFieldOption.h"
+#import "NSString+Initials.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -309,6 +310,19 @@ static NSString * const ParameterNameClosed = @"is_closed";
         }
         return [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
+}
+
+- (NSString *) initials
+{
+    NSString * firstName = [[self firstNameFieldValue] value] ?: @"";
+    NSString * lastName = [[self lastNameFieldValue] value] ?: @"";
+    NSString * name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([name length] == 0) {
+        return nil;
+    }
+    
+    return [name initials];
 }
 
 - (NSArray<ZNGChannel *> *) channelsWithValues

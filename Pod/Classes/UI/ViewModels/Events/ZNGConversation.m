@@ -176,6 +176,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     
     [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
         
+        if (!self.loadedInitialData) {
+            self.loadedInitialData = YES;
+        }
+        
         self.totalEventCount = status.totalRecords;
         
         // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order

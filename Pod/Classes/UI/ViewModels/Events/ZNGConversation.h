@@ -53,6 +53,12 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 @property (nonatomic) BOOL loading;
 
 /**
+ *  Flag that is set to YES once some data has been received from the server.
+ *  This can be used to determine whether to display a skeleton view or other initial loading display.
+ */
+@property (nonatomic, assign) BOOL loadedInitialData;
+
+/**
  *  How many events to load in initial data and in each subsequent call to loadOlderData.  Defaults to 100.
  */
 @property (nonatomic) NSUInteger pageSize;

@@ -48,6 +48,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (BOOL) exactImageSizeCalculated
 {
+    if (self.attachmentName == nil) {
+        return NO;
+    }
+    
     return !CGSizeEqualToSize([[ZNGImageSizeCache sharedCache] sizeForImageWithPath:[self attachmentName]], CGSizeZero);
 }
 

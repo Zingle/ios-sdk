@@ -1437,14 +1437,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // Is there an image here?
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
-    UIImage * image = viewModel.event.message.imageAttachmentsByName[viewModel.attachmentName];
+    NSString * attachmentName = [viewModel attachmentName];
     
-    if (image == nil) {
+    if ([attachmentName length] == 0) {
         return;
     }
     
+    NSURL * attachmentURL = [NSURL URLWithString:attachmentName];
+    
     ZNGImageViewController * imageView = [[ZNGImageViewController alloc] init];
-    imageView.image = image;
+    imageView.imageURL = attachmentURL;
     imageView.navigationItem.title = self.navigationItem.title;
     
     // Prevent JSQMessagesViewController from being an absolute ass and scrolling to the bottom when we come back.

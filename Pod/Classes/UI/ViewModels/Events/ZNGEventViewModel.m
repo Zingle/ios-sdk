@@ -148,6 +148,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSURL * attachmentURL = [NSURL URLWithString:[self attachmentName]];
     
     FLAnimatedImageView * animatedImageView = [[FLAnimatedImageView alloc] init];
+    animatedImageView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
+    animatedImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
     imageView = animatedImageView;
     
     // Set content mode to center so our placeholder image is centered instead of stretched.  Content mode will be reset when the image loads.

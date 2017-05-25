@@ -8,11 +8,17 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGEvent.h"
 #import "ZNGImageSizeCache.h"
-#import "ZNGLogging.h"
+#import "ZNGLogging.h" 
+
+@import SDWebImage;
+@import FLAnimatedImage;
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGEventViewModel
+{
+    UIImageView * imageView;
+}
 
 - (id) initWithEvent:(ZNGEvent *)event index:(NSUInteger)index
 {
@@ -111,28 +117,45 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (UIView *)mediaView
 {
-    // Has our image loaded?
-    UIImage * image = self.event.message.imageAttachmentsByName[[self attachmentName]];
-    
-    // Outgoing image?
-    if ((image == nil) && ([self.event.message.outgoingImageAttachments count] > self.index)) {
-        image = self.event.message.outgoingImageAttachments[self.index];
+    if (([[self attachmentName] length] == 0) && ([self.event.message.outgoingImageAttachments count] == 0)) {
+        return nil;
     }
- 
-    if (image != nil) {
-        UIImageView * imageView = [[UIImageView alloc] initWithImage:image];
-        
-        // Really we want aspect fit, but there are often some very small sizing mistakes when it comes to the interaction between the image sizing and the
-        //  collection view layout calculations.  Since we are adding a rounded corner mask to the image view anyway, it's OK if we slightly crop the edges here.
-        imageView.contentMode = UIViewContentModeScaleAspectFill;
-        
-        ZNGLogVerbose(@"%@-%llu created and returned image view", self.event.eventId, (unsigned long long)self.index);
+    
+    if (imageView != nil) {
         return imageView;
     }
     
-    // No media yet
-    ZNGLogVerbose(@"%@-%llu has no image yet available.  Returning nil for media view.", self.event.eventId, (unsigned long long)self.index);
-    return nil;
+    // If this is an outgoing image, we will return a normal UIImageView containing it.
+    if ([self.event.message.outgoingImageAttachments count] > self.index) {
+        UIImage * image = self.event.message.outgoingImageAttachments[self.index];
+        imageView = [[UIImageView alloc] initWithImage:image];
+        return imageView;
+    }
+    
+    // This is a normal image attachment.  We will set its URL via SDWebImage and plop a placeholder in place.
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
+    UIImage * placeholderIcon = [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    NSURL * attachmentURL = [NSURL URLWithString:[self attachmentName]];
+    
+    FLAnimatedImageView * animatedImageView = [[FLAnimatedImageView alloc] init];
+    imageView = animatedImageView;
+    
+    // Set content mode to center so our placeholder image is centered instead of stretched.  Content mode will be reset when the image loads.
+    animatedImageView.contentMode = UIViewContentModeCenter;
+    
+    // Gogogo
+    [animatedImageView sd_setImageWithURL:attachmentURL placeholderImage:placeholderIcon completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (image != nil) {
+            // Set the content mode back to fill
+            animatedImageView.contentMode = UIViewContentModeScaleAspectFill;
+            
+            // Save the image size to cache
+            [[ZNGImageSizeCache sharedCache] setSize:image.size forImageWithPath:[self attachmentName]];
+        }
+    }];
+    
+    return animatedImageView;
 }
 
 /**
@@ -142,21 +165,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
  */
 - (CGSize)mediaViewDisplaySize
 {
-    CGSize size = CGSizeZero;
-    NSString * attachmentName = [self attachmentName];
-    UIImage * image;
-    
-    if (self.index < [self.event.message.outgoingImageAttachments count]) {
-        image = self.event.message.outgoingImageAttachments[self.index];
-    } else {
-        image = self.event.message.imageAttachmentsByName[attachmentName];
-    }
-    
-    if (image != nil) {
-        size = image.size;
-    } else {
-        size = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:attachmentName];
-    }
+    CGSize size = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:[self attachmentName]];
     
     if ((size.height == 0.0) || (size.width == 0.0)) {
         size = [self maximumImageDisplaySize];
@@ -177,26 +186,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (UIView *)mediaPlaceholderView
 {
-    CGSize imageSize = [self mediaViewDisplaySize];
-    UIView * placeholderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, imageSize.width, imageSize.height)];
-    placeholderView.translatesAutoresizingMaskIntoConstraints = NO;
-    placeholderView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
-    
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
-    UIImage * placeholderIcon = [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
-    UIImageView * placeholderIconImageView = [[UIImageView alloc] initWithImage:placeholderIcon];
-    placeholderIconImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    placeholderIconImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
-    
-    [placeholderView addSubview:placeholderIconImageView];
-    
-    NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:placeholderIconImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:placeholderView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-    NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:placeholderIconImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:placeholderView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-    
-    [placeholderView addConstraints:@[centerX, centerY]];
-    ZNGLogVerbose(@"%@-%llu creating and returning media placeholder view", self.event.eventId, (unsigned long long)self.index);
-    
-    return placeholderView;
+    return nil;
 }
 
 - (NSUInteger)mediaHash

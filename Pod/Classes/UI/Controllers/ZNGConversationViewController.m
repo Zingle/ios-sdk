@@ -180,7 +180,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadedInitialDataKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyMediaMessageMediaDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
 }
 
 - (void)viewDidLoad
@@ -336,7 +335,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     self.conversation.automaticallyRefreshesOnPushNotification = NO;
     
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self removeObserver:self forKeyPath:LoadedInitialDataKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];
@@ -710,45 +708,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         [self.collectionView insertItemsAtIndexPaths:indexes];
         pendingInsertionCount = 0;
     }];
-}
-
-- (void) notifyMediaMessageMediaDownloaded:(NSNotification *)notification
-{
-    ZNGMessage * message = notification.object;
-    NSArray<NSIndexPath *> * indexPaths = [self indexPathsForEventWithId:message.messageId];
-    NSIndexPath * indexPath = [indexPaths firstObject];
-    
-    if (indexPath == nil) {
-        // This message is not in our conversation
-        return;
-    }
-    
-    ZNGLogDebug(@"Reloading message %@ due to an image load", message.messageId);
-    
-    NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
-    NSIndexPath * topPath = [visibleIndexPaths lastObject];
-    NSComparisonResult comparison = [topPath compare:indexPath];
-    
-    if (comparison == NSOrderedDescending) {
-        // The cell we are refreshing is above our current screen.  We need to keep our bottom offset.
-        [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
-            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
-        }];
-    } else {
-        // The cell we are refreshing is below or on screen.  Do not scroll.
-        if ((!caTransactionToDisableAnimationsPushed) && (self.collectionView != nil)) {
-            [CATransaction begin];
-            [CATransaction setDisableActions:YES];
-            caTransactionToDisableAnimationsPushed = YES;
-        }
-
-        [self.collectionView performBatchUpdates:^{
-            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
-        } completion:^(BOOL finished) {
-            caTransactionToDisableAnimationsPushed = NO;
-            [CATransaction commit];
-        }];
-    }
 }
 
 #pragma mark - Text view delegate

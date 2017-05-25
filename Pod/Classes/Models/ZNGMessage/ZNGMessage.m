@@ -22,38 +22,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGMessage
 {
-    BOOL startedDownloadingAttachments;
-    
     NSAttributedString * attributedText;
     NSUInteger numLoadedImagesInAttributedText;
-}
-
-#pragma mark - Initialization
-- (instancetype) initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError *__autoreleasing *)error
-{
-    self = [super initWithDictionary:dictionaryValue error:error];
-    
-    if (self != nil) {
-        if ([self isMediaMessage]) {
-            self.imageAttachmentsByName = [[NSMutableDictionary alloc] init];
-            [self downloadAttachmentsIfNecessary];
-        }
-    }
-    
-    return self;
-}
-
-+ (dispatch_queue_t) imageDownloadingQueue
-{
-    static dispatch_once_t onceToken;
-    static dispatch_queue_t queue;
-    
-    dispatch_once(&onceToken, ^{
-        queue = dispatch_queue_create("com.zingleme.ZNGMessage.imageDownloadingQueue", 0);
-        dispatch_set_target_queue(queue, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0));
-    });
-    
-    return queue;
 }
 
 + (NSValueTransformer *) bodyJSONTransformer
@@ -70,59 +40,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         
         return strippedString;
     }];
-}
-
-- (void) downloadAttachmentsIfNecessary
-{
-    if (startedDownloadingAttachments) {
-        return;
-    }
-    
-    startedDownloadingAttachments = YES;
-    
-    dispatch_async([[self class] imageDownloadingQueue], ^{
-        for (NSString * path in self.attachments) {
-            NSURL * url = [NSURL URLWithString:path];
-            
-            if (url == nil) {
-                ZNGLogWarn(@"Unable to parse URL for message attachment: %@", path);
-                return;
-            }
-            
-            NSData * imageData = [NSData dataWithContentsOfURL:url];
-            
-            if (imageData == nil) {
-                ZNGLogWarn(@"Unable to retrieve image data for message attachment from %@", path);
-                return;
-            }
-            
-            UIImage * theImage = [self imageFromData:imageData];
-            
-            if (theImage == nil) {
-                ZNGLogWarn(@"Unable to initialize an image from %llu bytes of attachment data.", (unsigned long long)[imageData length]);
-                return;
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.imageAttachmentsByName[path] = theImage;
-                [[NSNotificationCenter defaultCenter] postNotificationName:kZNGMessageMediaLoadedNotification object:self];
-            });
-        }
-    });
-}
-
-- (UIImage *) imageFromData:(NSData *)data
-{
-    // Use CG to check for more than one frame
-    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)data, NULL);
-    size_t const frameCount = CGImageSourceGetCount(imageSource);
-    CFRelease(imageSource);
-    
-    if (frameCount > 1) {
-        return [UIImage animatedImageWithAnimatedGIFData:data];
-    } else {
-        return [[UIImage alloc] initWithData:data];
-    }
 }
 
 #pragma mark - Utility
@@ -216,7 +133,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
-             NSStringFromSelector(@selector(imageAttachmentsByName)) : [NSNull null],
              NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null]
              };
 }

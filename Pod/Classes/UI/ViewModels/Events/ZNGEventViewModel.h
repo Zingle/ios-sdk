@@ -29,6 +29,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) NSString * attachmentName;
 
+/**
+ *  Flag that is set if we are confidence that our mediaViewDisplaySize is accurate and not an estimate.
+ */
+@property (nonatomic, readonly) BOOL exactImageSizeCalculated;
+
 - (id) initWithEvent:(ZNGEvent *)event index:(NSUInteger)index;
 
 @end

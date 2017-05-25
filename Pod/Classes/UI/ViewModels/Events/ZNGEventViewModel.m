@@ -46,6 +46,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     return ((self.index == object.index) && ([self.event.eventId isEqualToString:object.event.eventId]));
 }
 
+- (BOOL) exactImageSizeCalculated
+{
+    return !CGSizeEqualToSize([[ZNGImageSizeCache sharedCache] sizeForImageWithPath:[self attachmentName]], CGSizeZero);
+}
+
 // Our text body will always be the last entry
 - (NSUInteger) textIndex
 {

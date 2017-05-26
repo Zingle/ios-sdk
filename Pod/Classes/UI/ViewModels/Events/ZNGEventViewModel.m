@@ -126,20 +126,17 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (UIView *)mediaView
 {
+    // If this is an outgoing image, we will return a UIImageView containing it.
+    if ([self.event.message.outgoingImageAttachments count] > self.index) {
+        UIImage * image = self.event.message.outgoingImageAttachments[self.index];
+        return [[UIImageView alloc] initWithImage:image];
+    }
+    
     if (([[self attachmentName] length] == 0) && ([self.event.message.outgoingImageAttachments count] == 0)) {
         return nil;
     }
     
-    if (imageView != nil) {
-        return imageView;
-    }
-    
-    // If this is an outgoing image, we will return a normal UIImageView containing it.
-    if ([self.event.message.outgoingImageAttachments count] > self.index) {
-        UIImage * image = self.event.message.outgoingImageAttachments[self.index];
-        imageView = [[UIImageView alloc] initWithImage:image];
-        return imageView;
-    }
+    CGSize previouslyKnownImageSize = [self mediaViewDisplaySize];
     
     // This is a normal image attachment.  We will set its URL via SDWebImage and plop a placeholder in place.
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
@@ -176,7 +173,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
  */
 - (CGSize)mediaViewDisplaySize
 {
-    CGSize size = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:[self attachmentName]];
+    CGSize size;
+    
+    if ([self.event.message.outgoingImageAttachments count] > self.index) {
+        // This is an outgoing image attachment
+        UIImage * image = self.event.message.outgoingImageAttachments[self.index];
+        size = image.size;
+    } else {
+        size = [[ZNGImageSizeCache sharedCache] sizeForImageWithPath:[self attachmentName]];
+    }
     
     if ((size.height == 0.0) || (size.width == 0.0)) {
         size = [self maximumImageDisplaySize];

@@ -97,6 +97,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         return CGSizeZero;
     }
     
+    if ([filename isKindOfClass:[NSNull class]]) {
+        return CGSizeZero;
+    }
+    
     NSString * name = [filename lastPathComponent];
     CGSize size = [sizes[name] CGSizeValue];
     

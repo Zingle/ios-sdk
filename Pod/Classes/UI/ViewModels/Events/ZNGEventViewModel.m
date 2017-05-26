@@ -15,6 +15,8 @@
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
+NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewModelImageSizeChangedNotification";
+
 @implementation ZNGEventViewModel
 
 - (id) initWithEvent:(ZNGEvent *)event index:(NSUInteger)index
@@ -154,8 +156,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             // Set the content mode back to fill
             animatedImageView.contentMode = UIViewContentModeScaleAspectFill;
             
-            // Save the image size to cache
-            [[ZNGImageSizeCache sharedCache] setSize:image.size forImageWithPath:[self attachmentName]];
+            // If this size is new, post a notification
+            if ((cacheType == SDImageCacheTypeNone) && (!CGSizeEqualToSize(previouslyKnownImageSize, image.size))) {
+                // Save the image size to cache
+                [[ZNGImageSizeCache sharedCache] setSize:image.size forImageWithPath:[self attachmentName]];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:ZNGEventViewModelImageSizeChangedNotification object:self];
+            }
         }
     }];
     

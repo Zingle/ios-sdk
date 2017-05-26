@@ -13,6 +13,12 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/**
+ *  An NSNotification will be posted to the shared NSNotificationCenter with this name and the ZNGEventViewModel as its object if
+ *   the image size corresponding to this event view model has changed (i.e. it was not loaded/cached, and now we know how big it is.)
+ */
+extern NSString * const ZNGEventViewModelImageSizeChangedNotification;
+
 @class ZNGEvent;
 
 @interface ZNGEventViewModel : NSObject <JSQMessageData, JSQMessageMediaData>

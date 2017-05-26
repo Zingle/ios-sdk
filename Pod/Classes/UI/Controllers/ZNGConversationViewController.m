@@ -30,7 +30,6 @@
 @import Photos;
 @import Shimmer;
 
-
 static const int zngLogLevel = ZNGLogLevelDebug;
 
 // How directly does the left panning gesture translate to speed of the time labels appearing on screen?
@@ -177,6 +176,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     outgoingImageAttachments = [[NSMutableArray alloc] initWithCapacity:2];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyImageAttachmentSizeChanged:) name:ZNGEventViewModelImageSizeChangedNotification object:nil];
     [self addObserver:self forKeyPath:EventsKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadingKVOPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGConversationKVOContext];
     [self addObserver:self forKeyPath:LoadedInitialDataKVOPath options:NSKeyValueObservingOptionNew context:ZNGConversationKVOContext];
@@ -338,6 +338,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self removeObserver:self forKeyPath:LoadedInitialDataKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:EventsKVOPath context:ZNGConversationKVOContext];
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     
     if (pollingTimerSource != nil) {
         dispatch_source_cancel(pollingTimerSource);
@@ -670,6 +671,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
+#pragma mark - Collection view scrolling/updates
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
     stuckToBottom = YES;
@@ -708,6 +710,51 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         [self.collectionView insertItemsAtIndexPaths:indexes];
         pendingInsertionCount = 0;
     }];
+}
+
+- (void) notifyImageAttachmentSizeChanged:(NSNotification *)notification
+{
+    ZNGEventViewModel * viewModel = notification.object;
+    
+    if (![viewModel isKindOfClass:[ZNGEventViewModel class]]) {
+        ZNGLogError(@"%@ notification was received, but the attached object is %@ instead of ZNGEventViewModel.  Weird.", ZNGEventViewModelImageSizeChangedNotification, [viewModel class]);
+        return;
+    }
+    
+    NSArray<NSIndexPath *> * indexPaths = [self indexPathsForEventWithId:viewModel.event.eventId];
+    NSIndexPath * indexPath = [indexPaths firstObject];
+    
+    if (indexPath == nil) {
+        // This message is not in our conversation
+        return;
+    }
+    
+    ZNGLogDebug(@"Reloading message %@ due to an image size change", viewModel.event.eventId);
+    
+    NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
+    NSIndexPath * topPath = [visibleIndexPaths lastObject];
+    NSComparisonResult comparison = [topPath compare:indexPath];
+    
+    if (comparison == NSOrderedDescending) {
+        // The cell we are refreshing is above our current screen.  We need to keep our bottom offset.
+        [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
+            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
+        }];
+    } else {
+        // The cell we are refreshing is below or on screen.  Do not scroll.
+        if ((!caTransactionToDisableAnimationsPushed) && (self.collectionView != nil)) {
+            [CATransaction begin];
+            [CATransaction setDisableActions:YES];
+            caTransactionToDisableAnimationsPushed = YES;
+        }
+        
+        [self.collectionView performBatchUpdates:^{
+            [self.collectionView reloadItemsAtIndexPaths:indexPaths];
+        } completion:^(BOOL finished) {
+            caTransactionToDisableAnimationsPushed = NO;
+            [CATransaction commit];
+        }];
+    }
 }
 
 #pragma mark - Text view delegate
@@ -1251,7 +1298,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         ZNGLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
         [self.conversation loadOlderData];
     }
-    
     
     // Now for marking messages read logic:
     

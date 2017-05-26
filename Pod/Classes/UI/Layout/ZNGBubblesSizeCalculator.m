@@ -107,9 +107,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     // Only attempt to find a cached size if this message is not outgoing from us.  (i.e. do not used cached sizes for outgoing local messages)
     if (!viewModel.event.sending) {
-        // Cache ID is event ID-itemIndex-number of loaded items.
-        // This means that, every time an image is loaded, all sizes for bubbles related to that message will be recalculated.
-        cacheID = [NSString stringWithFormat:@"%@-%llu-%llu", viewModel.event.eventId, (unsigned long long)viewModel.index, (unsigned long long)[viewModel.event.message.imageAttachmentsByName count]];
+        // Cache ID is event ID-itemIndex-flag for whether image size is exact
+        cacheID = [NSString stringWithFormat:@"%@-%llu-%d", viewModel.event.eventId, (unsigned long long)viewModel.index, (int)viewModel.exactImageSizeCalculated];
         NSValue * cachedSize = [cache objectForKey:cacheID];
         
         if (cachedSize != nil) {

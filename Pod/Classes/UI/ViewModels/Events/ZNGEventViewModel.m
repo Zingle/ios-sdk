@@ -16,9 +16,6 @@
 static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGEventViewModel
-{
-    UIImageView * imageView;
-}
 
 - (id) initWithEvent:(ZNGEvent *)event index:(NSUInteger)index
 {
@@ -147,7 +144,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     FLAnimatedImageView * animatedImageView = [[FLAnimatedImageView alloc] init];
     animatedImageView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
     animatedImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
-    imageView = animatedImageView;
     
     // Set content mode to center so our placeholder image is centered instead of stretched.  Content mode will be reset when the image loads.
     animatedImageView.contentMode = UIViewContentModeCenter;

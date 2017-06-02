@@ -150,8 +150,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     dateWithoutYearFormatter = [[NSDateFormatter alloc] init];
     dateWithoutYearFormatter.dateFormat = @"MMM d";
 
+    if (self.title == nil) {
+        self.title = @"Inbox";
+    }
     
-    self.title = @"Inbox";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.estimatedRowHeight = 118.0;

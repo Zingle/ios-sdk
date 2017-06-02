@@ -139,15 +139,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     refreshControl = [self configuredRefreshControl];
     [self.tableView addSubview:refreshControl];
     
-    // Creating view for extending background color
-    CGRect frame = self.tableView.bounds;
-    frame.origin.y = -frame.size.height;
-    UIView* bgView = [[UIView alloc] initWithFrame:frame];
-    bgView.backgroundColor = [UIColor whiteColor];
-    
-    // Adding the view below the refresh control
-    [self.tableView insertSubview:bgView atIndex:0];
-    
     // Time/date formatting
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;

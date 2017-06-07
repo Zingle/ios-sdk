@@ -135,7 +135,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
     
     self.refreshControl = [self configuredRefreshControl];
-    [self.tableView addSubview:self.refreshControl];;
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
 
     // Time/date formatting
     timeFormatter = [[NSDateFormatter alloc] init];

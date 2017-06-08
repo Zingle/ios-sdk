@@ -65,4 +65,6 @@
  */
 @property (nonatomic, strong, nullable) ZNGContact * selectedContact;
 
+@property (nonatomic, strong, nullable) UIRefreshControl * refreshControl;
+
 @end

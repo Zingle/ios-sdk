@@ -1255,26 +1255,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return paths;
 }
 
-/**
- *  The event prior to the supplied index path.  This may be multiple indexes behind the supplied index path if there are other event view model objects
- *   for the same event above the index path
- */
-- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    
-    for (NSInteger i = indexPath.row - 1; i >= 0; i--) {
-        // Is this event for the same event (i.e. an attachment for that same message)
-        ZNGEventViewModel * viewModel = self.conversation.eventViewModels[i];
-        if (![viewModel.event isEqual:thisEvent]) {
-            // No, it's a different one.  Hooray.
-            return viewModel.event;
-        }
-    }
-    
-    return nil;
-}
-
 - (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < ([self.conversation.eventViewModels count] - 1)) {
@@ -1284,10 +1264,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
-- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath includingDelayedEvents:(BOOL)includeDelayed
 {
     if (indexPath.row > 0) {
-        return [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+        ZNGEventViewModel * model = [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+        
+        if ((!includeDelayed) && (model.event.message.isDelayed)) {
+            return [self priorViewModelToIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section] includingDelayedEvents:NO];
+        } else {
+            return model;
+        }
     }
     
     return nil;
@@ -1456,7 +1442,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath];
+    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath includingDelayedEvents:NO];
     
     if ([thisEvent isEqual:priorEventViewModel.event]) {
         // The bubble above this one is for the same event.  Don't break them up with a timestamp, you maniac.

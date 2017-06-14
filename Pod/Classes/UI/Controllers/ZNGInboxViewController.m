@@ -36,8 +36,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 @implementation ZNGInboxViewController
 {
-    UIRefreshControl * refreshControl;
-    
     NSDateFormatter * dayOfWeekFormatter;
     NSDateFormatter * dateWithoutYearFormatter;
     NSDateFormatter * dateWithYearFormatter;
@@ -136,18 +134,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
     
-    refreshControl = [self configuredRefreshControl];
-    [self.tableView addSubview:refreshControl];
-    
-    // Creating view for extending background color
-    CGRect frame = self.tableView.bounds;
-    frame.origin.y = -frame.size.height;
-    UIView* bgView = [[UIView alloc] initWithFrame:frame];
-    bgView.backgroundColor = [UIColor whiteColor];
-    
-    // Adding the view below the refresh control
-    [self.tableView insertSubview:bgView atIndex:0];
-    
+    self.refreshControl = [self configuredRefreshControl];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
+
     // Time/date formatting
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
@@ -159,8 +148,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     dateWithoutYearFormatter = [[NSDateFormatter alloc] init];
     dateWithoutYearFormatter.dateFormat = @"MMM d";
 
+    if (self.title == nil) {
+        self.title = @"Inbox";
+    }
     
-    self.title = @"Inbox";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.estimatedRowHeight = 118.0;
@@ -301,8 +292,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
         // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
         // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
-        if ((!self.data.loading) && (refreshControl.isRefreshing)) {
-            [refreshControl endRefreshing];
+        if ((!self.data.loading) && (self.refreshControl.isRefreshing)) {
+            [self.refreshControl endRefreshing];
         }
     } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
         [self handleContactsUpdateWithChangeDictionary:change];
@@ -329,8 +320,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
     // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
-    if (refreshControl.isRefreshing) {
-        [refreshControl endRefreshing];
+    if (self.refreshControl.isRefreshing) {
+        [self.refreshControl endRefreshing];
     }
     
     switch (changeType)

@@ -8,6 +8,9 @@
 
 #import "ZNGImageViewController.h"
 
+@import FLAnimatedImage;
+@import SDWebImage;
+
 @interface ZNGImageViewController ()
 
 @end
@@ -16,27 +19,35 @@
 
 - (id) init
 {
-    return [super initWithNibName:NSStringFromClass([self class]) bundle:[NSBundle bundleForClass:[self class]]];
+    return [super initWithNibName:NSStringFromClass([ZNGImageViewController class]) bundle:[NSBundle bundleForClass:[ZNGImageViewController class]]];
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    self.imageView.image = self.image;
+    [self.imageView sd_setImageWithURL:self.imageURL placeholderImage:nil];
     
     UIBarButtonItem * shareButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAction target:self action:@selector(pressedShare:)];
     self.navigationItem.rightBarButtonItem = shareButton;
 }
 
-- (void) setImage:(UIImage *)image
+- (void) setImageURL:(NSURL *)imageURL
 {
-    _image = image;
-    self.imageView.image = image;
+    _imageURL = [imageURL copy];
+    [self.imageView sd_setImageWithURL:_imageURL placeholderImage:nil];
 }
                                      
 - (void) pressedShare:(id)sender
 {
-    UIActivityViewController * shareView = [[UIActivityViewController alloc] initWithActivityItems:@[self.image] applicationActivities:nil];
+    UIImage * image = self.imageView.image;
+    
+    if (image == nil)
+    {
+        return;
+    }
+    
+    UIActivityViewController * shareView = [[UIActivityViewController alloc] initWithActivityItems:@[image] applicationActivities:nil];
     shareView.popoverPresentationController.barButtonItem = self.navigationItem.rightBarButtonItem;
     [self presentViewController:shareView animated:YES completion:nil];
 }

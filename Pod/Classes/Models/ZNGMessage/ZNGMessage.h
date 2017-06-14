@@ -11,9 +11,6 @@
 #import "ZNGUser.h"
 #import <JSQMessagesViewController/JSQMessageData.h>
 
-// Posted through NSNotificationCenter when media has finished downloading
-#define kZNGMessageMediaLoadedNotification  @"kZNGMessageMediaLoadedNotification"
-
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 #pragma mark - JSON properties
@@ -46,11 +43,6 @@
 @property (nonatomic, copy) NSString * senderDisplayName;
 
 /**
- *  KVO compliant dictionary that will be loaded with image data from attachments
- */
-@property (nonatomic, strong) NSMutableDictionary<NSString *, UIImage *> * imageAttachmentsByName;
-
-/**
  *  Used only for transient outgoing message data objects.  This entire ZNGMessage object will be replaced once the server acknowledges the outbound message.
  */
 @property (nonatomic, strong) NSArray<UIImage *> * outgoingImageAttachments;
@@ -61,8 +53,6 @@
 - (NSString *) triggeredByUserIdOrSenderId;
 
 - (BOOL) isOutbound;
-
-- (void) downloadAttachmentsIfNecessary;
 
 /**
  *  The sender or receiver, whichever corresponds to a contact.

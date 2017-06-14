@@ -27,6 +27,7 @@
     self.groupIds = [baseDataSet.groupIds copy];
     self.searchText = [baseDataSet.searchText copy];
     self.searchMessageBodies = baseDataSet.searchMessageBodies;
+    self.allowContactsWithNoMessages = baseDataSet.allowContactsWithNoMessages;
     
     if ([baseDataSet.sortFields count] > 0) {
         self.sortFields = baseDataSet.sortFields;

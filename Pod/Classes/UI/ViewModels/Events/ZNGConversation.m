@@ -239,26 +239,71 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         return;
     }
     
-    // We have new data for page 1 and some existing data.  We expect some overlap.
-    // First we will find the index of the previous last object in this new data.
-    NSUInteger previousNewestEventIndexInNewData = [incomingEvents indexOfObject:[self.events lastObject]];
+    NSMutableOrderedSet<ZNGEvent *> * newEvents = [[NSMutableOrderedSet alloc] initWithArray:incomingEvents];
+    NSOrderedSet<ZNGEvent *> * oldEvents = [[NSOrderedSet alloc] initWithArray:self.events];
+    [newEvents minusOrderedSet:oldEvents];
     
-    if (previousNewestEventIndexInNewData == NSNotFound) {
-        // We could not find our previous newest even in this new data.  We will append all of this data to our tail.
-        ZNGLogInfo(@"Received %llu new events but were unable to find any overlap.  There is likely missing data inbetween these pages.", (unsigned long long)[incomingEvents count]);
-        [self appendEvents:incomingEvents];
+    if ([newEvents count] == 0) {
+        // No new events.  It is odd that we made it this far, but this should be harmless.
         return;
     }
     
-    // Ensure we actually have some new data.  Things have gone kooky somewhere earlier if this sanity test fails.
-    if ([incomingEvents count] <= previousNewestEventIndexInNewData + 1) {
-        ZNGLogWarn(@"We received %llu new events, but there appears to be no new data to append.", (unsigned long long)[incomingEvents count]);
+    NSMutableIndexSet * indexesOfNewEvents = [[NSMutableIndexSet alloc] init];
+    
+    for (ZNGEvent * event in newEvents) {
+        [indexesOfNewEvents addIndex:[incomingEvents indexOfObject:event]];
+    }
+    
+    if (![indexesOfNewEvents isContinuous]) {
+        ZNGLogError(@"%s was called, but there is a non-continuous delta between our old data and this new data.  This would likely cause duplicate event data.\n\
+                      Reloading all data.", __PRETTY_FUNCTION__);
+        [self loadRecentEventsErasingOlderData:YES];
         return;
     }
     
-    NSRange incomingEventsFreshDataRange = NSMakeRange(previousNewestEventIndexInNewData + 1, [incomingEvents count] - previousNewestEventIndexInNewData - 1);
-    NSArray<ZNGEvent *> * nonOverlappingIncomingEvents = [incomingEvents subarrayWithRange:incomingEventsFreshDataRange];
-    [self appendEvents:nonOverlappingIncomingEvents];
+    // Check for this data being inserted somewhere other than the tail.  This happens, for instance, if there is a delayed message that always appears at
+    //  the end of our data.  New messages will arrive just above these delayed messages.
+    NSUInteger indexJustBelowNewData = [indexesOfNewEvents lastIndex] + 1;
+    
+    if ([incomingEvents count] > indexJustBelowNewData) {
+        ZNGEvent * eventJustBelowNewData = incomingEvents[indexJustBelowNewData];
+        
+        NSUInteger totalDataIndexBelowNewData = [self.events indexOfObject:eventJustBelowNewData];
+        
+        if (totalDataIndexBelowNewData != NSNotFound) {
+            NSIndexSet * viewModelInsertAboveIndexes = [self.eventViewModels indexesOfObjectsPassingTest:^BOOL(ZNGEventViewModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                return [obj.event isEqual:eventJustBelowNewData];
+            }];
+            
+            if ([viewModelInsertAboveIndexes count] == 0) {
+                ZNGLogError(@"Unable to find our insertion target event in the view models array.  Something has gone wacky.  Clearing all data and reloading...");
+                [self loadRecentEventsErasingOlderData:YES];
+                return;
+            }
+            
+            NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+            NSIndexSet * insertionIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(totalDataIndexBelowNewData, [newEvents count])];
+            [mutableEvents insertObjects:[newEvents array] atIndexes:insertionIndexSet];
+            
+            NSMutableArray<ZNGEventViewModel *> * newViewModels = [[NSMutableArray alloc] init];
+            for (ZNGEvent * event in newEvents) {
+                [newViewModels addObjectsFromArray:event.viewModels];
+            }
+            
+            NSMutableArray<ZNGEventViewModel *> * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+            NSIndexSet * viewModelInsertionIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([viewModelInsertAboveIndexes firstIndex], [newViewModels count])];
+            [mutableViewModels insertObjects:newViewModels atIndexes:viewModelInsertionIndexSet];
+            
+            return;
+        } else {
+            ZNGLogWarn(@"We expected the new %llu events appearing in this new data to be inserted above our tail, but we were unable to find the event below this new data.  Appending new data to tail..",
+                       (unsigned long long)[newEvents count]);
+            // Fall through to the appendEvents: below
+        }
+    }
+    
+    // Normal append.
+    [self appendEvents:[newEvents array]];
 }
 
 - (void) appendEvents:(NSArray<ZNGEvent *> *)events

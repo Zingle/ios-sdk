@@ -29,6 +29,36 @@ NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";
 NSString * const ZNGConversationParticipantTypeLabel = @"label";
 
+@interface NSIndexSet (Continuity)
+- (BOOL) isContinuous;
+@end
+
+@implementation NSIndexSet (Continuity)
+
+- (BOOL) isContinuous
+{
+    __block BOOL continuous = YES;
+    __block NSUInteger lastIndex = [self firstIndex];
+    
+    [self enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx == lastIndex) {
+            return;
+        }
+        
+        if (idx != lastIndex + 1) {
+            continuous = NO;
+            *stop = YES;
+            return;
+        }
+        
+        lastIndex = idx;
+    }];
+    
+    return continuous;
+}
+
+@end
+
 @implementation ZNGConversation
 
 NSString * const kConversationPage = @"page";

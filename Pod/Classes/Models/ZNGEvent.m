@@ -56,7 +56,8 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
              @"automation" : @"automation",
              @"message" : @"message",
              NSStringFromSelector(@selector(sending)) : [NSNull null],
-             NSStringFromSelector(@selector(viewModels)) : [NSNull null]
+             NSStringFromSelector(@selector(viewModels)) : [NSNull null],
+             NSStringFromSelector(@selector(displayTime)) : [NSNull null]
              };
 }
 
@@ -189,6 +190,15 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 - (BOOL) isInboundMessage
 {
     return (([self isMessage]) && (![self.message isOutbound]));
+}
+
+- (NSDate *) displayTime
+{
+    if (self.message != nil) {
+        return self.message.displayTime;
+    }
+    
+    return self.createdAt;
 }
 
 #pragma mark - Message data for <JSQMessageData>

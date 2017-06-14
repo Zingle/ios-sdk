@@ -1655,7 +1655,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         if (event.createdAt != nil) {
             // Both of our incoming and outgoing cell classes have properties for time label, so we'll just use outbound.
             ZNGConversationCellOutgoing * outgoingCell = (ZNGConversationCellOutgoing *)cell;
-            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.createdAt];
+            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.displayTime];
             [self updateTimeLabelLocationForCell:cell forEventViewModel:viewModel animated:NO];
         }
         

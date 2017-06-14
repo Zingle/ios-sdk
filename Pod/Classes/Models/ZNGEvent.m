@@ -194,7 +194,14 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 - (NSDate *) displayTime
 {
     if (self.message != nil) {
-        return self.message.isDelayed ? self.message.executedAt : self.createdAt;
+        if (self.message.isDelayed) {
+            // Delayed messages that have not yet been sent do not have a displayTime
+            return nil;
+        }
+        
+        // Delayed messages that have been sent (i.e. messages with a non-nil exectedAt time) use executedAt for displayTime.
+        // Otherwise, normal messages use the event's createdAt.  (Note: The message object itself tends to not have a createdAt time.  Thanks, server.)
+        return self.message.executedAt ?: self.createdAt;
     }
     
     return self.createdAt;

@@ -83,16 +83,6 @@
     return self.triggeredByUser.userId;
 }
 
-#pragma mark -
-- (NSDate *) displayTime
-{
-    if (self.isDelayed) {
-        return self.executedAt;
-    }
-
-    return self.createdAt;
-}
-
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {

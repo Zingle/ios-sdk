@@ -56,8 +56,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
              @"automation" : @"automation",
              @"message" : @"message",
              NSStringFromSelector(@selector(sending)) : [NSNull null],
-             NSStringFromSelector(@selector(viewModels)) : [NSNull null],
-             NSStringFromSelector(@selector(displayTime)) : [NSNull null]
+             NSStringFromSelector(@selector(viewModels)) : [NSNull null]
              };
 }
 
@@ -195,7 +194,7 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
 - (NSDate *) displayTime
 {
     if (self.message != nil) {
-        return self.message.displayTime;
+        return self.message.isDelayed ? self.message.executedAt : self.createdAt;
     }
     
     return self.createdAt;

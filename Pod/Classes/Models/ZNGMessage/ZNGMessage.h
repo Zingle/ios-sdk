@@ -37,11 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSDate * executedAt;
 
 /**
- *  The time this message actually went out over the wire.  For delayed messages, this is nil until the message is executed.
- */
-@property (nonatomic, readonly, nullable) NSDate * displayTime;
-
-/**
  *  If this is an inbound, this is the contact ID.  Outbound, it is the triggered by user ID.
  */
 @property (nonatomic, readonly, nullable) NSString * senderPersonId;

@@ -713,7 +713,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     newEventsSinceLastScrolledToBottom = 0;
     [self updateUnreadBanner];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    // Add a slight delay to allow the collection view layout to update.
+    // Removing this delay can sometimes cause the conversation not to scroll fully down.
+    // This is especially noticeable when sending a new message that creates a large message bubble.  Without the 0.1 delay, the conversation
+    //  would scroll down to see just the top of the new bubble but not the entire bubble.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
         [self.collectionView scrollRectToVisible:bottomLeft animated:animated];
     });

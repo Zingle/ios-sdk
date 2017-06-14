@@ -132,7 +132,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                 ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
-            } else if ((status.totalPages < self.totalEventCount) && ([self lastPageContainsDeletableMessage])) {
+            } else if ((status.totalRecords < self.totalEventCount) && ([self lastPageContainsDeletableMessage])) {
                 ZNGLogInfo(@"Our total event count has gone from %llu to %llu, and we have one or more deletable event types in data.\
                              Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalPages);
                 [self _loadRecentEventsErasing:YES];

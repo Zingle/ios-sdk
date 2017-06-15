@@ -506,7 +506,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     
     // TODO: Remove this contact_group nonsense once the server actually sends it in the ZNGService object.
-    if ([self.service.contactGroups count] == 0) {
+    if (([self.service.contactGroups count] == 0) && (self.sessionManager != nil)) {
         semaphore = dispatch_semaphore_create(0);
         NSString * path = [NSString stringWithFormat:@"services/%@/contact-groups", self.service.serviceId];
         [self.sessionManager GET:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary * _Nonnull responseObject) {

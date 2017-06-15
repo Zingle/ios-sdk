@@ -16,6 +16,7 @@
 #import "ZNGTemplate.h"
 #import "ZNGSettingsField.h"
 #import "ZNGPrinter.h"
+#import "ZNGContactGroup.h"
 
 #define kServiceSettingHotsosURLKey         @"hotsos_url"
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
@@ -53,6 +54,7 @@
              @"settings" : @"settings",
              @"automations" : @"automations",
              @"printers" : @"printers",
+             NSStringFromSelector(@selector(contactGroups)): @"contact_groups",
              @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
              @"createdAt" : @"created_at",
@@ -115,6 +117,11 @@
 + (NSValueTransformer *)printersJSONTransformer
 {
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGPrinter class]];
+}
+
++ (NSValueTransformer *) contactGroupsJSONTransformer
+{
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGContactGroup class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer

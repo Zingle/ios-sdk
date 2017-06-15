@@ -249,13 +249,13 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         return;
     }
     
-    NSMutableIndexSet * indexesOfNewEvents = [[NSMutableIndexSet alloc] init];
+    NSMutableIndexSet * indexesOfNewEventsInIncomingEvents = [[NSMutableIndexSet alloc] init];
     
     for (ZNGEvent * event in newEvents) {
-        [indexesOfNewEvents addIndex:[incomingEvents indexOfObject:event]];
+        [indexesOfNewEventsInIncomingEvents addIndex:[incomingEvents indexOfObject:event]];
     }
     
-    if (![indexesOfNewEvents isContinuous]) {
+    if (![indexesOfNewEventsInIncomingEvents isContinuous]) {
         ZNGLogError(@"%s was called, but there is a non-continuous delta between our old data and this new data.  This would likely cause duplicate event data.\n\
                       Reloading all data.", __PRETTY_FUNCTION__);
         [self loadRecentEventsErasingOlderData:YES];
@@ -264,26 +264,29 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     
     // Check for this data being inserted somewhere other than the tail.  This happens, for instance, if there is a delayed message that always appears at
     //  the end of our data.  New messages will arrive just above these delayed messages.
-    NSUInteger indexJustBelowNewData = [indexesOfNewEvents lastIndex] + 1;
+    NSUInteger indexJustBelowNewData = [indexesOfNewEventsInIncomingEvents lastIndex] + 1;
     
     if ([incomingEvents count] > indexJustBelowNewData) {
         ZNGEvent * eventJustBelowNewData = incomingEvents[indexJustBelowNewData];
         
-        NSUInteger totalDataIndexBelowNewData = [self.events indexOfObject:eventJustBelowNewData];
+        // The index in our total data just below where our new data is to be inserted
+        NSUInteger postInsertionIndex = [self.events indexOfObject:eventJustBelowNewData];
         
-        if (totalDataIndexBelowNewData != NSNotFound) {
-            NSIndexSet * viewModelInsertAboveIndexes = [self.eventViewModels indexesOfObjectsPassingTest:^BOOL(ZNGEventViewModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (postInsertionIndex != NSNotFound) {
+            // Find the same index in our view models array that we just found in our events array.
+            // This may be more than one if eventJustBelowNewData has more than one view model.
+            NSIndexSet * viewModelPostInsertionIndexes = [self.eventViewModels indexesOfObjectsPassingTest:^BOOL(ZNGEventViewModel * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                 return [obj.event isEqual:eventJustBelowNewData];
             }];
             
-            if ([viewModelInsertAboveIndexes count] == 0) {
+            if ([viewModelPostInsertionIndexes count] == 0) {
                 ZNGLogError(@"Unable to find our insertion target event in the view models array.  Something has gone wacky.  Clearing all data and reloading...");
                 [self loadRecentEventsErasingOlderData:YES];
                 return;
             }
             
             NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
-            NSIndexSet * insertionIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(totalDataIndexBelowNewData, [newEvents count])];
+            NSIndexSet * insertionIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(postInsertionIndex, [newEvents count])];
             [mutableEvents insertObjects:[newEvents array] atIndexes:insertionIndexSet];
             
             NSMutableArray<ZNGEventViewModel *> * newViewModels = [[NSMutableArray alloc] init];
@@ -292,7 +295,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             }
             
             NSMutableArray<ZNGEventViewModel *> * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
-            NSIndexSet * viewModelInsertionIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([viewModelInsertAboveIndexes firstIndex], [newViewModels count])];
+            NSIndexSet * viewModelInsertionIndexSet = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([viewModelPostInsertionIndexes firstIndex], [newViewModels count])];
             [mutableViewModels insertObjects:newViewModels atIndexes:viewModelInsertionIndexSet];
             
             return;

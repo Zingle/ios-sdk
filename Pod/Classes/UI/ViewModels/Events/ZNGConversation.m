@@ -41,8 +41,9 @@ NSString * const ZNGConversationParticipantTypeLabel = @"label";
     __block NSUInteger lastIndex = [self firstIndex];
     
     [self enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        // Is this the first item?
         if (idx == lastIndex) {
-            return;
+            return; // continue
         }
         
         if (idx != lastIndex + 1) {

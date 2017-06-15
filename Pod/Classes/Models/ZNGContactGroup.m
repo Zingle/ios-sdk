@@ -8,6 +8,7 @@
 
 #import "ZNGContactGroup.h"
 #import "ZNGCondition.h"
+#import "UIColor+ZingleSDK.h"
 
 @implementation ZNGContactGroup
 
@@ -31,5 +32,17 @@
     NSString * lowerTerm = [term lowercaseString];
     return ([[self.displayName lowercaseString] containsString:lowerTerm]);
 }
+
+// The server may eventually send us colors here.  That would be sweet.
+- (UIColor *) foregroundColor
+{
+    return [UIColor blackColor];
+}
+
+- (UIColor *) backgroundColor
+{
+    return [UIColor zng_light_gray];
+}
+
 
 @end

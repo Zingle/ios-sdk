@@ -9,6 +9,7 @@
 #import "ZNGLabelGridView.h"
 #import "ZNGDashedBorderLabel.h"
 #import "ZNGLabel.h"
+#import "ZNGContactGroup.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGLogging.h"
 #import "UIFont+Lato.h"
@@ -59,11 +60,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     _font = [UIFont latoFontOfSize:13.0];
     _labelBorderWidth = 2.0;
     _labelTextInset = 6.0;
-    _labelCornerRadius = 12.0;
+    _labelCornerRadius = 14.0;
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     xImage = [UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil];
     self.userInteractionEnabled = NO;
+    
+    _labelIcon = [[UIImage imageNamed:@"smallTag" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    _groupIcon = [[UIImage imageNamed:@"smallStalker" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
 #pragma mark - Setters
@@ -88,6 +92,24 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) setLabels:(NSArray<ZNGLabel *> *)labels
 {
     _labels = labels;
+    [self createLabelViews];
+}
+
+- (void) setGroups:(NSArray<ZNGContactGroup *> *)groups
+{
+    _groups = groups;
+    [self createLabelViews];
+}
+
+- (void) setLabelIcon:(UIImage *)labelIcon
+{
+    _labelIcon = labelIcon;
+    [self createLabelViews];
+}
+
+- (void) setGroupIcon:(UIImage *)groupIcon
+{
+    _groupIcon = groupIcon;
     [self createLabelViews];
 }
 
@@ -195,9 +217,26 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [self configureLabel:labelView];
         labelView.text = label.displayName;
         
-        NSString * labelText = [NSString stringWithFormat:@" %@ ", [label.displayName uppercaseString] ?: @""];
-        NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:labelText];
+        NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:@" "];
         
+        if (self.labelIcon != nil) {
+            NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
+            iconAttachment.image = self.labelIcon;
+            
+            // For < 10 pt fonts, we need to adjust the label icon down a bit farther.  There is assuredly a more intelligent logic
+            //  to this than adding 2.0 for small fonts, but this manual adjustment gets the job done.
+            // This probably has a lot to do with image size vs. font point size.
+            CGFloat imageDescender = (self.font.pointSize > 10.0) ? self.font.descender : self.font.descender - 2.0;
+            iconAttachment.bounds = CGRectMake(0.0, imageDescender, self.labelIcon.size.width, self.labelIcon.size.height);
+            NSAttributedString * iconString = [NSAttributedString attributedStringWithAttachment:iconAttachment];
+            
+            [text appendAttributedString:iconString];
+            [text appendAttributedString:[[NSAttributedString alloc] initWithString:@"  "]];
+        }
+        
+        NSAttributedString * labelAttributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", [label.displayName uppercaseString] ?: @""]];
+        [text appendAttributedString:labelAttributedText];
+
         if (self.showRemovalX) {
             NSTextAttachment * imageAttachment = [[NSTextAttachment alloc] init];
             imageAttachment.image = xImage;
@@ -224,6 +263,43 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         
         [newLabelViews addObject:labelView];
         [self addSubview:labelView];
+    }
+    
+    for (ZNGContactGroup * group in self.groups) {
+        ZNGDashedBorderLabel * groupView = [[ZNGDashedBorderLabel alloc] init];
+        [self configureLabel:groupView];
+        groupView.text = group.displayName;
+        
+        NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:@" "];
+        
+        if (self.groupIcon != nil) {
+            NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
+            iconAttachment.image = self.groupIcon;
+            
+            // For < 10 pt fonts, we need to adjust the label icon down a bit farther.  There is assuredly a more intelligent logic
+            //  to this than adding 2.0 for small fonts, but this manual adjustment gets the job done.
+            // This probably has a lot to do with image size vs. font point size.
+            CGFloat imageDescender = (self.font.pointSize > 10.0) ? self.font.descender : self.font.descender - 2.0;
+            iconAttachment.bounds = CGRectMake(0.0, imageDescender, self.groupIcon.size.width, self.groupIcon.size.height);
+            NSAttributedString * iconString = [NSAttributedString attributedStringWithAttachment:iconAttachment];
+            
+            [text appendAttributedString:iconString];
+            [text appendAttributedString:[[NSAttributedString alloc] initWithString:@"  "]];
+        }
+        
+        NSAttributedString * labelAttributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", [group.displayName uppercaseString] ?: @""]];
+        [text appendAttributedString:labelAttributedText];
+        
+        UIColor * textColor = group.foregroundColor;
+        groupView.font = self.font;
+        groupView.textColor = textColor;
+        groupView.borderColor = textColor;
+        groupView.backgroundColor = group.backgroundColor;
+        [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
+        groupView.attributedText = text;
+        
+        [newLabelViews addObject:groupView];
+        [self addSubview:groupView];
     }
     
     if ((self.maxRows > 0) && (moreLabel == nil)) {

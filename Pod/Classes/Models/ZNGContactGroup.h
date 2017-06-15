@@ -17,4 +17,6 @@
 @property (nonatomic, copy, nullable) NSString * conditionBooleanOperator;
 @property (nonatomic, strong, nullable) NSArray<ZNGCondition *> * conditions;
 
+- (BOOL) matchesSearchTerm:(NSString * _Nonnull)term;
+
 @end

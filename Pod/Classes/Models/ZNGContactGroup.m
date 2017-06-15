@@ -26,4 +26,10 @@
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGCondition class]];
 }
 
+- (BOOL) matchesSearchTerm:(NSString *)term
+{
+    NSString * lowerTerm = [term lowercaseString];
+    return ([[self.displayName lowercaseString] containsString:lowerTerm]);
+}
+
 @end

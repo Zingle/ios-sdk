@@ -23,6 +23,7 @@ static NSString * const ParameterKeyLastMessageCreatedAt   = @"last_message_crea
 static NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
 static NSString * const ParameterKeyIsClosed               = @"is_closed";
 static NSString * const ParameterKeyLabelId                = @"label_id";
+static NSString * const ParameterKeyGroupId                = @"contact_group_id";
 static NSString * const ParameterKeyQuery                  = @"query";
 static NSString * const ParameterKeySearchMessageBodies    = @"search_message_bodies";
 static NSString * const ParameterValueTrue                 = @"true";
@@ -167,8 +168,12 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     }
     
     if ([self.groupIds count] > 0) {
-        // TODO: Support group filtering
-        ZNGLogWarn(@"%llu group IDs were selected for searching, but the API does not yet support contact group filtering.  Life is hard and cruel.", (unsigned long long)[self.groupIds count]);
+        if ([self.groupIds count] > 1) {
+            // TODO: Support multiple group searching
+            ZNGLogWarn(@"%llu group IDs were provided for contact searching, but the API only supports one.  Gross.  We'll send one.", (unsigned long long)[self.groupIds count]);
+        }
+        
+        parameters[ParameterKeyGroupId] = [self.groupIds firstObject];
     }
     
     if ([self.searchText length] > 0) {

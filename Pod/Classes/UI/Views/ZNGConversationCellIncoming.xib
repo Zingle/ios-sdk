@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -43,7 +43,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ufa-bF-l1Y" userLabel="Bubble top label" customClass="JSQMessagesLabel">
-                        <rect key="frame" x="0.0" y="20" width="320" height="20"/>
+                        <rect key="frame" x="30" y="20" width="290" height="20"/>
                         <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" id="fal-sy-hrK"/>
@@ -125,11 +125,11 @@
             <constraints>
                 <constraint firstItem="gRE-Vl-pLy" firstAttribute="top" secondItem="Da1-09-wR4" secondAttribute="bottom" id="FUy-Q2-LFq"/>
                 <constraint firstItem="Vvz-D1-DSw" firstAttribute="bottom" secondItem="btS-p8-B7Z" secondAttribute="bottom" constant="-6" id="IyD-pC-WBU"/>
+                <constraint firstItem="Ufa-bF-l1Y" firstAttribute="leading" secondItem="btS-p8-B7Z" secondAttribute="leading" constant="-10" id="JPF-w8-pYj"/>
                 <constraint firstItem="gRE-Vl-pLy" firstAttribute="top" secondItem="btS-p8-B7Z" secondAttribute="bottom" id="NNv-3Q-L52"/>
                 <constraint firstItem="gRE-Vl-pLy" firstAttribute="leading" secondItem="w23-sL-0Rh" secondAttribute="trailing" constant="10" id="OoP-99-cWy"/>
                 <constraint firstItem="Vvz-D1-DSw" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="btS-p8-B7Z" secondAttribute="trailing" constant="4" id="S4h-Mn-5Ah"/>
                 <constraint firstItem="oJh-f1-j92" firstAttribute="top" secondItem="4lh-CK-yVn" secondAttribute="top" id="UzW-km-teJ"/>
-                <constraint firstItem="Ufa-bF-l1Y" firstAttribute="leading" secondItem="4lh-CK-yVn" secondAttribute="leading" id="Z5z-m3-8Ne"/>
                 <constraint firstAttribute="trailing" secondItem="Ufa-bF-l1Y" secondAttribute="trailing" id="cWQ-1Q-xOA"/>
                 <constraint firstAttribute="bottom" secondItem="gRE-Vl-pLy" secondAttribute="bottom" id="gtX-wr-wjR"/>
                 <constraint firstAttribute="trailing" secondItem="Vvz-D1-DSw" secondAttribute="leading" id="hu0-gA-xY4"/>

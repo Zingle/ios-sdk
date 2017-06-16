@@ -510,7 +510,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             header.sectionImage.image = [UIImage imageNamed:@"editIconChannels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionLabels:
-            header.sectionLabel.text = @"LABELS";
+            header.sectionLabel.text = @"TAGS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionOptionalCustomFields:

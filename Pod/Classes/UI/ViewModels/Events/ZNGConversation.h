@@ -53,6 +53,12 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 @property (nonatomic) BOOL loading;
 
 /**
+ *  Flag that is set to YES once some data has been received from the server.
+ *  This can be used to determine whether to display a skeleton view or other initial loading display.
+ */
+@property (nonatomic, assign) BOOL loadedInitialData;
+
+/**
  *  How many events to load in initial data and in each subsequent call to loadOlderData.  Defaults to 100.
  */
 @property (nonatomic) NSUInteger pageSize;
@@ -152,6 +158,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
 #pragma mark - Protected methods that can be called by subclasses
 - (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;
 
+/**
+ *  Removes any events with sending flags
+ */
+- (void) removeSendingEvents;
+
 #pragma mark - Protected methods to be overridden by subclasses
 
 /**
@@ -161,6 +172,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeLabel;
  *  Default implementation returns @[@"message"]
  */
 - (nullable NSArray<NSString *> *)eventTypes;
+
+/**
+ *  Used to generate an event with a 'sending' flag.  This can be overridden to add user meta data such as avatars.
+ */
+- (nonnull ZNGEvent *)pendingMessageEventForOutgoingMessage:(nonnull ZNGNewMessage *)newMessage;
 
 - (BOOL) pushNotificationRelevantToThisConversation:(nonnull NSNotification *)notification;
 

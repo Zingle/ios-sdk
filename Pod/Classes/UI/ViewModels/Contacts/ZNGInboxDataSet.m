@@ -11,27 +11,29 @@
 #import "ZNGContactClient.h"
 #import "ZNGStatus.h"
 #import "ZingleSDK.h"
+#import "ZNGContactDataSetBuilder.h"
+#import "ZNGLabel.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
-NSString * const ParameterKeyPageIndex              = @"page";
-NSString * const ParameterKeyPageSize               = @"page_size";
-NSString * const ParameterKeySortField              = @"sort_field";
-NSString * const ParameterKeySortDirection          = @"sort_direction";
-NSString * const ParameterKeyLastMessageCreatedAt   = @"last_message_created_at";
-NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
-NSString * const ParameterKeyIsClosed               = @"is_closed";
-NSString * const ParameterKeyLabelId                = @"label_id";
-NSString * const ParameterKeyQuery                  = @"query";
-NSString * const ParameterKeyIsStarred              = @"is_starred";
-NSString * const ParameterKeySearchMessageBodies    = @"search_message_bodies";
+static NSString * const ParameterKeyPageIndex              = @"page";
+static NSString * const ParameterKeyPageSize               = @"page_size";
+static NSString * const ParameterKeySortFields              = @"sort_fields";
+static NSString * const ParameterKeyLastMessageCreatedAt   = @"last_message_created_at";
+static NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
+static NSString * const ParameterKeyIsClosed               = @"is_closed";
+static NSString * const ParameterKeyLabelId                = @"label_id";
+static NSString * const ParameterKeyQuery                  = @"query";
+static NSString * const ParameterKeySearchMessageBodies    = @"search_message_bodies";
+static NSString * const ParameterValueTrue                 = @"true";
+static NSString * const ParameterValueFalse                = @"false";
+static NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
 
-
-NSString * const ParameterValueTrue                 = @"true";
-NSString * const ParameterValueFalse                = @"false";
-NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
-NSString * const ParameterValueDescending           = @"desc";
-NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at";
+NSString * const ZNGInboxDataSetSortFieldContactCreatedAt = @"created_at";
+NSString * const ZNGInboxDataSetSortFieldLastMessageCreatedAt = @"last_message_created_at";
+NSString * const ZNGInboxDataSetSortFieldLastName = @"last_name";
+NSString * const ZNGInboxDataSetSortDirectionAscending = @"asc";
+NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 
 // Readonly property re-declarations to ensure that they are properly backed with KVO compliant setters.
 @interface ZNGInboxDataSet ()
@@ -53,19 +55,57 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     ZNGContact * lastLocallyRemovedContact;
 }
 
-- (nonnull instancetype) initWithContactClient:(ZNGContactClient *)aContactClient
++ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder *))builderBlock
+{
+    NSParameterAssert(builderBlock);
+    
+    ZNGContactDataSetBuilder * builder = [[ZNGContactDataSetBuilder alloc] init];
+    builderBlock(builder);
+    return [builder build];
+}
+
+- (nonnull instancetype) init
 {
     self = [super init];
     
     if (self != nil) {
-        _contactClient = aContactClient;
+        _sortFields = @[[NSString stringWithFormat:@"%@ %@", ZNGInboxDataSetSortFieldLastMessageCreatedAt, ZNGInboxDataSetSortDirectionDescending]];
+    }
+    
+    return self;
+}
+
+- (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder
+{
+    NSParameterAssert(builder.contactClient);
+    
+    self = [self init];
+    
+    if (self != nil) {
+        _contactClient = builder.contactClient;
+        
+        _pageSize = builder.pageSize;
+        _allowContactsWithNoMessages = builder.allowContactsWithNoMessages;
+        _openStatus = builder.openStatus;
+        _unconfirmed = builder.unconfirmed;
+        _labelIds = builder.labelIds;
+        _groupIds = builder.groupIds;
+        _searchText = builder.searchText;
+        _searchMessageBodies = builder.searchMessageBodies;
+        
+        if ([builder.sortFields count] > 0) {
+            _sortFields = builder.sortFields;
+        }
+        
+        if (_pageSize == 0) {
+            _pageSize = 25;
+        }
         
         fetchQueue = [[NSOperationQueue alloc] init];
         fetchQueue.name = @"Zingle Inbox fetching";
         fetchQueue.maxConcurrentOperationCount = 1;
         
         _contacts = [[NSOrderedSet alloc] init];
-        _pageSize = 25;
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
     }
@@ -89,14 +129,55 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
     return [NSString stringWithFormat:@"<%@: %p>", [self class], self];
 }
 
+- (NSString *) title
+{
+    // TODO: Return a title
+    return @"Contacts";
+}
+
 #pragma mark - Filtering
 - (nonnull NSMutableDictionary *) parameters
 {
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
     parameters[ParameterKeyPageSize] = @(self.pageSize);
-    parameters[ParameterKeySortField] = ParameterValueLastMessageCreatedAt;
-    parameters[ParameterKeySortDirection] = ParameterValueDescending;
-    parameters[ParameterKeyLastMessageCreatedAt] = ParameterValueGreaterThanZero;
+    
+    parameters[ParameterKeySortFields] = self.sortFields;
+    
+    if (self.openStatus == ZNGInboxDataSetOpenStatusOpen) {
+        parameters[ParameterKeyIsClosed] = ParameterValueFalse;
+    } else if (self.openStatus == ZNGInboxDataSetOpenStatusClosed) {
+        parameters[ParameterKeyIsClosed] = ParameterValueTrue;
+    } // else both, so no value for is_closed
+    
+    if (self.unconfirmed) {
+        parameters[ParameterKeyIsConfirmed] = ParameterValueFalse;
+    }
+    
+    if (!self.allowContactsWithNoMessages) {
+        parameters[ParameterKeyLastMessageCreatedAt] = ParameterValueGreaterThanZero;
+    }
+    
+    if ([self.labelIds count] > 0) {
+        if ([self.labelIds count] > 1) {
+            // TODO: Support multiple label searching
+            ZNGLogWarn(@"%llu label IDs were provided for contact searching, but the API only supports one.  Gross.  We'll send one.", (unsigned long long)[self.labelIds count]);
+        }
+        
+        parameters[ParameterKeyLabelId] = [self.labelIds firstObject];
+    }
+    
+    if ([self.groupIds count] > 0) {
+        // TODO: Support group filtering
+        ZNGLogWarn(@"%llu group IDs were selected for searching, but the API does not yet support contact group filtering.  Life is hard and cruel.", (unsigned long long)[self.groupIds count]);
+    }
+    
+    if ([self.searchText length] > 0) {
+        if (self.searchMessageBodies) {
+           parameters[ParameterKeySearchMessageBodies] = ParameterValueTrue;
+        }
+        
+        parameters[ParameterKeyQuery] = [self.searchText copy];
+    }
 
     return parameters;
 }
@@ -469,7 +550,57 @@ NSString * const ParameterValueLastMessageCreatedAt = @"last_message_created_at"
 
 - (BOOL) contactBelongsInDataSet:(ZNGContact *)contact
 {
-    // Default implementation is YES, since we do not yet discriminate.
+    if ((self.openStatus == ZNGInboxDataSetOpenStatusOpen) && (contact.isClosed)) {
+        return NO;
+    }
+    
+    if ((self.openStatus == ZNGInboxDataSetOpenStatusClosed) && (!contact.isClosed)) {
+        return NO;
+    }
+    
+    if ((self.unconfirmed) && (contact.isConfirmed)) {
+        return NO;
+    }
+    
+    if ([self.labelIds count] > 0) {
+        __block BOOL matchingLabelFound = NO;
+        
+        [contact.labels enumerateObjectsUsingBlock:^(ZNGLabel * _Nonnull contactLabel, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([self.labelIds containsObject:contactLabel.labelId]) {
+                matchingLabelFound = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (!matchingLabelFound) {
+            return NO;
+        }
+    }
+    
+    if ([self.groupIds count] > 0) {
+        // TODO: Support groups
+    }
+    
+    // It is unlikely that search text needs an accurate result here.  Take a shot just in case.
+    if ([self.searchText length] > 0) {
+        NSMutableString * allSearchableFields = [[contact fullName] mutableCopy];
+        
+        for (ZNGLabel * label in contact.labels) {
+            if (label.displayName != nil) {
+                [allSearchableFields appendString:label.displayName];
+            }
+        }
+        
+        // One message body is better than none, right?
+        if ((self.searchMessageBodies) && (contact.lastMessage.body != nil)) {
+            [allSearchableFields appendString:contact.lastMessage.body];
+        }
+        
+        if (![[allSearchableFields lowercaseString] containsString:[self.searchText lowercaseString]]) {
+            return NO;
+        }
+    }
+    
     return YES;
 }
 

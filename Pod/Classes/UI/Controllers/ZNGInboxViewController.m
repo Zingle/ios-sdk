@@ -11,7 +11,6 @@
 #import "ZNGContactClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGTableViewCell.h"
-#import "ZNGInboxDataFilters.h"
 #import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
@@ -21,6 +20,8 @@
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGAnalytics.h"
 #import "ZNGLabelGridView.h"
+#import "ZNGInboxDataSet.h"
+#import "ZNGContactDataSetBuilder.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -29,14 +30,12 @@ static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadin
 static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loading";
 static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
-@interface ZNGInboxViewController () <UITableViewDataSource, UITableViewDelegate>
+@interface ZNGInboxViewController ()
 
 @end
 
 @implementation ZNGInboxViewController
 {
-    UIRefreshControl * refreshControl;
-    
     NSDateFormatter * dayOfWeekFormatter;
     NSDateFormatter * dateWithoutYearFormatter;
     NSDateFormatter * dateWithYearFormatter;
@@ -129,26 +128,15 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.hidden = YES;
-    
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGInboxViewController class]];
     unconfirmedImage = [UIImage imageNamed:@"unconfirmedCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
     
-    refreshControl = [self configuredRefreshControl];
-    [self.tableView addSubview:refreshControl];
-    
-    // Creating view for extending background color
-    CGRect frame = self.tableView.bounds;
-    frame.origin.y = -frame.size.height;
-    UIView* bgView = [[UIView alloc] initWithFrame:frame];
-    bgView.backgroundColor = [UIColor whiteColor];
-    
-    // Adding the view below the refresh control
-    [self.tableView insertSubview:bgView atIndex:0];
-    
+    self.refreshControl = [self configuredRefreshControl];
+    [self.tableView insertSubview:self.refreshControl atIndex:0];
+
     // Time/date formatting
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
@@ -160,8 +148,10 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     dateWithoutYearFormatter = [[NSDateFormatter alloc] init];
     dateWithoutYearFormatter.dateFormat = @"MMM d";
 
+    if (self.title == nil) {
+        self.title = @"Inbox";
+    }
     
-    self.title = @"Inbox";
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.estimatedRowHeight = 118.0;
@@ -211,7 +201,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 
 - (ZNGInboxDataSet *) initialDataSet
 {
-    return [[ZNGInboxDataOpen alloc] initWithContactClient:self.session.contactClient];
+    return [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = self.session.contactClient;
+    }];
 }
 
 - (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -300,17 +292,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     if ([keyPath isEqualToString:ZNGKVOContactsLoadingPath]) {
         // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
         // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
-        if ((!self.data.loading) && (refreshControl.isRefreshing)) {
-            [refreshControl endRefreshing];
-        }
-    } else if ([keyPath isEqualToString:ZNGKVOContactsLoadingInitialDataPath]) {
-        if (self.data.loadingInitialData) {
-            self.tableView.hidden = YES;
-            [self showActivityIndicator];
-        } else {
-            // We just finished loading
-            [self hideActivityIndicator];
-            self.tableView.hidden = NO;
+        if ((!self.data.loading) && (self.refreshControl.isRefreshing)) {
+            [self.refreshControl endRefreshing];
         }
     } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
         [self handleContactsUpdateWithChangeDictionary:change];
@@ -337,8 +320,8 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     
     // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
     // See: http://stackoverflow.com/questions/20549475/uitableview-insertrows-without-locking-main-thread
-    if (refreshControl.isRefreshing) {
-        [refreshControl endRefreshing];
+    if (self.refreshControl.isRefreshing) {
+        [self.refreshControl endRefreshing];
     }
     
     switch (changeType)

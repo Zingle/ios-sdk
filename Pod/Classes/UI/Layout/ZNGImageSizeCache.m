@@ -49,8 +49,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         NSString * cacheFolder = [paths firstObject];
         cacheFilePath = [cacheFolder stringByAppendingPathComponent:kCacheFileName];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(imageDownloaded:) name:kZNGMessageMediaLoadedNotification object:nil];
-        
         loading = YES;
         [self loadCachedSizes];
     }
@@ -91,33 +89,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     });
 }
 
-- (void) imageDownloaded:(NSNotification *)notification
-{
-    ZNGMessage * message = notification.object;
-    
-    if (![message isKindOfClass:[ZNGMessage class]]) {
-        NSAssert(NO, @"Notification for downloaded image attachment was from a %@ instead of a ZNGMessage.  What?", [message class]);
-    }
-    
-    __block NSUInteger count = 0;
-    
-    [message.imageAttachmentsByName enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull filename, UIImage * _Nonnull image, BOOL * _Nonnull stop) {
-        if ((filename != nil) && (image != nil)) {
-            [self setSize:image.size forImageWithPath:filename save:NO];
-            count++;
-        }
-    }];
-    
-    if (count > 0) {
-        [self saveCachedSizes];
-    }
-}
-
 - (CGSize) sizeForImageWithPath:(NSString *)filename
 {
     if (loading) {
         // Our cache has not yet loaded.
         ZNGLogInfo(@"Returning 0x0 as cached size because our cache has not yet loaded.");
+        return CGSizeZero;
+    }
+    
+    if ([filename isKindOfClass:[NSNull class]]) {
         return CGSizeZero;
     }
     

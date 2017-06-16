@@ -11,7 +11,7 @@
 #import "ZingleSDK/ZNGContact.h"
 #import "ZingleSDK/ZNGContactFieldValue.h"
 #import "ZingleSDK/ZNGInboxDataSet.h"
-#import "ZingleSDK/ZNGInboxDataUnconfirmed.h"
+#import "ZingleSDK/ZNGContactDataSetBuilder.h"
 
 @interface TestInboxDataSet : XCTestCase
 
@@ -47,7 +47,6 @@
     for (NSUInteger i=0; i < numDudes; i++) {
         ZNGContact * dude = [[ZNGContact alloc] init];
         dude.isConfirmed = ((i % 2) == 0);
-        dude.isClosed = ((i % 3) == 0);
         
         ZNGContactFieldValue * lastName = [[ZNGContactFieldValue alloc] init];
         ZNGContactField * lastNameField = [[ZNGContactField alloc] init];
@@ -70,7 +69,9 @@
     ZNGContact * dude = [[self oneHundredDudes] firstObject];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = @[dude];
-    ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+    }];
     [data refresh];
     
     [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
@@ -86,8 +87,11 @@
     NSUInteger pageSize = 10;
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = hundredsOfDudes;
-    ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
-    data.pageSize = pageSize;
+    
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
     [data refresh];
     
     NSArray<ZNGContact *> * expectedFirstPage = [hundredsOfDudes subarrayWithRange:NSMakeRange(0, pageSize)];
@@ -130,8 +134,10 @@
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = oneHundredDudes;
-    ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
-    data.pageSize = pageSize;
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
     [data refresh];
     
     // Ensure he is indeed unconfirmed
@@ -187,8 +193,11 @@
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = oneHundredDudes;
-    ZNGInboxDataUnconfirmed * data = [[ZNGInboxDataUnconfirmed alloc] initWithContactClient:contactClient];
-    data.pageSize = pageSize;
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.unconfirmed = YES;
+        builder.pageSize = pageSize;
+    }];
     [data refresh];
 
     
@@ -238,8 +247,11 @@
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = oneHundredDudes;
-    ZNGInboxDataUnconfirmed * data = [[ZNGInboxDataUnconfirmed alloc] initWithContactClient:contactClient];
-    data.pageSize = pageSize;
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.unconfirmed = YES;
+        builder.pageSize = pageSize;
+    }];
     [data refresh];
     
     
@@ -295,8 +307,10 @@
     
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     contactClient.contacts = twoDudes;
-    ZNGInboxDataSet * data = [[ZNGInboxDataSet alloc] initWithContactClient:contactClient];
-    data.pageSize = pageSize;
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
     [data refresh];
     
     

@@ -28,7 +28,7 @@
 
 @end
 
-@interface ZNGInboxViewController : UIViewController <MGSwipeTableCellDelegate>
+@interface ZNGInboxViewController : UIViewController <MGSwipeTableCellDelegate, UITableViewDataSource, UITableViewDelegate>
 
 + (nonnull instancetype)inboxViewController;
 
@@ -64,5 +64,7 @@
  *  Setting this to nil or to a contact that is not present in our data will deselect any current selection
  */
 @property (nonatomic, strong, nullable) ZNGContact * selectedContact;
+
+@property (nonatomic, strong, nullable) UIRefreshControl * refreshControl;
 
 @end

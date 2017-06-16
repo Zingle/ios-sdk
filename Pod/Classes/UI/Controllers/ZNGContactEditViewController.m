@@ -28,6 +28,7 @@
 #import "ZNGAnalytics.h"
 #import "ZNGGradientLoadingView.h"
 #import "ZNGLabelGridView.h"
+#import "ZNGContactDefaultFieldsTableViewCell.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -482,6 +483,11 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    // All sections other than the top profile section will have headers
+    if (section == ContactSectionDefaultCustomFields) {
+        return 0.0;
+    }
+    
     return 30.0;
 }
 
@@ -497,9 +503,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     switch (section) {
         case ContactSectionDefaultCustomFields:
-            header.sectionLabel.text = @"PROFILE";
-            header.sectionImage.image = [UIImage imageNamed:@"editIconProfile" inBundle:bundle compatibleWithTraitCollection:nil];
-            break;
+            // No header for top section
+            return nil;
         case ContactSectionChannels:
             header.sectionLabel.text = @"CHANNELS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconChannels" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -537,7 +542,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 {
     switch (section) {
         case ContactSectionDefaultCustomFields:
-            return [defaultCustomFields count];
+            return 1;
         case ContactSectionOptionalCustomFields:
             return [optionalCustomFields count];
         case ContactSectionLabels:
@@ -553,6 +558,27 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 {
     switch (indexPath.section) {
         case ContactSectionDefaultCustomFields:
+        {
+            ZNGContactDefaultFieldsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"defaultFields" forIndexPath:indexPath];
+            
+            ZNGContactFieldValue * titleFieldValue = [self.contact titleFieldValue];
+            ZNGContactFieldValue * firstNameFieldValue = [self.contact firstNameFieldValue];
+            ZNGContactFieldValue * lastNameFieldValue = [self.contact lastNameFieldValue];
+            
+            cell.contact = self.contact;
+            cell.titleFieldValue = titleFieldValue;
+            cell.firstNameFieldValue = firstNameFieldValue;
+            cell.lastNameFieldValue = lastNameFieldValue;
+            
+            BOOL locked = ([self.contact editingCustomFieldIsLocked:titleFieldValue]
+                           || [self.contact editingCustomFieldIsLocked:firstNameFieldValue]
+                           || [self.contact editingCustomFieldIsLocked:lastNameFieldValue]);
+            
+            cell.editingLocked = locked;
+            
+            return cell;
+        }
+            
         case ContactSectionOptionalCustomFields:
         {
             NSArray<ZNGContactFieldValue *> * customFields = (indexPath.section == ContactSectionDefaultCustomFields) ? defaultCustomFields : optionalCustomFields;

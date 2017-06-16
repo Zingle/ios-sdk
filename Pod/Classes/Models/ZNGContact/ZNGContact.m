@@ -16,6 +16,7 @@
 #import "ZNGNewChannel.h"
 #import "ZNGAnalytics.h"
 #import "ZNGFieldOption.h"
+#import "NSString+Initials.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -311,6 +312,19 @@ static NSString * const ParameterNameClosed = @"is_closed";
     }
 }
 
+- (NSString *) initials
+{
+    NSString * firstName = [[self firstNameFieldValue] value] ?: @"";
+    NSString * lastName = [[self lastNameFieldValue] value] ?: @"";
+    NSString * name = [[NSString stringWithFormat:@"%@ %@", firstName, lastName] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    if ([name length] == 0) {
+        return nil;
+    }
+    
+    return [name initials];
+}
+
 - (NSArray<ZNGChannel *> *) channelsWithValues
 {
     NSMutableArray<ZNGChannel *> * populatedChannels = [[NSMutableArray alloc] initWithCapacity:[self.channels count]];
@@ -419,10 +433,18 @@ static NSString * const ParameterNameClosed = @"is_closed";
         return YES;
     }
     
-    BOOL sameCustomFields = [[self customFieldsWithValues] isEqualToArray:[old customFieldsWithValues]];
-    __block BOOL sameChannels = [[self channelsWithValues] isEqualToArray:[old channelsWithValues]];
+    NSSet * customFieldSet = [NSSet setWithArray:[self customFieldsWithValues]];
+    NSSet * oldCustomFieldSet = [NSSet setWithArray:[old customFieldsWithValues]];
+    BOOL sameCustomFields = [customFieldSet isEqualToSet:oldCustomFieldSet];
+    
+    NSSet * channelsSet = [NSSet setWithArray:[self channelsWithValues]];
+    NSSet * oldChannelsSet = [NSSet setWithArray:[old channelsWithValues]];
+    __block BOOL sameChannels = [channelsSet isEqualToSet:oldChannelsSet];
     BOOL sameConfirmed = (old.isConfirmed == self.isConfirmed);
-    BOOL sameLabels = ([old.labels isEqualToArray:self.labels]);
+    
+    NSSet * labelsSet = [NSSet setWithArray:self.labels];
+    NSSet * oldLabelsSet = [NSSet setWithArray:old.labels];
+    BOOL sameLabels = ([labelsSet isEqualToSet:oldLabelsSet]);
     
     if (sameChannels) {
         // We have the same channel IDs, but some of the channels may be changed

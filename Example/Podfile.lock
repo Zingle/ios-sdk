@@ -29,6 +29,7 @@ PODS:
     - CocoaLumberjack/Core
   - CocoaLumberjack/Extensions (2.3.0):
     - CocoaLumberjack/Default
+  - FLAnimatedImage (1.0.12)
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
@@ -37,9 +38,11 @@ PODS:
     - Mantle/extobjc (= 1.5.8)
   - Mantle/extobjc (1.5.8)
   - MGSwipeTableCell (1.5.6)
-  - SDWebImage (4.0.0):
-    - SDWebImage/Core (= 4.0.0)
   - SDWebImage/Core (4.0.0)
+  - SDWebImage/GIF (4.0.0):
+    - FLAnimatedImage (~> 1.0)
+    - SDWebImage/Core
+  - Shimmer (1.0.2)
   - Socket.IO-Client-Swift (8.3.3)
   - ZingleSDK (1.1.0):
     - AFNetworking (~> 2.5)
@@ -49,7 +52,8 @@ PODS:
     - JVFloatLabeledTextField
     - Mantle (~> 1.0)
     - MGSwipeTableCell
-    - SDWebImage
+    - SDWebImage/GIF
+    - Shimmer
     - Socket.IO-Client-Swift
 
 DEPENDENCIES:
@@ -63,14 +67,16 @@ SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
   Analytics: 15be3e651d22cc811f44df65698538236676437b
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
+  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
   Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   Socket.IO-Client-Swift: a2faffdbde89c63aebc5d631041530c1068b02b8
-  ZingleSDK: 9d4cfd96785f46cb360d43d2fcc159de70299ff6
+  ZingleSDK: f305f35f50137e5eb929a5a8ebfca3155918eebb
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

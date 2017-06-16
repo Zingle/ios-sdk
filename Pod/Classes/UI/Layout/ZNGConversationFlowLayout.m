@@ -57,6 +57,21 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self.minimumLineSpacing = 6.0;
 }
 
+- (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
+{
+    // Stop JSQMessagesCollectionViewFlowLayout from setting our header z index to -1 and causing an assertion failure
+    NSArray<UICollectionViewLayoutAttributes *> * allAttributes = [[super layoutAttributesForElementsInRect:rect] copy];
+    
+    [allAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes * _Nonnull attributes, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (attributes.representedElementCategory == UICollectionElementCategorySupplementaryView) {
+            ZNGLogVerbose(@"%s: Setting %@ frame for %@ view", __PRETTY_FUNCTION__, NSStringFromCGRect(attributes.frame), attributes.representedElementKind);
+            attributes.zIndex = 10;
+        }
+    }];
+    
+    return allAttributes;
+}
+
 - (CGSize)sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * eventViewModel = (ZNGEventViewModel *)[self.collectionView.dataSource collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];

@@ -16,6 +16,7 @@
 #import "ZNGAutomation.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGLabel.h"
+#import "ZNGContactGroup.h"
 @import Analytics;
 
 static const int zngLogLevel = ZNGLogLevelInfo;
@@ -290,6 +291,26 @@ static NSString * const HostPropertyName = @"Host";
     
     properties[@"labelNames"] = labelNames;
     properties[@"labelIds"] = labelIds;
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackSentMessage:(NSString *)messageBody toGroups:(NSArray<ZNGContactGroup *> *)groups
+{
+    NSString * event = @"Sent a message to group(s)";
+    
+    NSMutableDictionary * properties = [self defaultProperties];
+    
+    NSMutableArray * groupNames = [[NSMutableArray alloc] initWithCapacity:[groups count]];
+    NSMutableArray * groupIds = [[NSMutableArray alloc] initWithCapacity:[groups count]];
+    
+    for (ZNGContactGroup * group in groups) {
+        [groupNames addObject:group.displayName];
+        [groupIds addObject:group.groupId];
+    }
+    
+    properties[@"groupNames"] = groupNames;
+    properties[@"groupIds"] = groupIds;
     
     [self _track:event properties:properties];
 }

@@ -695,9 +695,15 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return vc;
 }
 
-- (void) sendMessage:(NSString *)body withUUID:(nullable NSString *)uuid toContacts:(NSArray<ZNGContact *> *)contacts labels:(NSArray<ZNGLabel *> *)labels phoneNumbers:(NSArray<NSString *> *)phoneNumbers completion:(void (^_Nullable)(BOOL succeeded))completion;
+- (void) sendMessage:(NSString *)body
+            withUUID:(nullable NSString *)uuid
+          toContacts:(NSArray<ZNGContact *> *)contacts
+              labels:(NSArray<ZNGLabel *> *)labels
+              groups:(NSArray<ZNGContactGroup *> *)groups
+        phoneNumbers:(NSArray<NSString *> *)phoneNumbers
+          completion:(void (^_Nullable)(BOOL succeeded))completion
 {
-    NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[phoneNumbers count];
+    NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[groups count] + (BOOL)[phoneNumbers count];
     
     if (typeCount == 0) {
         ZNGLogError(@"No recipients provided to sendMessage:.  Ignoring.");
@@ -723,6 +729,10 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     if ([labels count] > 0) {
         [messages addObject:[self _messageToLabels:labels withUUID:uuid]];
+    }
+    
+    if ([groups count] > 0) {
+        [messages addObject:[self _messageToGroups:groups withUUID:uuid]];
     }
     
     if ([phoneNumbers count] > 0) {
@@ -781,6 +791,10 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         
         if ([labels count] > 0) {
             [[ZNGAnalytics sharedAnalytics] trackSentMessage:body toLabels:labels];
+        }
+        
+        if ([groups count] > 0) {
+            [[ZNGAnalytics sharedAnalytics] trackSentMessage:body toGroups:groups];
         }
         
         if ([phoneNumbers count] > 0) {
@@ -854,6 +868,23 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     for (ZNGLabel * label in labels) {
         ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
         recipient.participantId = label.labelId;
+        [recipients addObject:recipient];
+    }
+    
+    message.recipients = recipients;
+    return message;
+}
+
+- (ZNGNewMessage *) _messageToGroups:(NSArray<ZNGContactGroup *> *)groups withUUID:(NSString *)uuid
+{
+    ZNGNewMessage * message = [self _freshOutgoingMessageWithUUID:uuid];
+    message.recipientType = ZNGConversationParticipantTypeGroup;
+    
+    NSMutableArray<ZNGParticipant *> * recipients = [[NSMutableArray alloc] initWithCapacity:[groups count]];
+    
+    for (ZNGContactGroup * group in groups) {
+        ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
+        recipient.participantId = group.groupId;
         [recipients addObject:recipient];
     }
     

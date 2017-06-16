@@ -11,27 +11,32 @@
 #import "ZNGUser.h"
 #import <JSQMessagesViewController/JSQMessageData.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 #pragma mark - JSON properties
-@property (nonatomic, strong, nonnull) NSString* messageId;
-@property (nonatomic, strong, nullable) NSString* body;
-@property (nonatomic, strong, nullable) NSString* displayName;
-@property (nonatomic, strong, nullable) NSString* communicationDirection;
-@property (nonatomic, strong, nullable) NSString* bodyLanguageCode;
-@property (nonatomic, strong, nullable) NSString* translatedBody;
-@property (nonatomic, strong, nullable) NSString* translatedBodyLanguageCode;
-@property (nonatomic, strong, nullable) NSString* triggeredByUserId;
-@property (nonatomic, strong, nullable) ZNGUser* triggeredByUser;
-@property (nonatomic, strong, nullable) NSString* templateId;
-@property (nonatomic, strong, nullable) NSString* senderType;
-@property (nonatomic, strong, nullable) ZNGCorrespondent* sender;
-@property (nonatomic, strong, nullable) NSString* recipientType;
-@property (nonatomic, strong, nullable) ZNGCorrespondent* recipient;
-@property (nonatomic, strong, nullable) NSArray* attachments;
-@property (nonatomic, strong, nullable) NSDate* createdAt;
-@property (nonatomic, strong, nullable) NSDate* readAt;
+
+@property(nonatomic, strong) NSString* messageId;
+@property(nonatomic, strong, nullable) NSString* body;
+@property(nonatomic, strong, nullable) NSString* displayName;
+@property(nonatomic, strong, nullable) NSString* communicationDirection;
+@property(nonatomic, strong, nullable) NSString* bodyLanguageCode;
+@property(nonatomic, strong, nullable) NSString* translatedBody;
+@property(nonatomic, strong, nullable) NSString* translatedBodyLanguageCode;
+@property(nonatomic, strong, nullable) ZNGUser* triggeredByUser;
+@property(nonatomic, strong, nullable) NSString* templateId;
+@property(nonatomic, strong, nullable) NSString* senderType;
+@property(nonatomic, strong, nullable) ZNGCorrespondent* sender;
+@property(nonatomic, strong, nullable) NSString* recipientType;
+@property(nonatomic, strong, nullable) ZNGCorrespondent* recipient;
+@property(nonatomic, strong, nullable) NSArray* attachments;
+@property(nonatomic, strong, nullable) NSDate* createdAt;
+@property(nonatomic, strong, nullable) NSDate* readAt;
 @property (nonatomic, copy, nullable) NSString * forwardedByServiceId;
+@property(nonatomic, assign) BOOL isDelayed;
+@property(nonatomic, strong, nullable) NSDate * executeAt;
+@property(nonatomic, strong, nullable) NSDate * executedAt;
 
 /**
  *  If this is an inbound, this is the contact ID.  Outbound, it is the triggered by user ID.
@@ -59,3 +64,5 @@
 - (ZNGCorrespondent * _Nullable) contactCorrespondent;
 
 @end
+
+NS_ASSUME_NONNULL_END

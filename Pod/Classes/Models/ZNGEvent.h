@@ -11,19 +11,27 @@
 #import "ZNGAutomation.h"
 #import "ZNGMessage.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class ZNGContact;
 @class ZNGEventViewModel;
 
 @interface ZNGEvent : MTLModel<MTLJSONSerializing, JSQMessageData>
 
-@property(nonatomic, strong) NSString* eventId;
-@property(nonatomic, strong) NSString* contactId;
-@property(nonatomic, strong) NSString* eventType;
-@property(nonatomic, strong) NSString* body;
-@property(nonatomic, strong) NSDate* createdAt;
-@property(nonatomic, strong) ZNGUser* triggeredByUser;
-@property(nonatomic, strong) ZNGAutomation* automation;
-@property(nonatomic, strong) ZNGMessage* message;
+@property (nonatomic, strong) NSString* eventId;
+@property (nonatomic, strong, nullable) NSString* contactId;
+@property (nonatomic, strong) NSString* eventType;
+@property (nonatomic, strong, nullable) NSString* body;
+@property (nonatomic, strong) NSDate* createdAt;
+@property (nonatomic, strong, nullable) ZNGUser* triggeredByUser;
+@property (nonatomic, strong, nullable) ZNGAutomation* automation;
+@property (nonatomic, strong, nullable) ZNGMessage* message;
+
+/**
+ *  The time this event actually came into existence.  For delayed messages, this will be null until the message is sent.
+ *  For most other event types, this is createdAt.
+ */
+@property (nonatomic, readonly, nullable) NSDate * displayTime;
 
 /**
  *  Local flag indicating that the event is outbound but has not yet been seen in remote data.
@@ -53,4 +61,11 @@
 - (BOOL) isNote;
 - (BOOL) isInboundMessage;
 
+/**
+ *  Returns YES if this event type is deletable.  The only event type where this is true at the moment is delayed message.
+ */
+- (BOOL) mayBeDeleted;
+
 @end
+
+NS_ASSUME_NONNULL_END

@@ -124,6 +124,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     CGFloat offScreenTimeLabelPenetration;
     
     NSDateFormatter * timeFormatter;
+    
+    /**
+     *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
+     */
+    NSDateComponentsFormatter * nearFutureTimeFormatter;
+    
+    NSMutableSet<NSIndexPath *> * indexPathsOfVisibleCellsWithRelativeTimesToRefresh;
 }
 
 @dynamic collectionView;
@@ -199,9 +206,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self updateUUID];
     
+    indexPathsOfVisibleCellsWithRelativeTimesToRefresh = [[NSMutableSet alloc] initWithCapacity:20];
+    
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
     timeFormatter.timeStyle = NSDateFormatterShortStyle;
+    
+    nearFutureTimeFormatter = [[NSDateComponentsFormatter alloc] init];
+    nearFutureTimeFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyleFull;
+    nearFutureTimeFormatter.includesApproximationPhrase = YES;
+    nearFutureTimeFormatter.allowedUnits = (NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
+    nearFutureTimeFormatter.formattingContext = NSFormattingContextMiddleOfSentence;
+    nearFutureTimeFormatter.maximumUnitCount = 1;
     
     self.automaticallyScrollsToMostRecentMessage = NO;
     
@@ -271,8 +287,27 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     uint64_t pollingIntervalNanoseconds = PollingIntervalSeconds * NSEC_PER_SEC;
     dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
     dispatch_source_set_event_handler(pollingTimerSource, ^{
+        if (weakSelf == nil) {
+            return;
+        }
+        
         if (weakSelf.isVisible) {
             [weakSelf.conversation loadRecentEventsErasingOlderData:NO];
+        }
+        
+        ZNGConversationViewController * strongSelf = weakSelf;
+        if ([strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh count] > 0) {
+            NSMutableSet<NSIndexPath *> * visibleCells = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+            [visibleCells intersectSet:strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh];
+            
+            if ([visibleCells count] > 0) {
+                // Put the reloads into a CATransaction with actions disabled to prevent a flicker when reloading the cell.
+                // This flicker is due to alpha being set in the default layout attributes of collection view cells.
+                [CATransaction begin];
+                [CATransaction setDisableActions:YES];
+                [self.collectionView reloadItemsAtIndexPaths:[visibleCells allObjects]];
+                [CATransaction commit];
+            }
         }
     });
     dispatch_resume(pollingTimerSource);
@@ -678,7 +713,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     newEventsSinceLastScrolledToBottom = 0;
     [self updateUnreadBanner];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    // Add a slight delay to allow the collection view layout to update.
+    // Removing this delay can sometimes cause the conversation not to scroll fully down.
+    // This is especially noticeable when sending a new message that creates a large message bubble.  Without the 0.1 delay, the conversation
+    //  would scroll down to see just the top of the new bubble but not the entire bubble.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
         [self.collectionView scrollRectToVisible:bottomLeft animated:animated];
     });
@@ -1216,26 +1255,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return paths;
 }
 
-/**
- *  The event prior to the supplied index path.  This may be multiple indexes behind the supplied index path if there are other event view model objects
- *   for the same event above the index path
- */
-- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    
-    for (NSInteger i = indexPath.row - 1; i >= 0; i--) {
-        // Is this event for the same event (i.e. an attachment for that same message)
-        ZNGEventViewModel * viewModel = self.conversation.eventViewModels[i];
-        if (![viewModel.event isEqual:thisEvent]) {
-            // No, it's a different one.  Hooray.
-            return viewModel.event;
-        }
-    }
-    
-    return nil;
-}
-
 - (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < ([self.conversation.eventViewModels count] - 1)) {
@@ -1245,10 +1264,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
-- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath includingDelayedEvents:(BOOL)includeDelayed
 {
     if (indexPath.row > 0) {
-        return [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+        ZNGEventViewModel * model = [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+        
+        if ((!includeDelayed) && (model.event.message.isDelayed)) {
+            return [self priorViewModelToIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section] includingDelayedEvents:NO];
+        } else {
+            return model;
+        }
     }
     
     return nil;
@@ -1287,6 +1312,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // No avatars
     return nil;
+}
+
+- (void) collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (![[collectionView indexPathsForVisibleItems] containsObject:indexPath]) {
+        [indexPathsOfVisibleCellsWithRelativeTimesToRefresh removeObject:indexPath];
+    }
 }
 
 // Used to mark messages as read
@@ -1377,7 +1409,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 0.0;
+    ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
+    return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
@@ -1409,7 +1442,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath];
+    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath includingDelayedEvents:NO];
     
     if ([thisEvent isEqual:priorEventViewModel.event]) {
         // The bubble above this one is for the same event.  Don't break them up with a timestamp, you maniac.
@@ -1464,7 +1497,57 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return nil;
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * delayedDescription = [self delayedDescriptionForEvent:viewModel.event];
+    
+    if (delayedDescription == nil) {
+        return nil;
+    }
+
+    // This message is indeed delayed
+    
+    // Begin the string with a clock icon
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    UIImage * clockIcon = [UIImage imageNamed:@"clockIcon" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * clockIconAttachment = [[NSTextAttachment alloc] init];
+    clockIconAttachment.image = clockIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:clockIconAttachment] mutableCopy];
+
+    // Append the words
+    NSString * words = [NSString stringWithFormat:@"  %@", delayedDescription]; // add space after icon
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    // Put it all together
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
+- (NSString *) delayedDescriptionForEvent:(ZNGEvent *)event
+{
+    if (!event.message.isDelayed) {
+        return nil;
+    }
+    
+    if (event.message.executeAt == nil) {
+        ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", event.eventId);
+        return @"Sending later";
+    }
+    
+    NSTimeInterval timeUntilSending = [event.message.executeAt timeIntervalSinceNow];
+    
+    if (timeUntilSending < 60.0) {
+        return @"Sending in less than a minute";
+    }
+    
+    if (timeUntilSending < 0.0) {
+        ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", event.eventId);
+        return @"Sending soon";
+    }
+    
+    // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
+    NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
+    return [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
@@ -1511,7 +1594,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        cell.alpha = event.sending ? 0.5 : 1.0;
+        cell.alpha = (event.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        
+        if (event.message.isDelayed) {
+            [indexPathsOfVisibleCellsWithRelativeTimesToRefresh addObject:indexPath];
+        } else {
+            [indexPathsOfVisibleCellsWithRelativeTimesToRefresh removeObject:indexPath];
+        }
         
         if ([viewModel isMediaMessage]) {
             if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {
@@ -1556,7 +1645,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         if (event.createdAt != nil) {
             // Both of our incoming and outgoing cell classes have properties for time label, so we'll just use outbound.
             ZNGConversationCellOutgoing * outgoingCell = (ZNGConversationCellOutgoing *)cell;
-            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.createdAt];
+            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.displayTime];
             [self updateTimeLabelLocationForCell:cell forEventViewModel:viewModel animated:NO];
         }
         

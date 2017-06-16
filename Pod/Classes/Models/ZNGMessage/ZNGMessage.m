@@ -120,7 +120,6 @@
              @"bodyLanguageCode" : @"body_language_code",
              @"translatedBody" : @"translated_body",
              @"translatedBodyLanguageCode" : @"translated_body_language_code",
-             @"triggeredByUserId" : @"triggered_by_user_id",
              @"triggeredByUser" : @"triggered_by_user",
              @"templateId" : @"template_id",
              @"senderType" : @"sender_type",
@@ -130,7 +129,10 @@
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
-             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null]
+             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null],
+             NSStringFromSelector(@selector(isDelayed)) : @"is_delayed",
+             NSStringFromSelector(@selector(executeAt)) : @"execute_at",
+             NSStringFromSelector(@selector(executedAt)) : @"executed_at"
              };
 }
 
@@ -157,6 +159,16 @@
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
+}
+
++ (NSValueTransformer *)executeAtJSONTransformer
+{
+    return [ZingleValueTransformers dateValueTransformer];
+}
+
++ (NSValueTransformer *)executedAtJSONTransformer
+{
+    return [ZingleValueTransformers dateValueTransformer];
 }
 
 @end

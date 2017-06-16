@@ -167,8 +167,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Protected methods used by subclasses
 - (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath;
-- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath;
-- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath includingDelayedEvents:(BOOL)includeDelayed;
 - (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath;
 - (void) updateUUID;
 

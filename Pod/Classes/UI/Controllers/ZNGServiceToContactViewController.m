@@ -1309,6 +1309,14 @@ static void * KVOContext = &KVOContext;
 
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    
+    // If this message is forwarded, we will allow height for the forwarding message.  We never expect this to be true when the super implementation of this method
+    //  will also return a non-zero value.
+    if ([viewModel.event.message.forwardedByServiceId length] > 0) {
+        return 14.0;
+    }
+    
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
@@ -1327,33 +1335,49 @@ static void * KVOContext = &KVOContext;
     return (isDelayed || wasForwarded) ? 18.0 : 0.0;
 }
 
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * forwardedDescription = [self forwardedDescriptionForEvent:viewModel.event];
+    
+    if ([forwardedDescription length] == 0) {
+        return nil;
+    }
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UIImage * forwardedIcon = [UIImage imageNamed:@"forwardArrow" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
+    iconAttachment.image = forwardedIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:iconAttachment] mutableCopy];
+    
+    NSString * words = [NSString stringWithFormat:@" %@", forwardedDescription];
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     NSString * delayedDescription = [self delayedDescriptionForEvent:viewModel.event];
-    NSString * forwardedDescription = [self forwardedDescriptionForEvent:viewModel.event];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
-    UIImage * icon = nil;
-    NSString * description = nil;
-    
-    if ([delayedDescription length] > 0) {
-        icon = [UIImage imageNamed:@"clockIcon" inBundle:bundle compatibleWithTraitCollection:nil];
-        description = delayedDescription;
-    } else if ([forwardedDescription length] > 0) {
-        icon = [[UIImage imageNamed:@"forwardArrow" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        description = forwardedDescription;
-    } else {
+    if (delayedDescription == nil) {
         return nil;
     }
-
-    // Begin the string with the icon
-    NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
-    iconAttachment.image = icon;
-    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:iconAttachment] mutableCopy];
+    
+    // This message is indeed delayed
+    
+    // Begin the string with a clock icon
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UIImage * clockIcon = [UIImage imageNamed:@"clockIcon" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * clockIconAttachment = [[NSTextAttachment alloc] init];
+    clockIconAttachment.image = clockIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:clockIconAttachment] mutableCopy];
     
     // Append the words
-    NSString * words = [NSString stringWithFormat:@"  %@", description];
+    NSString * words = [NSString stringWithFormat:@"  %@", delayedDescription]; // add space after icon
     NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
     NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
     

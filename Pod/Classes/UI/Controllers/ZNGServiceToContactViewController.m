@@ -1307,16 +1307,9 @@ static void * KVOContext = &KVOContext;
     return attributedString;
 }
 
+#pragma mark - Message bubble text field sizes
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
-    
-    // If this message is forwarded, we will allow height for the forwarding message.  We never expect this to be true when the super implementation of this method
-    //  will also return a non-zero value.
-    if ([viewModel.event.message.forwardedByServiceId length] > 0) {
-        return 14.0;
-    }
-    
+{  
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
@@ -1330,11 +1323,24 @@ static void * KVOContext = &KVOContext;
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
-    BOOL isDelayed = eventViewModel.event.message.isDelayed;
-    BOOL wasForwarded = ([eventViewModel.event.message.forwardedByServiceId length] > 0);
-    return (isDelayed || wasForwarded) ? 18.0 : 0.0;
+    return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
 }
 
+- (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    // See how much space our superclass wants for this label.
+    // Sometimes it returns a non-zero value that will just be used for spacing.
+    CGFloat superHeight = [super collectionView:collectionView layout:collectionViewLayout heightForCellBottomLabelAtIndexPath:indexPath];
+    
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    BOOL wasForwarded = ([viewModel.event.message.forwardedByServiceId length] > 0);
+    CGFloat ourHeight = (wasForwarded) ? 18.0 : 0.0;
+    
+    // Who wants more space?
+    return MAX(superHeight, ourHeight);
+}
+
+#pragma mark - Message bubble text fields
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
@@ -1386,7 +1392,6 @@ static void * KVOContext = &KVOContext;
     return string;
 }
 
-
 - (NSString *) delayedDescriptionForEvent:(ZNGEvent *)event
 {
     if (!event.message.isDelayed) {
@@ -1430,6 +1435,7 @@ static void * KVOContext = &KVOContext;
     return nil;
 }
 
+#pragma mark -
 - (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(forwardMessage:)) {

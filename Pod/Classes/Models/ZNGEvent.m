@@ -21,6 +21,7 @@ static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
 static NSString * const ZNGEventFeedReopened = @"feed_reopened";
 static NSString * const ZNGEventFeedClosed = @"feed_closed";
 static NSString * const ZNGEventMessageForwarded = @"message_forward";
+static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
 
 @implementation ZNGEvent
 
@@ -39,7 +40,8 @@ static NSString * const ZNGEventMessageForwarded = @"message_forward";
                   ZNGEventWorkflowEnded,
                   ZNGEventFeedClosed,
                   ZNGEventFeedReopened,
-                  ZNGEventMessageForwarded
+                  ZNGEventMessageForwarded,
+                  ZNGEventHotsosIssueCreated
                   ];
     });
     
@@ -267,6 +269,8 @@ static NSString * const ZNGEventMessageForwarded = @"message_forward";
         return @"Reopened";
     } else if ([self.eventType isEqualToString:ZNGEventMessageForwarded]) {
         return @"Message forwarded";
+    } else if ([self.eventType isEqualToString:ZNGEventHotsosIssueCreated]) {
+        return @"HotSOS order created";
     }
     
     return @"Unknown event";

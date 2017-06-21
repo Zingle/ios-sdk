@@ -1052,7 +1052,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     // Due to a bug in UITextView, we must save our font before inserting the image attachment and reset it afterward.
     // See: http://stackoverflow.com/questions/21742376/nsattributedstring-changed-font-unexpectedly-after-inserting-image
-    
     UIFont * font = self.inputToolbar.contentView.textView.font;
     
     ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
@@ -1060,9 +1059,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
     NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
     [mutableString appendAttributedString:imageString];
+    
     self.inputToolbar.contentView.textView.attributedText = mutableString;
     self.inputToolbar.contentView.textView.font = font;
     
+    [self.inputToolbar.contentView.textView becomeFirstResponder];
     [self.inputToolbar toggleSendButtonEnabled];
 }
 

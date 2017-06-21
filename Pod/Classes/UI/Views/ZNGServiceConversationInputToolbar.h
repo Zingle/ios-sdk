@@ -52,6 +52,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (IBAction)didPressChannelSelectButton:(id)sender;
 
+- (void) collapseInputButtons;
+
 NS_ASSUME_NONNULL_END
 
 @end

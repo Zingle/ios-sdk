@@ -1364,6 +1364,12 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Text view delegate
+- (void) textViewDidBeginEditing:(UITextView *)textView
+{
+    [self.inputToolbar collapseInputButtons];
+    [super textViewDidBeginEditing:textView];
+}
+
 - (void) textViewDidChange:(UITextView *)textView
 {
     if (textView == self.inputToolbar.contentView.textView) {

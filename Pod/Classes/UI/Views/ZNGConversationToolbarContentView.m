@@ -38,8 +38,7 @@
                              @"imageButton": self.imageButton,
                              @"noteButton": self.noteButton,
                              @"revealButton": self.revealButton,
-                             @"textView": self.textView,
-                             @"superview": self
+                             @"textView": self.textView
                              };
     
     
@@ -69,10 +68,19 @@
                                                                                                        metrics:0
                                                                                                          views:views];
     
-    NSLayoutConstraint * buttonsOffScreenConstraint = [NSLayoutConstraint constraintWithItem:self.noteButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-6.0];
+    NSLayoutConstraint * buttonsOffScreenConstraint = [NSLayoutConstraint constraintWithItem:self.noteButton
+                                                                                   attribute:NSLayoutAttributeRight
+                                                                                   relatedBy:NSLayoutRelationEqual
+                                                                                      toItem:self
+                                                                                   attribute:NSLayoutAttributeLeft
+                                                                                  multiplier:1.0
+                                                                                    constant:-6.0];
     
     NSString * revealButtonFormat = @"H:|-(17)-[revealButton]-(17)-[textView]";
-    NSArray<NSLayoutConstraint *> * revealButtonConstraints = [NSLayoutConstraint constraintsWithVisualFormat:revealButtonFormat options:0 metrics:0 views:views];
+    NSArray<NSLayoutConstraint *> * revealButtonConstraints = [NSLayoutConstraint constraintsWithVisualFormat:revealButtonFormat
+                                                                                                      options:0
+                                                                                                      metrics:0
+                                                                                                        views:views];
     
     NSMutableArray<NSLayoutConstraint *> * collapsedConstraints = [buttonSpacingConstraints mutableCopy];
     [collapsedConstraints addObject:buttonsOffScreenConstraint];

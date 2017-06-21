@@ -560,9 +560,9 @@
                                 </constraints>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqn-aA-lFp" customClass="ZNGServiceConversationInputToolbar">
-                                <rect key="frame" x="0.0" y="554" width="375" height="113"/>
+                                <rect key="frame" x="0.0" y="590" width="375" height="77"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="113" id="gry-0L-4u8"/>
+                                    <constraint firstAttribute="height" constant="77" id="gry-0L-4u8"/>
                                 </constraints>
                                 <items/>
                             </toolbar>

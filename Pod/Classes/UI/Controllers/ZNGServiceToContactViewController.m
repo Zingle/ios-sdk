@@ -1375,6 +1375,8 @@ static void * KVOContext = &KVOContext;
     if (textView == self.inputToolbar.contentView.textView) {
         [textViewChangeTimer invalidate];
         
+        [self.inputToolbar collapseInputButtons];
+        
         if ([textView.text length] == 0) {
             textViewChangeTimer = nil;
             [self.conversation userClearedInput];
@@ -1624,6 +1626,7 @@ static void * KVOContext = &KVOContext;
     [self updateUUID];
     self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
     [self.inputToolbar toggleSendButtonEnabled];
+    [self.inputToolbar collapseInputButtons];
 }
 
 - (BOOL) _shouldModallyEditContact

@@ -179,7 +179,7 @@ static void * KVOContext = &KVOContext;
     [self updateConfirmedButton];
     [self setupBannerContainer];
     
-    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
+    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
     [self updateInputStatus];

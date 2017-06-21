@@ -7,7 +7,7 @@
 //
 
 #import "ZNGServiceConversationInputToolbar.h"
-#import "ZNGConversationToolbarContentView.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGChannel.h"
 #import "UIFont+Lato.h"
@@ -44,7 +44,7 @@
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
 {
-    NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:NSStringFromClass([ZNGConversationToolbarContentView class])
+    NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:NSStringFromClass([ZNGServiceConversationToolbarContentView class])
                                                                                           owner:nil
                                                                                         options:nil];
     return nibViews.firstObject;

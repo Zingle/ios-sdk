@@ -13,6 +13,7 @@
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 #import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
@@ -863,11 +864,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIView * popoverSource = toolbar.contentView.leftBarButtonContainerView;
-    
-    if ([toolbar.contentView respondsToSelector:@selector(imageButton)]) {
-        popoverSource = toolbar.contentView.imageButton;
-    }
+    UIView * popoverSource = toolbar.contentView.imageButton;
     
     alert.popoverPresentationController.sourceView = popoverSource;
     alert.popoverPresentationController.sourceRect = popoverSource.bounds;

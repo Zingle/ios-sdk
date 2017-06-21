@@ -7,7 +7,7 @@
 //
 
 #import <ZingleSDK/ZNGConversationInputToolbar.h>
-#import "ZNGConversationToolbarContentView.h"
+#import <ZingleSDK/ZNGServiceConversationToolbarContentView.h>
 
 @class ZNGChannel;
 @class ZNGServiceConversationInputToolbar;
@@ -31,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (weak, nonatomic, nullable) id<ZNGServiceConversationInputToolbarDelegate> delegate;
 
-@property (weak, nonatomic, readonly) ZNGConversationToolbarContentView * contentView;
+@property (weak, nonatomic, readonly) ZNGServiceConversationToolbarContentView * contentView;
 
 /**
  *  Defaults to an empty string.  Can be set to something like "No available channels".

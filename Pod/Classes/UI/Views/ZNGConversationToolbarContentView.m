@@ -112,14 +112,12 @@
     
     [self setNeedsUpdateConstraints];
     
-    if (animated) {
-        [UIView animateWithDuration:0.4 delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.0 options:0 animations:^{
-            self.revealButton.alpha = 1.0;
-            [self layoutIfNeeded];
-        } completion:nil];
-    } else {
+    NSTimeInterval duration = animated ? 0.4 : 0.0;
+
+    [UIView animateWithDuration:duration delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.0 options:0 animations:^{
+        self.revealButton.alpha = 1.0;
         [self layoutIfNeeded];
-    }
+    } completion:nil];
 }
 
 - (void) expandButtons:(BOOL)animated
@@ -135,14 +133,12 @@
     
     [self setNeedsUpdateConstraints];
     
-    if (animated) {
-        [UIView animateWithDuration:0.4 delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.0 options:0 animations:^{
-            self.revealButton.alpha = 0.0;
-            [self layoutIfNeeded];
-        } completion:nil];
-    } else {
+    NSTimeInterval duration = animated ? 0.4 : 0.0;
+
+    [UIView animateWithDuration:duration delay:0.0 usingSpringWithDamping:0.6 initialSpringVelocity:0.0 options:0 animations:^{
+        self.revealButton.alpha = 0.0;
         [self layoutIfNeeded];
-    }
+    } completion:nil];
 }
 
 @end

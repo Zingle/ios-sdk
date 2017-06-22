@@ -20,7 +20,6 @@
 
 @property (nonatomic, weak) IBOutlet ZNGLabelGridView * labelGrid;
 @property (weak, nonatomic) IBOutlet UILabel *dateLabel;
-@property (weak, nonatomic) IBOutlet UIView * closedShadingOverlay;
 @property (weak, nonatomic) IBOutlet UILabel *contactName;
 @property (weak, nonatomic) IBOutlet UILabel *lastMessage;
 @property (weak, nonatomic) IBOutlet UIImageView * unconfirmedCircle;

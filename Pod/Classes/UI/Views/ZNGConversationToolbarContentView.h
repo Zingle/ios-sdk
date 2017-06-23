@@ -15,8 +15,11 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * imageButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
-
+@property (nonatomic, strong, nullable) IBOutlet UIButton * revealButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
+
+- (void) collapseButtons:(BOOL)animated;
+- (void) expandButtons:(BOOL)animated;
 
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled;
 

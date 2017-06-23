@@ -13,6 +13,7 @@
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 #import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
@@ -108,11 +109,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSMutableArray<NSData *> * outgoingImageAttachments;
     
     /**
-     *  YES if the last scrolling action left us at the bottom of our content (within a few points) or if there is another reason we now want to be bottom pinned (e.g. just sent a message)
-     */
-    BOOL stuckToBottom;
-    
-    /**
      *  The number of new events that have arrived under our current scroll position.
      *  This will count messages and internal notes but not other event types.
      */
@@ -172,6 +168,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
     _showSkeletonViewWhenLoading = YES;
+    _stuckToBottom = YES;
     
     offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
@@ -445,7 +442,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.inputEnabled = NO;
     self.inputToolbar.contentView.textView.text = @"";
     
-    stuckToBottom = YES;
+    self.stuckToBottom = YES;
     
     [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] uuid:uuid success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
@@ -483,7 +480,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) finishSendingMessageAnimated:(BOOL)animated
 {
-    stuckToBottom = YES;
+    self.stuckToBottom = YES;
     [outgoingImageAttachments removeAllObjects];
     [super finishSendingMessageAnimated:animated];
 }
@@ -662,7 +659,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                           hasDisplayedInitialData ? @"HAS" : @"HAS NOT");
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             
-            if ((hasDisplayedInitialData) && (!stuckToBottom)) {
+            if ((hasDisplayedInitialData) && (!self.stuckToBottom)) {
                 __block NSUInteger newMessagesAndNotesCount = 0;
                 
                 for (ZNGEventViewModel * eventViewModel in insertions) {
@@ -697,7 +694,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 #pragma mark - Collection view scrolling/updates
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
-    stuckToBottom = YES;
+    self.stuckToBottom = YES;
     newEventsSinceLastScrolledToBottom = 0;
     [self updateUnreadBanner];
     
@@ -851,11 +848,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIView * popoverSource = toolbar.contentView.leftBarButtonContainerView;
-    
-    if ([toolbar.contentView respondsToSelector:@selector(imageButton)]) {
-        popoverSource = toolbar.contentView.imageButton;
-    }
+    UIView * popoverSource = toolbar.contentView.imageButton;
     
     alert.popoverPresentationController.sourceView = popoverSource;
     alert.popoverPresentationController.sourceRect = popoverSource.bounds;
@@ -1040,7 +1033,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     // Due to a bug in UITextView, we must save our font before inserting the image attachment and reset it afterward.
     // See: http://stackoverflow.com/questions/21742376/nsattributedstring-changed-font-unexpectedly-after-inserting-image
-    
     UIFont * font = self.inputToolbar.contentView.textView.font;
     
     ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
@@ -1048,9 +1040,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
     NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
     [mutableString appendAttributedString:imageString];
+    
     self.inputToolbar.contentView.textView.attributedText = mutableString;
     self.inputToolbar.contentView.textView.font = font;
     
+    [self.inputToolbar.contentView.textView becomeFirstResponder];
     [self.inputToolbar toggleSendButtonEnabled];
 }
 
@@ -1072,7 +1066,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     // If we are stuck to the bottom, we will not show the banner
-    if (stuckToBottom) {
+    if (self.stuckToBottom) {
         return;
     }
     
@@ -1157,7 +1151,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
     BOOL isNowScrolledToBottom = (bottomOffset < 60.0);
-    BOOL changed = (stuckToBottom != isNowScrolledToBottom);
+    BOOL changed = (self.stuckToBottom != isNowScrolledToBottom);
     
     // If we're scrolling away from the bottom, we need to ensure that the scrolling is from user input and not some kind of refresh that may remove us from the bottom.
     if ((changed) && (!isNowScrolledToBottom)) {
@@ -1168,9 +1162,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
     }
     
-    stuckToBottom = isNowScrolledToBottom;
+    self.stuckToBottom = isNowScrolledToBottom;
     
-    if (stuckToBottom) {
+    if (self.stuckToBottom) {
         newEventsSinceLastScrolledToBottom = 0;
     }
     
@@ -1180,9 +1174,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 - (BOOL) automaticallyScrollsToMostRecentMessage
 {
-    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", stuckToBottom ? @"YES" : @"NO");
+    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", self.stuckToBottom ? @"YES" : @"NO");
 
-    return stuckToBottom;
+    return self.stuckToBottom;
 }
 
 #pragma mark - Data source

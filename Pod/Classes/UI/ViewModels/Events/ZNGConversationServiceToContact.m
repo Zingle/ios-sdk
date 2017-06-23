@@ -58,6 +58,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         [self addObserver:self forKeyPath:ChannelsKVOPath options:NSKeyValueObservingOptionNew context:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceivedDawg:) name:ZNGPushNotificationReceived object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
     }
     
     return self;
@@ -148,6 +149,23 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     if ((self.automaticallyRefreshesOnPushNotification) && ([self pushNotificationRelevantToThisConversation:notification])) {
         [self.contact updateRemotely];
     }
+}
+
+- (void) notifyContactSelfMutated:(NSNotification *)notification
+{
+    // If it was literally our same contact instance, we can ignore it.
+    if (notification.object == self.contact) {
+        return;
+    }
+    
+    // If it was an unrelated contact, we can ignore it.
+    ZNGContact * updatedContact = notification.object;
+    if (![updatedContact isEqualToContact:self.contact]) {
+        return;
+    }
+    
+    // Update our dude
+    [_contact updateWithNewData:updatedContact];
 }
 
 - (void) addSenderNameToEvents:(NSArray<ZNGEvent *> *)events

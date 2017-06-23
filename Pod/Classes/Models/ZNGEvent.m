@@ -254,9 +254,9 @@ static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
     }
     
     if ([self.eventType isEqualToString:ZNGEventMarkConfirmed]) {
-        return @"Confirmed";
+        return @"Marked read";
     } else if ([self.eventType isEqualToString:ZNGEventMarkUnconfirmed]) {
-        return @"Unconfirmed";
+        return @"Marked unread";
     } else if ([self.eventType isEqualToString:ZNGEventContactCreated]) {
         return @"Contact created";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowStarted]) {

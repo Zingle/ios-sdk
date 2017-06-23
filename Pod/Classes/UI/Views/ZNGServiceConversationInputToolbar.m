@@ -7,7 +7,7 @@
 //
 
 #import "ZNGServiceConversationInputToolbar.h"
-#import "ZNGConversationToolbarContentView.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGChannel.h"
 #import "UIFont+Lato.h"
@@ -21,7 +21,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 121.0;
+    self.preferredDefaultHeight = 77.0;
     
     self.barTintColor = [UIColor whiteColor];
     
@@ -30,6 +30,8 @@
     self.sendButtonColor = [UIColor zng_green];
     self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
+    
+    [self.contentView.revealButton addTarget:self action:@selector(didPressRevealButton:) forControlEvents:UIControlEventTouchUpInside];
 
     self.clipsToBounds = YES;
     
@@ -42,7 +44,7 @@
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
 {
-    NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:NSStringFromClass([ZNGConversationToolbarContentView class])
+    NSArray *nibViews = [[NSBundle bundleForClass:[self class]] loadNibNamed:NSStringFromClass([ZNGServiceConversationToolbarContentView class])
                                                                                           owner:nil
                                                                                         options:nil];
     return nibViews.firstObject;
@@ -145,6 +147,16 @@
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressChooseChannelButton:)]) {
         [self.delegate inputToolbar:self didPressChooseChannelButton:sender];
     }
+}
+
+- (IBAction)didPressRevealButton:(id)sender
+{
+    [self.contentView expandButtons:YES];
+}
+
+- (void) collapseInputButtons
+{
+    [self.contentView collapseButtons:YES];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "ZNGNewMessageInputToolbar.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 
 @implementation ZNGNewMessageInputToolbar
 

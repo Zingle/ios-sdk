@@ -164,7 +164,7 @@ static void * KVOContext = &KVOContext;
     
     [self setupBannerContainer];
     
-    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
+    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
     [self updateInputStatus];
@@ -1214,10 +1214,18 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Text view delegate
+- (void) textViewDidBeginEditing:(UITextView *)textView
+{
+    [self.inputToolbar collapseInputButtons];
+    [super textViewDidBeginEditing:textView];
+}
+
 - (void) textViewDidChange:(UITextView *)textView
 {
     if (textView == self.inputToolbar.contentView.textView) {
         [textViewChangeTimer invalidate];
+        
+        [self.inputToolbar collapseInputButtons];
         
         if ([textView.text length] == 0) {
             textViewChangeTimer = nil;
@@ -1468,6 +1476,7 @@ static void * KVOContext = &KVOContext;
     [self updateUUID];
     self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
     [self.inputToolbar toggleSendButtonEnabled];
+    [self.inputToolbar collapseInputButtons];
 }
 
 - (BOOL) _shouldModallyEditContact

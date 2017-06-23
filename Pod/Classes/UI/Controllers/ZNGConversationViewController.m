@@ -13,6 +13,7 @@
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 #import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
@@ -859,11 +860,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIView * popoverSource = toolbar.contentView.leftBarButtonContainerView;
-    
-    if ([toolbar.contentView respondsToSelector:@selector(imageButton)]) {
-        popoverSource = toolbar.contentView.imageButton;
-    }
+    UIView * popoverSource = toolbar.contentView.imageButton;
     
     alert.popoverPresentationController.sourceView = popoverSource;
     alert.popoverPresentationController.sourceRect = popoverSource.bounds;
@@ -1048,7 +1045,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     // Due to a bug in UITextView, we must save our font before inserting the image attachment and reset it afterward.
     // See: http://stackoverflow.com/questions/21742376/nsattributedstring-changed-font-unexpectedly-after-inserting-image
-    
     UIFont * font = self.inputToolbar.contentView.textView.font;
     
     ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
@@ -1056,9 +1052,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
     NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
     [mutableString appendAttributedString:imageString];
+    
     self.inputToolbar.contentView.textView.attributedText = mutableString;
     self.inputToolbar.contentView.textView.font = font;
     
+    [self.inputToolbar.contentView.textView becomeFirstResponder];
     [self.inputToolbar toggleSendButtonEnabled];
 }
 

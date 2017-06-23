@@ -654,7 +654,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     __weak ZNGInboxViewController * weakSelf = self;
     
     if (contact.isConfirmed) {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nunread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact unconfirm];
@@ -664,7 +664,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             return !changeWillCauseRemoval;
         }];
     } else {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact confirm];

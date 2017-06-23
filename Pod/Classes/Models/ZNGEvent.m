@@ -250,9 +250,9 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     }
     
     if ([self.eventType isEqualToString:ZNGEventMarkConfirmed]) {
-        return @"Confirmed";
+        return @"Marked read";
     } else if ([self.eventType isEqualToString:ZNGEventMarkUnconfirmed]) {
-        return @"Unconfirmed";
+        return @"Marked unread";
     } else if ([self.eventType isEqualToString:ZNGEventContactCreated]) {
         return @"Contact created";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowStarted]) {

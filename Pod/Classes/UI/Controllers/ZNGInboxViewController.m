@@ -577,8 +577,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         cell.contactName.text = [contact fullName];
         NSUInteger lastMessageAttachmentCount = [contact.lastMessage.attachments count];
         
-        cell.closedShadingOverlay.hidden = !(contact.isClosed);
-        
         if ([contact.lastMessage.body length] > 0) {
             cell.lastMessage.text = contact.lastMessage.body;
         } else if (lastMessageAttachmentCount > 0) {
@@ -614,7 +612,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         cell.contactName.text = nil;
         cell.lastMessage.text = nil;
         cell.unconfirmedCircle.image = nil;
-        cell.closedShadingOverlay.hidden = YES;
     }
     
     return cell;

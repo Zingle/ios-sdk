@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
 
 #pragma mark - JSON properties
+
 @property(nonatomic, strong) NSString* messageId;
 @property(nonatomic, strong, nullable) NSString* body;
 @property(nonatomic, strong, nullable) NSString* displayName;
@@ -32,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray* attachments;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* readAt;
+@property (nonatomic, copy, nullable) NSString * forwardedByServiceId;
 @property(nonatomic, assign) BOOL isDelayed;
 @property(nonatomic, strong, nullable) NSDate * executeAt;
 @property(nonatomic, strong, nullable) NSDate * executedAt;

@@ -72,6 +72,11 @@ static void * KVOContext = &KVOContext;
     ZNGMessage * messageToForward;
     
     NSTimer * textViewChangeTimer;
+    
+    /**
+     *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
+     */
+    NSDateComponentsFormatter * nearFutureTimeFormatter;
 }
 
 @dynamic conversation;
@@ -168,7 +173,15 @@ static void * KVOContext = &KVOContext;
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
     [self updateInputStatus];
-        
+    
+    // Delayed message time formatter
+    nearFutureTimeFormatter = [[NSDateComponentsFormatter alloc] init];
+    nearFutureTimeFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyleFull;
+    nearFutureTimeFormatter.includesApproximationPhrase = YES;
+    nearFutureTimeFormatter.allowedUnits = (NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
+    nearFutureTimeFormatter.formattingContext = NSFormattingContextMiddleOfSentence;
+    nearFutureTimeFormatter.maximumUnitCount = 1;
+    
     // Avatars
     ZNGInitialsAvatarCache * avatarCache = [ZNGInitialsAvatarCache sharedCache];
     avatarCache.incomingTextColor = self.incomingTextColor;
@@ -1144,8 +1157,9 @@ static void * KVOContext = &KVOContext;
     return attributedString;
 }
 
+#pragma mark - Message bubble text field sizes
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{
+{  
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
@@ -1155,6 +1169,123 @@ static void * KVOContext = &KVOContext;
     return height;
 }
 
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
+    return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
+}
+
+- (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    // See how much space our superclass wants for this label.
+    // Sometimes it returns a non-zero value that will just be used for spacing.
+    CGFloat superHeight = [super collectionView:collectionView layout:collectionViewLayout heightForCellBottomLabelAtIndexPath:indexPath];
+    
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    BOOL wasForwarded = ([viewModel.event.message.forwardedByServiceId length] > 0);
+    CGFloat ourHeight = (wasForwarded) ? 18.0 : 0.0;
+    
+    // Who wants more space?
+    return MAX(superHeight, ourHeight);
+}
+
+#pragma mark - Message bubble text fields
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * forwardedDescription = [self forwardedDescriptionForEvent:viewModel.event];
+    
+    if ([forwardedDescription length] == 0) {
+        return nil;
+    }
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UIImage * forwardedIcon = [UIImage imageNamed:@"forwardArrow" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
+    iconAttachment.image = forwardedIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:iconAttachment] mutableCopy];
+    
+    NSString * words = [NSString stringWithFormat:@" %@", forwardedDescription];
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * delayedDescription = [self delayedDescriptionForEvent:viewModel.event];
+    
+    if (delayedDescription == nil) {
+        return nil;
+    }
+    
+    // This message is indeed delayed
+    
+    // Begin the string with a clock icon
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UIImage * clockIcon = [UIImage imageNamed:@"clockIcon" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * clockIconAttachment = [[NSTextAttachment alloc] init];
+    clockIconAttachment.image = clockIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:clockIconAttachment] mutableCopy];
+    
+    // Append the words
+    NSString * words = [NSString stringWithFormat:@"  %@", delayedDescription]; // add space after icon
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    // Put it all together
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
+- (NSString *) delayedDescriptionForEvent:(ZNGEvent *)event
+{
+    if (!event.message.isDelayed) {
+        return nil;
+    }
+    
+    if (event.message.executeAt == nil) {
+        ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", event.eventId);
+        return @"Sending later";
+    }
+    
+    NSTimeInterval timeUntilSending = [event.message.executeAt timeIntervalSinceNow];
+    
+    if (timeUntilSending < 60.0) {
+        return @"Sending in less than a minute";
+    }
+    
+    if (timeUntilSending < 0.0) {
+        ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", event.eventId);
+        return @"Sending soon";
+    }
+    
+    // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
+    NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
+    return [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
+}
+
+- (NSString *) forwardedDescriptionForEvent:(ZNGEvent *)event
+{
+    if ([event.message.forwardedByServiceId length] > 0) {
+        // Do we see this service in our available services?  If so, show its name.
+        for (ZNGService * service in self.conversation.session.availableServices) {
+            if ([service.serviceId isEqualToString:event.message.forwardedByServiceId]) {
+                return [NSString stringWithFormat:@"Forwarded from %@", service.displayName];
+            }
+        }
+        
+        return @"Forwarded from another service";
+    }
+    
+    return nil;
+}
+
+#pragma mark -
 - (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(forwardMessage:)) {

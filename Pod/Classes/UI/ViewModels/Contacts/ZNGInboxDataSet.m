@@ -428,13 +428,13 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     } else {
         // We have some overlap between our current data and this data.
         NSUInteger overlapFinalIndex = MIN(oldDataCount, startIndex + [incomingContacts count]);
-        NSRange overlapRange = NSMakeRange(startIndex, overlapFinalIndex - startIndex);
+        NSRange overlapRangeInTotalData = NSMakeRange(startIndex, overlapFinalIndex - startIndex);
         
-        NSInteger overflowCount = [incomingContacts count] - overlapRange.length;
+        NSInteger overflowCount = [incomingContacts count] - overlapRangeInTotalData.length;
         NSArray * replacements = incomingContacts;
 
         if (overflowCount > 0) {
-            replacements = [replacements subarrayWithRange:NSMakeRange(0, overlapRange.length)];
+            replacements = [replacements subarrayWithRange:NSMakeRange(0, overlapRangeInTotalData.length)];
         }
         
         ZNGLogVerbose(@"We received %ld contacts, %ld of which extend past our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
@@ -463,7 +463,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                     [mutableContacts removeObjectsAtIndexes:removedIndexes];
                 }
             } else if ([incomingContacts count] >= 2) {
-                NSArray<ZNGContact *> * oldPage = [[mutableContacts array] subarrayWithRange:overlapRange];
+                NSArray<ZNGContact *> * oldPage = [[mutableContacts array] subarrayWithRange:overlapRangeInTotalData];
                 
                 if ([[oldPage firstObject] isEqualToContact:incomingContacts[1]]) {
                     // This looks like a simple new-contact-to-head move so far.  Our first object has moved down by one.
@@ -500,21 +500,22 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         
         if (!simpleReorderingOrRefresh) {
             // Sanity check
-            if ((overlapRange.location + overlapRange.length) > [mutableContacts count]) {
-                ZNGLogError(@"New inbox data overlap range is out of bounds.  Help.  Refreshing all data.");
+            if ((overlapRangeInTotalData.location + overlapRangeInTotalData.length) > [mutableContacts count]) {
+                ZNGLogWarn(@"New inbox data overlap range is out of bounds.  Help.  Refreshing all data.");
                 [self refresh];
                 return;
             }
             
             // Replace the overlapping objects
-            NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRange];
+            NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overlapRangeInTotalData];
             [mutableContacts replaceObjectsAtIndexes:indexSet withObjects:replacements];
             
             // Append any extra
             if (overflowCount > 0) {
-                NSRange overflowRange = NSMakeRange(overlapRange.length, [incomingContacts count] - overlapRange.length);
-                NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:overflowRange];
-                NSArray * overflow = [incomingContacts subarrayWithRange:overflowRange];
+                NSRange overflowRangeInIncomingData = NSMakeRange(overlapRangeInTotalData.length, [incomingContacts count] - overlapRangeInTotalData.length);
+                NSArray * overflow = [incomingContacts subarrayWithRange:overflowRangeInIncomingData];
+                NSRange appendRange = NSMakeRange([mutableContacts count], [overflow count]);
+                NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:appendRange];
                 [mutableContacts insertObjects:overflow atIndexes:indexSet];    // See note above about insertObjects:AtIndexes: vs. addObjectsFromArray; re: KVO
             }
         }

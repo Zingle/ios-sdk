@@ -376,4 +376,251 @@
     }
 }
 
+- (void) testContactMovedDown
+{
+    NSUInteger pageSize = 200;
+    NSMutableArray<ZNGContact *> * oneHundredDudes = [[self oneHundredDudes] mutableCopy];
+    
+    // Pick someone in the rough middle of a page
+    NSUInteger dudeIndex = 11;
+    ZNGContact * dude = oneHundredDudes[dudeIndex];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
+    contactClient.contacts = oneHundredDudes;
+    
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
+    [data refresh];
+    
+    
+    // Is he there?
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return [data.contacts containsObject:dude];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    // Move him down
+    [oneHundredDudes removeObjectAtIndex:dudeIndex];
+    [oneHundredDudes addObject:dude];
+    
+    // Refresh
+    [data refresh];
+    
+    
+    // Make sure he is at the bottom
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([data.contacts indexOfObject:dude] == ([data.contacts count] - 1));
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testOneDudeDownOneDudeUp
+{
+    NSUInteger pageSize = 200;
+    NSMutableArray<ZNGContact *> * oneHundredDudes = [[self oneHundredDudes] mutableCopy];
+    
+    NSUInteger willMoveToHeadDudeIndex = 11;
+    ZNGContact * willMoveToHeadDude = oneHundredDudes[willMoveToHeadDudeIndex];
+    NSUInteger willMoveDownToIndex = 50;
+    ZNGContact * willMoveDownDude = [oneHundredDudes firstObject];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
+    contactClient.contacts = oneHundredDudes;
+    
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
+
+    [data refresh];
+    
+    
+    // Are they there?
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([data.contacts containsObject:willMoveToHeadDude] && [data.contacts containsObject:willMoveDownDude]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    // Move the dudes
+    [oneHundredDudes removeObjectAtIndex:willMoveToHeadDudeIndex];
+    [oneHundredDudes removeObjectAtIndex:0];
+    [oneHundredDudes insertObject:willMoveToHeadDude atIndex:0];
+    [oneHundredDudes insertObject:willMoveDownDude atIndex:willMoveDownToIndex];
+    
+    // Refresh
+    [data refresh];
+    
+    
+    // Make sure the dudes are both in data and the top dude is at the top
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        BOOL topDudeCorrect = [[data.contacts firstObject] isEqualToContact:willMoveToHeadDude];
+        BOOL dudeMovedDown = ([data.contacts indexOfObject:willMoveDownDude] == willMoveDownToIndex);
+        return topDudeCorrect && dudeMovedDown;
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testOneDudeGoneOneNewDudeAtTail
+{
+    NSUInteger pageSize = 100;
+    NSArray<ZNGContact *> * oneHundredDudes = [self oneHundredDudes];
+    NSMutableArray<ZNGContact *> * fiftyDudes = [[oneHundredDudes subarrayWithRange:NSMakeRange(0, 50)] mutableCopy];
+    ZNGContact * newDude = oneHundredDudes[75];
+    
+    // Pick someone in the rough middle of a page
+    NSUInteger oldDude1Index = 27;
+    ZNGContact * oldDude1 = fiftyDudes[oldDude1Index];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
+    contactClient.contacts = fiftyDudes;
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
+
+    [data refresh];
+    
+    
+    // Is he there?
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([data.contacts containsObject:oldDude1] && ![data.contacts containsObject:newDude]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    // Remove the old dude and add the new dude
+    [fiftyDudes removeObjectAtIndex:oldDude1Index];
+    [fiftyDudes addObject:newDude];
+    
+    // Refresh
+    [data refresh];
+    
+    
+    // Make sure only the new dude is around
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([data.contacts containsObject:newDude] && ![data.contacts containsObject:oldDude1]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testTwoDudesGoneOneNewDudeAtTail
+{
+    NSUInteger pageSize = 100;
+    NSArray<ZNGContact *> * oneHundredDudes = [self oneHundredDudes];
+    NSMutableArray<ZNGContact *> * fiftyDudes = [[oneHundredDudes subarrayWithRange:NSMakeRange(0, 50)] mutableCopy];
+    ZNGContact * newDude = oneHundredDudes[75];
+    
+    // Pick someone in the rough middle of a page
+    NSUInteger oldDude1Index = 27;
+    ZNGContact * oldDude1 = fiftyDudes[oldDude1Index];
+    NSUInteger oldDude2Index = 42;
+    ZNGContact * oldDude2 = fiftyDudes[oldDude2Index];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
+    contactClient.contacts = fiftyDudes;
+    
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
+
+    [data refresh];
+    
+    
+    // Is he there?
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([data.contacts containsObject:oldDude1] && [data.contacts containsObject:oldDude2] && ![data.contacts containsObject:newDude]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    // Remove the old dude and add the new dude
+    [fiftyDudes removeObjectAtIndex:oldDude1Index];
+    [fiftyDudes removeObject:oldDude2];
+    [fiftyDudes addObject:newDude];
+    
+    // Refresh
+    [data refresh];
+    
+    
+    // Make sure only the new dude is around
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([data.contacts containsObject:newDude] && ![data.contacts containsObject:oldDude1] && ![data.contacts containsObject:oldDude2]);
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testFiveNewDudesAtHeadFiveNewAtTail
+{
+    NSUInteger pageSize = 100;
+    NSArray<ZNGContact *> * oneHundredDudes = [self oneHundredDudes];
+    NSMutableArray<ZNGContact *> * fiftyDudes = [[oneHundredDudes subarrayWithRange:NSMakeRange(0, 50)] mutableCopy];
+    NSArray<ZNGContact *> * fiveNewHeadDudes = [oneHundredDudes subarrayWithRange:NSMakeRange(50, 5)];
+    NSArray<ZNGContact *> * fiveNewTailDudes = [oneHundredDudes subarrayWithRange:NSMakeRange(55, 5)];
+    
+    ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
+    contactClient.contacts = fiftyDudes;
+    
+    ZNGInboxDataSet * data = [ZNGInboxDataSet dataSetWithBlock:^(ZNGContactDataSetBuilder * _Nonnull builder) {
+        builder.contactClient = contactClient;
+        builder.pageSize = pageSize;
+    }];
+
+    [data refresh];
+    
+    
+    // Wait for all original fifty dudes to arrive.  Ensure new dudes are not there.
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        if ([data.contacts count] != 50) {
+            return NO;
+        }
+        
+        NSArray<ZNGContact *> * tooEarlyDudes = [fiveNewHeadDudes arrayByAddingObjectsFromArray:fiveNewTailDudes];
+        for (ZNGContact * dude in tooEarlyDudes) {
+            if ([data.contacts containsObject:dude]) {
+                return NO;
+            }
+        }
+        
+        return YES;
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    
+    // Add the new dudes
+    [fiftyDudes insertObjects:fiveNewHeadDudes atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, 5)]];
+    [fiftyDudes addObjectsFromArray:fiveNewTailDudes];
+    
+    // Refresh
+    [data refresh];
+    
+    
+    // Find the new dudes
+    [self keyValueObservingExpectationForObject:data keyPath:@"contacts" handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        NSArray<ZNGContact *> * newDudes = [fiveNewHeadDudes arrayByAddingObjectsFromArray:fiveNewTailDudes];
+        
+        for (ZNGContact * dude in newDudes) {
+            if (![data.contacts containsObject:dude]) {
+                return NO;
+            }
+        }
+        
+        return YES;
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
 @end

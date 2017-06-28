@@ -30,8 +30,8 @@ static NSString * const ZNGAutomationTypeCustom = @"Custom Automation";
 
 - (BOOL) canBeTriggedOnAContact
 {
-    NSArray<NSString *> * triggerableTypes = @[ZNGAutomationTypeSurvey, ZNGAutomationTypeSelfRegistration, ZNGAutomationTypeCustom];
-    return [triggerableTypes containsObject:self.type];
+    // This used to require checking the automation type string.  In 2017 it is no longer politically correct to discriminate by automation type.
+    return YES;
 }
 
 - (BOOL) isActive

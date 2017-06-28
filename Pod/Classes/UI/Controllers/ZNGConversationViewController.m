@@ -13,6 +13,7 @@
 #import "JSQMessagesBubbleImage.h"
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
+#import "ZNGServiceConversationToolbarContentView.h"
 #import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
@@ -108,11 +109,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSMutableArray<NSData *> * outgoingImageAttachments;
     
     /**
-     *  YES if the last scrolling action left us at the bottom of our content (within a few points) or if there is another reason we now want to be bottom pinned (e.g. just sent a message)
-     */
-    BOOL stuckToBottom;
-    
-    /**
      *  The number of new events that have arrived under our current scroll position.
      *  This will count messages and internal notes but not other event types.
      */
@@ -124,6 +120,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     CGFloat offScreenTimeLabelPenetration;
     
     NSDateFormatter * timeFormatter;
+    
+    NSMutableSet<NSIndexPath *> * indexPathsOfVisibleCellsWithRelativeTimesToRefresh;
 }
 
 @dynamic collectionView;
@@ -170,6 +168,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
     _showSkeletonViewWhenLoading = YES;
+    _stuckToBottom = YES;
     
     offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
@@ -198,6 +197,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self setupLoadingGradient];
     
     [self updateUUID];
+    
+    indexPathsOfVisibleCellsWithRelativeTimesToRefresh = [[NSMutableSet alloc] initWithCapacity:20];
     
     timeFormatter = [[NSDateFormatter alloc] init];
     timeFormatter.dateStyle = NSDateFormatterNoStyle;
@@ -271,8 +272,27 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     uint64_t pollingIntervalNanoseconds = PollingIntervalSeconds * NSEC_PER_SEC;
     dispatch_source_set_timer(pollingTimerSource, dispatch_time(DISPATCH_TIME_NOW, pollingIntervalNanoseconds), pollingIntervalNanoseconds, 5 * NSEC_PER_SEC /* 5 sec leeway */);
     dispatch_source_set_event_handler(pollingTimerSource, ^{
+        if (weakSelf == nil) {
+            return;
+        }
+        
         if (weakSelf.isVisible) {
             [weakSelf.conversation loadRecentEventsErasingOlderData:NO];
+        }
+        
+        ZNGConversationViewController * strongSelf = weakSelf;
+        if ([strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh count] > 0) {
+            NSMutableSet<NSIndexPath *> * visibleCells = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+            [visibleCells intersectSet:strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh];
+            
+            if ([visibleCells count] > 0) {
+                // Put the reloads into a CATransaction with actions disabled to prevent a flicker when reloading the cell.
+                // This flicker is due to alpha being set in the default layout attributes of collection view cells.
+                [CATransaction begin];
+                [CATransaction setDisableActions:YES];
+                [self.collectionView reloadItemsAtIndexPaths:[visibleCells allObjects]];
+                [CATransaction commit];
+            }
         }
     });
     dispatch_resume(pollingTimerSource);
@@ -422,7 +442,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.inputEnabled = NO;
     self.inputToolbar.contentView.textView.text = @"";
     
-    stuckToBottom = YES;
+    self.stuckToBottom = YES;
     
     [self.conversation sendMessageWithBody:text imageData:[outgoingImageAttachments copy] uuid:uuid success:^(ZNGStatus *status) {
         self.inputToolbar.inputEnabled = YES;
@@ -460,7 +480,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) finishSendingMessageAnimated:(BOOL)animated
 {
-    stuckToBottom = YES;
+    self.stuckToBottom = YES;
     [outgoingImageAttachments removeAllObjects];
     [super finishSendingMessageAnimated:animated];
 }
@@ -639,7 +659,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                           hasDisplayedInitialData ? @"HAS" : @"HAS NOT");
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
             
-            if ((hasDisplayedInitialData) && (!stuckToBottom)) {
+            if ((hasDisplayedInitialData) && (!self.stuckToBottom)) {
                 __block NSUInteger newMessagesAndNotesCount = 0;
                 
                 for (ZNGEventViewModel * eventViewModel in insertions) {
@@ -674,11 +694,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 #pragma mark - Collection view scrolling/updates
 - (void) scrollToBottomAnimated:(BOOL)animated
 {
-    stuckToBottom = YES;
+    self.stuckToBottom = YES;
     newEventsSinceLastScrolledToBottom = 0;
     [self updateUnreadBanner];
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    // Add a slight delay to allow the collection view layout to update.
+    // Removing this delay can sometimes cause the conversation not to scroll fully down.
+    // This is especially noticeable when sending a new message that creates a large message bubble.  Without the 0.1 delay, the conversation
+    //  would scroll down to see just the top of the new bubble but not the entire bubble.
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
         [self.collectionView scrollRectToVisible:bottomLeft animated:animated];
     });
@@ -824,11 +848,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     UIAlertController * alert =[UIAlertController alertControllerWithTitle:nil message:nil preferredStyle:UIAlertControllerStyleActionSheet];
     
-    UIView * popoverSource = toolbar.contentView.leftBarButtonContainerView;
-    
-    if ([toolbar.contentView respondsToSelector:@selector(imageButton)]) {
-        popoverSource = toolbar.contentView.imageButton;
-    }
+    UIView * popoverSource = toolbar.contentView.imageButton;
     
     alert.popoverPresentationController.sourceView = popoverSource;
     alert.popoverPresentationController.sourceRect = popoverSource.bounds;
@@ -1013,7 +1033,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     // Due to a bug in UITextView, we must save our font before inserting the image attachment and reset it afterward.
     // See: http://stackoverflow.com/questions/21742376/nsattributedstring-changed-font-unexpectedly-after-inserting-image
-    
     UIFont * font = self.inputToolbar.contentView.textView.font;
     
     ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
@@ -1021,9 +1040,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
     NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
     [mutableString appendAttributedString:imageString];
+    
     self.inputToolbar.contentView.textView.attributedText = mutableString;
     self.inputToolbar.contentView.textView.font = font;
     
+    [self.inputToolbar.contentView.textView becomeFirstResponder];
     [self.inputToolbar toggleSendButtonEnabled];
 }
 
@@ -1045,7 +1066,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     // If we are stuck to the bottom, we will not show the banner
-    if (stuckToBottom) {
+    if (self.stuckToBottom) {
         return;
     }
     
@@ -1130,7 +1151,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y - self.collectionView.frame.size.height + self.collectionView.contentInset.bottom;
     BOOL isNowScrolledToBottom = (bottomOffset < 60.0);
-    BOOL changed = (stuckToBottom != isNowScrolledToBottom);
+    BOOL changed = (self.stuckToBottom != isNowScrolledToBottom);
     
     // If we're scrolling away from the bottom, we need to ensure that the scrolling is from user input and not some kind of refresh that may remove us from the bottom.
     if ((changed) && (!isNowScrolledToBottom)) {
@@ -1141,9 +1162,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         }
     }
     
-    stuckToBottom = isNowScrolledToBottom;
+    self.stuckToBottom = isNowScrolledToBottom;
     
-    if (stuckToBottom) {
+    if (self.stuckToBottom) {
         newEventsSinceLastScrolledToBottom = 0;
     }
     
@@ -1153,9 +1174,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 - (BOOL) automaticallyScrollsToMostRecentMessage
 {
-    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", stuckToBottom ? @"YES" : @"NO");
+    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", self.stuckToBottom ? @"YES" : @"NO");
 
-    return stuckToBottom;
+    return self.stuckToBottom;
 }
 
 #pragma mark - Data source
@@ -1216,26 +1237,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return paths;
 }
 
-/**
- *  The event prior to the supplied index path.  This may be multiple indexes behind the supplied index path if there are other event view model objects
- *   for the same event above the index path
- */
-- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    
-    for (NSInteger i = indexPath.row - 1; i >= 0; i--) {
-        // Is this event for the same event (i.e. an attachment for that same message)
-        ZNGEventViewModel * viewModel = self.conversation.eventViewModels[i];
-        if (![viewModel.event isEqual:thisEvent]) {
-            // No, it's a different one.  Hooray.
-            return viewModel.event;
-        }
-    }
-    
-    return nil;
-}
-
 - (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < ([self.conversation.eventViewModels count] - 1)) {
@@ -1245,10 +1246,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
-- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath includingDelayedEvents:(BOOL)includeDelayed
 {
     if (indexPath.row > 0) {
-        return [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+        ZNGEventViewModel * model = [self eventViewModelAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section]];
+        
+        if ((!includeDelayed) && (model.event.message.isDelayed)) {
+            return [self priorViewModelToIndexPath:[NSIndexPath indexPathForRow:indexPath.row - 1 inSection:indexPath.section] includingDelayedEvents:NO];
+        } else {
+            return model;
+        }
     }
     
     return nil;
@@ -1287,6 +1294,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // No avatars
     return nil;
+}
+
+- (void) collectionView:(UICollectionView *)collectionView didEndDisplayingCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (![[collectionView indexPathsForVisibleItems] containsObject:indexPath]) {
+        [indexPathsOfVisibleCellsWithRelativeTimesToRefresh removeObject:indexPath];
+    }
 }
 
 // Used to mark messages as read
@@ -1409,7 +1423,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     ZNGEvent * thisEvent = [[self eventViewModelAtIndexPath:indexPath] event];
-    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath];
+    ZNGEventViewModel * priorEventViewModel = [self priorViewModelToIndexPath:indexPath includingDelayedEvents:NO];
     
     if ([thisEvent isEqual:priorEventViewModel.event]) {
         // The bubble above this one is for the same event.  Don't break them up with a timestamp, you maniac.
@@ -1511,7 +1525,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        cell.alpha = event.sending ? 0.5 : 1.0;
+        cell.alpha = (event.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        
+        if (event.message.isDelayed) {
+            [indexPathsOfVisibleCellsWithRelativeTimesToRefresh addObject:indexPath];
+        } else {
+            [indexPathsOfVisibleCellsWithRelativeTimesToRefresh removeObject:indexPath];
+        }
         
         if ([viewModel isMediaMessage]) {
             if ([cell respondsToSelector:@selector(setMediaViewMaskingImage:)]) {
@@ -1556,7 +1576,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         if (event.createdAt != nil) {
             // Both of our incoming and outgoing cell classes have properties for time label, so we'll just use outbound.
             ZNGConversationCellOutgoing * outgoingCell = (ZNGConversationCellOutgoing *)cell;
-            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.createdAt];
+            outgoingCell.exactTimeLabel.text = [timeFormatter stringFromDate:event.displayTime];
             [self updateTimeLabelLocationForCell:cell forEventViewModel:viewModel animated:NO];
         }
         

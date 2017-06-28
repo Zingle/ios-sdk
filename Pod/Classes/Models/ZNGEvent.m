@@ -20,6 +20,8 @@ static NSString * const ZNGEventWorkflowStarted = @"workflow_started";
 static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
 static NSString * const ZNGEventFeedReopened = @"feed_reopened";
 static NSString * const ZNGEventFeedClosed = @"feed_closed";
+static NSString * const ZNGEventMessageForwarded = @"message_forward";
+static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
 
 @implementation ZNGEvent
 
@@ -37,7 +39,9 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
                   ZNGEventWorkflowStarted,
                   ZNGEventWorkflowEnded,
                   ZNGEventFeedClosed,
-                  ZNGEventFeedReopened
+                  ZNGEventFeedReopened,
+                  ZNGEventMessageForwarded,
+                  ZNGEventHotsosIssueCreated
                   ];
     });
     
@@ -191,6 +195,22 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     return (([self isMessage]) && (![self.message isOutbound]));
 }
 
+- (NSDate *) displayTime
+{
+    if (self.message != nil) {
+        if (self.message.isDelayed) {
+            // Delayed messages that have not yet been sent do not have a displayTime
+            return nil;
+        }
+        
+        // Delayed messages that have been sent (i.e. messages with a non-nil executedAt time) use executedAt for displayTime.
+        // Otherwise, normal messages use the event's createdAt.  (Note: The message object itself tends to not have a createdAt time.  Thanks, server.)
+        return self.message.executedAt ?: self.createdAt;
+    }
+    
+    return self.createdAt;
+}
+
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {
@@ -234,9 +254,9 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
     }
     
     if ([self.eventType isEqualToString:ZNGEventMarkConfirmed]) {
-        return @"Confirmed";
+        return @"Marked read";
     } else if ([self.eventType isEqualToString:ZNGEventMarkUnconfirmed]) {
-        return @"Unconfirmed";
+        return @"Marked unread";
     } else if ([self.eventType isEqualToString:ZNGEventContactCreated]) {
         return @"Contact created";
     } else if ([self.eventType isEqualToString:ZNGEventWorkflowStarted]) {
@@ -247,9 +267,22 @@ static NSString * const ZNGEventFeedClosed = @"feed_closed";
         return @"Closed";
     } else if ([self.eventType isEqualToString:ZNGEventFeedReopened]) {
         return @"Reopened";
+    } else if ([self.eventType isEqualToString:ZNGEventMessageForwarded]) {
+        return @"Message forwarded";
+    } else if ([self.eventType isEqualToString:ZNGEventHotsosIssueCreated]) {
+        return @"HotSOS order created";
     }
     
     return @"Unknown event";
+}
+
+- (BOOL) mayBeDeleted
+{
+    if ([self.eventType isEqualToString:ZNGEventTypeMessage]) {
+        return self.message.isDelayed;
+    }
+    
+    return NO;
 }
 
 @end

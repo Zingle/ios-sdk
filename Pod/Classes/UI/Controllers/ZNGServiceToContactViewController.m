@@ -18,7 +18,6 @@
 #import "ZNGConversationDetailedEvents.h"
 #import "ZNGEventCollectionViewCell.h"
 #import "ZNGConversationFlowLayout.h"
-#import "ZNGPulsatingBarButtonImage.h"
 #import "ZNGTemplate.h"
 #import "UIViewController+ZNGSelectTemplate.h"
 #import "ZNGContactEditViewController.h"
@@ -40,7 +39,6 @@ static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
 static NSString * const KVOContactChannelsPath = @"conversation.contact.channels";
-static NSString * const KVOContactConfirmedPath = @"conversation.contact.isConfirmed";
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
@@ -56,9 +54,7 @@ static void * KVOContext = &KVOContext;
 
 @implementation ZNGServiceToContactViewController
 {
-    ZNGPulsatingBarButtonImage * confirmButton;
     UIView * bannerContainer;
-    
     UIButton * titleButton;
     
     UIView * blockedChannelBanner;
@@ -67,11 +63,8 @@ static void * KVOContext = &KVOContext;
     NSLayoutConstraint * blockedChannelOffScreenConstraint;
     
     ZNGPaddedLabel * networkStatusLabel;
-    
-    dispatch_source_t emphasizeTimer;
-    
-    NSMutableArray<NSDate *> * touchTimes;
-    NSUInteger spamZIndex;
+        
+    NSUInteger fireZIndex;
     
     NSMutableArray<NSDate *> * robotTouchTimes;
     NSDate * lastRobotVolleyTime;
@@ -79,6 +72,11 @@ static void * KVOContext = &KVOContext;
     ZNGMessage * messageToForward;
     
     NSTimer * textViewChangeTimer;
+    
+    /**
+     *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
+     */
+    NSDateComponentsFormatter * nearFutureTimeFormatter;
 }
 
 @dynamic conversation;
@@ -127,7 +125,6 @@ static void * KVOContext = &KVOContext;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNetworkStatusChanged:) name:ZNGNetworkLookoutStatusChanged object:nil];
     
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
-    [self addObserver:self forKeyPath:KVOContactConfirmedPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
@@ -135,16 +132,11 @@ static void * KVOContext = &KVOContext;
 
 - (void) dealloc
 {
-    if (emphasizeTimer != nil) {
-        dispatch_source_cancel(emphasizeTimer);
-    }
-    
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
-    [self removeObserver:self forKeyPath:KVOContactConfirmedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
@@ -169,22 +161,26 @@ static void * KVOContext = &KVOContext;
     
     [super viewDidLoad];
     
-    touchTimes = [[NSMutableArray alloc] initWithCapacity:20];
-    spamZIndex = INT_MAX;
+    fireZIndex = INT_MAX;
     robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
     
     self.typingIndicatorContainerView.hidden = YES;
     self.typingIndicatorTextLabel.text = nil;
     
-    [self updateConfirmedButton];
     [self setupBannerContainer];
     
-    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply here";
+    self.inputToolbar.contentView.textView.placeHolder = @"Type a reply";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
     [self updateInputStatus];
     
-    [self startEmphasisTimer];
+    // Delayed message time formatter
+    nearFutureTimeFormatter = [[NSDateComponentsFormatter alloc] init];
+    nearFutureTimeFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyleFull;
+    nearFutureTimeFormatter.includesApproximationPhrase = YES;
+    nearFutureTimeFormatter.allowedUnits = (NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
+    nearFutureTimeFormatter.formattingContext = NSFormattingContextMiddleOfSentence;
+    nearFutureTimeFormatter.maximumUnitCount = 1;
     
     // Avatars
     ZNGInitialsAvatarCache * avatarCache = [ZNGInitialsAvatarCache sharedCache];
@@ -241,12 +237,20 @@ static void * KVOContext = &KVOContext;
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(forwardMessage:)];
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+    
+    if ((self.stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
+        ZNGLogInfo(@"Confirming contact due to conversation view appearance.");
+        [self.conversation.contact confirm];
+    }
+}
+
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (context == KVOContext) {
-        if ([keyPath isEqualToString:KVOContactConfirmedPath]) {
-            [self updateConfirmedButton];
-        } else if ([keyPath isEqualToString:KVOChannelPath]) {
+        if ([keyPath isEqualToString:KVOChannelPath]) {
             [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateInputStatus];
@@ -421,70 +425,40 @@ static void * KVOContext = &KVOContext;
     return conversation.contact;
 }
 
+- (void) setStuckToBottom:(BOOL)stuckToBottom
+{
+    BOOL wasStuck = self.stuckToBottom;
+    
+    if (wasStuck != stuckToBottom) {
+        [super setStuckToBottom:stuckToBottom];
+        
+        // Mark the conversation read (confirmed) if we are just scrolling down
+        if ((stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
+            ZNGLogInfo(@"Marking conversation as read due to scroll to bottom.");
+            [self.conversation.contact confirm];
+        }
+    }
+}
+
+- (void) setConversation:(ZNGConversationServiceToContact *)conversation
+{
+    [super setConversation:conversation];
+    
+    // Do we need to mark this conversation as read?
+    if ((self.stuckToBottom) && (!conversation.contact.isConfirmed)) {
+        ZNGLogInfo(@"Marking conversation as read on load.");
+        [conversation.contact confirm];
+    }
+}
+
 #pragma mark - Easter eggs
-- (void) checkForSpam
-{
-    NSDate * mostRecentTouch = [NSDate date];
-    [touchTimes addObject:mostRecentTouch];
-    
-    if ([touchTimes count] < 12) {
-        // Not even spamming
-        return;
-    }
-    
-    if ([touchTimes count] > 12) {
-        [touchTimes removeObjectAtIndex:0];
-    }
-    
-    NSDate * oldestTouch = [touchTimes firstObject];
-    NSTimeInterval totalSpamTime = [mostRecentTouch timeIntervalSinceDate:oldestTouch];
-    
-    if (totalSpamTime > 4.0) {
-        // Not fast enough
-        return;
-    }
-    
-    NSDate * secondMostRecentTouch = touchTimes[[touchTimes count] - 2];
-    NSTimeInterval spamTime = [mostRecentTouch timeIntervalSinceDate:secondMostRecentTouch];
-    uint32_t percentChance = 0;
-    
-    // Change of spam will be 50% if the touch was a 0.25 seconds ago, 10% if it was 2 seconds ago
-    if (spamTime <= 0.25) {
-        percentChance = 50;
-    } else if (spamTime < 1.0) {
-        percentChance = 25;
-    } else if (spamTime < 2.0) {
-        percentChance = 10;
-    }
-    
-    uint32_t token = arc4random() % 100;
-    
-    if (token <= percentChance) {
-        [[ZNGAnalytics sharedAnalytics] trackEasterEggNamed:@"Confirmation spam fire"];
-        [self smoulderAtRandomPoint];
-    }
-}
-
-- (void) smoulderAtRandomPoint
-{
-    u_int32_t minY = 64.0;
-    u_int32_t maxY = minY + bannerContainer.frame.size.height + 50.0;
-    u_int32_t minX = 20.0;
-    u_int32_t maxX = bannerContainer.frame.size.width - 20.0 - minX;
-    
-    CGFloat y = minY + (arc4random() % (maxY - minY));
-    CGFloat x = minX + (arc4random() % (maxX - minX));
-    
-    [self smoulderAtPoint:CGPointMake(x, y)];
-}
-
 - (void) smoulderAtPoint:(CGPoint)point
 {
     CAEmitterLayer * smoulderer = [CAEmitterLayer layer];
     smoulderer.frame = self.view.layer.bounds;
     smoulderer.renderMode = kCAEmitterLayerAdditive;
     smoulderer.beginTime = CACurrentMediaTime();
-    smoulderer.zPosition = spamZIndex--;
+    smoulderer.zPosition = fireZIndex--;
     
     smoulderer.emitterPosition = point;
     
@@ -802,41 +776,40 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Button items
-- (NSArray<UIBarButtonItem *> *)rightBarButtonItems
-{
-    NSArray<UIBarButtonItem *> * superButtonItems = [super rightBarButtonItems];
-    NSMutableArray<UIBarButtonItem *> * items = ([superButtonItems count] > 0) ? [superButtonItems mutableCopy] : [[NSMutableArray alloc] init];
-    
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
-    UIImage * confirmImage = [UIImage imageNamed:@"confirmButtonSelected" inBundle:bundle compatibleWithTraitCollection:nil];
-    UIImage * selectedImage = [UIImage imageNamed:@"confirmButton" inBundle:bundle compatibleWithTraitCollection:nil];
-    confirmButton = [[ZNGPulsatingBarButtonImage alloc] initWithImage:confirmImage selectedImage:selectedImage target:self action:@selector(pressedConfirmedButton:)];
-    confirmButton.emphasisImage = [UIImage imageNamed:@"confirmButtonEmptyCircle" inBundle:bundle compatibleWithTraitCollection:nil];
-    confirmButton.emphasisColor = [UIColor zng_lightBlue];
-    [items addObject:confirmButton];
-    
-    return items;
-}
-
 - (NSArray<UIAlertAction *> *)alertActionsForDetailsButton
 {
     NSArray<UIAlertAction *> * superActions = [super alertActionsForDetailsButton];
     NSMutableArray<UIAlertAction *> * actions = ([superActions count] > 0) ? [superActions mutableCopy] : [[NSMutableArray alloc] init];
+    
+    NSString * uiType = @"ellipsis menu";
     
     UIAlertAction * editContact = [UIAlertAction actionWithTitle:@"View / edit contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self pressedEditContact];
     }];
     [actions addObject:editContact];
     
+    BOOL alreadyConfirmed = self.conversation.contact.isConfirmed;
+    NSString * confirmOrUnconfirmString = alreadyConfirmed ? @"Mark unread" : @"Mark read";
+    UIAlertAction * confirm = [UIAlertAction actionWithTitle:confirmOrUnconfirmString style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (alreadyConfirmed) {
+            [self.conversation.contact unconfirm];
+            [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:self.conversation.contact fromUIType:uiType];
+        } else {
+            [self.conversation.contact confirm];
+            [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:self.conversation.contact fromUIType:uiType];
+        }
+    }];
+    [actions addObject:confirm];
+    
     BOOL alreadyClosed = self.conversation.contact.isClosed;
     NSString * closeOrOpenString = alreadyClosed ? @"Open conversation" : @"Close conversation";
     UIAlertAction * closeOrOpen = [UIAlertAction actionWithTitle:closeOrOpenString style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         if (alreadyClosed) {
             [self.conversation.contact reopen];
-            [[ZNGAnalytics sharedAnalytics] trackOpenedContact:self.conversation.contact fromUIType:@"ellipsis menu"];
+            [[ZNGAnalytics sharedAnalytics] trackOpenedContact:self.conversation.contact fromUIType:uiType];
         } else {
             [self.conversation.contact close];
-            [[ZNGAnalytics sharedAnalytics] trackClosedContact:self.conversation.contact fromUIType:@"ellipsis menu"];
+            [[ZNGAnalytics sharedAnalytics] trackClosedContact:self.conversation.contact fromUIType:uiType];
         }
     }];
     [actions addObject:closeOrOpen];
@@ -878,67 +851,6 @@ static void * KVOContext = &KVOContext;
     
     // This is probably an incoming message.  The contact's name is in the title bar; we do not need one above message bubbles.
     return nil;
-}
-
-#pragma mark - Confirmed button
-- (void) updateConfirmedButton
-{
-    if ([self.conversation.contact isConfirmed]) {
-        confirmButton.selected = YES;
-    } else {
-        confirmButton.selected = NO;
-    }
-}
-
-- (void) pressedConfirmedButton:(id)sender
-{
-    ZNGContact * contact = [self contact];
-    
-    if (contact == nil) {
-        return;
-    }
-    
-    if (contact.isConfirmed) {
-        [contact unconfirm];
-        confirmButton.selected = NO;
-        [self showTemporaryBlueBannerWithText:@"UNCONFIRMED"];
-        
-        [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:self.conversation.contact fromUIType:@"button"];
-    } else {
-        [contact confirm];
-        confirmButton.selected = YES;
-        [self showTemporaryBlueBannerWithText:@"CONFIRMED"];
-        
-        [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:self.conversation.contact fromUIType:@"button"];
-    }
-    
-    [self checkForSpam];
-}
-
-- (void) startEmphasisTimer
-{
-    if (emphasizeTimer != nil) {
-        return;
-    }
-    
-    emphasizeTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
-    
-    if (emphasizeTimer != nil) {
-        uint64_t interval = 2 * NSEC_PER_SEC;
-        dispatch_source_set_timer(emphasizeTimer, DISPATCH_TIME_NOW, interval, (uint64_t)(0.1 * NSEC_PER_SEC));
-        __weak ZNGServiceToContactViewController * weakSelf = self;
-        dispatch_source_set_event_handler(emphasizeTimer, ^{
-            [weakSelf emphasizeConfirmButtonIfAppropriate];
-        });
-        dispatch_resume(emphasizeTimer);
-    }
-}
-
-- (void) emphasizeConfirmButtonIfAppropriate
-{
-    if ((self.conversation.contact != nil) && (![self.conversation.contact isConfirmed])) {
-        [confirmButton emphasize];
-    }
 }
 
 #pragma mark - Confirmed banner
@@ -1052,55 +964,6 @@ static void * KVOContext = &KVOContext;
     shouldDisableInput |= ([automationLockText length] > 0);
     
     self.inputToolbar.inputEnabled = !shouldDisableInput;
-}
-
-- (void) showTemporaryBlueBannerWithText:(NSString *)text
-{
-    CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
-    UIView * bannerContent = [[UIView alloc] initWithFrame:rect];
-    bannerContent.translatesAutoresizingMaskIntoConstraints = NO;
-    bannerContent.backgroundColor = [UIColor zng_lightBlue];
-    NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
-    NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
-    NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
-    NSLayoutConstraint * offScreenY = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-    NSLayoutConstraint * onScreenY = [NSLayoutConstraint constraintWithItem:bannerContent attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
-    [bannerContainer addSubview:bannerContent];
-    [bannerContainer addConstraints:@[height, width, left, offScreenY]];
-    
-    UILabel * textLabel = [[UILabel alloc] initWithFrame:rect];
-    textLabel.textAlignment = NSTextAlignmentCenter;
-    textLabel.font = [UIFont latoBoldFontOfSize:15.0];
-    textLabel.textColor = [UIColor whiteColor];
-    textLabel.text = text;
-    textLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    NSLayoutConstraint * centerX = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
-    NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:textLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:bannerContent attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
-    [bannerContent addSubview:textLabel];
-    [bannerContent addConstraints:@[centerX, centerY]];
-
-    
-    // Animate on screen
-    [bannerContainer layoutIfNeeded];
-    
-    [UIView animateWithDuration:0.5 animations:^{
-        [bannerContainer removeConstraint:offScreenY];
-        [bannerContainer addConstraint:onScreenY];
-        [bannerContainer layoutIfNeeded];
-    } completion:^(BOOL finished) {
-        // Animate back off screen
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [bannerContainer layoutIfNeeded];
-            
-            [UIView animateWithDuration:0.5 animations:^{
-                [bannerContainer removeConstraint:onScreenY];
-                [bannerContainer addConstraint:offScreenY];
-                [bannerContainer layoutIfNeeded];
-            } completion:^(BOOL finished) {
-                [bannerContent removeFromSuperview];
-            }];
-        });
-    }];
 }
 
 #pragma mark - Inset manipulation
@@ -1294,8 +1157,9 @@ static void * KVOContext = &KVOContext;
     return attributedString;
 }
 
+#pragma mark - Message bubble text field sizes
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{
+{  
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
@@ -1305,6 +1169,123 @@ static void * KVOContext = &KVOContext;
     return height;
 }
 
+- (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
+                   layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
+    return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
+}
+
+- (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    // See how much space our superclass wants for this label.
+    // Sometimes it returns a non-zero value that will just be used for spacing.
+    CGFloat superHeight = [super collectionView:collectionView layout:collectionViewLayout heightForCellBottomLabelAtIndexPath:indexPath];
+    
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    BOOL wasForwarded = ([viewModel.event.message.forwardedByServiceId length] > 0);
+    CGFloat ourHeight = (wasForwarded) ? 18.0 : 0.0;
+    
+    // Who wants more space?
+    return MAX(superHeight, ourHeight);
+}
+
+#pragma mark - Message bubble text fields
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * forwardedDescription = [self forwardedDescriptionForEvent:viewModel.event];
+    
+    if ([forwardedDescription length] == 0) {
+        return nil;
+    }
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UIImage * forwardedIcon = [UIImage imageNamed:@"forwardArrow" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
+    iconAttachment.image = forwardedIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:iconAttachment] mutableCopy];
+    
+    NSString * words = [NSString stringWithFormat:@" %@", forwardedDescription];
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
+- (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    NSString * delayedDescription = [self delayedDescriptionForEvent:viewModel.event];
+    
+    if (delayedDescription == nil) {
+        return nil;
+    }
+    
+    // This message is indeed delayed
+    
+    // Begin the string with a clock icon
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UIImage * clockIcon = [UIImage imageNamed:@"clockIcon" inBundle:bundle compatibleWithTraitCollection:nil];
+    NSTextAttachment * clockIconAttachment = [[NSTextAttachment alloc] init];
+    clockIconAttachment.image = clockIcon;
+    NSMutableAttributedString * string = [[NSAttributedString attributedStringWithAttachment:clockIconAttachment] mutableCopy];
+    
+    // Append the words
+    NSString * words = [NSString stringWithFormat:@"  %@", delayedDescription]; // add space after icon
+    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
+    NSAttributedString * attributedDescription = [[NSAttributedString alloc] initWithString:words attributes:attributes];
+    
+    // Put it all together
+    [string appendAttributedString:attributedDescription];
+    return string;
+}
+
+- (NSString *) delayedDescriptionForEvent:(ZNGEvent *)event
+{
+    if (!event.message.isDelayed) {
+        return nil;
+    }
+    
+    if (event.message.executeAt == nil) {
+        ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", event.eventId);
+        return @"Sending later";
+    }
+    
+    NSTimeInterval timeUntilSending = [event.message.executeAt timeIntervalSinceNow];
+    
+    if (timeUntilSending < 60.0) {
+        return @"Sending in less than a minute";
+    }
+    
+    if (timeUntilSending < 0.0) {
+        ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", event.eventId);
+        return @"Sending soon";
+    }
+    
+    // Note that we have to take lowercaseString here because formattingContext is bugged and ignored in NSDateComponentsFormatter as of iOS 10.3.1
+    NSString * justTimeIntervalString = [[nearFutureTimeFormatter stringFromTimeInterval:timeUntilSending] lowercaseString];
+    return [NSString stringWithFormat:@"Sending in %@", justTimeIntervalString];
+}
+
+- (NSString *) forwardedDescriptionForEvent:(ZNGEvent *)event
+{
+    if ([event.message.forwardedByServiceId length] > 0) {
+        // Do we see this service in our available services?  If so, show its name.
+        for (ZNGService * service in self.conversation.session.availableServices) {
+            if ([service.serviceId isEqualToString:event.message.forwardedByServiceId]) {
+                return [NSString stringWithFormat:@"Forwarded from %@", service.displayName];
+            }
+        }
+        
+        return @"Forwarded from another service";
+    }
+    
+    return nil;
+}
+
+#pragma mark -
 - (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
 {
     if (action == @selector(forwardMessage:)) {
@@ -1364,10 +1345,18 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Text view delegate
+- (void) textViewDidBeginEditing:(UITextView *)textView
+{
+    [self.inputToolbar collapseInputButtons];
+    [super textViewDidBeginEditing:textView];
+}
+
 - (void) textViewDidChange:(UITextView *)textView
 {
     if (textView == self.inputToolbar.contentView.textView) {
         [textViewChangeTimer invalidate];
+        
+        [self.inputToolbar collapseInputButtons];
         
         if ([textView.text length] == 0) {
             textViewChangeTimer = nil;
@@ -1618,6 +1607,7 @@ static void * KVOContext = &KVOContext;
     [self updateUUID];
     self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
     [self.inputToolbar toggleSendButtonEnabled];
+    [self.inputToolbar collapseInputButtons];
 }
 
 - (BOOL) _shouldModallyEditContact

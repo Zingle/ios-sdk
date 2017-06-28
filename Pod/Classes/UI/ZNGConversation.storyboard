@@ -560,9 +560,9 @@
                                 </constraints>
                             </view>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Uqn-aA-lFp" customClass="ZNGServiceConversationInputToolbar">
-                                <rect key="frame" x="0.0" y="554" width="375" height="113"/>
+                                <rect key="frame" x="0.0" y="590" width="375" height="77"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="113" id="gry-0L-4u8"/>
+                                    <constraint firstAttribute="height" constant="77" id="gry-0L-4u8"/>
                                 </constraints>
                                 <items/>
                             </toolbar>
@@ -613,6 +613,7 @@
                         <outlet property="moreMessagesViewOnScreenConstraint" destination="fnt-qz-0f1" id="StC-8W-Pbz"/>
                         <outlet property="skeletonContentView" destination="E7V-XK-dac" id="xP4-dl-di8"/>
                         <outlet property="skeletonView" destination="0kk-eR-qEq" id="dcD-bV-XPn"/>
+                        <outlet property="toolbarBottomLayoutGuide" destination="gMQ-Jk-t3t" id="gag-7k-lNg"/>
                         <outlet property="toolbarHeightConstraint" destination="gry-0L-4u8" id="5h1-71-KIe"/>
                         <outlet property="typingIndicatorContainerView" destination="iWA-dO-3bV" id="57A-Ya-pZB"/>
                         <outlet property="typingIndicatorEmojiLabel" destination="qsr-lM-mNk" id="ixN-Rj-REX"/>

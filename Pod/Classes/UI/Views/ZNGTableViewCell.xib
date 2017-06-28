@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -21,15 +24,17 @@
             <rect key="frame" x="0.0" y="0.0" width="334" height="125"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <frame key="frameInset" width="334" height="124"/>
+                <rect key="frame" x="0.0" y="0.0" width="334" height="124.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" text="Contact name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Blq-2G-nRN">
+                        <rect key="frame" x="34" y="8" width="112" height="22"/>
                         <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="18"/>
                         <color key="textColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="unconfirmedCircle" translatesAutoresizingMaskIntoConstraints="NO" id="Bhb-CF-DfK">
+                        <rect key="frame" x="12" y="11" width="16" height="16"/>
                         <color key="tintColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="16" id="6rp-hh-Dzr"/>
@@ -45,6 +50,7 @@
                         </variation>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="751" text="Mar 11 12:44 PM" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gdp-gA-wBf">
+                        <rect key="frame" x="187" y="9" width="109" height="17"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="126" id="7Vu-HZ-P42"/>
                         </constraints>
@@ -57,13 +63,17 @@
                             </mask>
                         </variation>
                     </label>
-                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-A6-8hF"/>
+                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="ts2-A6-8hF">
+                        <rect key="frame" x="307" y="12" width="14" height="14"/>
+                    </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last message" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XBa-nb-zNh">
+                        <rect key="frame" x="34" y="33" width="87.5" height="18"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                         <color key="textColor" red="0.53725490196078429" green="0.55686274509803924" blue="0.58431372549019611" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TlF-2S-BqZ" customClass="ZNGLabelGridView">
+                        <rect key="frame" x="34" y="59" width="287" height="57.5"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="NO"/>
@@ -75,9 +85,6 @@
                             </userDefinedRuntimeAttribute>
                         </userDefinedRuntimeAttributes>
                     </view>
-                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hWO-o0-B6O">
-                        <color key="backgroundColor" red="0.90665411949157715" green="0.90665411949157715" blue="0.90665411949157715" alpha="0.31089317375886527" colorSpace="custom" customColorSpace="sRGB"/>
-                    </view>
                 </subviews>
                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 <constraints>
@@ -88,7 +95,6 @@
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="4" id="3pv-CZ-iXc"/>
                     <constraint firstItem="TlF-2S-BqZ" firstAttribute="leading" secondItem="XBa-nb-zNh" secondAttribute="leading" id="48u-mP-lzW"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="baseline" secondItem="gdp-gA-wBf" secondAttribute="baseline" constant="2" id="57X-bn-0C0"/>
-                    <constraint firstAttribute="bottom" secondItem="hWO-o0-B6O" secondAttribute="bottom" id="7z5-2j-EGB"/>
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="8QL-Bl-NuL"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Bhb-CF-DfK" secondAttribute="centerY" id="8bW-nx-fba"/>
                     <constraint firstItem="XBa-nb-zNh" firstAttribute="width" relation="lessThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="width" constant="-26" id="Baf-a5-F7Z"/>
@@ -118,9 +124,6 @@
                     <constraint firstItem="Bhb-CF-DfK" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-4" id="v47-G5-2aC"/>
                     <constraint firstItem="ts2-A6-8hF" firstAttribute="centerY" secondItem="Blq-2G-nRN" secondAttribute="centerY" id="wJX-jq-S25"/>
                     <constraint firstAttribute="bottom" secondItem="TlF-2S-BqZ" secondAttribute="bottom" constant="8" id="wz1-Pz-CgK"/>
-                    <constraint firstItem="hWO-o0-B6O" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="xK4-oQ-a8P"/>
-                    <constraint firstItem="hWO-o0-B6O" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="xXV-6u-GPU"/>
-                    <constraint firstAttribute="trailing" secondItem="hWO-o0-B6O" secondAttribute="trailing" id="xn2-CD-b0o"/>
                     <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="XBa-nb-zNh" secondAttribute="trailing" id="xrT-Dk-kla"/>
                 </constraints>
                 <variation key="default">
@@ -148,7 +151,6 @@
                 </variation>
             </tableViewCellContentView>
             <connections>
-                <outlet property="closedShadingOverlay" destination="hWO-o0-B6O" id="96S-XP-jFr"/>
                 <outlet property="contactName" destination="Blq-2G-nRN" id="ysH-oI-GYs"/>
                 <outlet property="dateLabel" destination="gdp-gA-wBf" id="fsD-8B-nWV"/>
                 <outlet property="labelGrid" destination="TlF-2S-BqZ" id="PkF-Ij-0mf"/>
@@ -160,6 +162,6 @@
     </objects>
     <resources>
         <image name="chevronRight" width="14" height="14"/>
-        <image name="unconfirmedCircle" width="16" height="16"/>
+        <image name="unconfirmedCircle" width="14" height="14"/>
     </resources>
 </document>

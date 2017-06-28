@@ -577,8 +577,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         cell.contactName.text = [contact fullName];
         NSUInteger lastMessageAttachmentCount = [contact.lastMessage.attachments count];
         
-        cell.closedShadingOverlay.hidden = !(contact.isClosed);
-        
         if ([contact.lastMessage.body length] > 0) {
             cell.lastMessage.text = contact.lastMessage.body;
         } else if (lastMessageAttachmentCount > 0) {
@@ -615,7 +613,6 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         cell.contactName.text = nil;
         cell.lastMessage.text = nil;
         cell.unconfirmedCircle.image = nil;
-        cell.closedShadingOverlay.hidden = YES;
     }
     
     return cell;
@@ -655,7 +652,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     __weak ZNGInboxViewController * weakSelf = self;
     
     if (contact.isConfirmed) {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Unconfirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nunread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact unconfirm];
@@ -665,7 +662,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
             return !changeWillCauseRemoval;
         }];
     } else {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Confirm" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [self.data contactWasChangedLocally:contactAfterChange];
             
             [contact confirm];

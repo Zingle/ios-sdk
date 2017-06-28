@@ -145,6 +145,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign, getter=isAutoMarkAsReadEnabled) BOOL autoMarkAsReadEnabled;
 
+/**
+ *  YES if the last scrolling action left us at the bottom of our content (within a few points) or if there is another reason we now want to be bottom pinned (e.g. just sent a message.)
+ *  Setting this to YES does *not* immediately scroll the view down; setting this to YES will cause the next incoming message to scroll the view down.
+ *
+ *  Defaults to YES.
+ */
+@property (nonatomic, assign) BOOL stuckToBottom;
+
 #pragma mark - Methods to be overridden by subclasses to add functionality
 - (NSArray<UIAlertAction *> *)alertActionsForDetailsButton;
 
@@ -167,8 +175,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Protected methods used by subclasses
 - (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath;
-- (ZNGEvent *) priorEventToIndexPath:(NSIndexPath *)indexPath;
-- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath;
+- (ZNGEventViewModel *) priorViewModelToIndexPath:(NSIndexPath *)indexPath includingDelayedEvents:(BOOL)includeDelayed;
 - (ZNGEventViewModel *) nextEventViewModelBelowIndexPath:(NSIndexPath *)indexPath;
 - (void) updateUUID;
 

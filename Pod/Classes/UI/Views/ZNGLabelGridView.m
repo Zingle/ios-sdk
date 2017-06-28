@@ -197,7 +197,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             addLabelView = [[ZNGDashedBorderLabel alloc] init];
             [self configureLabel:addLabelView];
             addLabelView.dashed = YES;
-            addLabelView.text = @" ADD LABEL ";
+            addLabelView.text = @" ADD TAG ";
             addLabelView.textColor = [UIColor grayColor];
             addLabelView.backgroundColor = [UIColor clearColor];
             addLabelView.borderColor = [UIColor grayColor];

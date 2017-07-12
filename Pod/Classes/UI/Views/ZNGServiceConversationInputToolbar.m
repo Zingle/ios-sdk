@@ -14,6 +14,9 @@
 #import "ZNGLogging.h"
 
 @implementation ZNGServiceConversationInputToolbar
+{
+    UIColor * originalTextViewTintColor;
+}
 
 @dynamic contentView;
 @dynamic delegate;
@@ -40,6 +43,14 @@
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
     
     self.currentChannel = nil;
+    
+    originalTextViewTintColor = self.contentView.textView.tintColor;
+    
+    UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedTextView:)];
+    tapper.cancelsTouchesInView = NO;
+    tapper.delaysTouchesEnded = NO;
+    tapper.delegate = self;
+    [self.contentView.textView addGestureRecognizer:tapper];
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
@@ -151,11 +162,23 @@
 
 - (IBAction)didPressRevealButton:(id)sender
 {
+    self.contentView.textView.hideCursor = YES;
     [self.contentView expandButtons:YES];
+}
+
+- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
+{
+    return YES;
+}
+
+- (void) userTappedTextView:(UITapGestureRecognizer *)tapper
+{
+    [self collapseInputButtons];
 }
 
 - (void) collapseInputButtons
 {
+    self.contentView.textView.hideCursor = NO;
     [self.contentView collapseButtons:YES];
 }
 

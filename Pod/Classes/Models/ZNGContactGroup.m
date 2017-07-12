@@ -40,6 +40,10 @@
     return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(NSString * colorString) {
         return [UIColor colorFromHexString:colorString];
     } reverseBlock:^id(UIColor * color) {
+        if (color == nil) {
+            return nil;
+        }
+        
         const CGFloat *components = CGColorGetComponents(color.CGColor);
         
         CGFloat r = components[0];

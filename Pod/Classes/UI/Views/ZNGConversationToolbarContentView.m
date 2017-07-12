@@ -12,6 +12,8 @@
 
 @implementation ZNGConversationToolbarContentView
 
+@dynamic textView;
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];

@@ -7,6 +7,7 @@
 //
 
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
+#import "ZNGConversationTextView.h"
 
 @interface ZNGConversationToolbarContentView : JSQMessagesToolbarContentView
 
@@ -17,6 +18,8 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * revealButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
+
+@property (weak, nonatomic, readonly, nullable) ZNGConversationTextView * textView;
 
 - (void) collapseButtons:(BOOL)animated;
 - (void) expandButtons:(BOOL)animated;

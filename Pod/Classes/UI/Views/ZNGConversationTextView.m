@@ -61,6 +61,21 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
 }
 
+- (void) setHideCursor:(BOOL)hideCursor
+{
+    _hideCursor = hideCursor;
+    [self setNeedsDisplay];
+}
+
+- (CGRect) caretRectForPosition:(UITextPosition *)position
+{
+    if (self.hideCursor) {
+        return CGRectZero;
+    }
+    
+    return [super caretRectForPosition:position];
+}
+
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
     if (!self.editable) {

@@ -1197,7 +1197,7 @@ static void * KVOContext = &KVOContext;
     NSString * forwardedDescription = [self forwardedDescriptionForEvent:viewModel.event];
     
     if ([forwardedDescription length] == 0) {
-        return nil;
+        return [super collectionView:collectionView attributedTextForCellBottomLabelAtIndexPath:indexPath];
     }
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];

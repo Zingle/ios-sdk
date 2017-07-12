@@ -1463,6 +1463,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return nil;
 }
 
+#pragma mark - Cell text
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self shouldShowTimestampAboveIndexPath:indexPath]) {
@@ -1488,6 +1489,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     return (name != nil) ? [[NSAttributedString alloc] initWithString:name attributes:attributes] : nil;
 }
 
+#pragma mark -
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     return [self.conversation.eventViewModels count] - pendingInsertionCount;

@@ -290,12 +290,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         NSAttributedString * labelAttributedText = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@ ", [group.displayName uppercaseString] ?: @""]];
         [text appendAttributedString:labelAttributedText];
         
-        UIColor * textColor = group.foregroundColor;
+        UIColor * textColor = group.textColor;
         groupView.font = self.font;
         groupView.textColor = textColor;
         groupView.borderColor = textColor;
         groupView.backgroundColor = group.backgroundColor;
-        [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
+        
+        if (textColor != nil) {
+            [text addAttribute:NSForegroundColorAttributeName value:textColor range:NSMakeRange(0, [text length])];
+        }
+        
         groupView.attributedText = text;
         
         [newLabelViews addObject:groupView];

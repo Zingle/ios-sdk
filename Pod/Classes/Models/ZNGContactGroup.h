@@ -16,9 +16,8 @@
 @property (nonatomic, copy, nullable) NSString * displayName;
 @property (nonatomic, copy, nullable) NSString * conditionBooleanOperator;
 @property (nonatomic, strong, nullable) NSArray<ZNGCondition *> * conditions;
-
-@property (nonatomic, readonly, nonnull) UIColor * foregroundColor;
-@property (nonatomic, readonly, nonnull) UIColor * backgroundColor;
+@property (nonatomic, copy, nullable) UIColor * textColor;
+@property (nonatomic, copy, nullable) UIColor * backgroundColor;
 
 - (BOOL) matchesSearchTerm:(NSString * _Nonnull)term;
 

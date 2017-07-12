@@ -18,7 +18,9 @@
              NSStringFromSelector(@selector(groupId)): @"id",
              NSStringFromSelector(@selector(displayName)): @"display_name",
              NSStringFromSelector(@selector(conditionBooleanOperator)): @"condition_boolean_operator",
-             NSStringFromSelector(@selector(conditions)): @"conditions"
+             NSStringFromSelector(@selector(conditions)): @"conditions",
+             NSStringFromSelector(@selector(textColor)): @"text_color",
+             NSStringFromSelector(@selector(backgroundColor)): @"background_color"
              };
 }
 
@@ -33,15 +35,32 @@
     return ([[self.displayName lowercaseString] containsString:lowerTerm]);
 }
 
-// The server may eventually send us colors here.  That would be sweet.
-- (UIColor *) foregroundColor
++ (MTLValueTransformer *) reversibleColorFromJSONStringTransformer
 {
-    return [UIColor blackColor];
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(NSString * colorString) {
+        return [UIColor colorFromHexString:colorString];
+    } reverseBlock:^id(UIColor * color) {
+        const CGFloat *components = CGColorGetComponents(color.CGColor);
+        
+        CGFloat r = components[0];
+        CGFloat g = components[1];
+        CGFloat b = components[2];
+        
+        return [NSString stringWithFormat:@"#%02lX%02lX%02lX",
+                lroundf(r * 255),
+                lroundf(g * 255),
+                lroundf(b * 255)];
+    }];
 }
 
-- (UIColor *) backgroundColor
++ (NSValueTransformer *) textColorJSONTransformer
 {
-    return [UIColor zng_light_gray];
+    return [self reversibleColorFromJSONStringTransformer];
+}
+
++ (NSValueTransformer *) backgroundColorJSONTransformer
+{
+    return [self reversibleColorFromJSONStringTransformer];
 }
 
 

@@ -34,6 +34,7 @@
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
 		969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 969AC8F31DC1600600D0E5D8 /* TestContactSession.m */; };
+		969F7C511F16CF020062CE9E /* TestContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 969F7C501F16CF020062CE9E /* TestContacts.m */; };
 		96A05BCE1DCBA68700E0E6D8 /* TestAccountSession.m in Sources */ = {isa = PBXBuildFile; fileRef = 96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */; };
 		96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */; };
 		96C61E601E03434E00A38B5F /* TestURLParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C61E5F1E03434E00A38B5F /* TestURLParsing.m */; };
@@ -108,6 +109,7 @@
 		9670D1B81D1480C80061F7C9 /* ContactServiceTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceTableViewCell.h; sourceTree = "<group>"; };
 		9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceTableViewCell.m; sourceTree = "<group>"; };
 		969AC8F31DC1600600D0E5D8 /* TestContactSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestContactSession.m; sourceTree = "<group>"; };
+		969F7C501F16CF020062CE9E /* TestContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestContacts.m; sourceTree = "<group>"; };
 		96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestAccountSession.m; sourceTree = "<group>"; };
 		96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestInboxDataSet.m; sourceTree = "<group>"; };
 		96C61E5F1E03434E00A38B5F /* TestURLParsing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestURLParsing.m; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				960FCBB21D0F6E9C00B7E82C /* Info.plist */,
 				96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */,
 				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
+				969F7C501F16CF020062CE9E /* TestContacts.m */,
 				96E0AABB1E6F8D2400911146 /* TestImageAttachmentSending.m */,
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
 				961847251E96CF9500AB3D45 /* TestMessageSending.m */,
@@ -540,6 +543,7 @@
 				9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */,
 				961847261E96CF9500AB3D45 /* TestMessageSending.m in Sources */,
 				9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */,
+				969F7C511F16CF020062CE9E /* TestContacts.m in Sources */,
 				96C61E601E03434E00A38B5F /* TestURLParsing.m in Sources */,
 				969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */,
 				96E0AABF1E6F8DFD00911146 /* ZNGStubbedEventClient.m in Sources */,

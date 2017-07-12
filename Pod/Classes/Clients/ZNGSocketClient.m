@@ -58,8 +58,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
         
         if ([zinglePrefix length] > 0) {
-            authPath = [NSString stringWithFormat:@"https://%@-secure.zingle.me/", zinglePrefix];
-            nodePath = [NSString stringWithFormat:@"https://%@-socket.zingle.me:8000", zinglePrefix];
+            authPath = [NSString stringWithFormat:@"https://%@-app.zingle.me/", zinglePrefix];
+            nodePath = [NSString stringWithFormat:@"https://%@-app.zingle.me:8000", zinglePrefix];
         } else {
             authPath = @"https://secure.zingle.me/";
             nodePath = @"https://socket.zingle.me/";

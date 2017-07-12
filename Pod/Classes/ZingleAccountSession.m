@@ -503,26 +503,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     }];
     
     dispatch_semaphore_wait(semaphore, tenSecondTimeout);
-    
-    
-    // TODO: Remove this contact_group nonsense once the server actually sends it in the ZNGService object.
-    if (([self.service.contactGroups count] == 0) && (self.sessionManager != nil)) {
-        semaphore = dispatch_semaphore_create(0);
-        NSString * path = [NSString stringWithFormat:@"services/%@/contact-groups", self.service.serviceId];
-        [self.sessionManager GET:path parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, NSDictionary * _Nonnull responseObject) {
-            NSArray * result = responseObject[@"result"];
-            
-            if (result != nil) {
-                self.service.contactGroups = [MTLJSONAdapter modelsOfClass:[ZNGContactGroup class] fromJSONArray:result error:nil];
-            }
-            
-            dispatch_semaphore_signal(semaphore);
-        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-            dispatch_semaphore_signal(semaphore);
-        }];
-        
-        dispatch_semaphore_wait(semaphore, tenSecondTimeout);
-    }
 }
 
 - (void) notifyShowDetailedEventsPreferenceChanged:(NSNotification *)notification

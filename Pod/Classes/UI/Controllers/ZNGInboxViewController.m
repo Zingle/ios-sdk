@@ -423,7 +423,9 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self cancelCancelSwipesTimer];
     
     for (MGSwipeTableCell * cell in [self.tableView visibleCells]) {
-        [cell hideSwipeAnimated:YES];
+        if ([cell isKindOfClass:[MGSwipeTableCell class]]) {
+            [cell hideSwipeAnimated:YES];
+        }
     }
     
     ZNGLogVerbose(@"Clearing swipeActive flag to NO while collapsing all swipe gestures");

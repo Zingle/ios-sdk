@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @class ZNGLabel;
+@class ZNGContactGroup;
 @class ZNGLabelGridView;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,6 +30,17 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) IBInspectable BOOL showRemovalX;
 
 @property (nonatomic, strong, nullable) NSArray<ZNGLabel *> * labels;
+@property (nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * groups;
+
+/**
+ *  An optional icon to display before each label name.  Defaults to a tag icon.
+ */
+@property (nonatomic, strong, nullable) UIImage * labelIcon;
+
+/**
+ *  An optional icon to display before each group name.  Defaults to a stalker person icon.
+ */
+@property (nonatomic, strong, nullable) UIImage * groupIcon;
 
 @property (nonatomic, assign) IBInspectable NSUInteger maxRows;
 @property (nonatomic, assign) IBInspectable CGFloat horizontalSpacing;

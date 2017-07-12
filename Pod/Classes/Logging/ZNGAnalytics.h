@@ -16,6 +16,7 @@
 @class ZNGConversationServiceToContact;
 @class ZNGInboxDataSet;
 @class ZNGLabel;
+@class ZNGContactGroup;
 @class ZNGMessage;
 @class ZNGTemplate;
 @class ZNGUserAuthorization;
@@ -56,6 +57,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) trackSentMessage:(NSString *)messageBody toContact:(ZNGContact *)contact;
 - (void) trackSentMessage:(NSString *)messageBody toMultipleContacts:(NSArray<ZNGContact *> *)contacts;
 - (void) trackSentMessage:(NSString *)messageBody toLabels:(NSArray<ZNGLabel *> *)labels;
+- (void) trackSentMessage:(NSString *)messageBody toGroups:(NSArray<ZNGContactGroup *> *)groups;
 - (void) trackSentMessage:(NSString *)messageBody toPhoneNumbers:(NSArray<NSString *> *)phoneNumbers;
 - (void) trackChangedChannel:(ZNGChannel *)channel inConversation:(ZNGConversationServiceToContact *)conversation;
 - (void) trackConfirmedContact:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;

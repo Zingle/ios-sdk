@@ -11,6 +11,7 @@
 #import "ZNGContactFieldValue.h"
 #import "ZNGLabel.h"
 #import "ZNGContactClient.h"
+#import "ZNGContactGroup.h"
 #import "ZNGLogging.h"
 #import "ZingleSDK.h"
 #import "ZNGNewChannel.h"
@@ -117,6 +118,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
              @"channels" : @"channels",
              @"customFieldValues" : @"custom_field_values",
              @"labels" : @"labels",
+             NSStringFromSelector(@selector(groups)): @"contact_groups",
              @"createdAt" : @"created_at",
              @"updatedAt" : @"updated_at",
              @"contactClient" : [NSNull null],
@@ -161,6 +163,11 @@ static NSString * const ParameterNameClosed = @"is_closed";
 + (NSValueTransformer*)labelsJSONTransformer
 {
     return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGLabel.class];
+}
+
++ (NSValueTransformer *) groupsJSONTransformer
+{
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGContactGroup class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

@@ -28,6 +28,7 @@ static const NSUInteger kDefaultPageSize = 100;
 NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";
 NSString * const ZNGConversationParticipantTypeLabel = @"label";
+NSString * const ZNGConversationParticipantTypeGroup = @"contact_group";
 
 @interface NSIndexSet (Continuity)
 - (BOOL) isContinuous;

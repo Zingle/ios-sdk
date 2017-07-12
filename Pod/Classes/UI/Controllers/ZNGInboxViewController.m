@@ -605,6 +605,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         }
         
         cell.labelGrid.labels = contact.labels;
+        cell.labelGrid.groups = contact.groups;
         cell.labelGrid.font = [UIFont latoSemiBoldFontOfSize:9.0];
         cell.dateLabel.text = [self dateStringForContact:contact];
         

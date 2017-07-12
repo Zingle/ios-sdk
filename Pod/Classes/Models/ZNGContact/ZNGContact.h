@@ -14,6 +14,7 @@
 @class ZNGContactFieldValue;
 @class ZNGLabel;
 @class ZNGContactClient;
+@class ZNGContactGroup;
 @class ZNGNewContactFieldValue;
 @class ZNGNewChannel;
 
@@ -36,6 +37,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel
 @property(nonatomic, strong, nullable) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue.  Why do these two classes both exist?
 @property(nonatomic, strong, nullable) NSArray<ZNGLabel *> * labels; // Array of ZNGLabel
+@property(nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * groups;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;

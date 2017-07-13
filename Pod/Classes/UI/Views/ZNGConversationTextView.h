@@ -10,4 +10,6 @@
 
 @interface ZNGConversationTextView : JSQMessagesComposerTextView
 
+@property (nonatomic, assign) BOOL hideCursor;
+
 @end

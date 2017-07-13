@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface ZNGServiceConversationInputToolbar : ZNGConversationInputToolbar
+@interface ZNGServiceConversationInputToolbar : ZNGConversationInputToolbar <UIGestureRecognizerDelegate>
 
 @property (weak, nonatomic, nullable) id<ZNGServiceConversationInputToolbarDelegate> delegate;
 

@@ -1526,6 +1526,7 @@ static void * KVOContext = &KVOContext;
     [alert addAction:addNote];
     [alert addAction:cancel];
     
+    [self.inputToolbar.contentView.textView resignFirstResponder];
     [self presentViewController:alert animated:YES completion:nil];
 }
 

@@ -673,10 +673,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         return;
     }
     
-    NSString * message = [NSString stringWithFormat:@"Remove the %@ label from %@?", label.displayName, [self.contact fullName]];
+    NSString * message = [NSString stringWithFormat:@"Remove the %@ tag from %@?", label.displayName, [self.contact fullName]];
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Label" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Tag" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self doLabelRemoval:label];
     }];
     UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];

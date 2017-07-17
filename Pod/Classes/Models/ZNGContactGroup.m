@@ -67,5 +67,23 @@
     return [self reversibleColorFromJSONStringTransformer];
 }
 
+- (UIColor *)textColor
+{
+    if (_textColor == nil) {
+        return [UIColor whiteColor];
+    }
+    
+    return _textColor;
+}
+
+- (UIColor *)backgroundColor
+{
+    if (_backgroundColor == nil) {
+        // Match the magic default value the server sometimes sends when it decides not to just send null like other times.
+        return [UIColor colorFromHexString:@"#595959"];
+    }
+    
+    return _backgroundColor;
+}
 
 @end

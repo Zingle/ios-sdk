@@ -15,7 +15,8 @@
     return @{
              @"deviceIdentifier" : @"device_identifier",
              @"serviceIds" : @"service_ids",
-             @"operatingSystem" : @"operating_system"
+             @"operatingSystem" : @"operating_system",
+             NSStringFromSelector(@selector(pushEnvironment)): @"push_environment"
              };
 }
 

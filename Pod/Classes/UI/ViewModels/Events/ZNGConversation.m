@@ -425,6 +425,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                                      kConversationContactId : contactId,
                                      kConversationPage: @(pageIndex),
                                      kConversationSortFields : @[isDelayedSort, executeAtSort, updatedAtSort, idSort],
+                                     kConversationSortDirection: kConversationSortDirectionDescending,
                                      } mutableCopy];
     
     if ([eventTypes count] > 0) {

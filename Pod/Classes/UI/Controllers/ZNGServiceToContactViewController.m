@@ -218,7 +218,7 @@ static void * KVOContext = &KVOContext;
     networkStatusLabel.adjustsFontSizeToFitWidth = YES;
     networkStatusLabel.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:networkStatusLabel];
-    [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
+    [self notifyNetworkStatusChanged:nil];
     
     // Locked status.
     // This has to be at the end of the current run loop because viewDidLoad does not actually finish loading the view; adjusting constraints here has no effect.  <3 Apple
@@ -277,6 +277,10 @@ static void * KVOContext = &KVOContext;
 - (void) notifyNetworkStatusChanged:(NSNotification *)notification
 {
     [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
+    
+    CGSize networkStatusSize = networkStatusLabel.intrinsicContentSize;
+    UIEdgeInsets collectionViewContentInset = self.collectionView.contentInset;
+    self.collectionView.contentInset = UIEdgeInsetsMake(networkStatusSize.height, collectionViewContentInset.left, collectionViewContentInset.bottom, collectionViewContentInset.right);
 }
 
 - (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription
@@ -1526,6 +1530,7 @@ static void * KVOContext = &KVOContext;
     [alert addAction:addNote];
     [alert addAction:cancel];
     
+    [self.inputToolbar.contentView.textView resignFirstResponder];
     [self presentViewController:alert animated:YES completion:nil];
 }
 

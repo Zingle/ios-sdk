@@ -33,6 +33,7 @@
 enum  {
     ContactSectionDefaultCustomFields,
     ContactSectionChannels,
+    ContactSectionGroups,
     ContactSectionLabels,
     ContactSectionOptionalCustomFields,
     ContactSectionCount
@@ -509,6 +510,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             header.sectionLabel.text = @"CHANNELS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconChannels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
+        case ContactSectionGroups:
+            header.sectionLabel.text = @"SEGMENTS";
+            header.sectionImage.image = [[UIImage imageNamed:@"smallStalker" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+            break;
         case ContactSectionLabels:
             header.sectionLabel.text = @"TAGS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -545,6 +550,7 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             return 1;
         case ContactSectionOptionalCustomFields:
             return [optionalCustomFields count];
+        case ContactSectionGroups:
         case ContactSectionLabels:
             return 1;
         case ContactSectionChannels:
@@ -587,6 +593,13 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
             ZNGContactFieldValue * customFieldValue = customFields[indexPath.row];
             cell.customFieldValue = customFieldValue;
             cell.editingLocked = [self.contact editingCustomFieldIsLocked:customFieldValue];
+            return cell;
+        }
+            
+        case ContactSectionGroups:
+        {
+            ZNGContactLabelsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"groups" forIndexPath:indexPath];
+            cell.labelsGrid.groups = self.contact.groups;
             return cell;
         }
             
@@ -673,10 +686,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         return;
     }
     
-    NSString * message = [NSString stringWithFormat:@"Remove the %@ label from %@?", label.displayName, [self.contact fullName]];
+    NSString * message = [NSString stringWithFormat:@"Remove the %@ tag from %@?", label.displayName, [self.contact fullName]];
     UIAlertController * alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleAlert];
     
-    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Label" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+    UIAlertAction * delete = [UIAlertAction actionWithTitle:@"Remove Tag" style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
         [self doLabelRemoval:label];
     }];
     UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];

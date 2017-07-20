@@ -116,17 +116,6 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  */
 - (void)loadOlderData;
 
-/**
- *  Marks the specified messages as read, only if they do not already have read_at dates.
- *  Messages that have already been marked read are ignored.
- */
-- (void)markMessagesAsRead:(nullable NSArray<ZNGMessage *> *)messages;
-
-/**
- *  Marks all unread messages as read.
- */
-- (void)markAllUnreadMessagesAsRead;
-
 - (void)sendMessageWithBody:(nonnull NSString *)body
                     success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
                     failure:(void (^_Nullable) (ZNGError * _Nullable error))failure;

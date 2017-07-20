@@ -86,7 +86,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 @implementation ZNGConversationViewController
 {
     dispatch_source_t pollingTimerSource;
-    BOOL checkedInitialVisibleCells;
     
     BOOL moreMessagesAvailableRemotely;
     BOOL hasDisplayedInitialData;
@@ -328,9 +327,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         showingImageView = NO;
     }
     
-    [self markAllVisibleMessagesAsRead];
-    checkedInitialVisibleCells = YES;
-    
     self.conversation.automaticallyRefreshesOnPushNotification = YES;
     
     [self checkForMoreRemoteMessagesAvailable];
@@ -338,8 +334,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) viewWillDisappear:(BOOL)animated
 {
-    checkedInitialVisibleCells = NO;
-    
     [self.inputToolbar.contentView.textView resignFirstResponder];
     
     self.isVisible = NO;
@@ -1084,47 +1078,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
 }
 
-#pragma mark - Message read marking
-- (void) markAllVisibleMessagesAsRead
-{
-    NSArray<NSIndexPath *> * visibleIndexPaths = [self.collectionView indexPathsForVisibleItems];
-    NSMutableOrderedSet<ZNGMessage *> * messages = [[NSMutableOrderedSet alloc] initWithCapacity:[visibleIndexPaths count]];
-    
-    for (NSIndexPath * indexPath in visibleIndexPaths) {
-        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
-        
-        if ([event isMessage]) {
-            [messages addObject:event.message];
-        }
-    }
-    
-    [self markMessagesReadIfNecessary:[messages array]];
-}
-
-- (void) markMessagesReadIfNecessary:(NSArray<ZNGMessage *> *)messages
-{
-    NSMutableArray<ZNGMessage *> * unreadMessages = [[NSMutableArray alloc] initWithCapacity:[messages count]];
-    
-    for (ZNGMessage * message in messages) {
-        if ([self weAreSendingOutbound] == [message isOutbound]) {
-            // We sent this message; we don't need to mark it as read
-            continue;
-        }
-        
-        if (message.readAt != nil) {
-            // This message was already read
-            continue;
-        }
-        
-        // This needs to be read
-        [unreadMessages addObject:message];
-    }
-    
-    if ([unreadMessages count] > 0) {
-        [self.conversation markMessagesAsRead:unreadMessages];
-    }
-}
-
 #pragma mark - Insets
 - (void) jsq_updateCollectionViewInsets
 {
@@ -1312,23 +1265,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         ZNGLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
         [self.conversation loadOlderData];
     }
-    
-    // Now for marking messages read logic:
-    
-    // A small optimization: We will always mark all visible cells as read whenever we appear.  If we haven't done that yet, we do not need to mark messages
-    //  read one at a time.
-    if (!checkedInitialVisibleCells) {
-        return;
-    }
-    
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
-    ZNGEvent * event = viewModel.event;
-    
-    if ([event isMessage]) {
-        [self markMessagesReadIfNecessary:@[event.message]];
-    }
-    
+
     // Update the hidden time label.
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     [self updateTimeLabelLocationForCell:(JSQMessagesCollectionViewCell *)cell forEventViewModel:viewModel animated:NO];
 }
 

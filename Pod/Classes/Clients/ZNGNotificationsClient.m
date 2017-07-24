@@ -23,6 +23,10 @@
     registration.serviceIds = serviceIds;
     registration.operatingSystem = @"ios";
     
+#if DEBUG
+    registration.pushEnvironment = @"dev";
+#endif
+    
     NSString *path = @"receive-notifications";
     
     [self postWithModel:registration

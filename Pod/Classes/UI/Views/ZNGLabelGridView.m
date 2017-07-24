@@ -321,7 +321,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     ZNGLogDebug(@"%@ now has %llu subviews", [self class], (unsigned long long)[self.subviews count]);
     
     [self layoutIfNeeded];
-    [self invalidateIntrinsicContentSize];
 }
 
 - (void) layoutSubviews
@@ -416,13 +415,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             CGFloat moreLabelMaxY = CGRectGetMaxY(moreLabel.frame);
             CGFloat moreLabelMinY = CGRectGetMinY(moreLabel.frame);
             
-            if ((labelMinY >= moreLabelMaxY) || (labelMaxY <= moreLabelMinY)) {
+            if ((labelMinY > moreLabelMaxY) || (labelMaxY < moreLabelMinY)) {
+                // Not in the same row
                 continue;
             }
             
             CGFloat remainingRightSpace = self.bounds.size.width - CGRectGetMaxX(label.frame);
             
-            if (remainingRightSpace < moreLabelSize.width) {
+            if (remainingRightSpace < (moreLabelSize.width + self.horizontalSpacing)) {
                 // This label would overlap our "X more..." label.  Move our "X more" label into its place and remove this label from the view hierarchy.
                 moreLabelFrame = CGRectMake(label.frame.origin.x, moreLabelFrame.origin.y, moreLabelFrame.size.width, moreLabelFrame.size.height);
                 [label removeFromSuperview];
@@ -442,10 +442,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [moreLabel removeFromSuperview];
     }
     
+    CGSize oldSize = totalSize;
+    
     if (lastDisplayedLabel == nil) {
         totalSize = [super intrinsicContentSize];
     } else {
         totalSize = CGSizeMake(widestWidth - self.horizontalSpacing, lastDisplayedLabel.frame.origin.y + lastDisplayedLabel.frame.size.height);
+    }
+    
+    if (!CGSizeEqualToSize(oldSize, totalSize)) {
+        [self invalidateIntrinsicContentSize];
     }
 }
 

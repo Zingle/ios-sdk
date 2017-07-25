@@ -71,6 +71,12 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  */
 @property (nonatomic) BOOL automaticallyRefreshesOnPushNotification;
 
+/**
+ *  The sequential ID for this feed (vs. the UUID we actually use.)
+ *  We should never have this, but socket is sometimes rude and insist that we use it. :(
+ */
+@property (nonatomic, assign) NSInteger sequentialId;
+
 @property (nonatomic, readonly, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, readonly, nullable) ZNGEventClient * eventClient;
 @property (nonatomic, strong, nullable) ZNGSocketClient * socketClient;

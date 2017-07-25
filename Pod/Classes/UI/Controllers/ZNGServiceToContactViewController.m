@@ -74,6 +74,13 @@ static void * KVOContext = &KVOContext;
     NSTimer * textViewChangeTimer;
     
     /**
+     *  This flag is unset when a user first starts typing a message.  When this is unset, the first input will immediately cause a
+     *   "user is typing" notification to be sent to the server.  The flag is then set so a normal delay precedes any future notifications
+     *   during the same editing session.
+     */
+    BOOL sentInitialTypingNotification;
+    
+    /**
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
     NSDateComponentsFormatter * nearFutureTimeFormatter;
@@ -1351,6 +1358,7 @@ static void * KVOContext = &KVOContext;
 #pragma mark - Text view delegate
 - (void) textViewDidBeginEditing:(UITextView *)textView
 {
+    sentInitialTypingNotification = NO;
     [self.inputToolbar collapseInputButtons];
     [super textViewDidBeginEditing:textView];
 }
@@ -1359,14 +1367,23 @@ static void * KVOContext = &KVOContext;
 {
     if (textView == self.inputToolbar.contentView.textView) {
         [textViewChangeTimer invalidate];
+        textViewChangeTimer = nil;
         
         [self.inputToolbar collapseInputButtons];
         
         if ([textView.text length] == 0) {
-            textViewChangeTimer = nil;
             [self.conversation userClearedInput];
+            sentInitialTypingNotification = NO; // Reset so we immediatley send a typing indicator if they type again
         } else {
-            textViewChangeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_textChanged) userInfo:nil repeats:NO];
+            // Is this the first input change since the user started editing in the text field?  If so, call _textChanged immediately so other users
+            //  see this user typing.
+            if (!sentInitialTypingNotification) {
+                sentInitialTypingNotification = YES;
+                [self _textChanged];
+            } else {
+                // We've already sent at least one notification, so do the normal delay before spamming the server more.
+                textViewChangeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(_textChanged) userInfo:nil repeats:NO];
+            }
         }
     }
     
@@ -1379,6 +1396,14 @@ static void * KVOContext = &KVOContext;
 }
 
 #pragma mark - Actions
+
+- (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
+{
+    [textViewChangeTimer invalidate];
+    textViewChangeTimer = nil;
+    
+    [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
+}
 
 - (IBAction)pressedCancelAutomation:(id)sender
 {

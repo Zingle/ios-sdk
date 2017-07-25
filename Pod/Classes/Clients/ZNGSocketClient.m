@@ -167,6 +167,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf receivedEventListData:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"userIsReplying" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf otherUserIsReplying:data];
+    }];
+    
     [socketClient on:@"error" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidEncounterErrorWithData:data];
     }];
@@ -370,6 +374,34 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         ZNGLogInfo(@"Conversation was locked: %@", description);
         self.activeConversation.lockedDescription = description;
     }
+}
+
+- (void) otherUserIsReplying:(NSArray *)dataArray
+{
+    if (self.activeConversation == nil) {
+        // We don't a conversation.  Who cares?
+        return;
+    }
+    
+    NSDictionary * data = [dataArray firstObject];
+    NSDictionary * userData = data[@"user"];
+    
+    if (userData[@"id"] == nil) {
+        ZNGLogWarn(@"Received a userIsReplying notification with no user ID.  Ignoring: %@", data);
+        return;
+    }
+    
+    ZingleAccountSession * accountSession = ([self.session isKindOfClass:[ZingleAccountSession class]]) ? (ZingleAccountSession *)self.session : nil;
+    ZNGUser * user = [ZNGUser userFromSocketData:userData];
+    
+    // The socket data currently uses sequential IDs instead of our UUIDs.  This means that we cannot check vs. our own ID.
+    // We will instead check vs. our email/username.
+    if ([user.email isEqualToString:accountSession.userAuthorization.email]) {
+        ZNGLogDebug(@"Received a userIsReplying notification for our current user.  Ignoring.");
+        return;
+    }
+    
+    [self.activeConversation otherUserIsReplying:user];
 }
 
 - (void) feedUnlocked:(NSArray *)data

@@ -94,6 +94,12 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
 @property (nonatomic, strong, nullable) NSString * lockedDescription;
 
 /**
+ *  If any other users are replying to this conversation, ZNGUser objects corresponding to each of them will be in this array.
+ *  This will normally be an empty set, indicating no other replying users.
+ */
+@property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGUser *> * replyingUsers;
+
+/**
  *  Initializing without a ZNGMessageClient is disallowed
  */
 - (nonnull id) init NS_UNAVAILABLE;
@@ -150,6 +156,9 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  *  @returns The most recent message in either direction
  */
 - (nullable ZNGMessage *) mostRecentMessage;
+
+#pragma mark - Typing indicator
+- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user;
 
 #pragma mark - Protected methods that can be called by subclasses
 - (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;

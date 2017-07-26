@@ -380,6 +380,7 @@ static void * KVOContext = &KVOContext;
         wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
         
         wiggle.duration = 2.0;
+        wiggle.beginTime = 2.0 * 0.85; // Start just at the first wiggle
         wiggle.repeatCount = FLT_MAX;
         
         [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];

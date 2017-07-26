@@ -42,6 +42,7 @@ static NSString * const KVOContactChannelsPath = @"conversation.contact.channels
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
+static NSString * const KVOReplyingUsersPath = @"conversation.replyingUsers";
 
 static void * KVOContext = &KVOContext;
 
@@ -135,12 +136,14 @@ static void * KVOContext = &KVOContext;
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
+    [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew context:KVOContext];
 }
 
 - (void) dealloc
 {
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
+    [self removeObserver:self forKeyPath:KVOReplyingUsersPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
@@ -275,6 +278,8 @@ static void * KVOContext = &KVOContext;
             }
             
             [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
+        } else if ([keyPath isEqualToString:KVOReplyingUsersPath]) {
+            [self updateForInputLockedStatus:self.conversation.lockedDescription oldStatus:nil];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -344,7 +349,7 @@ static void * KVOContext = &KVOContext;
 
 - (void) updateTypingIndicatorEmoji
 {
-    NSString * lowercaseLockedDescription = [self.conversation.lockedDescription lowercaseString];
+    NSString * lowercaseLockedDescription = [[self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription] string];
     BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
     static NSString * const wiggleKey = @"wiggle";
     BOOL shouldWiggle = userResponding;
@@ -382,26 +387,75 @@ static void * KVOContext = &KVOContext;
     }
 }
 
-- (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)description
+- (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)lockedDescription
 {
-    // We'll try to find a typical "is responding" string and bold the name before it.
-    NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
-    
-    if ((description == nil) || (isRespondingRange.location == NSNotFound)) {
-        // This is not an 'is responding' string
-        return nil;
-    }
-    
-    NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
-    rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
-    
     CGFloat fontSize = self.typingIndicatorTextLabel.font.pointSize;
     UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
+    NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
+    NSString * description = lockedDescription;
+    
+    // If we have any users listed as editing (via the new web UI's userIsReplying socket event,) that will supercede
+    //  any other locked message
+    if ([self.conversation.replyingUsers count] > 0) {
+        // Construct a string with the user(s)'s name
+        NSMutableArray<NSString *> * names = [[NSMutableArray alloc] initWithCapacity:[self.conversation.replyingUsers count]];
+        
+        for (ZNGUser * user in self.conversation.replyingUsers) {
+            [names addObject:[user fullName]];
+        }
+        
+        NSMutableString * newDescription = [[self commaAndifiedString:names] mutableCopy];
+        rangeToBoldify = NSMakeRange(0, [newDescription length]);
+        
+        if ([self.conversation.replyingUsers count] == 1) {
+            [newDescription appendString:@" is responding"];
+        } else {
+            [newDescription appendString:@" are responding"];
+        }
+        
+        description = newDescription;
+    } else {
+        // We'll try to find a typical "is responding" string and bold the name before it.
+        NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
+        
+        if ((description == nil) || (isRespondingRange.location == NSNotFound)) {
+            // This is not an 'is responding' string
+            return nil;
+        }
+        
+        rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
+    }
     
     NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:description];
     [text addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
     
     return text;
+}
+
+- (NSString *) commaAndifiedString:(NSArray<NSString *> *)components
+{
+    if ([components count] == 0) {
+        return nil;
+    }
+    
+    if ([components count] == 1) {
+        return [components firstObject];
+    }
+    
+    NSMutableString * string = [[NSMutableString alloc] initWithString:[components firstObject]];
+    
+    for (NSUInteger i=1; i < [components count]; i++) {
+        NSString * component = components[i];
+        
+        if (i == [components count] - 1) {
+            NSString * maybeOxfordComma = ([components count] != 2) ? @"," : @"";
+            [string appendFormat:@"%@ and %@", maybeOxfordComma, component];
+        } else {
+            [string appendFormat:@", %@", component];
+        }
+    }
+    
+    return string;
 }
 
 - (NSAttributedString *) attributedTextForAutomationBanner:(NSString *)description

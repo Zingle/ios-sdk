@@ -280,6 +280,7 @@ static void * KVOContext = &KVOContext;
             [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
         } else if ([keyPath isEqualToString:KVOReplyingUsersPath]) {
             [self updateForInputLockedStatus:self.conversation.lockedDescription oldStatus:nil];
+            [self updateTypingIndicatorEmoji];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

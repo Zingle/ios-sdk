@@ -12,7 +12,7 @@
 
 @interface ZNGSetting : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong, nullable) NSString * value;
+@property (nonatomic, strong, nullable) id value;
 @property (nonatomic, strong, nullable) NSString * settingsFieldOptionId;
 @property (nonatomic, strong, nullable) ZNGSettingsField * settingsField;
 

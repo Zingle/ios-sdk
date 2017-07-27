@@ -26,7 +26,7 @@
 
 + (NSValueTransformer *) conditionsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGCondition class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGCondition class]];
 }
 
 - (BOOL) matchesSearchTerm:(NSString *)term

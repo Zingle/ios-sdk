@@ -128,17 +128,17 @@ static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
 
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGUser class]];
 }
 
 + (NSValueTransformer*)automationJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGAutomation class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGAutomation class]];
 }
 
 + (NSValueTransformer*)messageJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGMessage class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGMessage class]];
 }
 
 - (BOOL) isEqual:(ZNGEvent *)other {

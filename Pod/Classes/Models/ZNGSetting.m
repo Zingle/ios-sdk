@@ -22,7 +22,7 @@
 
 + (NSValueTransformer *) settingsFieldJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGSettingsField class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGSettingsField class]];
 }
 
 @end

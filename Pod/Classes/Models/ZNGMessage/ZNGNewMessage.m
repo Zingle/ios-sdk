@@ -28,12 +28,12 @@
 
 + (NSValueTransformer*)senderJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGParticipant class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGParticipant class]];
 }
 
 + (NSValueTransformer*)recipientsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGParticipant class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGParticipant class]];
 }
 
 @end

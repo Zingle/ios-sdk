@@ -139,12 +139,12 @@
 
 + (NSValueTransformer*)senderJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
 }
 
 + (NSValueTransformer*)recipientJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer
@@ -159,7 +159,7 @@
 
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGUser class]];
 }
 
 + (NSValueTransformer *)executeAtJSONTransformer

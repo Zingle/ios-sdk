@@ -64,7 +64,7 @@
 
 + (NSValueTransformer*)customFieldJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGContactField.class];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGContactField class]];
 }
 
 + (NSValueTransformer *)JSONTransformerForKey:(NSString *)key

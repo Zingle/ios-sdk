@@ -25,7 +25,7 @@
 
 + (NSValueTransformer *) bodyJSONTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithBlock:^NSString *(NSString * source) {
+    return [MTLValueTransformer transformerUsingReversibleBlock:^id(NSString * source, BOOL *success, NSError *__autoreleasing *error) {
         if (source == nil) {
             return nil;
         }

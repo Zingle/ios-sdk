@@ -21,9 +21,9 @@
 
 + (NSValueTransformer *)valueJSONTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(id jsonValue) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(id jsonValue, BOOL *success, NSError *__autoreleasing *error) {
         return jsonValue;
-    } reverseBlock:^id(NSString * localValue) {
+    } reverseBlock:^id(NSString * localValue, BOOL *success, NSError *__autoreleasing *error) {
         if ([localValue length] == 0) {
             return [NSNull null];
         }

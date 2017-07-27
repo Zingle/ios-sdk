@@ -33,14 +33,14 @@
 
 + (NSValueTransformer *) valueJSONTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(id incoming) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(id incoming, BOOL *success, NSError *__autoreleasing *error) {
         if ([incoming isKindOfClass:[NSNumber class]]) {
             return [incoming stringValue];
         }
         
         return incoming;
-    } reverseBlock:^id(id thing) {
-        return thing;
+    } reverseBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+        return value;
     }];
 }
 

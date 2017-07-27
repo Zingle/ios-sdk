@@ -37,9 +37,9 @@
 
 + (MTLValueTransformer *) reversibleColorFromJSONStringTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(NSString * colorString) {
+    return [MTLValueTransformer transformerUsingForwardBlock:^id(NSString * colorString, BOOL *success, NSError *__autoreleasing *error) {
         return [UIColor colorFromHexString:colorString];
-    } reverseBlock:^id(UIColor * color) {
+    } reverseBlock:^id(UIColor * color, BOOL *success, NSError *__autoreleasing *error) {
         if (color == nil) {
             return nil;
         }

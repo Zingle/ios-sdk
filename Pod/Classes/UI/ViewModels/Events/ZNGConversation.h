@@ -71,6 +71,12 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  */
 @property (nonatomic) BOOL automaticallyRefreshesOnPushNotification;
 
+/**
+ *  The sequential ID for this feed (vs. the UUID we actually use.)
+ *  We should never have this, but socket is sometimes rude and insist that we use it. :(
+ */
+@property (nonatomic, assign) NSInteger sequentialId;
+
 @property (nonatomic, readonly, nullable) ZNGMessageClient * messageClient;
 @property (nonatomic, readonly, nullable) ZNGEventClient * eventClient;
 @property (nonatomic, strong, nullable) ZNGSocketClient * socketClient;
@@ -86,6 +92,12 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  *  This is usually nil, indicating an unlocked conversation.
  */
 @property (nonatomic, strong, nullable) NSString * lockedDescription;
+
+/**
+ *  If any other users are replying to this conversation, ZNGUser objects corresponding to each of them will be in this array.
+ *  This will normally be an empty set, indicating no other replying users.
+ */
+@property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGUser *> * replyingUsers;
 
 /**
  *  Initializing without a ZNGMessageClient is disallowed
@@ -144,6 +156,9 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  *  @returns The most recent message in either direction
  */
 - (nullable ZNGMessage *) mostRecentMessage;
+
+#pragma mark - Typing indicator
+- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user;
 
 #pragma mark - Protected methods that can be called by subclasses
 - (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;

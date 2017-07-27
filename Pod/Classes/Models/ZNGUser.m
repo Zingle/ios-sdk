@@ -25,6 +25,20 @@
              };
 }
 
+- (BOOL) isEqual:(ZNGUser *)other
+{
+    if (![other isKindOfClass:[ZNGUser class]]) {
+        return NO;
+    }
+    
+    return ([self.userId isEqualToString:other.userId]);
+}
+
+- (NSUInteger) hash
+{
+    return [self.userId hash];
+}
+
 + (NSValueTransformer *) avatarUriJSONTransformer
 {
     return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
@@ -68,5 +82,25 @@
     
     return user;
 }
+
++ (instancetype) userFromSocketData:(NSDictionary *)data
+{
+    ZNGUser * user = [[self alloc] init];
+    
+    id userIdUnknownType = data[@"id"];
+    user.userId = ([userIdUnknownType isKindOfClass:[NSString class]]) ? userIdUnknownType : [userIdUnknownType stringValue];
+    
+    user.firstName = data[@"first_name"];
+    user.lastName = data[@"last_name"];
+    user.email = data[@"username"];
+    
+    NSString * avatarAsset = data[@"avatar_asset"];
+    if ([avatarAsset isKindOfClass:[NSString class]]) {
+        [user setValue:[NSURL URLWithString:avatarAsset] forKey:NSStringFromSelector(@selector(avatarUri))];
+    }
+    
+    return user;
+}
+
 
 @end

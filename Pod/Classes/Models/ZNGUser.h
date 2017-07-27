@@ -26,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString * _Nullable) fullName;
 
 + (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth;
++ (instancetype) userFromSocketData:(NSDictionary *)data;
 
 NS_ASSUME_NONNULL_END
 

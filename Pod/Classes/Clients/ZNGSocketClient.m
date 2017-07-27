@@ -163,6 +163,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf socketDidBindNodeController];
     }];
     
+    [socketClient on:@"eventListData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedEventListData:data ackEmitter:ackEmitter];
+    }];
+    
+    [socketClient on:@"userIsReplying" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf otherUserIsReplying:data];
+    }];
+    
     [socketClient on:@"error" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidEncounterErrorWithData:data];
     }];
@@ -218,26 +226,33 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Typing indicator
 - (void) userDidType:(NSString *)input
 {
+    if ([input length] == 0) {
+        ZNGLogInfo(@"%s was called with no user input.  No message is sent to socket for the user clearing input, so this is ignored.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
     if (![self.activeConversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
         ZNGLogWarn(@"%@ was called, but the current conversation is a %@.  Ignoring.", NSStringFromSelector(_cmd), [self.activeConversation class]);
         return;
     }
     
     ZNGConversationServiceToContact * conversation = (ZNGConversationServiceToContact *)self.activeConversation;
-
-    NSString * description = nil;
     
-    if (([input length] > 0) && (conversation.session.userAuthorization != nil)) {
-        description = [NSString stringWithFormat:@"%@ is responding", [conversation.session.userAuthorization displayName]];
-    }
+    NSString * event = @"userIsReplying";
     
-    NSString * event = ([input length] > 0) ? @"lockFeed" : @"unlockFeed";
+    NSMutableDictionary * user = [[NSMutableDictionary alloc] init];
+    [user setValue:conversation.session.userAuthorization.userId forKey:@"id"];
+    [user setValue:conversation.session.userAuthorization.firstName forKey:@"first_name"];
+    [user setValue:conversation.session.userAuthorization.lastName forKey:@"last_name"];
+    [user setValue:conversation.session.userAuthorization.email forKey:@"username"];
+    [user setValue:[conversation.session.userAuthorization displayName] forKey:@"display_name"];
+    [user setValue:[conversation.session.user.avatarUri absoluteString] forKey:@"avatar_asset"];
     
     NSMutableDictionary * payload = [[NSMutableDictionary alloc] init];
-    payload[@"feedId"] = conversation.contact.contactId;
+    payload[@"feedId"] = (conversation.sequentialId > 0) ? @(conversation.sequentialId) : conversation.contact.contactId;
     payload[@"serviceId"] = conversation.service.serviceId;
-    payload[@"pendingResponse"] = input;
-    payload[@"description"] = description;
+    payload[@"type"] = @"message";
+    payload[@"user"] = user;
     
     ZNGLogInfo(@"Emitting %@ for feed %@", event, conversation.contact.contactId);
     [socketClient emit:event with:@[payload]];
@@ -245,7 +260,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) userClearedInput
 {
-    [self userDidType:nil];
+    // No message is sent to socket for the user clearing input as of July 2016.
 }
 
 #pragma mark - Sockety goodness
@@ -270,6 +285,20 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     ZNGLogDebug(@"Node controller bind succeeded.");
     if (self.activeConversation != nil) {
         [self subscribeForFeedUpdatesForConversation:self.activeConversation];
+    }
+}
+
+// We do not actually process the event data from socket, but we can use this event to grab our sequential ID for the feed
+//  (that does not exist in the API and should also not be used, even by socket, honestly.)
+- (void) receivedEventListData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    ZNGLogDebug(@"Received event data.");
+    
+    NSDictionary * eventData = [data firstObject];
+    NSNumber * feedId = eventData[@"requestFeedId"];
+    
+    if ([feedId integerValue] > 0) {
+        self.activeConversation.sequentialId = [feedId integerValue];
     }
 }
 
@@ -345,6 +374,34 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         ZNGLogInfo(@"Conversation was locked: %@", description);
         self.activeConversation.lockedDescription = description;
     }
+}
+
+- (void) otherUserIsReplying:(NSArray *)dataArray
+{
+    if (self.activeConversation == nil) {
+        // We don't a conversation.  Who cares?
+        return;
+    }
+    
+    NSDictionary * data = [dataArray firstObject];
+    NSDictionary * userData = data[@"user"];
+    
+    if (userData[@"id"] == nil) {
+        ZNGLogWarn(@"Received a userIsReplying notification with no user ID.  Ignoring: %@", data);
+        return;
+    }
+    
+    ZingleAccountSession * accountSession = ([self.session isKindOfClass:[ZingleAccountSession class]]) ? (ZingleAccountSession *)self.session : nil;
+    ZNGUser * user = [ZNGUser userFromSocketData:userData];
+    
+    // The socket data currently uses sequential IDs instead of our UUIDs.  This means that we cannot check vs. our own ID.
+    // We will instead check vs. our email/username.
+    if ([user.email isEqualToString:accountSession.userAuthorization.email]) {
+        ZNGLogDebug(@"Received a userIsReplying notification for our current user.  Ignoring.");
+        return;
+    }
+    
+    [self.activeConversation otherUserIsReplying:user];
 }
 
 - (void) feedUnlocked:(NSArray *)data

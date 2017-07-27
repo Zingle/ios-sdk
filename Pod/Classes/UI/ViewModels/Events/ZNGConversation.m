@@ -25,6 +25,9 @@ static const int zngLogLevel = ZNGLogLevelVerbose;
 
 static const NSUInteger kDefaultPageSize = 100;
 
+// How long should a user remain in the replyingUsers array after a notification?
+static const NSTimeInterval userTypingIndicatorLifetime = 5.0;
+
 NSString * const ZNGConversationParticipantTypeContact = @"contact";
 NSString * const ZNGConversationParticipantTypeService = @"service";
 NSString * const ZNGConversationParticipantTypeLabel = @"label";
@@ -61,7 +64,16 @@ NSString * const ZNGConversationParticipantTypeGroup = @"contact_group";
 
 @end
 
+@interface ZNGConversation ()
+@property (nonatomic, strong, nonnull) NSOrderedSet * replyingUsers;
+@end
+
 @implementation ZNGConversation
+{
+    // Weak table of NSTimers used to remove typing indicator users.
+    // Keyed by user ID.
+    NSMapTable * typingIndicatorUserExpirationTimers;
+}
 
 NSString * const kConversationPage = @"page";
 NSString * const kConversationPageSize = @"page_size";
@@ -100,6 +112,9 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         _eventClient = eventClient;
         _pageSize = kDefaultPageSize;
         _automaticallyRefreshesOnPushNotification = YES;
+        
+        _replyingUsers = [[NSOrderedSet alloc] init];
+        typingIndicatorUserExpirationTimers = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory valueOptions:NSMapTableWeakMemory];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     }
@@ -843,6 +858,52 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     UIGraphicsEndImageContext();
     
     return imageData;
+}
+
+#pragma mark - Typing indicator
+- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user
+{
+    if ([user.userId length] == 0) {
+        ZNGLogError(@"%s called with no user ID: %@", __PRETTY_FUNCTION__, user);
+        return;
+    }
+
+    // Add the dude
+    NSMutableOrderedSet<ZNGUser *> * mutableRespondingUsers = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(replyingUsers))];
+    [mutableRespondingUsers addObject:user];
+    
+    // Cancel any timer that would have removed him from an earlier notification
+    NSTimer * previousTimerThisUser = [typingIndicatorUserExpirationTimers objectForKey:user.userId];
+    [previousTimerThisUser invalidate];
+    
+    NSTimer * newTimer;
+    
+    // Set a timer to remove him after some time.
+    // Use weak timers if they are available.
+    if ([NSTimer respondsToSelector:@selector(scheduledTimerWithTimeInterval:repeats:block:)]) {
+        __weak ZNGConversation * weakSelf = self;
+        newTimer = [NSTimer scheduledTimerWithTimeInterval:userTypingIndicatorLifetime repeats:NO block:^(NSTimer * _Nonnull timer) {
+            [weakSelf _removeRespondingUser:user];
+        }];
+    } else {
+        // We cannot easily use a weak timer, so we'll use a normal timer.  This means that we will persist for, at most, five seconds beyond
+        //  when we would normally be deallocated.
+        newTimer = [NSTimer scheduledTimerWithTimeInterval:userTypingIndicatorLifetime target:self selector:@selector(_removeRespondingUserFromTimer:) userInfo:user repeats:NO];
+    }
+    
+    [typingIndicatorUserExpirationTimers setObject:newTimer forKey:user.userId];
+}
+
+- (void) _removeRespondingUserFromTimer:(NSTimer *)timer
+{
+    ZNGUser * user = timer.userInfo;
+    [self _removeRespondingUser:user];
+}
+
+- (void) _removeRespondingUser:(ZNGUser *)user
+{
+    NSMutableOrderedSet<ZNGUser *> * mutableRespondingUsers = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(replyingUsers))];
+    [mutableRespondingUsers removeObject:user];
 }
 
 #pragma mark - Protected/Abstract methods

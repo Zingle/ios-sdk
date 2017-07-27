@@ -25,7 +25,6 @@ NSString * const ZNGMessageForwardingRecipientTypePrinter = @"printer";
              NSStringFromSelector(@selector(recipients)) : @"recipients",
              NSStringFromSelector(@selector(hotsosIssue)) : @"hotsos_issue",
              NSStringFromSelector(@selector(room)) : @"room",
-             NSStringFromSelector(@selector(message)) : [NSNull null]
              };
 }
 

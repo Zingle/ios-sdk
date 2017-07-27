@@ -21,7 +21,6 @@
              @"channelTypeIds" : @"channel_type_ids",
              @"body" : @"body",
              @"attachments" : @"attachments",
-             @"outgoingImageAttachments" : [NSNull null],
              @"uuid" : @"uuid"
              };
 }

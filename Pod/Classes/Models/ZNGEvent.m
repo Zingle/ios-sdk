@@ -59,8 +59,6 @@ static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
              @"triggeredByUser" : @"triggered_by_user",
              @"automation" : @"automation",
              @"message" : @"message",
-             NSStringFromSelector(@selector(sending)) : [NSNull null],
-             NSStringFromSelector(@selector(viewModels)) : [NSNull null]
              };
 }
 

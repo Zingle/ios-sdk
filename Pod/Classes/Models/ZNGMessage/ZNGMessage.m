@@ -129,7 +129,6 @@
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
-             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null],
              NSStringFromSelector(@selector(forwardedByServiceId)) : @"forwarded_by_service_id",
              NSStringFromSelector(@selector(isDelayed)) : @"is_delayed",
              NSStringFromSelector(@selector(executeAt)) : @"execute_at",

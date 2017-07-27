@@ -121,7 +121,6 @@ static NSString * const ParameterNameClosed = @"is_closed";
              NSStringFromSelector(@selector(groups)): @"contact_groups",
              @"createdAt" : @"created_at",
              @"updatedAt" : @"updated_at",
-             @"contactClient" : [NSNull null],
              NSStringFromSelector(@selector(avatarUri)) : @"avatar_uri"
              };
 }

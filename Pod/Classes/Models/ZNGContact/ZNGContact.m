@@ -45,7 +45,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 - (id) copyWithZone:(NSZone *)zone
 {
-    NSDictionary * selfAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self];
+    NSDictionary * selfAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self error:nil];
     ZNGContact * contact = [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:selfAsDictionary error:nil];
     contact.contactClient = self.contactClient;
     return contact;

@@ -422,7 +422,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         NSMutableDictionary<NSString *, id> * parameters = [[NSMutableDictionary alloc] init];
         
         if ([changedContact.customFieldValues count] > 0) {
-            parameters[@"custom_field_values"] = [MTLJSONAdapter JSONArrayFromModels:changedContact.customFieldValues];
+            parameters[@"custom_field_values"] = [MTLJSONAdapter JSONArrayFromModels:changedContact.customFieldValues error:nil];
         }
         
         // Note: Using this logic instead of just @(boolValue) is necessary because the Zingle server does not accept 0 and 1 as boolean.  This is Nathan's fault.

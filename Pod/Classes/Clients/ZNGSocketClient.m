@@ -115,7 +115,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     // Bad NSHTTPCookieStorage.  Bad.
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] removeCookiesSinceDate:[NSDate dateWithTimeIntervalSince1970:0.0]];
     
-    [session POST:@"auth" parameters:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    [session POST:@"auth" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         ZNGLogDebug(@"Auth request succeeded.");
         authSucceeded = YES;
         [self _connectSocket];

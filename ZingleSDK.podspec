@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
   s.dependency 'AFNetworking', '~> 2.5'
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle'
-  s.dependency 'CocoaLumberjack', '2.3'
+  s.dependency 'CocoaLumberjack'
   s.dependency 'JSQMessagesViewController'
   s.dependency 'Analytics', '~> 3.0'
   s.dependency 'MGSwipeTableCell'

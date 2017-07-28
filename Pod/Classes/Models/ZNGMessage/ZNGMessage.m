@@ -25,7 +25,7 @@
 
 + (NSValueTransformer *) bodyJSONTransformer
 {
-    return [MTLValueTransformer reversibleTransformerWithBlock:^NSString *(NSString * source) {
+    return [MTLValueTransformer transformerUsingReversibleBlock:^id(NSString * source, BOOL *success, NSError *__autoreleasing *error) {
         if (source == nil) {
             return nil;
         }
@@ -129,7 +129,6 @@
              @"attachments" : @"attachments",
              @"createdAt" : @"created_at",
              @"readAt" : @"read_at",
-             NSStringFromSelector(@selector(outgoingImageAttachments)) : [NSNull null],
              NSStringFromSelector(@selector(forwardedByServiceId)) : @"forwarded_by_service_id",
              NSStringFromSelector(@selector(isDelayed)) : @"is_delayed",
              NSStringFromSelector(@selector(executeAt)) : @"execute_at",
@@ -139,12 +138,12 @@
 
 + (NSValueTransformer*)senderJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
 }
 
 + (NSValueTransformer*)recipientJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGCorrespondent class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer
@@ -159,7 +158,7 @@
 
 + (NSValueTransformer*)triggeredByUserJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGUser class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGUser class]];
 }
 
 + (NSValueTransformer *)executeAtJSONTransformer

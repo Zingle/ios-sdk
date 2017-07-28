@@ -20,4 +20,16 @@
              };
 }
 
++ (MTLValueTransformer *) sortOrderJSONTransformer
+{
+    return [MTLValueTransformer transformerUsingReversibleBlock:^id(id value, BOOL *success, NSError *__autoreleasing *error) {
+        // Tolerate strings
+        if ([value isKindOfClass:[NSString class]]) {
+            return @([(NSString *)value integerValue]);
+        }
+        
+        return value;
+    }];
+}
+
 @end

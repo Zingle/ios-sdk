@@ -45,7 +45,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 - (id) copyWithZone:(NSZone *)zone
 {
-    NSDictionary * selfAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self];
+    NSDictionary * selfAsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:self error:nil];
     ZNGContact * contact = [MTLJSONAdapter modelOfClass:[self class] fromJSONDictionary:selfAsDictionary error:nil];
     contact.contactClient = self.contactClient;
     return contact;
@@ -121,7 +121,6 @@ static NSString * const ParameterNameClosed = @"is_closed";
              NSStringFromSelector(@selector(groups)): @"contact_groups",
              @"createdAt" : @"created_at",
              @"updatedAt" : @"updated_at",
-             @"contactClient" : [NSNull null],
              NSStringFromSelector(@selector(avatarUri)) : @"avatar_uri"
              };
 }
@@ -147,27 +146,27 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 + (NSValueTransformer*)lastMessageJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGMessage.class];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGMessage class]];
 }
 
 + (NSValueTransformer*)channelsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGChannel.class];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGChannel class]];
 }
 
 + (NSValueTransformer*)customFieldValuesJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGContactFieldValue.class];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactFieldValue class]];
 }
 
 + (NSValueTransformer*)labelsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:ZNGLabel.class];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGLabel class]];
 }
 
 + (NSValueTransformer *) groupsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGContactGroup class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactGroup class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

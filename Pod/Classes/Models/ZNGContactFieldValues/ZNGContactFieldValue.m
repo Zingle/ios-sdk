@@ -64,21 +64,20 @@
 
 + (NSValueTransformer*)customFieldJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:ZNGContactField.class];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGContactField class]];
 }
 
 + (NSValueTransformer *)JSONTransformerForKey:(NSString *)key
 {
     // Handle the case of value being an int.  We could reasonably ask the server to send strings only, but this is easy enough.
     if ([key isEqualToString:@"value"]) {
-        
-        return [MTLValueTransformer reversibleTransformerWithForwardBlock:^id(id maybeNumber) {
+        return [MTLValueTransformer transformerUsingForwardBlock:^id(id maybeNumber, BOOL *success, NSError *__autoreleasing *error) {
             if ([maybeNumber isKindOfClass:[NSNumber class]]) {
                 return [maybeNumber stringValue];
             }
             
             return maybeNumber;
-        } reverseBlock:^id(id valueString) {
+        } reverseBlock:^id(id valueString, BOOL *success, NSError *__autoreleasing *error) {
             return valueString;
         }];
     }

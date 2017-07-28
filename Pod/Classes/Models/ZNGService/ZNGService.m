@@ -69,64 +69,62 @@
 
 + (NSValueTransformer*)accountJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGAccount class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGAccount class]];
 }
 
 + (NSValueTransformer*)planJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGAccountPlan class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGAccountPlan class]];
 }
 
 + (NSValueTransformer*)channelsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGChannel class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGChannel class]];
 }
 
 + (NSValueTransformer*)channelTypesJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGChannelType class]];
-
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGChannelType class]];
 }
 
 + (NSValueTransformer*)contactLabelsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGLabel class]];
-
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGLabel class]];
 }
 
 + (NSValueTransformer*)contactCustomFieldsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGContactField class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactField class]];
 }
 
 + (NSValueTransformer*)settingsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGSetting class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGSetting class]];
 }
 
 + (NSValueTransformer *)automationsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGAutomation class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGAutomation class]];
 }
 
 + (NSValueTransformer *)templatesJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGTemplate class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGTemplate class]];
 }
 
 + (NSValueTransformer *)printersJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGPrinter class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGPrinter class]];
 }
 
 + (NSValueTransformer *) contactGroupsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGContactGroup class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactGroup class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[ZNGServiceAddress class]];
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGServiceAddress class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

@@ -24,7 +24,7 @@
 
 + (NSValueTransformer*)optionsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGFieldOption class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGFieldOption class]];
 }
 
 @end

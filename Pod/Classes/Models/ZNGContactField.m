@@ -33,7 +33,7 @@ NSString * const ZNGContactFieldDataTypeSingleSelect = @"single_select_options";
 
 + (NSValueTransformer*)optionsJSONTransformer
 {
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[ZNGFieldOption class]];
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGFieldOption class]];
 }
 
 - (BOOL) isEqual:(ZNGContactField *)object

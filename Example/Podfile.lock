@@ -20,7 +20,7 @@ PODS:
   - AFNetworking/UIKit (2.6.3):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
-  - Analytics (3.6.1)
+  - Analytics (3.6.4)
   - CocoaLumberjack (2.3.0):
     - CocoaLumberjack/Default (= 2.3.0)
     - CocoaLumberjack/Extensions (= 2.3.0)
@@ -33,24 +33,26 @@ PODS:
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
-  - JVFloatLabeledTextField (1.1.1)
-  - Mantle (1.5.8):
-    - Mantle/extobjc (= 1.5.8)
-  - Mantle/extobjc (1.5.8)
+  - JVFloatLabeledTextField (1.2.0)
+  - Mantle (2.1.0):
+    - Mantle/extobjc (= 2.1.0)
+  - Mantle/extobjc (2.1.0)
   - MGSwipeTableCell (1.5.6)
   - SDWebImage/Core (4.0.0)
   - SDWebImage/GIF (4.0.0):
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
   - Shimmer (1.0.2)
-  - Socket.IO-Client-Swift (10.0.0)
+  - Socket.IO-Client-Swift (11.0.0):
+    - StarscreamSocketIO (~> 8.0.1)
+  - StarscreamSocketIO (8.0.1)
   - ZingleSDK (1.1.0):
     - AFNetworking (~> 2.5)
     - Analytics (~> 3.0)
     - CocoaLumberjack (= 2.3)
     - JSQMessagesViewController
     - JVFloatLabeledTextField
-    - Mantle (~> 1.0)
+    - Mantle
     - MGSwipeTableCell
     - SDWebImage/GIF
     - Shimmer
@@ -65,18 +67,19 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
-  Analytics: 32f2d1e0e5499c493450192726b0b42d43606b82
+  Analytics: a24b6b80f9f16dfb69aac605da5c3854bdfb328a
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
-  JVFloatLabeledTextField: 0e5524b097f102036214dd8279edc8ecf08b5e18
-  Mantle: f03b2b606c3f0cabd80214ad8a2fed6b464a7359
+  JVFloatLabeledTextField: 96c0c1b6739001801340d25b86aff990d67c4181
+  Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
-  Socket.IO-Client-Swift: 9c5b4e5e76e30e1b9a1804c40e11dad0a002b1a4
-  ZingleSDK: f305f35f50137e5eb929a5a8ebfca3155918eebb
+  Socket.IO-Client-Swift: 9cafa4459be23886c231942baeebb0df94f3989e
+  StarscreamSocketIO: 821a1a2597cc4735919fd5d7683a85c14b81bb8c
+  ZingleSDK: a211fd294f4dd40d0dc7c617f6884df3a8a678b1
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

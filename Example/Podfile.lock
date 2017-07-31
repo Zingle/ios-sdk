@@ -1,24 +1,18 @@
 PODS:
-  - AFNetworking (2.6.3):
-    - AFNetworking/NSURLConnection (= 2.6.3)
-    - AFNetworking/NSURLSession (= 2.6.3)
-    - AFNetworking/Reachability (= 2.6.3)
-    - AFNetworking/Security (= 2.6.3)
-    - AFNetworking/Serialization (= 2.6.3)
-    - AFNetworking/UIKit (= 2.6.3)
-  - AFNetworking/NSURLConnection (2.6.3):
+  - AFNetworking (3.1.0):
+    - AFNetworking/NSURLSession (= 3.1.0)
+    - AFNetworking/Reachability (= 3.1.0)
+    - AFNetworking/Security (= 3.1.0)
+    - AFNetworking/Serialization (= 3.1.0)
+    - AFNetworking/UIKit (= 3.1.0)
+  - AFNetworking/NSURLSession (3.1.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/NSURLSession (2.6.3):
-    - AFNetworking/Reachability
-    - AFNetworking/Security
-    - AFNetworking/Serialization
-  - AFNetworking/Reachability (2.6.3)
-  - AFNetworking/Security (2.6.3)
-  - AFNetworking/Serialization (2.6.3)
-  - AFNetworking/UIKit (2.6.3):
-    - AFNetworking/NSURLConnection
+  - AFNetworking/Reachability (3.1.0)
+  - AFNetworking/Security (3.1.0)
+  - AFNetworking/Serialization (3.1.0)
+  - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Analytics (3.6.4)
   - CocoaLumberjack (3.2.0):
@@ -28,7 +22,7 @@ PODS:
   - CocoaLumberjack/Extensions (3.2.0):
     - CocoaLumberjack/Default
   - FLAnimatedImage (1.0.12)
-  - JSQMessagesViewController (7.3.4):
+  - JSQMessagesViewController (7.3.5):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - JVFloatLabeledTextField (1.2.0)
@@ -36,8 +30,8 @@ PODS:
     - Mantle/extobjc (= 2.1.0)
   - Mantle/extobjc (2.1.0)
   - MGSwipeTableCell (1.5.6)
-  - SDWebImage/Core (4.0.0)
-  - SDWebImage/GIF (4.0.0):
+  - SDWebImage/Core (4.1.0)
+  - SDWebImage/GIF (4.1.0):
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
   - Shimmer (1.0.2)
@@ -45,7 +39,7 @@ PODS:
     - StarscreamSocketIO (~> 8.0.1)
   - StarscreamSocketIO (8.0.1)
   - ZingleSDK (1.1.0):
-    - AFNetworking (~> 2.5)
+    - AFNetworking
     - Analytics (~> 3.0)
     - CocoaLumberjack
     - JSQMessagesViewController
@@ -64,20 +58,20 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFNetworking: cb8d14a848e831097108418f5d49217339d4eb60
+  AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Analytics: a24b6b80f9f16dfb69aac605da5c3854bdfb328a
   CocoaLumberjack: 9b4aed7073d242f29cc2f62068d995faf67f703a
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
+  JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JVFloatLabeledTextField: 96c0c1b6739001801340d25b86aff990d67c4181
   Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
-  SDWebImage: 76a6348bdc74eb5a55dd08a091ef298e56b55e41
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   Socket.IO-Client-Swift: 9cafa4459be23886c231942baeebb0df94f3989e
   StarscreamSocketIO: 821a1a2597cc4735919fd5d7683a85c14b81bb8c
-  ZingleSDK: 7c795ce3bf79d0b63ab944cf62e315bbdb2b7e66
+  ZingleSDK: 122206c1860a93db28b0ed11de9ec262d2a65763
 
 PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
 

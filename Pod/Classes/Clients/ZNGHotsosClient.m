@@ -52,7 +52,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 - (void) getIssuesLike:(NSString *)term completion:(void (^)(NSArray<NSString *> * _Nullable matchingIssueNames, NSError * _Nullable error))completion;
 {
-    AFHTTPRequestOperationManager * requestManager = [AFHTTPRequestOperationManager manager];
+    AFHTTPSessionManager * sessionManager = [AFHTTPSessionManager manager];
     AFHTTPRequestSerializer * requestSerializer = [AFHTTPRequestSerializer serializer];
     AFXMLParserResponseSerializer * responseSerializer = [AFXMLParserResponseSerializer serializer];
     
@@ -60,10 +60,10 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [requestSerializer setValue:@"application/xml" forHTTPHeaderField:@"Content-type"];
     responseSerializer.acceptableContentTypes = [NSSet setWithObjects:@"text/xml", nil];
     
-    requestManager.responseSerializer = responseSerializer;
-    requestManager.requestSerializer = requestSerializer;
+    sessionManager.responseSerializer = responseSerializer;
+    sessionManager.requestSerializer = requestSerializer;
     
-    [requestManager GET:[self hotsosIssuePathForTerm:term] parameters:nil success:^(AFHTTPRequestOperation * _Nonnull operation, NSXMLParser * _Nonnull responseObject) {
+    [sessionManager GET:[self hotsosIssuePathForTerm:term] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSXMLParser * _Nullable responseObject) {
         responseObject.delegate = self;
         [responseObject parse];
         ZNGLogInfo(@"HotSOS returned %llu issues matching \"%%%@%%\"", (unsigned long long)[matchingIssueNames count], term);
@@ -74,13 +74,13 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         }
         
         NSError * error = [responseObject parserError];
-
+        
         if (error != nil) {
             completion(nil, error);
         } else {
             completion(matchingIssueNames, nil);
         }
-    } failure:^(AFHTTPRequestOperation * _Nullable operation, NSError * _Nonnull error) {
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (completion != nil) {
             completion(nil, error);
         }

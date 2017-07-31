@@ -70,7 +70,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     ZNGLogDebug(@"Sending request to %@%@, expecting [%@] in response", self.session.sessionManager.baseURL, path, responseClass);
     ZNGLogVerbose(@"... with parameters: %@", parameters);
     
-    return [self.session.sessionManager GET:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager GET:path parameters:parameters progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -134,7 +134,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 {
     ZNGLogDebug(@"Sending request to %@%@, expecting %@ in response", self.session.sessionManager.baseURL, path, responseClass);
     
-    return [self.session.sessionManager GET:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -296,7 +296,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         }
     }
     
-    return [self.session.sessionManager POST:path parameters:params success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager POST:path parameters:params progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -361,7 +361,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     ZNGLogDebug(@"POSTing to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
     ZNGLogVerbose(@"... with parameters: %@", parameters);
     
-    return [self.session.sessionManager POST:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         

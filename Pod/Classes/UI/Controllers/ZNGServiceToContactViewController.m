@@ -298,7 +298,9 @@ static void * KVOContext = &KVOContext;
 - (void) updateTopInset
 {
     CGFloat networkStatusHeight = networkStatusLabel.intrinsicContentSize.height;
-    CGFloat topBannerHeight = (self.automationBannerOnScreenConstraint.active) ? bannerContainer.frame.size.height : 0.0;
+    CGFloat topAutomationBannerHeight = (self.automationBannerOnScreenConstraint.active) ? bannerContainer.frame.size.height : 0.0;
+    CGFloat topBlockedBannerHeight = (blockedChannelBanner.superview != nil) ? blockedChannelBanner.frame.size.height : 0.0;
+    CGFloat topBannerHeight = MAX(topBlockedBannerHeight, topAutomationBannerHeight);
     self.topContentAdditionalInset = MAX(networkStatusHeight, topBannerHeight);
 }
 

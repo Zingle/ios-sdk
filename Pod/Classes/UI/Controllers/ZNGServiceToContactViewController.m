@@ -255,6 +255,8 @@ static void * KVOContext = &KVOContext;
         ZNGLogInfo(@"Confirming contact due to conversation view appearance.");
         [self.conversation.contact confirm];
     }
+    
+    [self updateTopInset];
 }
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
@@ -290,9 +292,14 @@ static void * KVOContext = &KVOContext;
 - (void) notifyNetworkStatusChanged:(NSNotification *)notification
 {
     [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
-    
-    CGSize networkStatusSize = networkStatusLabel.intrinsicContentSize;
-    self.topContentAdditionalInset = networkStatusSize.height;
+    [self updateTopInset];
+}
+
+- (void) updateTopInset
+{
+    CGFloat networkStatusHeight = networkStatusLabel.intrinsicContentSize.height;
+    CGFloat topBannerHeight = (self.automationBannerOnScreenConstraint.active) ? bannerContainer.frame.size.height : 0.0;
+    self.topContentAdditionalInset = MAX(networkStatusHeight, topBannerHeight);
 }
 
 - (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription
@@ -325,6 +332,8 @@ static void * KVOContext = &KVOContext;
             self.automationBannerOffScreenConstraint.active = !automationTextExists;
             [self.automationBannerContainerView layoutSubviews];
         }];
+        
+        [self updateTopInset];
     }
     
     if (bottomStatusChanged) {

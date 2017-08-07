@@ -292,8 +292,7 @@ static void * KVOContext = &KVOContext;
     [networkStatusLabel updateWithNetworkStatus:self.conversation.session.networkLookout.status];
     
     CGSize networkStatusSize = networkStatusLabel.intrinsicContentSize;
-    UIEdgeInsets collectionViewContentInset = self.collectionView.contentInset;
-    self.collectionView.contentInset = UIEdgeInsetsMake(networkStatusSize.height, collectionViewContentInset.left, collectionViewContentInset.bottom, collectionViewContentInset.right);
+    self.topContentAdditionalInset = networkStatusSize.height;
 }
 
 - (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription

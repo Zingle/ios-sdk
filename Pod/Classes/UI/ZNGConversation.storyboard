@@ -82,16 +82,11 @@
                                     <constraint firstAttribute="height" constant="32" id="Bkx-K0-LNH"/>
                                     <constraint firstItem="59H-Kb-Pa5" firstAttribute="height" secondItem="Vm4-GP-Tqx" secondAttribute="height" id="JGN-BY-NVV"/>
                                     <constraint firstAttribute="top" secondItem="59H-Kb-Pa5" secondAttribute="bottom" priority="999" id="LGJ-nO-6nG"/>
-                                    <constraint firstItem="59H-Kb-Pa5" firstAttribute="top" secondItem="Vm4-GP-Tqx" secondAttribute="top" priority="999" id="Ops-CP-9QT"/>
+                                    <constraint firstItem="59H-Kb-Pa5" firstAttribute="top" secondItem="Vm4-GP-Tqx" secondAttribute="top" priority="998" id="Ops-CP-9QT"/>
                                     <constraint firstAttribute="trailing" secondItem="59H-Kb-Pa5" secondAttribute="trailing" id="Rrl-3j-4Ab"/>
                                     <constraint firstItem="59H-Kb-Pa5" firstAttribute="leading" secondItem="Vm4-GP-Tqx" secondAttribute="leading" id="k3N-Wv-Ybx"/>
                                     <constraint firstItem="59H-Kb-Pa5" firstAttribute="top" secondItem="Vm4-GP-Tqx" secondAttribute="top" placeholder="YES" id="u4F-7N-4lb" userLabel="Automation banner IB prototyping constraint"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="Ops-CP-9QT"/>
-                                    </mask>
-                                </variation>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1S3-q5-gQs" userLabel="More Messages Below Container">
                                 <rect key="frame" x="0.0" y="558" width="375" height="32"/>

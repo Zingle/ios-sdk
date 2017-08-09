@@ -109,6 +109,12 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 #pragma mark - User data
 - (void) updateUserData;
 
+#pragma mark - Push notifications
+/**
+ *  Asks the server to send a push notification.  Can be used to test pushes from top to bottom by listening for a ZNGPushNotificationReceived notification.
+ */
+- (void) requestAPushNotification;
+
 #pragma mark - Messaging methods
 
 /**

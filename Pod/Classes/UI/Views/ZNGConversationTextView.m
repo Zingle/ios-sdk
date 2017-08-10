@@ -27,7 +27,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self.layer.borderColor = [[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor];
     self.layer.cornerRadius = 15.0;
     
-    self.textContainerInset = UIEdgeInsetsMake(4.0, 6.0, 4.0, 6.0);
+    self.textContainerInset = UIEdgeInsetsMake(5.0, 7.0, 5.0, 7.0);
 }
 
 - (NSDictionary *) placeholderAttributes

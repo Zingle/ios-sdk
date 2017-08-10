@@ -24,7 +24,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 77.0;
+    self.preferredDefaultHeight = 81.0;
     
     self.barTintColor = [UIColor whiteColor];
     

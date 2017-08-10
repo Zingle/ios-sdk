@@ -144,6 +144,17 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     }
 }
 
+#pragma mark - Push testing
+- (void) requestAPushNotification
+{
+    if (self.service.serviceId == nil) {
+        ZNGLogWarn(@"%s was called, but there is no active service.  Ignoring.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
+    [self _registerForPushNotificationsForServiceIds:@[self.service.serviceId] removePreviousSubscriptions:NO];
+}
+
 #pragma mark - Service/Account setters
 - (void) setAccount:(ZNGAccount *)account
 {

@@ -179,10 +179,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                 ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace];
-            } else if ((status.totalRecords < self.totalEventCount) && ([self lastPageContainsDeletableMessage])) {
+            } else if ([self lastPageContainsMutableMessage]) {
                 ZNGLogInfo(@"Our total event count has gone from %llu to %llu, and we have one or more deletable event types in data.\
-                             Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalPages);
-                [self _loadRecentEventsErasing:YES];
+                           Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalPages);
+                [self _loadRecentEventsErasing:NO];
             } else {
                 ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
@@ -196,12 +196,12 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
 }
 
-- (BOOL) lastPageContainsDeletableMessage
+- (BOOL) lastPageContainsMutableMessage
 {
     NSInteger i = ([self.events count] <= self.pageSize) ? 0 : ([self.events count] - self.pageSize);
     
     while (i < [self.events count]) {
-        if ([self.events[i] mayBeDeleted]) {
+        if ([self.events[i] isMutable]) {
             return YES;
         }
         
@@ -245,6 +245,53 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }];
 }
 
+- (void) mergeMutableEventsFromNewData:(NSArray<ZNGEvent *> *)incomingEvents
+{
+    NSInteger startingIndex = ([self.events count] <= self.pageSize) ? 0 : ([self.events count] - self.pageSize);
+
+    for (NSInteger i = startingIndex; i < [self.events count]; i++) {
+        ZNGEvent * oldEvent = self.events[i];
+        NSUInteger newEventIndex = [incomingEvents indexOfObject:oldEvent];
+        
+        if (newEventIndex == NSNotFound) {
+            // There was no previous data for this event
+            continue;
+        }
+        
+        ZNGEvent * newEvent = incomingEvents[newEventIndex];
+        
+        if ((![newEvent isMutable]) && (![oldEvent isMutable])) {
+            // This is an immutable event
+            continue;
+        }
+        
+        if ([newEvent hasChangedSince:oldEvent]) {
+            NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+            [mutableEvents replaceObjectAtIndex:i withObject:newEvent];
+            
+            NSMutableIndexSet * oldViewModelIndexes = [[NSMutableIndexSet alloc] init];
+            NSMutableArray<ZNGEventViewModel *> * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+            
+            [mutableViewModels enumerateObjectsUsingBlock:^(ZNGEventViewModel * _Nonnull viewModel, NSUInteger idx, BOOL * _Nonnull stop) {
+                if ([viewModel.event isEqual:oldEvent]) {
+                    [oldViewModelIndexes addIndex:idx];
+                }
+            }];
+            
+            if ([oldViewModelIndexes count] == 0) {
+                ZNGLogError(@"Unable to find updated event in view models array even though it was found in the events array.  Help.");
+                return;
+            }
+            
+            [mutableViewModels removeObjectsAtIndexes:oldViewModelIndexes];
+            NSArray<ZNGEventViewModel *> * newViewModels = newEvent.viewModels;
+            
+            NSIndexSet * viewModelIndexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([oldViewModelIndexes firstIndex], [newViewModels count])];
+            [mutableViewModels insertObjects:newViewModels atIndexes:viewModelIndexes];
+        }
+    }
+}
+
 - (void)mergeNewDataAtTail:(NSArray<ZNGEvent *> *)incomingEvents
 {
     [self addSenderNameToEvents:incomingEvents];
@@ -256,12 +303,18 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         return;
     }
     
+    // Take care of any mutable events
+    if ([self lastPageContainsMutableMessage]) {
+        [self mergeMutableEventsFromNewData:incomingEvents];
+    }
+    
     NSMutableOrderedSet<ZNGEvent *> * newEvents = [[NSMutableOrderedSet alloc] initWithArray:incomingEvents];
     NSOrderedSet<ZNGEvent *> * oldEvents = [[NSOrderedSet alloc] initWithArray:self.events];
     [newEvents minusOrderedSet:oldEvents];
     
     if ([newEvents count] == 0) {
         // No new events.  It is odd that we made it this far, but this should be harmless.
+        ZNGLogInfo(@"%s was called, but no new event data was found.", __PRETTY_FUNCTION__);
         return;
     }
     

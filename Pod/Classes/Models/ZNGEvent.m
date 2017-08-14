@@ -274,13 +274,22 @@ static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
     return @"Unknown event";
 }
 
-- (BOOL) mayBeDeleted
+- (BOOL) isMutable
 {
     if ([self.eventType isEqualToString:ZNGEventTypeMessage]) {
         return self.message.isDelayed;
     }
     
     return NO;
+}
+
+- (BOOL) hasChangedSince:(ZNGEvent *)oldEvent
+{
+    if ((![self isMutable]) && (![oldEvent isMutable])) {
+        return NO;
+    }
+    
+    return ([self.message hasChangedSince:oldEvent.message]);
 }
 
 @end

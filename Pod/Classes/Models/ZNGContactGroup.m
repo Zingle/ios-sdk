@@ -12,6 +12,20 @@
 
 @implementation ZNGContactGroup
 
+- (NSUInteger) hash
+{
+    return [self.groupId hash];
+}
+
+- (BOOL) isEqual:(ZNGContactGroup *)other
+{
+    if (![other isKindOfClass:[ZNGContactGroup class]]) {
+        return NO;
+    }
+    
+    return ([other.groupId isEqualToString:self.groupId]);
+}
+
 + (NSDictionary*) JSONKeyPathsByPropertyKey
 {
     return @{

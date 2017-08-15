@@ -563,6 +563,22 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 }
 
 #pragma mark - Messaging
+- (void) contactChanged:(ZNGContact *)contact
+{
+    NSString * contactId = contact.contactId;
+    
+    if ([contactId length] == 0) {
+        ZNGLogWarn(@"%s called with no contact ID supplied.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
+    ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:contactId];
+    
+    if ((conversation != nil) && ([contact changedSince:conversation.contact])) {
+        conversation.contact = contact;
+    }
+}
+
 - (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 {
     // Do we have a cached version of this conversation already?

@@ -13,6 +13,7 @@
 #import "ZingleSDK.h"
 #import "ZNGContactDataSetBuilder.h"
 #import "ZNGLabel.h"
+#import "ZingleAccountSession.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -495,6 +496,13 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                         if ([newContact changedSince:contact]) {
                             ZNGLogDebug(@"Refreshing %@, last updated %.0f seconds ago", [newContact fullName], [[NSDate date] timeIntervalSinceDate:newContact.updatedAt]);
                             [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
+                            
+                            ZingleAccountSession * session = (ZingleAccountSession *)self.contactClient.session;
+                            
+                            if ([session isKindOfClass:[ZingleAccountSession class]]) {
+                                [session contactChanged:newContact];
+                            }
+                            
                         } else {
                             ZNGLogVerbose(@"Failing to replace %@ since the updated at timestamp has not changed.", [contact fullName]);
                         }

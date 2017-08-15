@@ -26,9 +26,10 @@
 static int const zngLogLevel = ZNGLogLevelInfo;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
-static NSString * const ZNGKVOContactsLoadingInitialDataPath   =   @"data.loadingInitialData";
-static NSString * const ZNGKVOContactsLoadingPath   =   @"data.loading";
-static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
+static NSString * const ZNGKVOContactsLoadingInitialDataPath = @"data.loadingInitialData";
+static NSString * const ZNGKVOContactsLoadingPath = @"data.loading";
+static NSString * const ZNGKVOContactsPath = @"data.contacts";
+static NSString * const ZNGKVOServicePath = @"session.service";
 
 @interface ZNGInboxViewController ()
 
@@ -101,6 +102,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsLoadingPath options:NSKeyValueObservingOptionNew context:ZNGInboxKVOContext];
     [self addObserver:self forKeyPath:ZNGKVOContactsPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
+    [self addObserver:self forKeyPath:ZNGKVOServicePath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
 }
@@ -109,6 +111,7 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     
+    [self removeObserver:self forKeyPath:ZNGKVOServicePath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingPath context:ZNGInboxKVOContext];
     [self removeObserver:self forKeyPath:ZNGKVOContactsLoadingInitialDataPath context:ZNGInboxKVOContext];
@@ -297,6 +300,12 @@ static NSString * const ZNGKVOContactsPath          =   @"data.contacts";
         }
     } else if ([keyPath isEqualToString:ZNGKVOContactsPath]) {
         [self handleContactsUpdateWithChangeDictionary:change];
+    } else if ([keyPath isEqualToString:ZNGKVOServicePath]) {
+        // A change to the service object could mean changes to labels or groups.
+        // In a perfect world, a change to a label or group would turn into push notifications for any affected contacts.
+        // In reality, we only get a push notification for a change to a service.
+        // Rather than doing a deep comparison of groups/labels, we will refresh our inbox data any time a service change is detected.
+        [self.data refresh];
     }
 }
 

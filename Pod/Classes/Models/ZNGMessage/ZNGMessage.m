@@ -83,6 +83,11 @@
     return self.triggeredByUser.userId;
 }
 
+- (BOOL) hasChangedSince:(ZNGMessage *)oldMessage
+{
+    return (self.isDelayed != oldMessage.isDelayed);
+}
+
 #pragma mark - Message data for <JSQMessageData>
 - (NSString *)senderId
 {

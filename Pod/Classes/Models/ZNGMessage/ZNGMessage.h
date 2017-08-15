@@ -63,6 +63,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (ZNGCorrespondent * _Nullable) contactCorrespondent;
 
+/**
+ *  Returns YES if this message has been changed.  Only true when a delayed message is finally sent at the moment.
+ */
+- (BOOL) hasChangedSince:(ZNGMessage *)oldMessage;
+
 @end
 
 NS_ASSUME_NONNULL_END

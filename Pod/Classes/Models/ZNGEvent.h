@@ -62,9 +62,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) isInboundMessage;
 
 /**
- *  Returns YES if this event type is deletable.  The only event type where this is true at the moment is delayed message.
+ *  Returns YES if this event type is deletable/mutable.  The only event type where this is true at the moment is delayed message.
  */
-- (BOOL) mayBeDeleted;
+- (BOOL) isMutable;
+
+/**
+ *  Returns YES if the event has changed since the provided copy.  Always returns NO if isMutable is NO.
+ */
+- (BOOL) hasChangedSince:(ZNGEvent *)oldEvent;
 
 @end
 

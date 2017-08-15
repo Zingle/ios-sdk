@@ -95,6 +95,10 @@ static NSString * const ParameterNameClosed = @"is_closed";
         self.labels = contact.labels;
     }
     
+    if (![self.groups isEqualToArray:contact.groups]) {
+        self.groups = contact.groups;
+    }
+    
     if (![self.updatedAt isEqualToDate:contact.updatedAt]) {
         self.updatedAt = contact.updatedAt;
     }
@@ -420,6 +424,14 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 - (BOOL) changedSince:(nullable ZNGContact *)old
 {
+    // Group changes are not reflected in the updatedAt timestamp, so that must be checked explicitly
+    NSSet * groupSet = [NSSet setWithArray:self.groups];
+    NSSet * oldGroupSet = [NSSet setWithArray:old.groups];
+    
+    if (![groupSet isEqualToSet:oldGroupSet]) {
+        return YES;
+    }
+    
     if ((old.updatedAt == nil) || (self.updatedAt == nil)) {
         return YES;
     }
@@ -452,6 +464,10 @@ static NSString * const ParameterNameClosed = @"is_closed";
     NSSet * oldLabelsSet = [NSSet setWithArray:old.labels];
     BOOL sameLabels = ([labelsSet isEqualToSet:oldLabelsSet]);
     
+    NSSet * groupsSet = [NSSet setWithArray:self.groups];
+    NSSet * oldGroupsSet = [NSSet setWithArray:old.groups];
+    BOOL sameGroups = ([groupsSet isEqualToSet:oldGroupsSet]);
+    
     if (sameChannels) {
         // We have the same channel IDs, but some of the channels may be changed
         [[self channelsWithValues] enumerateObjectsUsingBlock:^(ZNGChannel * _Nonnull channel, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -464,7 +480,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         }];
     }
 
-    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels);
+    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels || !sameGroups);
 }
 
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old

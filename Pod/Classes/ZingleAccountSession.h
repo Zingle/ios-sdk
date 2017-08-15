@@ -109,6 +109,13 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 #pragma mark - User data
 - (void) updateUserData;
 
+#pragma mark - External data
+/**
+ *  If a contact data change is detected elsewhere, such as through the /contacts/ end point somewhere else,
+ *   calling this method ensures that any cached data for that contact (such as within conversations) is updated.
+ */
+- (void) contactChanged:(ZNGContact *)contact;
+
 #pragma mark - Push notifications
 /**
  *  Asks the server to send a push notification.  Can be used to test pushes from top to bottom by listening for a ZNGPushNotificationReceived notification.
@@ -123,7 +130,7 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *  If no such conversation yet exists in our data, a blank conversation will be returned.  It will populate itself
  *   as soon as a network request returns.
  *
- *  @param contactId The identifier for the desired contact
+ *  @param contact The desired contact
  */
 - (ZNGConversationServiceToContact *) conversationWithContact:(ZNGContact *)contact;
 

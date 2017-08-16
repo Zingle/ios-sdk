@@ -957,10 +957,8 @@ static void * KVOContext = &KVOContext;
     if ([self.conversation.contact.channels count] == 0) {
         self.inputToolbar.noSelectedChannelText = @"No channels available";
         shouldDisableInput = YES;
-    }
-    
-    // Did our channel disappear?
-    if (![self.conversation.contact.channels containsObject:self.conversation.channel]) {
+    } else if (![self.conversation.contact.channels containsObject:self.conversation.channel]) {
+        // Our channel disappeared
         ZNGLogWarn(@"Currently selected channel is not present in the contact data.  Deselecting.");
         self.inputToolbar.noSelectedChannelText = @"Select a channel";
         shouldDisableInput = YES;

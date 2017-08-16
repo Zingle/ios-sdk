@@ -281,7 +281,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         ZNGConversationViewController * strongSelf = weakSelf;
         if ([strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh count] > 0) {
-            NSMutableSet<NSIndexPath *> * visibleCells = [NSMutableSet setWithArray:[self.collectionView indexPathsForVisibleItems]];
+            NSMutableSet<NSIndexPath *> * visibleCells = [NSMutableSet setWithArray:[strongSelf.collectionView indexPathsForVisibleItems]];
             [visibleCells intersectSet:strongSelf->indexPathsOfVisibleCellsWithRelativeTimesToRefresh];
             
             if ([visibleCells count] > 0) {
@@ -289,7 +289,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 // This flicker is due to alpha being set in the default layout attributes of collection view cells.
                 [CATransaction begin];
                 [CATransaction setDisableActions:YES];
-                [self.collectionView reloadItemsAtIndexPaths:[visibleCells allObjects]];
+                [strongSelf.collectionView reloadItemsAtIndexPaths:[visibleCells allObjects]];
                 [CATransaction commit];
             }
         }

@@ -60,6 +60,12 @@
         
         const CGFloat *components = CGColorGetComponents(color.CGColor);
         
+        if (CGColorGetNumberOfComponents(color.CGColor) < 4) {
+            // Grayscale
+            long whiteness = lroundf(components[0] * 255.0);
+            return [NSString stringWithFormat:@"#%02lX%02lX%02lX", whiteness, whiteness, whiteness];
+        }
+        
         CGFloat r = components[0];
         CGFloat g = components[1];
         CGFloat b = components[2];

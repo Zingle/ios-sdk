@@ -1040,6 +1040,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self.inputToolbar.contentView.textView becomeFirstResponder];
     [self.inputToolbar toggleSendButtonEnabled];
+    
+    [self updateUUID];
 }
 
 #pragma mark - Unread banner

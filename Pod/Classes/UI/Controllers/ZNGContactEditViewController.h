@@ -26,9 +26,8 @@
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
 @property (nonatomic, strong) IBOutlet ZNGGradientLoadingView * loadingGradient;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * lockedContactHeightConstraint;
-@property (nonatomic, strong) IBOutlet UINavigationItem * navItem;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem * cancelButton;
-@property (nonatomic, strong) IBOutlet UIBarButtonItem * saveButton;
+@property (nonatomic, strong) IBOutlet UIButton * saveButton;
+@property (nonatomic, strong) IBOutlet UILabel * titleLabel;
 
 @property (nonatomic, strong) ZNGContactClient * contactClient;
 @property (nonatomic, strong) ZNGService * service;

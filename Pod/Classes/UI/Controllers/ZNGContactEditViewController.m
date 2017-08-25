@@ -87,12 +87,6 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     self.tableView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 10.0)];
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 10.0)];
     
-    // For some reason UIAppearance does not work for these buttons, possibly because they were manually placed in IB instead of being auto generated as part
-    //  of a nav controller.
-    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:17.0] };
-    [self.cancelButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    [self.saveButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    
     [self updateUIForNewContact];
 }
 
@@ -131,9 +125,9 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     
     [self showOrHideLockedContactBarAnimated:NO];
     NSString * saveOrCreate = (originalContact != nil) ? @"Save" : @"Create";
-    [self.saveButton setTitle:saveOrCreate];
+    [self.saveButton setTitle:saveOrCreate forState:UIControlStateNormal];
     NSString * name = [originalContact fullName];
-    self.navItem.title = ([name length] > 0) ? name : @"Create Contact";
+    self.titleLabel.text = ([name length] > 0) ? name : @"Create Contact";
     
     [self generateDataArrays];
     [self.tableView reloadData];

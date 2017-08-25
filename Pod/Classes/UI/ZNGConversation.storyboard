@@ -696,7 +696,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYt-3Q-GWh">
-                                <rect key="frame" x="50" y="79.5" width="46" height="33"/>
+                                <rect key="frame" x="50" y="80" width="46" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Select">
                                     <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -706,14 +706,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-wd-LW9">
-                                <rect key="frame" x="106" y="85" width="14" height="22"/>
+                                <rect key="frame" x="106" y="85.5" width="14" height="22"/>
                                 <state key="normal" image="chevronRight"/>
                                 <connections>
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="4eI-y5-Pku"/>
                                 </connections>
                             </button>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
-                                <rect key="frame" x="139" y="81" width="220" height="30"/>
+                                <rect key="frame" x="139" y="81.5" width="220" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
@@ -722,7 +722,7 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="130.5" width="375" height="84"/>
+                                <rect key="frame" x="0.0" y="131" width="375" height="84"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
                                         <rect key="frame" x="312" y="-3.5" width="51" height="33"/>
@@ -1301,26 +1301,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bqv-LP-hW0">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="64" id="k3Z-be-eON"/>
-                                </constraints>
-                                <color key="barTintColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <textAttributes key="titleTextAttributes">
-                                    <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </textAttributes>
-                                <items>
-                                    <navigationItem title="Select Tag" id="c45-U0-INg">
-                                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="Oqq-ck-WiM">
-                                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                            <connections>
-                                                <action selector="pressedCancel:" destination="X8F-hv-i5R" id="AWh-7I-SVK"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="drN-GY-1hp">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1329,20 +1309,48 @@
                                     <outlet property="delegate" destination="X8F-hv-i5R" id="QZY-j1-wkU"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="oZX-gR-oMY">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5h-kA-dBV">
+                                        <rect key="frame" x="147.5" y="30" width="80" height="22"/>
+                                        <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
+                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
+                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                                        <state key="normal" title="Cancel">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="pressedCancel:" destination="X8F-hv-i5R" eventType="touchUpInside" id="BpQ-87-Zjc"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="bottom" secondItem="M5h-kA-dBV" secondAttribute="bottom" constant="12" id="18B-xN-Hgc"/>
+                                    <constraint firstAttribute="height" constant="64" id="O7E-Oq-SE7"/>
+                                    <constraint firstItem="M5h-kA-dBV" firstAttribute="centerX" secondItem="oZX-gR-oMY" secondAttribute="centerX" id="OoX-0O-Sbj"/>
+                                    <constraint firstItem="fYS-Oy-CKN" firstAttribute="leading" secondItem="oZX-gR-oMY" secondAttribute="leading" constant="16" id="g7X-S0-jfg"/>
+                                    <constraint firstItem="fYS-Oy-CKN" firstAttribute="baseline" secondItem="M5h-kA-dBV" secondAttribute="baseline" id="yF1-6m-f54"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Bqv-LP-hW0" firstAttribute="leading" secondItem="qn5-PP-c3d" secondAttribute="leading" id="1VG-mq-XOc"/>
-                            <constraint firstItem="Bqv-LP-hW0" firstAttribute="top" secondItem="qn5-PP-c3d" secondAttribute="top" id="9lc-Z2-y0h"/>
-                            <constraint firstItem="drN-GY-1hp" firstAttribute="top" secondItem="Bqv-LP-hW0" secondAttribute="bottom" id="EFf-mR-nOf"/>
-                            <constraint firstAttribute="trailing" secondItem="Bqv-LP-hW0" secondAttribute="trailing" id="ErZ-9N-pT3"/>
                             <constraint firstAttribute="trailing" secondItem="drN-GY-1hp" secondAttribute="trailing" id="HY5-ZQ-PHh"/>
+                            <constraint firstItem="oZX-gR-oMY" firstAttribute="leading" secondItem="qn5-PP-c3d" secondAttribute="leading" id="Joc-y3-fdu"/>
+                            <constraint firstItem="oZX-gR-oMY" firstAttribute="top" secondItem="qn5-PP-c3d" secondAttribute="top" id="LEh-Lq-lwA"/>
                             <constraint firstItem="drN-GY-1hp" firstAttribute="leading" secondItem="qn5-PP-c3d" secondAttribute="leading" id="UY3-U6-Dj5"/>
+                            <constraint firstAttribute="trailing" secondItem="oZX-gR-oMY" secondAttribute="trailing" id="i17-8D-NYq"/>
                             <constraint firstItem="qKm-fI-KoJ" firstAttribute="top" secondItem="drN-GY-1hp" secondAttribute="bottom" id="izw-hY-N13"/>
+                            <constraint firstItem="drN-GY-1hp" firstAttribute="top" secondItem="oZX-gR-oMY" secondAttribute="bottom" id="orD-e5-sTe"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="cancelButton" destination="Oqq-ck-WiM" id="069-4F-0eE"/>
                         <outlet property="searchDisplayController" destination="fZB-BA-4Hq" id="aJI-ch-GNB"/>
                         <outlet property="tableView" destination="drN-GY-1hp" id="FXL-Qf-HjD"/>
                     </connections>

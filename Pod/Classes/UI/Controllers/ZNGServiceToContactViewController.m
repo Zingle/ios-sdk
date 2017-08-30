@@ -1393,18 +1393,23 @@ static void * KVOContext = &KVOContext;
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
 
-    // If this is not a message nor a note, we cannot add an avatar
-    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+    if (initialsAvatarData == nil) {
+        // No avatar data to add.  Use superclass cell.
         return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     }
-    
+
     // This is a message or a note.  Add an avatar.
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
     
-    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
     NSURL * avatarURL = nil;
+    
+    if (initialsAvatarData == nil) {
+        // No avatar for this message
+        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
     
     if ([viewModel.event isMessage]) {
         avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;

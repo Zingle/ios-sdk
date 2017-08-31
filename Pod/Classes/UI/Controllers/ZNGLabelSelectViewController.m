@@ -28,11 +28,6 @@
     [super viewDidLoad];
     bundle = [NSBundle bundleForClass:[self class]];
     
-    // For some reason UIAppearance does not work for these buttons, possibly because they were manually placed in IB instead of being auto generated as part
-    //  of a nav controller.
-    NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:17.0] };
-    [self.cancelButton setTitleTextAttributes:attributes forState:UIControlStateNormal];
-    
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchResultsUpdater = self;
     searchController.dimsBackgroundDuringPresentation = NO;

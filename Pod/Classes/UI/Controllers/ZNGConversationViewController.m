@@ -1279,6 +1279,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // Should we show "This is the start of the conversation?"
     
+    // This is only relevant for the first section if subclasses happen to add more.
+    if (section > 0) {
+        return CGSizeZero;
+    }
+    
     // If no data is yet loaded, no
     if (!self.conversation.loadedInitialData) {
         return CGSizeZero;

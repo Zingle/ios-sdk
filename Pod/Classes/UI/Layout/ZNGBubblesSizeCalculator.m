@@ -97,7 +97,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (CGSize) messageBubbleSizeForTypingIndicator
 {
     // TODO: Implement
-    return CGSizeZero;
+    return CGSizeMake(250.0, 100.0);
 }
 
 - (CGSize)messageBubbleSizeForMessageData:(id<JSQMessageData>)messageData

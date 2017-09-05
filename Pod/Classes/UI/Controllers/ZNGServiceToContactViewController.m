@@ -30,6 +30,7 @@
 #import "ZNGUserAuthorization.h"
 #import "UILabel+NetworkStatus.h"
 #import "ZNGPaddedLabel.h"
+#import "ZNGConversationTypingIndicatorCell.h"
 
 @import SDWebImage;
 
@@ -44,6 +45,8 @@ static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.replyingUsers";
 
+static NSString * const TypingIndicatorCellID = @"typingIndicator";
+
 static void * KVOContext = &KVOContext;
 
 @interface JSQMessagesViewController (PrivateInsetManipulation)
@@ -52,6 +55,13 @@ static void * KVOContext = &KVOContext;
 - (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
 
 @end
+
+enum ZNGConversationSections
+{
+    ZNGConversationSectionMessages,
+    ZNGConversationSectionTypingIndicators,
+    ZNGConversationSectionCount
+};
 
 @implementation ZNGServiceToContactViewController
 {
@@ -170,6 +180,10 @@ static void * KVOContext = &KVOContext;
 
     
     [super viewDidLoad];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
+    [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
     
     fireZIndex = INT_MAX;
     robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
@@ -1239,6 +1253,91 @@ static void * KVOContext = &KVOContext;
     return attributedString;
 }
 
+- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return ZNGConversationSectionCount;
+}
+
+- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    if (section == ZNGConversationSectionTypingIndicators) {
+        return [self.conversation.replyingUsers count];
+    }
+    
+    return [super collectionView:collectionView numberOfItemsInSection:section];
+}
+
+- (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (indexPath.section != ZNGConversationSectionMessages) {
+        return NO;
+    }
+    
+    if (action == @selector(forwardMessage:)) {
+        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
+        return (self.allowForwarding && event.isMessage && !event.message.isOutbound);
+    }
+    
+    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+}
+
+- (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(forwardMessage:)) {
+        ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
+        
+        if (message != nil) {
+            [self _doForwardMessage:message];
+        }
+    } else {
+        [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
+    }
+}
+
+- (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section != ZNGConversationSectionMessages) {
+        return nil;
+    }
+    
+    return [super eventViewModelAtIndexPath:indexPath];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{   
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    
+    // If this is not a message nor a note, we cannot add an avatar
+    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    }
+    
+    // This is a message or a note.  Add an avatar.
+    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+    
+    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
+    NSURL * avatarURL = nil;
+    
+    if ([viewModel.event isMessage]) {
+        avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
+    } else {
+        avatarURL = viewModel.event.triggeredByUser.avatarUri;
+    }
+    
+    if (avatarURL != nil) {
+        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
+    } else {
+        cell.avatarImageView.image = [initialsAvatarData avatarImage];
+    }
+    
+    // Make it a circle, dog
+    CGSize avatarSize = ([viewModel.event.message isOutbound]) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
+    cell.avatarImageView.layer.masksToBounds = YES;
+    cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
+    
+    return cell;
+}
+
 #pragma mark - Message bubble text field sizes
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {  
@@ -1365,65 +1464,6 @@ static void * KVOContext = &KVOContext;
     }
     
     return nil;
-}
-
-#pragma mark -
-- (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if (action == @selector(forwardMessage:)) {
-        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
-        return (self.allowForwarding && event.isMessage && !event.message.isOutbound);
-    }
-    
-    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
-}
-
-- (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if (action == @selector(forwardMessage:)) {
-        ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
-        
-        if (message != nil) {
-            [self _doForwardMessage:message];
-        }
-    } else {
-        [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
-    }
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
-
-    // If this is not a message nor a note, we cannot add an avatar
-    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
-        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    }
-    
-    // This is a message or a note.  Add an avatar.
-    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    
-    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
-    NSURL * avatarURL = nil;
-    
-    if ([viewModel.event isMessage]) {
-        avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
-    } else {
-        avatarURL = viewModel.event.triggeredByUser.avatarUri;
-    }
-    
-    if (avatarURL != nil) {
-        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
-    } else {
-        cell.avatarImageView.image = [initialsAvatarData avatarImage];
-    }
-    
-    // Make it a circle, dog
-    CGSize avatarSize = ([viewModel.event.message isOutbound]) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
-    cell.avatarImageView.layer.masksToBounds = YES;
-    cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
-    
-    return cell;
 }
 
 #pragma mark - Text view delegate

@@ -31,6 +31,9 @@
 #import "UILabel+NetworkStatus.h"
 #import "ZNGPaddedLabel.h"
 #import "ZNGConversationTypingIndicatorCell.h"
+#import "ZNGUser+TypingIndicatorData.h"
+#import "ZNGMessageData.h"
+#import "JSQMessagesViewController/JSQMessageBubbleImageDataSource.h"
 
 @import SDWebImage;
 
@@ -146,7 +149,7 @@ enum ZNGConversationSections
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
-    [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
 }
 
 - (void) dealloc
@@ -295,8 +298,39 @@ enum ZNGConversationSections
             
             [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
         } else if ([keyPath isEqualToString:KVOReplyingUsersPath]) {
-            [self updateForInputLockedStatus:self.conversation.lockedDescription oldStatus:nil];
-            [self updateTypingIndicatorEmoji];
+            
+            switch ([change[NSKeyValueChangeKindKey] intValue]) {
+                case NSKeyValueChangeInsertion:
+                {
+                    NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
+                    [self.collectionView performBatchUpdates:^{
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:ZNGConversationSectionTypingIndicators]]];
+                        }];
+                    } completion:^(BOOL finished) {
+                        if (self.stuckToBottom) {
+                            [self scrollToBottomAnimated:YES];
+                        }
+                    }];
+                    break;
+                }
+                    
+                case NSKeyValueChangeRemoval:
+                {
+                    NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
+                    [self.collectionView performBatchUpdates:^{
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:idx inSection:ZNGConversationSectionTypingIndicators]]];
+                        }];
+                    } completion:nil];
+                    break;
+                }
+                    
+                default:
+                    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:ZNGConversationSectionTypingIndicators]];
+                    
+            }
+            
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -926,6 +960,11 @@ enum ZNGConversationSections
 
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        ZNGUser * user = self.conversation.replyingUsers[indexPath.row];
+        return [user fullName];
+    }
+    
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
         return nil;
     }
@@ -1156,6 +1195,11 @@ enum ZNGConversationSections
 
 - (id<JSQMessageAvatarImageDataSource>) initialsAvatarForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        ZNGUser * user = self.conversation.replyingUsers[indexPath.row];
+        return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:user.userId nameForFallbackAvatar:[user fullName] outgoing:YES];
+    }
+    
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
         return nil;
     }
@@ -1213,6 +1257,20 @@ enum ZNGConversationSections
     }
     
     return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:senderUUID nameForFallbackAvatar:name outgoing:[self isOutgoingMessage:event]];
+}
+
+- (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        if (indexPath.row >= [self.conversation.replyingUsers count]) {
+            ZNGLogError(@"Out of bounds displaying typing indicator #%lld", (long long)indexPath.row);
+            return nil;
+        }
+        
+        return self.conversation.replyingUsers[indexPath.row];
+    }
+    
+    return [super collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
 }
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
@@ -1303,27 +1361,56 @@ enum ZNGConversationSections
     return [super eventViewModelAtIndexPath:indexPath];
 }
 
+- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 0) {
+        return [super collectionView:collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];
+    }
+    
+    // This is a typing indicator.  I hope.
+    return self.outgoingBubbleImageData;
+}
+
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{   
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+{
+    id <JSQMessageData> messageData = [self collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    BOOL isTypingIndicator = (([messageData conformsToProtocol:@protocol(ZNGMessageData)]) && ([(id <ZNGMessageData>)messageData isTypingIndicator]));
     
-    // If this is not a message nor a note, we cannot add an avatar
-    if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
-        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    }
-    
-    // This is a message or a note.  Add an avatar.
-    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    
-    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
+    JSQMessagesCollectionViewCell * cell;
     NSURL * avatarURL = nil;
+    ZNGEventViewModel * viewModel = nil;
     
-    if ([viewModel.event isMessage]) {
-        avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
+    if (isTypingIndicator) {
+        ZNGUser * user = (ZNGUser *)messageData;
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:TypingIndicatorCellID forIndexPath:indexPath];
+        
+        // We need to do the bubble coloring since we are not using [super collectionView:collectionView cellForItemAtIndexPath:indexPath]
+        id<JSQMessageBubbleImageDataSource> bubbleImageDataSource = [self collectionView:self.collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];
+        cell.messageBubbleImageView.image = [bubbleImageDataSource messageBubbleImage];
+        cell.messageBubbleImageView.highlightedImage = [bubbleImageDataSource messageBubbleHighlightedImage];
+        
+        cell.cellBottomLabel.attributedText = [self collectionView:self.collectionView attributedTextForCellBottomLabelAtIndexPath:indexPath];
+        
+        avatarURL = user.avatarUri;
     } else {
-        avatarURL = viewModel.event.triggeredByUser.avatarUri;
+        cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+        
+        viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+        // If this is not a message nor a note, we cannot add an avatar
+        if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+            return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+        }
+        
+        if ([viewModel.event isMessage]) {
+            avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
+        } else {
+            avatarURL = viewModel.event.triggeredByUser.avatarUri;
+        }
     }
-    
+
+    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
+
     if (avatarURL != nil) {
         [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
     } else {
@@ -1331,7 +1418,7 @@ enum ZNGConversationSections
     }
     
     // Make it a circle, dog
-    CGSize avatarSize = ([viewModel.event.message isOutbound]) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
+    CGSize avatarSize = ((isTypingIndicator) || ([viewModel.event.message isOutbound])) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
     cell.avatarImageView.layer.masksToBounds = YES;
     cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
     

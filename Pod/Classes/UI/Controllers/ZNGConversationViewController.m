@@ -69,8 +69,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @interface ZNGConversationViewController ()
 
-@property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
-@property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleMediaMaskData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleMediaMaskData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;

@@ -16,6 +16,7 @@
 @class ZNGEvent;
 @class ZNGEventViewModel;
 @class FBShimmeringView;
+@class JSQMessagesBubbleImage;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,6 +46,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) IBOutlet UIView * skeletonContentView;
 @property (nonatomic, strong, nullable) IBOutletCollection(UIView) NSArray<UIView *> * skeletonCircles;
 @property (nonatomic, strong, nullable) IBOutletCollection(UIView) NSArray<UIView *> * skeletonRectangles;
+
+@property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
 
 /**
  * OPTIONAL UI SETTINGS

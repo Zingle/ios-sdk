@@ -8,6 +8,8 @@
 
 #import "ZNGConversationTypingIndicatorCell.h"
 
+static const CGFloat bubbleDiameter = 7.0;
+
 @implementation ZNGConversationTypingIndicatorCell
 
 + (CGSize) size
@@ -19,12 +21,47 @@
 {
     [super awakeFromNib];
     
-    CAShapeLayer * tempCircle = [[CAShapeLayer alloc] init];
-    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, 10.0, 10.0)];
-    tempCircle.path = path.CGPath;
-    tempCircle.frame = CGRectMake(self.layer.bounds.size.width - 10.0, self.layer.bounds.size.height - 10.0, 10.0, 10.0);
+    // Draw the three bouncing circles for typing indicator magic.
+    CAShapeLayer * circle1 = [[CAShapeLayer alloc] init];
+    UIBezierPath * path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, bubbleDiameter, bubbleDiameter)];
+    circle1.path = path.CGPath;
+    circle1.fillColor = [[UIColor whiteColor] CGColor];
+    circle1.frame = CGRectMake(self.bouncingCircleContainerView.layer.bounds.size.width - (bubbleDiameter  * 5.0), self.bouncingCircleContainerView.layer.bounds.size.height - bubbleDiameter, bubbleDiameter, bubbleDiameter);
     
-    [self.layer addSublayer:tempCircle];
+    CAShapeLayer * circle2 = [[CAShapeLayer alloc] init];
+    path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, bubbleDiameter, bubbleDiameter)];
+    circle2.path = path.CGPath;
+    circle2.fillColor = circle1.fillColor;
+    circle2.frame = CGRectMake(self.bouncingCircleContainerView.layer.bounds.size.width - (bubbleDiameter  * 3.0), self.bouncingCircleContainerView.layer.bounds.size.height - bubbleDiameter, bubbleDiameter, bubbleDiameter);
+    
+    CAShapeLayer * circle3 = [[CAShapeLayer alloc] init];
+    path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0.0, 0.0, bubbleDiameter, bubbleDiameter)];
+    circle3.path = path.CGPath;
+    circle3.fillColor = circle1.fillColor;
+    circle3.frame = CGRectMake(self.bouncingCircleContainerView.layer.bounds.size.width - bubbleDiameter, self.bouncingCircleContainerView.layer.bounds.size.height - bubbleDiameter, bubbleDiameter, bubbleDiameter);
+    
+    [self.bouncingCircleContainerView.layer addSublayer:circle1];
+    [self.bouncingCircleContainerView.layer addSublayer:circle2];
+    [self.bouncingCircleContainerView.layer addSublayer:circle3];
+    
+    CAKeyframeAnimation * bounce = [CAKeyframeAnimation animationWithKeyPath:@"transform.translation.y"];
+    bounce.repeatCount = FLT_MAX;
+    bounce.duration = 1.6;
+    bounce.values = @[@(0.0), @(-12.0), @(0.0), @(0.0)];
+    bounce.keyTimes = @[@(0.0), @(0.1), @(0.2), @(1.0)];
+    bounce.timingFunctions = @[
+                               [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn],
+                               [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut],
+                               [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionLinear],
+                               ];
+    
+    [circle1 addAnimation:bounce forKey:@"bounce"];
+    
+    bounce.timeOffset = -0.1;
+    [circle2 addAnimation:bounce forKey:@"bounce"];
+    
+    bounce.timeOffset = -0.2;
+    [circle3 addAnimation:bounce forKey:@"bounce"];
 }
 
 @end

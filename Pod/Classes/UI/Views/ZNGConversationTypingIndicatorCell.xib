@@ -59,7 +59,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="244" height="94"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dBF-mg-6vU">
-                                <rect key="frame" x="144" y="62" width="100" height="32"/>
+                                <rect key="frame" x="128" y="51" width="100" height="32"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="32" id="Q5h-9L-0lr"/>
@@ -69,11 +69,11 @@
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="dBF-mg-6vU" secondAttribute="trailing" id="1Cv-Zk-IpB"/>
+                            <constraint firstAttribute="trailing" secondItem="dBF-mg-6vU" secondAttribute="trailing" constant="16" id="1Cv-Zk-IpB"/>
                             <constraint firstAttribute="trailing" secondItem="2qm-c6-OZf" secondAttribute="trailing" identifier="space between bubble container and bubble image" id="AEu-1l-tqh"/>
                             <constraint firstItem="2qm-c6-OZf" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="top" identifier="top margin bubble container bubble image" id="DbW-Cx-zOW"/>
                             <constraint firstItem="2qm-c6-OZf" firstAttribute="leading" secondItem="2zh-vR-QJW" secondAttribute="leading" identifier="bubble image bubble container left space" id="H1H-yn-Raq"/>
-                            <constraint firstAttribute="bottom" secondItem="dBF-mg-6vU" secondAttribute="bottom" id="J0v-3q-1HK"/>
+                            <constraint firstAttribute="bottom" secondItem="dBF-mg-6vU" secondAttribute="bottom" constant="11" id="J0v-3q-1HK"/>
                             <constraint firstAttribute="width" constant="244" identifier="Message Bubble Container Width Constraint" id="imD-52-K45"/>
                             <constraint firstAttribute="bottom" secondItem="2qm-c6-OZf" secondAttribute="bottom" identifier="bubble container bubble image bottom space" id="lts-Ve-wSh"/>
                         </constraints>

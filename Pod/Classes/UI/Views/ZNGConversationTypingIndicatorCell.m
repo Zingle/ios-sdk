@@ -9,8 +9,10 @@
 #import "ZNGConversationTypingIndicatorCell.h"
 
 @implementation ZNGConversationTypingIndicatorCell
+
++ (CGSize) size
 {
-    
+    return CGSizeMake(60.0, 38.0);
 }
 
 - (void) awakeFromNib

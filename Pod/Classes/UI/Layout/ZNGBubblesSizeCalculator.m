@@ -11,6 +11,7 @@
 
 
 #import "ZNGBubblesSizeCalculator.h"
+#import "ZNGConversationTypingIndicatorCell.h"
 
 #import "JSQMessagesCollectionView.h"
 #import "JSQMessagesCollectionViewDataSource.h"
@@ -96,8 +97,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (CGSize) messageBubbleSizeForTypingIndicator
 {
-    // TODO: Implement
-    return CGSizeMake(250.0, 100.0);
+    return [ZNGConversationTypingIndicatorCell size];
 }
 
 - (CGSize)messageBubbleSizeForMessageData:(id<JSQMessageData>)messageData

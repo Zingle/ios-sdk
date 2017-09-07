@@ -12,4 +12,9 @@
 
 @property (nonatomic, strong, nullable) IBOutlet UIView * bouncingCircleContainerView;
 
+/**
+ *  The ideal size of the entire typing indicator bubble.
+ */
++ (CGSize) size;
+
 @end

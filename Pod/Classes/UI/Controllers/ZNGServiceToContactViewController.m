@@ -960,9 +960,10 @@ enum ZNGConversationSections
 
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
-        ZNGUser * user = self.conversation.replyingUsers[indexPath.row];
-        return [user fullName];
+    ZNGUser * typingIndicatorUser = [self userForTypingIndicatorAtIndexPath:indexPath];
+    
+    if (typingIndicatorUser != nil) {
+        return [typingIndicatorUser fullName];
     }
     
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
@@ -1119,7 +1120,7 @@ enum ZNGConversationSections
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     
     if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
-        // This is some kind of detailed event.  No timestamp.
+        // This is some kind of detailed event or typing indicator.  No timestamp.
         return NO;
     }
     
@@ -1141,6 +1142,10 @@ enum ZNGConversationSections
 
 - (BOOL) contactChannelAtIndexPathChangedSincePriorMessage:(NSIndexPath *)indexPath
 {
+    if (indexPath.section != ZNGConversationSectionMessages) {
+        return NO;
+    }
+    
     ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     ZNGEvent * priorEvent = [self.conversation priorEvent:event];
     
@@ -1158,10 +1163,16 @@ enum ZNGConversationSections
 
 /**
  *  Returns YES if the sender name/avatar should be shown based on adjacent messages.
- *  (There is either a message from a different sender below this message or there is a timestamp on the message below this one.)
+ *  (There is either a message from a different sender below this message, there is a timestamp on the message below this one, or
+ *   this is a typing indicator.)
  */
 - (BOOL) shouldShowSenderInfoForIndexPath:(NSIndexPath *)indexPath
 {
+    // Always show user info for typing indicators
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return YES;
+    }
+    
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
 
     // If this is not a message nor a note, we do not have sender info
@@ -1195,9 +1206,11 @@ enum ZNGConversationSections
 
 - (id<JSQMessageAvatarImageDataSource>) initialsAvatarForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
-        ZNGUser * user = self.conversation.replyingUsers[indexPath.row];
-        return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:user.userId nameForFallbackAvatar:[user fullName] outgoing:YES];
+    ZNGUser * typingIndicatorUser = [self userForTypingIndicatorAtIndexPath:indexPath];
+    
+    // If this cell is a typing indicator, we have the user data immediately available.
+    if (typingIndicatorUser != nil) {
+        return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:typingIndicatorUser.userId nameForFallbackAvatar:[typingIndicatorUser fullName] outgoing:YES];
     }
     
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
@@ -1262,12 +1275,7 @@ enum ZNGConversationSections
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == ZNGConversationSectionTypingIndicators) {
-        if (indexPath.row >= [self.conversation.replyingUsers count]) {
-            ZNGLogError(@"Out of bounds displaying typing indicator #%lld", (long long)indexPath.row);
-            return nil;
-        }
-        
-        return self.conversation.replyingUsers[indexPath.row];
+        return [self userForTypingIndicatorAtIndexPath:indexPath];
     }
     
     return [super collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
@@ -1275,6 +1283,11 @@ enum ZNGConversationSections
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    // Typing indicators have no top text
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return nil;
+    }
+    
     NSAttributedString * attributedString = [super collectionView:collectionView attributedTextForCellTopLabelAtIndexPath:indexPath];
     
     // Check if we are showing a timestamp (i.e. super returned a string) and we want to display channel info (i.e. this user has more than one channel available)
@@ -1352,6 +1365,21 @@ enum ZNGConversationSections
     }
 }
 
+// If the provided index path represents a typing indicator, this will return the corresponding user.  Otherwise it returns nil.
+- (ZNGUser *) userForTypingIndicatorAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section != ZNGConversationSectionTypingIndicators) {
+        return nil;
+    }
+    
+    if (indexPath.row >= [self.conversation.replyingUsers count]) {
+        ZNGLogError(@"Out of bounds retrieving user at index %lld in our %llu currently replying users.", (long long)indexPath.row, (unsigned long long)[self.conversation.replyingUsers count]);
+        return nil;
+    }
+    
+    return self.conversation.replyingUsers[indexPath.row];
+}
+
 - (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section != ZNGConversationSectionMessages) {
@@ -1363,12 +1391,11 @@ enum ZNGConversationSections
 
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
-        return [super collectionView:collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return self.outgoingBubbleImageData;
     }
-    
-    // This is a typing indicator.  I hope.
-    return self.outgoingBubbleImageData;
+
+    return [super collectionView:collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -1427,7 +1454,12 @@ enum ZNGConversationSections
 
 #pragma mark - Message bubble text field sizes
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{  
+{
+    // No header for typing indicators
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return 0.0;
+    }
+    
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
@@ -1440,6 +1472,11 @@ enum ZNGConversationSections
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    // No header for typing indicators
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return 0.0;
+    }
+    
     ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
     return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
 }

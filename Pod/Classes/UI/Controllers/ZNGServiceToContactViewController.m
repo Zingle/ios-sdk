@@ -55,7 +55,6 @@ static void * KVOContext = &KVOContext;
 @interface JSQMessagesViewController (PrivateInsetManipulation)
 
 - (void)jsq_updateCollectionViewInsets;
-- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
 
 @end
 
@@ -121,7 +120,6 @@ enum ZNGConversationSections
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -134,7 +132,6 @@ enum ZNGConversationSections
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -190,9 +187,6 @@ enum ZNGConversationSections
     
     fireZIndex = INT_MAX;
     robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
-    
-    self.typingIndicatorContainerView.hidden = YES;
-    self.typingIndicatorTextLabel.text = nil;
     
     [self setupBannerContainer];
     
@@ -354,21 +348,15 @@ enum ZNGConversationSections
 
 - (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription
 {
-    NSAttributedString * oldBottomString = [self attributedTextForTypingIndicatorDescription:oldLockedDescription];
-    NSAttributedString * bottomString = [self attributedTextForTypingIndicatorDescription:lockedDescription];
     NSAttributedString * oldTopString = [self attributedTextForAutomationBanner:oldLockedDescription];
     NSAttributedString * topString = [self attributedTextForAutomationBanner:lockedDescription];
-    
-    self.typingIndicatorTextLabel.attributedText = bottomString;
-    self.typingIndicatorContainerView.hidden = ([bottomString length] == 0);
-    
+
     // We only set the automation label text if it is not nil.  We want old text to continue to exist as the banner is animated away.
     if ([topString length] > 0) {
         self.automationLabel.attributedText = topString;
     }
     
     BOOL topStatusChanged = (([topString length] == 0) != ([oldTopString length] == 0));
-    BOOL bottomStatusChanged = (([bottomString length] == 0) != ([oldBottomString length] == 0));
     
     if (topStatusChanged) {
         BOOL automationTextExists = ([topString length] > 0);
@@ -385,111 +373,6 @@ enum ZNGConversationSections
         
         [self updateTopInset];
     }
-    
-    if (bottomStatusChanged) {
-        ZNGLogDebug(@"Typing indicator banner is either appearing or disappearing.");
-        
-        [self updateTypingIndicatorEmoji];
-        BOOL bottomJustAppeared = (([oldBottomString length] == 0) && ([bottomString length] > 0));
-        BOOL needToScrollBackToBottom = NO;
-        
-        if (bottomJustAppeared) {
-            // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
-            needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
-        }
-        
-        [self jsq_updateCollectionViewInsets];
-        
-        if (needToScrollBackToBottom) {
-            [self scrollToBottomAnimated:YES];
-        }
-    }
-}
-
-- (void) updateTypingIndicatorEmoji
-{
-    NSString * lowercaseLockedDescription = [[self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription] string];
-    BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
-    static NSString * const wiggleKey = @"wiggle";
-    BOOL shouldWiggle = userResponding;
-    
-    if (userResponding) {
-        self.typingIndicatorEmojiLabel.text = @"\U0001F4AC";
-    } else {
-        self.typingIndicatorEmojiLabel.text = nil;
-    }
-    
-    if (shouldWiggle) {
-        CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
-        wiggle.keyPath = @"transform";
-        
-        CGFloat wiggleAngle = 0.42;
-        NSValue * noWiggle = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-        
-        CATransform3D leftWiggleTransform = CATransform3DMakeRotation(wiggleAngle, 0.0, 0.0, 1.0);
-        leftWiggleTransform = CATransform3DScale(leftWiggleTransform, 1.2, 1.2, 1.0);
-        CATransform3D rightWiggleTransform = CATransform3DMakeRotation(-wiggleAngle, 0.0, 0.0, 1.0);
-        rightWiggleTransform = CATransform3DScale(rightWiggleTransform, 1.2, 1.2, 1.0);
-        
-        NSValue * leftWiggle = [NSValue valueWithCATransform3D:leftWiggleTransform];
-        NSValue * rightWiggle = [NSValue valueWithCATransform3D:rightWiggleTransform];
-        
-        wiggle.values = @[noWiggle, noWiggle, leftWiggle, rightWiggle, noWiggle];
-        wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
-        
-        wiggle.duration = 2.0;
-        wiggle.beginTime = 2.0 * 0.85; // Start just at the first wiggle
-        wiggle.repeatCount = FLT_MAX;
-        
-        [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];
-    } else {
-        [self.typingIndicatorEmojiLabel.layer removeAllAnimations];
-    }
-}
-
-- (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)lockedDescription
-{
-    CGFloat fontSize = self.typingIndicatorTextLabel.font.pointSize;
-    UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
-    NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
-    NSString * description = lockedDescription;
-    
-    // If we have any users listed as editing (via the new web UI's userIsReplying socket event,) that will supercede
-    //  any other locked message
-    if ([self.conversation.replyingUsers count] > 0) {
-        // Construct a string with the user(s)'s name
-        NSMutableArray<NSString *> * names = [[NSMutableArray alloc] initWithCapacity:[self.conversation.replyingUsers count]];
-        
-        for (ZNGUser * user in self.conversation.replyingUsers) {
-            [names addObject:[user fullName]];
-        }
-        
-        NSMutableString * newDescription = [[self commaAndifiedString:names] mutableCopy];
-        rangeToBoldify = NSMakeRange(0, [newDescription length]);
-        
-        if ([self.conversation.replyingUsers count] == 1) {
-            [newDescription appendString:@" is responding"];
-        } else {
-            [newDescription appendString:@" are responding"];
-        }
-        
-        description = newDescription;
-    } else {
-        // We'll try to find a typical "is responding" string and bold the name before it.
-        NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
-        
-        if ((description == nil) || (isRespondingRange.location == NSNotFound)) {
-            // This is not an 'is responding' string
-            return nil;
-        }
-        
-        rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
-    }
-    
-    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:description];
-    [text addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
-    
-    return text;
 }
 
 - (NSString *) commaAndifiedString:(NSArray<NSString *> *)components
@@ -1100,18 +983,6 @@ enum ZNGConversationSections
     shouldDisableInput |= ([automationLockText length] > 0);
     
     self.inputToolbar.inputEnabled = !shouldDisableInput;
-}
-
-#pragma mark - Inset manipulation
-- (void) jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
-{
-    CGFloat extraBottom = 0.0;
-    
-    if (!self.typingIndicatorContainerView.hidden) {
-        extraBottom = self.typingIndicatorContainerView.frame.size.height + self.extraSpaceAboveTypingIndicator;
-    }
-    
-    return [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraBottom];
 }
 
 #pragma mark - Collection view shenanigans

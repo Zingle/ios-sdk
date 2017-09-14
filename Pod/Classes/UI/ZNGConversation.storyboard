@@ -1212,7 +1212,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1222,7 +1222,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
-                                        <rect key="frame" x="324" y="25.5" width="35" height="33"/>
+                                        <rect key="frame" x="324" y="25" width="35" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1249,11 +1249,11 @@
                             <constraint firstItem="emI-L2-W9W" firstAttribute="leading" secondItem="Tvn-Ae-Do9" secondAttribute="leading" id="7vz-6x-jAk"/>
                             <constraint firstItem="Tvn-Ae-Do9" firstAttribute="trailing" secondItem="YWb-LP-HLJ" secondAttribute="trailing" id="A62-9v-pdi"/>
                             <constraint firstItem="Tvn-Ae-Do9" firstAttribute="trailing" secondItem="moV-rG-hce" secondAttribute="trailing" id="D6U-P7-8bD"/>
-                            <constraint firstItem="Tvn-Ae-Do9" firstAttribute="bottom" secondItem="emI-L2-W9W" secondAttribute="bottom" id="HIT-Cx-joa"/>
                             <constraint firstItem="moV-rG-hce" firstAttribute="leading" secondItem="Tvn-Ae-Do9" secondAttribute="leading" id="IKn-6O-Oxe"/>
                             <constraint firstItem="YWb-LP-HLJ" firstAttribute="top" secondItem="zra-gb-FUq" secondAttribute="top" id="UG7-78-wDd"/>
                             <constraint firstItem="Tvn-Ae-Do9" firstAttribute="trailing" secondItem="cBV-tG-q1x" secondAttribute="trailing" id="V8f-1N-iVx"/>
                             <constraint firstItem="Tvn-Ae-Do9" firstAttribute="trailing" secondItem="emI-L2-W9W" secondAttribute="trailing" id="YMa-qS-0qK"/>
+                            <constraint firstAttribute="bottom" secondItem="emI-L2-W9W" secondAttribute="bottom" id="b6F-hq-ekX"/>
                             <constraint firstItem="emI-L2-W9W" firstAttribute="top" secondItem="cBV-tG-q1x" secondAttribute="bottom" id="bvW-gE-Id4"/>
                             <constraint firstItem="cBV-tG-q1x" firstAttribute="leading" secondItem="Tvn-Ae-Do9" secondAttribute="leading" id="hzT-3F-gO0"/>
                             <constraint firstItem="cBV-tG-q1x" firstAttribute="top" secondItem="YWb-LP-HLJ" secondAttribute="bottom" id="iJL-j1-653"/>
@@ -1307,7 +1307,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1334,7 +1334,7 @@
                             <constraint firstItem="oZX-gR-oMY" firstAttribute="top" secondItem="qn5-PP-c3d" secondAttribute="top" id="LEh-Lq-lwA"/>
                             <constraint firstItem="drN-GY-1hp" firstAttribute="leading" secondItem="6aC-6y-me5" secondAttribute="leading" id="UY3-U6-Dj5"/>
                             <constraint firstItem="6aC-6y-me5" firstAttribute="trailing" secondItem="oZX-gR-oMY" secondAttribute="trailing" id="i17-8D-NYq"/>
-                            <constraint firstItem="6aC-6y-me5" firstAttribute="bottom" secondItem="drN-GY-1hp" secondAttribute="bottom" id="izw-hY-N13"/>
+                            <constraint firstAttribute="bottom" secondItem="drN-GY-1hp" secondAttribute="bottom" id="o6h-3M-zCD"/>
                             <constraint firstItem="drN-GY-1hp" firstAttribute="top" secondItem="oZX-gR-oMY" secondAttribute="bottom" id="orD-e5-sTe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6aC-6y-me5"/>

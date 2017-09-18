@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -89,7 +90,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppu-y2-IOa">
-                    <rect key="frame" x="12" y="1" width="54" height="29"/>
+                    <rect key="frame" x="12" y="1" width="56" height="29"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="29" id="35x-S5-S0X"/>
                     </constraints>
@@ -102,7 +103,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-oP-Tqy">
-                    <rect key="frame" x="82" y="4" width="12" height="22"/>
+                    <rect key="frame" x="84" y="4" width="12" height="22"/>
                     <color key="tintColor" red="0.47702047228813171" green="0.47702047228813171" blue="0.47702047228813171" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="chevronUp"/>
                     <connections>
@@ -140,7 +141,7 @@
                 <constraint firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" constant="8" id="EBg-Tk-J9n"/>
                 <constraint firstItem="aXg-DS-vF9" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="FLV-qc-kR7"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="bottom" secondItem="dm4-NT-mvr" secondAttribute="bottom" id="HeZ-J5-fvv"/>
-                <constraint firstItem="yZv-vI-ArA" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="14" placeholder="YES" id="HlQ-lQ-nBO"/>
+                <constraint firstItem="yZv-vI-ArA" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="14" placeholder="YES" id="HlQ-lQ-nBO"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="top" secondItem="1" secondAttribute="top" id="L3l-C0-jVd"/>
                 <constraint firstItem="yAc-fE-ozc" firstAttribute="top" secondItem="Ppu-y2-IOa" secondAttribute="bottom" constant="2" id="LPm-pf-52w"/>
                 <constraint firstItem="unL-0Q-ERy" firstAttribute="leading" secondItem="Udp-Uc-I4X" secondAttribute="trailing" constant="22" placeholder="YES" id="Odz-DR-1uM"/>
@@ -150,9 +151,9 @@
                 <constraint firstItem="iTt-oP-Tqy" firstAttribute="centerY" secondItem="Ppu-y2-IOa" secondAttribute="centerY" id="Wzl-io-vIm"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bTQ-bh-h0p"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="unL-0Q-ERy" secondAttribute="trailing" constant="9" placeholder="YES" id="bY8-eH-zLl"/>
-                <constraint firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
+                <constraint firstItem="TAH-O8-daK" firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="8" id="ds6-61-GNv"/>
                 <constraint firstAttribute="trailing" secondItem="yAc-fE-ozc" secondAttribute="trailing" id="lCS-2b-9LN"/>
-                <constraint firstItem="Ppu-y2-IOa" firstAttribute="leading" secondItem="1" secondAttribute="leading" constant="12" id="m8Q-vb-OWp"/>
+                <constraint firstItem="Ppu-y2-IOa" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="12" id="m8Q-vb-OWp"/>
                 <constraint firstItem="unL-0Q-ERy" firstAttribute="centerY" secondItem="yZv-vI-ArA" secondAttribute="centerY" constant="1" id="mnB-pG-A6V"/>
                 <constraint firstItem="aXg-DS-vF9" firstAttribute="top" secondItem="1" secondAttribute="top" id="nfO-Cz-sNa"/>
                 <constraint firstItem="0Mh-pU-v2i" firstAttribute="centerY" secondItem="yZv-vI-ArA" secondAttribute="centerY" id="nmE-w6-tjE"/>
@@ -164,6 +165,7 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="TAH-O8-daK"/>
             <connections>
                 <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
                 <outlet property="channelSelectButton" destination="Ppu-y2-IOa" id="0sf-Uy-Bw7"/>
@@ -187,9 +189,4 @@
         <image name="reveal" width="22" height="19"/>
         <image name="triggerAutomation" width="28" height="28"/>
     </resources>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
 </document>

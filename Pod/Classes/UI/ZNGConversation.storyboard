@@ -579,7 +579,7 @@
                             <constraint firstItem="0kk-eR-qEq" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="HIY-EQ-SDT"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="Vm4-GP-Tqx" secondAttribute="trailing" id="JDw-d0-zFU"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="bottom" id="JvL-Pt-bfH"/>
-                            <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
+                            <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
                             <constraint firstItem="IrD-za-bqt" firstAttribute="top" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="Pgs-am-IVF"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="0kk-eR-qEq" secondAttribute="bottom" id="XNN-6r-9eK"/>
                             <constraint firstItem="E7V-XK-dac" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="ZwW-bH-jKg"/>
@@ -596,7 +596,7 @@
                             <constraint firstItem="1S3-q5-gQs" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="sfA-yn-544"/>
                             <constraint firstItem="E7V-XK-dac" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="xJH-jd-HgK"/>
                             <constraint firstItem="Vm4-GP-Tqx" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="xcs-Tv-MJM"/>
-                            <constraint firstItem="Uqn-aA-lFp" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="y5U-NG-cZx"/>
+                            <constraint firstItem="Uqn-aA-lFp" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="y5U-NG-cZx"/>
                             <constraint firstItem="Vm4-GP-Tqx" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="ygn-fT-qvE"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="mNq-IG-c2A"/>
@@ -699,7 +699,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYt-3Q-GWh">
-                                <rect key="frame" x="50" y="79.5" width="46" height="33"/>
+                                <rect key="frame" x="50" y="80" width="46" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Select">
                                     <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -709,14 +709,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-wd-LW9">
-                                <rect key="frame" x="106" y="85" width="14" height="22"/>
+                                <rect key="frame" x="106" y="85.5" width="14" height="22"/>
                                 <state key="normal" image="chevronRight"/>
                                 <connections>
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="4eI-y5-Pku"/>
                                 </connections>
                             </button>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
-                                <rect key="frame" x="139" y="81" width="220" height="30"/>
+                                <rect key="frame" x="139" y="81.5" width="220" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
@@ -725,7 +725,7 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="130.5" width="375" height="100"/>
+                                <rect key="frame" x="0.0" y="131" width="375" height="100"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
                                         <rect key="frame" x="312" y="4.5" width="51" height="33"/>
@@ -1221,7 +1221,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1231,7 +1231,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
-                                        <rect key="frame" x="324" y="25" width="35" height="33"/>
+                                        <rect key="frame" x="324" y="25.5" width="35" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1316,7 +1316,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

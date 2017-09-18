@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16C67" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -40,7 +41,6 @@
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
-                        <constraint firstItem="V0b-Hz-vQ8" firstAttribute="leading" secondItem="3gO-wE-4ph" secondAttribute="leading" constant="17" id="04c-cb-1SN"/>
                         <constraint firstItem="k1f-GL-88w" firstAttribute="centerY" secondItem="V0b-Hz-vQ8" secondAttribute="centerY" id="9f0-l9-f2l"/>
                         <constraint firstAttribute="bottom" secondItem="V0b-Hz-vQ8" secondAttribute="bottom" constant="14" id="A7x-2I-K9S"/>
                         <constraint firstItem="V0b-Hz-vQ8" firstAttribute="centerY" secondItem="3gO-wE-4ph" secondAttribute="centerY" id="I6n-QQ-2AZ"/>
@@ -58,11 +58,13 @@
                 <constraint firstAttribute="bottom" secondItem="3gO-wE-4ph" secondAttribute="bottom" id="B0e-qq-Fpj"/>
                 <constraint firstItem="3gO-wE-4ph" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="Bh5-DC-W2x"/>
                 <constraint firstAttribute="trailing" secondItem="3gO-wE-4ph" secondAttribute="trailing" id="fkq-ly-q2S"/>
+                <constraint firstItem="Qlm-2A-omw" firstAttribute="leading" secondItem="V0b-Hz-vQ8" secondAttribute="leading" constant="-17" id="hRX-6y-fT0"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="Qlm-2A-omw"/>
             <connections>
                 <outlet property="sectionImage" destination="V0b-Hz-vQ8" id="izO-r2-9Fa"/>
                 <outlet property="sectionLabel" destination="k1f-GL-88w" id="jnY-6N-eYt"/>

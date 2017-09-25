@@ -430,13 +430,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		347BC21E4AC8F2378329E3E6 /* [CP] Check Pods Manifest.lock */ = {
@@ -445,13 +448,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZingleSDK_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3D34F2E3920F6FAF71378C5E /* [CP] Copy Pods Resources */ = {
@@ -475,9 +481,38 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking-iOS9.3/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Analytics-iOS9.3/Analytics.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage-iOS9.3/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController-iOS9.3/JSQMessagesViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer-iOS9.3/JSQSystemSoundPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/JVFloatLabeledTextField-iOS9.3/JVFloatLabeledTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/MGSwipeTableCell-iOS9.3/MGSwipeTableCell.framework",
+				"${BUILT_PRODUCTS_DIR}/Mantle-iOS9.3/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-iOS9.3/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/Shimmer-iOS9.3/Shimmer.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift-iOS9.3/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO-iOS9.3/StarscreamSocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/ZingleSDK-iOS9.3/ZingleSDK.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Analytics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVFloatLabeledTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MGSwipeTableCell.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Shimmer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZingleSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -505,9 +540,38 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking-iOS8.0/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Analytics-iOS8.0/Analytics.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack-iOS8.0/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage-iOS8.0/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController-iOS8.0/JSQMessagesViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer-iOS8.0/JSQSystemSoundPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/JVFloatLabeledTextField-iOS8.0/JVFloatLabeledTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/MGSwipeTableCell-iOS8.0/MGSwipeTableCell.framework",
+				"${BUILT_PRODUCTS_DIR}/Mantle-iOS8.0/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-iOS8.0/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/Shimmer-iOS8.0/Shimmer.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift-iOS8.0/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO-iOS8.0/StarscreamSocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/ZingleSDK-iOS8.0/ZingleSDK.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Analytics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVFloatLabeledTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MGSwipeTableCell.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Shimmer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZingleSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

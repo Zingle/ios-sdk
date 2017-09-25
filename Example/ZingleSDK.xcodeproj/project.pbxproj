@@ -30,6 +30,7 @@
 		9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */; };
 		9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B35F1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m */; };
 		964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */; };
+		967032D71F798DD100E87B3D /* TestUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 967032D61F798DD100E87B3D /* TestUser.m */; };
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
@@ -103,6 +104,7 @@
 		9622B35F1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockUserAuthorizationClient.m; path = mocks/ZNGMockUserAuthorizationClient.m; sourceTree = "<group>"; };
 		964E99C61DCAACA000A22CD5 /* ZNGMockNotificationsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockNotificationsClient.h; path = mocks/ZNGMockNotificationsClient.h; sourceTree = "<group>"; };
 		964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockNotificationsClient.m; path = mocks/ZNGMockNotificationsClient.m; sourceTree = "<group>"; };
+		967032D61F798DD100E87B3D /* TestUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestUser.m; sourceTree = "<group>"; };
 		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
 				961847251E96CF9500AB3D45 /* TestMessageSending.m */,
 				96EBB5681E0877900048218C /* TestTemplate.m */,
+				967032D61F798DD100E87B3D /* TestUser.m */,
 				96C61E5F1E03434E00A38B5F /* TestURLParsing.m */,
 			);
 			path = Tests;
@@ -600,6 +603,7 @@
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
 				964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */,
 				96A05BCE1DCBA68700E0E6D8 /* TestAccountSession.m in Sources */,
+				967032D71F798DD100E87B3D /* TestUser.m in Sources */,
 				9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */,
 				9611CD4D1E9BFEC400702465 /* ZNGMockUserClient.m in Sources */,
 				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,

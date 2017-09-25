@@ -47,6 +47,15 @@ static NSString * const AvatarKey = @"avatar_asset";
     XCTAssertEqualObjects(name, expectedName, @"Full name should be %@ but was %@", expectedName, name);
 }
 
+- (void) testOnlyEmailAddressAsDisplayName
+{
+    NSString * email = @"dude@duders.com";
+    NSDictionary * data = [self socketDataDictionaryWithFirstName:nil lastName:nil email:email avatarPath:nil];
+    ZNGUser * dude = [ZNGUser userFromSocketData:data];
+    
+    XCTAssertEqualObjects([dude fullName], email, @"A user with no first/last names but with an email address should use the email address as a display name.");
+}
+
 - (void) testNullNameData
 {
     NSString * first = @"Dudey";

@@ -817,8 +817,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         
         if (deletingChar == '}') {
             // Can we find a matching {?
-            NSRange openingBraceRange = [textView.text rangeOfString:@"{" options:NSBackwardsSearch];
-            
+            NSRange openingBraceRange = [[textView.text substringToIndex:range.location] rangeOfString:@"{" options:NSBackwardsSearch];
+
             if (openingBraceRange.location != NSNotFound) {
                 // We found a template to delete.  Delete it.
                 NSRange customFieldRange = NSMakeRange(openingBraceRange.location, range.location-openingBraceRange.location+1);

@@ -90,9 +90,13 @@
     id userIdUnknownType = data[@"id"];
     user.userId = ([userIdUnknownType isKindOfClass:[NSString class]]) ? userIdUnknownType : [userIdUnknownType stringValue];
     
-    user.firstName = data[@"first_name"];
-    user.lastName = data[@"last_name"];
-    user.email = data[@"username"];
+    // Protect against these fields being NSNulls instead of NSStrings
+    id firstNameOrNull = data[@"first_name"];
+    id lastNameOrNull = data[@"last_name"];
+    id emailOrNull = data[@"username"];
+    user.firstName = ([firstNameOrNull isKindOfClass:[NSString class]]) ? firstNameOrNull : nil;
+    user.lastName = ([lastNameOrNull isKindOfClass:[NSString class]]) ? lastNameOrNull : nil;
+    user.email = ([emailOrNull isKindOfClass:[NSString class]]) ? emailOrNull : nil;
     
     NSString * avatarAsset = data[@"avatar_asset"];
     if ([avatarAsset isKindOfClass:[NSString class]]) {

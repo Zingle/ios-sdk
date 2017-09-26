@@ -30,6 +30,7 @@
 		9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3581DC2BA2600957C5F /* ZNGMockServiceClient.m */; };
 		9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B35F1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m */; };
 		964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */; };
+		967032D71F798DD100E87B3D /* TestUser.m in Sources */ = {isa = PBXBuildFile; fileRef = 967032D61F798DD100E87B3D /* TestUser.m */; };
 		9670D1B41D1475500061F7C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9670D1B31D1475500061F7C9 /* Main.storyboard */; };
 		9670D1B71D147AC50061F7C9 /* ContactServiceChoosingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */; };
 		9670D1BA1D1480C80061F7C9 /* ContactServiceTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9670D1B91D1480C80061F7C9 /* ContactServiceTableViewCell.m */; };
@@ -103,6 +104,7 @@
 		9622B35F1DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockUserAuthorizationClient.m; path = mocks/ZNGMockUserAuthorizationClient.m; sourceTree = "<group>"; };
 		964E99C61DCAACA000A22CD5 /* ZNGMockNotificationsClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockNotificationsClient.h; path = mocks/ZNGMockNotificationsClient.h; sourceTree = "<group>"; };
 		964E99C71DCAACA000A22CD5 /* ZNGMockNotificationsClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockNotificationsClient.m; path = mocks/ZNGMockNotificationsClient.m; sourceTree = "<group>"; };
+		967032D61F798DD100E87B3D /* TestUser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestUser.m; sourceTree = "<group>"; };
 		9670D1B31D1475500061F7C9 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		9670D1B51D147AC50061F7C9 /* ContactServiceChoosingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ContactServiceChoosingViewController.h; sourceTree = "<group>"; };
 		9670D1B61D147AC50061F7C9 /* ContactServiceChoosingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ContactServiceChoosingViewController.m; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
 				961847251E96CF9500AB3D45 /* TestMessageSending.m */,
 				96EBB5681E0877900048218C /* TestTemplate.m */,
+				967032D61F798DD100E87B3D /* TestUser.m */,
 				96C61E5F1E03434E00A38B5F /* TestURLParsing.m */,
 			);
 			path = Tests;
@@ -430,13 +433,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		347BC21E4AC8F2378329E3E6 /* [CP] Check Pods Manifest.lock */ = {
@@ -445,13 +451,16 @@
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
 			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-ZingleSDK_Example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 		3D34F2E3920F6FAF71378C5E /* [CP] Copy Pods Resources */ = {
@@ -475,9 +484,38 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-Tests/Pods-Tests-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking-iOS9.3/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Analytics-iOS9.3/Analytics.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack-iOS9.3/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage-iOS9.3/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController-iOS9.3/JSQMessagesViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer-iOS9.3/JSQSystemSoundPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/JVFloatLabeledTextField-iOS9.3/JVFloatLabeledTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/MGSwipeTableCell-iOS9.3/MGSwipeTableCell.framework",
+				"${BUILT_PRODUCTS_DIR}/Mantle-iOS9.3/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-iOS9.3/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/Shimmer-iOS9.3/Shimmer.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift-iOS9.3/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO-iOS9.3/StarscreamSocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/ZingleSDK-iOS9.3/ZingleSDK.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Analytics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVFloatLabeledTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MGSwipeTableCell.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Shimmer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZingleSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -505,9 +543,38 @@
 			files = (
 			);
 			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking-iOS8.0/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Analytics-iOS8.0/Analytics.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack-iOS8.0/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/FLAnimatedImage-iOS8.0/FLAnimatedImage.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQMessagesViewController-iOS8.0/JSQMessagesViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/JSQSystemSoundPlayer-iOS8.0/JSQSystemSoundPlayer.framework",
+				"${BUILT_PRODUCTS_DIR}/JVFloatLabeledTextField-iOS8.0/JVFloatLabeledTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/MGSwipeTableCell-iOS8.0/MGSwipeTableCell.framework",
+				"${BUILT_PRODUCTS_DIR}/Mantle-iOS8.0/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage-iOS8.0/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/Shimmer-iOS8.0/Shimmer.framework",
+				"${BUILT_PRODUCTS_DIR}/Socket.IO-Client-Swift-iOS8.0/SocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/StarscreamSocketIO-iOS8.0/StarscreamSocketIO.framework",
+				"${BUILT_PRODUCTS_DIR}/ZingleSDK-iOS8.0/ZingleSDK.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Analytics.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLAnimatedImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQMessagesViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JSQSystemSoundPlayer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JVFloatLabeledTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MGSwipeTableCell.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Shimmer.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/StarscreamSocketIO.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZingleSDK.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -536,6 +603,7 @@
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
 				964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */,
 				96A05BCE1DCBA68700E0E6D8 /* TestAccountSession.m in Sources */,
+				967032D71F798DD100E87B3D /* TestUser.m in Sources */,
 				9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */,
 				9611CD4D1E9BFEC400702465 /* ZNGMockUserClient.m in Sources */,
 				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,

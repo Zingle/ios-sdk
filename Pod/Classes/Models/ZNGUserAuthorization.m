@@ -15,12 +15,20 @@
 {
     return @{
              @"authorizationClass" : @"authorization_class",
-             @"userId" : @"id",
+             NSStringFromSelector(@selector(userId)) : @"id",
              @"email" : @"email",
              @"firstName" : @"first_name",
              @"lastName" : @"last_name",
-             @"title" : @"title"
+             @"title" : @"title",
+             NSStringFromSelector(@selector(accountIds)): @"account_uuids",
+             NSStringFromSelector(@selector(serviceIds)): @"service_uuids",
+             NSStringFromSelector(@selector(avatarUri)): @"avatar_uri",
              };
+}
+
++ (NSValueTransformer *) avatarUriJSONTransformer
+{
+    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
 }
 
 - (NSString *)displayName

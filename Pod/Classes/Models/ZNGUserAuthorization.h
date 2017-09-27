@@ -10,13 +10,17 @@
 
 @interface ZNGUserAuthorization : MTLModel<MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString* authorizationClass;
-@property (nonatomic, strong) NSString * userId;
-@property (nonatomic, strong) NSString * email;
-@property (nonatomic, strong) NSString * firstName;
-@property (nonatomic, strong) NSString * lastName;
-@property (nonatomic, strong) NSString * title;
+@property (nonatomic, strong, nullable) NSString * authorizationClass;
+@property (nonatomic, strong, nullable) NSString * userId;
+@property (nonatomic, strong, nullable) NSString * username;
+@property (nonatomic, strong, nullable) NSString * email;
+@property (nonatomic, strong, nullable) NSString * firstName;
+@property (nonatomic, strong, nullable) NSString * lastName;
+@property (nonatomic, strong, nullable) NSString * title;
+@property (nonatomic, strong, nullable) NSArray<NSString *> * accountIds;
+@property (nonatomic, strong, nullable) NSArray<NSString *> * serviceIds;
+@property (nonatomic, strong, nullable) NSURL * avatarUri;
 
-- (NSString *) displayName;
+- (NSString * _Nullable) displayName;
 
 @end

@@ -360,7 +360,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (void) addAvatarToSendingEvent:(ZNGEvent *)event
 {
-    event.triggeredByUser = self.session.user;
+    event.triggeredByUser = [ZNGUser userFromUserAuthorization:self.session.userAuthorization];
 }
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion

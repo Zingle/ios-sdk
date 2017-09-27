@@ -56,7 +56,6 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *  Meta data about the current user.
  */
 @property (nonatomic, strong, nullable) ZNGUserAuthorization * userAuthorization;
-@property (nonatomic, strong, nullable) ZNGUser * user;
 
 /**
  *  If set, the service object will be refreshed whenever returning from the background (but no more often than every ten minutes.)

@@ -79,6 +79,8 @@
     user.userId = auth.userId;
     user.email = auth.email;
     user.title = auth.title;
+    user.serviceIds = auth.serviceIds;
+    user.avatarUri = auth.avatarUri;
     
     return user;
 }

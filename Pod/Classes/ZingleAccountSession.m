@@ -529,6 +529,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 - (void) retrieveAvailableAccounts
 {
     [self.accountClient getAccountListWithSuccess:^(NSArray *accounts, ZNGStatus *status) {
+        // This is always our very first request.  If it succeeds, we can set our successful user authorization flag.
+        self.userHasBeenAuthenticated = YES;
         
         if ([accounts count] == 0) {
             self.availableAccounts = @[];   // This ensures that we will set our list explicitly to an empty array instead of just nil if there is no data

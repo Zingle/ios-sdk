@@ -250,7 +250,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [user setValue:conversation.session.userAuthorization.lastName forKey:@"last_name"];
     [user setValue:conversation.session.userAuthorization.email forKey:@"username"];
     [user setValue:[conversation.session.userAuthorization displayName] forKey:@"display_name"];
-    [user setValue:[conversation.session.user.avatarUri absoluteString] forKey:@"avatar_asset"];
+    [user setValue:[conversation.session.userAuthorization.avatarUri absoluteString] forKey:@"avatar_asset"];
     
     NSMutableDictionary * payload = [[NSMutableDictionary alloc] init];
     payload[@"feedId"] = (conversation.sequentialId > 0) ? @(conversation.sequentialId) : conversation.contact.contactId;

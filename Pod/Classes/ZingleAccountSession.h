@@ -53,10 +53,16 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 @property (nonatomic, strong, nullable) ZNGService * service;
 
 /**
+ *  Flag that is set if the current user has ever been authenticated.  This can be used to handle auth failures differently on
+ *   initial login vs. one that happens later in the session.  This differs from the `available` flag in that it is set before
+ *   the login has fully completed.
+ */
+@property (nonatomic, assign) BOOL userHasBeenAuthenticated;
+
+/**
  *  Meta data about the current user.
  */
 @property (nonatomic, strong, nullable) ZNGUserAuthorization * userAuthorization;
-@property (nonatomic, strong, nullable) ZNGUser * user;
 
 /**
  *  If set, the service object will be refreshed whenever returning from the background (but no more often than every ten minutes.)

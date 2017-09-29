@@ -488,6 +488,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
         self.userAuthorization = theUserAuthorization;
+        
         [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
         dispatch_semaphore_signal(semaphore);
     } failure:^(ZNGError *error) {
@@ -502,18 +503,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         // We failed to get the user ID; we cannot get the user object below.
         return;
     }
-    
-    semaphore = dispatch_semaphore_create(0);
-    
-    [self.userClient userWithId:self.userAuthorization.userId success:^(ZNGUser *user, ZNGStatus *status) {
-        self.user = user;
-        dispatch_semaphore_signal(semaphore);
-    } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to retrieve user object for user %@", self.userAuthorization.userId);
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_semaphore_wait(semaphore, tenSecondTimeout);
 }
 
 - (void) notifyShowDetailedEventsPreferenceChanged:(NSNotification *)notification
@@ -529,6 +518,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 - (void) retrieveAvailableAccounts
 {
     [self.accountClient getAccountListWithSuccess:^(NSArray *accounts, ZNGStatus *status) {
+        // This is always our very first request.  If it succeeds, we can set our successful user authorization flag.
+        self.userHasBeenAuthenticated = YES;
         
         if ([accounts count] == 0) {
             self.availableAccounts = @[];   // This ensures that we will set our list explicitly to an empty array instead of just nil if there is no data

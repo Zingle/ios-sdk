@@ -95,7 +95,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="124" y="4.5" width="128.5" height="20"/>
+                                                <rect key="frame" x="123.5" y="4.5" width="128.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -553,6 +553,7 @@
                             <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
                             <constraint firstItem="IrD-za-bqt" firstAttribute="top" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="Pgs-am-IVF"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="0kk-eR-qEq" secondAttribute="bottom" id="XNN-6r-9eK"/>
+                            <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="Z5e-qb-Lsr"/>
                             <constraint firstItem="E7V-XK-dac" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="ZwW-bH-jKg"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="1S3-q5-gQs" secondAttribute="bottom" id="e2q-0E-eOl"/>
                             <constraint firstAttribute="bottom" secondItem="IrD-za-bqt" secondAttribute="bottom" id="eCG-1k-1P5"/>
@@ -561,7 +562,6 @@
                             <constraint firstItem="IrD-za-bqt" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="lao-f6-meA"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="n5E-he-CGo"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="0kk-eR-qEq" secondAttribute="trailing" id="rod-aR-Di7"/>
-                            <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="sKk-9e-V7y"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="top" secondItem="eYw-Gk-ZwV" secondAttribute="top" id="sPw-m9-Cyf"/>
                             <constraint firstItem="1S3-q5-gQs" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="sfA-yn-544"/>
                             <constraint firstItem="E7V-XK-dac" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="xJH-jd-HgK"/>
@@ -826,7 +826,7 @@
                                     <constraint firstAttribute="height" constant="32" id="hKn-r9-8Op"/>
                                 </constraints>
                             </view>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="30" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="emI-L2-W9W">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" sectionHeaderHeight="30" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="emI-L2-W9W">
                                 <rect key="frame" x="0.0" y="96" width="375" height="571"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
@@ -1182,13 +1182,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
-                                        <rect key="frame" x="156" y="30" width="63" height="22"/>
+                                        <rect key="frame" x="156.5" y="30" width="63" height="22"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1198,7 +1198,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
-                                        <rect key="frame" x="324" y="25.5" width="35" height="33"/>
+                                        <rect key="frame" x="324" y="25" width="35" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1283,7 +1283,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

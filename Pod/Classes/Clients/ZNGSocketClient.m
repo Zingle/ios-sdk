@@ -51,6 +51,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     if (self != nil) {
         _session = session;
         
+#ifndef DEBUG
+        _ignoreCurrentUserTypingIndicator = YES;
+#endif 
+        
         NSString * zinglePrefix = [session.sessionManager.baseURL zingleServerPrefix];
         
         if (zinglePrefix == nil) {
@@ -395,8 +399,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     ZNGUser * user = [ZNGUser userFromSocketData:userData];
     
     // The socket data currently uses sequential IDs instead of our UUIDs.  This means that we cannot check vs. our own ID.
-    // We will instead check vs. our email/username.
-    if ([user.email isEqualToString:accountSession.userAuthorization.email]) {
+    // Should we check vs. our email/username?
+    if ((self.ignoreCurrentUserTypingIndicator) && ([user.email isEqualToString:accountSession.userAuthorization.email])) {
         ZNGLogDebug(@"Received a userIsReplying notification for our current user.  Ignoring.");
         return;
     }

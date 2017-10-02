@@ -30,6 +30,10 @@
 #import "ZNGUserAuthorization.h"
 #import "UILabel+NetworkStatus.h"
 #import "ZNGPaddedLabel.h"
+#import "ZNGConversationTypingIndicatorCell.h"
+#import "ZNGUser+TypingIndicatorData.h"
+#import "ZNGMessageData.h"
+#import "JSQMessagesViewController/JSQMessageBubbleImageDataSource.h"
 
 @import SDWebImage;
 
@@ -44,14 +48,22 @@ static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.replyingUsers";
 
+static NSString * const TypingIndicatorCellID = @"typingIndicator";
+
 static void * KVOContext = &KVOContext;
 
 @interface JSQMessagesViewController (PrivateInsetManipulation)
 
 - (void)jsq_updateCollectionViewInsets;
-- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
 
 @end
+
+enum ZNGConversationSections
+{
+    ZNGConversationSectionMessages,
+    ZNGConversationSectionTypingIndicators,
+    ZNGConversationSectionCount
+};
 
 @implementation ZNGServiceToContactViewController
 {
@@ -108,7 +120,6 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -121,7 +132,6 @@ static void * KVOContext = &KVOContext;
     
     if (self != nil) {
         _allowForwarding = YES;
-        _extraSpaceAboveTypingIndicator = 20.0;
         [self setupKVO];
     }
     
@@ -136,7 +146,7 @@ static void * KVOContext = &KVOContext;
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
-    [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
 }
 
 - (void) dealloc
@@ -171,11 +181,12 @@ static void * KVOContext = &KVOContext;
     
     [super viewDidLoad];
     
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
+    UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
+    [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
+    
     fireZIndex = INT_MAX;
     robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
-    
-    self.typingIndicatorContainerView.hidden = YES;
-    self.typingIndicatorTextLabel.text = nil;
     
     [self setupBannerContainer];
     
@@ -281,8 +292,39 @@ static void * KVOContext = &KVOContext;
             
             [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
         } else if ([keyPath isEqualToString:KVOReplyingUsersPath]) {
-            [self updateForInputLockedStatus:self.conversation.lockedDescription oldStatus:nil];
-            [self updateTypingIndicatorEmoji];
+            
+            switch ([change[NSKeyValueChangeKindKey] intValue]) {
+                case NSKeyValueChangeInsertion:
+                {
+                    NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
+                    [self.collectionView performBatchUpdates:^{
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:ZNGConversationSectionTypingIndicators]]];
+                        }];
+                    } completion:^(BOOL finished) {
+                        if (self.stuckToBottom) {
+                            [self scrollToBottomAnimated:YES];
+                        }
+                    }];
+                    break;
+                }
+                    
+                case NSKeyValueChangeRemoval:
+                {
+                    NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
+                    [self.collectionView performBatchUpdates:^{
+                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+                            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:idx inSection:ZNGConversationSectionTypingIndicators]]];
+                        }];
+                    } completion:nil];
+                    break;
+                }
+                    
+                default:
+                    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:ZNGConversationSectionTypingIndicators]];
+                    
+            }
+            
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -306,21 +348,15 @@ static void * KVOContext = &KVOContext;
 
 - (void) updateForInputLockedStatus:(NSString *)lockedDescription oldStatus:(NSString *)oldLockedDescription
 {
-    NSAttributedString * oldBottomString = [self attributedTextForTypingIndicatorDescription:oldLockedDescription];
-    NSAttributedString * bottomString = [self attributedTextForTypingIndicatorDescription:lockedDescription];
     NSAttributedString * oldTopString = [self attributedTextForAutomationBanner:oldLockedDescription];
     NSAttributedString * topString = [self attributedTextForAutomationBanner:lockedDescription];
-    
-    self.typingIndicatorTextLabel.attributedText = bottomString;
-    self.typingIndicatorContainerView.hidden = ([bottomString length] == 0);
-    
+
     // We only set the automation label text if it is not nil.  We want old text to continue to exist as the banner is animated away.
     if ([topString length] > 0) {
         self.automationLabel.attributedText = topString;
     }
     
     BOOL topStatusChanged = (([topString length] == 0) != ([oldTopString length] == 0));
-    BOOL bottomStatusChanged = (([bottomString length] == 0) != ([oldBottomString length] == 0));
     
     if (topStatusChanged) {
         BOOL automationTextExists = ([topString length] > 0);
@@ -337,111 +373,6 @@ static void * KVOContext = &KVOContext;
         
         [self updateTopInset];
     }
-    
-    if (bottomStatusChanged) {
-        ZNGLogDebug(@"Typing indicator banner is either appearing or disappearing.");
-        
-        [self updateTypingIndicatorEmoji];
-        BOOL bottomJustAppeared = (([oldBottomString length] == 0) && ([bottomString length] > 0));
-        BOOL needToScrollBackToBottom = NO;
-        
-        if (bottomJustAppeared) {
-            // The typing indicator just appeared.  If we are scrolled to the bottom, make sure we stay at the bottom after changing our insets.
-            needToScrollBackToBottom = ((self.collectionView.contentOffset.y + self.collectionView.frame.size.height - self.collectionView.contentInset.bottom) >= self.collectionView.contentSize.height);
-        }
-        
-        [self jsq_updateCollectionViewInsets];
-        
-        if (needToScrollBackToBottom) {
-            [self scrollToBottomAnimated:YES];
-        }
-    }
-}
-
-- (void) updateTypingIndicatorEmoji
-{
-    NSString * lowercaseLockedDescription = [[self attributedTextForTypingIndicatorDescription:self.conversation.lockedDescription] string];
-    BOOL userResponding = [lowercaseLockedDescription containsString:@"is responding"];
-    static NSString * const wiggleKey = @"wiggle";
-    BOOL shouldWiggle = userResponding;
-    
-    if (userResponding) {
-        self.typingIndicatorEmojiLabel.text = @"\U0001F4AC";
-    } else {
-        self.typingIndicatorEmojiLabel.text = nil;
-    }
-    
-    if (shouldWiggle) {
-        CAKeyframeAnimation * wiggle = [[CAKeyframeAnimation alloc] init];
-        wiggle.keyPath = @"transform";
-        
-        CGFloat wiggleAngle = 0.42;
-        NSValue * noWiggle = [NSValue valueWithCATransform3D:CATransform3DIdentity];
-        
-        CATransform3D leftWiggleTransform = CATransform3DMakeRotation(wiggleAngle, 0.0, 0.0, 1.0);
-        leftWiggleTransform = CATransform3DScale(leftWiggleTransform, 1.2, 1.2, 1.0);
-        CATransform3D rightWiggleTransform = CATransform3DMakeRotation(-wiggleAngle, 0.0, 0.0, 1.0);
-        rightWiggleTransform = CATransform3DScale(rightWiggleTransform, 1.2, 1.2, 1.0);
-        
-        NSValue * leftWiggle = [NSValue valueWithCATransform3D:leftWiggleTransform];
-        NSValue * rightWiggle = [NSValue valueWithCATransform3D:rightWiggleTransform];
-        
-        wiggle.values = @[noWiggle, noWiggle, leftWiggle, rightWiggle, noWiggle];
-        wiggle.keyTimes = @[ @0.0, @0.85, @0.9, @0.95, @1.0 ];
-        
-        wiggle.duration = 2.0;
-        wiggle.beginTime = 2.0 * 0.85; // Start just at the first wiggle
-        wiggle.repeatCount = FLT_MAX;
-        
-        [self.typingIndicatorEmojiLabel.layer addAnimation:wiggle forKey:wiggleKey];
-    } else {
-        [self.typingIndicatorEmojiLabel.layer removeAllAnimations];
-    }
-}
-
-- (NSAttributedString *) attributedTextForTypingIndicatorDescription:(NSString *)lockedDescription
-{
-    CGFloat fontSize = self.typingIndicatorTextLabel.font.pointSize;
-    UIFont * boldFont = [UIFont latoBoldFontOfSize:fontSize];
-    NSRange rangeToBoldify = NSMakeRange(NSNotFound, 0);
-    NSString * description = lockedDescription;
-    
-    // If we have any users listed as editing (via the new web UI's userIsReplying socket event,) that will supercede
-    //  any other locked message
-    if ([self.conversation.replyingUsers count] > 0) {
-        // Construct a string with the user(s)'s name
-        NSMutableArray<NSString *> * names = [[NSMutableArray alloc] initWithCapacity:[self.conversation.replyingUsers count]];
-        
-        for (ZNGUser * user in self.conversation.replyingUsers) {
-            [names addObject:[user fullName]];
-        }
-        
-        NSMutableString * newDescription = [[self commaAndifiedString:names] mutableCopy];
-        rangeToBoldify = NSMakeRange(0, [newDescription length]);
-        
-        if ([self.conversation.replyingUsers count] == 1) {
-            [newDescription appendString:@" is responding"];
-        } else {
-            [newDescription appendString:@" are responding"];
-        }
-        
-        description = newDescription;
-    } else {
-        // We'll try to find a typical "is responding" string and bold the name before it.
-        NSRange isRespondingRange = [description rangeOfString:@"is responding" options:NSCaseInsensitiveSearch];
-        
-        if ((description == nil) || (isRespondingRange.location == NSNotFound)) {
-            // This is not an 'is responding' string
-            return nil;
-        }
-        
-        rangeToBoldify = NSMakeRange(0, isRespondingRange.location);
-    }
-    
-    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:description];
-    [text addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
-    
-    return text;
 }
 
 - (NSString *) commaAndifiedString:(NSArray<NSString *> *)components
@@ -912,6 +843,12 @@ static void * KVOContext = &KVOContext;
 
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGUser * typingIndicatorUser = [self userForTypingIndicatorAtIndexPath:indexPath];
+    
+    if (typingIndicatorUser != nil) {
+        return [typingIndicatorUser fullName];
+    }
+    
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
         return nil;
     }
@@ -1048,25 +985,13 @@ static void * KVOContext = &KVOContext;
     self.inputToolbar.inputEnabled = !shouldDisableInput;
 }
 
-#pragma mark - Inset manipulation
-- (void) jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom
-{
-    CGFloat extraBottom = 0.0;
-    
-    if (!self.typingIndicatorContainerView.hidden) {
-        extraBottom = self.typingIndicatorContainerView.frame.size.height + self.extraSpaceAboveTypingIndicator;
-    }
-    
-    return [super jsq_setCollectionViewInsetsTopValue:top bottomValue:bottom + extraBottom];
-}
-
 #pragma mark - Collection view shenanigans
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     
     if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
-        // This is some kind of detailed event.  No timestamp.
+        // This is some kind of detailed event or typing indicator.  No timestamp.
         return NO;
     }
     
@@ -1088,6 +1013,10 @@ static void * KVOContext = &KVOContext;
 
 - (BOOL) contactChannelAtIndexPathChangedSincePriorMessage:(NSIndexPath *)indexPath
 {
+    if (indexPath.section != ZNGConversationSectionMessages) {
+        return NO;
+    }
+    
     ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
     ZNGEvent * priorEvent = [self.conversation priorEvent:event];
     
@@ -1105,10 +1034,16 @@ static void * KVOContext = &KVOContext;
 
 /**
  *  Returns YES if the sender name/avatar should be shown based on adjacent messages.
- *  (There is either a message from a different sender below this message or there is a timestamp on the message below this one.)
+ *  (There is either a message from a different sender below this message, there is a timestamp on the message below this one, or
+ *   this is a typing indicator.)
  */
 - (BOOL) shouldShowSenderInfoForIndexPath:(NSIndexPath *)indexPath
 {
+    // Always show user info for typing indicators
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return YES;
+    }
+    
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
 
     // If this is not a message nor a note, we do not have sender info
@@ -1142,6 +1077,13 @@ static void * KVOContext = &KVOContext;
 
 - (id<JSQMessageAvatarImageDataSource>) initialsAvatarForItemAtIndexPath:(NSIndexPath *)indexPath
 {
+    ZNGUser * typingIndicatorUser = [self userForTypingIndicatorAtIndexPath:indexPath];
+    
+    // If this cell is a typing indicator, we have the user data immediately available.
+    if (typingIndicatorUser != nil) {
+        return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:typingIndicatorUser.userId nameForFallbackAvatar:[typingIndicatorUser fullName] outgoing:YES];
+    }
+    
     if (![self shouldShowSenderInfoForIndexPath:indexPath]) {
         return nil;
     }
@@ -1201,8 +1143,22 @@ static void * KVOContext = &KVOContext;
     return [[ZNGInitialsAvatarCache sharedCache] avatarForUserUUID:senderUUID nameForFallbackAvatar:name outgoing:[self isOutgoingMessage:event]];
 }
 
+- (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return [self userForTypingIndicatorAtIndexPath:indexPath];
+    }
+    
+    return [super collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
+}
+
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    // Typing indicators have no top text
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return nil;
+    }
+    
     NSAttributedString * attributedString = [super collectionView:collectionView attributedTextForCellTopLabelAtIndexPath:indexPath];
     
     // Check if we are showing a timestamp (i.e. super returned a string) and we want to display channel info (i.e. this user has more than one channel available)
@@ -1239,9 +1195,142 @@ static void * KVOContext = &KVOContext;
     return attributedString;
 }
 
+- (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView
+{
+    return ZNGConversationSectionCount;
+}
+
+- (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    if (section == ZNGConversationSectionTypingIndicators) {
+        return [self.conversation.replyingUsers count];
+    }
+    
+    return [super collectionView:collectionView numberOfItemsInSection:section];
+}
+
+- (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (indexPath.section != ZNGConversationSectionMessages) {
+        return NO;
+    }
+    
+    if (action == @selector(forwardMessage:)) {
+        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
+        return (self.allowForwarding && event.isMessage && !event.message.isOutbound);
+    }
+    
+    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
+}
+
+- (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
+{
+    if (action == @selector(forwardMessage:)) {
+        ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
+        
+        if (message != nil) {
+            [self _doForwardMessage:message];
+        }
+    } else {
+        [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
+    }
+}
+
+// If the provided index path represents a typing indicator, this will return the corresponding user.  Otherwise it returns nil.
+- (ZNGUser *) userForTypingIndicatorAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section != ZNGConversationSectionTypingIndicators) {
+        return nil;
+    }
+    
+    if (indexPath.row >= [self.conversation.replyingUsers count]) {
+        ZNGLogError(@"Out of bounds retrieving user at index %lld in our %llu currently replying users.", (long long)indexPath.row, (unsigned long long)[self.conversation.replyingUsers count]);
+        return nil;
+    }
+    
+    return self.conversation.replyingUsers[indexPath.row];
+}
+
+- (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section != ZNGConversationSectionMessages) {
+        return nil;
+    }
+    
+    return [super eventViewModelAtIndexPath:indexPath];
+}
+
+- (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return self.outgoingBubbleImageData;
+    }
+
+    return [super collectionView:collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    id <JSQMessageData> messageData = [self collectionView:self.collectionView messageDataForItemAtIndexPath:indexPath];
+    BOOL isTypingIndicator = (([messageData conformsToProtocol:@protocol(ZNGMessageData)]) && ([(id <ZNGMessageData>)messageData isTypingIndicator]));
+    
+    JSQMessagesCollectionViewCell * cell;
+    NSURL * avatarURL = nil;
+    ZNGEventViewModel * viewModel = nil;
+    
+    if (isTypingIndicator) {
+        ZNGUser * user = (ZNGUser *)messageData;
+        cell = [collectionView dequeueReusableCellWithReuseIdentifier:TypingIndicatorCellID forIndexPath:indexPath];
+        
+        // We need to do the bubble coloring since we are not using [super collectionView:collectionView cellForItemAtIndexPath:indexPath]
+        id<JSQMessageBubbleImageDataSource> bubbleImageDataSource = [self collectionView:self.collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];
+        cell.messageBubbleImageView.image = [bubbleImageDataSource messageBubbleImage];
+        cell.messageBubbleImageView.highlightedImage = [bubbleImageDataSource messageBubbleHighlightedImage];
+        
+        cell.cellBottomLabel.attributedText = [self collectionView:self.collectionView attributedTextForCellBottomLabelAtIndexPath:indexPath];
+        
+        avatarURL = user.avatarUri;
+    } else {
+        cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+        
+        viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+        // If this is not a message nor a note, we cannot add an avatar
+        if ((![viewModel.event isMessage]) && (![viewModel.event isNote])) {
+            return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
+        }
+        
+        if ([viewModel.event isMessage]) {
+            avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
+        } else {
+            avatarURL = viewModel.event.triggeredByUser.avatarUri;
+        }
+    }
+
+    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
+
+    if (avatarURL != nil) {
+        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
+    } else {
+        cell.avatarImageView.image = [initialsAvatarData avatarImage];
+    }
+    
+    // Make it a circle, dog
+    CGSize avatarSize = ((isTypingIndicator) || ([viewModel.event.message isOutbound])) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
+    cell.avatarImageView.layer.masksToBounds = YES;
+    cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
+    
+    return cell;
+}
+
 #pragma mark - Message bubble text field sizes
 - (CGFloat) collectionView:(JSQMessagesCollectionView *)collectionView layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
-{  
+{
+    // No header for typing indicators
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return 0.0;
+    }
+    
     CGFloat height = [super collectionView:collectionView layout:collectionViewLayout heightForCellTopLabelAtIndexPath:indexPath];
     
     if (([self shouldShowTimestampAboveIndexPath:indexPath]) && ([self shouldShowChannelInfoUnderTimestamps])) {
@@ -1254,6 +1343,11 @@ static void * KVOContext = &KVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForMessageBubbleTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
+    // No header for typing indicators
+    if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        return 0.0;
+    }
+    
     ZNGEventViewModel * eventViewModel = [self eventViewModelAtIndexPath:indexPath];
     return (eventViewModel.event.message.isDelayed) ? 18.0 : 0.0;
 }
@@ -1365,70 +1459,6 @@ static void * KVOContext = &KVOContext;
     }
     
     return nil;
-}
-
-#pragma mark -
-- (BOOL) collectionView:(UICollectionView *)collectionView canPerformAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if (action == @selector(forwardMessage:)) {
-        ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
-        return (self.allowForwarding && event.isMessage && !event.message.isOutbound);
-    }
-    
-    return [super collectionView:collectionView canPerformAction:action forItemAtIndexPath:indexPath withSender:sender];
-}
-
-- (void) collectionView:(UICollectionView *)collectionView performAction:(SEL)action forItemAtIndexPath:(NSIndexPath *)indexPath withSender:(id)sender
-{
-    if (action == @selector(forwardMessage:)) {
-        ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
-        
-        if (message != nil) {
-            [self _doForwardMessage:message];
-        }
-    } else {
-        [super collectionView:collectionView performAction:action forItemAtIndexPath:indexPath withSender:sender];
-    }
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
-{
-    id <JSQMessageAvatarImageDataSource> initialsAvatarData = [self initialsAvatarForItemAtIndexPath:indexPath];
-
-    if (initialsAvatarData == nil) {
-        // No avatar data to add.  Use superclass cell.
-        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    }
-
-    // This is a message or a note.  Add an avatar.
-    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
-    JSQMessagesCollectionViewCell * cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    
-    NSURL * avatarURL = nil;
-    
-    if (initialsAvatarData == nil) {
-        // No avatar for this message
-        return [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
-    }
-    
-    if ([viewModel.event isMessage]) {
-        avatarURL = ([viewModel.event isInboundMessage]) ? self.conversation.contact.avatarUri : viewModel.event.triggeredByUser.avatarUri;
-    } else {
-        avatarURL = viewModel.event.triggeredByUser.avatarUri;
-    }
-    
-    if (avatarURL != nil) {
-        [cell.avatarImageView sd_setImageWithURL:avatarURL placeholderImage:[initialsAvatarData avatarImage]];
-    } else {
-        cell.avatarImageView.image = [initialsAvatarData avatarImage];
-    }
-    
-    // Make it a circle, dog
-    CGSize avatarSize = ([viewModel.event.message isOutbound]) ? self.collectionView.collectionViewLayout.outgoingAvatarViewSize : self.collectionView.collectionViewLayout.incomingAvatarViewSize;
-    cell.avatarImageView.layer.masksToBounds = YES;
-    cell.avatarImageView.layer.cornerRadius = avatarSize.width / 2.0;
-    
-    return cell;
 }
 
 #pragma mark - Text view delegate

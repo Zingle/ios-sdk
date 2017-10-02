@@ -11,6 +11,7 @@
 
 
 #import "ZNGBubblesSizeCalculator.h"
+#import "ZNGConversationTypingIndicatorCell.h"
 
 #import "JSQMessagesCollectionView.h"
 #import "JSQMessagesCollectionViewDataSource.h"
@@ -22,6 +23,7 @@
 #import "ZNGEvent.h"
 #import "ZNGEventViewModel.h"
 #import "ZNGMessage.h"
+#import "ZNGMessageData.h"
 
 #import "ZNGLogging.h"
 
@@ -93,10 +95,20 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [cache removeAllObjects];
 }
 
+- (CGSize) messageBubbleSizeForTypingIndicator
+{
+    return [ZNGConversationTypingIndicatorCell size];
+}
+
 - (CGSize)messageBubbleSizeForMessageData:(id<JSQMessageData>)messageData
                               atIndexPath:(NSIndexPath *)indexPath
                                withLayout:(JSQMessagesCollectionViewFlowLayout *)layout
 {
+    // Typing indicator bubbles have a consistent size
+    if (([messageData conformsToProtocol:@protocol(ZNGMessageData)]) && ([(id <ZNGMessageData>)messageData isTypingIndicator])) {
+        return [self messageBubbleSizeForTypingIndicator];
+    }
+    
     ZNGEventViewModel * viewModel = (ZNGEventViewModel *)messageData;
     NSString * cacheID = nil;
     

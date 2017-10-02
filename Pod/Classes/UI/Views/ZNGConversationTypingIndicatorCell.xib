@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="" id="23f-xH-rkY" customClass="ZNGConversationTypingIndicatorCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="154"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5Gk-Ay-M9X" userLabel="Cell top label container">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="20"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell top label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vSO-G2-WG6" customClass="JSQMessagesLabel">
+                                <rect key="frame" x="0.0" y="8" width="320" height="12"/>
+                                <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="vSO-G2-WG6" secondAttribute="bottom" id="22C-tv-FDk"/>
+                            <constraint firstItem="vSO-G2-WG6" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="top" priority="900" constant="8" id="HMo-TY-Y4W"/>
+                            <constraint firstItem="vSO-G2-WG6" firstAttribute="leading" secondItem="5Gk-Ay-M9X" secondAttribute="leading" id="Zz8-Pr-0O1"/>
+                            <constraint firstAttribute="trailing" secondItem="vSO-G2-WG6" secondAttribute="trailing" id="l5p-vs-xZO"/>
+                            <constraint firstAttribute="height" constant="20" id="n7t-KS-RUh"/>
+                        </constraints>
+                    </view>
+                    <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p52-YN-yLu" userLabel="Bubble top label" customClass="JSQMessagesLabel">
+                        <rect key="frame" x="0.0" y="20" width="287" height="20"/>
+                        <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" identifier="Message Bubble Top Label Height" id="8TB-va-f8L"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="12"/>
+                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2zh-vR-QJW" userLabel="Bubble container">
+                        <rect key="frame" x="36" y="40" width="244" height="94"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2qm-c6-OZf" userLabel="Bubble Image View">
+                                <rect key="frame" x="0.0" y="0.0" width="244" height="94"/>
+                            </imageView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dBF-mg-6vU">
+                                <rect key="frame" x="128" y="51" width="100" height="32"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="32" id="Q5h-9L-0lr"/>
+                                    <constraint firstAttribute="width" constant="100" id="bFp-Rg-oti"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="dBF-mg-6vU" secondAttribute="trailing" constant="16" id="1Cv-Zk-IpB"/>
+                            <constraint firstAttribute="trailing" secondItem="2qm-c6-OZf" secondAttribute="trailing" identifier="space between bubble container and bubble image" id="AEu-1l-tqh"/>
+                            <constraint firstItem="2qm-c6-OZf" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="top" identifier="top margin bubble container bubble image" id="DbW-Cx-zOW"/>
+                            <constraint firstItem="2qm-c6-OZf" firstAttribute="leading" secondItem="2zh-vR-QJW" secondAttribute="leading" identifier="bubble image bubble container left space" id="H1H-yn-Raq"/>
+                            <constraint firstAttribute="bottom" secondItem="dBF-mg-6vU" secondAttribute="bottom" constant="11" id="J0v-3q-1HK"/>
+                            <constraint firstAttribute="width" constant="244" identifier="Message Bubble Container Width Constraint" id="imD-52-K45"/>
+                            <constraint firstAttribute="bottom" secondItem="2qm-c6-OZf" secondAttribute="bottom" identifier="bubble container bubble image bottom space" id="lts-Ve-wSh"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X89-B1-aAd" userLabel="Avatar container">
+                        <rect key="frame" x="282" y="100" width="34" height="34"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y9b-D9-Q7W" userLabel="Avatar Image View">
+                                <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="y9b-D9-Q7W" secondAttribute="bottom" id="7SX-4t-GAr"/>
+                            <constraint firstAttribute="width" constant="34" identifier="avatar container width" id="Pkm-tW-k4z"/>
+                            <constraint firstItem="y9b-D9-Q7W" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="leading" id="Pya-tL-FjE"/>
+                            <constraint firstItem="y9b-D9-Q7W" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="top" id="e5w-hn-mre"/>
+                            <constraint firstAttribute="height" constant="34" identifier="avatar container height" id="tgw-aN-JJu"/>
+                            <constraint firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="trailing" id="w9X-3u-BNY"/>
+                        </constraints>
+                    </view>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d5b-Qu-ohI" userLabel="Cell Bottom Label Container">
+                        <rect key="frame" x="164" y="134" width="108" height="20"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell bottom label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxh-zX-vCu" customClass="JSQMessagesLabel">
+                                <rect key="frame" x="0.0" y="0.0" width="108" height="17"/>
+                                <color key="backgroundColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="Rxh-zX-vCu" firstAttribute="top" secondItem="d5b-Qu-ohI" secondAttribute="top" id="NGa-HJ-NIv"/>
+                            <constraint firstItem="Rxh-zX-vCu" firstAttribute="leading" secondItem="d5b-Qu-ohI" secondAttribute="leading" id="S7t-NF-CjK"/>
+                            <constraint firstAttribute="height" constant="20" id="Uay-Ci-Liz"/>
+                            <constraint firstAttribute="trailing" secondItem="Rxh-zX-vCu" secondAttribute="trailing" id="flM-0e-5oE"/>
+                        </constraints>
+                    </view>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstItem="2zh-vR-QJW" firstAttribute="top" secondItem="p52-YN-yLu" secondAttribute="bottom" identifier="space between bubble container and top label" id="3Wx-g0-fTc"/>
+                <constraint firstAttribute="trailing" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" id="6g3-04-lgT"/>
+                <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="bottom" id="GsO-H5-D3v"/>
+                <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" id="U9s-lj-C7u"/>
+                <constraint firstItem="5Gk-Ay-M9X" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" id="a35-gx-RGQ"/>
+                <constraint firstAttribute="bottom" secondItem="d5b-Qu-ohI" secondAttribute="bottom" id="gNU-zx-YAN"/>
+                <constraint firstItem="d5b-Qu-ohI" firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="leading" constant="-10" id="ltP-jP-Llg"/>
+                <constraint firstItem="5Gk-Ay-M9X" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="n9g-Vi-PyP"/>
+                <constraint firstItem="X89-B1-aAd" firstAttribute="leading" secondItem="p52-YN-yLu" secondAttribute="trailing" constant="-5" id="rTs-BO-puW"/>
+                <constraint firstItem="p52-YN-yLu" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="bubble top label left" id="tTj-Mp-0va"/>
+                <constraint firstAttribute="trailing" secondItem="5Gk-Ay-M9X" secondAttribute="trailing" id="uCo-3l-Xom"/>
+                <constraint firstItem="p52-YN-yLu" firstAttribute="top" secondItem="5Gk-Ay-M9X" secondAttribute="bottom" id="uUe-xd-MHO"/>
+                <constraint firstItem="X89-B1-aAd" firstAttribute="leading" secondItem="2zh-vR-QJW" secondAttribute="trailing" constant="2" identifier="space between avatar container and bubble" id="vMz-Yi-B0w"/>
+            </constraints>
+            <size key="customSize" width="317" height="245"/>
+            <connections>
+                <outlet property="avatarContainerView" destination="X89-B1-aAd" id="WSI-Zc-qIE"/>
+                <outlet property="avatarContainerViewHeightConstraint" destination="tgw-aN-JJu" id="pgV-tY-5Cm"/>
+                <outlet property="avatarContainerViewWidthConstraint" destination="Pkm-tW-k4z" id="Cpe-d3-yiq"/>
+                <outlet property="avatarImageView" destination="y9b-D9-Q7W" id="cZo-SR-S9h"/>
+                <outlet property="bouncingCircleContainerView" destination="dBF-mg-6vU" id="4pK-Ul-NSF"/>
+                <outlet property="cellBottomLabel" destination="Rxh-zX-vCu" id="7Q3-0N-ql0"/>
+                <outlet property="cellBottomLabelHeightConstraint" destination="Uay-Ci-Liz" id="jFp-i2-mgK"/>
+                <outlet property="cellTopLabel" destination="vSO-G2-WG6" id="8cg-XN-aai"/>
+                <outlet property="cellTopLabelHeightConstraint" destination="n7t-KS-RUh" id="eUM-7v-DIG"/>
+                <outlet property="messageBubbleContainerView" destination="2zh-vR-QJW" id="pu0-GU-eZl"/>
+                <outlet property="messageBubbleContainerWidthConstraint" destination="imD-52-K45" id="Xld-Pa-yJw"/>
+                <outlet property="messageBubbleImageView" destination="2qm-c6-OZf" id="bpy-Gv-jSh"/>
+                <outlet property="messageBubbleTopLabel" destination="p52-YN-yLu" id="WyC-Au-w9T"/>
+                <outlet property="messageBubbleTopLabelHeightConstraint" destination="8TB-va-f8L" id="OEE-UN-JYn"/>
+            </connections>
+            <point key="canvasLocation" x="371" y="145"/>
+        </collectionViewCell>
+    </objects>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
+    </simulatedMetricsContainer>
+</document>

@@ -41,6 +41,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, readonly) BOOL connected;
 
+/**
+ *  Should typing indicator messages be ignored if they appear to be from the current user?  Defaults to YES in normal builds and NO in debug builds.
+ */
+@property (nonatomic, assign) BOOL ignoreCurrentUserTypingIndicator;
+
 NS_ASSUME_NONNULL_END
 
 @end

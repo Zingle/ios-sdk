@@ -122,33 +122,6 @@
                                     </mask>
                                 </variation>
                             </view>
-                            <view hidden="YES" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="iWA-dO-3bV">
-                                <rect key="frame" x="0.0" y="564" width="375" height="26"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="💬" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qsr-lM-mNk">
-                                        <rect key="frame" x="350" y="5" width="17" height="16"/>
-                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Someone is responding" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WHX-Je-yfE">
-                                        <rect key="frame" x="209.5" y="5" width="132.5" height="16"/>
-                                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
-                                        <color key="textColor" red="0.59999999999999998" green="0.59999999999999998" blue="0.59999999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="0.94999999999999996" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstItem="qsr-lM-mNk" firstAttribute="centerY" secondItem="WHX-Je-yfE" secondAttribute="centerY" id="Aiu-pP-S0N"/>
-                                    <constraint firstItem="WHX-Je-yfE" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="top" constant="5" id="FXV-56-Pbs"/>
-                                    <constraint firstAttribute="bottom" secondItem="WHX-Je-yfE" secondAttribute="bottom" constant="5" id="RTx-Mo-5Ul"/>
-                                    <constraint firstItem="qsr-lM-mNk" firstAttribute="leading" secondItem="WHX-Je-yfE" secondAttribute="trailing" constant="8" id="ca3-8Y-T85"/>
-                                    <constraint firstItem="WHX-Je-yfE" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="iWA-dO-3bV" secondAttribute="leading" id="cja-CJ-h45"/>
-                                    <constraint firstItem="WHX-Je-yfE" firstAttribute="centerY" secondItem="iWA-dO-3bV" secondAttribute="centerY" id="mJa-8H-Ha4"/>
-                                    <constraint firstAttribute="trailing" secondItem="qsr-lM-mNk" secondAttribute="trailing" constant="8" id="sPc-9k-ixE"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-XK-dac">
                                 <rect key="frame" x="0.0" y="64" width="375" height="526"/>
                                 <subviews>
@@ -572,13 +545,11 @@
                         <constraints>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="E7V-XK-dac" secondAttribute="trailing" id="0QV-nR-CJF"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="1S3-q5-gQs" secondAttribute="trailing" id="53e-ge-dRW"/>
-                            <constraint firstItem="iWA-dO-3bV" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="7dA-3e-6d0"/>
                             <constraint firstItem="0kk-eR-qEq" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="BCr-OU-jxW"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="G72-K8-cSu" secondAttribute="trailing" id="COI-bv-zcs"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="E7V-XK-dac" secondAttribute="bottom" id="EDx-Ch-b3F"/>
                             <constraint firstItem="0kk-eR-qEq" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="HIY-EQ-SDT"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="Vm4-GP-Tqx" secondAttribute="trailing" id="JDw-d0-zFU"/>
-                            <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="iWA-dO-3bV" secondAttribute="bottom" id="JvL-Pt-bfH"/>
                             <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
                             <constraint firstItem="IrD-za-bqt" firstAttribute="top" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="Pgs-am-IVF"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="0kk-eR-qEq" secondAttribute="bottom" id="XNN-6r-9eK"/>
@@ -589,7 +560,6 @@
                             <constraint firstAttribute="trailing" secondItem="IrD-za-bqt" secondAttribute="trailing" id="iPl-8o-mcz"/>
                             <constraint firstItem="IrD-za-bqt" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="lao-f6-meA"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="n5E-he-CGo"/>
-                            <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="iWA-dO-3bV" secondAttribute="trailing" id="oym-kt-s8p"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="0kk-eR-qEq" secondAttribute="trailing" id="rod-aR-Di7"/>
                             <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="sKk-9e-V7y"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="top" secondItem="eYw-Gk-ZwV" secondAttribute="top" id="sPw-m9-Cyf"/>
@@ -621,9 +591,6 @@
                         <outlet property="skeletonView" destination="0kk-eR-qEq" id="dcD-bV-XPn"/>
                         <outlet property="toolbarBottomLayoutGuide" destination="gMQ-Jk-t3t" id="gag-7k-lNg"/>
                         <outlet property="toolbarHeightConstraint" destination="gry-0L-4u8" id="5h1-71-KIe"/>
-                        <outlet property="typingIndicatorContainerView" destination="iWA-dO-3bV" id="57A-Ya-pZB"/>
-                        <outlet property="typingIndicatorEmojiLabel" destination="qsr-lM-mNk" id="ixN-Rj-REX"/>
-                        <outlet property="typingIndicatorTextLabel" destination="WHX-Je-yfE" id="QhX-Hi-TH3"/>
                         <outletCollection property="skeletonCircles" destination="LYC-6N-n5W" id="GGf-CY-9sd"/>
                         <outletCollection property="skeletonCircles" destination="8tK-bf-b8e" id="yBT-U8-YdH"/>
                         <outletCollection property="skeletonCircles" destination="60I-67-lkF" id="CAu-f6-e6b"/>
@@ -725,10 +692,10 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="130.5" width="375" height="100"/>
+                                <rect key="frame" x="0.0" y="130.5" width="375" height="84"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
-                                        <rect key="frame" x="312" y="4.5" width="51" height="33"/>
+                                        <rect key="frame" x="312" y="-3.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
                                             <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -738,10 +705,10 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
-                                        <rect key="frame" x="327.5" y="11" width="20" height="20"/>
+                                        <rect key="frame" x="327.5" y="3" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Room number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6v7-ZW-0uV" customClass="JVFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="54" width="110" height="46"/>
+                                        <rect key="frame" x="16" y="38" width="110" height="46"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="OAA-C6-Pj7"/>
                                             <constraint firstAttribute="height" constant="46" id="uhc-Yq-zGp"/>
@@ -756,7 +723,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="HotSOS issue name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR" customClass="ZNGContactEditFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="0.0" width="284" height="46"/>
+                                        <rect key="frame" x="16" y="0.0" width="284" height="30"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
@@ -1215,7 +1182,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
-                                        <rect key="frame" x="157" y="30" width="63" height="22"/>
+                                        <rect key="frame" x="156" y="30" width="63" height="22"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -1316,7 +1283,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

@@ -15,11 +15,11 @@ PODS:
   - AFNetworking/UIKit (3.1.0):
     - AFNetworking/NSURLSession
   - Analytics (3.6.4)
-  - CocoaLumberjack (3.2.0):
-    - CocoaLumberjack/Default (= 3.2.0)
-    - CocoaLumberjack/Extensions (= 3.2.0)
-  - CocoaLumberjack/Default (3.2.0)
-  - CocoaLumberjack/Extensions (3.2.0):
+  - CocoaLumberjack (3.3.0):
+    - CocoaLumberjack/Default (= 3.3.0)
+    - CocoaLumberjack/Extensions (= 3.3.0)
+  - CocoaLumberjack/Default (3.3.0)
+  - CocoaLumberjack/Extensions (3.3.0):
     - CocoaLumberjack/Default
   - FLAnimatedImage (1.0.12)
   - JSQMessagesViewController (7.3.5):
@@ -60,7 +60,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Analytics: a24b6b80f9f16dfb69aac605da5c3854bdfb328a
-  CocoaLumberjack: 9b4aed7073d242f29cc2f62068d995faf67f703a
+  CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
@@ -71,8 +71,8 @@ SPEC CHECKSUMS:
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   Socket.IO-Client-Swift: 9cafa4459be23886c231942baeebb0df94f3989e
   StarscreamSocketIO: 821a1a2597cc4735919fd5d7683a85c14b81bb8c
-  ZingleSDK: 122206c1860a93db28b0ed11de9ec262d2a65763
+  ZingleSDK: ca2d298652b9b4923328e2fd6f0fec511b2d38c0
 
-PODFILE CHECKSUM: d52c63cf1a3b6dddb838e7b242fdc4dabf8e34dd
+PODFILE CHECKSUM: c90e2fbda148da25276b0792300e10f8899e396a
 
 COCOAPODS: 1.3.1

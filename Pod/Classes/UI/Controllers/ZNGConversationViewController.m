@@ -57,6 +57,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 // Public declaration of private inset updating methods.  Barf.
 - (void)jsq_updateCollectionViewInsets;
 - (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
+- (void)jsq_setToolbarBottomLayoutGuideConstant:(CGFloat)constant;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *toolbarBottomLayoutGuide;
+
 
 // Public declarations of methods required by our input toolbar delegate protocol that are already implemented by the base JSQMessagesViewController privately
 - (void)messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressLeftBarButton:(UIButton *)sender;
@@ -1533,6 +1537,30 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGEventCollectionViewCell * cell = [self.collectionView dequeueReusableCellWithReuseIdentifier:EventCellIdentifier forIndexPath:indexPath];
     cell.textLabel.text = [event text];
     return cell;
+}
+
+#pragma mark - Safe area fixes
+/**
+ *  This is mostly a copy/paste from the original JSQMessagesViewController keyboardController:keyboardDidChangeFrame: but with
+ *   added support for safeAreaInsets to prevent the toolbar form being moved too far above the keyboard.
+ */
+- (void)keyboardController:(JSQMessagesKeyboardController *)keyboardController keyboardDidChangeFrame:(CGRect)keyboardFrame
+{
+    if (![self.inputToolbar.contentView.textView isFirstResponder] && self.toolbarBottomLayoutGuide.constant == 0.0) {
+        return;
+    }
+    
+    CGFloat bottomNonSafeSpace = 0.0;
+    
+    if (@available(iOS 11.0, *)) {
+        bottomNonSafeSpace += self.view.safeAreaInsets.bottom;
+    }
+    
+    CGFloat heightFromBottom = CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(keyboardFrame) - bottomNonSafeSpace;
+    
+    heightFromBottom = MAX(0.0, heightFromBottom);
+    
+    [self jsq_setToolbarBottomLayoutGuideConstant:heightFromBottom];
 }
 
 #pragma mark - Abstract methods

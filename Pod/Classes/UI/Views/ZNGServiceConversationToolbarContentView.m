@@ -34,7 +34,7 @@
                              };
     
     
-    NSString * expandedVisualFormat = @"H:|-(14)-[templateButton]-(16)-[automationButton]-(17)-[imageButton]-(22)-[noteButton]-(22)-[textView]";
+    NSString * expandedVisualFormat = @"H:[templateButton]-(16)-[automationButton]-(17)-[imageButton]-(22)-[noteButton]-(22)-[textView]";
     NSArray<NSLayoutConstraint *> * expandedVisibleButtonConstraints = [NSLayoutConstraint constraintsWithVisualFormat:expandedVisualFormat
                                                                                                                options:0
                                                                                                                metrics:0
@@ -49,6 +49,7 @@
                                                                                               constant:6.0];
     
     expandedButtonsConstraints = [expandedVisibleButtonConstraints arrayByAddingObject:expandButtonUnderTextFieldConstraint];
+    expandedButtonsConstraints = [expandedVisibleButtonConstraints arrayByAddingObject:[self constraintForSubview:self.templateButton withDistanceToLeftEdgeOfSafeArea:14.0]];
     
     [self addConstraints:expandedButtonsConstraints];
     
@@ -68,7 +69,7 @@
                                                                                   multiplier:1.0
                                                                                     constant:-6.0];
     
-    NSString * revealButtonFormat = @"H:|-(17)-[revealButton]-(17)-[textView]";
+    NSString * revealButtonFormat = @"H:[revealButton]-(17)-[textView]";
     NSArray<NSLayoutConstraint *> * revealButtonConstraints = [NSLayoutConstraint constraintsWithVisualFormat:revealButtonFormat
                                                                                                       options:0
                                                                                                       metrics:0
@@ -77,8 +78,26 @@
     NSMutableArray<NSLayoutConstraint *> * collapsedConstraints = [buttonSpacingConstraints mutableCopy];
     [collapsedConstraints addObject:buttonsOffScreenConstraint];
     [collapsedConstraints addObjectsFromArray:revealButtonConstraints];
+    [collapsedConstraints addObject:[self constraintForSubview:self.revealButton withDistanceToLeftEdgeOfSafeArea:17.0]];
     
     collapsedButtonsConstraints = collapsedConstraints;
+}
+
+/**
+ *  Pre-iOS 11.0, this returns a constraint to the left edge of the view.  In iOS 11+, this returns a constraint to the left edge
+ *   of the safe area.
+ */
+- (NSLayoutConstraint *) constraintForSubview:(UIView *)subview withDistanceToLeftEdgeOfSafeArea:(CGFloat)dx
+{
+    id safeArea;
+    
+    if (@available(iOS 11.0, *)) {
+        safeArea = self.safeAreaLayoutGuide;
+    } else {
+        safeArea = self;
+    }
+    
+    return [NSLayoutConstraint constraintWithItem:subview attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:safeArea attribute:NSLayoutAttributeLeft multiplier:1.0 constant:dx];
 }
 
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled

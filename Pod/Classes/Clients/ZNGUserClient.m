@@ -28,7 +28,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 }
 
 - (void) deleteAvatarForUserWithId:(NSString *)userId
-                           success:(void (^)())success
+                           success:(void (^)(void))success
                            failure:(void (^)(ZNGError * error))failure
 {
     NSString * path = [NSString stringWithFormat:@"accounts/%@/users/%@/avatar", self.accountId, userId];
@@ -44,7 +44,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) uploadAvatar:(UIImage *)avatarImage
         forUserWithId:(NSString *)userId
-              success:(void (^)())success
+              success:(void (^)(void))success
               failure:(void (^)(ZNGError * error))failure
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

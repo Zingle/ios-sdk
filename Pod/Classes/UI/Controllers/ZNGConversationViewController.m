@@ -705,7 +705,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 
 // Using method stolen from http://stackoverflow.com/a/26401767/3470757 to insert/reload without scrolling
-- (void) performCollectionViewUpdatesWithoutScrollingFromBottom:(void (^)())updates
+- (void) performCollectionViewUpdatesWithoutScrollingFromBottom:(void (^)(void))updates
 {
     CGFloat bottomOffset = self.collectionView.contentSize.height - self.collectionView.contentOffset.y;
 

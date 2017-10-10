@@ -7,7 +7,7 @@
 //
 
 #import "ZNGError.h"
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
 
 @implementation ZNGError
 

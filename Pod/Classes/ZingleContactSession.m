@@ -7,7 +7,7 @@
 //
 
 #import "ZingleContactSession.h"
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"

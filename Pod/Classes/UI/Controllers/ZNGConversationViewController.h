@@ -56,50 +56,43 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Sets the background color of the incoming bubble.
- *
- *  @param incomingBubbleColor Defaults to Zingle light gray.
+ *  Defaults to Zingle light gray.
  */
 @property (nonatomic, strong) UIColor *incomingBubbleColor;
 
 /**
  *  Sets the background color of the outgoing bubble.
- *
- *  @param outgoingBubbleColor Defaults to default Zingle blue
+ *  Defaults to default Zingle blue.
  */
 @property (nonatomic, strong) UIColor *outgoingBubbleColor;
 
 /**
  *  Sets the background color of internal note bubbles.
- *
- *  @param internalNoteColor Defaults to zng_note_yellow
+ *  Defaults to zng_note_yellow
  */
 @property (nonatomic, strong) UIColor * internalNoteColor;
 
 /**
  *  Sets the text color of the incoming message text.
- *
- *  @param incomingTextColor Defaults to Zingle gray text color
+ *  Defaults to Zingle gray text color
  */
 @property (nonatomic, strong) UIColor *incomingTextColor;
 
 /**
  *  Sets the text color of the outgoing message text.
- *
- *  @param outgoingTextColor Defaults to Zingle gray text color
+ *  Defaults to Zingle gray text color
  */
 @property (nonatomic ,strong) UIColor *outgoingTextColor;
 
 /**
  *  Sets the text color of internal notes.
- *
- *  @param internalNoteTextColor Defaults to Zingle gray text color
+ *  Defaults to Zingle gray text color
  */
 @property (nonatomic, strong) UIColor * internalNoteTextColor;
 
 /**
  *  Sets the text color of the label on top of the message bubble.
- *
- *  @param authorTextColor Defaults to [UIColor lightGrayColor]
+ *  Defaults to [UIColor lightGrayColor]
  */
 @property (nonatomic, strong) UIColor *authorTextColor;
 
@@ -143,9 +136,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /**
  *  Sets whether or not the messages should be automatically marked as read.
- *
- *  @param autoMarkAsReadEnabled If YES, then the messages are automatically marked as read.
- *  Default value is NO.
+ *  If YES, then the messages are automatically marked as read.
+ *  Defaults to NO.
  */
 @property (nonatomic, assign, getter=isAutoMarkAsReadEnabled) BOOL autoMarkAsReadEnabled;
 

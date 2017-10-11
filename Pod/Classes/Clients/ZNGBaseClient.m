@@ -6,7 +6,7 @@
 //
 //
 
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "ZNGBaseClient.h"
 #import "ZNGLogging.h"
 #import "ZingleSession.h"

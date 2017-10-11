@@ -8,7 +8,7 @@
 
 #import "ZingleSession.h"
 #import "ZNGLogging.h"
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "ZNGAccountClient.h"
 #import "ZNGContactServiceClient.h"
 #import "ZNGNotificationsClient.h"
@@ -303,7 +303,7 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
     
     NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
     
-    void (^registerForNotifications)() = ^{
+    void (^registerForNotifications)(void) = ^{
         [self.notificationsClient registerForNotificationsWithDeviceId:tokenString withServiceIds:serviceIds success:^(ZNGStatus *status) {
             ZNGLogDebug(@"Registered for push notifications successfully as %@", tokenString);
         } failure:^(ZNGError *error) {

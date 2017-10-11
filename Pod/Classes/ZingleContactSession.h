@@ -94,9 +94,6 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param key Security key for Zingle API user
  *  @param channelTypeId An identifier for the channel type, e.g. the identifier for Big Hotel Messaging System
  *  @param channelValue The channel value for the current user, e.g. joeSchmoe97 for the user name in Big Hotel Messaging System
- *  @param contactServiceChooser Optional block to be used to select a contact service once we obtain the list of available contact services.  May be neglected or return nil.
- *   This block is retained indefinitely, so weak references should be used or the contactServiceChooser property should be set to nil if no longer needed.
- *  @param errorHandler Optional block that is called every time an error is received.
  */
 - (instancetype) initWithToken:(NSString *)token
                            key:(NSString *)key

@@ -9,7 +9,7 @@
 #import "ZNGSocketClient.h"
 #import "ZNGLogging.h"
 #import "ZingleSession.h"
-#import <AFNetworking/AFNetworking.h>
+#import <AFNetworking/AFHTTPSessionManager.h>
 #import "NSURL+Zingle.h"
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGConversationContactToService.h"

@@ -20,12 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Avatars
 - (void) deleteAvatarForUserWithId:(NSString *)userId
-                           success:(void (^ _Nullable)())success
+                           success:(void (^ _Nullable)(void))success
                            failure:(void (^ _Nullable)(ZNGError * error))failure;
 
 - (void) uploadAvatar:(UIImage *)avatarImage
         forUserWithId:(NSString *)userId
-              success:(void (^ _Nullable)())success
+              success:(void (^ _Nullable)(void))success
               failure:(void (^ _Nullable)(ZNGError * error))failure;
 
 NS_ASSUME_NONNULL_END

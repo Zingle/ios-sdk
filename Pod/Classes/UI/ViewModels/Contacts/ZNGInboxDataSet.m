@@ -236,7 +236,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     // Calculate what page indices should be loaded in order to load some data starting at the specified index.
     
     NSUInteger pageSize = self.pageSize;
-    NSMutableOrderedSet<NSNumber *> * pagesToRefresh = [[NSMutableOrderedSet alloc] init];
+    NSMutableIndexSet * pagesToRefresh = [[NSMutableIndexSet alloc] init];
     NSUInteger loadedCount = [_contacts count];
     NSUInteger lastPageToLoad = (index / pageSize) + 1; // The page holding the object at the specified index
     NSUInteger totalPageCount = self.totalPageCount;
@@ -254,15 +254,15 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     }
     
     // First, we are going to need the page that holds the object at this specific index
-    [pagesToRefresh addObject:@(lastPageToLoad)];
+    [pagesToRefresh addIndex:lastPageToLoad];
     
     // If the index they requested would load fewer than 10 entries, load an additional page
     NSUInteger remainingCountPastIndexOnPage = pageSize - (index % pageSize);
     
     if (remainingCountPastIndexOnPage < 10) {
         // Ensure that we are not appending an extra page beyond the actual data
-        if ((totalPageCount == 0) || (lastPageToLoad+1 < totalPageCount)) {
-            [pagesToRefresh addObject:@(lastPageToLoad + 1)];
+        if ((totalPageCount == 0) || ((lastPageToLoad + 1) < totalPageCount)) {
+            [pagesToRefresh addIndex:lastPageToLoad + 1];
         }
     }
     
@@ -270,10 +270,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     //  array, we need the missing values first.)
     if (index > loadedCount) {
         NSUInteger firstPageToLoad = (loadedCount / pageSize) + 1;
-        
-        for (NSUInteger i = lastPageToLoad - 1; i >= firstPageToLoad; i--) {
-            [pagesToRefresh insertObject:@(i) atIndex:0];
-        }
+        [pagesToRefresh addIndexesInRange:NSMakeRange(firstPageToLoad, lastPageToLoad - 1)];
     }
     
     if ([pagesToRefresh count] == 0) {
@@ -282,10 +279,11 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         return;
     }
     
-    [self fetchPages:[pagesToRefresh array] removingTail:removeTail];
+    [self fetchPages:pagesToRefresh removingTail:removeTail];
 }
 
 - (void) fetchPages:(NSArray<NSNumber *> *)pages removingTail:(BOOL)removeTail
+- (void) fetchPages:(NSIndexSet *)pages removingTail:(BOOL)removeTail
 {
     self.loading = YES;
     __weak ZNGInboxDataSet * weakSelf = self;
@@ -295,7 +293,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     // Using NSBlockOperation also allows proper cancellation if we are deallocated.  This is a very real concern, especially when doing
     //  filtering based on a live-typed search term.  (We can expect many ZNGInboxDataSearch objects to be created and destroyed as the
     //  user types.)
-    for (NSNumber * pageNumber in pages) {
+    [pages enumerateIndexesUsingBlock:^(NSUInteger page, BOOL * _Nonnull stop) {
         __block NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
             // Grab a strong reference to the client before we set our semaphore
             ZNGContactClient * strongContactClient = weakContactClient;
@@ -309,9 +307,9 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             
             NSMutableDictionary * parameters = [weakSelf parameters];
-            parameters[ParameterKeyPageIndex] = pageNumber;
+            parameters[ParameterKeyPageIndex] = @(page);
             
-            ZNGLogInfo(@"%@ (%p) is loading page #%@ of data...", [weakSelf class], weakSelf, pageNumber);
+            ZNGLogInfo(@"%@ (%p) is loading page #%llu of data...", [weakSelf class], weakSelf, (unsigned long long)page);
             
             [strongContactClient contactListWithParameters:parameters success:^(NSArray<ZNGContact *> *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;
@@ -327,7 +325,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                 }
                 dispatch_semaphore_signal(semaphore);
             } failure:^(ZNGError *error) {
-                ZNGLogWarn(@"Unable to fetch inbox data for page %@: %@", pageNumber, error);
+                ZNGLogWarn(@"Unable to fetch inbox data for page %llu: %@", (unsigned long long)page, error);
                 dispatch_semaphore_signal(semaphore);
             }];
             
@@ -336,7 +334,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         }];
         
         [fetchQueue addOperation:operation];
-    }
+    }];
     
     // Remove any data past this current refresh if appropriate
     if (removeTail) {
@@ -346,7 +344,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             }
             
             dispatch_sync(dispatch_get_main_queue(), ^{
-                NSUInteger indexAfterCurrentData = [[pages lastObject] longValue] * weakSelf.pageSize;
+                NSUInteger indexAfterCurrentData = [pages lastIndex] * weakSelf.pageSize;
                 
                 if (indexAfterCurrentData < [weakSelf.contacts count]) {
                     NSMutableOrderedSet<ZNGContact *> * mutable = [weakSelf mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];

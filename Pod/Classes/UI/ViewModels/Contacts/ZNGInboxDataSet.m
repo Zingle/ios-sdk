@@ -51,6 +51,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 @implementation ZNGInboxDataSet
 {
     BOOL loadedInitialData;
+    NSIndexSet * loadingPages;
     
     NSOperationQueue * fetchQueue;
     
@@ -72,6 +73,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     
     if (self != nil) {
         _sortFields = @[[NSString stringWithFormat:@"%@ %@", ZNGInboxDataSetSortFieldLastMessageCreatedAt, ZNGInboxDataSetSortDirectionDescending]];
+        loadingPages = [[NSMutableIndexSet alloc] init];
     }
     
     return self;
@@ -273,19 +275,37 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         [pagesToRefresh addIndexesInRange:NSMakeRange(firstPageToLoad, lastPageToLoad - 1)];
     }
     
+    // Remove any pages that are already loading
+    [pagesToRefresh removeIndexes:loadingPages];
+    
     if ([pagesToRefresh count] == 0) {
         // Nothing to refresh
-        ZNGLogInfo(@"Refresh was called to start with index of %ld, but there is no additional data available (%ld total items.)", (unsigned long)index, (unsigned long)totalPageCount);
+        ZNGLogInfo(@"Refresh was called to start with index of %ld, but there is no additional data available (%ld total items, %llu pages loading already).",
+                   (unsigned long)index, (unsigned long)totalPageCount, (unsigned long long)[loadingPages count]);
         return;
     }
     
     [self fetchPages:pagesToRefresh removingTail:removeTail];
 }
 
-- (void) fetchPages:(NSArray<NSNumber *> *)pages removingTail:(BOOL)removeTail
+- (BOOL) alreadyLoadingDataAtIndex:(NSUInteger)index
+{
+    if (!self.loading) {
+        // We're not loading anything at all, silly.
+        return NO;
+    }
+    
+    NSUInteger page = (index / self.pageSize) + 1;
+    return [loadingPages containsIndex:page];
+}
+
 - (void) fetchPages:(NSIndexSet *)pages removingTail:(BOOL)removeTail
 {
     self.loading = YES;
+    NSMutableIndexSet * mutableLoadingPages = [loadingPages mutableCopy];
+    [mutableLoadingPages addIndexes:pages];
+    loadingPages = mutableLoadingPages;
+    
     __weak ZNGInboxDataSet * weakSelf = self;
     __weak ZNGContactClient * weakContactClient = self.contactClient;
     
@@ -369,6 +389,10 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             
             if (strongSelf != nil) {
                 strongSelf->lastLocallyRemovedContact = nil;
+                
+                NSMutableIndexSet * mutableLoadingPages = [strongSelf->loadingPages mutableCopy];
+                [mutableLoadingPages removeIndexes:pages];
+                strongSelf->loadingPages = mutableLoadingPages;
             }
         });
     }];

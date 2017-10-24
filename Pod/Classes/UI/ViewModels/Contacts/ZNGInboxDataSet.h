@@ -134,6 +134,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) refresh;
 
 /**
+ *  Returns YES if there is a fetch operation in progress for the specificed index.  Returns NO if `loading` is NO.
+ */
+- (BOOL) alreadyLoadingDataAtIndex:(NSUInteger)index;
+
+/**
  *  Refreshes data starting around the current value.  This data will be merged into the contacts array if possible.  Any data trailing past the data fetched
  *   by this request will be discarded.  (e.g. If we refresh and that ends up retrieving page 4 of 10, any page 5 or later will be discarded until it is fetched
  *   again in the future.)

@@ -756,7 +756,8 @@ static NSString * const ZNGKVOServicePath = @"session.service";
 
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((!self.data.loading) && [self shouldRequestNewDataAfterViewingIndexPath:indexPath]) {
+    if ([self shouldRequestNewDataAfterViewingIndexPath:indexPath]) {
+        ZNGLogDebug(@"Requesting data around index #%lld", (long long)indexPath.row + 10);
         [self.data refreshStartingAtIndex:indexPath.row + 10 removingTail:YES];
     }
 }
@@ -766,8 +767,9 @@ static NSString * const ZNGKVOServicePath = @"session.service";
     // This method could be tweaked to take velocity into account.  For now we will just grab more data if we are within 10 items from the bottom of our current data.
     BOOL nearBottom = (indexPath.row > ([self.data.contacts count] - 10));
     BOOL moreDataAvailable = ([self.data.contacts count] < self.data.count);
+    BOOL notAlreadyLoading = ![self.data alreadyLoadingDataAtIndex:indexPath.row + 10];
     
-    return (nearBottom && moreDataAvailable);
+    return (nearBottom && moreDataAvailable && notAlreadyLoading);
 }
 
 - (BOOL) _shouldShowConversation:(ZNGConversation *)conversation

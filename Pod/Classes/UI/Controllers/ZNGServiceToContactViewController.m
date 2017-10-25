@@ -1268,7 +1268,7 @@ enum ZNGConversationSections
         if ([pendingResponse.eventType isEqualToString:ZNGPendingResponseTypeMessage]) {
             return self.outgoingBubbleImageData;
         } else if ([pendingResponse.eventType isEqualToString:ZNGPendingResponseTypeInternalNote]) {
-            return self.intenralNoteBubbleImageData;
+            return self.internalNoteBubbleImageData;
         }
         
         // Unrecognized type.  Use the normal outgoing bubble image.

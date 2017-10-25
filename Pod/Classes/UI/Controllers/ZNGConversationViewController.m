@@ -75,7 +75,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleMediaMaskData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleMediaMaskData;
-@property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
 /**
@@ -251,7 +250,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:bubbleImage capInsets:UIEdgeInsetsZero];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
-    self.intenralNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
+    self.internalNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
     self.outgoingBubbleMediaMaskData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor blackColor]];
     self.incomingBubbleMediaMaskData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor blackColor]];
     
@@ -1232,7 +1231,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     if ([event isNote]) {
-        return self.intenralNoteBubbleImageData;
+        return self.internalNoteBubbleImageData;
     }
     
     return self.incomingBubbleImageData;

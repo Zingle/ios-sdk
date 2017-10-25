@@ -49,6 +49,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleImageData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleImageData;
+@property (nonatomic, strong) JSQMessagesBubbleImage * internalNoteBubbleImageData;
 
 /**
  * OPTIONAL UI SETTINGS

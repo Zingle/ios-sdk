@@ -100,9 +100,16 @@
     user.lastName = ([lastNameOrNull isKindOfClass:[NSString class]]) ? lastNameOrNull : nil;
     user.email = ([emailOrNull isKindOfClass:[NSString class]]) ? emailOrNull : nil;
     
-    NSString * avatarAsset = data[@"avatar_asset"];
+    // The avatar asset has been, at different times, a URI string and a dictionary with a "uri" key
+    id avatarAsset = data[@"avatar_asset"];
     if ([avatarAsset isKindOfClass:[NSString class]]) {
         [user setValue:[NSURL URLWithString:avatarAsset] forKey:NSStringFromSelector(@selector(avatarUri))];
+    } else if ([avatarAsset isKindOfClass:[NSDictionary class]]) {
+        NSString * avatarUriString = avatarAsset[@"uri"];
+        
+        if ([avatarUriString isKindOfClass:[NSString class]]) {
+            [user setValue:[NSURL URLWithString:avatarUriString] forKey:NSStringFromSelector(@selector(avatarUri))];
+        }
     }
     
     return user;

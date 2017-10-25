@@ -389,6 +389,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     NSDictionary * data = [dataArray firstObject];
     NSDictionary * userData = data[@"user"];
+    BOOL isNote = [data[@"type"] isEqualToString:@"note"];
     
     if (userData[@"id"] == nil) {
         ZNGLogWarn(@"Received a userIsReplying notification with no user ID.  Ignoring: %@", data);
@@ -405,7 +406,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         return;
     }
     
-    [self.activeConversation otherUserIsReplying:user];
+    [self.activeConversation otherUserIsReplying:user isInternalNote:isNote];
 }
 
 - (void) feedUnlocked:(NSArray *)data

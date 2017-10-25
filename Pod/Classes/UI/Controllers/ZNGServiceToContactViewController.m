@@ -31,9 +31,9 @@
 #import "UILabel+NetworkStatus.h"
 #import "ZNGPaddedLabel.h"
 #import "ZNGConversationTypingIndicatorCell.h"
-#import "ZNGUser+TypingIndicatorData.h"
 #import "ZNGMessageData.h"
 #import "JSQMessagesViewController/JSQMessageBubbleImageDataSource.h"
+#import "ZNGPendingResponseOrNote.h"
 
 @import SDWebImage;
 
@@ -46,7 +46,7 @@ static NSString * const KVOContactChannelsPath = @"conversation.contact.channels
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
-static NSString * const KVOReplyingUsersPath = @"conversation.replyingUsers";
+static NSString * const KVOReplyingUsersPath = @"conversation.pendingResponses";
 
 static NSString * const TypingIndicatorCellID = @"typingIndicator";
 
@@ -843,7 +843,7 @@ enum ZNGConversationSections
 
 - (NSString * _Nullable) nameForMessageAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGUser * typingIndicatorUser = [self userForTypingIndicatorAtIndexPath:indexPath];
+    ZNGUser * typingIndicatorUser = [[self pendingResponseForTypingIndicatorAtIndexPath:indexPath] user];
     
     if (typingIndicatorUser != nil) {
         return [typingIndicatorUser fullName];
@@ -1077,7 +1077,7 @@ enum ZNGConversationSections
 
 - (id<JSQMessageAvatarImageDataSource>) initialsAvatarForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    ZNGUser * typingIndicatorUser = [self userForTypingIndicatorAtIndexPath:indexPath];
+    ZNGUser * typingIndicatorUser = [[self pendingResponseForTypingIndicatorAtIndexPath:indexPath] user];
     
     // If this cell is a typing indicator, we have the user data immediately available.
     if (typingIndicatorUser != nil) {
@@ -1146,7 +1146,7 @@ enum ZNGConversationSections
 - (id<JSQMessageData>)collectionView:(JSQMessagesCollectionView *)collectionView messageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == ZNGConversationSectionTypingIndicators) {
-        return [self userForTypingIndicatorAtIndexPath:indexPath];
+        return [self pendingResponseForTypingIndicatorAtIndexPath:indexPath];
     }
     
     return [super collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
@@ -1203,7 +1203,7 @@ enum ZNGConversationSections
 - (NSInteger) collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (section == ZNGConversationSectionTypingIndicators) {
-        return [self.conversation.replyingUsers count];
+        return [self.conversation.pendingResponses count];
     }
     
     return [super collectionView:collectionView numberOfItemsInSection:section];
@@ -1237,18 +1237,18 @@ enum ZNGConversationSections
 }
 
 // If the provided index path represents a typing indicator, this will return the corresponding user.  Otherwise it returns nil.
-- (ZNGUser *) userForTypingIndicatorAtIndexPath:(NSIndexPath *)indexPath
+- (ZNGPendingResponseOrNote *) pendingResponseForTypingIndicatorAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section != ZNGConversationSectionTypingIndicators) {
         return nil;
     }
     
-    if (indexPath.row >= [self.conversation.replyingUsers count]) {
-        ZNGLogError(@"Out of bounds retrieving user at index %lld in our %llu currently replying users.", (long long)indexPath.row, (unsigned long long)[self.conversation.replyingUsers count]);
+    if (indexPath.row >= [self.conversation.pendingResponses count]) {
+        ZNGLogError(@"Out of bounds retrieving user at index %lld in our %llu currently replying users.", (long long)indexPath.row, (unsigned long long)[self.conversation.pendingResponses count]);
         return nil;
     }
     
-    return self.conversation.replyingUsers[indexPath.row];
+    return self.conversation.pendingResponses[indexPath.row];
 }
 
 - (ZNGEventViewModel *) eventViewModelAtIndexPath:(NSIndexPath *)indexPath
@@ -1263,6 +1263,16 @@ enum ZNGConversationSections
 - (id<JSQMessageBubbleImageDataSource>)collectionView:(JSQMessagesCollectionView *)collectionView messageBubbleImageDataForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == ZNGConversationSectionTypingIndicators) {
+        ZNGPendingResponseOrNote * pendingResponse = (ZNGPendingResponseOrNote *)[self collectionView:collectionView messageDataForItemAtIndexPath:indexPath];
+        
+        if ([pendingResponse.eventType isEqualToString:ZNGPendingResponseTypeMessage]) {
+            return self.outgoingBubbleImageData;
+        } else if ([pendingResponse.eventType isEqualToString:ZNGPendingResponseTypeInternalNote]) {
+            return self.internalNoteBubbleImageData;
+        }
+        
+        // Unrecognized type.  Use the normal outgoing bubble image.
+        ZNGLogError(@"Unexpected pending response type found: %@", pendingResponse.eventType);
         return self.outgoingBubbleImageData;
     }
 
@@ -1279,7 +1289,7 @@ enum ZNGConversationSections
     ZNGEventViewModel * viewModel = nil;
     
     if (isTypingIndicator) {
-        ZNGUser * user = (ZNGUser *)messageData;
+        ZNGPendingResponseOrNote * pendingResponse = (ZNGPendingResponseOrNote *)messageData;
         cell = [collectionView dequeueReusableCellWithReuseIdentifier:TypingIndicatorCellID forIndexPath:indexPath];
         
         // We need to do the bubble coloring since we are not using [super collectionView:collectionView cellForItemAtIndexPath:indexPath]
@@ -1289,7 +1299,7 @@ enum ZNGConversationSections
         
         cell.cellBottomLabel.attributedText = [self collectionView:self.collectionView attributedTextForCellBottomLabelAtIndexPath:indexPath];
         
-        avatarURL = user.avatarUri;
+        avatarURL = pendingResponse.user.avatarUri;
     } else {
         cell = [super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         

@@ -1290,7 +1290,12 @@ enum ZNGConversationSections
     
     if (isTypingIndicator) {
         ZNGPendingResponseOrNote * pendingResponse = (ZNGPendingResponseOrNote *)messageData;
-        cell = [collectionView dequeueReusableCellWithReuseIdentifier:TypingIndicatorCellID forIndexPath:indexPath];
+        ZNGConversationTypingIndicatorCell * typingCell = [collectionView dequeueReusableCellWithReuseIdentifier:TypingIndicatorCellID forIndexPath:indexPath];
+        cell = typingCell;
+
+        // Set dot color as appropriate for message/note
+        BOOL isInternalNote = ([pendingResponse.eventType isEqualToString:ZNGPendingResponseTypeInternalNote]);
+        typingCell.dotColor = (isInternalNote) ? self.internalNoteTextColor : self.outgoingTextColor;
         
         // We need to do the bubble coloring since we are not using [super collectionView:collectionView cellForItemAtIndexPath:indexPath]
         id<JSQMessageBubbleImageDataSource> bubbleImageDataSource = [self collectionView:self.collectionView messageBubbleImageDataForItemAtIndexPath:indexPath];

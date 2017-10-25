@@ -75,7 +75,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleMediaMaskData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleMediaMaskData;
-@property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
 /**

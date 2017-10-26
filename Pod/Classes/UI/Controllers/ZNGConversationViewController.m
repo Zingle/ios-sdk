@@ -968,23 +968,60 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) attachImageFromPhotoLibraryWithInfo:(NSDictionary<NSString *,id> *)info
 {
+    // Retrieve the selected image to verify that we are starting with something.
+    // This UIImage may be insufficient, such as is the case with animated GIFs (where we only get one frame here).
     UIImage * image = info[UIImagePickerControllerOriginalImage];
+    
+    if (image == nil) {
+        ZNGLogError(@"The user selected an image, but no image was found in the callback info dictionary.  What are we supposed to do now?");
+        [self showImageAttachmentError];
+        return;
+    }
+    
+    PHAsset * asset;
+
+    // If we're in iOS 11 and have already sought photo library access permission, we will immediately get the PHAsset here.
+    if (@available(iOS 11.0, *)) {
+        asset = info[UIImagePickerControllerPHAsset];
+    }
+    
+    if (asset != nil) {
+        // That was easy
+        [self attachImageWithAsset:asset];
+        return;
+    }
+    
+    // Otherwise, we are either pre iOS 11 or do not yet have permission.  Either way, we get to go on a trip to PHPhotoLibrary town.
+    // First, ensure that we have an image URL that we can later use with PHImageManager.
     NSURL * url = info[UIImagePickerControllerReferenceURL];
-    
-    if ((image == nil) || (url == nil)) {
-        ZNGLogError(@"No image data was found after the user selected an image.");
+
+    if (url == nil) {
+        ZNGLogError(@"The user selected an image, but we did not receieve a reference URL to retrieve it.  Drat.");
         [self showImageAttachmentError];
         return;
     }
     
-    PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
+    // In the cases that we already have permission, this extra call to request permission will have no visible effect.
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        if (status != PHAuthorizationStatusAuthorized) {
+            ZNGLogError(@"The user has not granted us permission to use an image from their library.  Silly human.");
+            return;
+        }
     
-    if (asset == nil) {
-        // We were unable to retrieve a PHAsset from the supplied image.
-        [self showImageAttachmentError];
-        return;
-    }
-    
+        PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
+        
+        if (asset == nil) {
+            ZNGLogError(@"Unable to retrieve the selected image asset from disk.  Odd.");
+            [self showImageAttachmentError];
+            return;
+        }
+        
+        [self attachImageWithAsset:asset];
+    }];
+}
+
+- (void) attachImageWithAsset:(PHAsset *)asset
+{
     PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
     options.synchronous = NO;
     options.networkAccessAllowed = NO;

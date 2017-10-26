@@ -927,6 +927,21 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     picker.delegate = self;
     picker.allowsEditing = NO;
     picker.sourceType = cameraMode ? UIImagePickerControllerSourceTypeCamera : UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    // For iPads showing the photo library, the UIImagePickerController must be presented as a popover (per UIImagePickerController documentation).
+    if ((!cameraMode) && ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)) {
+        UIView * sourceView = self.inputToolbar.contentView;
+        
+        if ([sourceView isKindOfClass:[ZNGServiceConversationToolbarContentView class]]) {
+            ZNGServiceConversationToolbarContentView * toolbarContentView = (ZNGServiceConversationToolbarContentView *)sourceView;
+            sourceView = toolbarContentView.imageButton;
+        }
+        
+        picker.modalPresentationStyle = UIModalPresentationPopover;
+        picker.popoverPresentationController.sourceView = sourceView;
+        picker.popoverPresentationController.sourceRect = sourceView.bounds;
+    }
+    
     [self presentViewController:picker animated:YES completion:nil];
 }
 

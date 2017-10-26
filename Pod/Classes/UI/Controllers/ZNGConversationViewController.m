@@ -993,6 +993,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     // Otherwise, we are either pre iOS 11 or do not yet have permission.  Either way, we get to go on a trip to PHPhotoLibrary town.
     // First, ensure that we have an image URL that we can later use with PHImageManager.
+    // Note that UIImagePickerControllerReferenceURL is supposed to be deprecated in iOS 11, but I cannot find any other way to access
+    //  the PHAsset passed in the image picker callback the very first time it is done.  The alternative is to ask the user for permission
+    //  for photo library access up front before an image is selected.  That would avoid a deprecated dictionary key at the expense of a
+    //  slightly worse user experience.
     NSURL * url = info[UIImagePickerControllerReferenceURL];
 
     if (url == nil) {

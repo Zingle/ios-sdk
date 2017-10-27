@@ -43,6 +43,16 @@ static NSString * const ZNGChannelTypeClassUserDefined = @"UserDefinedChannel";
              };
 }
 
+/**
+ *  In a sane world, the API would tell us if a channel type should be readable/editable by a human being.
+ *  We do not live in such a world, so we will assume that only phone numbers and email addresses are human editable.
+ */
+- (BOOL) valueIsHumanReadable
+{
+    // TODO: Replace this method once the API provides an alternative to checking vs. channel type class string.
+    return (([self isPhoneNumberType]) || ([self isEmailType]));
+}
+
 - (BOOL) isPhoneNumberType
 {
     return [self.typeClass isEqualToString:ZNGChannelTypeClassPhoneNumber];

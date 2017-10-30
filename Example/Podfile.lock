@@ -1,10 +1,4 @@
 PODS:
-  - AFNetworking (3.1.0):
-    - AFNetworking/NSURLSession (= 3.1.0)
-    - AFNetworking/Reachability (= 3.1.0)
-    - AFNetworking/Security (= 3.1.0)
-    - AFNetworking/Serialization (= 3.1.0)
-    - AFNetworking/UIKit (= 3.1.0)
   - AFNetworking/NSURLSession (3.1.0):
     - AFNetworking/Reachability
     - AFNetworking/Security
@@ -12,8 +6,6 @@ PODS:
   - AFNetworking/Reachability (3.1.0)
   - AFNetworking/Security (3.1.0)
   - AFNetworking/Serialization (3.1.0)
-  - AFNetworking/UIKit (3.1.0):
-    - AFNetworking/NSURLSession
   - Analytics (3.6.4)
   - CocoaLumberjack (3.3.0):
     - CocoaLumberjack/Default (= 3.3.0)
@@ -39,7 +31,7 @@ PODS:
     - StarscreamSocketIO (~> 8.0.1)
   - StarscreamSocketIO (8.0.1)
   - ZingleSDK (1.1.0):
-    - AFNetworking
+    - AFNetworking/NSURLSession
     - Analytics (~> 3.0)
     - CocoaLumberjack
     - JSQMessagesViewController
@@ -71,7 +63,7 @@ SPEC CHECKSUMS:
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   Socket.IO-Client-Swift: 9cafa4459be23886c231942baeebb0df94f3989e
   StarscreamSocketIO: 821a1a2597cc4735919fd5d7683a85c14b81bb8c
-  ZingleSDK: ca2d298652b9b4923328e2fd6f0fec511b2d38c0
+  ZingleSDK: ca04674852009cb7573510191e62c5d4d06d3739
 
 PODFILE CHECKSUM: c90e2fbda148da25276b0792300e10f8899e396a
 

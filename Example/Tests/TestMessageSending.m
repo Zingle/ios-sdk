@@ -21,13 +21,10 @@
 
 @implementation TestMessageSending
 {
-    ZNGMockMessageClient * messageClient;
-    ZNGConversationServiceToContact * conversation;
 }
 
-- (void)setUp {
-    [super setUp];
-    
+- (ZNGConversationServiceToContact *) freshConversation
+{
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
     ZNGSocketClient * socketClient = [[ZNGSocketClient alloc] initWithSession:session];
     
@@ -36,7 +33,7 @@
     channelType.channelTypeId = @"1111-22222222222-333333333333-4444";
     channel.channelType = channelType;
     
-    messageClient = [[ZNGMockMessageClient alloc] init];
+    ZNGMockMessageClient * messageClient = [[ZNGMockMessageClient alloc] init];
     
     ZNGService * service = [[ZNGService alloc] init];
     ZNGContact * contact = [[ZNGContact alloc] init];
@@ -44,11 +41,12 @@
     ZNGStubbedEventClient * eventClient = [[ZNGStubbedEventClient alloc] init];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     
-    conversation = [[ZNGConversationServiceToContact alloc] initFromService:service toContact:contact withCurrentUserId:@"" usingChannel:channel withMessageClient:messageClient eventClient:eventClient contactClient:contactClient socketClient:socketClient];
+    return [[ZNGConversationServiceToContact alloc] initFromService:service toContact:contact withCurrentUserId:@"" usingChannel:channel withMessageClient:messageClient eventClient:eventClient contactClient:contactClient socketClient:socketClient];
 }
 
 - (void) testCompletionBlockCalled
 {
+    ZNGConversationServiceToContact * conversation = [self freshConversation];
     XCTestExpectation * expectation = [self expectationWithDescription:@"Completion block called after sending message"];
     
     [conversation sendMessageWithBody:@"body" imageData:nil uuid:nil success:^(ZNGStatus * _Nullable status) {
@@ -62,6 +60,8 @@
 
 - (void) testFailureBlockCalled
 {
+    ZNGConversationServiceToContact * conversation = [self freshConversation];
+    ZNGMockMessageClient * messageClient = (ZNGMockMessageClient *)conversation.messageClient;
     XCTestExpectation * expectation = [self expectationWithDescription:@"Completion block called after sending message"];
     
     messageClient.alwaysFail = YES;

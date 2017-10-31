@@ -16,7 +16,7 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		92E39693E54735C032BC69C0 /* Pods_ZingleSDK_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */; };
 		9611CD4D1E9BFEC400702465 /* ZNGMockUserClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9611CD4C1E9BFEC400702465 /* ZNGMockUserClient.m */; };
-		961847261E96CF9500AB3D45 /* TestMessageSending.m in Sources */ = {isa = PBXBuildFile; fileRef = 961847251E96CF9500AB3D45 /* TestMessageSending.m */; };
+		961847261E96CF9500AB3D45 /* TestConversation.m in Sources */ = {isa = PBXBuildFile; fileRef = 961847251E96CF9500AB3D45 /* TestConversation.m */; };
 		9622B33A1DC284A800957C5F /* devEnterpriseService.json in Resources */ = {isa = PBXBuildFile; fileRef = 9622B3381DC284A800957C5F /* devEnterpriseService.json */; };
 		9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */; };
 		9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */; };
@@ -41,7 +41,7 @@
 		96C61E601E03434E00A38B5F /* TestURLParsing.m in Sources */ = {isa = PBXBuildFile; fileRef = 96C61E5F1E03434E00A38B5F /* TestURLParsing.m */; };
 		96E0AABA1E6F87CE00911146 /* ZNGMockMessageClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E0AAB81E6F87CE00911146 /* ZNGMockMessageClient.m */; };
 		96E0AABC1E6F8D2400911146 /* TestImageAttachmentSending.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E0AABB1E6F8D2400911146 /* TestImageAttachmentSending.m */; };
-		96E0AABF1E6F8DFD00911146 /* ZNGStubbedEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E0AABE1E6F8DFD00911146 /* ZNGStubbedEventClient.m */; };
+		96E0AABF1E6F8DFD00911146 /* ZNGMockEventClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E0AABE1E6F8DFD00911146 /* ZNGMockEventClient.m */; };
 		96E0AACA1E6F978000911146 /* tinyJpg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E0AAC81E6F978000911146 /* tinyJpg.jpg */; };
 		96E0AACB1E6F978000911146 /* tinyPng.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E0AAC91E6F978000911146 /* tinyPng.png */; };
 		96E0AACD1E6F997000911146 /* 1280.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E0AACC1E6F997000911146 /* 1280.png */; };
@@ -84,7 +84,7 @@
 		960FCBB21D0F6E9C00B7E82C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9611CD4B1E9BFEC400702465 /* ZNGMockUserClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockUserClient.h; path = mocks/ZNGMockUserClient.h; sourceTree = "<group>"; };
 		9611CD4C1E9BFEC400702465 /* ZNGMockUserClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockUserClient.m; path = mocks/ZNGMockUserClient.m; sourceTree = "<group>"; };
-		961847251E96CF9500AB3D45 /* TestMessageSending.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestMessageSending.m; sourceTree = "<group>"; };
+		961847251E96CF9500AB3D45 /* TestConversation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestConversation.m; sourceTree = "<group>"; };
 		9622B3381DC284A800957C5F /* devEnterpriseService.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = devEnterpriseService.json; path = data/devEnterpriseService.json; sourceTree = "<group>"; };
 		9622B33D1DC2852200957C5F /* ZNGMockContactClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockContactClient.h; path = mocks/ZNGMockContactClient.h; sourceTree = "<group>"; };
 		9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockContactClient.m; path = mocks/ZNGMockContactClient.m; sourceTree = "<group>"; };
@@ -118,8 +118,8 @@
 		96E0AAB71E6F87CE00911146 /* ZNGMockMessageClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockMessageClient.h; path = mocks/ZNGMockMessageClient.h; sourceTree = "<group>"; };
 		96E0AAB81E6F87CE00911146 /* ZNGMockMessageClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockMessageClient.m; path = mocks/ZNGMockMessageClient.m; sourceTree = "<group>"; };
 		96E0AABB1E6F8D2400911146 /* TestImageAttachmentSending.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestImageAttachmentSending.m; sourceTree = "<group>"; };
-		96E0AABD1E6F8DFD00911146 /* ZNGStubbedEventClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGStubbedEventClient.h; path = mocks/ZNGStubbedEventClient.h; sourceTree = "<group>"; };
-		96E0AABE1E6F8DFD00911146 /* ZNGStubbedEventClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGStubbedEventClient.m; path = mocks/ZNGStubbedEventClient.m; sourceTree = "<group>"; };
+		96E0AABD1E6F8DFD00911146 /* ZNGMockEventClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZNGMockEventClient.h; path = mocks/ZNGMockEventClient.h; sourceTree = "<group>"; };
+		96E0AABE1E6F8DFD00911146 /* ZNGMockEventClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZNGMockEventClient.m; path = mocks/ZNGMockEventClient.m; sourceTree = "<group>"; };
 		96E0AAC81E6F978000911146 /* tinyJpg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = tinyJpg.jpg; path = data/tinyJpg.jpg; sourceTree = "<group>"; };
 		96E0AAC91E6F978000911146 /* tinyPng.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tinyPng.png; path = data/tinyPng.png; sourceTree = "<group>"; };
 		96E0AACC1E6F997000911146 /* 1280.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 1280.png; path = data/1280.png; sourceTree = "<group>"; };
@@ -240,7 +240,7 @@
 				969F7C501F16CF020062CE9E /* TestContacts.m */,
 				96E0AABB1E6F8D2400911146 /* TestImageAttachmentSending.m */,
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
-				961847251E96CF9500AB3D45 /* TestMessageSending.m */,
+				961847251E96CF9500AB3D45 /* TestConversation.m */,
 				96EBB5681E0877900048218C /* TestTemplate.m */,
 				967032D61F798DD100E87B3D /* TestUser.m */,
 				96C61E5F1E03434E00A38B5F /* TestURLParsing.m */,
@@ -274,8 +274,8 @@
 				9622B33E1DC2852200957C5F /* ZNGMockContactClient.m */,
 				9622B33F1DC2852200957C5F /* ZNGMockContactServiceClient.h */,
 				9622B3401DC2852200957C5F /* ZNGMockContactServiceClient.m */,
-				96E0AABD1E6F8DFD00911146 /* ZNGStubbedEventClient.h */,
-				96E0AABE1E6F8DFD00911146 /* ZNGStubbedEventClient.m */,
+				96E0AABD1E6F8DFD00911146 /* ZNGMockEventClient.h */,
+				96E0AABE1E6F8DFD00911146 /* ZNGMockEventClient.m */,
 				96E0AAB71E6F87CE00911146 /* ZNGMockMessageClient.h */,
 				96E0AAB81E6F87CE00911146 /* ZNGMockMessageClient.m */,
 				964E99C61DCAACA000A22CD5 /* ZNGMockNotificationsClient.h */,
@@ -611,12 +611,12 @@
 				96EBB5691E0877900048218C /* TestTemplate.m in Sources */,
 				9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */,
 				9622B3411DC2852200957C5F /* ZNGMockContactClient.m in Sources */,
-				961847261E96CF9500AB3D45 /* TestMessageSending.m in Sources */,
+				961847261E96CF9500AB3D45 /* TestConversation.m in Sources */,
 				9622B35A1DC2BA2600957C5F /* ZNGMockServiceClient.m in Sources */,
 				969F7C511F16CF020062CE9E /* TestContacts.m in Sources */,
 				96C61E601E03434E00A38B5F /* TestURLParsing.m in Sources */,
 				969AC8F41DC1600600D0E5D8 /* TestContactSession.m in Sources */,
-				96E0AABF1E6F8DFD00911146 /* ZNGStubbedEventClient.m in Sources */,
+				96E0AABF1E6F8DFD00911146 /* ZNGMockEventClient.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

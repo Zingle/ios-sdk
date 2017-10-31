@@ -10,18 +10,17 @@
 #import <ZingleSDK/ZingleAccountSession.h>
 #import <ZingleSDK/ZNGConversationServiceToContact.h>
 #import <ZingleSDK/ZNGSocketClient.h>
+#import <ZingleSDK/ZNGEvent.h>
 #import "ZNGMockMessageClient.h"
 #import "ZNGMockContactClient.h"
 #import "ZNGMockServiceClient.h"
-#import "ZNGStubbedEventClient.h"
+#import "ZNGMockEventClient.h"
 
-@interface TestMessageSending : XCTestCase
+@interface TestConversation : XCTestCase
 
 @end
 
-@implementation TestMessageSending
-{
-}
+@implementation TestConversation
 
 - (ZNGConversationServiceToContact *) freshConversation
 {
@@ -38,7 +37,7 @@
     ZNGService * service = [[ZNGService alloc] init];
     ZNGContact * contact = [[ZNGContact alloc] init];
     contact.contactId = @"1234-ABCDEFABCDEFABCD-EFABCDEFABCD-1234";
-    ZNGStubbedEventClient * eventClient = [[ZNGStubbedEventClient alloc] init];
+    ZNGMockEventClient * eventClient = [[ZNGMockEventClient alloc] init];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     
     return [[ZNGConversationServiceToContact alloc] initFromService:service toContact:contact withCurrentUserId:@"" usingChannel:channel withMessageClient:messageClient eventClient:eventClient contactClient:contactClient socketClient:socketClient];
@@ -73,7 +72,28 @@
     }];
     
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
-    messageClient.alwaysFail = NO;
+}
+
+- (void) testPendingEventImmediatelyPresent
+{
+    NSString * body = @"body of in progress message";
+    ZNGConversationServiceToContact * conversation = [self freshConversation];
+    
+    [self keyValueObservingExpectationForObject:conversation keyPath:NSStringFromSelector(@selector(events)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        for (ZNGEvent * event in conversation.events) {
+            if (([event.message.body isEqualToString:body]) && (event.sending)) {
+                return YES;
+            }
+        }
+        
+        return NO;
+    }];
+    
+    [conversation sendMessageWithBody:body imageData:nil uuid:nil success:nil failure:^(ZNGError * _Nullable error) {
+        XCTFail(@"Failure block was called when test should trigger success");
+    }];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
 }
 
 @end

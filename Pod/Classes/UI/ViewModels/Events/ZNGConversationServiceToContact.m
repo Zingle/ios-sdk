@@ -323,15 +323,10 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     [self appendEvents:@[outgoingNote]];
     
     [self.eventClient postInternalNote:noteString toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
-        self.loading = NO;
-        [self removeSendingEvents];
-        [self addSenderNameToEvents:@[note]];
-        [self appendEvents:@[note]];
-        self.totalEventCount = self.totalEventCount + 1;
-        
-        if (success != nil) {
-            success(status);
-        }
+        // Slight delay to allow our silly elastic server to index elastically
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self _loadRecentEventsErasing:NO removingSendingEvents:YES];
+        });
     } failure:^(ZNGError *error) {
         self.loading = NO;
         [self removeSendingEvents];

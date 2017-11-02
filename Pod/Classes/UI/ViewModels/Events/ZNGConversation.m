@@ -179,25 +179,25 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             if (status.totalRecords > self.totalEventCount) {
                 ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
-                [self _loadRecentEventsErasing:replace];
-            } else if ([self lastPageContainsMutableMessage]) {
+                [self _loadRecentEventsErasing:replace removingSendingEvents:NO];
+            } else if ([self lastPageContainsMutableEvent]) {
                 ZNGLogInfo(@"Our total event count has gone from %llu to %llu, and we have one or more deletable event types in data.\
-                           Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalPages);
-                [self _loadRecentEventsErasing:NO];
+                           Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalRecords);
+                [self _loadRecentEventsErasing:NO removingSendingEvents:NO];
             } else {
                 ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
         } failure:^(ZNGError *error) {
             ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
-            [self _loadRecentEventsErasing:replace];
+            [self _loadRecentEventsErasing:replace removingSendingEvents:NO];
         }];
     } else {
         // We have no special logic for this case.  Go get the data.
-        [self _loadRecentEventsErasing:replace];
+        [self _loadRecentEventsErasing:replace removingSendingEvents:NO];
     }
 }
 
-- (BOOL) lastPageContainsMutableMessage
+- (BOOL) lastPageContainsMutableEvent
 {
     NSInteger i = ([self.events count] <= self.pageSize) ? 0 : ([self.events count] - self.pageSize);
     
@@ -212,9 +212,11 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     return NO;
 }
 
-- (void)_loadRecentEventsErasing:(BOOL)replace
+- (void)_loadRecentEventsErasing:(BOOL)replace removingSendingEvents:(BOOL)removeSending
 {
-    if (self.loading) {
+    // Avoid double loading.  If our caller is relying on us to remove sending events on success or failure,
+    //  we will go ahead and double load.
+    if ((self.loading) && (!removeSending)) {
         ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
         return;
     }
@@ -223,6 +225,9 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     self.loading = YES;
     
     [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
+        if (removeSending) {
+            [self removeSendingEvents];
+        }
         
         if (!self.loadedInitialData) {
             self.loadedInitialData = YES;
@@ -241,6 +246,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         [self mergeNewDataAtTail:sortedEvents];
         self.loading = NO;
     } failure:^(ZNGError *error) {
+        if (removeSending) {
+            [self removeSendingEvents];
+        }
+        
         ZNGLogError(@"Unable to load events: %@", error);
         self.loading = NO;
     }];
@@ -305,7 +314,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
     
     // Take care of any mutable events
-    if ([self lastPageContainsMutableMessage]) {
+    if ([self lastPageContainsMutableEvent]) {
         [self mergeMutableEventsFromNewData:incomingEvents];
     }
     
@@ -845,29 +854,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         
         // Slight delay so we're not 2fast2furious for the server.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSDictionary * params = [self parametersForPageSize:self.pageSize pageIndex:1];
-            [self.eventClient eventListWithParameters:params success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
-                [self removeSendingEvents];
-                self.totalEventCount = status.totalRecords;
-                
-                // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
-                NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
-                
-                [self mergeNewDataAtTail:sortedEvents];
-                self.loading = NO;
-                
-                if (success) {
-                    success(status);
-                }
-            } failure:^(ZNGError *error) {
-                [self removeSendingEvents];
-                ZNGLogError(@"Message send reported success, but we were unable to load event data afterwards.  This is odd.  %@", error);
-                self.loading = NO;
-                
-                if (success) {
-                    success(status);
-                }
-            }];
+            [self _loadRecentEventsErasing:NO removingSendingEvents:YES];
         });
     } failure:^(ZNGError *error) {
         [self removeSendingEvents];

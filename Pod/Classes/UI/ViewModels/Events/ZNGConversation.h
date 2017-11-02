@@ -164,6 +164,8 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
 #pragma mark - Protected methods that can be called by subclasses
 - (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;
 
+- (void)_loadRecentEventsErasing:(BOOL)replace removingSendingEvents:(BOOL)removeSending;
+
 /**
  *  Removes any events with sending flags
  */

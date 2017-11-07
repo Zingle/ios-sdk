@@ -923,7 +923,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     
     // Set a timer to remove him after some time.
     // Use weak timers if they are available.
-    if ([NSTimer respondsToSelector:@selector(scheduledTimerWithTimeInterval:repeats:block:)]) {
+    if (@available(iOS 10.0, *)) {
         __weak ZNGConversation * weakSelf = self;
         newTimer = [NSTimer scheduledTimerWithTimeInterval:userTypingIndicatorLifetime repeats:NO block:^(NSTimer * _Nonnull timer) {
             [weakSelf _removeRespondingUser:pendingResponse];

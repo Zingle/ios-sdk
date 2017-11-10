@@ -179,21 +179,21 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             if (status.totalRecords > self.totalEventCount) {
                 ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
-                [self _loadRecentEventsErasing:replace removingSendingEvents:NO];
+                [self _loadRecentEventsErasing:replace removingSendingEvents:NO success:nil failure:nil];
             } else if ([self lastPageContainsMutableEvent]) {
                 ZNGLogInfo(@"Our total event count has gone from %llu to %llu, and we have one or more deletable event types in data.\
                            Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalRecords);
-                [self _loadRecentEventsErasing:NO removingSendingEvents:NO];
+                [self _loadRecentEventsErasing:NO removingSendingEvents:NO success:nil failure:nil];
             } else {
                 ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
         } failure:^(ZNGError *error) {
             ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
-            [self _loadRecentEventsErasing:replace removingSendingEvents:NO];
+            [self _loadRecentEventsErasing:replace removingSendingEvents:NO success:nil failure:nil];
         }];
     } else {
         // We have no special logic for this case.  Go get the data.
-        [self _loadRecentEventsErasing:replace removingSendingEvents:NO];
+        [self _loadRecentEventsErasing:replace removingSendingEvents:NO success:nil failure:nil];
     }
 }
 
@@ -212,7 +212,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     return NO;
 }
 
-- (void)_loadRecentEventsErasing:(BOOL)replace removingSendingEvents:(BOOL)removeSending
+- (void)_loadRecentEventsErasing:(BOOL)replace removingSendingEvents:(BOOL)removeSending  success:(void (^)(ZNGStatus* status))success failure:(void (^) (ZNGError *error))failure
 {
     // Avoid double loading.  If our caller is relying on us to remove sending events on success or failure,
     //  we will go ahead and double load.
@@ -245,6 +245,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         
         [self mergeNewDataAtTail:sortedEvents];
         self.loading = NO;
+        
+        if (success) {
+            success(status);
+        }
     } failure:^(ZNGError *error) {
         if (removeSending) {
             [self removeSendingEvents];
@@ -252,6 +256,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         
         ZNGLogError(@"Unable to load events: %@", error);
         self.loading = NO;
+        
+        if (failure != nil) {
+            failure(error);
+        }
     }];
 }
 
@@ -700,7 +708,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                    imageData:(nullable NSArray<NSData *> *)imageDatas
                         uuid:(NSString *)uuid
                      success:(void (^_Nullable)(ZNGStatus* _Nullable status))success
-                     failure:(void (^_Nullable) (ZNGError * _Nullable error))failure
+                     failure:(void (^_Nullable)(ZNGError * _Nullable error))failure
 {
     ZNGNewMessage *newMessage = [self freshMessage];
     
@@ -854,7 +862,17 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         
         // Slight delay so we're not 2fast2furious for the server.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self _loadRecentEventsErasing:NO removingSendingEvents:YES];
+            [self _loadRecentEventsErasing:NO removingSendingEvents:YES success:^(ZNGStatus * _Nullable status) {
+                if (success != nil) {
+                    success(status);
+                }
+            } failure:^(ZNGError * _Nullable error) {
+                ZNGLogWarn(@"Message send succeeded, but retrieving data afterward failed.  This is probably fine: %@", error);
+                
+                if (success != nil) {
+                    success(status);
+                }
+            }];
         });
     } failure:^(ZNGError *error) {
         [self removeSendingEvents];

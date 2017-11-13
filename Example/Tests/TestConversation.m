@@ -162,9 +162,17 @@
     // Remove the delayed message
     eventClient.events = [[oneNormalOneNewMessage reverseObjectEnumerator] allObjects];
     
-    [self keyValueObservingExpectationForObject:conversation keyPath:NSStringFromSelector(@selector(events)) expectedValue:oneNormalOneNewMessage];
+    [self keyValueObservingExpectationForObject:conversation keyPath:NSStringFromSelector(@selector(events)) handler:^BOOL(ZNGConversationServiceToContact * _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return ([observedObject.events isEqualToArray:oneNormalOneNewMessage]);
+    }];
+    
     [conversation loadRecentEventsErasingOlderData:NO];
-    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    [self waitForExpectationsWithTimeout:3.0 handler:^(NSError * _Nullable error) {
+        if (error != nil) {
+            NSLog(@"Actual value of events array is: %@", conversation.events);
+        }
+    }];
 }
 
 // TODO: Address the following two unit tests that have never passed.

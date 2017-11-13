@@ -130,6 +130,43 @@
     [self waitForExpectationsWithTimeout:3.0 handler:nil];
 }
 
+- (void) testDeletedDelayedMessageDisappearsWithSimultaneousNewMessageAppearing
+{
+    ZNGConversationServiceToContact * conversation = [self freshConversation];
+    ZNGMockEventClient * eventClient = (ZNGMockEventClient *)conversation.eventClient;
+    
+    ZNGEvent * event1 = [[ZNGEvent alloc] init];
+    event1.eventId = @"1234-123412341234-123412341234-1234";
+    event1.body = @"First message";
+    ZNGEvent * event2 = [[ZNGEvent alloc] init];
+    ZNGMessage * message2 = [[ZNGMessage alloc] init];
+    NSString * message2Body = @"A second message";
+    message2.isDelayed = YES;
+    message2.body = message2Body;
+    event2.eventId = @"5678-567856785687-567856785678-5678";
+    event2.body = message2Body;
+    event2.message = message2;
+    event2.eventType = @"message";
+    ZNGEvent * event3 = [[ZNGEvent alloc] init];
+    event3.eventId = @"3333-33333333-333333333-3333";
+    event3.body = @"A third message";
+    
+    NSArray<ZNGEvent *> * oneNormalOneDelayed = @[event1, event2];
+    NSArray<ZNGEvent *> * oneNormalOneNewMessage = @[event1, event3];
+    eventClient.events = [[oneNormalOneDelayed reverseObjectEnumerator] allObjects];
+    
+    [self keyValueObservingExpectationForObject:conversation keyPath:NSStringFromSelector(@selector(events)) expectedValue:oneNormalOneDelayed];
+    [conversation loadRecentEventsErasingOlderData:YES];
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+    
+    // Remove the delayed message
+    eventClient.events = [[oneNormalOneNewMessage reverseObjectEnumerator] allObjects];
+    
+    [self keyValueObservingExpectationForObject:conversation keyPath:NSStringFromSelector(@selector(events)) expectedValue:oneNormalOneNewMessage];
+    [conversation loadRecentEventsErasingOlderData:NO];
+    [self waitForExpectationsWithTimeout:3.0 handler:nil];
+}
+
 // TODO: Address the following two unit tests that have never passed.
 
 /**

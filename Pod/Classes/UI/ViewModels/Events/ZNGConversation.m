@@ -181,9 +181,13 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace removingSendingEvents:NO success:nil failure:nil];
             } else if ([self lastPageContainsMutableEvent]) {
-                ZNGLogInfo(@"Our total event count has gone from %llu to %llu, and we have one or more deletable event types in data.\
+                // We are going to load our most recent page of data.  If our event count has decreased, we will also blow away any
+                //  existing data at the same time.
+                BOOL countDecreased = (status.totalRecords < self.totalEventCount);
+                
+                ZNGLogInfo(@"We have one or more deletable event types in data.  Total event count was %llu and is now %llu. \
                            Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalRecords);
-                [self _loadRecentEventsErasing:NO removingSendingEvents:NO success:nil failure:nil];
+                [self _loadRecentEventsErasing:countDecreased removingSendingEvents:NO success:nil failure:nil];
             } else {
                 ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }

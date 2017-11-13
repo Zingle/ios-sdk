@@ -270,16 +270,27 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (void) mergeMutableEventsFromNewData:(NSArray<ZNGEvent *> *)incomingEvents
 {
     NSInteger startingIndex = ([self.events count] <= self.pageSize) ? 0 : ([self.events count] - self.pageSize);
+    BOOL foundPreviousEventInNewData = NO;
+    NSMutableArray<ZNGEvent *> * eventsToDelete = [[NSMutableArray alloc] init];
 
     for (NSInteger i = startingIndex; i < [self.events count]; i++) {
         ZNGEvent * oldEvent = self.events[i];
         NSUInteger newEventIndex = [incomingEvents indexOfObject:oldEvent];
         
         if (newEventIndex == NSNotFound) {
-            // There was no previous data for this event
+            // The old event from our data is not present in this new data.  Was it deleted?
+            // Unless we are looking at the case of an event slipping off the most recent page of data, the event is gone.
+            
+            if (foundPreviousEventInNewData) {
+                // We found the last event in this new data.  The lack of this event in new data indicates that the event is deleted.
+                [eventsToDelete addObject:oldEvent];
+            }
+            
+            foundPreviousEventInNewData = NO;
             continue;
         }
         
+        foundPreviousEventInNewData = YES;
         ZNGEvent * newEvent = incomingEvents[newEventIndex];
         
         if ((![newEvent isMutable]) && (![oldEvent isMutable])) {
@@ -311,6 +322,30 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             NSIndexSet * viewModelIndexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange([oldViewModelIndexes firstIndex], [newViewModels count])];
             [mutableViewModels insertObjects:newViewModels atIndexes:viewModelIndexes];
         }
+    }
+    
+    if ([eventsToDelete count] > 0) {
+        [self _removeDeletedEvents:eventsToDelete];
+    }
+}
+
+- (void) _removeDeletedEvents:(NSArray<ZNGEvent *> *)eventsToDelete
+{
+    for (ZNGEvent * event in eventsToDelete) {
+        NSMutableArray<ZNGEvent *> * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
+        NSMutableArray<ZNGEventViewModel *> * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
+        
+        NSMutableIndexSet * viewModelIndexesToDelete = [[NSMutableIndexSet alloc] init];
+        
+        [mutableViewModels enumerateObjectsUsingBlock:^(ZNGEventViewModel * _Nonnull viewModel, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([viewModel.event isEqual:event]) {
+                // This view model corresponds to the event we are deleting
+                [viewModelIndexesToDelete addIndex:idx];
+            }
+        }];
+        
+        [mutableEvents removeObject:event];
+        [mutableViewModels removeObjectsAtIndexes:viewModelIndexesToDelete];
     }
 }
 

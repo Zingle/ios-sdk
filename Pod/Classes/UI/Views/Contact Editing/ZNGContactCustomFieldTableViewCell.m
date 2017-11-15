@@ -153,10 +153,15 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeTime;
-        datePicker.timeZone = [NSTimeZone localTimeZone];
         datePicker.minuteInterval = 5;
         [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
+        
+        // Immediately changing a time picker's time zone causes the UIDatePicker to be disabled and unusable for Apple reasons.
+        // This wonderfully intuitive and not at all scary delay prevents the UIDatePicker from committing seppuku.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            datePicker.timeZone = [NSTimeZone localTimeZone];
+        });
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
@@ -356,11 +361,40 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) textFieldDidBeginEditing:(UITextField *)textField
 {
-    if (([self.textField.inputView isKindOfClass:[UIPickerView class]]) || ([self.textField.inputView isKindOfClass:[UIDatePicker class]])) {
+    BOOL inputViewIsPicker = ([self.textField.inputView isKindOfClass:[UIPickerView class]]);
+    BOOL inputViewIsDatePicker = ([self.textField.inputView isKindOfClass:[UIDatePicker class]]);
+    
+    if ((inputViewIsPicker) || (inputViewIsDatePicker)) {
         // This is a picker type field.  If no value is selected, we will select the first value.
         if ([self.customFieldValue.value length] == 0) {
             [self selectInitialValue];
         }
+
+        if (inputViewIsDatePicker) {
+            [self repairStupidBrokenDatePicker:(UIDatePicker *)self.textField.inputView];
+        }
+    }
+}
+
+// There is some Apple-style wackiness going on in iOS 11 where time UIDatePickers become disabled and unusable
+//  if their date value is changed or the time zone changed in certain circumstances.  Flopping the date picker
+//  mode back and forth resolves this, though it also blows away the minuteInterval property.
+// The life of an iOS developer is one of shame and terror.
+- (void) repairStupidBrokenDatePicker:(UIDatePicker *)datePicker
+{
+    if (datePicker.datePickerMode == UIDatePickerModeTime) {
+        // As an extra nugget of happiness and sanity, removing this 0 second delay causes the date picker to freeze
+        //  itself, but only when a date (not time) field is immediately above the time field, and the IQKeyboardManager-Swift
+        //  down arrow is used to access this time field.  It does not happen upward, only downward, and does not happen
+        //  for custom fields of any other type.
+        // Delaying this magical date picker mode toggle to the next run loop cycle fixes this.
+        // I think I need a shower.
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            NSInteger interval = datePicker.minuteInterval;
+            datePicker.datePickerMode = UIDatePickerModeDate;
+            datePicker.datePickerMode = UIDatePickerModeTime;
+            datePicker.minuteInterval = interval;
+        });
     }
 }
 
@@ -379,14 +413,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     NSDate * date = [NSDate date];
     [self selectTime:date];
-    datePicker.date = date;
 }
 
 - (void) selectInitialDate
 {
     NSDate * date = [NSDate date];
     [self selectDate:date];
-    datePicker.date = date;
 }
 
 - (void) selectInitialPickerValue

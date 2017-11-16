@@ -29,7 +29,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGSocketClient
 {
-    SocketIOClient * socketClient;
+    SocketManager * socketManager;
     
     NSString * authPath;
     NSString * nodePath;
@@ -77,7 +77,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (BOOL) active
 {
-    return ((socketClient.status == SocketIOClientStatusConnected) || (socketClient.status == SocketIOClientStatusConnecting) || (initializingSession));
+    int status = [socketManager status];
+    return ((status == SocketIOStatusConnected) || (status == SocketIOStatusConnecting) || (initializingSession));
 }
 
 - (void) setActiveConversation:(ZNGConversation *)activeConversation
@@ -143,7 +144,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     NSNumber * shouldLog = (zngLogLevel & DDLogFlagDebug) ? @YES : @NO;
     
-    socketClient = [[SocketIOClient alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : shouldLog }];
+    socketManager = [[SocketManager alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : shouldLog }];
+    SocketIOClient * socketClient = [socketManager defaultSocket];
     
     __weak ZNGSocketClient * weakSelf = self;
     
@@ -195,7 +197,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     authFailureCount = 0;
     [authRetryTimer invalidate];
     authRetryTimer = nil;
-    [socketClient disconnect];
+    [socketManager disconnect];
 }
 
 - (void) subscribeForFeedUpdatesForConversation:(ZNGConversation *)conversation
@@ -219,7 +221,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     ZNGLogDebug(@"Setting active feed to %@", feedId);
-    [socketClient emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
+    [[socketManager defaultSocket] emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
 }
 
 - (void) unsubscribeFromFeedUpdates
@@ -259,7 +261,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     payload[@"user"] = user;
     
     ZNGLogInfo(@"Emitting %@ for feed %@", event, conversation.contact.contactId);
-    [socketClient emit:event with:@[payload]];
+    [[socketManager defaultSocket] emit:event with:@[payload]];
 }
 
 - (void) userClearedInput
@@ -281,7 +283,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self.connected = YES;
     
     ZNGLogInfo(@"Web socket connected.");
-    [socketClient emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
+    [[socketManager defaultSocket] emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
 }
 
 - (void) socketDidBindNodeController
@@ -316,7 +318,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         if ([errorString.lowercaseString containsString:@"session became invalid"]) {
             authSucceeded = NO;
             initializingSession = YES;
-            [socketClient disconnect];
+            [socketManager disconnect];
             
             authFailureCount++;
             [authRetryTimer invalidate];

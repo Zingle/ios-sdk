@@ -27,9 +27,9 @@ PODS:
     - FLAnimatedImage (~> 1.0)
     - SDWebImage/Core
   - Shimmer (1.0.2)
-  - Socket.IO-Client-Swift (11.0.0):
-    - StarscreamSocketIO (~> 8.0.1)
-  - StarscreamSocketIO (8.0.1)
+  - Socket.IO-Client-Swift (13.0.1):
+    - Starscream (~> 3.0.2)
+  - Starscream (3.0.2)
   - ZingleSDK (1.1.0):
     - AFNetworking/NSURLSession
     - Analytics (~> 3.0)
@@ -40,7 +40,7 @@ PODS:
     - MGSwipeTableCell
     - SDWebImage/GIF
     - Shimmer
-    - Socket.IO-Client-Swift
+    - Socket.IO-Client-Swift (~> 13.0)
 
 DEPENDENCIES:
   - ZingleSDK (from `../`)
@@ -61,9 +61,9 @@ SPEC CHECKSUMS:
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
-  Socket.IO-Client-Swift: 9cafa4459be23886c231942baeebb0df94f3989e
-  StarscreamSocketIO: 821a1a2597cc4735919fd5d7683a85c14b81bb8c
-  ZingleSDK: ca04674852009cb7573510191e62c5d4d06d3739
+  Socket.IO-Client-Swift: 7055c89b7a9926b343194c4cac75998329c4a95a
+  Starscream: b512c62f6706421221b5ceb2ba01a9f58aca5bea
+  ZingleSDK: e304ba437ec8ca6cbe57736584a405a4ccaf3bda
 
 PODFILE CHECKSUM: c90e2fbda148da25276b0792300e10f8899e396a
 

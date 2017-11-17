@@ -95,7 +95,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         if (range.length > 0) {
             if (action == @selector(cut:) || action == @selector(copy:) ||
                 action == @selector(select:) || action == @selector(selectAll:) ||
-                action == @selector(paste:) || action ==@selector(delete:)) {
+                action == @selector(paste:)) {
                 canPerform = YES;
             }
         } else {

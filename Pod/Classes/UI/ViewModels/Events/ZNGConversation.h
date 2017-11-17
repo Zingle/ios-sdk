@@ -20,6 +20,7 @@
 @class ZingleSession;
 @class ZNGEventClient;
 @class ZNGSocketClient;
+@class ZNGPendingResponseOrNote;
 
 extern NSString * _Nonnull const ZNGConversationParticipantTypeContact;
 extern NSString * _Nonnull const ZNGConversationParticipantTypeService;
@@ -97,7 +98,7 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  *  If any other users are replying to this conversation, ZNGUser objects corresponding to each of them will be in this array.
  *  This will normally be an empty set, indicating no other replying users.
  */
-@property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGUser *> * replyingUsers;
+@property (nonatomic, readonly, nonnull) NSOrderedSet<ZNGPendingResponseOrNote *> * pendingResponses;
 
 /**
  *  Initializing without a ZNGMessageClient is disallowed
@@ -158,7 +159,7 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
 - (nullable ZNGMessage *) mostRecentMessage;
 
 #pragma mark - Typing indicator
-- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user;
+- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user isInternalNote:(BOOL)isNote;
 
 #pragma mark - Protected methods that can be called by subclasses
 - (void) appendEvents:(nonnull NSArray<ZNGEvent *> *)events;

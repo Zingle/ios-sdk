@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <JSQMessagesViewController/JSQMessageData.h>
 
 @protocol ZNGMessageData <JSQMessageData>
 

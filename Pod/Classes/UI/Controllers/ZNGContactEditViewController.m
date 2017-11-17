@@ -627,7 +627,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
                 channel = phoneNumberChannels[indexPath.row - [nonPhoneNumberChannels count]];
             }
             
-            BOOL locked = [self.contact editingChannelIsLocked:channel];
+            BOOL channelTypeIsHumanReadable = [channel.channelType valueIsHumanReadable];
+            BOOL locked = ((!channelTypeIsHumanReadable) || ([self.contact editingChannelIsLocked:channel]));
             
             if ([channel isPhoneNumber]) {
                 ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];

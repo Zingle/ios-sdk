@@ -20,6 +20,7 @@
 #import <ImageIO/ImageIO.h>
 #import "UIImage+animatedGIF.h"
 #import "NSData+ImageType.h"
+#import "ZNGPendingResponseOrNote.h"
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
@@ -914,7 +915,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 }
 
 #pragma mark - Typing indicator
-- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user
+- (void) otherUserIsReplying:(ZNGUser * _Nonnull)user isInternalNote:(BOOL)isNote
 {
     if ([user.userId length] == 0) {
         ZNGLogError(@"%s called with no user ID: %@", __PRETTY_FUNCTION__, user);
@@ -922,8 +923,10 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
 
     // Add the dude
-    NSMutableOrderedSet<ZNGUser *> * mutableRespondingUsers = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(replyingUsers))];
-    [mutableRespondingUsers addObject:user];
+    NSString * eventType = (isNote) ? ZNGPendingResponseTypeInternalNote : ZNGPendingResponseTypeMessage;
+    ZNGPendingResponseOrNote * pendingResponse = [[ZNGPendingResponseOrNote alloc] initWithUser:user eventType:eventType];
+    NSMutableOrderedSet<ZNGPendingResponseOrNote *> * mutableRespondingUsers = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(pendingResponses))];
+    [mutableRespondingUsers addObject:pendingResponse];
     
     // Cancel any timer that would have removed him from an earlier notification
     NSTimer * previousTimerThisUser = [typingIndicatorUserExpirationTimers objectForKey:user.userId];
@@ -933,15 +936,15 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     
     // Set a timer to remove him after some time.
     // Use weak timers if they are available.
-    if ([NSTimer respondsToSelector:@selector(scheduledTimerWithTimeInterval:repeats:block:)]) {
+    if (@available(iOS 10.0, *)) {
         __weak ZNGConversation * weakSelf = self;
         newTimer = [NSTimer scheduledTimerWithTimeInterval:userTypingIndicatorLifetime repeats:NO block:^(NSTimer * _Nonnull timer) {
-            [weakSelf _removeRespondingUser:user];
+            [weakSelf _removeRespondingUser:pendingResponse];
         }];
     } else {
         // We cannot easily use a weak timer, so we'll use a normal timer.  This means that we will persist for, at most, five seconds beyond
         //  when we would normally be deallocated.
-        newTimer = [NSTimer scheduledTimerWithTimeInterval:userTypingIndicatorLifetime target:self selector:@selector(_removeRespondingUserFromTimer:) userInfo:user repeats:NO];
+        newTimer = [NSTimer scheduledTimerWithTimeInterval:userTypingIndicatorLifetime target:self selector:@selector(_removeRespondingUserFromTimer:) userInfo:pendingResponse repeats:NO];
     }
     
     [typingIndicatorUserExpirationTimers setObject:newTimer forKey:user.userId];
@@ -949,14 +952,14 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 
 - (void) _removeRespondingUserFromTimer:(NSTimer *)timer
 {
-    ZNGUser * user = timer.userInfo;
-    [self _removeRespondingUser:user];
+    ZNGPendingResponseOrNote * pendingResponse = timer.userInfo;
+    [self _removeRespondingUser:pendingResponse];
 }
 
-- (void) _removeRespondingUser:(ZNGUser *)user
+- (void) _removeRespondingUser:(ZNGPendingResponseOrNote *)pendingResponse
 {
-    NSMutableOrderedSet<ZNGUser *> * mutableRespondingUsers = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(replyingUsers))];
-    [mutableRespondingUsers removeObject:user];
+    NSMutableOrderedSet<ZNGPendingResponseOrNote *> * mutableRespondingUsers = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(pendingResponses))];
+    [mutableRespondingUsers removeObject:pendingResponse];
 }
 
 #pragma mark - Protected/Abstract methods

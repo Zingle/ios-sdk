@@ -75,7 +75,6 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 @property (nonatomic, strong) JSQMessagesBubbleImage * outgoingBubbleMediaMaskData;
 @property (nonatomic, strong) JSQMessagesBubbleImage * incomingBubbleMediaMaskData;
-@property (nonatomic, strong) JSQMessagesBubbleImage * intenralNoteBubbleImageData;
 @property (nonatomic, assign) BOOL isVisible;
 
 /**
@@ -251,7 +250,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     JSQMessagesBubbleImageFactory * bubbleFactory = [[JSQMessagesBubbleImageFactory alloc] initWithBubbleImage:bubbleImage capInsets:UIEdgeInsetsZero];
     self.outgoingBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.outgoingBubbleColor];
     self.incomingBubbleImageData = [bubbleFactory incomingMessagesBubbleImageWithColor:self.incomingBubbleColor];
-    self.intenralNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
+    self.internalNoteBubbleImageData = [bubbleFactory outgoingMessagesBubbleImageWithColor:self.internalNoteColor];
     self.outgoingBubbleMediaMaskData = [bubbleFactory outgoingMessagesBubbleImageWithColor:[UIColor blackColor]];
     self.incomingBubbleMediaMaskData = [bubbleFactory incomingMessagesBubbleImageWithColor:[UIColor blackColor]];
     
@@ -928,6 +927,21 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     picker.delegate = self;
     picker.allowsEditing = NO;
     picker.sourceType = cameraMode ? UIImagePickerControllerSourceTypeCamera : UIImagePickerControllerSourceTypePhotoLibrary;
+    
+    // For iPads showing the photo library, the UIImagePickerController must be presented as a popover (per UIImagePickerController documentation).
+    if ((!cameraMode) && ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad)) {
+        UIView * sourceView = self.inputToolbar.contentView;
+        
+        if ([sourceView isKindOfClass:[ZNGServiceConversationToolbarContentView class]]) {
+            ZNGServiceConversationToolbarContentView * toolbarContentView = (ZNGServiceConversationToolbarContentView *)sourceView;
+            sourceView = toolbarContentView.imageButton;
+        }
+        
+        picker.modalPresentationStyle = UIModalPresentationPopover;
+        picker.popoverPresentationController.sourceView = sourceView;
+        picker.popoverPresentationController.sourceRect = sourceView.bounds;
+    }
+    
     [self presentViewController:picker animated:YES completion:nil];
 }
 
@@ -969,23 +983,64 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) attachImageFromPhotoLibraryWithInfo:(NSDictionary<NSString *,id> *)info
 {
+    // Retrieve the selected image to verify that we are starting with something.
+    // This UIImage may be insufficient, such as is the case with animated GIFs (where we only get one frame here).
     UIImage * image = info[UIImagePickerControllerOriginalImage];
+    
+    if (image == nil) {
+        ZNGLogError(@"The user selected an image, but no image was found in the callback info dictionary.  What are we supposed to do now?");
+        [self showImageAttachmentError];
+        return;
+    }
+    
+    PHAsset * asset;
+
+    // If we're in iOS 11 and have already sought photo library access permission, we will immediately get the PHAsset here.
+    if (@available(iOS 11.0, *)) {
+        asset = info[UIImagePickerControllerPHAsset];
+    }
+    
+    if (asset != nil) {
+        // That was easy
+        [self attachImageWithAsset:asset];
+        return;
+    }
+    
+    // Otherwise, we are either pre iOS 11 or do not yet have permission.  Either way, we get to go on a trip to PHPhotoLibrary town.
+    // First, ensure that we have an image URL that we can later use with PHImageManager.
+    // Note that UIImagePickerControllerReferenceURL is supposed to be deprecated in iOS 11, but I cannot find any other way to access
+    //  the PHAsset passed in the image picker callback the very first time it is done.  The alternative is to ask the user for permission
+    //  for photo library access up front before an image is selected.  That would avoid a deprecated dictionary key at the expense of a
+    //  slightly worse user experience.
     NSURL * url = info[UIImagePickerControllerReferenceURL];
-    
-    if ((image == nil) || (url == nil)) {
-        ZNGLogError(@"No image data was found after the user selected an image.");
+
+    if (url == nil) {
+        ZNGLogError(@"The user selected an image, but we did not receieve a reference URL to retrieve it.  Drat.");
         [self showImageAttachmentError];
         return;
     }
     
-    PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
+    // In the cases that we already have permission, this extra call to request permission will have no visible effect.
+    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+        if (status != PHAuthorizationStatusAuthorized) {
+            ZNGLogError(@"The user has not granted us permission to use an image from their library.  Silly human.");
+            return;
+        }
     
-    if (asset == nil) {
-        // We were unable to retrieve a PHAsset from the supplied image.
-        [self showImageAttachmentError];
-        return;
-    }
-    
+        PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
+        
+        if (asset == nil) {
+            ZNGLogError(@"Unable to retrieve the selected image asset from disk.  Odd.");
+            [self showImageAttachmentError];
+            return;
+        }
+        
+        [self attachImageWithAsset:asset];
+    }];
+}
+
+- (void) attachImageWithAsset:(PHAsset *)asset
+{
     PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
     options.synchronous = NO;
     options.networkAccessAllowed = NO;
@@ -1232,7 +1287,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     if ([event isNote]) {
-        return self.intenralNoteBubbleImageData;
+        return self.internalNoteBubbleImageData;
     }
     
     return self.incomingBubbleImageData;
@@ -1475,7 +1530,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        cell.alpha = (event.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        CGFloat contentAlpha = (event.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        cell.messageBubbleImageView.alpha = contentAlpha;
+        cell.mediaView.alpha = contentAlpha;
         
         if (event.message.isDelayed) {
             [indexPathsOfVisibleCellsWithRelativeTimesToRefresh addObject:indexPath];

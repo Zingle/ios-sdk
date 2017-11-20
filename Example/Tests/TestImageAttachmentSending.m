@@ -13,7 +13,7 @@
 #import "ZNGMockMessageClient.h"
 #import "ZNGMockContactClient.h"
 #import "ZNGMockServiceClient.h"
-#import "ZNGStubbedEventClient.h"
+#import "ZNGMockEventClient.h"
 
 @interface TestImageAttachmentSending : XCTestCase
 
@@ -42,7 +42,7 @@
     ZNGService * service = [[ZNGService alloc] init];
     ZNGContact * contact = [[ZNGContact alloc] init];
     contact.contactId = @"1234-ABCDEFABCDEFABCD-EFABCDEFABCD-1234";
-    ZNGStubbedEventClient * eventClient = [[ZNGStubbedEventClient alloc] init];
+    ZNGMockEventClient * eventClient = [[ZNGMockEventClient alloc] init];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     
     conversation = [[ZNGConversationServiceToContact alloc] initFromService:service toContact:contact withCurrentUserId:@"" usingChannel:channel withMessageClient:messageClient eventClient:eventClient contactClient:contactClient socketClient:socketClient];

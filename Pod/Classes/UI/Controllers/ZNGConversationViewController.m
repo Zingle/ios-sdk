@@ -1320,7 +1320,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     // If we are nearing the top of our loaded data and more data exists, go grab it
     NSUInteger proximityToTopOfDataToTriggerMoreDataLoad = 5;
-    if ((hasDisplayedInitialData) && (moreMessagesAvailableRemotely) && (!self.conversation.loading) && (indexPath.row <= proximityToTopOfDataToTriggerMoreDataLoad)) {
+    if ((hasDisplayedInitialData) && (moreMessagesAvailableRemotely) && (!self.conversation.loading) && (indexPath.section == 0) && (indexPath.row <= proximityToTopOfDataToTriggerMoreDataLoad)) {
         ZNGLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
         [self.conversation loadOlderData];
     }

@@ -341,6 +341,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                 }
                 
                 if (!(operation.cancelled)) {
+                    [self _removeLoadingPage:page];
                     [weakSelf mergeNewData:contacts withStatus:status];
                 }
                 dispatch_semaphore_signal(semaphore);
@@ -389,13 +390,16 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             
             if (strongSelf != nil) {
                 strongSelf->lastLocallyRemovedContact = nil;
-                
-                NSMutableIndexSet * mutableLoadingPages = [strongSelf->loadingPages mutableCopy];
-                [mutableLoadingPages removeIndexes:pages];
-                strongSelf->loadingPages = mutableLoadingPages;
             }
         });
     }];
+}
+
+- (void) _removeLoadingPage:(NSUInteger)page
+{
+    NSMutableIndexSet * mutableLoadingPages = [loadingPages mutableCopy];
+    [mutableLoadingPages removeIndex:page];
+    loadingPages = mutableLoadingPages;
 }
 
 - (void) mergeNewData:(NSArray<ZNGContact *> *)incomingContacts withStatus:(ZNGStatus *)status

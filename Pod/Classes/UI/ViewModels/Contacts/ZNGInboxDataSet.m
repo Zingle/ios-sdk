@@ -329,7 +329,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = @(page);
             
-            ZNGLogInfo(@"%@ (%p) is loading page #%llu of data...", [weakSelf class], weakSelf, (unsigned long long)page);
+            ZNGLogInfo(@"%@ (%p) is loading page #%llu/%llu of data...", [weakSelf class], weakSelf, (unsigned long long)page, (unsigned long long)self.totalPageCount);
             
             [strongContactClient contactListWithParameters:parameters success:^(NSArray<ZNGContact *> *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;

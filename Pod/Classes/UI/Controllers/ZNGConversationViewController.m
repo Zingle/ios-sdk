@@ -1527,7 +1527,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     NSString * attachmentName = [viewModel attachmentName];
     
-    if ([attachmentName length] == 0) {
+    if (([attachmentName length] == 0) || (viewModel.attachmentStatus != ZNGEventViewModelAttachmentStatusAvailable)) {
         return;
     }
     

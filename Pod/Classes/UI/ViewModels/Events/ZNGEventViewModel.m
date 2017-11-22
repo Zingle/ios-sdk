@@ -27,26 +27,30 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
         _event = event;
         _index = index;
         
-        [self sanityCheckAttachment];
+        if (([self attachmentName] != nil) &&  (![self attachmentIsSupported])) {
+            self.attachmentStatus = ZNGEventViewModelAttachmentStatusUnrecognizedType;
+        }
     }
     
     return self;
 }
 
-- (void) sanityCheckAttachment
+- (BOOL) attachmentIsSupported
 {
     NSString * attachmentPath = [self attachmentName];
     
     if (attachmentPath == nil) {
-        return;
+        return NO;
     }
     
     NSString * extension = [[[self attachmentName] pathExtension] lowercaseString];
 
     if (![[self recognizedAttachmentFileExtensions] containsObject:extension]) {
         ZNGLogInfo(@"Unsupported file extension (%@) for attachment: %@", extension, attachmentPath);
-        self.attachmentStatus = ZNGEventViewModelAttachmentStatusUnrecognizedType;
+        return NO;
     }
+    
+    return YES;
 }
 
 - (NSArray<NSString *> *) recognizedAttachmentFileExtensions
@@ -159,7 +163,7 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     }
     
     CGSize previouslyKnownImageSize = [self mediaViewDisplaySize];
-    NSURL * attachmentURL = [NSURL URLWithString:[self attachmentName]];
+    NSURL * attachmentURL = ([self attachmentIsSupported]) ? [NSURL URLWithString:[self attachmentName]] : nil;
 
     FLAnimatedImageView * animatedImageView = [[FLAnimatedImageView alloc] init];
     animatedImageView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
@@ -189,7 +193,7 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:ZNGEventViewModelImageSizeChangedNotification object:self];
             }
-        } else {
+        } else if (imageURL != nil) {
             ZNGLogInfo(@"Setting event view model image view to %@ failed: %@", imageURL, error);
             self.attachmentStatus = ZNGEventViewModelAttachmentStatusFailed;
             

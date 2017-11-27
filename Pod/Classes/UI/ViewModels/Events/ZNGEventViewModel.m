@@ -37,6 +37,10 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
 
 - (BOOL) attachmentIsSupported
 {
+    if ([self outgoingImageAttachment] != nil) {
+        return YES;
+    }
+    
     NSString * attachmentPath = [self attachmentName];
     
     if (attachmentPath == nil) {
@@ -104,6 +108,15 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     return self.event.message.attachments[self.index];
 }
 
+- (UIImage *) outgoingImageAttachment
+{
+    if (self.index >= [self.event.message.outgoingImageAttachments count]) {
+        return nil;
+    }
+    
+    return self.event.message.outgoingImageAttachments[self.index];
+}
+
 #pragma mark - Image attachment sizing
 - (CGSize) maximumImageDisplaySize
 {
@@ -153,9 +166,10 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
 - (UIView *)mediaView
 {
     // If this is an outgoing image, we will return a UIImageView containing it.
-    if ([self.event.message.outgoingImageAttachments count] > self.index) {
-        UIImage * image = self.event.message.outgoingImageAttachments[self.index];
-        return [[UIImageView alloc] initWithImage:image];
+    UIImage * outgoingAttachmenmt = [self outgoingImageAttachment];
+    
+    if (outgoingAttachmenmt != nil) {
+        return [[UIImageView alloc] initWithImage:outgoingAttachmenmt];
     }
     
     if (([[self attachmentName] length] == 0) && ([self.event.message.outgoingImageAttachments count] == 0)) {

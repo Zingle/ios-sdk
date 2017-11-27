@@ -27,7 +27,9 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
         _event = event;
         _index = index;
         
-        if (([self attachmentName] != nil) &&  (![self attachmentIsSupported])) {
+        if ([self outgoingImageAttachment] != nil) {
+            self.attachmentStatus = ZNGEventViewModelAttachmentStatusAvailable;
+        } else if (([self attachmentName] != nil) &&  (![self attachmentIsSupported])) {
             self.attachmentStatus = ZNGEventViewModelAttachmentStatusUnrecognizedType;
         }
     }

@@ -8,6 +8,8 @@
 
 #import <XCTest/XCTest.h>
 #import <ZingleSDK/ZingleAccountSession.h>
+#import <ZingleSDK/ZNGEventViewModel.h>
+#import <ZingleSDK/ZNGEvent.h>
 #import <ZingleSDK/ZNGConversationServiceToContact.h>
 #import <ZingleSDK/ZNGSocketClient.h>
 #import "ZNGMockMessageClient.h"
@@ -21,14 +23,19 @@
 
 @implementation TestImageAttachmentSending
 {
-    ZNGMockMessageClient * messageClient;
-    ZNGConversationServiceToContact * conversation;
+    ZNGMockMessageClient * sharedMessageClient;
+    ZNGConversationServiceToContact * sharedConversation;
 }
 
 - (void)setUp
 {
     [super setUp];
-    
+    sharedConversation = [self freshConversation];
+    sharedMessageClient = (ZNGMockMessageClient *)sharedConversation.messageClient;
+}
+
+- (ZNGConversationServiceToContact *) freshConversation
+{
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
     ZNGSocketClient * socketClient = [[ZNGSocketClient alloc] initWithSession:session];
     
@@ -37,7 +44,7 @@
     channelType.channelTypeId = @"1111-22222222222-333333333333-4444";
     channel.channelType = channelType;
     
-    messageClient = [[ZNGMockMessageClient alloc] init];
+    ZNGMockMessageClient * messageClient = [[ZNGMockMessageClient alloc] init];
     
     ZNGService * service = [[ZNGService alloc] init];
     ZNGContact * contact = [[ZNGContact alloc] init];
@@ -45,7 +52,7 @@
     ZNGMockEventClient * eventClient = [[ZNGMockEventClient alloc] init];
     ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] init];
     
-    conversation = [[ZNGConversationServiceToContact alloc] initFromService:service toContact:contact withCurrentUserId:@"" usingChannel:channel withMessageClient:messageClient eventClient:eventClient contactClient:contactClient socketClient:socketClient];
+    return [[ZNGConversationServiceToContact alloc] initFromService:service toContact:contact withCurrentUserId:@"" usingChannel:channel withMessageClient:messageClient eventClient:eventClient contactClient:contactClient socketClient:socketClient];
 }
 
 - (void) testSmallPngSentIntact
@@ -55,11 +62,11 @@
     XCTAssertNotNil(tinyPng, @"Loading small PNG from bundle");
     
     NSData * pngData = UIImagePNGRepresentation(tinyPng);
-    messageClient.lastSentMessageAttachments = nil;
+    sharedMessageClient.lastSentMessageAttachments = nil;
     
     XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
     
-    [conversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:^(ZNGStatus * _Nullable status) {
+    [sharedConversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:^(ZNGStatus * _Nullable status) {
         [messageSent fulfill];
     } failure:^(ZNGError * _Nullable error) {
         XCTFail(@"Message sent failed: %@", [error localizedDescription]);
@@ -67,7 +74,7 @@
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
-    NSDictionary<NSString *, NSString *> * attachment = [messageClient.lastSentMessageAttachments firstObject];
+    NSDictionary<NSString *, NSString *> * attachment = [sharedMessageClient.lastSentMessageAttachments firstObject];
     NSString * base64DataString = attachment[@"base64"];
     NSData * imageData = [[NSData alloc] initWithBase64EncodedString:base64DataString options:NSUTF8StringEncoding];
     UIImage * image = [[UIImage alloc] initWithData:imageData];
@@ -84,11 +91,11 @@
     XCTAssertNotNil(tinyJpg, @"Loading small JPG from bundle");
     
     NSData * jpgData = UIImageJPEGRepresentation(tinyJpg, 0.5);
-    messageClient.lastSentMessageAttachments = nil;
+    sharedMessageClient.lastSentMessageAttachments = nil;
     
     XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
     
-    [conversation sendMessageWithBody:@"" imageData:@[jpgData] uuid:nil success:^(ZNGStatus * _Nullable status) {
+    [sharedConversation sendMessageWithBody:@"" imageData:@[jpgData] uuid:nil success:^(ZNGStatus * _Nullable status) {
         [messageSent fulfill];
     } failure:^(ZNGError * _Nullable error) {
         XCTFail(@"Message sent failed: %@", [error localizedDescription]);
@@ -96,7 +103,7 @@
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
-    NSDictionary<NSString *, NSString *> * attachment = [messageClient.lastSentMessageAttachments firstObject];
+    NSDictionary<NSString *, NSString *> * attachment = [sharedMessageClient.lastSentMessageAttachments firstObject];
     NSString * base64DataString = attachment[@"base64"];
     NSData * imageData = [[NSData alloc] initWithBase64EncodedString:base64DataString options:NSUTF8StringEncoding];
     UIImage * image = [[UIImage alloc] initWithData:imageData];
@@ -113,11 +120,11 @@
     XCTAssertNotNil(largePng, @"Loading large PNG from bundle");
     
     NSData * pngData = UIImagePNGRepresentation(largePng);
-    messageClient.lastSentMessageAttachments = nil;
+    sharedMessageClient.lastSentMessageAttachments = nil;
     
     XCTestExpectation * messageSent = [self expectationWithDescription:@"Message was sent"];
     
-    [conversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:^(ZNGStatus * _Nullable status) {
+    [sharedConversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:^(ZNGStatus * _Nullable status) {
         [messageSent fulfill];
     } failure:^(ZNGError * _Nullable error) {
         XCTFail(@"Message sent failed: %@", [error localizedDescription]);
@@ -125,7 +132,7 @@
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
-    NSDictionary<NSString *, NSString *> * attachment = [messageClient.lastSentMessageAttachments firstObject];
+    NSDictionary<NSString *, NSString *> * attachment = [sharedMessageClient.lastSentMessageAttachments firstObject];
     NSString * base64DataString = attachment[@"base64"];
     NSData * imageData = [[NSData alloc] initWithBase64EncodedString:base64DataString options:NSUTF8StringEncoding];
     UIImage * image = [[UIImage alloc] initWithData:imageData];

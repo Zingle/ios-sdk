@@ -1400,22 +1400,32 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString * name = [self nameForMessageAtIndexPath:indexPath];
+    static const CGFloat heightForText = 26.0;
     
-    if (name == nil) {
-        // If this is the last message in an inbound group, add some spacing
-        ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
-        ZNGEventViewModel * nextViewModel = [self nextEventViewModelBelowIndexPath:indexPath];
-        
-        if (([viewModel.event isInboundMessage]) && (![nextViewModel.event isInboundMessage])) {
-            // Add some extra spacing between this message and the next outbound message/detailed event
-            return 26.0;
-        }
-        
-        return 0.0;
+    if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
+        return heightForText;
     }
     
-    return 26.0;
+    if ([[self nameForMessageAtIndexPath:indexPath] length] > 0) {
+        return heightForText;
+    }
+    
+    // If this is the last message in an inbound group, add some spacing
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    ZNGEventViewModel * nextViewModel = [self nextEventViewModelBelowIndexPath:indexPath];
+    
+    if (([viewModel.event isInboundMessage]) && (![nextViewModel.event isInboundMessage])) {
+        // Add some extra spacing between this message and the next outbound message/detailed event
+        return 26.0;
+    }
+    
+    return 0.0;
+}
+
+- (BOOL) shouldShowAttachmentErrorForIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    return ((viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusFailed) || (viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusUnrecognizedType));
 }
 
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
@@ -1487,9 +1497,22 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (NSAttributedString *)collectionView:(JSQMessagesCollectionView *)collectionView attributedTextForCellBottomLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString * name = [self nameForMessageAtIndexPath:indexPath];
+    NSString * content = nil;
+    
+    if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
+        ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+        
+        if (viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusUnrecognizedType) {
+            content = @"Unrecognized attachment type";
+        } else if (viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusFailed) {
+            content = @"Failed to download attachment";
+        }
+    } else {
+        content = [self nameForMessageAtIndexPath:indexPath];
+    }
+    
     NSDictionary * attributes = @{ NSFontAttributeName: [UIFont latoFontOfSize:12.0] };
-    return (name != nil) ? [[NSAttributedString alloc] initWithString:name attributes:attributes] : nil;
+    return ([content length] > 0) ? [[NSAttributedString alloc] initWithString:content attributes:attributes] : nil;
 }
 
 #pragma mark -
@@ -1504,7 +1527,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
     NSString * attachmentName = [viewModel attachmentName];
     
-    if ([attachmentName length] == 0) {
+    if (([attachmentName length] == 0) || (viewModel.attachmentStatus != ZNGEventViewModelAttachmentStatusAvailable)) {
         return;
     }
     

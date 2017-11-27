@@ -26,9 +26,42 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     if (self != nil) {
         _event = event;
         _index = index;
+        
+        if ([self outgoingImageAttachment] != nil) {
+            self.attachmentStatus = ZNGEventViewModelAttachmentStatusAvailable;
+        } else if (([self attachmentName] != nil) && (![self attachmentIsSupported])) {
+            self.attachmentStatus = ZNGEventViewModelAttachmentStatusUnrecognizedType;
+        }
     }
     
     return self;
+}
+
+- (BOOL) attachmentIsSupported
+{
+    if ([self outgoingImageAttachment] != nil) {
+        return YES;
+    }
+    
+    NSString * attachmentPath = [self attachmentName];
+    
+    if (attachmentPath == nil) {
+        return NO;
+    }
+    
+    NSString * extension = [[[self attachmentName] pathExtension] lowercaseString];
+
+    if (![[self recognizedAttachmentFileExtensions] containsObject:extension]) {
+        ZNGLogInfo(@"Unsupported file extension (%@) for attachment: %@", extension, attachmentPath);
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (NSArray<NSString *> *) recognizedAttachmentFileExtensions
+{
+    return @[@"png", @"jpg", @"jpeg", @"gif", @"tiff", @"bmp"];
 }
 
 - (NSUInteger) hash
@@ -75,6 +108,15 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     }
     
     return self.event.message.attachments[self.index];
+}
+
+- (UIImage *) outgoingImageAttachment
+{
+    if (self.index >= [self.event.message.outgoingImageAttachments count]) {
+        return nil;
+    }
+    
+    return self.event.message.outgoingImageAttachments[self.index];
 }
 
 #pragma mark - Image attachment sizing
@@ -126,9 +168,10 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
 - (UIView *)mediaView
 {
     // If this is an outgoing image, we will return a UIImageView containing it.
-    if ([self.event.message.outgoingImageAttachments count] > self.index) {
-        UIImage * image = self.event.message.outgoingImageAttachments[self.index];
-        return [[UIImageView alloc] initWithImage:image];
+    UIImage * outgoingAttachmenmt = [self outgoingImageAttachment];
+    
+    if (outgoingAttachmenmt != nil) {
+        return [[UIImageView alloc] initWithImage:outgoingAttachmenmt];
     }
     
     if (([[self attachmentName] length] == 0) && ([self.event.message.outgoingImageAttachments count] == 0)) {
@@ -136,23 +179,26 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     }
     
     CGSize previouslyKnownImageSize = [self mediaViewDisplaySize];
-    
-    // This is a normal image attachment.  We will set its URL via SDWebImage and plop a placeholder in place.
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
-    UIImage * placeholderIcon = [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
-    
-    NSURL * attachmentURL = [NSURL URLWithString:[self attachmentName]];
-    
+    NSURL * attachmentURL = ([self attachmentIsSupported]) ? [NSURL URLWithString:[self attachmentName]] : nil;
+
     FLAnimatedImageView * animatedImageView = [[FLAnimatedImageView alloc] init];
     animatedImageView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
-    animatedImageView.tintColor = [UIColor colorWithWhite:0.0 alpha:0.15];
+    animatedImageView.tintColor = [self _placeholderTint];
     
     // Set content mode to center so our placeholder image is centered instead of stretched.  Content mode will be reset when the image loads.
     animatedImageView.contentMode = UIViewContentModeCenter;
     
     // Gogogo
-    [animatedImageView sd_setImageWithURL:attachmentURL placeholderImage:placeholderIcon completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+    [animatedImageView sd_setImageWithURL:attachmentURL placeholderImage:[self _placeholderIcon] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+        if (receivedSize < expectedSize) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.attachmentStatus = ZNGEventViewModelAttachmentStatusDownloading;
+            });
+        }
+    } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
         if (image != nil) {
+            self.attachmentStatus = ZNGEventViewModelAttachmentStatusAvailable;
+            
             // Set the content mode back to fill
             animatedImageView.contentMode = UIViewContentModeScaleAspectFill;
             
@@ -163,10 +209,39 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:ZNGEventViewModelImageSizeChangedNotification object:self];
             }
+        } else if (imageURL != nil) {
+            ZNGLogInfo(@"Setting event view model image view to %@ failed: %@", imageURL, error);
+            self.attachmentStatus = ZNGEventViewModelAttachmentStatusFailed;
+            
+            // Ensure that the content mode is still center and the placeholder image is now a failed download image
+            animatedImageView.contentMode = UIViewContentModeCenter;
+            animatedImageView.tintColor = [self _placeholderTint];
+            animatedImageView.image = [self _placeholderIcon];
         }
     }];
     
     return animatedImageView;
+}
+
+- (UIColor *) _placeholderTint
+{
+    if ((self.attachmentStatus == ZNGEventViewModelAttachmentStatusUnrecognizedType) || (self.attachmentStatus == ZNGEventViewModelAttachmentStatusFailed)) {
+        return [UIColor colorWithWhite:0.0 alpha:0.5];
+    }
+    
+    return [UIColor colorWithWhite:0.0 alpha:0.15];
+}
+
+- (UIImage *) _placeholderIcon
+{
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGEventViewModel class]];
+
+    if ((self.attachmentStatus == ZNGEventViewModelAttachmentStatusUnrecognizedType) || (self.attachmentStatus == ZNGEventViewModelAttachmentStatusFailed)) {
+        return [UIImage imageNamed:@"sadCloud" inBundle:bundle compatibleWithTraitCollection:nil];
+    }
+    
+    // Else we look good
+    return [UIImage imageNamed:@"attachment" inBundle:bundle compatibleWithTraitCollection:nil];
 }
 
 /**

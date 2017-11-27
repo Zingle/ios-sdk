@@ -13,6 +13,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef enum {
+    ZNGEventViewModelAttachmentStatusUnknown,
+    ZNGEventViewModelAttachmentStatusUnrecognizedType,
+    ZNGEventViewModelAttachmentStatusDownloading,
+    ZNGEventViewModelAttachmentStatusAvailable,
+    ZNGEventViewModelAttachmentStatusFailed
+} ZNGEventViewModelAttachmentStatus;
+
 /**
  *  An NSNotification will be posted to the shared NSNotificationCenter with this name and the ZNGEventViewModel as its object if
  *   the image size corresponding to this event view model has changed (i.e. it was not loaded/cached, and now we know how big it is.)
@@ -34,6 +42,11 @@ extern NSString * const ZNGEventViewModelImageSizeChangedNotification;
  *  The name/URL string of the attachment represented by this ZNGEventViewModel.  nil if this is a text entry.
  */
 @property (nonatomic, readonly) NSString * attachmentName;
+
+/**
+ *  The status of the attachment or ZNGEventViewModelAttachmentStatusUnknown if no attachment.
+ */
+@property (nonatomic, assign) ZNGEventViewModelAttachmentStatus attachmentStatus;
 
 /**
  *  Flag that is set if we are confidence that our mediaViewDisplaySize is accurate and not an estimate.

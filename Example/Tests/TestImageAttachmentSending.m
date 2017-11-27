@@ -142,4 +142,35 @@
     XCTAssert((image.size.width <= 800.0) && (image.size.height <= 800.0), @"Large JPG is resized");
 }
 
+- (void) testSendingAttachmentImmediatelyAvailable
+{
+    ZNGConversationServiceToContact * conversation = [self freshConversation];
+
+    NSBundle * bundle = [NSBundle bundleForClass:[TestImageAttachmentSending class]];
+    UIImage * tinyPng = [UIImage imageNamed:@"tinyPng.png" inBundle:bundle compatibleWithTraitCollection:nil];
+    XCTAssertNotNil(tinyPng, @"Loading small PNG from bundle");
+
+    NSData * pngData = UIImagePNGRepresentation(tinyPng);
+    
+    [self keyValueObservingExpectationForObject:conversation keyPath:NSStringFromSelector(@selector(eventViewModels)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        // Find a pending event with an available attachment
+        for (ZNGEventViewModel * viewModel in conversation.eventViewModels) {
+            if (viewModel.event.sending) {
+                // We found our sending event.  Is the attachment available?
+                if (viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusAvailable) {
+                    return YES;
+                } else {
+                    // We found our sending event, but the attachment status is not available.  This is a bug.
+                    XCTFail(@"Attachment is sending, but the attachment status is not available.");
+                }
+            }
+        }
+        
+        return NO;
+    }];
+    
+    [conversation sendMessageWithBody:@"" imageData:@[pngData] uuid:nil success:nil failure:nil];
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
 @end

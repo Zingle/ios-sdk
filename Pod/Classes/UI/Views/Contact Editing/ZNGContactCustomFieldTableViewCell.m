@@ -459,10 +459,18 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) applyChangesIfFirstResponder
 {
     if (self.textField.isFirstResponder) {
+        // Any picker type custom field will save its own value every time a value is selected in the picker.
+        // Booleans will need to be sanitized to "true" or "false" from other truthy values (yes/no)
         if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
             self.customFieldValue.value = ([self.customFieldValue.value boolValue]) ? @"true" : @"false";
         } else {
-            self.customFieldValue.value = self.textField.text;
+            // Non-picker, non-bool fields will need to be saved if they are mid-edit.
+            UIView * picker = self.textField.inputView;
+            BOOL pickerExists = (([picker isKindOfClass:[UIDatePicker class]]) || ([picker isKindOfClass:[UIPickerView class]]));
+            
+            if (!pickerExists) {
+                self.customFieldValue.value = self.textField.text;
+            }
         }
     }
 }

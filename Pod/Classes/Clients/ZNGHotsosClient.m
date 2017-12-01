@@ -44,10 +44,30 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     return self;
 }
 
+/**
+ *  Ensures that the hotsosHostName includes https:// and not http:// nor nothing at all
+ */
+- (NSString *) hotsosURLAsSSL
+{
+    NSURLComponents * components = [NSURLComponents componentsWithString:self.service.hotsosHostName];
+    
+    if (components == nil) {
+        return nil;
+    }
+    
+    if (components.host == nil) {
+        components.host = components.path;
+        components.path = nil;
+    }
+    
+    components.scheme = @"https";
+    return components.string;
+}
+
 - (NSString *) hotsosIssuePathForTerm:(NSString *)term
 {
     NSString * fuzzyTerm = [[NSString stringWithFormat:@"%%%@%%", term] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    return [NSString stringWithFormat:@"https://%@/api/service.svc/rest/GetIssueCollection?nameLike=%@", [self.service hotsosHostName], fuzzyTerm];
+    return [NSString stringWithFormat:@"%@/api/service.svc/rest/GetIssueCollection?nameLike=%@", [self hotsosURLAsSSL], fuzzyTerm];
 }
 
 - (void) getIssuesLike:(NSString *)term completion:(void (^)(NSArray<NSString *> * _Nullable matchingIssueNames, NSError * _Nullable error))completion;

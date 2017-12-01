@@ -166,6 +166,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
         datePicker.datePickerMode = UIDatePickerModeDate;
+        datePicker.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
         datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         [datePicker addTarget:self action:@selector(datePickerSelectedDate:) forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;

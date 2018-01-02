@@ -347,6 +347,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                 dispatch_semaphore_signal(semaphore);
             } failure:^(ZNGError *error) {
                 ZNGLogWarn(@"Unable to fetch inbox data for page %llu: %@", (unsigned long long)page, error);
+                [self _removeLoadingPage:page];
                 dispatch_semaphore_signal(semaphore);
             }];
             

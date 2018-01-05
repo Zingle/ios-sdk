@@ -13,6 +13,7 @@
 #import "ZNGContactField.h"
 #import "ZNGSetting.h"
 #import "ZNGAutomation.h"
+#import "ZNGTeam.h"
 #import "ZNGTemplate.h"
 #import "ZNGSettingsField.h"
 #import "ZNGPrinter.h"
@@ -51,10 +52,12 @@
              @"channelTypes" : @"channel_types",
              @"contactLabels" : @"contact_labels",
              @"contactCustomFields" : @"contact_custom_fields",
+             NSStringFromSelector(@selector(features)): @"features",
              @"settings" : @"settings",
              @"automations" : @"automations",
              @"printers" : @"printers",
              NSStringFromSelector(@selector(contactGroups)): @"contact_groups",
+             NSStringFromSelector(@selector(teams)): @"teams",
              @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
              @"createdAt" : @"created_at",
@@ -105,6 +108,11 @@
 + (NSValueTransformer *)automationsJSONTransformer
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGAutomation class]];
+}
+
++ (NSValueTransformer *)teamsJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGTeam class]];
 }
 
 + (NSValueTransformer *)templatesJSONTransformer
@@ -236,6 +244,42 @@
     }
     
     return nil;
+}
+
+- (ZNGSetting * _Nullable)settingWithCode:(NSString * _Nonnull)settingCode
+{
+    for (ZNGSetting * setting in self.settings) {
+        if ([setting.settingsField.code isEqualToString:settingCode]) {
+            return setting;
+        }
+    }
+    
+    return nil;
+}
+
+- (BOOL) allowsAssignment
+{
+    ZNGSetting * assignmentSetting = [self settingWithCode:@"assignment_enabled"];
+    
+    // First check if the setting is enabled.
+    // It is possible for the service to have the feature but also have the feature disabled via the setting.
+    if (![assignmentSetting.value boolValue]) {
+        return NO;
+    }
+    
+    // We're in nonsense land if the assignment_enabled setting is true above but the feature is missing.
+    // We'll check anyway.
+    return ([self.features containsObject:@"assignment"]);
+}
+
+- (BOOL) allowsTeamAssignment
+{
+    if (![self allowsAssignment]) {
+        // Assignment in general is not allowed.  Team assignment certainly is not.
+        return NO;
+    }
+    
+    return ([self.features containsObject:@"teams"]);
 }
 
 - (NSString *)hotsosHostName

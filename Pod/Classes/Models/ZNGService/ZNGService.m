@@ -13,6 +13,7 @@
 #import "ZNGContactField.h"
 #import "ZNGSetting.h"
 #import "ZNGAutomation.h"
+#import "ZNGTeam.h"
 #import "ZNGTemplate.h"
 #import "ZNGSettingsField.h"
 #import "ZNGPrinter.h"
@@ -51,10 +52,12 @@
              @"channelTypes" : @"channel_types",
              @"contactLabels" : @"contact_labels",
              @"contactCustomFields" : @"contact_custom_fields",
+             NSStringFromSelector(@selector(features)): @"features",
              @"settings" : @"settings",
              @"automations" : @"automations",
              @"printers" : @"printers",
              NSStringFromSelector(@selector(contactGroups)): @"contact_groups",
+             NSStringFromSelector(@selector(teams)): @"teams",
              @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
              @"createdAt" : @"created_at",
@@ -105,6 +108,11 @@
 + (NSValueTransformer *)automationsJSONTransformer
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGAutomation class]];
+}
+
++ (NSValueTransformer *)teamsJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGTeam class]];
 }
 
 + (NSValueTransformer *)templatesJSONTransformer

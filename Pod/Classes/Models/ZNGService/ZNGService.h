@@ -21,6 +21,7 @@
 @class ZNGSetting;
 @class ZNGTemplate;
 @class ZNGContactGroup;
+@class ZNGTeam;
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -34,6 +35,7 @@
 @property(nonatomic, strong, nullable) NSArray<ZNGChannelType *> * channelTypes;
 @property(nonatomic, strong, nullable) NSArray<ZNGLabel *> * contactLabels;
 @property(nonatomic, strong, nullable) NSArray<ZNGContactField *> * contactCustomFields;
+@property(nonatomic, strong, nullable) NSArray<NSString *> * features;
 @property(nonatomic, strong, nullable) NSArray<ZNGSetting *> * settings;
 @property(nonatomic, strong, nullable) NSArray<ZNGAutomation *> * automations;
 @property(nonatomic, strong, nullable) NSArray<ZNGTemplate *> * templates;

@@ -38,6 +38,7 @@
 @property(nonatomic, strong, nullable) NSArray<NSString *> * features;
 @property(nonatomic, strong, nullable) NSArray<ZNGSetting *> * settings;
 @property(nonatomic, strong, nullable) NSArray<ZNGAutomation *> * automations;
+@property(nonatomic, strong, nullable) NSArray<ZNGTeam *> * teams;
 @property(nonatomic, strong, nullable) NSArray<ZNGTemplate *> * templates;
 @property(nonatomic, strong, nullable) NSArray<ZNGPrinter *> * printers;
 @property(nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * contactGroups;
@@ -55,6 +56,23 @@
 
 - (ZNGChannel * _Nullable)defaultPhoneNumberChannel;
 - (ZNGChannel * _Nullable)defaultChannelForType:(ZNGChannelType * _Nonnull)channelType;
+
+/**
+ *  Returns the setting with the given code if available.
+ *
+ *  @param settingCode The setting code, e.g. "assignment_enabled"
+ */
+- (ZNGSetting * _Nullable)settingWithCode:(NSString * _Nonnull)settingCode;
+
+/**
+ *  Whether this service allows conversations to be assigned to team members (or teams if allowsTeamAssignment is also YES).
+ */
+- (BOOL) allowsAssignment;
+
+/**
+ *  Whether this service allows conversations to be assigned to teams.  Returns NO if allowsAssignment is NO.
+ */
+- (BOOL) allowsTeamAssignment;
 
 // HotSOS settings
 - (NSString * _Nullable)hotsosUserName;

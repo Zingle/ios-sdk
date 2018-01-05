@@ -246,6 +246,42 @@
     return nil;
 }
 
+- (ZNGSetting * _Nullable)settingWithCode:(NSString * _Nonnull)settingCode
+{
+    for (ZNGSetting * setting in self.settings) {
+        if ([setting.settingsField.code isEqualToString:settingCode]) {
+            return setting;
+        }
+    }
+    
+    return nil;
+}
+
+- (BOOL) allowsAssignment
+{
+    ZNGSetting * assignmentSetting = [self settingWithCode:@"assignment_enabled"];
+    
+    // First check if the setting is enabled.
+    // It is possible for the service to have the feature but also have the feature disabled via the setting.
+    if (![assignmentSetting.value boolValue]) {
+        return NO;
+    }
+    
+    // We're in nonsense land if the assignment_enabled setting is true above but the feature is missing.
+    // We'll check anyway.
+    return ([self.features containsObject:@"assignment"]);
+}
+
+- (BOOL) allowsTeamAssignment
+{
+    if (![self allowsAssignment]) {
+        // Assignment in general is not allowed.  Team assignment certainly is not.
+        return NO;
+    }
+    
+    return ([self.features containsObject:@"teams"]);
+}
+
 - (NSString *)hotsosHostName
 {
     return [self settingValueForCode:kServiceSettingHotsosURLKey];

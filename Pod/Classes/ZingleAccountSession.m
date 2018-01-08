@@ -553,6 +553,26 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     }];
 }
 
+#pragma mark - Teams
+- (NSArray<ZNGTeam *> * _Nonnull) teamsVisibleToCurrentUser
+{
+    // We cannot return anything meaningful if we are not yet logged in
+    if (self.userAuthorization == nil) {
+        ZNGLogWarn(@"%s called before a userAuthorization object is available.  Returning empty array.", __PRETTY_FUNCTION__);
+        return @[];
+    }
+    
+    // If there are no teams, we have nothing to return
+    if (![self.service allowsTeamAssignment]) {
+        return @[];
+    }
+    
+    // TODO: Return all teams if the user is an admin.  We do not yet have that data.
+    
+    NSPredicate * oneOfMyTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", self.userAuthorization.userId];
+    return [self.service.teams filteredArrayUsingPredicate:oneOfMyTeams];
+}
+
 #pragma mark - Messaging
 - (void) contactChanged:(ZNGContact *)contact
 {

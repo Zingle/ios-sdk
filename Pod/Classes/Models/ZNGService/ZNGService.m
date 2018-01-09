@@ -282,6 +282,17 @@
     return ([self.features containsObject:@"teams"]);
 }
 
+- (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId
+{
+    for (ZNGTeam * team in self.teams) {
+        if ([team.teamId isEqualToString:teamId]) {
+            return team;
+        }
+    }
+    
+    return nil;
+}
+
 - (NSString *)hotsosHostName
 {
     return [self settingValueForCode:kServiceSettingHotsosURLKey];

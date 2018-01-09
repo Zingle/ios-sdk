@@ -15,4 +15,6 @@
 @property (nonatomic, copy, nullable) NSString * displayName;
 @property (nonatomic, copy, nullable) NSString * emoji;
 
+- (NSString * _Nullable) displayNameWithEmoji;
+
 @end

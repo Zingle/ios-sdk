@@ -128,6 +128,13 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 - (void) requestAPushNotification;
 
+#pragma mark - Teams
+/**
+ *  The teams visible to the current user.  Generally, this returns only teams of which the current user is a member.  Admin
+ *   users will see all teams.
+ */
+- (NSArray<ZNGTeam *> * _Nonnull) teamsVisibleToCurrentUser;
+
 #pragma mark - Messaging methods
 
 /**

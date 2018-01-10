@@ -26,4 +26,13 @@
     return [ZingleValueTransformers dateValueTransformer];
 }
 
+- (NSString * _Nullable) displayNameWithEmoji
+{
+    if ([self.emoji length] == 0) {
+        return self.displayName;
+    }
+    
+    return [NSString stringWithFormat:@"%@ %@", self.emoji, self.displayName];
+}
+
 @end

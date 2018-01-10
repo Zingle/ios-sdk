@@ -74,6 +74,8 @@
  */
 - (BOOL) allowsTeamAssignment;
 
+- (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId;
+
 // HotSOS settings
 - (NSString * _Nullable)hotsosUserName;
 - (NSString * _Nullable)hotsosHostName;

@@ -65,6 +65,20 @@
                success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
                failure:(void (^)(ZNGError* error))failure;
 
+- (void)unassignContactWithId:(NSString *)contactId
+                      success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                      failure:(void (^)(ZNGError* error))failure;
+
+- (void)assignContactWithId:(NSString *)contactId
+                   toUserId:(NSString *)userId
+                    success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                    failure:(void (^)(ZNGError* error))failure;
+
+- (void)assignContactWithId:(NSString *)contactId
+                   toTeamId:(NSString *)teamId
+                    success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                    failure:(void (^)(ZNGError* error))failure;
+
 #pragma mark - PUT methods
 
 - (void)updateContactWithId:(NSString*)contactId

@@ -18,6 +18,8 @@
 #import "ZNGAnalytics.h"
 #import "ZNGFieldOption.h"
 #import "NSString+Initials.h"
+#import "ZNGTeam.h"
+#import "ZNGUser.h"
 
 static const int zngLogLevel = ZNGLogLevelDebug;
 
@@ -123,6 +125,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
              @"customFieldValues" : @"custom_field_values",
              @"labels" : @"labels",
              NSStringFromSelector(@selector(groups)): @"contact_groups",
+             NSStringFromSelector(@selector(assignedToTeamId)): @"assigned_to_team_id",
+             NSStringFromSelector(@selector(assignedToUserId)): @"assigned_to_user_id",
              @"createdAt" : @"created_at",
              @"updatedAt" : @"updated_at",
              NSStringFromSelector(@selector(avatarUri)) : @"avatar_uri"
@@ -619,5 +623,80 @@ static NSString * const ParameterNameClosed = @"is_closed";
     }];
 }
 
+- (void) assignToTeam:(ZNGTeam *)team
+{
+    if ([team.teamId length] == 0) {
+        ZNGLogError(@"%s called with no team ID.  Ignoring.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
+    NSString * oldTeamId = self.assignedToTeamId;
+    NSString * oldUserId = self.assignedToUserId;
+    
+    [self _atomicallySetAssignedTeamId:team.teamId andUserId:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+
+    [self.contactClient assignContactWithId:self.contactId toTeamId:team.teamId success:^(ZNGContact *contact, ZNGStatus *status) {
+        // We succeeded, so we expect these to match what we set.  Just in case, we'll double set the values.
+        [self _atomicallySetAssignedTeamId:contact.assignedToTeamId andUserId:contact.assignedToUserId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Assigning contact %@ to team %@ failed: %@", [self fullName], [team displayName], error);
+        
+        [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+    }];
+}
+
+- (void) assignToUser:(ZNGUser *)user
+{
+    if ([user.userId length] == 0) {
+        ZNGLogError(@"%s called with no user ID.  Ignoring.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
+    NSString * oldTeamId = self.assignedToTeamId;
+    NSString * oldUserId = self.assignedToUserId;
+
+    [self _atomicallySetAssignedTeamId:nil andUserId:user.userId];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+    
+    [self.contactClient assignContactWithId:self.contactId toUserId:user.userId success:^(ZNGContact *contact, ZNGStatus *status) {
+        // We succeeded, so we expect these to match what we set.  Just in case, we'll double set the values.
+        [self _atomicallySetAssignedTeamId:contact.assignedToTeamId andUserId:contact.assignedToUserId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+    } failure:^(ZNGError *error) {
+        ZNGLogError(@"Assigning contact %@ to %@ failed: %@", [self fullName], [user fullName], error);
+        
+        [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+    }];
+}
+
+- (void) unassign
+{
+    NSString * oldTeamId = self.assignedToTeamId;
+    NSString * oldUserId = self.assignedToUserId;
+    
+    [self _atomicallySetAssignedTeamId:nil andUserId:nil];
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+
+    [self.contactClient unassignContactWithId:self.contactId success:nil failure:^(ZNGError *error) {
+        ZNGLogError(@"Unassigning contact %@ failed: %@", [self fullName], error);
+        
+        [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+    }];
+}
+
+- (void) _atomicallySetAssignedTeamId:(NSString *)teamId andUserId:(NSString *)userId
+{
+    [self willChangeValueForKey:NSStringFromSelector(@selector(assignedToTeamId))];
+    [self willChangeValueForKey:NSStringFromSelector(@selector(assignedToUserId))];
+    _assignedToTeamId = teamId;
+    _assignedToUserId = userId;
+    [self didChangeValueForKey:NSStringFromSelector(@selector(assignedToUserId))];
+    [self didChangeValueForKey:NSStringFromSelector(@selector(assignedToTeamId))];
+}
 
 @end

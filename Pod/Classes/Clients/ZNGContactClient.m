@@ -172,6 +172,51 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                 failure:failure];
 }
 
+- (void)unassignContactWithId:(NSString *)contactId
+                      success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                      failure:(void (^)(ZNGError* error))failure
+{
+    NSString * path = [NSString stringWithFormat:@"services/%@/contacts/%@/unassign", self.serviceId, contactId];
+    [self postWithModel:nil path:path responseClass:[ZNGContact class] success:success failure:failure];
+}
+
+- (void)assignContactWithId:(NSString *)contactId
+                   toUserId:(NSString *)userId
+                    success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                    failure:(void (^)(ZNGError* error))failure
+{
+    [self _assignContactWithId:contactId toTeamId:nil orUserId:userId success:success failure:failure];
+}
+
+- (void)assignContactWithId:(NSString *)contactId
+                   toTeamId:(NSString *)teamId
+                    success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                    failure:(void (^)(ZNGError* error))failure
+{
+    [self _assignContactWithId:contactId toTeamId:teamId orUserId:nil success:success failure:failure];
+}
+
+- (void) _assignContactWithId:(NSString *)contactId
+                     toTeamId:(NSString *)teamId
+                     orUserId:(NSString *)userId
+                      success:(void (^)(ZNGContact* contact, ZNGStatus* status))success
+                      failure:(void (^)(ZNGError* error))failure
+{
+    if (([teamId length] + [userId length]) == 0) {
+        ZNGLogWarn(@"%s was called with no teamId nor userId.  Calling /unassign.", __PRETTY_FUNCTION__);
+        [self unassignContactWithId:contactId success:success failure:failure];
+        return;
+    }
+    
+    NSString * path = [NSString stringWithFormat:@"services/%@/contacts/%@/assign", self.serviceId, contactId];
+    
+    NSMutableDictionary * parameters = [[NSMutableDictionary alloc] initWithCapacity:2];
+    parameters[@"teamId"] = teamId;
+    parameters[@"userId"] = userId;
+    
+    [self putWithPath:path parameters:parameters responseClass:[ZNGContact class] success:success failure:failure];
+}
+
 #pragma mark - PUT methods
 
 - (void)updateContactWithId:(NSString*)contactId

@@ -17,6 +17,8 @@
 @class ZNGContactGroup;
 @class ZNGNewContactFieldValue;
 @class ZNGNewChannel;
+@class ZNGTeam;
+@class ZNGUser;
 
 /**
  *  The notification posted whenever a contact mutates itself.  The object in the NSNotification will be the updated ZNGContact
@@ -38,6 +40,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue.  Why do these two classes both exist?
 @property(nonatomic, strong, nullable) NSArray<ZNGLabel *> * labels; // Array of ZNGLabel
 @property(nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * groups;
+@property(nonatomic, strong, nullable) NSString * assignedToTeamId;
+@property(nonatomic, strong, nullable) NSString * assignedToUserId;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;
@@ -140,6 +144,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) unconfirm;
 - (void) close;
 - (void) reopen;
+- (void) assignToTeam:(ZNGTeam *)team;
+- (void) assignToUser:(ZNGUser *)user;
+- (void) unassign;
 
 NS_ASSUME_NONNULL_END
 

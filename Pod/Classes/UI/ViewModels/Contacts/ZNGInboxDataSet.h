@@ -106,6 +106,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSArray<NSString *> * groupIds;
 
 /**
+ *  If this flag is set, only unassigned conversations will be returned.
+ */
+@property (nonatomic, readonly) BOOL unassigned;
+
+/**
+ *  The team ID to which all returned contacts are assigned
+ */
+@property (nonatomic, readonly, nullable) NSString * assignedTeamId;
+
+/**
+ *  The user ID to which all returned contacts are assigned.
+ */
+@property (nonatomic, readonly, nullable) NSString * assignedUserId;
+
+/**
  *  Search text.  searchMessageBodies determines whether this searches only contact fields or also message contents to/from that contact.
  */
 @property (nonatomic, readonly, nullable) NSString * searchText;

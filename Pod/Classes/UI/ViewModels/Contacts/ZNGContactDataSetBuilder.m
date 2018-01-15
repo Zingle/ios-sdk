@@ -23,9 +23,12 @@
     self.pageSize = baseDataSet.pageSize;
     self.openStatus = baseDataSet.openStatus;
     self.unconfirmed = baseDataSet.unconfirmed;
-    self.labelIds = [baseDataSet.labelIds copy];
-    self.groupIds = [baseDataSet.groupIds copy];
-    self.searchText = [baseDataSet.searchText copy];
+    self.labelIds = baseDataSet.labelIds;
+    self.groupIds = baseDataSet.groupIds;
+    self.unassigned = baseDataSet.unassigned;
+    self.assignedUserId = baseDataSet.assignedUserId;
+    self.assignedTeamId = baseDataSet.assignedTeamId;
+    self.searchText = baseDataSet.searchText;
     self.searchMessageBodies = baseDataSet.searchMessageBodies;
     self.allowContactsWithNoMessages = baseDataSet.allowContactsWithNoMessages;
     

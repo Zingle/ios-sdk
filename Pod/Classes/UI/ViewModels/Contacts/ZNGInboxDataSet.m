@@ -23,6 +23,9 @@ static NSString * const ParameterKeySortFields              = @"sort_fields";
 static NSString * const ParameterKeyLastMessageCreatedAt   = @"last_message_created_at";
 static NSString * const ParameterKeyIsConfirmed            = @"is_confirmed";
 static NSString * const ParameterKeyIsClosed               = @"is_closed";
+static NSString * const ParameterKeyUnassigned             = @"is_unassigned";
+static NSString * const ParameterKeyAssignedUserId         = @"assigned_to_user_id";
+static NSString * const ParameterKeyAssignedTeamId         = @"assigned_to_team_id";
 static NSString * const ParameterKeyLabelId                = @"label_id";
 static NSString * const ParameterKeyGroupId                = @"contact_group_id";
 static NSString * const ParameterKeyQuery                  = @"query";
@@ -96,6 +99,20 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         _groupIds = builder.groupIds;
         _searchText = builder.searchText;
         _searchMessageBodies = builder.searchMessageBodies;
+        _unassigned = builder.unassigned;
+        
+        if (!_unassigned) {
+            _assignedTeamId = builder.assignedTeamId;
+            _assignedUserId = builder.assignedUserId;
+            
+            if (([_assignedTeamId length] > 0) && ([_assignedUserId length] > 0)) {
+                ZNGLogError(@"Both team ID and user ID provided as assignment filters.  This is probably in error.");
+            }
+        } else {
+            if (([builder.assignedTeamId length] > 0) || ([builder.assignedUserId length] > 0)) {
+                ZNGLogError(@"Unassigned flag is set to YES, but there were team or user assignment IDs also provided.  They are ignored.");
+            }
+        }
         
         if ([builder.sortFields count] > 0) {
             _sortFields = builder.sortFields;
@@ -177,6 +194,19 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         }
         
         parameters[ParameterKeyGroupId] = [self.groupIds firstObject];
+    }
+    
+    if (self.unassigned) {
+        parameters[ParameterKeyUnassigned] = ParameterValueTrue;
+    } else {
+        // We only expect one of these two assignment fields to be populated, but there is no need to silently enforce that here.
+        if ([self.assignedUserId length] > 0) {
+            parameters[ParameterKeyAssignedUserId] = self.assignedUserId;
+        }
+        
+        if ([self.assignedTeamId length] > 0) {
+            parameters[ParameterKeyAssignedTeamId] = self.assignedTeamId;
+        }
     }
     
     if ([self.searchText length] > 0) {

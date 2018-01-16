@@ -41,11 +41,16 @@ enum TopSectionRows {
 {
     NSArray<ZNGTeam *> * teams;
     NSArray<ZNGUser *> * users;
+    
+    UIImage * blankManImage;
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGAssignmentViewController class]];
+    blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
     teams = self.session.teamsVisibleToCurrentUser;
     
@@ -117,6 +122,12 @@ enum TopSectionRows {
                 {
                     ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
                     cell.nameLabel.text = @"Unassigned";
+                    
+                    UIImageView * blankAvatar = [[UIImageView alloc] initWithImage:blankManImage];
+                    blankAvatar.contentMode = UIViewContentModeScaleAspectFit;
+                    blankAvatar.frame = cell.avatarContainer.bounds;
+                    [cell.avatarContainer addSubview:blankAvatar];
+
                     return cell;
                 }
             }

@@ -28,13 +28,13 @@ enum Sections {
     SECTION_TOP,
     SECTION_TEAMS,
     SECTION_USERS,
-    SECTION_TOTAL = SECTION_USERS
+    SECTION_TOTAL
 };
 
 enum TopSectionRows {
     ROW_YOU,
     ROW_UNASSIGN,
-    ROW_TOTAL = ROW_UNASSIGN
+    ROW_TOTAL
 };
 
 @implementation ZNGAssignmentViewController

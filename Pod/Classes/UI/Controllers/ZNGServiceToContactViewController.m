@@ -34,6 +34,7 @@
 #import "ZNGMessageData.h"
 #import "JSQMessagesViewController/JSQMessageBubbleImageDataSource.h"
 #import "ZNGPendingResponseOrNote.h"
+#import "ZNGAssignmentViewController.h"
 
 @import SDWebImage;
 
@@ -803,6 +804,11 @@ enum ZNGConversationSections
     NSMutableArray<UIAlertAction *> * actions = ([superActions count] > 0) ? [superActions mutableCopy] : [[NSMutableArray alloc] init];
     
     NSString * uiType = @"ellipsis menu";
+    
+    UIAlertAction * assign = [UIAlertAction actionWithTitle:@"Assign" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performSegueWithIdentifier:@"assign" sender:self];
+    }];
+    [actions addObject:assign];
     
     UIAlertAction * editContact = [UIAlertAction actionWithTitle:@"View / edit contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self pressedEditContact];
@@ -1616,6 +1622,10 @@ enum ZNGConversationSections
         forwardingView.availableServices = availableServices;
         forwardingView.contact = self.conversation.contact;
         forwardingView.activeService = self.conversation.service;
+    } else if ([segue.identifier isEqualToString:@"assign"]) {
+        UINavigationController * navController = segue.destinationViewController;
+        ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
+        assignView.session = self.conversation.session;
     }
 }
 

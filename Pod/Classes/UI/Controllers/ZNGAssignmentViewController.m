@@ -61,7 +61,7 @@ enum TopSectionRows {
 {
     switch (section) {
     case SECTION_TOP:
-        return 2; // You/Unassign
+        return ROW_TOTAL; // You/Unassign
         
     case SECTION_TEAMS:
         return [teams count];

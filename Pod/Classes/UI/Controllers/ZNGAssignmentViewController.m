@@ -109,7 +109,7 @@ enum TopSectionRows {
                     avatar.frame = cell.avatarContainer.bounds;
                     [cell.avatarContainer addSubview:avatar];
                     
-                    cell.nameLabel.text = [self.session.userAuthorization displayName];
+                    cell.nameLabel.text = @"You";
                     return cell;
                 }
                     

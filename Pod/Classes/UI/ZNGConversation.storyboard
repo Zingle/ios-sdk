@@ -900,7 +900,11 @@
                         <viewLayoutGuide key="safeArea" id="IUX-ms-K8G"/>
                     </view>
                     <navigationItem key="navigationItem" title="Assign Conversation" id="faD-Ae-ndN">
-                        <barButtonItem key="leftBarButtonItem" title="Close" id="l3v-H9-0ae"/>
+                        <barButtonItem key="leftBarButtonItem" title="Close" id="l3v-H9-0ae">
+                            <connections>
+                                <action selector="pressedClose:" destination="k8h-e7-5aC" id="F43-wg-oZa"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Or-Y7-KL0" userLabel="First Responder" sceneMemberID="firstResponder"/>

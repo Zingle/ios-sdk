@@ -52,6 +52,11 @@ enum TopSectionRows {
     // TODO: Populate users list
 }
 
+- (IBAction)pressedClose:(id)sender
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return SECTION_TOTAL;

@@ -53,6 +53,8 @@ enum TopSectionRows {
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGAssignmentViewController class]];
     blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
+    self.title = [NSString stringWithFormat:@"Assign to %@", [self.conversation remoteName]];
+    
     teams = self.conversation.session.teamsVisibleToCurrentUser;
     
     // TODO: Populate users list

@@ -55,7 +55,7 @@ enum TopSectionRows {
     
     self.title = [NSString stringWithFormat:@"Assign to %@", [self.conversation remoteName]];
     
-    teams = self.conversation.session.teamsVisibleToCurrentUser;
+    teams = self.conversation.session.service.teams;
     
     // TODO: Populate users list
 }

@@ -13,6 +13,7 @@
 #import "ZNGAssignTeamTableViewCell.h"
 #import "ZNGAssignUserTableViewCell.h"
 #import "ZNGAvatarImageView.h"
+#import "ZNGConversationServiceToContact.h"
 #import "ZNGLogging.h"
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
@@ -52,7 +53,7 @@ enum TopSectionRows {
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGAssignmentViewController class]];
     blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
-    teams = self.session.teamsVisibleToCurrentUser;
+    teams = self.conversation.session.teamsVisibleToCurrentUser;
     
     // TODO: Populate users list
 }
@@ -169,7 +170,40 @@ enum TopSectionRows {
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // TODO: Implement
+    switch (indexPath.section) {
+        case SECTION_TOP:
+            switch (indexPath.row) {
+                case ROW_YOU:
+                {
+                    ZNGUser * you = [ZNGUser userFromUserAuthorization:self.conversation.session.userAuthorization];
+                    
+                    if (![self.conversation.contact.assignedToUserId isEqualToString:you.userId]) {
+                        [self.conversation.contact assignToUser:you];
+                    } else {
+                        ZNGLogInfo(@"Declining to assign %@ to the current user because it is already assigned to him.", [self.conversation.contact fullName]);
+                    }
+                    
+                    break;
+                }
+                    
+                case ROW_UNASSIGN:
+                    if ((self.conversation.contact.assignedToUserId == nil) && (self.conversation.contact.assignedToTeamId == nil)) {
+                        ZNGLogInfo(@"Declining to unassign %@ because he is already unassigned.", [self.conversation.contact fullName]);
+                    } else {
+                        [self.conversation.contact unassign];
+                    }
+            }
+            
+            [self dismissViewControllerAnimated:YES completion:nil];
+            return;
+            
+        case SECTION_TEAMS:
+            [self.conversation.contact assignToTeam:teams[indexPath.row]];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            return;
+            
+        // TODO: I wish we had users :(
+    }
 }
 
 @end

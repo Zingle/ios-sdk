@@ -1625,7 +1625,7 @@ enum ZNGConversationSections
     } else if ([segue.identifier isEqualToString:@"assign"]) {
         UINavigationController * navController = segue.destinationViewController;
         ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
-        assignView.session = self.conversation.session;
+        assignView.conversation = self.conversation;
     }
 }
 

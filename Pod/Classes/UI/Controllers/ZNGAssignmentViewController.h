@@ -7,10 +7,10 @@
 
 #import <UIKit/UIKit.h>
 
-@class ZingleAccountSession;
+@class ZNGConversationServiceToContact;
 
 @interface ZNGAssignmentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
 
-@property (nonatomic, strong, nullable) ZingleAccountSession * session;
+@property (nonatomic, strong, nullable) ZNGConversationServiceToContact * conversation;
 
 @end

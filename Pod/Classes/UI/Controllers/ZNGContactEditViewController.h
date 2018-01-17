@@ -10,6 +10,7 @@
 #import "ZNGLabelSelectViewController.h"
 #import "ZNGContactPhoneNumberTableViewCell.h"
 
+@class ZNGConversationServiceToContact;
 @class ZNGGradientLoadingView;
 @class ZNGContact;
 @class ZNGContactClient;
@@ -29,6 +30,7 @@
 @property (nonatomic, strong) IBOutlet UIButton * saveButton;
 @property (nonatomic, strong) IBOutlet UILabel * titleLabel;
 
+@property (nonatomic, strong) ZNGConversationServiceToContact * conversation;
 @property (nonatomic, strong) ZNGContactClient * contactClient;
 @property (nonatomic, strong) ZNGService * service;
 @property (nonatomic, copy) ZNGContact * contact;

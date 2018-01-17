@@ -177,6 +177,7 @@ enum ZNGConversationSections
     titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
     titleLabel.textColor = [UIColor zng_lightBlue];
     titleLabel.numberOfLines = 2;
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n\
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     [self updateTitle];
@@ -1602,6 +1603,7 @@ enum ZNGConversationSections
     if ([segue.identifier isEqualToString:@"editContact"]) {
         ZNGContactEditViewController * vc = segue.destinationViewController;
         
+        vc.conversation = self.conversation;
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;

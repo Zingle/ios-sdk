@@ -105,8 +105,9 @@ enum TopSectionRows {
                 case ROW_YOU:
                 {
                     ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
-                    ZNGAvatarImageView * avatar = [[ZNGAvatarImageView alloc] initWithAvatarUrl:self.session.userAuthorization.avatarUri
-                                                                                       initials:[[self.session.userAuthorization displayName] initials]
+                    ZNGUserAuthorization * userAuth = self.conversation.session.userAuthorization;
+                    ZNGAvatarImageView * avatar = [[ZNGAvatarImageView alloc] initWithAvatarUrl:userAuth.avatarUri
+                                                                                       initials:[[userAuth displayName] initials]
                                                                                            size:cell.avatarContainer.bounds.size
                                                                                 backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
                                                                                       textColor:[UIColor whiteColor]
@@ -121,7 +122,7 @@ enum TopSectionRows {
                 case ROW_UNASSIGN:
                 {
                     ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
-                    cell.nameLabel.text = @"Unassigned";
+                    cell.nameLabel.text = @"Unassign";
                     
                     UIImageView * blankAvatar = [[UIImageView alloc] initWithImage:blankManImage];
                     blankAvatar.contentMode = UIViewContentModeScaleAspectFit;

@@ -12,6 +12,7 @@
 #import "ZNGLabel.h"
 #import "ZNGError.h"
 #import "ZNGNewChannel.h"
+#import "ZNGContactAssignment.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -210,11 +211,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     NSString * path = [NSString stringWithFormat:@"services/%@/contacts/%@/assign", self.serviceId, contactId];
     
-    NSMutableDictionary * parameters = [[NSMutableDictionary alloc] initWithCapacity:2];
-    parameters[@"teamId"] = teamId;
-    parameters[@"userId"] = userId;
+    ZNGContactAssignment * assignment = [[ZNGContactAssignment alloc] init];
+    assignment.teamId = teamId;
+    assignment.userId = userId;
     
-    [self putWithPath:path parameters:parameters responseClass:[ZNGContact class] success:success failure:failure];
+    [self postWithModel:assignment path:path responseClass:[ZNGContact class] success:success failure:failure];
 }
 
 #pragma mark - PUT methods

@@ -483,8 +483,14 @@ static NSString * const ParameterNameClosed = @"is_closed";
             }
         }];
     }
+    
+    BOOL userAssignmentAlwaysNil = ((self.assignedToUserId == nil) && (old.assignedToUserId == nil));
+    BOOL teamAssignmentAlwaysNil = ((self.assignedToTeamId == nil) && (old.assignedToTeamId == nil));
+    BOOL userAssignmentEqual = ((userAssignmentAlwaysNil) || ([self.assignedToUserId isEqualToString:old.assignedToUserId]));
+    BOOL teamAssignmentEqual = ((teamAssignmentAlwaysNil) || ([self.assignedToTeamId isEqualToString:old.assignedToTeamId]));
+    BOOL sameAssignment = ((userAssignmentEqual) && (teamAssignmentEqual));
 
-    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels || !sameGroups);
+    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels || !sameGroups || !sameAssignment);
 }
 
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old

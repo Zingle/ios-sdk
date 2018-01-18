@@ -563,7 +563,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (NSArray<NSString *> *)eventTypes
 {
     // Default implementation is just messages
-    return @[@"message"];
+    return @[ZNGEventTypeMessage];
 }
 
 - (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification

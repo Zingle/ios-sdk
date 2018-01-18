@@ -522,7 +522,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
             return nil;
         case ContactSectionAssignment:
             header.sectionLabel.text = @"ASSIGNMENT";
-            header.sectionImage.image = nil;
+            header.sectionImage.image = [UIImage imageNamed:@"editIconAssignment" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionChannels:
             header.sectionLabel.text = @"CHANNELS";

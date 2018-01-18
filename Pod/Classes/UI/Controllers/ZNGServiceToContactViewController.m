@@ -35,6 +35,8 @@
 #import "JSQMessagesViewController/JSQMessageBubbleImageDataSource.h"
 #import "ZNGPendingResponseOrNote.h"
 #import "ZNGAssignmentViewController.h"
+#import "ZNGTeam.h"
+#import "ZNGUser.h"
 
 @import SDWebImage;
 
@@ -1544,12 +1546,12 @@ enum ZNGConversationSections
 
 - (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
 {
-    [contact assignToTeam:team];
+    [contact assignToTeamWithId:team.teamId];
 }
 
 - (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
 {
-    [contact assignToUser:user];
+    [contact assignToUserWithId:user.userId];
 }
 
 #pragma mark - Actions

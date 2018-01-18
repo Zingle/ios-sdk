@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZNGAssignmentViewController.h"
 #import "ZNGLabelSelectViewController.h"
 #import "ZNGContactPhoneNumberTableViewCell.h"
 
@@ -22,7 +23,11 @@
 
 @end
 
-@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, ZNGLabelSelectionDelegate, ZNGContactPhoneNumberTableCellDelegate>
+@interface ZNGContactEditViewController : UIViewController <UITableViewDataSource,
+                                                            UITableViewDelegate,
+                                                            ZNGLabelSelectionDelegate,
+                                                            ZNGContactPhoneNumberTableCellDelegate,
+                                                            ZNGAssignmentDelegate>
 
 @property (nonatomic, strong) IBOutlet UITableView * tableView;
 @property (nonatomic, strong) IBOutlet ZNGGradientLoadingView * loadingGradient;

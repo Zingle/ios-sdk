@@ -348,6 +348,17 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         ZNGLogDebug(@"Updating %@ (%@) (but not yet labels or channels if present) succeeded.", [contact fullName], contact.isConfirmed ? @"confirmed" : @"unconfirmed");
         contact.contactClient = self;
         
+        // Assignment?
+        if ([newContact assignmentHasChangedSince:oldContact]) {
+            if ([newContact.assignedToTeamId length] > 0) {
+                [contact assignToTeamWithId:newContact.assignedToTeamId];
+            } else if ([newContact.assignedToUserId length] > 0) {
+                [contact assignToUserWithId:newContact.assignedToUserId];
+            } else {
+                [contact unassign];
+            }
+        }
+        
         // If we have no label nor channel changes, we are done
         NSUInteger labelAndChannelChangeCount = [addedLabels count] + [removedLabels count] + [addedChannels count] + [removedChannels count] + [changedValueChannels count] + [changedOtherwiseChannels count];
         if (labelAndChannelChangeCount == 0) {

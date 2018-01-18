@@ -487,10 +487,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
 
 - (BOOL) shouldShowAssignmentSection
 {
-    BOOL assignmentAvailable = [self.service allowsAssignment];
-    BOOL contactAlreadyExists = (originalContact != nil);
-    
-    return ((assignmentAvailable) && (contactAlreadyExists));
+    return ([self.service allowsAssignment]);
 }
 
 #pragma mark - Table view delegate
@@ -842,9 +839,32 @@ static NSString * const AssignSegueIdentifier = @"assign";
     } else if ([segue.identifier isEqualToString:AssignSegueIdentifier]) {
         UINavigationController * navController = segue.destinationViewController;
         ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
-        assignView.session = self.contactClient.session;
+        assignView.session = (ZingleAccountSession *)self.contactClient.session;
         assignView.contact = self.contact;
+        assignView.delegate = self;
     }
+}
+
+#pragma mark - Assignment
+- (void) userChoseToUnassignContact:(ZNGContact *)contact
+{
+    self.contact.assignedToTeamId = nil;
+    self.contact.assignedToUserId = nil;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:ContactSectionAssignment] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
+{
+    self.contact.assignedToTeamId = team.teamId;
+    self.contact.assignedToUserId = nil;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:ContactSectionAssignment] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
+{
+    self.contact.assignedToTeamId = nil;
+    self.contact.assignedToUserId = user.userId;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:ContactSectionAssignment] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

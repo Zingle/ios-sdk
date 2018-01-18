@@ -108,6 +108,14 @@ static NSString * const ParameterNameClosed = @"is_closed";
     if (self.isConfirmed != contact.isConfirmed) {
         self.isConfirmed = contact.isConfirmed;
     }
+    
+    if (![self.assignedToUserId isEqualToString:contact.assignedToUserId]) {
+        self.assignedToUserId = contact.assignedToUserId;
+    }
+    
+    if (![self.assignedToTeamId isEqualToString:contact.assignedToTeamId]) {
+        self.assignedToTeamId = contact.assignedToTeamId;
+    }
 }
 
 #pragma mark - Mantle
@@ -484,13 +492,19 @@ static NSString * const ParameterNameClosed = @"is_closed";
         }];
     }
     
+    BOOL sameAssignment = (![self assignmentHasChangedSince:old]);
+
+    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels || !sameGroups || !sameAssignment);
+}
+
+- (BOOL) assignmentHasChangedSince:(ZNGContact *)old
+{
     BOOL userAssignmentAlwaysNil = ((self.assignedToUserId == nil) && (old.assignedToUserId == nil));
     BOOL teamAssignmentAlwaysNil = ((self.assignedToTeamId == nil) && (old.assignedToTeamId == nil));
     BOOL userAssignmentEqual = ((userAssignmentAlwaysNil) || ([self.assignedToUserId isEqualToString:old.assignedToUserId]));
     BOOL teamAssignmentEqual = ((teamAssignmentAlwaysNil) || ([self.assignedToTeamId isEqualToString:old.assignedToTeamId]));
-    BOOL sameAssignment = ((userAssignmentEqual) && (teamAssignmentEqual));
-
-    return (!sameCustomFields || !sameChannels || !sameConfirmed || !sameLabels || !sameGroups || !sameAssignment);
+    
+    return ((!userAssignmentEqual) || (!teamAssignmentEqual));
 }
 
 - (BOOL) visualRefreshSinceOldMessageShouldAnimate:(ZNGContact *)old
@@ -629,9 +643,9 @@ static NSString * const ParameterNameClosed = @"is_closed";
     }];
 }
 
-- (void) assignToTeam:(ZNGTeam *)team
+- (void) assignToTeamWithId:(NSString *)teamId
 {
-    if ([team.teamId length] == 0) {
+    if ([teamId length] == 0) {
         ZNGLogError(@"%s called with no team ID.  Ignoring.", __PRETTY_FUNCTION__);
         return;
     }
@@ -639,24 +653,24 @@ static NSString * const ParameterNameClosed = @"is_closed";
     NSString * oldTeamId = self.assignedToTeamId;
     NSString * oldUserId = self.assignedToUserId;
     
-    [self _atomicallySetAssignedTeamId:team.teamId andUserId:nil];
+    [self _atomicallySetAssignedTeamId:teamId andUserId:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
 
-    [self.contactClient assignContactWithId:self.contactId toTeamId:team.teamId success:^(ZNGContact *contact, ZNGStatus *status) {
+    [self.contactClient assignContactWithId:self.contactId toTeamId:teamId success:^(ZNGContact *contact, ZNGStatus *status) {
         // We succeeded, so we expect these to match what we set.  Just in case, we'll double set the values.
         [self _atomicallySetAssignedTeamId:contact.assignedToTeamId andUserId:contact.assignedToUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Assigning contact %@ to team %@ failed: %@", [self fullName], [team displayName], error);
+        ZNGLogError(@"Assigning contact %@ to team %@ failed: %@", [self fullName], teamId, error);
         
         [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     }];
 }
 
-- (void) assignToUser:(ZNGUser *)user
+- (void) assignToUserWithId:(NSString *)userId
 {
-    if ([user.userId length] == 0) {
+    if ([userId length] == 0) {
         ZNGLogError(@"%s called with no user ID.  Ignoring.", __PRETTY_FUNCTION__);
         return;
     }
@@ -664,15 +678,15 @@ static NSString * const ParameterNameClosed = @"is_closed";
     NSString * oldTeamId = self.assignedToTeamId;
     NSString * oldUserId = self.assignedToUserId;
 
-    [self _atomicallySetAssignedTeamId:nil andUserId:user.userId];
+    [self _atomicallySetAssignedTeamId:nil andUserId:userId];
     [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     
-    [self.contactClient assignContactWithId:self.contactId toUserId:user.userId success:^(ZNGContact *contact, ZNGStatus *status) {
+    [self.contactClient assignContactWithId:self.contactId toUserId:userId success:^(ZNGContact *contact, ZNGStatus *status) {
         // We succeeded, so we expect these to match what we set.  Just in case, we'll double set the values.
         [self _atomicallySetAssignedTeamId:contact.assignedToTeamId andUserId:contact.assignedToUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Assigning contact %@ to %@ failed: %@", [self fullName], [user fullName], error);
+        ZNGLogError(@"Assigning contact %@ to user %@ failed: %@", [self fullName], userId, error);
         
         [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];

@@ -16,6 +16,7 @@
 #import "ZNGMessageForwardingRequest.h"
 #import "ZNGSocketClient.h"
 #import "ZingleAccountSession.h"
+#import "ZNGUserAuthorization.h"
 
 static const int zngLogLevel = ZNGLogLevelWarning;
 
@@ -365,7 +366,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (void) addAvatarToSendingEvent:(ZNGEvent *)event
 {
-    event.triggeredByUser = [ZNGUser userFromUserAuthorization:self.session.userAuthorization];
+    event.triggeredByUser = self.session.userAuthorization;
 }
 
 - (void) triggerAutomation:(ZNGAutomation *)automation completion:(void (^)(BOOL success))completion

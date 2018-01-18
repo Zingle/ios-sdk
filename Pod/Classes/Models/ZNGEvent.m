@@ -11,17 +11,18 @@
 #import "ZNGContact.h"
 #import "ZingleValueTransformers.h"
 
-static NSString * const ZNGEventTypeMessage = @"message";
-static NSString * const ZNGEventTypeNote = @"note";
-static NSString * const ZNGEventMarkConfirmed = @"mark_confirmed";
-static NSString * const ZNGEventMarkUnconfirmed = @"mark_unconfirmed";
-static NSString * const ZNGEventContactCreated = @"contact_created";
-static NSString * const ZNGEventWorkflowStarted = @"workflow_started";
-static NSString * const ZNGEventWorkflowEnded = @"workflow_ended";
-static NSString * const ZNGEventFeedReopened = @"feed_reopened";
-static NSString * const ZNGEventFeedClosed = @"feed_closed";
-static NSString * const ZNGEventMessageForwarded = @"message_forward";
-static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
+NSString * const ZNGEventTypeMessage = @"message";
+NSString * const ZNGEventTypeNote = @"note";
+NSString * const ZNGEventTypeMarkConfirmed = @"mark_confirmed";
+NSString * const ZNGEventTypeMarkUnconfirmed = @"mark_unconfirmed";
+NSString * const ZNGEventTypeContactCreated = @"contact_created";
+NSString * const ZNGEventTypeWorkflowStarted = @"workflow_started";
+NSString * const ZNGEventTypeWorkflowEnded = @"workflow_ended";
+NSString * const ZNGEventTypeFeedReopened = @"feed_reopened";
+NSString * const ZNGEventTypeFeedClosed = @"feed_closed";
+NSString * const ZNGEventTypeMessageForwarded = @"message_forward";
+NSString * const ZNGEventTypeHotsosIssueCreated = @"hotsos_issue_creation";
+NSString * const ZNGEventTypeAssignmentChange = @"assignment_changed";
 
 @implementation ZNGEvent
 
@@ -33,15 +34,16 @@ static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
         types = @[
                   ZNGEventTypeMessage,
                   ZNGEventTypeNote,
-                  ZNGEventMarkConfirmed,
-                  ZNGEventMarkUnconfirmed,
-                  ZNGEventContactCreated,
-                  ZNGEventWorkflowStarted,
-                  ZNGEventWorkflowEnded,
-                  ZNGEventFeedClosed,
-                  ZNGEventFeedReopened,
-                  ZNGEventMessageForwarded,
-                  ZNGEventHotsosIssueCreated
+                  ZNGEventTypeMarkConfirmed,
+                  ZNGEventTypeMarkUnconfirmed,
+                  ZNGEventTypeContactCreated,
+                  ZNGEventTypeWorkflowStarted,
+                  ZNGEventTypeWorkflowEnded,
+                  ZNGEventTypeFeedClosed,
+                  ZNGEventTypeFeedReopened,
+                  ZNGEventTypeMessageForwarded,
+                  ZNGEventTypeHotsosIssueCreated,
+                  ZNGEventTypeAssignmentChange
                   ];
     });
     
@@ -251,24 +253,43 @@ static NSString * const ZNGEventHotsosIssueCreated = @"hotsos_issue_creation";
         return self.body;
     }
     
-    if ([self.eventType isEqualToString:ZNGEventMarkConfirmed]) {
+    if ([self.eventType isEqualToString:ZNGEventTypeMarkConfirmed]) {
         return @"Marked read";
-    } else if ([self.eventType isEqualToString:ZNGEventMarkUnconfirmed]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeMarkUnconfirmed]) {
         return @"Marked unread";
-    } else if ([self.eventType isEqualToString:ZNGEventContactCreated]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeContactCreated]) {
         return @"Contact created";
-    } else if ([self.eventType isEqualToString:ZNGEventWorkflowStarted]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeWorkflowStarted]) {
         return @"Automation started";
-    } else if ([self.eventType isEqualToString:ZNGEventWorkflowEnded]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeWorkflowEnded]) {
         return @"Automation ended";
-    } else if ([self.eventType isEqualToString:ZNGEventFeedClosed]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeFeedClosed]) {
         return @"Closed";
-    } else if ([self.eventType isEqualToString:ZNGEventFeedReopened]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeFeedReopened]) {
         return @"Reopened";
-    } else if ([self.eventType isEqualToString:ZNGEventMessageForwarded]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeMessageForwarded]) {
         return @"Message forwarded";
-    } else if ([self.eventType isEqualToString:ZNGEventHotsosIssueCreated]) {
+    } else if ([self.eventType isEqualToString:ZNGEventTypeHotsosIssueCreated]) {
         return @"HotSOS order created";
+    } else if ([self.eventType isEqualToString:ZNGEventTypeAssignmentChange]) {
+        NSMutableString * description;
+        
+        // The body should be either "unassigned" or a team/person name that was assigned
+        if ([self.body isEqualToString:@"unassigned"]) {
+            description = [NSMutableString stringWithString:@"Unassigned"];
+        } else if ([self.body length] > 0) {
+            description = [NSMutableString stringWithFormat:@"Assigned to %@", self.body];
+        } else {
+            description = [NSMutableString stringWithString:@"Assignment changed"];
+        }
+        
+        // Add the user info if available.
+        // It's arguable that this appending should be added to every single return value instead of just assignment.
+        if (self.triggeredByUser != nil) {
+            [description appendFormat:@" by %@", [self.triggeredByUser fullName]];
+        }
+        
+        return description;
     }
     
     return @"Unknown event";

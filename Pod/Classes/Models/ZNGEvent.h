@@ -13,6 +13,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+extern NSString * const ZNGEventTypeMessage;
+extern NSString * const ZNGEventTypeNote;
+extern NSString * const ZNGEventTypeMarkConfirmed;
+extern NSString * const ZNGEventTypeMarkUnconfirmed;
+extern NSString * const ZNGEventTypeContactCreated;
+extern NSString * const ZNGEventTypeWorkflowStarted;
+extern NSString * const ZNGEventTypeWorkflowEnded;
+extern NSString * const ZNGEventTypeFeedReopened;
+extern NSString * const ZNGEventTypeFeedClosed;
+extern NSString * const ZNGEventTypeMessageForwarded;
+extern NSString * const ZNGEventTypeHotsosIssueCreated;
+extern NSString * const ZNGEventTypeAssignmentChange;
+
 @class ZNGContact;
 @class ZNGEventViewModel;
 

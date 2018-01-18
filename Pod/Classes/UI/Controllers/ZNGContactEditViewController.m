@@ -842,7 +842,8 @@ static NSString * const AssignSegueIdentifier = @"assign";
     } else if ([segue.identifier isEqualToString:AssignSegueIdentifier]) {
         UINavigationController * navController = segue.destinationViewController;
         ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
-        assignView.conversation = self.conversation;
+        assignView.session = self.contactClient.session;
+        assignView.contact = self.contact;
     }
 }
 

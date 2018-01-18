@@ -53,15 +53,21 @@ enum TopSectionRows {
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGAssignmentViewController class]];
     blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
-    self.title = [NSString stringWithFormat:@"Assign to %@", [self.conversation remoteName]];
+    if ([[self.contact fullName] length] > 0) {
+        self.title = [NSString stringWithFormat:@"Assign to %@", [self.contact fullName]];
+    }
     
-    teams = self.conversation.session.service.teams;
-    
+    teams = self.session.service.teams;
+
     // TODO: Populate users list
 }
 
 - (IBAction)pressedClose:(id)sender
 {
+    if ([self.delegate respondsToSelector:@selector(assignmentViewWasCanceled:)]) {
+        [self.delegate assignmentViewWasCanceled:self];
+    }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -108,7 +114,7 @@ enum TopSectionRows {
                 case ROW_YOU:
                 {
                     ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"user" forIndexPath:indexPath];
-                    ZNGUserAuthorization * userAuth = self.conversation.session.userAuthorization;
+                    ZNGUserAuthorization * userAuth = self.session.userAuthorization;
                     ZNGAvatarImageView * avatar = [[ZNGAvatarImageView alloc] initWithAvatarUrl:userAuth.avatarUri
                                                                                        initials:[[userAuth displayName] initials]
                                                                                            size:cell.avatarContainer.bounds.size
@@ -177,30 +183,20 @@ enum TopSectionRows {
             switch (indexPath.row) {
                 case ROW_YOU:
                 {
-                    ZNGUser * you = [ZNGUser userFromUserAuthorization:self.conversation.session.userAuthorization];
-                    
-                    if (![self.conversation.contact.assignedToUserId isEqualToString:you.userId]) {
-                        [self.conversation.contact assignToUser:you];
-                    } else {
-                        ZNGLogInfo(@"Declining to assign %@ to the current user because it is already assigned to him.", [self.conversation.contact fullName]);
-                    }
-                    
+                    ZNGUser * you = [ZNGUser userFromUserAuthorization:self.session.userAuthorization];
+                    [self.delegate userChoseToAssignContact:self.contact toUser:you];
                     break;
                 }
                     
                 case ROW_UNASSIGN:
-                    if ((self.conversation.contact.assignedToUserId == nil) && (self.conversation.contact.assignedToTeamId == nil)) {
-                        ZNGLogInfo(@"Declining to unassign %@ because he is already unassigned.", [self.conversation.contact fullName]);
-                    } else {
-                        [self.conversation.contact unassign];
-                    }
+                    [self.delegate userChoseToUnassignContact:self.contact];
             }
             
             [self dismissViewControllerAnimated:YES completion:nil];
             return;
             
         case SECTION_TEAMS:
-            [self.conversation.contact assignToTeam:teams[indexPath.row]];
+            [self.delegate userChoseToAssignContact:self.contact toTeam:teams[indexPath.row]];
             [self dismissViewControllerAnimated:YES completion:nil];
             return;
             

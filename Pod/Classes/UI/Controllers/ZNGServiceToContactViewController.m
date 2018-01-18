@@ -1536,6 +1536,22 @@ enum ZNGConversationSections
     [self.conversation userDidType:self.inputToolbar.contentView.textView.text];
 }
 
+#pragma mark - Assignment
+- (void) userChoseToUnassignContact:(ZNGContact *)contact
+{
+    [contact unassign];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
+{
+    [contact assignToTeam:team];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
+{
+    [contact assignToUser:user];
+}
+
 #pragma mark - Actions
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
@@ -1627,7 +1643,9 @@ enum ZNGConversationSections
     } else if ([segue.identifier isEqualToString:@"assign"]) {
         UINavigationController * navController = segue.destinationViewController;
         ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
-        assignView.conversation = self.conversation;
+        assignView.session = self.conversation.session;
+        assignView.contact = self.conversation.contact;
+        assignView.delegate = self;
     }
 }
 

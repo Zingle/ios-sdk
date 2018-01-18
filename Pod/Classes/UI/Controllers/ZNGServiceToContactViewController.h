@@ -8,6 +8,7 @@
 
 #import <ZingleSDK/ZNGConversationViewController.h>
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGAssignmentViewController.h"
 
 @protocol  ZNGServiceToContactViewDelegate <NSObject>
 
@@ -23,7 +24,7 @@
 @end
 
 
-@interface ZNGServiceToContactViewController : ZNGConversationViewController
+@interface ZNGServiceToContactViewController : ZNGConversationViewController <ZNGAssignmentDelegate>
 
 @property (weak, nonatomic, readonly, nullable) ZNGServiceConversationInputToolbar * inputToolbar;
 

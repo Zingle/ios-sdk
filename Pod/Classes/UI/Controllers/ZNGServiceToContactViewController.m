@@ -34,6 +34,9 @@
 #import "ZNGMessageData.h"
 #import "JSQMessagesViewController/JSQMessageBubbleImageDataSource.h"
 #import "ZNGPendingResponseOrNote.h"
+#import "ZNGAssignmentViewController.h"
+#import "ZNGTeam.h"
+#import "ZNGUser.h"
 
 @import SDWebImage;
 
@@ -176,6 +179,7 @@ enum ZNGConversationSections
     titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
     titleLabel.textColor = [UIColor zng_lightBlue];
     titleLabel.numberOfLines = 2;
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n\
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
     [self updateTitle];
@@ -803,6 +807,11 @@ enum ZNGConversationSections
     NSMutableArray<UIAlertAction *> * actions = ([superActions count] > 0) ? [superActions mutableCopy] : [[NSMutableArray alloc] init];
     
     NSString * uiType = @"ellipsis menu";
+    
+    UIAlertAction * assign = [UIAlertAction actionWithTitle:@"Assign" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [self performSegueWithIdentifier:@"assign" sender:self];
+    }];
+    [actions addObject:assign];
     
     UIAlertAction * editContact = [UIAlertAction actionWithTitle:@"View / edit contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self pressedEditContact];
@@ -1529,6 +1538,22 @@ enum ZNGConversationSections
     [self.conversation userDidType:self.inputToolbar.contentView.textView.text];
 }
 
+#pragma mark - Assignment
+- (void) userChoseToUnassignContact:(ZNGContact *)contact
+{
+    [contact unassign];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
+{
+    [contact assignToTeamWithId:team.teamId];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
+{
+    [contact assignToUserWithId:user.userId];
+}
+
 #pragma mark - Actions
 
 - (void) didPressSendButton:(UIButton *)button withMessageText:(NSString *)text senderId:(NSString *)senderId senderDisplayName:(NSString *)senderDisplayName date:(NSDate *)date
@@ -1596,6 +1621,7 @@ enum ZNGConversationSections
     if ([segue.identifier isEqualToString:@"editContact"]) {
         ZNGContactEditViewController * vc = segue.destinationViewController;
         
+        vc.conversation = self.conversation;
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
@@ -1616,6 +1642,12 @@ enum ZNGConversationSections
         forwardingView.availableServices = availableServices;
         forwardingView.contact = self.conversation.contact;
         forwardingView.activeService = self.conversation.service;
+    } else if ([segue.identifier isEqualToString:@"assign"]) {
+        UINavigationController * navController = segue.destinationViewController;
+        ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
+        assignView.session = self.conversation.session;
+        assignView.contact = self.conversation.contact;
+        assignView.delegate = self;
     }
 }
 

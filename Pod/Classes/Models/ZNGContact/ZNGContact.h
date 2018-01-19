@@ -105,6 +105,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (BOOL) hasBeenEditedSince:(ZNGContact *)old;
 
+/**
+ *  Returns YES if the assignment to either team or user has changed (or if old is nil).
+ */
+- (BOOL) assignmentHasChangedSince:(ZNGContact *)old;
+
 - (BOOL) isEqualToContact:(nullable ZNGContact *)other;
 
 - (NSArray<ZNGChannel *> *) channelsWithValues;
@@ -144,8 +149,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) unconfirm;
 - (void) close;
 - (void) reopen;
-- (void) assignToTeam:(ZNGTeam *)team;
-- (void) assignToUser:(ZNGUser *)user;
+- (void) assignToTeamWithId:(NSString *)teamId;
+- (void) assignToUserWithId:(NSString *)userId;
 - (void) unassign;
 
 NS_ASSUME_NONNULL_END

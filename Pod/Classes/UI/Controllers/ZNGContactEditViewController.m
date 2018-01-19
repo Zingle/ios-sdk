@@ -29,9 +29,17 @@
 #import "ZNGGradientLoadingView.h"
 #import "ZNGLabelGridView.h"
 #import "ZNGContactDefaultFieldsTableViewCell.h"
+#import "ZNGUserAuthorization.h"
+#import "ZNGAvatarImageView.h"
+#import "NSString+Initials.h"
+#import "ZNGAssignTeamTableViewCell.h"
+#import "ZNGAssignUserTableViewCell.h"
+#import "ZNGTeam.h"
+#import "ZNGAssignmentViewController.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
+    ContactSectionAssignment,
     ContactSectionChannels,
     ContactSectionGroups,
     ContactSectionLabels,
@@ -44,6 +52,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
+static NSString * const AssignSegueIdentifier = @"assign";
 
 @interface ZNGContactEditViewController () <ZNGLabelGridViewDelegate>
 
@@ -476,11 +485,21 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     return [NSIndexPath indexPathForRow:row inSection:ContactSectionChannels];
 }
 
+- (BOOL) shouldShowAssignmentSection
+{
+    return ([self.service allowsAssignment]);
+}
+
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     // All sections other than the top profile section will have headers
     if (section == ContactSectionDefaultCustomFields) {
+        return 0.0;
+    }
+    
+    // If we have no assignment section, make sure it has no header
+    if ((section == ContactSectionAssignment) && (![self shouldShowAssignmentSection])) {
         return 0.0;
     }
     
@@ -501,6 +520,10 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         case ContactSectionDefaultCustomFields:
             // No header for top section
             return nil;
+        case ContactSectionAssignment:
+            header.sectionLabel.text = @"ASSIGNMENT";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconAssignment" inBundle:bundle compatibleWithTraitCollection:nil];
+            break;
         case ContactSectionChannels:
             header.sectionLabel.text = @"CHANNELS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconChannels" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -541,6 +564,8 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section) {
+        case ContactSectionAssignment:
+            return ([self shouldShowAssignmentSection]) ? 1 : 0;
         case ContactSectionDefaultCustomFields:
             return 1;
         case ContactSectionOptionalCustomFields:
@@ -555,9 +580,63 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
     }
 }
 
+- (ZNGAvatarImageView *) avatarForUser:(ZNGUser *)user
+{
+    return [[ZNGAvatarImageView alloc] initWithAvatarUrl:user.avatarUri
+                                                initials:[[user fullName] initials]
+                                                    size:CGSizeMake(32.0, 32.0)
+                                         backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
+                                               textColor:[UIColor whiteColor]
+                                                    font:[UIFont latoFontOfSize:24.0]];
+}
+
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
+        case ContactSectionAssignment:
+        {
+            if ([self.contact.assignedToUserId length] > 0) {
+                ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"userAssignment" forIndexPath:indexPath];
+
+                // It's assigned to a user.  Is it me?
+                ZingleAccountSession * session = (ZingleAccountSession *)self.contactClient.session;
+                
+                if ([self.contact.assignedToUserId isEqualToString:session.userAuthorization.userId]) {
+                    // It's you!
+                    // How are you, gentlemen?
+                    ZNGUser * me = [ZNGUser userFromUserAuthorization:session.userAuthorization];
+                    
+                    cell.nameLabel.text = @"You";
+                    [cell.avatarContainer addSubview:[self avatarForUser:me]];
+                } else {
+                    // This is assigned to a user, but not the current user
+                    
+                    // TODO: Plug in users once we get a users list
+                }
+                
+                return cell;
+
+            } else if ([self.contact.assignedToTeamId length] > 0) {
+                // It's assigned to a team
+                ZNGAssignTeamTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"teamAssignment" forIndexPath:indexPath];
+                ZNGTeam * team = [self.service teamWithId:self.contact.assignedToTeamId];
+                
+                if (team == nil) {
+                    ZNGLogWarn(@"%@ is assigned to team %@, but that team does not appear in our data.", [self.contact fullName], self.contact.assignedToTeamId);
+                    cell.nameLabel.text = @"A team";
+                    cell.emojiLabel.text = @"?";
+                } else {
+                    cell.nameLabel.text = team.displayName;
+                    cell.emojiLabel.text = team.emoji;
+                }
+                
+                return cell;
+            }
+            
+            // Else it's unassigned
+            return [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
+        }
+            
         case ContactSectionDefaultCustomFields:
         {
             ZNGContactDefaultFieldsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"defaultFields" forIndexPath:indexPath];
@@ -651,20 +730,29 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if ((indexPath.section == ContactSectionChannels) && (indexPath.row >= [self.contact.channels count])) {
-        // This is the "Add phone number" row
-        ZNGChannel * newPhoneChannel = [[ZNGChannel alloc] init];
-        newPhoneChannel.channelType = [self.service phoneNumberChannelType];
+    if (indexPath.section == ContactSectionChannels) {
+        if (indexPath.row >= [self.contact.channels count]) {
+            // This is the "Add phone number" row
+            ZNGChannel * newPhoneChannel = [[ZNGChannel alloc] init];
+            newPhoneChannel.channelType = [self.service phoneNumberChannelType];
+            
+            NSMutableArray * mutableChannels = [self.contact.channels mutableCopy];
+            NSMutableArray * mutablePhoneChannels = [phoneNumberChannels mutableCopy];
+            [mutableChannels addObject:newPhoneChannel];
+            [mutablePhoneChannels addObject:newPhoneChannel];
+            self.contact.channels = mutableChannels;
+            phoneNumberChannels = mutablePhoneChannels;
+            
+            NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
+            [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } else if (indexPath.section == ContactSectionAssignment) {
+        [self performSegueWithIdentifier:AssignSegueIdentifier sender:self];
         
-        NSMutableArray * mutableChannels = [self.contact.channels mutableCopy];
-        NSMutableArray * mutablePhoneChannels = [phoneNumberChannels mutableCopy];
-        [mutableChannels addObject:newPhoneChannel];
-        [mutablePhoneChannels addObject:newPhoneChannel];
-        self.contact.channels = mutableChannels;
-        phoneNumberChannels = mutablePhoneChannels;
-        
-        NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
-        [tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationFade];
+        // De-select after the segue
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [tableView deselectRowAtIndexPath:indexPath animated:NO];
+        });
     }
 }
 
@@ -748,7 +836,35 @@ static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
         
         vc.labels = availableLabels;
         vc.delegate = self;
+    } else if ([segue.identifier isEqualToString:AssignSegueIdentifier]) {
+        UINavigationController * navController = segue.destinationViewController;
+        ZNGAssignmentViewController * assignView = [navController.viewControllers firstObject];
+        assignView.session = (ZingleAccountSession *)self.contactClient.session;
+        assignView.contact = self.contact;
+        assignView.delegate = self;
     }
+}
+
+#pragma mark - Assignment
+- (void) userChoseToUnassignContact:(ZNGContact *)contact
+{
+    self.contact.assignedToTeamId = nil;
+    self.contact.assignedToUserId = nil;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:ContactSectionAssignment] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
+{
+    self.contact.assignedToTeamId = team.teamId;
+    self.contact.assignedToUserId = nil;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:ContactSectionAssignment] withRowAnimation:UITableViewRowAnimationNone];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
+{
+    self.contact.assignedToTeamId = nil;
+    self.contact.assignedToUserId = user.userId;
+    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:ContactSectionAssignment] withRowAnimation:UITableViewRowAnimationNone];
 }
 
 @end

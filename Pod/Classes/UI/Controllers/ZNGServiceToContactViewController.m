@@ -68,7 +68,7 @@ enum ZNGConversationSections
 @implementation ZNGServiceToContactViewController
 {
     UIView * bannerContainer;
-    UIButton * titleButton;
+    UILabel * titleLabel;
     
     UIView * blockedChannelBanner;
     UILabel * blockedChannelLabel;
@@ -169,17 +169,21 @@ enum ZNGConversationSections
 
 - (void) viewDidLoad
 {
-    // Replace the default nav bar title with a button
-    // Note that this must be done before [super viewDidLoad] to prevent the title from jarringly popping out of nonexistence
-    titleButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
-    titleButton.titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
-    [titleButton setTitleColor:[UIColor zng_lightBlue] forState:UIControlStateNormal];
-    [titleButton addTarget:self action:@selector(pressedEditContact) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.titleView = titleButton;
-
-    
     [super viewDidLoad];
+
+    // Add a custom UILabel to support multi line titles
+    titleLabel = [[UILabel alloc] init];
+    titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
+    titleLabel.textColor = [UIColor zng_lightBlue];
+    titleLabel.numberOfLines = 2;
+    titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.navigationItem.titleView = titleLabel;
+    [self updateTitle];
+    
+    // Add a tap gesture recognizer to the title to link to the edit view
+    UITapGestureRecognizer * titleTapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedEditContact)];
+    titleLabel.userInteractionEnabled = YES;
+    [titleLabel addGestureRecognizer:titleTapper];
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
@@ -278,7 +282,7 @@ enum ZNGConversationSections
         } else if ([keyPath isEqualToString:KVOContactChannelsPath]) {
             [self updateInputStatus];
         } else if ([keyPath isEqualToString:KVOContactCustomFieldsPath]) {
-            [titleButton setTitle:self.conversation.remoteName forState:UIControlStateNormal];
+            [self updateTitle];
         } else if ([keyPath isEqualToString:KVOInputLockedPath]) {
             NSString * oldLockedString = change[NSKeyValueChangeOldKey];
             NSString * lockedString = change[NSKeyValueChangeNewKey];
@@ -373,6 +377,15 @@ enum ZNGConversationSections
         
         [self updateTopInset];
     }
+}
+
+- (void) updateTitle
+{
+    // Removing the title label from the navigation item is necessary when changing its size to avoid some clipping shenanigans
+    self.navigationItem.titleView = nil;
+    titleLabel.text = [self.conversation remoteName];
+    [titleLabel sizeToFit];
+    self.navigationItem.titleView = titleLabel;
 }
 
 - (NSString *) commaAndifiedString:(NSArray<NSString *> *)components

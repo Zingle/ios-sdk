@@ -130,7 +130,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (NSArray<NSString *> *)eventTypes
 {
-    return @[@"message", @"note"];
+    return @[ZNGEventTypeMessage, ZNGEventTypeNote, ZNGEventTypeAssignmentChange];
 }
 
 - (NSString *)remoteName

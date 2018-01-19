@@ -844,8 +844,8 @@
                                                         <constraint firstAttribute="height" constant="64" id="sUh-ID-wOf"/>
                                                     </constraints>
                                                 </imageView>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ljm-8I-NYe" customClass="JVFloatLabeledTextField">
-                                                    <rect key="frame" x="95" y="65" width="272" height="43"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ljm-8I-NYe" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="102" y="65" width="258" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="10f-6O-InA"/>
                                                     </constraints>
@@ -861,8 +861,8 @@
                                                         <outlet property="delegate" destination="zLT-so-Bb8" id="u1n-Sx-zYU"/>
                                                     </connections>
                                                 </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="7pc-rO-cRK" customClass="JVFloatLabeledTextField">
-                                                    <rect key="frame" x="95" y="8" width="272" height="43"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Title" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="7pc-rO-cRK" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="102" y="8" width="258" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="NeH-3j-aSB"/>
                                                     </constraints>
@@ -878,8 +878,8 @@
                                                         <outlet property="delegate" destination="zLT-so-Bb8" id="WPp-3A-OV5"/>
                                                     </connections>
                                                 </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kbt-DW-Nbq" customClass="JVFloatLabeledTextField">
-                                                    <rect key="frame" x="95" y="122" width="272" height="43"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kbt-DW-Nbq" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="102" y="122" width="258" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="hYq-xz-tS6"/>
                                                     </constraints>
@@ -925,7 +925,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Aqf-Zt-MOZ" customClass="JVFloatLabeledTextField">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Aqf-Zt-MOZ" customClass="ZNGContactEditFloatLabeledTextField">
                                                     <rect key="frame" x="37" y="8" width="330" height="46"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -1057,7 +1057,7 @@
                                                         <action selector="pressedPhoneNumberType:" destination="yxw-oU-69S" eventType="touchUpInside" id="l86-wD-mhf"/>
                                                     </connections>
                                                 </button>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="200" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MvJ-Dy-edy" customClass="ZNGNonLeakingTextField">
                                                     <rect key="frame" x="142" y="8" width="225" height="43"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="43" id="Yjv-O7-T28"/>

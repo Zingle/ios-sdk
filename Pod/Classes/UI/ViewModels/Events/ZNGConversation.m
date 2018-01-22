@@ -384,6 +384,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     if (![indexesOfNewEventsInIncomingEvents isContinuous]) {
         ZNGLogError(@"%s was called, but there is a non-continuous delta between our old data and this new data.  This would likely cause duplicate event data.\n\
                       Reloading all data.", __PRETTY_FUNCTION__);
+        _loading = NO;  // Remove loading flag without triggering KVO so that the load below is not skipped.
         [self loadRecentEventsErasingOlderData:YES];
         return;
     }
@@ -407,6 +408,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             
             if ([viewModelPostInsertionIndexes count] == 0) {
                 ZNGLogError(@"Unable to find our insertion target event in the view models array.  Something has gone wacky.  Clearing all data and reloading...");
+                _loading = NO;  // Remove loading flag without triggering KVO so that the load below is not skipped.
                 [self loadRecentEventsErasingOlderData:YES];
                 return;
             }

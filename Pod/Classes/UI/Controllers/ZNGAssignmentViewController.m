@@ -182,11 +182,8 @@ enum TopSectionRows {
         case SECTION_TOP:
             switch (indexPath.row) {
                 case ROW_YOU:
-                {
-                    ZNGUser * you = [ZNGUser userFromUserAuthorization:self.session.userAuthorization];
-                    [self.delegate userChoseToAssignContact:self.contact toUser:you];
+                    [self.delegate userChoseToAssignContact:self.contact toUser:self.session.userAuthorization];
                     break;
-                }
                     
                 case ROW_UNASSIGN:
                     [self.delegate userChoseToUnassignContact:self.contact];

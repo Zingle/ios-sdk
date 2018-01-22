@@ -23,6 +23,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray* serviceIds;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;
 
+/**
+ *  A local copy of the user's avatar, rendered in a 15pt circle.
+ *  Nil if fetchAndRenderTinyAvatar has never been called.
+ */
+@property (nonatomic, strong, nullable) UIImage * tinyAvatar;
+
+- (void) fetchAndRenderTinyAvatar:(void (^_Nullable)(UIImage * tinyImage))completion;
+
 - (NSString * _Nullable) fullName;
 
 + (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth;

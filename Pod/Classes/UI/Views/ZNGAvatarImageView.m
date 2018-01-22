@@ -9,6 +9,7 @@
 #import "ZNGAvatarImageView.h"
 #import "ZNGInitialsAvatar.h"
 #import "ZNGLogging.h"
+#import "UIImage+CircleCrop.h"
 
 @import SDWebImage;
 
@@ -145,26 +146,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     CGFloat diameter = MIN(self.size.width, self.size.height);
-    CGFloat smallestDimension = MIN(image.size.width, image.size.height);
-    CGFloat scale = diameter / smallestDimension;
-    CGFloat scaledSmallestDimension = smallestDimension * scale;
-    
-    CGSize downscaledSize = CGSizeMake(image.size.width * scale, image.size.height * scale);
-    
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(scaledSmallestDimension, scaledSmallestDimension), false, 0.0);
-    CGRect rect = CGRectMake(0.0, 0.0, scaledSmallestDimension, scaledSmallestDimension);
-    [[UIBezierPath bezierPathWithOvalInRect:rect] addClip];
-    CGFloat radius = scaledSmallestDimension / 2.0;
-    CGFloat halfWidth = downscaledSize.width / 2.0;
-    CGFloat halfHeight = downscaledSize.height / 2.0;
-    CGPoint imageOrigin = CGPointMake(radius - halfWidth, radius - halfHeight);
-    
-    [image drawInRect:CGRectMake(imageOrigin.x, imageOrigin.y, downscaledSize.width, downscaledSize.height)];
-    
-    UIImage * result = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return result;
+    return [image imageCroppedToCircleOfDiameter:diameter withScale:0.0];
 }
 
 - (UIImage *) imageAddingEditIcon:(UIImage *)image

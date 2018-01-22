@@ -13,27 +13,14 @@
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
-    return @{
-             @"authorizationClass" : @"authorization_class",
-             NSStringFromSelector(@selector(userId)) : @"id",
-             @"email" : @"email",
-             @"firstName" : @"first_name",
-             @"lastName" : @"last_name",
-             @"title" : @"title",
-             NSStringFromSelector(@selector(accountIds)): @"account_uuids",
-             NSStringFromSelector(@selector(serviceIds)): @"service_uuids",
-             NSStringFromSelector(@selector(avatarUri)): @"avatar_uri",
-             };
-}
-
-+ (NSValueTransformer *) avatarUriJSONTransformer
-{
-    return [NSValueTransformer valueTransformerForName:MTLURLValueTransformerName];
+    return [[super JSONKeyPathsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
+                                                                                            NSStringFromSelector(@selector(authorizationClass)): @"authorization_class",
+                                                                                            }];
 }
 
 - (NSString *)displayName
 {
-    return [[ZNGUser userFromUserAuthorization:self] fullName];
+    return [super fullName];
 }
 
 @end

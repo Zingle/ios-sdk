@@ -7,19 +7,11 @@
 //
 
 #import <Mantle/Mantle.h>
+#import "ZNGUser.h"
 
-@interface ZNGUserAuthorization : MTLModel<MTLJSONSerializing>
+@interface ZNGUserAuthorization : ZNGUser
 
 @property (nonatomic, strong, nullable) NSString * authorizationClass;
-@property (nonatomic, strong, nullable) NSString * userId;
-@property (nonatomic, strong, nullable) NSString * username;
-@property (nonatomic, strong, nullable) NSString * email;
-@property (nonatomic, strong, nullable) NSString * firstName;
-@property (nonatomic, strong, nullable) NSString * lastName;
-@property (nonatomic, strong, nullable) NSString * title;
-@property (nonatomic, strong, nullable) NSArray<NSString *> * accountIds;
-@property (nonatomic, strong, nullable) NSArray<NSString *> * serviceIds;
-@property (nonatomic, strong, nullable) NSURL * avatarUri;
 
 - (NSString * _Nullable) displayName;
 

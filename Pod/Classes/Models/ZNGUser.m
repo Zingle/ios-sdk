@@ -7,7 +7,10 @@
 //
 
 #import "ZNGUser.h"
+#import "ZNGService.h"
 #import "ZNGUserAuthorization.h"
+
+static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
 
 @implementation ZNGUser
 
@@ -21,7 +24,8 @@
              @"lastName" : @"last_name",
              @"title" : @"title",
              @"serviceIds" : @"service_ids",
-             @"avatarUri" : @"avatar_uri"
+             @"avatarUri" : @"avatar_uri",
+             NSStringFromSelector(@selector(servicePrivileges)): @"service_privileges",
              };
 }
 
@@ -70,19 +74,18 @@
     return nil;
 }
 
-+ (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth
+- (BOOL) canMonitorAllTeamsOnService:(ZNGService *)service;
 {
-    ZNGUser * user = [[self alloc] init];
+    return [[self privilegesForService:service] containsObject:ZNGUserPrivilegeMonitorTeams];
+}
+
+- (NSArray<NSString *> * _Nullable) privilegesForService:(ZNGService *)service
+{
+    if (service.serviceId == nil) {
+        return nil;
+    }
     
-    user.firstName = auth.firstName;
-    user.lastName = auth.lastName;
-    user.userId = auth.userId;
-    user.email = auth.email;
-    user.title = auth.title;
-    user.serviceIds = auth.serviceIds;
-    user.avatarUri = auth.avatarUri;
-    
-    return user;
+    return self.servicePrivileges[service.serviceId];
 }
 
 + (instancetype) userFromSocketData:(NSDictionary *)data

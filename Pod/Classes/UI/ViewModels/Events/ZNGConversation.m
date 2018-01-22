@@ -21,6 +21,7 @@
 #import "UIImage+animatedGIF.h"
 #import "NSData+ImageType.h"
 #import "ZNGPendingResponseOrNote.h"
+#import "ZNGUserAuthorization.h"
 
 static const int zngLogLevel = ZNGLogLevelVerbose;
 
@@ -849,7 +850,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 
     if ([self.messageClient.session isKindOfClass:[ZingleAccountSession class]]) {
         ZingleAccountSession * accountSession = (ZingleAccountSession *)self.messageClient.session;
-        message.triggeredByUser = [ZNGUser userFromUserAuthorization:accountSession.userAuthorization];
+        message.triggeredByUser = accountSession.userAuthorization;
     }
     
     if ([newMessage.outgoingImageAttachments count] > 0) {

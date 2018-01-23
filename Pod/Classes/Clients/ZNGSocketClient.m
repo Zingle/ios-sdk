@@ -31,6 +31,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     SocketManager * socketManager;
     
+    int currentServiceNumericId;
+    
     NSString * authPath;
     NSString * nodePath;
     
@@ -135,6 +137,41 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         
         ZNGLogWarn(@"Request to auth at %@ failued for an unknown reason.", authPath);
     }];
+    
+    [self _uncoverNumericIdForCurrentService];
+}
+
+// The socket server is terribly rude and often requires numeric IDs.  We can find our current service's numeric ID
+//  leaked through the v2 API.
+- (void) _uncoverNumericIdForCurrentService
+{
+    if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
+        ZNGLogInfo(@"Neglecting to find service numeric ID because we do not have a ZingleAccountSession.");
+        return;
+    }
+
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    
+    if ([session.service.serviceId length] == 0) {
+        ZNGLogWarn(@"Neglecting to find service numeric ID because there is no UUID for the current service.");
+        return;
+    }
+    
+    NSString * v2ApiString = [session.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
+    AFHTTPSessionManager * httpSession = [ZingleSession anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiString]];
+    [httpSession.requestSerializer setAuthorizationHeaderFieldWithUsername:self.session.token password:self.session.key];
+    
+    NSString * path = [NSString stringWithFormat:@"services/%@", session.service.serviceId];
+    [httpSession GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (([responseObject isKindOfClass:[NSDictionary class]]) && ([responseObject[@"id"] isKindOfClass:[NSNumber class]])) {
+            // We found an ID!
+            currentServiceNumericId = [responseObject[@"id"] intValue];
+        } else {
+            ZNGLogWarn(@"Unable to find service numeric ID in v2 API response.");
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        ZNGLogError(@"Error attempting to fetch service data from v2 API: %@", error);
+    }];
 }
 
 - (void) _connectSocket
@@ -171,6 +208,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     [socketClient on:@"eventListData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf receivedEventListData:data ackEmitter:ackEmitter];
+    }];
+    
+    [socketClient on:@"serviceUsersData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedUserData:data ackEmitter:ackEmitter];
     }];
     
     [socketClient on:@"userIsReplying" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
@@ -288,6 +329,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) socketDidBindNodeController
 {
+    if (currentServiceNumericId > 0) {
+        [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
+    }
+    
     ZNGLogDebug(@"Node controller bind succeeded.");
     if (self.activeConversation != nil) {
         [self subscribeForFeedUpdatesForConversation:self.activeConversation];
@@ -306,6 +351,29 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     if ([feedId integerValue] > 0) {
         self.activeConversation.sequentialId = [feedId integerValue];
     }
+}
+
+- (void) receivedUserData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
+        return;
+    }
+    
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    
+    NSMutableArray<ZNGUser *> * users = [[NSMutableArray alloc] initWithCapacity:[data count]];
+    
+    for (NSDictionary * userDictionary in [data firstObject]) {
+        [users addObject:[ZNGUser userFromSocketData:userDictionary]];
+    }
+    
+    NSSortDescriptor * firstNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(firstName)) ascending:YES];
+    NSSortDescriptor * lastNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(lastName)) ascending:YES];
+    
+    // Sort by first then last name
+    [users sortUsingDescriptors:@[firstNameDescriptor, lastNameDescriptor]];
+    
+    session.users = users;
 }
 
 - (void) socketDidEncounterErrorWithData:(NSArray *)data

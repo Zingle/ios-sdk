@@ -90,6 +90,8 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 @property (nonatomic, copy, nullable) ZNGAccountSessionCallback completion;
 
+@property (nonatomic, strong, nullable) NSArray<ZNGUser *> * users;
+
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;

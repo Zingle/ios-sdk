@@ -10,6 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ZNGService;
 @class ZNGUserAuthorization;
 
 @interface ZNGUser : MTLModel<MTLJSONSerializing>
@@ -36,7 +37,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString * _Nullable) fullName;
 
-+ (instancetype) userFromUserAuthorization:(ZNGUserAuthorization *)auth;
+- (BOOL) canMonitorAllTeamsOnService:(ZNGService *)service;
+
+- (NSArray<NSString *> * _Nullable) privilegesForService:(ZNGService *)service;
+
 + (instancetype) userFromSocketData:(NSDictionary *)data;
 
 NS_ASSUME_NONNULL_END

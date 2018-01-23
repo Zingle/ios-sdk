@@ -567,7 +567,10 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         return @[];
     }
     
-    // TODO: Return all teams if the user is an admin.  We do not yet have that data.
+    // Return all teams if this user has sufficient privilege
+    if ([self.userAuthorization canMonitorAllTeamsOnService:self.service]) {
+        return self.service.teams;
+    }
     
     NSPredicate * oneOfMyTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", self.userAuthorization.userId];
     return [self.service.teams filteredArrayUsingPredicate:oneOfMyTeams];

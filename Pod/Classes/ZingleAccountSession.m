@@ -594,6 +594,24 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return [self.service.teams filteredArrayUsingPredicate:oneOfMyTeams];
 }
 
+#pragma mark - Users
+- (NSArray<ZNGUser *> * _Nonnull) usersIncludingSelf:(BOOL)includeSelf
+{
+    if (includeSelf) {
+        return self.users;
+    }
+    
+    NSMutableArray<ZNGUser *> * filteredUsers = [[NSMutableArray alloc] initWithCapacity:([self.users count] - 1)];
+    
+    for (ZNGUser * dude in self.users) {
+        if (![dude.userId isEqualToString:self.userAuthorization.userId]) {
+            [filteredUsers addObject:dude];
+        }
+    }
+    
+    return filteredUsers;
+}
+
 #pragma mark - Messaging
 - (void) contactChanged:(ZNGContact *)contact
 {

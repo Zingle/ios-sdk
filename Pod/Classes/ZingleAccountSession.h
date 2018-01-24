@@ -153,6 +153,11 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 - (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichCurrentUserBelongs;
 
+/**
+ *  If includeSelf is YES, the return value is identical to the `users` getter.
+ */
+- (NSArray<ZNGUser *> * _Nonnull) usersIncludingSelf:(BOOL)includeSelf;
+
 
 #pragma mark - Messaging methods
 

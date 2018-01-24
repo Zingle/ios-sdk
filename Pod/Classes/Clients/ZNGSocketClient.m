@@ -15,6 +15,7 @@
 #import "ZNGConversationContactToService.h"
 #import "ZingleAccountSession.h"
 #import "ZNGUserAuthorization.h"
+#import "ZNGInboxStatistician.h"
 @import SocketIO;
 
 #if DEBUG
@@ -214,6 +215,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf receivedUserData:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"badgeData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedBadgeData:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"userIsReplying" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf otherUserIsReplying:data];
     }];
@@ -331,6 +336,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if (currentServiceNumericId > 0) {
         [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
+        [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
     }
     
     ZNGLogDebug(@"Node controller bind succeeded.");
@@ -374,6 +380,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [users sortUsingDescriptors:@[firstNameDescriptor, lastNameDescriptor]];
     
     session.users = users;
+}
+
+- (void) receivedBadgeData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
+        return;
+    }
+
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    [session.inboxStatistician updateWithSocketData:data];
 }
 
 - (void) socketDidEncounterErrorWithData:(NSArray *)data

@@ -26,6 +26,8 @@
 #import "ZNGSocketClient.h"
 #import "ZNGNetworkLookout.h"
 #import "ZNGContactGroup.h"
+#import "ZNGInboxStatistician.h"
+#import "ZNGTeamClient.h"
 
 @import AFNetworking;
 
@@ -72,6 +74,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
         _conversationCache.delegate = self;
+        
+        self.inboxStatistician = [[ZNGInboxStatistician alloc] init];
         
         _automaticallyUpdateServiceWhenReturningFromBackground = YES;
     }
@@ -426,6 +430,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     // We now have both an account and a service selected.
     
     [self initializeAllClients];
+    [self retrieveSupplementalV2ApiData];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self synchronouslyRetrieveUserData];
@@ -447,6 +452,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
+    self.teamClient = [[ZNGTeamClient alloc] initWithSession:self serviceId:serviceId];
     
     // A lazy way to keep us from overwriting a mocked client in unit tests.
     // This is a bit of a code smell :(
@@ -461,6 +467,18 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     [self.socketClient connect];
     
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
+}
+
+/**
+ *  Go acquire some data that the v1 API does not supply, namely numeric IDs that the socket server throws at us.
+ */
+- (void) retrieveSupplementalV2ApiData
+{
+    [self.teamClient teamListWithSuccess:^(NSArray<ZNGTeamV2 *> * _Nullable teams) {
+        [self.inboxStatistician updateWithV2TeamsData:teams];
+    } failure:^(ZNGError * _Nullable error) {
+        ZNGLogError(@"Unable to retrieve team IDs from v2 API.");
+    }];
 }
 
 - (void) updateUserData
@@ -556,20 +574,20 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 #pragma mark - Teams
 - (NSArray<ZNGTeam *> * _Nonnull) teamsVisibleToCurrentUser
 {
+    // Return all teams if this user has sufficient privilege
+    if ([self.userAuthorization canMonitorAllTeamsOnService:self.service]) {
+        return self.service.teams;
+    }
+    
+    return [self teamsToWhichCurrentUserBelongs];
+}
+
+- (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichCurrentUserBelongs
+{
     // We cannot return anything meaningful if we are not yet logged in
     if (self.userAuthorization == nil) {
         ZNGLogWarn(@"%s called before a userAuthorization object is available.  Returning empty array.", __PRETTY_FUNCTION__);
         return @[];
-    }
-    
-    // If there are no teams, we have nothing to return
-    if (![self.service allowsTeamAssignment]) {
-        return @[];
-    }
-    
-    // Return all teams if this user has sufficient privilege
-    if ([self.userAuthorization canMonitorAllTeamsOnService:self.service]) {
-        return self.service.teams;
     }
     
     NSPredicate * oneOfMyTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", self.userAuthorization.userId];

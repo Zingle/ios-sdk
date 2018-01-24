@@ -119,6 +119,10 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
         _sessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:self.urlString]];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
         
+        NSString * v2ApiPath = [self.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
+        _v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiPath]];
+        [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
+        
         self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
         self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
         self.notificationsClient = [[ZNGNotificationsClient alloc] initWithSession:self];
@@ -162,6 +166,10 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
         self.sessionManager = [[self class] anonymousSessionManagerWithURL:url];
         [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
+        
+        NSString * v2Path = [urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
+        self.v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2Path]];
+        [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
     }
 }
 

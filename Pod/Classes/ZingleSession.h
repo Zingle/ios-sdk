@@ -77,6 +77,7 @@
 
 #pragma mark - Properties used by client objects
 @property (nonatomic, strong, nonnull) AFHTTPSessionManager * sessionManager;
+@property (nonatomic, strong, nonnull) AFHTTPSessionManager * v2SessionManager; // Session manager for the V2 Zingle API
 @property (nonatomic, readonly, nonnull) dispatch_queue_t jsonProcessingQueue;
 
 - (nonnull id) init NS_UNAVAILABLE;

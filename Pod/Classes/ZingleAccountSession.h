@@ -21,6 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGUserAuthorization;
 @class ZNGUserClient;
 @class ZNGNetworkLookout;
+@class ZNGInboxStatistician;
+@class ZNGTeamClient;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -90,12 +92,21 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 @property (nonatomic, copy, nullable) ZNGAccountSessionCallback completion;
 
+/**
+ *  All users in the current service.  Each ZNGUser object includes online status.
+ */
 @property (nonatomic, strong, nullable) NSArray<ZNGUser *> * users;
+
+/**
+ *  The manager of all inbox count data.
+ */
+@property (nonatomic, strong, nullable) ZNGInboxStatistician * inboxStatistician;
 
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nullable) ZNGUserClient * userClient;
+@property (nonatomic, strong, nullable) ZNGTeamClient * teamClient;
 
 #pragma mark - Network diagnostics
 @property (nonatomic, strong, nullable) ZNGNetworkLookout * networkLookout;
@@ -136,6 +147,12 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *   users will see all teams.
  */
 - (NSArray<ZNGTeam *> * _Nonnull) teamsVisibleToCurrentUser;
+
+/**
+ *  For non-admin users, this will be identicial to `teamsVisibleToCurrentUser`
+ */
+- (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichCurrentUserBelongs;
+
 
 #pragma mark - Messaging methods
 

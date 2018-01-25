@@ -380,6 +380,16 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [users sortUsingDescriptors:@[firstNameDescriptor, lastNameDescriptor]];
     
     session.users = users;
+    
+    // Update the user auth numeric ID while we're in here
+    if (session.userAuthorization.numericId == 0) {
+        for (ZNGUser * user in users) {
+            if ([user.userId isEqualToString:session.userAuthorization.userId]) {
+                session.userAuthorization.numericId = user.numericId;
+                break;
+            }
+        }
+    }
 }
 
 - (void) receivedBadgeData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter

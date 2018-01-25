@@ -9,6 +9,7 @@
 #import "ZNGTeamV2.h"
 #import "ZNGLogging.h"
 #import "ZNGUser.h"
+#import "ZNGInboxStatsEntry.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -16,9 +17,9 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     NSMutableDictionary <NSString *, NSNumber *> * teamNumericIdsByUuid;
     
-    NSUInteger unassignedOpenCount;
-    NSMutableDictionary <NSNumber *, NSNumber *> * teamOpenCounts;  // Keyed by numeric ID not UUID
-    NSMutableDictionary <NSNumber *, NSNumber *> * userOpenCounts;  // Keyed by numeric ID not UUID
+    ZNGInboxStatsEntry * unassignedStatsEntry;
+    NSMutableDictionary<NSNumber *, ZNGInboxStatsEntry *> * teamStats;
+    NSMutableDictionary<NSNumber *, ZNGInboxStatsEntry *> * userStats;
 }
 
 - (id) init
@@ -27,8 +28,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     if (self != nil) {
         teamNumericIdsByUuid = [[NSMutableDictionary alloc] init];
-        teamOpenCounts = [[NSMutableDictionary alloc] init];
-        userOpenCounts = [[NSMutableDictionary alloc] init];
+        teamStats = [[NSMutableDictionary alloc] init];
+        userStats = [[NSMutableDictionary alloc] init];
     }
     
     return self;
@@ -37,27 +38,35 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 #pragma mark - Writing
 - (void) updateWithSocketData:(NSArray<NSDictionary *> *)socketData
 {
+    ZNGLogVerbose(@"Updating inbox stats with socket data: %@", socketData);
+    
     NSDictionary * data = [socketData firstObject];
     
-    NSDictionary<NSString *, NSDictionary *> * teams = data[@"teams"];
-    NSDictionary<NSString *, id> * unassigned = data[@"unassigned"];
-    NSDictionary<NSString *, NSDictionary *> * users = data[@"users"];
+    if (![data isKindOfClass:[NSDictionary class]]) {
+        return;
+    }
     
-    if (([unassigned isKindOfClass:[NSDictionary class]]) && ([unassigned[@"open"] isKindOfClass:[NSNumber class]])) {
-        unassignedOpenCount = [unassigned[@"open"] unsignedIntegerValue];
+    NSDictionary * teams = data[@"teams"];
+    NSDictionary * unassigned = data[@"unassigned"];
+    NSDictionary * users = data[@"users"];
+    
+    if ([unassigned isKindOfClass:[NSDictionary class]]) {
+        unassignedStatsEntry = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:unassigned error:nil];
     }
     
     if ([teams isKindOfClass:[NSDictionary class]]) {
         [teams enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull teamId, NSDictionary * _Nonnull teamData, BOOL * _Nonnull stop) {
-            teamOpenCounts[@([teamId intValue])] = @([teamData[@"open"] unsignedIntegerValue]);
+            teamStats[@([teamId intValue])] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:teamData error:nil];;
         }];
     }
     
     if ([users isKindOfClass:[NSDictionary class]]) {
         [users enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull userId, NSDictionary * _Nonnull userData, BOOL * _Nonnull stop) {
-            userOpenCounts[@([userId intValue])] = @([userData[@"open"] unsignedIntegerValue]);
+            userStats[@([userId intValue])] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:userData error:nil];
         }];
     }
+    
+    // TODO: Check if any data has changed and post a notification if so.
 }
 
 - (void) updateWithV2TeamsData:(NSArray<ZNGTeamV2 *> *)teams
@@ -70,7 +79,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 }
 
 #pragma mark - Reading
-- (NSUInteger) openCountForTeam:(ZNGTeam *)team
+- (ZNGInboxStatsEntry *) statsForUnassigned
+{
+    return unassignedStatsEntry;
+}
+
+- (ZNGInboxStatsEntry *) statsForTeam:(ZNGTeam *)team
 {
     if ([team.teamId length] == 0) {
         ZNGLogWarn(@"%s called with a team with no UUID.  Returning 0.", __PRETTY_FUNCTION__);
@@ -83,17 +97,26 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         return 0;
     }
     
-    return [teamOpenCounts[teamId] unsignedIntegerValue];
+    return teamStats[teamId];
 }
 
-- (NSUInteger) openCountForUser:(ZNGUser *)user
+- (ZNGInboxStatsEntry *) statsForUser:(ZNGUser *)user
 {
-    return [userOpenCounts[@(user.numericId)] unsignedIntegerValue];
+    return userStats[@(user.numericId)];
 }
 
-- (NSUInteger) unassignedOpenCount
+- (ZNGInboxStatsEntry * _Nullable) combinedStatsForUnassignedAndUser:(ZNGUser *)user andTeams:(NSArray<ZNGTeam *> *)teams
 {
-    return unassignedOpenCount;
+    NSMutableArray<ZNGInboxStatsEntry *> * stats = [[NSMutableArray alloc] initWithCapacity:[teams count] + 2];
+    
+    for (ZNGTeam * team in teams) {
+        [stats addObject:[self statsForTeam:team]];
+    }
+    
+    [stats addObject:[self statsForUnassigned]];
+    [stats addObject:[self statsForUser:user]];
+    
+    return [[ZNGInboxStatsEntry alloc] initByCombiningEntries:stats];
 }
 
 @end

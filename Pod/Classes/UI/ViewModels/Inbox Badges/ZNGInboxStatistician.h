@@ -7,6 +7,11 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
+extern NSString * const ZNGInboxStatisticianDataChangedNotification;
+
+@class ZNGInboxStatsEntry;
 @class ZNGTeam;
 @class ZNGTeamV2;
 @class ZNGUser;
@@ -22,8 +27,11 @@
 - (void) updateWithV2TeamsData:(NSArray<ZNGTeamV2 *> *)teams;
 
 #pragma mark - Reading
-- (NSUInteger) openCountForTeam:(ZNGTeam *)team;
-- (NSUInteger) openCountForUser:(ZNGUser *)user;
-- (NSUInteger) unassignedOpenCount;
+- (ZNGInboxStatsEntry * _Nullable) statsForUnassigned;
+- (ZNGInboxStatsEntry * _Nullable) statsForTeam:(ZNGTeam *)team;
+- (ZNGInboxStatsEntry * _Nullable) statsForUser:(ZNGUser *)user;
+- (ZNGInboxStatsEntry * _Nullable) combinedStatsForUnassignedAndUser:(ZNGUser *)user andTeams:(NSArray<ZNGTeam *> *)teams;
 
 @end
+
+NS_ASSUME_NONNULL_END

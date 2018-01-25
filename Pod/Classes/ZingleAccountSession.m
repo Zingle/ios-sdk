@@ -612,6 +612,17 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return filteredUsers;
 }
 
+- (ZNGUser * _Nullable) userWithUuid:(NSString *)uuid
+{
+    for (ZNGUser * user in self.users) {
+        if ([user.userId isEqualToString:uuid]) {
+            return user;
+        }
+    }
+    
+    return nil;
+}
+
 #pragma mark - Messaging
 - (void) contactChanged:(ZNGContact *)contact
 {

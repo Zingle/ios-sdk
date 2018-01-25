@@ -12,6 +12,8 @@
 #import "ZNGInboxStatsEntry.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
+NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatisticianDataChangedNotification";
+
 
 @implementation ZNGInboxStatistician
 {
@@ -40,6 +42,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     ZNGLogVerbose(@"Updating inbox stats with socket data: %@", socketData);
     
+    // Record old values to determine if things have changed
+    ZNGInboxStatsEntry * oldUnassignedStats = unassignedStatsEntry;
+    NSDictionary * oldTeamsStats = [teamStats copy];
+    NSDictionary * oldUserStats = [userStats copy];
+        
     NSDictionary * data = [socketData firstObject];
     
     if (![data isKindOfClass:[NSDictionary class]]) {
@@ -66,7 +73,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         }];
     }
     
-    // TODO: Check if any data has changed and post a notification if so.
+    // Check for changes and send a notification if any exist
+    if ((![unassignedStatsEntry isEqual:oldUnassignedStats]) || (![teamStats isEqualToDictionary:oldTeamsStats]) || (![userStats isEqualToDictionary:oldUserStats])) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZNGInboxStatisticianDataChangedNotification object:self];
+    }
 }
 
 - (void) updateWithV2TeamsData:(NSArray<ZNGTeamV2 *> *)teams

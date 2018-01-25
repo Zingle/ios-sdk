@@ -44,6 +44,20 @@
     return totaledEntry;
 }
 
+- (NSUInteger) hash
+{
+    return ((uint32_t)[_oldestUnconfirmed timeIntervalSince1970] + ((_openCount & 0xFFFF) << 32) + ((_unreadCount & 0xFFFF) << 48));
+}
+
+- (BOOL) isEqual:(ZNGInboxStatsEntry *)other
+{
+    if (![other isKindOfClass:[ZNGInboxStatsEntry class]]) {
+        return NO;
+    }
+    
+    return ((self.openCount == other.openCount) && (self.unreadCount == other.unreadCount) && ([self.oldestUnconfirmed isEqualToDate:other.oldestUnconfirmed]));
+}
+
 + (NSValueTransformer *)oldestUnconfirmedJSONTransformer
 {
     return [ZingleValueTransformers millisecondDateValueTransformer];

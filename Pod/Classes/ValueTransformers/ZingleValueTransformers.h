@@ -12,4 +12,6 @@
 
 + (NSValueTransformer*)dateValueTransformer;
 
++ (NSValueTransformer *)millisecondDateValueTransformer;
+
 @end

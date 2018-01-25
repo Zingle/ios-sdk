@@ -46,7 +46,7 @@
 
 + (NSValueTransformer *)oldestUnconfirmedJSONTransformer
 {
-    return [ZingleValueTransformers dateValueTransformer];
+    return [ZingleValueTransformers millisecondDateValueTransformer];
 }
 
 @end

@@ -28,7 +28,6 @@
 #import "ZNGContactGroup.h"
 #import "ZNGInboxStatistician.h"
 #import "ZNGTeamClient.h"
-#import "ZNGTinyAvatarRepository.h"
 
 @import AFNetworking;
 
@@ -75,9 +74,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         _conversationCache = [[NSCache alloc] init];
         _conversationCache.countLimit = 10;
         _conversationCache.delegate = self;
-        
-        _tinyAvatarRepository = [[ZNGTinyAvatarRepository alloc] initWithAvatarDiameter:15.0];
-        
+                
         self.inboxStatistician = [[ZNGInboxStatistician alloc] init];
         
         _automaticallyUpdateServiceWhenReturningFromBackground = YES;

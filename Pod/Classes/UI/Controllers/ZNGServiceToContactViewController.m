@@ -37,7 +37,6 @@
 #import "ZNGAssignmentViewController.h"
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
-#import "ZNGTinyAvatarRepository.h"
 
 @import SDWebImage;
 
@@ -358,21 +357,6 @@ enum ZNGConversationSections
                 return;
             }
             
-            // Check if we should do some avatar fetching
-            if ([userId length] > 0) {
-                ZNGUser * user = [self.conversation.session userWithUuid:userId];
-                
-                if (user.avatarUri != nil) {
-                    // This guy has an avatar.  Did we fetch it already?
-                    if ([self.conversation.session.tinyAvatarRepository tinyAvatarForUser:user] == nil) {
-                        // We have not.  Let's go do that and then refresh again.
-                        [self.conversation.session.tinyAvatarRepository fetchTinyAvatarForUser:user completion:^(UIImage * _Nullable avatar) {
-                            [self updateTitle];
-                        }];
-                    }
-                }
-            }
-            
             [self updateTitle];
         }
     } else {
@@ -469,7 +453,6 @@ enum ZNGConversationSections
         
         if (team != nil) {
             return [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Assigned to %@", team.displayName]];
-//            return [[NSMutableAttributedString alloc] initWithString:[team displayNameWithEmoji]];
         } else {
             return [[NSMutableAttributedString alloc] initWithString:@"Assigned to a team"];
         }
@@ -480,17 +463,6 @@ enum ZNGConversationSections
         
         if (user != nil) {
             NSMutableAttributedString * name = [[NSMutableAttributedString alloc] init];
-            
-            // Can we add an avatar?
-//            UIImage * avatar = [self.conversation.session.tinyAvatarRepository tinyAvatarForUser:user];
-//
-//            if (avatar != nil) {
-//                NSTextAttachment * textAttachment = [[NSTextAttachment alloc] init];
-//                textAttachment.image = avatar;
-//                NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:textAttachment];
-//                [name appendAttributedString:imageString];
-//                [name appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-//            }
             
             if ([user.userId isEqualToString:self.conversation.session.userAuthorization.userId]) {
                 [name appendAttributedString:[[NSAttributedString alloc] initWithString:@"Assigned to You"]];

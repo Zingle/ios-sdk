@@ -161,7 +161,7 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 /**
  *  The user with the provided UUID, if available
  */
-- (ZNGUser * _Nullable) userWithUuid:(NSString *)uuid;
+- (ZNGUser * _Nullable) userWithId:(NSString *)userId;
 
 
 #pragma mark - Messaging methods

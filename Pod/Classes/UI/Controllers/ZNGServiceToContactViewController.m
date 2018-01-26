@@ -459,7 +459,7 @@ enum ZNGConversationSections
     }
     
     if ([self.conversation.contact.assignedToUserId length] > 0) {
-        ZNGUser * user = [self.conversation.session userWithUuid:self.conversation.contact.assignedToUserId];
+        ZNGUser * user = [self.conversation.session userWithId:self.conversation.contact.assignedToUserId];
         
         if (user != nil) {
             NSMutableAttributedString * name = [[NSMutableAttributedString alloc] init];

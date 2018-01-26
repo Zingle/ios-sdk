@@ -608,7 +608,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                     [cell.avatarContainer addSubview:[self avatarForUser:session.userAuthorization]];
                 } else {
                     // This is assigned to a user, but not the current user
-                    ZNGUser * user = [session userWithUuid:self.contact.assignedToUserId];
+                    ZNGUser * user = [session userWithId:self.contact.assignedToUserId];
                     
                     if (user == nil) {
                         cell.nameLabel.text = @"Someone";

@@ -612,10 +612,10 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
     return filteredUsers;
 }
 
-- (ZNGUser * _Nullable) userWithUuid:(NSString *)uuid
+- (ZNGUser * _Nullable) userWithId:(NSString *)userId
 {
     for (ZNGUser * user in self.users) {
-        if ([user.userId isEqualToString:uuid]) {
+        if ([user.userId isEqualToString:userId]) {
             return user;
         }
     }

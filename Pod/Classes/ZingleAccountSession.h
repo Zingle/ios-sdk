@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGNetworkLookout;
 @class ZNGInboxStatistician;
 @class ZNGTeamClient;
+@class ZNGTinyAvatarRepository;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -96,6 +97,11 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  *  All users in the current service.  Each ZNGUser object includes online status.
  */
 @property (nonatomic, strong, nullable) NSArray<ZNGUser *> * users;
+
+/**
+ *  A repository to grab tiny avatars for users.
+ */
+@property (nonatomic, readonly, nonnull) ZNGTinyAvatarRepository * tinyAvatarRepository;
 
 /**
  *  The manager of all inbox count data.

@@ -137,45 +137,4 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
     return user;
 }
 
-- (void) fetchAndRenderTinyAvatar:(void (^_Nullable)(UIImage * tinyImage))completion
-{
-    if (self.avatarUri == nil) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(nil);
-        });
-        return;
-    }
-    
-    // Did we already do this?
-    if (self.tinyAvatar != nil) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            completion(self.tinyAvatar);
-        });
-        return;
-    }
-    
-    // Load/retrieve the user's avatar from cache, resize it on a background thread, and call the completion block.
-    [[SDWebImageManager sharedManager] loadImageWithURL:self.avatarUri options:0 progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-        // Did we fail?
-        if (image == nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(nil);
-            });
-            return;
-        }
-        
-        // Resize the image in a low priority background queue
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
-            UIImage * tinyImage = [image imageCroppedToCircleOfDiameter:15.0 withScale:0.0];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.tinyAvatar = tinyImage;
-                completion(tinyImage);
-            });
-        });
-    }];
-}
-
-
-
 @end

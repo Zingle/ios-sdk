@@ -353,7 +353,7 @@ enum ZNGConversationSections
             NSString * userId = ([userIdOrNull isKindOfClass:[NSString class]]) ? userIdOrNull : nil;
             
             if ([userId isEqualToString:oldUserId]) {
-                // Same guy.  No need to refresh nor fetch avatars.
+                // Same guy.  No need to refresh.
                 return;
             }
             

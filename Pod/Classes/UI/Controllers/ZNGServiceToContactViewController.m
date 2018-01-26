@@ -413,12 +413,13 @@ enum ZNGConversationSections
     NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:[self.conversation remoteName]];
     NSMutableAttributedString * subtitle = [self subtitle];
     
-    // Set smaller font/lighter color for subtitle
     if ([subtitle length] > 0) {
+        // Set smaller font/lighter color for subtitle
         NSRange range = NSMakeRange(0, [subtitle length]);
         [subtitle addAttribute:NSFontAttributeName value:[UIFont latoFontOfSize:14.0] range:range];
         [subtitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.58 alpha:1.0] range:range];
         
+        // Check if our subtitle will be on a new line (usually) or the same line (iPhone landscape)
         BOOL isPhone = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
         BOOL isLandscape = ((orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight));

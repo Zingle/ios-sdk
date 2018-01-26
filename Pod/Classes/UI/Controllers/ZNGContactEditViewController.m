@@ -587,7 +587,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                                                     size:CGSizeMake(32.0, 32.0)
                                          backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
                                                textColor:[UIColor whiteColor]
-                                                    font:[UIFont latoFontOfSize:24.0]];
+                                                    font:[UIFont latoFontOfSize:17.0]];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -608,8 +608,14 @@ static NSString * const AssignSegueIdentifier = @"assign";
                     [cell.avatarContainer addSubview:[self avatarForUser:session.userAuthorization]];
                 } else {
                     // This is assigned to a user, but not the current user
+                    ZNGUser * user = [session userWithUuid:self.contact.assignedToUserId];
                     
-                    // TODO: Plug in users once we get a users list
+                    if (user == nil) {
+                        cell.nameLabel.text = @"Someone";
+                    } else {
+                        cell.nameLabel.text = [user fullName];
+                        [cell.avatarContainer addSubview:[self avatarForUser:user]];
+                    }
                 }
                 
                 return cell;

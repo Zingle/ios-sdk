@@ -32,7 +32,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         _avatarUrl = [avatarUrl copy];
         _initials = [initials copy];
         _size = size;
-        _backgroundColor = backgroundColor;
+        _avatarBackgroundColor = backgroundColor;
         _textColor = textColor;
         _font = font;
         

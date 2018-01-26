@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly, nullable) NSURL * avatarUrl;
 @property (nonatomic, readonly) NSString * initials;
 @property (nonatomic, readonly) CGSize size;
-@property (nonatomic, readonly, nullable) UIColor * backgroundColor;
+@property (nonatomic, readonly, nullable) UIColor * avatarBackgroundColor;
 @property (nonatomic, readonly) UIColor * textColor;
 @property (nonatomic, readonly) UIFont * font;
 @property (nonatomic, readonly) UIImage * placeholderImage;

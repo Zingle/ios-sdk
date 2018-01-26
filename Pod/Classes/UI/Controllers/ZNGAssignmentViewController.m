@@ -58,8 +58,7 @@ enum TopSectionRows {
     }
     
     teams = self.session.service.teams;
-
-    // TODO: Populate users list
+    users = [self.session usersIncludingSelf:NO];
 }
 
 - (IBAction)pressedClose:(id)sender
@@ -163,7 +162,7 @@ enum TopSectionRows {
                                                                                    size:cell.avatarContainer.bounds.size
                                                                         backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
                                                                               textColor:[UIColor whiteColor]
-                                                                                   font:[UIFont latoFontOfSize:36.0]];
+                                                                                   font:[UIFont latoFontOfSize:17.0]];
             
             [cell.avatarContainer addSubview:avatar];
             cell.nameLabel.text = [user fullName];
@@ -197,7 +196,10 @@ enum TopSectionRows {
             [self dismissViewControllerAnimated:YES completion:nil];
             return;
             
-        // TODO: I wish we had users :(
+        case SECTION_USERS:
+            [self.delegate userChoseToAssignContact:self.contact toUser:users[indexPath.row]];
+            [self dismissViewControllerAnimated:YES completion:nil];
+            return;
     }
 }
 

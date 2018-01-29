@@ -28,9 +28,6 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 @end
 
 @implementation ZNGBaseClient
-{
-    dispatch_queue_t jsonProcessingQueue;
-}
 
 NSString *const kBaseClientStatus = @"status";
 NSString *const kBaseClientResult = @"result";

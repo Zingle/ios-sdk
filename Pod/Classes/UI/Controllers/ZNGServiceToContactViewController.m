@@ -47,6 +47,8 @@ static NSString * const UnconfirmedText = @" Unconfirmed ";
 
 static NSString * const KVOContactChannelsPath = @"conversation.contact.channels";
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
+static NSString * const KVOTeamAssignment = @"conversation.contact.assignedToTeamId";
+static NSString * const KVOUserAssignment = @"conversation.contact.assignedToUserId";
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.pendingResponses";
@@ -150,12 +152,16 @@ enum ZNGConversationSections
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOInputLockedPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
     [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
+    [self addObserver:self forKeyPath:KVOTeamAssignment options:NSKeyValueObservingOptionNew context:KVOContext];
+    [self addObserver:self forKeyPath:KVOUserAssignment options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
 }
 
 - (void) dealloc
 {
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
+    [self removeObserver:self forKeyPath:KVOUserAssignment context:KVOContext];
+    [self removeObserver:self forKeyPath:KVOTeamAssignment context:KVOContext];
     [self removeObserver:self forKeyPath:KVOReplyingUsersPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOInputLockedPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
@@ -179,10 +185,9 @@ enum ZNGConversationSections
     titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
     titleLabel.textColor = [UIColor zng_lightBlue];
     titleLabel.numberOfLines = 2;
-    titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n\
+    titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n'
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
-    [self updateTitle];
     
     // Add a tap gesture recognizer to the title to link to the edit view
     UITapGestureRecognizer * titleTapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedEditContact)];
@@ -278,6 +283,12 @@ enum ZNGConversationSections
     [self updateTopInset];
 }
 
+- (void) viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+    [self updateTitle];
+}
+
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (context == KVOContext) {
@@ -333,6 +344,20 @@ enum ZNGConversationSections
                     
             }
             
+        } else if ([keyPath isEqualToString:KVOTeamAssignment]) {
+            [self updateTitle];
+        } else if ([keyPath isEqualToString:KVOUserAssignment]) {
+            id oldUserIdOrNull = change[NSKeyValueChangeOldKey];
+            id userIdOrNull = change[NSKeyValueChangeNewKey];
+            NSString * oldUserId = ([oldUserIdOrNull isKindOfClass:[NSString class]]) ? oldUserIdOrNull : nil;
+            NSString * userId = ([userIdOrNull isKindOfClass:[NSString class]]) ? userIdOrNull : nil;
+            
+            if ([userId isEqualToString:oldUserId]) {
+                // Same guy.  No need to refresh.
+                return;
+            }
+            
+            [self updateTitle];
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -385,11 +410,75 @@ enum ZNGConversationSections
 
 - (void) updateTitle
 {
+    NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:[self.conversation remoteName]];
+    NSMutableAttributedString * subtitle = [self subtitle];
+    
+    if ([subtitle length] > 0) {
+        // Set smaller font/lighter color for subtitle
+        NSRange range = NSMakeRange(0, [subtitle length]);
+        [subtitle addAttribute:NSFontAttributeName value:[UIFont latoFontOfSize:14.0] range:range];
+        [subtitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.58 alpha:1.0] range:range];
+        
+        // Check if our subtitle will be on a new line (usually) or the same line (iPhone landscape)
+        BOOL isPhone = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        BOOL isLandscape = ((orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight));
+        BOOL useSingleLine = ((isPhone) && (isLandscape));
+        
+        if (useSingleLine) {
+            // Space before the subtitle
+            [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"  "]];
+        } else {
+            [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+        }
+        
+        [title appendAttributedString:subtitle];
+    }
+
     // Removing the title label from the navigation item is necessary when changing its size to avoid some clipping shenanigans
     self.navigationItem.titleView = nil;
-    titleLabel.text = [self.conversation remoteName];
+    titleLabel.attributedText = title;
     [titleLabel sizeToFit];
     self.navigationItem.titleView = titleLabel;
+}
+
+- (NSMutableAttributedString *) subtitle
+{
+    if (![self.conversation.session.service allowsAssignment]) {
+        // This service does not have assignment enabled.  No subtitle.
+        return nil;
+    }
+    
+    if ([self.conversation.contact.assignedToTeamId length] > 0) {
+        ZNGTeam * team = [self.conversation.session.service teamWithId:self.conversation.contact.assignedToTeamId];
+        
+        if (team != nil) {
+            return [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Assigned to %@", team.displayName]];
+        } else {
+            return [[NSMutableAttributedString alloc] initWithString:@"Assigned to a team"];
+        }
+    }
+    
+    if ([self.conversation.contact.assignedToUserId length] > 0) {
+        ZNGUser * user = [self.conversation.session userWithId:self.conversation.contact.assignedToUserId];
+        
+        if (user != nil) {
+            NSMutableAttributedString * name = [[NSMutableAttributedString alloc] init];
+            
+            if ([user.userId isEqualToString:self.conversation.session.userAuthorization.userId]) {
+                [name appendAttributedString:[[NSAttributedString alloc] initWithString:@"Assigned to You"]];
+            } else {
+                [name appendAttributedString:[[NSAttributedString alloc] initWithString:@"Assigned to "]];
+                [name appendAttributedString:[[NSAttributedString alloc] initWithString:[user fullName]]];
+            }
+            
+            return name;
+        } else {
+            return [[NSMutableAttributedString alloc] initWithString:@"Assigned to a teammate"];
+        }
+    }
+    
+    return [[NSMutableAttributedString alloc] initWithString:@"Unassigned"];
 }
 
 - (NSString *) commaAndifiedString:(NSArray<NSString *> *)components

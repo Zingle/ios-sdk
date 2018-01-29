@@ -9,6 +9,9 @@
 #import "ZNGUser.h"
 #import "ZNGService.h"
 #import "ZNGUserAuthorization.h"
+#import "UIImage+CircleCrop.h"
+
+@import SDWebImage;
 
 static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
 
@@ -88,16 +91,30 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
     return self.servicePrivileges[service.serviceId];
 }
 
+// This deserialization should happen through actual JSON parsing, but the API and socket server are an absolute mess of different
+//  combinations of snake_case and camelCase that make that an exercise in futility.
 + (instancetype) userFromSocketData:(NSDictionary *)data
 {
     ZNGUser * user = [[self alloc] init];
     
-    id userIdUnknownType = data[@"id"];
-    user.userId = ([userIdUnknownType isKindOfClass:[NSString class]]) ? userIdUnknownType : [userIdUnknownType stringValue];
+    if ([data[@"uuid"] isKindOfClass:[NSString class]]) {
+        user.userId = data[@"uuid"];
+    } else {
+        id userIdUnknownType = data[@"id"];
+        user.userId = ([userIdUnknownType isKindOfClass:[NSString class]]) ? userIdUnknownType : [userIdUnknownType stringValue];
+    }
+    
+    if ([data[@"id"] isKindOfClass:[NSNumber class]]) {
+        user.numericId = [data[@"id"] intValue];
+    }
+    
+    if ([data[@"isOnline"] isKindOfClass:[NSNumber class]]) {
+        user.isOnline = [data[@"isOnline"] boolValue];
+    }
     
     // Protect against these fields being NSNulls instead of NSStrings
-    id firstNameOrNull = data[@"first_name"];
-    id lastNameOrNull = data[@"last_name"];
+    id firstNameOrNull = data[@"first_name"] ?: data[@"firstName"];
+    id lastNameOrNull = data[@"last_name"] ?: data[@"lastName"];
     id emailOrNull = data[@"username"];
     user.firstName = ([firstNameOrNull isKindOfClass:[NSString class]]) ? firstNameOrNull : nil;
     user.lastName = ([lastNameOrNull isKindOfClass:[NSString class]]) ? lastNameOrNull : nil;
@@ -113,10 +130,11 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
         if ([avatarUriString isKindOfClass:[NSString class]]) {
             [user setValue:[NSURL URLWithString:avatarUriString] forKey:NSStringFromSelector(@selector(avatarUri))];
         }
+    } else if (([data[@"avatarUri"] isKindOfClass:[NSString class]]) && ([data[@"avatarUri"] length] > 0)) {
+        user.avatarUri = [NSURL URLWithString:data[@"avatarUri"]];
     }
     
     return user;
 }
-
 
 @end

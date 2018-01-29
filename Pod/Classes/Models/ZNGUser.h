@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZNGUser : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong, nullable) NSString * userId;
+@property(nonatomic, assign) int numericId;
 @property(nonatomic, strong, nullable) NSString* username;
 @property(nonatomic, strong, nullable) NSString* email;
 @property(nonatomic, strong, nullable) NSString* firstName;
@@ -24,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray* serviceIds;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;
 @property(nonatomic, strong, nullable) NSDictionary<NSString *, NSArray<NSString *> *> * servicePrivileges;
+@property (nonatomic, assign) BOOL isOnline;
 
 - (NSString * _Nullable) fullName;
 

@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZingleSession;
 
 @interface ZNGBaseClient : NSObject
+{
+    dispatch_queue_t jsonProcessingQueue;
+}
 
 @property (nonatomic, weak, nullable) ZingleSession * session;
 

@@ -27,10 +27,12 @@
 @end
 
 
-@interface ZNGAssignmentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate>
+@interface ZNGAssignmentViewController : UIViewController <UITableViewDataSource, UITableViewDelegate, UISearchResultsUpdating>
 
 @property (nonatomic, strong, nullable) ZingleAccountSession * session;
 @property (nonatomic, strong, nullable) ZNGContact * contact;
+
+@property (nonatomic, weak, nullable) IBOutlet UITableView * tableView;
 
 @property (nonatomic, weak, nullable) NSObject <ZNGAssignmentDelegate> * delegate;
 

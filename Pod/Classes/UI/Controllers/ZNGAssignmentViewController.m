@@ -54,7 +54,7 @@ enum TopSectionRows {
     blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
     if ([[self.contact fullName] length] > 0) {
-        self.title = [NSString stringWithFormat:@"Assign to %@", [self.contact fullName]];
+        self.title = [NSString stringWithFormat:@"Assign %@", [self.contact fullName]];
     }
     
     teams = self.session.service.teams;

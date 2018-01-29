@@ -125,7 +125,7 @@ enum TopSectionRows {
 
 - (void)updateSearchResultsForSearchController:(UISearchController *)searchController
 {
-    [self updateDataForSearchText:searchController.searchBar.text];
+    [self updateDataForSearchText:[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
 }
 
 #pragma mark - Table view data

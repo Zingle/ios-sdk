@@ -105,6 +105,15 @@ enum TopSectionRows {
     }
 }
 
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView * header = (UITableViewHeaderFooterView *)view;
+        header.textLabel.textAlignment = NSTextAlignmentCenter;
+        header.textLabel.textColor = [UIColor colorWithWhite:0.75 alpha:1.0];
+    }
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {

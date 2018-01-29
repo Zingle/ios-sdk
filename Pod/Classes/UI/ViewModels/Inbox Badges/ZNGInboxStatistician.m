@@ -120,11 +120,20 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     NSMutableArray<ZNGInboxStatsEntry *> * stats = [[NSMutableArray alloc] initWithCapacity:[teams count] + 2];
     
     for (ZNGTeam * team in teams) {
-        [stats addObject:[self statsForTeam:team]];
+        ZNGInboxStatsEntry * teamStats = [self statsForTeam:team];
+        
+        if (teamStats != nil) {
+            [stats addObject:teamStats];
+        }
     }
     
     [stats addObject:[self statsForUnassigned]];
-    [stats addObject:[self statsForUser:user]];
+    
+    ZNGInboxStatsEntry * userStats = [self statsForUser:user];
+    
+    if (userStats != nil) {
+        [stats addObject:userStats];
+    }
     
     return [[ZNGInboxStatsEntry alloc] initByCombiningEntries:stats];
 }

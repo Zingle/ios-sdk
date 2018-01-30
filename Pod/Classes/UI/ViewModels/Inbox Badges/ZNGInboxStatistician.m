@@ -127,7 +127,11 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
         }
     }
     
-    [stats addObject:[self statsForUnassigned]];
+    ZNGInboxStatsEntry * unassignedStats = [self statsForUnassigned];
+    
+    if (unassignedStats != nil) {
+        [stats addObject:unassignedStats];
+    }
     
     ZNGInboxStatsEntry * userStats = [self statsForUser:user];
     

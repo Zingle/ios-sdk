@@ -7,11 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Mantle/Mantle.h>
 #import "ZNGInboxDataSet.h"
 
 @class ZNGContactClient;
 
-@interface ZNGContactDataSetBuilder : NSObject
+@interface ZNGContactDataSetBuilder : MTLModel <MTLJSONSerializing>
 
 /**
  *  A previously existing data set used to begin building a new one.

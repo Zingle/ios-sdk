@@ -41,4 +41,22 @@
     }
 }
 
++ (NSDictionary *) JSONKeyPathsByPropertyKey
+{
+    return @{
+             NSStringFromSelector(@selector(pageSize)): NSStringFromSelector(@selector(pageSize)),
+             NSStringFromSelector(@selector(openStatus)): NSStringFromSelector(@selector(openStatus)),
+             NSStringFromSelector(@selector(unconfirmed)): NSStringFromSelector(@selector(unconfirmed)),
+             NSStringFromSelector(@selector(allowContactsWithNoMessages)): NSStringFromSelector(@selector(allowContactsWithNoMessages)),
+             NSStringFromSelector(@selector(sortFields)): NSStringFromSelector(@selector(sortFields)),
+             NSStringFromSelector(@selector(labelIds)): NSStringFromSelector(@selector(labelIds)),
+             NSStringFromSelector(@selector(groupIds)): NSStringFromSelector(@selector(groupIds)),
+             NSStringFromSelector(@selector(unassigned)): NSStringFromSelector(@selector(unassigned)),
+             NSStringFromSelector(@selector(assignedTeamId)): NSStringFromSelector(@selector(assignedTeamId)),
+             NSStringFromSelector(@selector(assignedUserId)): NSStringFromSelector(@selector(assignedUserId)),
+             NSStringFromSelector(@selector(searchText)): NSStringFromSelector(@selector(searchText)),
+             NSStringFromSelector(@selector(searchMessageBodies)): NSStringFromSelector(@selector(searchMessageBodies)),
+             };
+}
+
 @end

@@ -156,6 +156,27 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     return @"Contacts";
 }
 
+- (ZNGContactDataSetBuilder *)builder
+{
+    ZNGContactDataSetBuilder * builder = [[ZNGContactDataSetBuilder alloc] init];
+    
+    builder.pageSize = self.pageSize;
+    builder.openStatus = self.openStatus;
+    builder.unconfirmed = self.unconfirmed;
+    builder.allowContactsWithNoMessages = self.allowContactsWithNoMessages;
+    builder.sortFields = self.sortFields;
+    builder.labelIds = self.labelIds;
+    builder.groupIds = self.groupIds;
+    builder.unassigned = self.unassigned;
+    builder.assignedTeamId = self.assignedTeamId;
+    builder.assignedUserId = self.assignedUserId;
+    builder.searchText = self.searchText;
+    builder.searchMessageBodies = self.searchMessageBodies;
+    builder.contactClient = self.contactClient;
+    
+    return builder;
+}
+
 #pragma mark - Filtering
 - (nonnull NSMutableDictionary *) parameters
 {

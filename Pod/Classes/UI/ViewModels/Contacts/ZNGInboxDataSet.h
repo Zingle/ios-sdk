@@ -142,6 +142,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nonnull instancetype) initWithBuilder:(ZNGContactDataSetBuilder *)builder;
 
+#pragma mark - Saving
+
+/**
+ *  A contact data set builder that can be serialized to save the current inbox type.
+ */
+- (ZNGContactDataSetBuilder *) builder;
+
 #pragma mark - Actions
 /**
  *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loadingInitialData property.

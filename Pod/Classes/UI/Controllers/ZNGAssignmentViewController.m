@@ -42,6 +42,9 @@ enum TopSectionRows {
 {
     NSArray<ZNGTeam *> * teams;
     NSArray<ZNGUser *> * users;
+    BOOL isFiltered;
+    
+    UISearchController * searchController;
     
     UIImage * blankManImage;
 }
@@ -53,12 +56,62 @@ enum TopSectionRows {
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGAssignmentViewController class]];
     blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
-    if ([[self.contact fullName] length] > 0) {
-        self.title = [NSString stringWithFormat:@"Assign to %@", [self.contact fullName]];
+    searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+    searchController.searchResultsUpdater = self;
+    self.definesPresentationContext = YES;
+    
+    if (@available(iOS 9.1, *)) {
+        searchController.obscuresBackgroundDuringPresentation = NO;
+    } else {
+        searchController.dimsBackgroundDuringPresentation = NO;
     }
     
-    teams = self.session.service.teams;
-    users = [self.session usersIncludingSelf:NO];
+    if (@available(iOS 11.0, *)) {
+        self.navigationItem.searchController = searchController;
+        self.navigationItem.hidesSearchBarWhenScrolling = NO;
+    } else {
+        self.tableView.tableHeaderView = searchController.searchBar;
+    }
+    
+    if ([[self.contact fullName] length] > 0) {
+        self.title = [NSString stringWithFormat:@"Assign %@", [self.contact fullName]];
+    }
+    
+    [self updateDataForSearchText:nil];
+}
+
+- (void) updateDataForSearchText:(NSString *)searchText
+{
+    if ([searchText length] == 0) {
+        isFiltered = NO;
+        teams = self.session.service.teams;
+        users = [self.session usersIncludingSelf:NO];
+        [self.tableView reloadData];
+        return;
+    }
+    
+    isFiltered = YES;
+    NSArray<ZNGUser *> * allUsers = [self.session usersIncludingSelf:NO];
+    NSMutableArray<ZNGTeam *> * matchingTeams = [[NSMutableArray alloc] initWithCapacity:[self.session.service.teams count]];
+    NSMutableArray<ZNGUser *> * matchingUsers = [[NSMutableArray alloc] initWithCapacity:[allUsers count]];
+    
+    for (ZNGTeam * team in self.session.service.teams) {
+        NSString * teamName = [team displayNameWithEmoji];
+        
+        if ([teamName rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            [matchingTeams addObject:team];
+        }
+    }
+    
+    for (ZNGUser * user in allUsers) {
+        if ([[user fullName] rangeOfString:searchText options:NSCaseInsensitiveSearch].location != NSNotFound) {
+            [matchingUsers addObject:user];
+        }
+    }
+    
+    teams = matchingTeams;
+    users = matchingUsers;
+    [self.tableView reloadData];
 }
 
 - (IBAction)pressedClose:(id)sender
@@ -70,6 +123,12 @@ enum TopSectionRows {
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
+{
+    [self updateDataForSearchText:[searchController.searchBar.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+}
+
+#pragma mark - Table view data
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
     return SECTION_TOTAL;
@@ -79,7 +138,8 @@ enum TopSectionRows {
 {
     switch (section) {
     case SECTION_TOP:
-        return ROW_TOTAL; // You/Unassign
+        // Hide You/Unassign if the user is searching by text
+        return (!isFiltered) ? ROW_TOTAL : 0;
         
     case SECTION_TEAMS:
         return [teams count];
@@ -95,13 +155,22 @@ enum TopSectionRows {
 {
     switch (section) {
         case SECTION_TEAMS:
-            return @"TEAMS";
+            return ([teams count] > 0) ? @"TEAMS" : nil;
             
         case SECTION_USERS:
-            return @"TEAMMATES";
+            return ([users count] > 0) ? @"TEAMMATES" : nil;
             
         default:
             return nil;
+    }
+}
+
+- (void) tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    if ([view isKindOfClass:[UITableViewHeaderFooterView class]]) {
+        UITableViewHeaderFooterView * header = (UITableViewHeaderFooterView *)view;
+        header.textLabel.textAlignment = NSTextAlignmentCenter;
+        header.textLabel.textColor = [UIColor colorWithWhite:0.75 alpha:1.0];
     }
 }
 
@@ -175,6 +244,7 @@ enum TopSectionRows {
     return nil;
 }
 
+#pragma mark - Table view delegate
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {

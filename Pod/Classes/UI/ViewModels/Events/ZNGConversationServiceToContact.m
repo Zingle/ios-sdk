@@ -138,7 +138,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return [_contact fullName];
 }
 
-- (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification
+- (BOOL) notificationRelevantToThisConversation:(NSNotification *)notification
 {
     NSString * feedId = notification.userInfo[@"aps"][@"contact"];
     return [feedId isEqualToString:self.contact.contactId];

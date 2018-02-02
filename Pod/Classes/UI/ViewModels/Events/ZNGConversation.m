@@ -113,7 +113,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         _messageClient = messageClient;
         _eventClient = eventClient;
         _pageSize = kDefaultPageSize;
-        _automaticallyRefreshesOnPushNotification = YES;
+        _automaticallyRefreshes = YES;
         
         _replyingUsers = [[NSOrderedSet alloc] init];
         typingIndicatorUserExpirationTimers = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory valueOptions:NSMapTableWeakMemory];
@@ -569,14 +569,14 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     return @[ZNGEventTypeMessage];
 }
 
-- (BOOL) pushNotificationRelevantToThisConversation:(NSNotification *)notification
+- (BOOL) notificationRelevantToThisConversation:(NSNotification *)notification
 {
     return YES;
 }
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    if ((self.automaticallyRefreshesOnPushNotification) && ([self pushNotificationRelevantToThisConversation:notification])) {
+    if ((self.automaticallyRefreshes) && ([self notificationRelevantToThisConversation:notification])) {
         [self loadRecentEventsErasingOlderData:NO];
     }
 }

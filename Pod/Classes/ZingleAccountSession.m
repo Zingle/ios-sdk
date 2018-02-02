@@ -37,6 +37,8 @@ static NSString * const kSocketConnectedKeyPath = @"socketClient.connected";
 static const int zngLogLevel = ZNGLogLevelInfo;
 
 NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"ZingleUserChangedDetailedEventsPreferenceNotification";
+NSString * const ZingleConversationDataArrivedNotification = @"ZingleConversationDataArrivedNotification";
+NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
 
 // Override readonly properties with strong properties to get proper KVO
 @interface ZingleAccountSession ()

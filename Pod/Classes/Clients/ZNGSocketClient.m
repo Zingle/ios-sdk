@@ -203,6 +203,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf feedUnlocked:data];
     }];
     
+    [socketClient on:@"feedUpdated" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedFeedUpdated:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"nodeControllerBindSuccess" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidBindNodeController];
     }];
@@ -361,6 +365,19 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     if ([feedId integerValue] > 0) {
         self.activeConversation.sequentialId = [feedId integerValue];
+    }
+}
+
+- (void) receivedFeedUpdated:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    NSDictionary * feedData = [data firstObject];
+    NSString * feedId = feedData[@"uuid"];
+    
+    if ([feedId length] > 0) {
+        NSDictionary * userInfo = @{ZingleConversationNotificationContactIdKey: feedId};
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZingleConversationDataArrivedNotification object:nil userInfo:userInfo];
+    } else {
+        ZNGLogWarn(@"feedUpdated event arrived without a uuid: %@", data);
     }
 }
 

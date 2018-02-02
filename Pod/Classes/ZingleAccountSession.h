@@ -29,6 +29,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 
+/**
+ *  Notification posted whenever new message/event data is detected through an asynchronous connection.
+ *  Conversation objects do *not* automatically refresh.  UI displaying a conversation should trigger a refresh
+ *   when receiving this notification.
+ *
+ *  `userData[ZingleConversationNotificationContactIdKey]` will contain the UUID of the conversation.
+ */
+extern NSString * const ZingleConversationDataArrivedNotification;
+extern NSString * const ZingleConversationNotificationContactIdKey;
+
 @interface ZingleAccountSession : ZingleSession <NSCacheDelegate>
 
 #pragma mark - Account/Service selection

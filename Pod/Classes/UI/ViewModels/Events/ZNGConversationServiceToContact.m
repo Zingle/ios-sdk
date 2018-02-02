@@ -140,8 +140,8 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (BOOL) notificationRelevantToThisConversation:(NSNotification *)notification
 {
-    NSString * feedId = notification.userInfo[@"aps"][@"contact"];
-    return [feedId isEqualToString:self.contact.contactId];
+    NSString * contactId = [notification.userInfo[ZingleConversationNotificationContactIdKey] copy];
+    return [contactId isEqualToString:self.contact.contactId];
 }
 
 - (void) notifyContactSelfMutated:(NSNotification *)notification

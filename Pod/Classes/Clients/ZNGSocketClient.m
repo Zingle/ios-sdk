@@ -371,10 +371,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) receivedFeedUpdated:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
     NSDictionary * feedData = [data firstObject];
-    NSString * feedId = feedData[@"uuid"];
+    NSDictionary * contact = feedData[@"contact"];
+    NSString * feedId = contact[@"uuid"];
     
     if ([feedId length] > 0) {
         NSDictionary * userInfo = @{ZingleConversationNotificationContactIdKey: feedId};
+        ZNGLogDebug(@"Posting %@ notification for %@", ZingleConversationDataArrivedNotification, feedId);
         [[NSNotificationCenter defaultCenter] postNotificationName:ZingleConversationDataArrivedNotification object:nil userInfo:userInfo];
     } else {
         ZNGLogWarn(@"feedUpdated event arrived without a uuid: %@", data);

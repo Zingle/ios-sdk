@@ -102,6 +102,11 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 @property (nonatomic, strong, nullable) ZNGInboxStatistician * inboxStatistician;
 
+/**
+ *  The total number of unread conversations relevant to this user.  This should always match the badge number sent in push notifications.
+ */
+@property (nonatomic, assign) NSUInteger totalUnreadCount;
+
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;

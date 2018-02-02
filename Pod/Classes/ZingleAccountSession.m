@@ -28,6 +28,7 @@
 #import "ZNGContactGroup.h"
 #import "ZNGInboxStatistician.h"
 #import "ZNGTeamClient.h"
+#import "ZNGInboxStatsEntry.h"
 
 @import AFNetworking;
 
@@ -67,6 +68,7 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBadgeDataChanged:) name:ZNGInboxStatisticianDataChangedNotification object:nil];
         
         [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
         
@@ -145,6 +147,16 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         } else if ((wasConnected) && (!connected)) {
             [self.networkLookout recordSocketDisconnected];
         }
+    }
+}
+
+- (void) notifyBadgeDataChanged:(NSNotification *)notification
+{
+    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUnassignedAndUser:self.userAuthorization andTeams:[self teamsToWhichCurrentUserBelongs]];
+    
+    if (self.totalUnreadCount != totalStats.unreadCount) {
+        ZNGLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);
+        self.totalUnreadCount = totalStats.unreadCount;
     }
 }
 

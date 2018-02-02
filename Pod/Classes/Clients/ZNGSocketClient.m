@@ -180,7 +180,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:authPath]];
     ZNGLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
     
-    NSNumber * shouldLog = (zngLogLevel & DDLogFlagDebug) ? @YES : @NO;
+    NSNumber * shouldLog = (zngLogLevel & DDLogFlagVerbose) ? @YES : @NO;
     
     socketManager = [[SocketManager alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : shouldLog }];
     SocketIOClient * socketClient = [socketManager defaultSocket];
@@ -318,7 +318,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Sockety goodness
 - (void) socketEvent:(SocketAnyEvent *)event
 {
-    ZNGLogDebug(@"Socket event of type %@: %@", [event class], event);
+    ZNGLogDebug(@"Received socket event of type %@", event.event);
+    ZNGLogVerbose(@"%@", event);
 }
 
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter

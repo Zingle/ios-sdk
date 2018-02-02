@@ -58,7 +58,6 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         [self addObserver:self forKeyPath:NSStringFromSelector(@selector(events)) options:NSKeyValueObservingOptionNew context:nil];
         [self addObserver:self forKeyPath:ChannelsKVOPath options:NSKeyValueObservingOptionNew context:nil];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceivedDawg:) name:ZNGPushNotificationReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
     }
     
@@ -143,13 +142,6 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 {
     NSString * feedId = notification.userInfo[@"aps"][@"contact"];
     return [feedId isEqualToString:self.contact.contactId];
-}
-
-- (void) notifyPushNotificationReceivedDawg:(NSNotification *)notification
-{
-    if ((self.automaticallyRefreshesOnPushNotification) && ([self pushNotificationRelevantToThisConversation:notification])) {
-        [self.contact updateRemotely];
-    }
 }
 
 - (void) notifyContactSelfMutated:(NSNotification *)notification

@@ -118,7 +118,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         _replyingUsers = [[NSOrderedSet alloc] init];
         typingIndicatorUserExpirationTimers = [NSMapTable mapTableWithKeyOptions:NSMapTableStrongMemory valueOptions:NSMapTableWeakMemory];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyConversationDataReceived:) name:ZingleConversationDataArrivedNotification object:nil];
     }
     
     return self;
@@ -574,7 +574,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     return YES;
 }
 
-- (void) notifyPushNotificationReceived:(NSNotification *)notification
+- (void) notifyConversationDataReceived:(NSNotification *)notification
 {
     if ((self.automaticallyRefreshes) && ([self notificationRelevantToThisConversation:notification])) {
         [self loadRecentEventsErasingOlderData:NO];

@@ -105,6 +105,7 @@ static NSString * const ZNGKVOServicePath = @"session.service";
     [self addObserver:self forKeyPath:ZNGKVOServicePath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:ZNGInboxKVOContext];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyConversationUpdated:) name:ZingleConversationDataArrivedNotification object:nil];
 }
 
 - (void) dealloc
@@ -316,6 +317,12 @@ static NSString * const ZNGKVOServicePath = @"session.service";
     if ([self.data.contacts containsObject:notification.object]) {
         [self reloadTableData];
     }
+}
+
+- (void) notifyConversationUpdated:(NSNotification *)notification
+{
+    // Some conversation was updated.  We don't care which one, really.  Refresh all data.
+    [self _doRefresh];
 }
 
 - (void) handleContactsUpdateWithChangeDictionary:(NSDictionary<NSString *, id> *)change

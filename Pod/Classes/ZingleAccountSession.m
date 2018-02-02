@@ -67,7 +67,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBadgeDataChanged:) name:ZNGInboxStatisticianDataChangedNotification object:nil];
         
         [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
@@ -346,14 +345,6 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 {
     NSString * serviceId = notification.userInfo[@"aps"][@"service"];
     return [serviceId isEqualToString:self.service.serviceId];
-}
-
-- (void) _notifyPushNotificationReceived:(NSNotification *)notification
-{
-    if ([self notificationRelevantToCurrentService:notification]) {
-        ZNGLogInfo(@"Refreshing current service due to push notification");
-        [self updateCurrentService];
-    }
 }
 
 - (void) notifyBecameActive:(NSNotification *)notification

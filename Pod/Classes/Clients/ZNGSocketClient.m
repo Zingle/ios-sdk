@@ -211,6 +211,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf receivedEventListData:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"serviceUpdated" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedServiceData:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"serviceUsersData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf receivedUserData:data ackEmitter:ackEmitter];
     }];
@@ -401,6 +405,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
     ZingleAccountSession * session = (ZingleAccountSession *)self.session;
     [session.inboxStatistician updateWithSocketData:data];
+}
+
+- (void) receivedServiceData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    if ([self.session isKindOfClass:[ZingleAccountSession class]]) {
+        [(ZingleAccountSession *)self.session updateCurrentService];
+    }
 }
 
 - (void) socketDidEncounterErrorWithData:(NSArray *)data

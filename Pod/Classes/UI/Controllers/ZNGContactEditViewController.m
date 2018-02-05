@@ -36,6 +36,7 @@
 #import "ZNGAssignUserTableViewCell.h"
 #import "ZNGTeam.h"
 #import "ZNGAssignmentViewController.h"
+#import "ZNGEditContactTransition.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -64,6 +65,8 @@ static NSString * const AssignSegueIdentifier = @"assign";
     
     CGFloat lockedContactHeight;
     
+    __weak UILabel * assignmentLabel;
+    
     NSArray<NSString *> * defaultCustomFieldDisplayNames;
     NSArray<NSString *> * editableCustomFieldDataTypes;
     NSArray<ZNGContactFieldValue *> * defaultCustomFields;
@@ -79,12 +82,14 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.transitioningDelegate = self;
+    
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
     
     defaultCustomFieldDisplayNames = @[@"Title", @"First Name", @"Last Name"];
     
     [self generateDataArrays];
-    
+
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     deleteXImage = [[UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
@@ -109,6 +114,21 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (UILabel * __weak) assignmentLabel
+{
+    // If the assignment row is not visible, we return nil.
+    NSArray<NSIndexPath *> * visibleIndexPaths = [self.tableView indexPathsForVisibleRows];
+    
+    for (NSIndexPath * indexPath in visibleIndexPaths) {
+        if (indexPath.section == ContactSectionAssignment) {
+            return assignmentLabel;
+        }
+    }
+    
+    // We did not find any assignment rows in our visible paths
+    return nil;
 }
 
 - (void) setContact:(ZNGContact *)contact
@@ -272,6 +292,17 @@ static NSString * const AssignSegueIdentifier = @"assign";
     } else {
         [self.view layoutIfNeeded];
     }
+}
+
+#pragma mark - Transition delegate
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForPresentedController:(UIViewController *)presented presentingController:(UIViewController *)presenting sourceController:(UIViewController *)source
+{
+    return [[ZNGEditContactTransition alloc] init];
+}
+
+- (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
+{
+    return nil;
 }
 
 #pragma mark - IBActions
@@ -618,6 +649,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                     }
                 }
                 
+                assignmentLabel = cell.nameLabel;
                 return cell;
 
             } else if ([self.contact.assignedToTeamId length] > 0) {
@@ -634,10 +666,12 @@ static NSString * const AssignSegueIdentifier = @"assign";
                     cell.emojiLabel.text = team.emoji;
                 }
                 
+                assignmentLabel = cell.nameLabel;
                 return cell;
             }
             
             // Else it's unassigned
+            assignmentLabel = nil;
             return [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
         }
             

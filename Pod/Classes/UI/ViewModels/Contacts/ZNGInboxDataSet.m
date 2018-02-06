@@ -127,8 +127,6 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         fetchQueue.maxConcurrentOperationCount = 1;
         
         _contacts = [[NSOrderedSet alloc] init];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshDueToPushNotification:) name:ZNGPushNotificationReceived object:nil];
     }
     
     return self;
@@ -137,7 +135,6 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 - (void) dealloc
 {
     [fetchQueue cancelAllOperations];
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 + (NSString *) description
@@ -260,28 +257,6 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     }
     
     [self refreshStartingAtIndex:0 removingTail:YES];
-}
-
-- (void) refreshDueToPushNotification:(NSNotification *)notification
-{
-    // We only need to refresh if the push is due to a contact in our current data set
-    NSString * contactId = notification.userInfo[@"aps"][@"contact"];
-    
-    if (contactId != nil) {
-        NSUInteger contactIndex = [self.contacts indexOfObjectPassingTest:^BOOL(ZNGContact * _Nonnull contact, NSUInteger idx, BOOL * _Nonnull stop) {
-            return [contact.contactId isEqualToString:contactId];
-        }];
-        
-        if (contactIndex != NSNotFound) {
-            NSUInteger pageIndex = contactIndex / self.pageSize + 1;
-            
-            // This delay is needed because the server sends us a push slightly before it updates the last message data in Elastic Cloud.
-            // Yell at a server developer for this, not me :(
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [self refreshStartingAtIndex:(pageIndex / self.pageSize) removingTail:NO];
-            });
-        }
-    }
 }
 
 - (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail

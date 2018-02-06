@@ -328,7 +328,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         showingImageView = NO;
     }
     
-    self.conversation.automaticallyRefreshesOnPushNotification = YES;
+    self.conversation.automaticallyRefreshes = YES;
     
     [self checkForMoreRemoteMessagesAvailable];
 }
@@ -348,7 +348,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) dealloc
 {
-    self.conversation.automaticallyRefreshesOnPushNotification = NO;
+    self.conversation.automaticallyRefreshes = NO;
     
     [self removeObserver:self forKeyPath:LoadedInitialDataKVOPath context:ZNGConversationKVOContext];
     [self removeObserver:self forKeyPath:LoadingKVOPath context:ZNGConversationKVOContext];

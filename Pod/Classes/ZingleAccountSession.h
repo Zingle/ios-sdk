@@ -29,6 +29,16 @@ NS_ASSUME_NONNULL_BEGIN
  */
 extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 
+/**
+ *  Notification posted whenever new message/event data is detected through an asynchronous connection.
+ *  Conversation objects do *not* automatically refresh.  UI displaying a conversation should trigger a refresh
+ *   when receiving this notification.
+ *
+ *  `userData[ZingleConversationNotificationContactIdKey]` will contain the UUID of the conversation.
+ */
+extern NSString * const ZingleConversationDataArrivedNotification;
+extern NSString * const ZingleConversationNotificationContactIdKey;
+
 @interface ZingleAccountSession : ZingleSession <NSCacheDelegate>
 
 #pragma mark - Account/Service selection
@@ -102,6 +112,11 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
  */
 @property (nonatomic, strong, nullable) ZNGInboxStatistician * inboxStatistician;
 
+/**
+ *  The total number of unread conversations relevant to this user.  This should always match the badge number sent in push notifications.
+ */
+@property (nonatomic, assign) NSUInteger totalUnreadCount;
+
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
@@ -125,8 +140,13 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 
 - (void) connectWithAccountChooser:(nullable ZNGAccountChooser)accountChooser serviceChooser:(nullable ZNGServiceChooser)serviceChooser completion:(nullable ZNGAccountSessionCallback)completion;
 
-#pragma mark - User data
+#pragma mark - Data
 - (void) updateUserData;
+
+/**
+ *  Refreshes the current service object
+ */
+- (void) updateCurrentService;
 
 #pragma mark - External data
 /**

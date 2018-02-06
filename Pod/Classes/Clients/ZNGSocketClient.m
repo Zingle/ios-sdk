@@ -180,7 +180,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:authPath]];
     ZNGLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
     
-    NSNumber * shouldLog = (zngLogLevel & DDLogFlagDebug) ? @YES : @NO;
+    NSNumber * shouldLog = (zngLogLevel & DDLogFlagVerbose) ? @YES : @NO;
     
     socketManager = [[SocketManager alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : shouldLog }];
     SocketIOClient * socketClient = [socketManager defaultSocket];
@@ -203,12 +203,20 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf feedUnlocked:data];
     }];
     
+    [socketClient on:@"feedUpdated" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedFeedUpdated:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"nodeControllerBindSuccess" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidBindNodeController];
     }];
     
     [socketClient on:@"eventListData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf receivedEventListData:data ackEmitter:ackEmitter];
+    }];
+    
+    [socketClient on:@"serviceUpdated" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedServiceData:data ackEmitter:ackEmitter];
     }];
     
     [socketClient on:@"serviceUsersData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
@@ -318,7 +326,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Sockety goodness
 - (void) socketEvent:(SocketAnyEvent *)event
 {
-    ZNGLogDebug(@"Socket event of type %@: %@", [event class], event);
+    ZNGLogDebug(@"Received socket event of type %@", event.event);
+    ZNGLogVerbose(@"%@", event);
 }
 
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
@@ -356,6 +365,21 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     if ([feedId integerValue] > 0) {
         self.activeConversation.sequentialId = [feedId integerValue];
+    }
+}
+
+- (void) receivedFeedUpdated:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    NSDictionary * feedData = [data firstObject];
+    NSDictionary * contact = feedData[@"contact"];
+    NSString * feedId = contact[@"uuid"];
+    
+    if ([feedId length] > 0) {
+        NSDictionary * userInfo = @{ZingleConversationNotificationContactIdKey: feedId};
+        ZNGLogDebug(@"Posting %@ notification for %@", ZingleConversationDataArrivedNotification, feedId);
+        [[NSNotificationCenter defaultCenter] postNotificationName:ZingleConversationDataArrivedNotification object:nil userInfo:userInfo];
+    } else {
+        ZNGLogWarn(@"feedUpdated event arrived without a uuid: %@", data);
     }
 }
 
@@ -400,6 +424,13 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
     ZingleAccountSession * session = (ZingleAccountSession *)self.session;
     [session.inboxStatistician updateWithSocketData:data];
+}
+
+- (void) receivedServiceData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    if ([self.session isKindOfClass:[ZingleAccountSession class]]) {
+        [(ZingleAccountSession *)self.session updateCurrentService];
+    }
 }
 
 - (void) socketDidEncounterErrorWithData:(NSArray *)data

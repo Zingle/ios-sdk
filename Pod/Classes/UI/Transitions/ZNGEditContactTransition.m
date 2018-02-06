@@ -6,8 +6,12 @@
 //
 
 #import "ZNGEditContactTransition.h"
+#import "ZNGLogging.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGServiceToContactViewController.h"
+#import "UILabel+SubstringRect.h"
+
+static const int zngLogLevel = ZNGLogLevelInfo;
 
 @interface UIButton (VisualCopy)
 - (UIButton *)nonInteractiveCopy;
@@ -39,9 +43,19 @@
 - (void) animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     UIView * container = transitionContext.containerView;
-    ZNGServiceToContactViewController * fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UISplitViewController * fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
+    UITabBarController * tabController = [fromViewController.viewControllers lastObject];
+    UINavigationController * navController = [tabController selectedViewController];
     ZNGContactEditViewController * toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     CGRect toViewFinalFrame = [transitionContext finalFrameForViewController:toViewController];
+    ZNGServiceToContactViewController * conversationViewController = nil;
+    
+    for (UIViewController * vc in navController.viewControllers) {
+        if ([vc isKindOfClass:[ZNGServiceToContactViewController class]]) {
+            conversationViewController = (ZNGServiceToContactViewController *)vc;
+            break;
+        }
+    }
     
     // Force a layout of the destination view to force the safe area to be calculated
     [toViewController.view setNeedsLayout];
@@ -66,12 +80,35 @@
     // Copy the title.
     // Note that its coordinates are relative to the header view, but the header is at 0.0, 0.0, so we
     //  do not strictly need to convert these coordinates.
-    UILabel * animatingTitle = [[UILabel alloc] initWithFrame:toViewController.titleLabel.frame];
+    CGRect destinationTitleFrame = toViewController.titleLabel.frame;
+    UILabel * animatingTitle = [[UILabel alloc] initWithFrame:destinationTitleFrame];
     animatingTitle.font = toViewController.titleLabel.font;
     animatingTitle.textColor = toViewController.titleLabel.textColor;
     animatingTitle.text = toViewController.titleLabel.text;
+    UILabel * oldColorAnimatingTitle = [[UILabel alloc] initWithFrame:animatingTitle.frame];
+    oldColorAnimatingTitle.font = animatingTitle.font;
+    oldColorAnimatingTitle.textColor = animatingTitle.textColor;  // Color will be set properly below
+    oldColorAnimatingTitle.text = animatingTitle.text;
     
-    // Make the existing header container uncolored during our animation
+    // Find the location of the contact's name in our old header
+    UILabel * fromTitleLabel = (UILabel *)conversationViewController.navigationItem.titleView;
+    
+    if ([fromTitleLabel isKindOfClass:[UILabel class]]) {
+        CGRect bounds = [fromTitleLabel boundingRectForFirstLine];
+        oldColorAnimatingTitle.textColor = fromTitleLabel.textColor;
+        
+        if (!CGRectIsEmpty(bounds)) {
+            // Adjust the animating title so it begins in the same Y as the previous view's contact name
+            CGRect fromTitleFrame = [fromTitleLabel convertRect:bounds toView:fromViewController.view];
+            animatingTitle.frame = CGRectMake(animatingTitle.frame.origin.x, fromTitleFrame.origin.y, animatingTitle.frame.size.width, animatingTitle.frame.size.height);
+            oldColorAnimatingTitle.frame = animatingTitle.frame;
+        }
+    } else {
+        ZNGLogWarn(@"Unable to find conversation view's title UILabel to animate.  Sad.");
+    }
+    
+    // Hide some things from both source and destination that we are animating
+    conversationViewController.navigationItem.titleView.hidden = YES;
     toViewController.titleContainer.backgroundColor = [UIColor clearColor];
     
     // Take snapshot of eventual view
@@ -86,6 +123,7 @@
     [animatingHeader addSubview:cancelButton];
     [animatingHeader addSubview:saveButton];
     [container addSubview:animatingTitle];
+    [container addSubview:oldColorAnimatingTitle];
     
     // Let the animations begin
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
@@ -93,6 +131,11 @@
         animatingHeader.frame = headerFrame;
         cancelButton.alpha = 1.0;
         saveButton.alpha = 1.0;
+        
+        // Move the title precisely into place
+        animatingTitle.frame = destinationTitleFrame;
+        oldColorAnimatingTitle.frame = destinationTitleFrame;
+        oldColorAnimatingTitle.alpha = 0.0;
         
         // Bring the view up into the frame
         toSnapshot.frame = toViewFinalFrame;
@@ -102,8 +145,14 @@
         toViewController.cancelButton.hidden = NO;
         toViewController.saveButton.hidden = NO;
         
+        conversationViewController.navigationItem.titleView.hidden = NO;
+        
         [container addSubview:toViewController.view];
         [toSnapshot removeFromSuperview];
+        [animatingHeader removeFromSuperview];
+        [animatingTitle removeFromSuperview];
+        [oldColorAnimatingTitle removeFromSuperview];
+        
         [transitionContext completeTransition:YES];
     }];
 }

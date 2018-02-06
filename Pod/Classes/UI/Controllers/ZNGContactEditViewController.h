@@ -33,7 +33,9 @@
 @property (nonatomic, strong) IBOutlet ZNGGradientLoadingView * loadingGradient;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * lockedContactHeightConstraint;
 @property (nonatomic, strong) IBOutlet UIButton * saveButton;
+@property (nonatomic, strong) IBOutlet UIButton * cancelButton;
 @property (nonatomic, strong) IBOutlet UILabel * titleLabel;
+@property (nonatomic, strong) IBOutlet UIView * titleContainer;
 
 /**
  *  Reference to the name label in the contact assignment table cell, if available and visible.

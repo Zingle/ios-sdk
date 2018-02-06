@@ -1488,10 +1488,12 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="cancelButton" destination="e5j-nJ-1Sw" id="4Kf-QZ-N2c"/>
                         <outlet property="loadingGradient" destination="moV-rG-hce" id="ySw-Hp-1sD"/>
                         <outlet property="lockedContactHeightConstraint" destination="hKn-r9-8Op" id="cu2-cT-eU2"/>
                         <outlet property="saveButton" destination="EkH-fL-ci7" id="qY5-9t-Yx0"/>
                         <outlet property="tableView" destination="emI-L2-W9W" id="KqX-8c-mqD"/>
+                        <outlet property="titleContainer" destination="YWb-LP-HLJ" id="itQ-wr-s8c"/>
                         <outlet property="titleLabel" destination="Ci6-Gc-8Uf" id="nyV-9W-uCq"/>
                         <segue destination="X8F-hv-i5R" kind="presentation" identifier="selectLabel" id="7nP-3t-wt8"/>
                         <segue destination="S2H-KT-IlU" kind="presentation" identifier="assign" id="N3x-Xs-n1w"/>

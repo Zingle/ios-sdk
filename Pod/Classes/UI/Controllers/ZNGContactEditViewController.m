@@ -103,7 +103,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self showOrHideLockedContactBarAnimated:NO];
+    [self showOrHideLockedContactBar];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -133,7 +133,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
         _contact = [[ZNGContact alloc] init];
     }
     
-    [self showOrHideLockedContactBarAnimated:NO];
+    [self showOrHideLockedContactBar];
     NSString * saveOrCreate = (originalContact != nil) ? @"Save" : @"Create";
     [self.saveButton setTitle:saveOrCreate forState:UIControlStateNormal];
     NSString * name = [originalContact fullName];
@@ -261,17 +261,17 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return value;
 }
 
-- (void) showOrHideLockedContactBarAnimated:(BOOL)animated
+- (void) showOrHideLockedContactBar
 {
     CGFloat lockedBarHeight = [self.contact lockedBySource] ? lockedContactHeight : 0.0;
+    
+    if (self.lockedContactHeightConstraint.constant == lockedBarHeight) {
+        // It's already the correct height
+        return;
+    }
+    
     self.lockedContactHeightConstraint.constant = lockedBarHeight;
     [self.view setNeedsUpdateConstraints];
-    
-    if (animated) {
-        [UIView animateWithDuration:0.25 animations:^{ [self.view layoutIfNeeded]; }];
-    } else {
-        [self.view layoutIfNeeded];
-    }
 }
 
 #pragma mark - IBActions

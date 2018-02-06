@@ -46,7 +46,7 @@
 
 - (NSUInteger) hash
 {
-    return ((uint32_t)[_oldestUnconfirmed timeIntervalSince1970] + ((_openCount & 0xFFFF) << 32) + ((_unreadCount & 0xFFFF) << 48));
+    return (NSUInteger)((uint32_t)[_oldestUnconfirmed timeIntervalSince1970] + ((uint64_t)(_openCount & 0xFFFF) << 32) + ((uint64_t)(_unreadCount & 0xFFFF) << 48));
 }
 
 - (BOOL) isEqual:(ZNGInboxStatsEntry *)other

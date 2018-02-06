@@ -108,7 +108,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    [self showOrHideLockedContactBarAnimated:NO];
+    [self showOrHideLockedContactBar];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -153,7 +153,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
         _contact = [[ZNGContact alloc] init];
     }
     
-    [self showOrHideLockedContactBarAnimated:NO];
+    [self showOrHideLockedContactBar];
     NSString * saveOrCreate = (originalContact != nil) ? @"Save" : @"Create";
     [self.saveButton setTitle:saveOrCreate forState:UIControlStateNormal];
     NSString * name = [originalContact fullName];
@@ -281,17 +281,17 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return value;
 }
 
-- (void) showOrHideLockedContactBarAnimated:(BOOL)animated
+- (void) showOrHideLockedContactBar
 {
     CGFloat lockedBarHeight = [self.contact lockedBySource] ? lockedContactHeight : 0.0;
+    
+    if (self.lockedContactHeightConstraint.constant == lockedBarHeight) {
+        // It's already the correct height
+        return;
+    }
+    
     self.lockedContactHeightConstraint.constant = lockedBarHeight;
     [self.view setNeedsUpdateConstraints];
-    
-    if (animated) {
-        [UIView animateWithDuration:0.25 animations:^{ [self.view layoutIfNeeded]; }];
-    } else {
-        [self.view layoutIfNeeded];
-    }
 }
 
 #pragma mark - Transition delegate
@@ -380,16 +380,6 @@ static NSString * const AssignSegueIdentifier = @"assign";
             [[ZNGAnalytics sharedAnalytics] trackCreatedContact:contact];
         } else {
             [[ZNGAnalytics sharedAnalytics] trackEditedExistingContact:contact];
-        }
-        
-        // If we do not have push notifications, we will fake a push notification so our UI gets updated
-        if (![[UIApplication sharedApplication] isRegisteredForRemoteNotifications]) {
-            NSDictionary * userInfo = @{ @"aps" : @{ @"contact" : contact.contactId } };
-            
-            // Delay to give the magic elastic data time to catch up.  A GET soon enough after a POST will have the old data for Zingle server reasons.
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:contact userInfo:userInfo];
-            });
         }
      
         [self dismissViewControllerAnimated:YES completion:nil];

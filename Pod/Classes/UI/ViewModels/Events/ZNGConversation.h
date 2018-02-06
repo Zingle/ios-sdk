@@ -66,11 +66,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
 @property (nonatomic) NSUInteger pageSize;
 
 /**
- *  Whether this conversation should make network requests to update its data when a push notification is received.
+ *  Whether this conversation should make network requests to update its data when asynchronous data is received.
  *
  *  Defaults to YES.
  */
-@property (nonatomic) BOOL automaticallyRefreshesOnPushNotification;
+@property (nonatomic) BOOL automaticallyRefreshes;
 
 /**
  *  The sequential ID for this feed (vs. the UUID we actually use.)
@@ -189,7 +189,7 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
  */
 - (nonnull ZNGEvent *)pendingMessageEventForOutgoingMessage:(nonnull ZNGNewMessage *)newMessage;
 
-- (BOOL) pushNotificationRelevantToThisConversation:(nonnull NSNotification *)notification;
+- (BOOL) notificationRelevantToThisConversation:(nonnull NSNotification *)notification;
 
 - (void) addSenderNameToEvents:(nullable NSArray<ZNGEvent *> *)events;
 - (nonnull ZNGNewMessage *)freshMessage;

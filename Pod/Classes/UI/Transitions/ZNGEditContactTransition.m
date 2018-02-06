@@ -97,10 +97,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         CGRect bounds = [fromTitleLabel boundingRectForFirstLine];
         oldColorAnimatingTitle.textColor = fromTitleLabel.textColor;
         
-        if (!CGRectIsEmpty(bounds)) {
-            // Adjust the animating title so it begins in the same Y as the previous view's contact name
+        if (!CGRectIsEmpty(bounds)) {            
+            // Adjust the animating title so it begins overlapping the contact name on the previous view
             CGRect fromTitleFrame = [fromTitleLabel convertRect:bounds toView:fromViewController.view];
-            animatingTitle.frame = CGRectMake(animatingTitle.frame.origin.x, fromTitleFrame.origin.y, animatingTitle.frame.size.width, animatingTitle.frame.size.height);
+            animatingTitle.frame = fromTitleFrame;
             oldColorAnimatingTitle.frame = animatingTitle.frame;
         }
     } else {

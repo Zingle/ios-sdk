@@ -18,26 +18,23 @@
     
     NSMutableAttributedString * attributedString = [[self attributedText] mutableCopy];
     
-    // Does our attributed string have a font attribute?  If not, we'll want to add our own.
-    __block BOOL foundFontAttribute = NO;
-    [attributedString enumerateAttributesInRange:range options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
-        if (attrs[NSFontAttributeName] != nil) {
-            foundFontAttribute = YES;
-            *stop = YES;
+    // This seems ugly and inefficient, but going character-by-character is the simplest way I could find to avoid
+    //  problems of attribute overlap while applying default attributes for font and alignment.
+    NSMutableParagraphStyle * style = [[NSMutableParagraphStyle alloc] init];
+    style.alignment = self.textAlignment;
+    
+    for (NSUInteger i = 0; i < [attributedString length]; i++) {
+        NSDictionary * attributes = [attributedString attributesAtIndex:i effectiveRange:nil];
+        NSRange thisRange = NSMakeRange(i, 1);
+        
+        if (attributes[NSFontAttributeName] == nil) {
+            [attributedString addAttribute:NSFontAttributeName value:self.font range:thisRange];
         }
-    }];
-    
-    if (!foundFontAttribute) {
-        [attributedString addAttribute:NSFontAttributeName value:self.font range:range];
+        
+        if ((self.textAlignment != NSTextAlignmentLeft) && (attributes[NSParagraphStyleAttributeName] == nil)) {
+            [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:thisRange];
+        }
     }
-    
-    // If our alignment is not lefty, attribute that jazz
-    if (self.textAlignment != NSTextAlignmentLeft) {
-        NSMutableParagraphStyle * style = [[NSMutableParagraphStyle alloc] init];
-        style.alignment = self.textAlignment;
-        [attributedString addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, [attributedString length])];
-    }
-    
     
     // I really wish we could access the UILabel's internal layout manager :(
     NSTextStorage * textStorage = [[NSTextStorage alloc] initWithAttributedString:attributedString];

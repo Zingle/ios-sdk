@@ -92,6 +92,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     UILabel * animatingNameLabel = nil;
     CGRect animatingNameFinalFrame = CGRectZero;
+    NSRange hiddenTitleRange = NSMakeRange(NSNotFound, 0);
+    __block UIColor * hiddenTitleColor = nil;
     
     // Find the location of the contact's name in our old header
     UILabel * fromTitleLabel = (UILabel *)conversationViewController.navigationItem.titleView;
@@ -110,18 +112,45 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         NSString * animatingName = [self assignmentStringToAnimateFromLabel:fromTitleLabel];
         
         if (animatingName != nil) {
-            CGRect animatingNameStartFrame = [self frameForSubstring:animatingName withinLabel:fromTitleLabel inContainerView:fromViewController.view];
+            // Hide the name
+            NSRange nameRange = [fromTitleLabel rangeOfFirstLine];
+            NSMutableAttributedString * attributedTitleText = [fromTitleLabel.attributedText mutableCopy];
+            [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:nameRange];
+            fromTitleLabel.attributedText = attributedTitleText;
+            
+            CGRect animatingNameStartBounds = [self frameForSubstring:animatingName withinLabel:fromTitleLabel];
+            CGRect animatingNameStartFrame = [fromTitleLabel convertRect:animatingNameStartBounds toView:fromViewController.view];
             
             if (!CGRectIsEmpty(animatingNameStartFrame) && (toViewController.assignmentLabel != nil)) {
+                CGFloat startingPointSize = [fromTitleLabel fontSizeOfSubstring:animatingName];
+                CGFloat startingScale = startingPointSize / toViewController.assignmentLabel.font.pointSize;
+                
+                // Adjust starting frame for scale
+                CGPoint animatingNameStartCenter = CGPointMake(CGRectGetMidX(animatingNameStartFrame), CGRectGetMidY(animatingNameStartFrame));
+                animatingNameStartFrame = CGRectMake(0.0, 0.0, animatingNameStartFrame.size.width / startingScale, animatingNameStartFrame.size.width / startingScale);
+                
                 CGRect destinationBounds = [toViewController.assignmentLabel boundingRectForFirstLine];
                 animatingNameFinalFrame = [toViewController.assignmentLabel convertRect:destinationBounds toView:toViewController.view];
-                
+
                 animatingNameLabel = [[UILabel alloc] initWithFrame:animatingNameStartFrame];
+                animatingNameLabel.center = animatingNameStartCenter;
                 animatingNameLabel.font = toViewController.assignmentLabel.font;
                 animatingNameLabel.textColor = [UIColor lightGrayColor];
                 animatingNameLabel.text = animatingName;
                 animatingNameLabel.minimumScaleFactor = 0.2;
                 animatingNameLabel.adjustsFontSizeToFitWidth = YES;
+                animatingNameLabel.transform = CGAffineTransformMakeScale(startingScale, startingScale);
+                
+                // Hide the name that we are animating
+                hiddenTitleRange = [fromTitleLabel.text rangeOfString:animatingName];
+                
+                [attributedTitleText enumerateAttribute:NSForegroundColorAttributeName inRange:hiddenTitleRange options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+                    hiddenTitleColor = value;
+                    *stop = YES;
+                }];
+                
+                [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:hiddenTitleRange];
+                fromTitleLabel.attributedText = attributedTitleText;
             }
         }
     } else {
@@ -130,7 +159,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
     
     // Hide some things from both source and destination that we are animating
-    conversationViewController.navigationItem.titleView.hidden = YES;
     toViewController.titleContainer.backgroundColor = [UIColor clearColor];
     
     // Take snapshot of eventual view
@@ -151,6 +179,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         [container addSubview:animatingNameLabel];
     }
     
+    NSTimeInterval duration = [self transitionDuration:transitionContext];
+    
+    // Hide the title label a bit faster
+    [UIView animateWithDuration:duration * 0.3 animations:^{
+        fromTitleLabel.alpha = 0.0;
+    }];
+    
     // Let the animations begin
     [UIView animateWithDuration:[self transitionDuration:transitionContext] animations:^{
         // Lower the header background into place
@@ -164,10 +199,24 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         oldColorAnimatingTitle.alpha = 0.0;
         
         animatingNameLabel.frame = animatingNameFinalFrame;
+        animatingNameLabel.transform = CGAffineTransformIdentity;
         
         // Bring the view up into the frame
         toSnapshot.frame = toViewFinalFrame;
     } completion:^(BOOL finished) {
+        // Restore any text that we hid above
+        fromTitleLabel.alpha = 1.0;
+        NSMutableAttributedString * text = [fromTitleLabel.attributedText mutableCopy];
+        [text enumerateAttribute:NSForegroundColorAttributeName inRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(UIColor * _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+            if ([value isEqual:[UIColor clearColor]]) {
+                [text removeAttribute:NSForegroundColorAttributeName range:range];
+            }
+        }];
+        if (hiddenTitleColor != nil) {
+            [text addAttribute:NSForegroundColorAttributeName value:hiddenTitleColor range:hiddenTitleRange];
+        }
+        fromTitleLabel.attributedText = text;
+        
         // Restore the header color and button visibility
         toViewController.titleContainer.backgroundColor = headerColor;
         toViewController.cancelButton.hidden = NO;
@@ -201,17 +250,10 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return nil;
 }
 
-- (CGRect) frameForSubstring:(NSString *)substring withinLabel:(UILabel *)label inContainerView:(UIView *)containerView
+- (CGRect) frameForSubstring:(NSString *)substring withinLabel:(UILabel *)label
 {
     NSRange animatingTextRange = [label.text rangeOfString:substring];
-    CGRect animatingTextBoundingRect = [label boundingRectForTextRange:animatingTextRange];
-    
-    if (!CGRectIsEmpty(animatingTextBoundingRect)) {
-        return [label convertRect:animatingTextBoundingRect toView:containerView];
-    }
-    
-    ZNGLogWarn(@"Unable to find bounds for animating text \"%@\"", substring);
-    return CGRectZero;
+    return [label boundingRectForTextRange:animatingTextRange];
 }
 
 @end

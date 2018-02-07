@@ -54,13 +54,36 @@
 
 - (CGRect) boundingRectForFirstLine
 {
+    return [self boundingRectForTextRange:[self rangeOfFirstLine]];
+}
+
+- (NSRange) rangeOfFirstLine
+{
     NSRange firstLineFeedRange = [self.text rangeOfString:@"\n"];
-    
+
     if (firstLineFeedRange.location != NSNotFound) {
-        return [self boundingRectForTextRange:NSMakeRange(0, firstLineFeedRange.location)];
+        return NSMakeRange(0, firstLineFeedRange.location);
     }
     
-    return [self boundingRectForTextRange:NSMakeRange(0, [self.text length])];
+    return NSMakeRange(0, [self.text length]);
+}
+
+- (CGFloat) fontSizeOfSubstring:(NSString *)substring
+{
+    __block CGFloat pointSize = self.font.pointSize;
+    NSRange range = [self.text rangeOfString:substring];
+    
+    if (range.location != NSNotFound) {
+        [self.attributedText enumerateAttributesInRange:range options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+            if (attrs[NSFontAttributeName] != nil) {
+                UIFont * font = attrs[NSFontAttributeName];
+                pointSize = font.pointSize;
+                *stop = YES;
+            }
+        }];
+    }
+    
+    return pointSize;
 }
 
 @end

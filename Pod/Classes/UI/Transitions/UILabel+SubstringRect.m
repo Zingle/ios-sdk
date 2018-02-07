@@ -12,7 +12,7 @@
 - (CGRect) boundingRectForTextRange:(NSRange)range
 {
     // Protect bounds
-    if ((range.location + range.length) >= [self.attributedText length]) {
+    if ((range.location + range.length) > [self.attributedText length]) {
         return CGRectZero;
     }
     
@@ -56,11 +56,11 @@
 {
     NSRange firstLineFeedRange = [self.text rangeOfString:@"\n"];
     
-    if (firstLineFeedRange.location == NSNotFound) {
-        return CGRectZero;
+    if (firstLineFeedRange.location != NSNotFound) {
+        return [self boundingRectForTextRange:NSMakeRange(0, firstLineFeedRange.location)];
     }
     
-    return [self boundingRectForTextRange:NSMakeRange(0, firstLineFeedRange.location)];
+    return [self boundingRectForTextRange:NSMakeRange(0, [self.text length])];
 }
 
 @end

@@ -37,7 +37,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    return 0.35;
+    return 0.5;
 }
 
 - (void) animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext

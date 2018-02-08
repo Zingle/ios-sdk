@@ -435,11 +435,15 @@ enum ZNGConversationSections
         [title appendAttributedString:subtitle];
     }
 
-    // Removing the title label from the navigation item is necessary when changing its size to avoid some clipping shenanigans
+    // Removing the title label from the navigation item and re-adding it next run loop cycle is necessary when changing
+    //  its size to avoid some clipping shenanigans.
     self.navigationItem.titleView = nil;
     titleLabel.attributedText = title;
-    [titleLabel sizeToFit];
-    self.navigationItem.titleView = titleLabel;
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [titleLabel sizeToFit];
+        self.navigationItem.titleView = titleLabel;
+    });
 }
 
 - (NSMutableAttributedString *) subtitle

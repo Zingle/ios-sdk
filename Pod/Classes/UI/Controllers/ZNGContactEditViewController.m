@@ -663,9 +663,9 @@ static NSString * const AssignSegueIdentifier = @"assign";
             }
             
             // Else it's unassigned
-            assignmentLabel = nil;
-            UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
+            ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
             _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
+            assignmentLabel = cell.nameLabel;
             return cell;
         }
             

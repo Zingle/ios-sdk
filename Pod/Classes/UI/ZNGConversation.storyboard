@@ -1360,7 +1360,7 @@
                                             <outlet property="nameLabel" destination="0jS-BD-iG2" id="6sb-bU-i8S"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="unassigned" rowHeight="52" id="7zD-nJ-pvM">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="unassigned" rowHeight="52" id="7zD-nJ-pvM" customClass="ZNGAssignUserTableViewCell">
                                         <rect key="frame" x="0.0" y="658" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7zD-nJ-pvM" id="fWO-Zj-3Wo">
@@ -1398,6 +1398,9 @@
                                                 <constraint firstItem="c9w-ZW-hhN" firstAttribute="centerY" secondItem="fWO-Zj-3Wo" secondAttribute="centerY" id="y0A-VE-Wbz"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="nameLabel" destination="qKD-A7-hvH" id="81y-Te-ag7"/>
+                                        </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>

@@ -113,9 +113,13 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         
         if (animatingName != nil) {
             // Hide the name
-            NSRange nameRange = [fromTitleLabel rangeOfFirstLine];
+            hiddenTitleRange = [fromTitleLabel.text rangeOfString:animatingName];
             NSMutableAttributedString * attributedTitleText = [fromTitleLabel.attributedText mutableCopy];
-            [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:nameRange];
+            [attributedTitleText enumerateAttribute:NSForegroundColorAttributeName inRange:hiddenTitleRange options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
+                hiddenTitleColor = value;
+                *stop = YES;
+            }];
+            [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:hiddenTitleRange];
             fromTitleLabel.attributedText = attributedTitleText;
             
             CGRect animatingNameStartBounds = [self frameForSubstring:animatingName withinLabel:fromTitleLabel];
@@ -147,13 +151,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                 
                 // Hide the name that we are animating and the destination label
                 toViewController.assignmentLabel.hidden = YES;
-                hiddenTitleRange = [fromTitleLabel.text rangeOfString:animatingName];
-                
-                [attributedTitleText enumerateAttribute:NSForegroundColorAttributeName inRange:hiddenTitleRange options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-                    hiddenTitleColor = value;
-                    *stop = YES;
-                }];
-                
                 [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:hiddenTitleRange];
                 fromTitleLabel.attributedText = attributedTitleText;
             }

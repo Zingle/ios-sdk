@@ -147,7 +147,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                 animatingNameLabel.minimumScaleFactor = 0.2;
                 animatingNameLabel.adjustsFontSizeToFitWidth = YES;
                 animatingNameLabel.transform = CGAffineTransformMakeScale(startingScale, startingScale);
-                animatingNameLabel.alpha = 0.5;
+                animatingNameLabel.alpha = 0.58;
                 
                 // Hide the name that we are animating and the destination label
                 toViewController.assignmentLabel.hidden = YES;

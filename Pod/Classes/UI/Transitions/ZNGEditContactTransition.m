@@ -131,17 +131,22 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                 
                 CGRect destinationBounds = [toViewController.assignmentLabel boundingRectForFirstLine];
                 animatingNameFinalFrame = [toViewController.assignmentLabel convertRect:destinationBounds toView:toViewController.view];
+                
+                // Shimmy right for margins
+                animatingNameFinalFrame = CGRectOffset(animatingNameFinalFrame, toViewController.assignmentLabelCellLeftMargin, 0.0);
 
                 animatingNameLabel = [[UILabel alloc] initWithFrame:animatingNameStartFrame];
                 animatingNameLabel.center = animatingNameStartCenter;
                 animatingNameLabel.font = toViewController.assignmentLabel.font;
-                animatingNameLabel.textColor = [UIColor lightGrayColor];
+                animatingNameLabel.textColor = toViewController.assignmentLabel.textColor;
                 animatingNameLabel.text = animatingName;
                 animatingNameLabel.minimumScaleFactor = 0.2;
                 animatingNameLabel.adjustsFontSizeToFitWidth = YES;
                 animatingNameLabel.transform = CGAffineTransformMakeScale(startingScale, startingScale);
+                animatingNameLabel.alpha = 0.5;
                 
-                // Hide the name that we are animating
+                // Hide the name that we are animating and the destination label
+                toViewController.assignmentLabel.hidden = YES;
                 hiddenTitleRange = [fromTitleLabel.text rangeOfString:animatingName];
                 
                 [attributedTitleText enumerateAttribute:NSForegroundColorAttributeName inRange:hiddenTitleRange options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
@@ -198,13 +203,15 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         oldColorAnimatingTitle.frame = destinationTitleFrame;
         oldColorAnimatingTitle.alpha = 0.0;
         
-        animatingNameLabel.frame = animatingNameFinalFrame;
+        animatingNameLabel.alpha = 1.0;
         animatingNameLabel.transform = CGAffineTransformIdentity;
+        animatingNameLabel.frame = animatingNameFinalFrame;
         
         // Bring the view up into the frame
         toSnapshot.frame = toViewFinalFrame;
     } completion:^(BOOL finished) {
         // Restore any text that we hid above
+        toViewController.assignmentLabel.hidden = NO;
         fromTitleLabel.alpha = 1.0;
         NSMutableAttributedString * text = [fromTitleLabel.attributedText mutableCopy];
         [text enumerateAttribute:NSForegroundColorAttributeName inRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(UIColor * _Nullable value, NSRange range, BOOL * _Nonnull stop) {

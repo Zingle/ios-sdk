@@ -41,6 +41,7 @@
  *  Reference to the name label in the contact assignment table cell, if available and visible.
  */
 @property (nonatomic, readonly) __weak UILabel * assignmentLabel;
+@property (nonatomic, readonly) CGFloat assignmentLabelCellLeftMargin;
 
 @property (nonatomic, strong) ZNGConversationServiceToContact * conversation;
 @property (nonatomic, strong) ZNGContactClient * contactClient;

@@ -640,6 +640,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 }
                 
                 assignmentLabel = cell.nameLabel;
+                _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
                 return cell;
 
             } else if ([self.contact.assignedToTeamId length] > 0) {
@@ -657,12 +658,15 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 }
                 
                 assignmentLabel = cell.nameLabel;
+                _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
                 return cell;
             }
             
             // Else it's unassigned
             assignmentLabel = nil;
-            return [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
+            UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
+            _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
+            return cell;
         }
             
         case ContactSectionDefaultCustomFields:

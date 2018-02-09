@@ -37,6 +37,7 @@
 #import "ZNGTeam.h"
 #import "ZNGAssignmentViewController.h"
 #import "ZNGEditContactTransition.h"
+#import "ZNGEditContactExitTransition.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -306,7 +307,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
 
 - (id<UIViewControllerAnimatedTransitioning>)animationControllerForDismissedController:(UIViewController *)dismissed
 {
-    return nil;
+    return [[ZNGEditContactExitTransition alloc] init];
 }
 
 #pragma mark - IBActions

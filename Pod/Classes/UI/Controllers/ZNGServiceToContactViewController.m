@@ -98,6 +98,9 @@ enum ZNGConversationSections
      */
     BOOL sentInitialTypingNotification;
     
+    BOOL viewHasAppeared;
+    BOOL titleWasSingleLineLastUpdate;
+    
     /**
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
@@ -275,6 +278,8 @@ enum ZNGConversationSections
 {
     [super viewDidAppear:animated];
     
+    viewHasAppeared = YES;
+    
     if ((self.stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
         ZNGLogInfo(@"Confirming contact due to conversation view appearance.");
         [self.conversation.contact confirm];
@@ -412,6 +417,7 @@ enum ZNGConversationSections
 {
     NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:[self.conversation remoteName]];
     NSMutableAttributedString * subtitle = [self subtitle];
+    BOOL deferUpdateToNextRunLoopCycle = NO;
     
     if ([subtitle length] > 0) {
         // Set smaller font/lighter color for subtitle
@@ -425,6 +431,12 @@ enum ZNGConversationSections
         BOOL isLandscape = ((orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight));
         BOOL useSingleLine = ((isPhone) && (isLandscape));
         
+        if ((useSingleLine != titleWasSingleLineLastUpdate) && (viewHasAppeared)) {
+            deferUpdateToNextRunLoopCycle = YES;
+        }
+        
+        titleWasSingleLineLastUpdate = useSingleLine;
+        
         if (useSingleLine) {
             // Space before the subtitle
             [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"  "]];
@@ -436,14 +448,20 @@ enum ZNGConversationSections
     }
 
     // Removing the title label from the navigation item and re-adding it next run loop cycle is necessary when changing
-    //  its size to avoid some clipping shenanigans.
+    //  its size to avoid some clipping shenanigans  We will do that if useSingleLine changed above, setting deferUpdateToNextRunLoopCycle.
     self.navigationItem.titleView = nil;
     titleLabel.attributedText = title;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+    void (^sizeAndPlaceTitle)(void) = ^{
         [titleLabel sizeToFit];
         self.navigationItem.titleView = titleLabel;
-    });
+    };
+    
+    if (deferUpdateToNextRunLoopCycle) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), sizeAndPlaceTitle);
+    } else {
+        sizeAndPlaceTitle();
+    }
 }
 
 - (NSMutableAttributedString *) subtitle

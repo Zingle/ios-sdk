@@ -32,13 +32,6 @@
             // Start the next group
             currentString = [[NSMutableString alloc] init];
             currentAttributes = thisCharAttributes;
-            
-            if (!isNewline) {
-                [currentString appendFormat:@"%c", thisCharacter];
-            }
-            
-            // Next!
-            continue;
         }
         
         // We're still building the same group

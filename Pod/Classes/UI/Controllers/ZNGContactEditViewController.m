@@ -82,7 +82,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.transitioningDelegate = self;
+    
+    // If someone else has specified their own transitioningDelegate, we will relinquish control of our transitioning to them.
+    if (self.transitioningDelegate == nil) {
+        self.transitioningDelegate = self;
+    }
     
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
     

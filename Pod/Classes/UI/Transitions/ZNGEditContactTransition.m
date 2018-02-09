@@ -9,35 +9,21 @@
 #import "ZNGLogging.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGServiceToContactViewController.h"
+#import "UIButton+VisualCopy.h"
 #import "UILabel+SubstringRect.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
-@interface UIButton (VisualCopy)
-- (UIButton *)nonInteractiveCopy;
-@end
-
-@implementation UIButton (VisualCopy)
-
-- (UIButton *)nonInteractiveCopy
-{
-    UIButton * button = [[UIButton alloc] initWithFrame:self.frame];
-    [button setTitle:[self titleForState:UIControlStateNormal] forState:UIControlStateNormal];
-    [button setAttributedTitle:[self attributedTitleForState:UIControlStateNormal] forState:UIControlStateNormal];
-    button.titleLabel.font = self.titleLabel.font;
-    button.titleLabel.textColor = self.titleLabel.textColor;
-    button.userInteractionEnabled = NO;
-    
-    return button;
-}
-
-@end
-
 @implementation ZNGEditContactTransition
+
++ (NSTimeInterval)duration
+{
+    return 0.5;
+}
 
 - (NSTimeInterval)transitionDuration:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    return 0.5;
+    return [[self class] duration];
 }
 
 - (void) animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext

@@ -9,4 +9,6 @@
 
 @interface ZNGEditContactTransition : NSObject <UIViewControllerAnimatedTransitioning>
 
++ (NSTimeInterval) duration;
+
 @end

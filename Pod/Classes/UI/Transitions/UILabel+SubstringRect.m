@@ -12,6 +12,10 @@
 - (CGRect) boundingRectForTextRange:(NSRange)range
 {
     // Protect bounds
+    if (range.location == NSNotFound) {
+        return CGRectZero;
+    }
+
     if ((range.location + range.length) > [self.attributedText length]) {
         return CGRectZero;
     }

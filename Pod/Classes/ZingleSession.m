@@ -18,6 +18,7 @@
 #import <objc/runtime.h>
 #import "ZNGImageSizeCache.h"
 #import "ZNGLogFormatter.h"
+#import <UserNotifications/UserNotifications.h>
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -44,8 +45,10 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 
 #pragma mark - Push notification swizzle magic
 static void (*_originalDidReceiveRemoteNotificationImplementation)(id, SEL, id, id) = NULL;
+static void (*_originalDidReceiveRemoteNotificationWithCompletionHandlerImplementation)(id, SEL, id, id, void *) = NULL;
+static void (*_originalUserNotificationWillPresentImplementation)(id, SEL, id, id, void *) = NULL;
 
-void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication * application, NSDictionary * userInfo)
+void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, id application, id userInfo)
 {
     [ZingleSession handlePushNotifcation:userInfo];
     
@@ -54,11 +57,36 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
     }
 }
 
+void __applicationDidReceiveRemoteNotificationWithCompletionHandler(id self, SEL _cmd, id application, id userInfo, void * completionHandler)
+{
+    [ZingleSession handlePushNotifcation:userInfo];
+    
+    if (_originalDidReceiveRemoteNotificationWithCompletionHandlerImplementation != NULL) {
+        _originalDidReceiveRemoteNotificationWithCompletionHandlerImplementation(self, _cmd, application, userInfo, completionHandler);
+    }
+}
+
+void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id notification, void * completion)
+{
+    if (@available(iOS 10.0, *)) {
+        [ZingleSession handlePushWithUNNotification:notification];
+    }
+    
+    if (_originalUserNotificationWillPresentImplementation != NULL) {
+        _originalUserNotificationWillPresentImplementation(self, _cmd, notificationCenter, notification, completion);
+    }
+}
+
 + (void) handlePushNotifcation:(NSDictionary *)userInfo
 {
     if ([self pushNotificationIsRelevantToZingle:userInfo]) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGPushNotificationReceived object:nil userInfo:userInfo];
     }
+}
+
++ (void) handlePushWithUNNotification:(UNNotification *)notification NS_AVAILABLE_IOS(10.0)
+{
+    [self handlePushNotifcation:notification.request.content.userInfo];
 }
 
 + (void) load
@@ -72,11 +100,35 @@ void __applicationDidReceiveRemoteNotification(id self, SEL _cmd, UIApplication 
 
 + (void) swizzlePushNotificationMethods
 {
+    // First swizzle any UNUserNotificationCenter delegate
+    if (@available(iOS 10.0, *)) {
+        id<UNUserNotificationCenterDelegate> notificationCenterDelegate = [[UNUserNotificationCenter currentNotificationCenter] delegate];
+        
+        if (notificationCenterDelegate != nil) {
+            Method userNotificationWillPresentMethod = class_getInstanceMethod([notificationCenterDelegate class], NSSelectorFromString(@"userNotificationCenter:willPresentNotification:withCompletionHandler:"));
+            
+            if (userNotificationWillPresentMethod != NULL) {
+                IMP originalIMP = method_setImplementation(userNotificationWillPresentMethod, (IMP)__userNotificationWillPresent);
+                _originalUserNotificationWillPresentImplementation = (void (*)(id, SEL, id, id, void *))originalIMP;
+            }
+        }
+    }
+    
+    // Next we will be swizzling app delegate methods.  Find the app delegate.
     Class appDelegateClass = [[[UIApplication sharedApplication] delegate] class];
     
     if (appDelegateClass == nil) {
         ZNGLogError(@"Unable to find app delegate class.  Push notifications cannot be swizzled.");
         return;
+    }
+
+    Method didReceiveRemoteNotificationWithCompletionMethod = class_getInstanceMethod(appDelegateClass, NSSelectorFromString(@"application:didReceiveRemoteNotification:fetchCompletionHandler:"));
+    
+    if (didReceiveRemoteNotificationWithCompletionMethod != NULL) {
+        // This is an iOS 10.0+ app delegate that is a good boy and implements the newer version of application:didReceiveRemoteNotification:
+        IMP replacementApplicationDidReceiveRemoteNotificationWithCompletionHandler = (IMP)__applicationDidReceiveRemoteNotificationWithCompletionHandler;
+        IMP originalIMP = method_setImplementation(didReceiveRemoteNotificationWithCompletionMethod, replacementApplicationDidReceiveRemoteNotificationWithCompletionHandler);
+        _originalDidReceiveRemoteNotificationWithCompletionHandlerImplementation = (void (*)(id, SEL, id, id, void *))originalIMP;
     }
     
     IMP replacementApplicationDidReceiveRemoteNotification = (IMP)__applicationDidReceiveRemoteNotification;

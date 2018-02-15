@@ -415,6 +415,10 @@ enum ZNGConversationSections
 
 - (void) updateTitle
 {
+    if ([self.conversation remoteName] == nil) {
+        return;
+    }
+    
     NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:[self.conversation remoteName]];
     NSMutableAttributedString * subtitle = [self subtitle];
     BOOL deferUpdateToNextRunLoopCycle = NO;

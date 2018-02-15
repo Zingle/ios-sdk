@@ -453,7 +453,8 @@ enum ZNGConversationSections
     titleLabel.attributedText = title;
     
     void (^sizeAndPlaceTitle)(void) = ^{
-        [titleLabel sizeToFit];
+        CGSize size = [titleLabel intrinsicContentSize];
+        titleLabel.frame = CGRectMake(0.0, 0.0, size.width, size.height);
         self.navigationItem.titleView = titleLabel;
     };
     

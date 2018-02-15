@@ -645,7 +645,6 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 }
                 
                 assignmentLabel = cell.nameLabel;
-                _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
                 return cell;
 
             } else if ([self.contact.assignedToTeamId length] > 0) {
@@ -663,13 +662,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 }
                 
                 assignmentLabel = cell.nameLabel;
-                _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
                 return cell;
             }
             
             // Else it's unassigned
             ZNGAssignUserTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"unassigned" forIndexPath:indexPath];
-            _assignmentLabelCellLeftMargin = cell.layoutMargins.left;
             assignmentLabel = cell.nameLabel;
             return cell;
         }

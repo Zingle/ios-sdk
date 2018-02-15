@@ -13,6 +13,7 @@
 #import "ZNGLogging.h"
 #import "NSAttributedString+GroupingSubstrings.h"
 #import "UILabel+SubstringRect.h"
+#import "UIViewController+ChildViewControllerOfType.h"
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
@@ -25,10 +26,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 
 - (void) animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
-    UISplitViewController * toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
-    UITabBarController * tabBarController = [[toViewController viewControllers] firstObject];
-    UINavigationController * navController = [tabBarController selectedViewController];
-    ZNGServiceToContactViewController * conversationViewController = [navController.viewControllers lastObject];
+    UIViewController * toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
+    ZNGServiceToContactViewController * conversationViewController = [toViewController childViewControllerOfType:[ZNGServiceToContactViewController class]];
     ZNGContactEditViewController * fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     
     // Add the destination view underneath all of our animating nonsense

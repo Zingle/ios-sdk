@@ -36,6 +36,8 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     ZNGServiceToContactViewController * conversationViewController = [fromViewController childViewControllerOfType:[ZNGServiceToContactViewController class]];
     
     // Force a layout of the destination view to force the safe area to be calculated
+    toViewController.view.frame = toViewFinalFrame;
+    [container addSubview:toViewController.view];
     [toViewController.view setNeedsLayout];
     [toViewController.view layoutIfNeeded];
     
@@ -113,9 +115,6 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                 
                 CGRect destinationBounds = [toViewController.assignmentLabel boundingRectForFirstLine];
                 animatingNameFinalFrame = [toViewController.assignmentLabel convertRect:destinationBounds toView:toViewController.view];
-                
-                // Shimmy right for margins
-                animatingNameFinalFrame = CGRectOffset(animatingNameFinalFrame, toViewController.assignmentLabelCellLeftMargin, 0.0);
 
                 animatingNameLabel = [[UILabel alloc] initWithFrame:animatingNameStartFrame];
                 animatingNameLabel.center = animatingNameStartCenter;
@@ -137,12 +136,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         ZNGLogWarn(@"Unable to find conversation view's title UILabel to animate.  Sad.");
     }
 
-    
-    // Hide some things from both source and destination that we are animating
+    // Hide the title background that we have copied and will animate into place
     toViewController.titleContainer.backgroundColor = [UIColor clearColor];
     
-    // Take snapshot of eventual view
+    // Take snapshot of eventual view and hide it
     UIView * toSnapshot = [toViewController.view snapshotViewAfterScreenUpdates:YES];
+    toViewController.view.hidden = YES;
     
     // Place the destination view off screen bottom
     toSnapshot.frame = CGRectMake(0.0, container.bounds.size.height, toViewFinalFrame.size.width, toViewFinalFrame.size.height);
@@ -206,7 +205,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         
         conversationViewController.navigationItem.titleView.hidden = NO;
         
-        [container addSubview:toViewController.view];
+        toViewController.view.hidden = NO;
         [toSnapshot removeFromSuperview];
         [animatingHeader removeFromSuperview];
         [animatingTitle removeFromSuperview];

@@ -26,22 +26,30 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     return [[self class] duration];
 }
 
+- (ZNGServiceToContactViewController *)conversationViewControllerInChildViewControllers:(UIViewController *)viewController
+{
+    if ((viewController == nil) || ([viewController isKindOfClass:[ZNGServiceToContactViewController class]])) {
+        return (ZNGServiceToContactViewController *)viewController;
+    }
+    
+    for (UIViewController * child in viewController.childViewControllers) {
+        ZNGServiceToContactViewController * foundChild = [self conversationViewControllerInChildViewControllers:child];
+        
+        if (foundChild != nil) {
+            return foundChild;
+        }
+    }
+    
+    return nil;
+}
+
 - (void) animateTransition:(id<UIViewControllerContextTransitioning>)transitionContext
 {
     UIView * container = transitionContext.containerView;
-    UISplitViewController * fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
-    UITabBarController * tabController = [fromViewController.viewControllers lastObject];
-    UINavigationController * navController = [tabController selectedViewController];
+    UIViewController * fromViewController = [transitionContext viewControllerForKey:UITransitionContextFromViewControllerKey];
     ZNGContactEditViewController * toViewController = [transitionContext viewControllerForKey:UITransitionContextToViewControllerKey];
     CGRect toViewFinalFrame = [transitionContext finalFrameForViewController:toViewController];
-    ZNGServiceToContactViewController * conversationViewController = nil;
-    
-    for (UIViewController * vc in navController.viewControllers) {
-        if ([vc isKindOfClass:[ZNGServiceToContactViewController class]]) {
-            conversationViewController = (ZNGServiceToContactViewController *)vc;
-            break;
-        }
-    }
+    ZNGServiceToContactViewController * conversationViewController = [self conversationViewControllerInChildViewControllers:fromViewController];
     
     // Force a layout of the destination view to force the safe area to be calculated
     [toViewController.view setNeedsLayout];

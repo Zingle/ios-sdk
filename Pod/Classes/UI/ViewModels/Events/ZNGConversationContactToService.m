@@ -144,7 +144,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             }
         }
     } failure:^(ZNGError *error) {
-        ZNGLogWarn(@"Unable to delete messages for contact ID %@: %@", contactId, error);
+        ZNGLogWarn(@"Unable to delete messages for contact ID %@: %@", self->contactId, error);
     }];
 }
 

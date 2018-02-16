@@ -264,7 +264,7 @@ static NSString * const ZNGKVOServicePath = @"session.service";
     //  http://jira.zinglecorp.com:8080/browse/MOBILE-518
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        _selectedContact = selectedContact;
+        self->_selectedContact = selectedContact;
         NSIndexPath * newSelection = [self indexPathForContact:selectedContact];
         NSIndexPath * oldSelection = [self.tableView indexPathForSelectedRow];
         

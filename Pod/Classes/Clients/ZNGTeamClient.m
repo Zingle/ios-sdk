@@ -18,7 +18,7 @@
     NSString * path = [NSString stringWithFormat:@"services/%@/teams", self.serviceId];
     
     [self.session.v2SessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        dispatch_async(jsonProcessingQueue, ^{
+        dispatch_async(self->jsonProcessingQueue, ^{
             NSError * error = nil;
             NSArray<ZNGTeamV2 *> * teams = [MTLJSONAdapter modelsOfClass:[ZNGTeamV2 class] fromJSONArray:responseObject error:&error];
             

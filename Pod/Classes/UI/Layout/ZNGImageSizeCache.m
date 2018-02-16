@@ -64,28 +64,28 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) loadCachedSizes
 {
     dispatch_async(fileThread, ^{
-        NSMutableDictionary * loadedSizes = [[NSKeyedUnarchiver unarchiveObjectWithFile:cacheFilePath] mutableCopy];
+        NSMutableDictionary * loadedSizes = [[NSKeyedUnarchiver unarchiveObjectWithFile:self->cacheFilePath] mutableCopy];
         
         if ([loadedSizes count] > 0) {
-            ZNGLogInfo(@"Loaded %llu cached image sizes from %@", (unsigned long long)[loadedSizes count], cacheFilePath);
+            ZNGLogInfo(@"Loaded %llu cached image sizes from %@", (unsigned long long)[loadedSizes count], self->cacheFilePath);
             
             dispatch_sync(dispatch_get_main_queue(), ^{
-                [loadedSizes addEntriesFromDictionary:sizes];   // Merge any sizes that were recorded while our cache was loading from disk.
-                sizes = loadedSizes;
+                [loadedSizes addEntriesFromDictionary:self->sizes];   // Merge any sizes that were recorded while our cache was loading from disk.
+                self->sizes = loadedSizes;
             });
         } else {
-            ZNGLogInfo(@"No cached image sizes were found at %@", cacheFilePath);
+            ZNGLogInfo(@"No cached image sizes were found at %@", self->cacheFilePath);
         }
         
-        loading = NO;
+        self->loading = NO;
     });
 }
 
 - (void) saveCachedSizes
 {
     dispatch_async(fileThread, ^{
-        ZNGLogInfo(@"Writing %llu cached sizes to %@", (unsigned long long)[sizes count], cacheFilePath);
-        [NSKeyedArchiver archiveRootObject:sizes toFile:cacheFilePath];
+        ZNGLogInfo(@"Writing %llu cached sizes to %@", (unsigned long long)[self->sizes count], self->cacheFilePath);
+        [NSKeyedArchiver archiveRootObject:self->sizes toFile:self->cacheFilePath];
     });
 }
 

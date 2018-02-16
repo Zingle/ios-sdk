@@ -330,7 +330,7 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
             
             self.service = service;
             
-            for (NSString * conversationId in allLoadedConversationIds) {
+            for (NSString * conversationId in self->allLoadedConversationIds) {
                 ZNGConversationServiceToContact * conversation = [self.conversationCache objectForKey:conversationId];
                 conversation.service = service;
             }
@@ -722,7 +722,7 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
     // We do not yet have a contact client.  Let's hang out and wait for one.
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0), ^{
         dispatch_time_t fiveSeconds = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC));
-        long semaphoreValue = dispatch_semaphore_wait(contactClientSemaphore, fiveSeconds);
+        long semaphoreValue = dispatch_semaphore_wait(self->contactClientSemaphore, fiveSeconds);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if ((semaphoreValue) || (self.contactClient == nil)) {

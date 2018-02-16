@@ -155,7 +155,7 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
         return @[];
     }
     
-    return self.teams;
+    return _teams;
 }
 
 - (NSString*)resourceId

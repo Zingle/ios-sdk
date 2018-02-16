@@ -897,10 +897,12 @@ enum ZNGConversationSections
     
     NSString * uiType = @"ellipsis menu";
     
-    UIAlertAction * assign = [UIAlertAction actionWithTitle:@"Assign" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self performSegueWithIdentifier:@"assign" sender:self];
-    }];
-    [actions addObject:assign];
+    if ([self.conversation.session.service allowsAssignment]) {
+        UIAlertAction * assign = [UIAlertAction actionWithTitle:@"Assign" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self performSegueWithIdentifier:@"assign" sender:self];
+        }];
+        [actions addObject:assign];
+    }
     
     UIAlertAction * editContact = [UIAlertAction actionWithTitle:@"View / edit contact" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [self pressedEditContact];

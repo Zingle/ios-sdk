@@ -160,7 +160,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         // Immediately changing a time picker's time zone causes the UIDatePicker to be disabled and unusable for Apple reasons.
         // This wonderfully intuitive and not at all scary delay prevents the UIDatePicker from committing seppuku.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            datePicker.timeZone = [NSTimeZone localTimeZone];
+            self->datePicker.timeZone = [NSTimeZone localTimeZone];
         });
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
         self.textField.clearButtonMode = UITextFieldViewModeAlways;

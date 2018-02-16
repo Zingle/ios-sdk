@@ -86,7 +86,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [sessionManager GET:[self hotsosIssuePathForTerm:term] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSXMLParser * _Nullable responseObject) {
         responseObject.delegate = self;
         [responseObject parse];
-        ZNGLogInfo(@"HotSOS returned %llu issues matching \"%%%@%%\"", (unsigned long long)[matchingIssueNames count], term);
+        ZNGLogInfo(@"HotSOS returned %llu issues matching \"%%%@%%\"", (unsigned long long)[self->matchingIssueNames count], term);
         
         // Sanity check for non nil completion block
         if (completion == nil) {
@@ -98,7 +98,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         if (error != nil) {
             completion(nil, error);
         } else {
-            completion(matchingIssueNames, nil);
+            completion(self->matchingIssueNames, nil);
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         if (completion != nil) {

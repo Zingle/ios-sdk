@@ -163,8 +163,8 @@ static NSString * const AssignSegueIdentifier = @"assign";
     
     // Maintain default field order
     [defaultValues sortUsingComparator:^NSComparisonResult(ZNGContactFieldValue * _Nonnull obj1, ZNGContactFieldValue * _Nonnull obj2) {
-        NSUInteger obj1SortIndex = [defaultCustomFieldDisplayNames indexOfObject:obj1.customField.displayName];
-        NSUInteger obj2SortIndex = [defaultCustomFieldDisplayNames indexOfObject:obj2.customField.displayName];
+        NSUInteger obj1SortIndex = [self->defaultCustomFieldDisplayNames indexOfObject:obj1.customField.displayName];
+        NSUInteger obj2SortIndex = [self->defaultCustomFieldDisplayNames indexOfObject:obj2.customField.displayName];
         return [@(obj1SortIndex) compare:@(obj2SortIndex)];
     }];
     
@@ -345,7 +345,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
         [self.loadingGradient stopAnimating];
         [self.delegate contactWasCreated:contact];
         
-        if (originalContact == nil) {
+        if (self->originalContact == nil) {
             [[ZNGAnalytics sharedAnalytics] trackCreatedContact:contact];
         } else {
             [[ZNGAnalytics sharedAnalytics] trackEditedExistingContact:contact];

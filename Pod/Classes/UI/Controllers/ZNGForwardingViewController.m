@@ -337,7 +337,7 @@ enum {
         
         NSString * title = [NSString stringWithFormat:@"Printer: %@", printer.displayName ?: printer.printerId];
         UIAlertAction * printerAction = [UIAlertAction actionWithTitle:title style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            selectedPrinter = printer;
+            self->selectedPrinter = printer;
             [self changeRecipientType:RECIPIENT_TYPE_PRINTER];
         }];
         [alert addAction:printerAction];

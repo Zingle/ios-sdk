@@ -618,7 +618,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if (!hasDisplayedInitialData) {
         // Delay the setting of this flag to allow the view to scroll to this new data.
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            hasDisplayedInitialData = YES;
+            self->hasDisplayedInitialData = YES;
         });
     }
     
@@ -717,7 +717,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     [self.collectionView performBatchUpdates:updates completion:^(BOOL finished) {
         self.collectionView.contentOffset = CGPointMake(0, self.collectionView.contentSize.height - bottomOffset);
         [CATransaction commit];
-        caTransactionToDisableAnimationsPushed = NO;
+        self->caTransactionToDisableAnimationsPushed = NO;
     }];
 }
 
@@ -727,7 +727,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     
     [self performCollectionViewUpdatesWithoutScrollingFromBottom:^{
         [self.collectionView insertItemsAtIndexPaths:indexes];
-        pendingInsertionCount = 0;
+        self->pendingInsertionCount = 0;
     }];
 }
 
@@ -770,7 +770,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         [self.collectionView performBatchUpdates:^{
             [self.collectionView reloadItemsAtIndexPaths:indexPaths];
         } completion:^(BOOL finished) {
-            caTransactionToDisableAnimationsPushed = NO;
+            self->caTransactionToDisableAnimationsPushed = NO;
             [CATransaction commit];
         }];
     }
@@ -1051,7 +1051,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             // We did not get image data.  Show an error.
             [self showImageAttachmentError];
         } else {
-            [outgoingImageAttachments addObject:imageData];
+            [self->outgoingImageAttachments addObject:imageData];
             
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 UIImage * image = [UIImage animatedImageWithAnimatedGIFData:imageData];

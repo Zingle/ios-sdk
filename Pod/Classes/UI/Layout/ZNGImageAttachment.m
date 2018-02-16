@@ -58,7 +58,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         UIGraphicsEndImageContext();
         
         dispatch_async(dispatch_get_main_queue(), ^{
-            scaledImage = newScaledImage;
+            self->scaledImage = newScaledImage;
         });
     });
 }

@@ -1024,12 +1024,12 @@ enum ZNGConversationSections
             [bannerContainer layoutIfNeeded];
             
             [UIView animateWithDuration:0.5 animations:^{
-                [bannerContainer removeConstraint:blockedChannelOnScreenConstraint];
-                [bannerContainer addConstraint:blockedChannelOffScreenConstraint];
-                [bannerContainer layoutIfNeeded];
+                [self->bannerContainer removeConstraint:self->blockedChannelOnScreenConstraint];
+                [self->bannerContainer addConstraint:self->blockedChannelOffScreenConstraint];
+                [self->bannerContainer layoutIfNeeded];
             } completion:^(BOOL finished) {
-                [blockedChannelBanner removeFromSuperview];
-                blockedChannelBanner = nil;
+                [self->blockedChannelBanner removeFromSuperview];
+                self->blockedChannelBanner = nil;
             }];
         }
     } else {
@@ -1084,9 +1084,9 @@ enum ZNGConversationSections
             [bannerContainer layoutIfNeeded];
             
             [UIView animateWithDuration:0.5 animations:^{
-                [bannerContainer removeConstraint:blockedChannelOffScreenConstraint];
-                [bannerContainer addConstraint:blockedChannelOnScreenConstraint];
-                [bannerContainer layoutIfNeeded];
+                [self->bannerContainer removeConstraint:self->blockedChannelOffScreenConstraint];
+                [self->bannerContainer addConstraint:self->blockedChannelOnScreenConstraint];
+                [self->bannerContainer layoutIfNeeded];
             } completion:nil];
         }
     }

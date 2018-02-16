@@ -381,7 +381,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             dispatch_semaphore_wait(semaphore, thirtySecondTimeout);
         }];
         
-        [fetchQueue addOperation:operation];
+        [self->fetchQueue addOperation:operation];
     }];
     
     // Remove any data past this current refresh if appropriate

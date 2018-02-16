@@ -125,18 +125,18 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     [session POST:@"auth" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         ZNGLogDebug(@"Auth request succeeded.");
-        authSucceeded = YES;
+        self->authSucceeded = YES;
         [self _connectSocket];
-        initializingSession = NO;
+        self->initializingSession = NO;
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        initializingSession = NO;
+        self->initializingSession = NO;
         
         if (error != nil) {
             ZNGLogWarn(@"Error sending request to auth URL: %@", error.localizedDescription);
             return;
         }
         
-        ZNGLogWarn(@"Request to auth at %@ failued for an unknown reason.", authPath);
+        ZNGLogWarn(@"Request to auth at %@ failued for an unknown reason.", self->authPath);
     }];
     
     [self _uncoverNumericIdForCurrentService];
@@ -166,7 +166,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [httpSession GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (([responseObject isKindOfClass:[NSDictionary class]]) && ([responseObject[@"id"] isKindOfClass:[NSNumber class]])) {
             // We found an ID!
-            currentServiceNumericId = [responseObject[@"id"] intValue];
+            self->currentServiceNumericId = [responseObject[@"id"] intValue];
         } else {
             ZNGLogWarn(@"Unable to find service numeric ID in v2 API response.");
         }

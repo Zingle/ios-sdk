@@ -263,7 +263,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.mostRecentError = error;
-            ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", _channelValue, _channelTypeID);
+            ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", self->_channelValue, self->_channelTypeID);
             dispatch_semaphore_signal(semaphore);
         });
     }];

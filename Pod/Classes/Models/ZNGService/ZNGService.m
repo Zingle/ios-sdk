@@ -23,6 +23,9 @@
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
 #define kServiceSettingHotsosPasswordKey    @"hotsos_password"
 
+NSString * const ZNGServiceFeatureTeams = @"teams";
+NSString * const ZNGServiceFeatureAssignment = @"assignment";
+
 @implementation ZNGService
 
 - (BOOL) isEqual:(ZNGService *)other
@@ -143,6 +146,16 @@
 + (NSValueTransformer*)updatedAtJSONTransformer
 {
     return [ZingleValueTransformers dateValueTransformer];
+}
+
+- (NSArray<ZNGTeam *> *)teams
+{
+    // Return an empty array if the teams feature is missing
+    if (![self.features containsObject:ZNGServiceFeatureTeams]) {
+        return @[];
+    }
+    
+    return self.teams;
 }
 
 - (NSString*)resourceId
@@ -269,7 +282,7 @@
     
     // We're in nonsense land if the assignment_enabled setting is true above but the feature is missing.
     // We'll check anyway.
-    return ([self.features containsObject:@"assignment"]);
+    return ([self.features containsObject:ZNGServiceFeatureAssignment]);
 }
 
 - (BOOL) allowsTeamAssignment
@@ -279,7 +292,7 @@
         return NO;
     }
     
-    return ([self.features containsObject:@"teams"]);
+    return ([self.features containsObject:ZNGServiceFeatureTeams]);
 }
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId

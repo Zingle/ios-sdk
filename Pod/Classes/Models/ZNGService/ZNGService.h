@@ -23,6 +23,9 @@
 @class ZNGContactGroup;
 @class ZNGTeam;
 
+extern NSString * const ZNGServiceFeatureTeams;
+extern NSString * const ZNGServiceFeatureAssignment;
+
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
 @property(nonatomic, strong, nonnull) NSString* serviceId;

@@ -606,7 +606,7 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
         return self.users;
     }
     
-    NSMutableArray<ZNGUser *> * filteredUsers = [[NSMutableArray alloc] initWithCapacity:([self.users count] - 1)];
+    NSMutableArray<ZNGUser *> * filteredUsers = [[NSMutableArray alloc] init];
     
     for (ZNGUser * dude in self.users) {
         if (![dude.userId isEqualToString:self.userAuthorization.userId]) {

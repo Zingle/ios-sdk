@@ -98,6 +98,9 @@ enum ZNGConversationSections
      */
     BOOL sentInitialTypingNotification;
     
+    BOOL viewHasAppeared;
+    BOOL titleWasSingleLineLastUpdate;
+    
     /**
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
@@ -275,6 +278,8 @@ enum ZNGConversationSections
 {
     [super viewDidAppear:animated];
     
+    viewHasAppeared = YES;
+    
     if ((self.stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
         ZNGLogInfo(@"Confirming contact due to conversation view appearance.");
         [self.conversation.contact confirm];
@@ -410,8 +415,13 @@ enum ZNGConversationSections
 
 - (void) updateTitle
 {
+    if ([self.conversation remoteName] == nil) {
+        return;
+    }
+    
     NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:[self.conversation remoteName]];
     NSMutableAttributedString * subtitle = [self subtitle];
+    BOOL deferUpdateToNextRunLoopCycle = NO;
     
     if ([subtitle length] > 0) {
         // Set smaller font/lighter color for subtitle
@@ -425,6 +435,12 @@ enum ZNGConversationSections
         BOOL isLandscape = ((orientation == UIInterfaceOrientationLandscapeLeft) || (orientation == UIInterfaceOrientationLandscapeRight));
         BOOL useSingleLine = ((isPhone) && (isLandscape));
         
+        if ((useSingleLine != titleWasSingleLineLastUpdate) && (viewHasAppeared)) {
+            deferUpdateToNextRunLoopCycle = YES;
+        }
+        
+        titleWasSingleLineLastUpdate = useSingleLine;
+        
         if (useSingleLine) {
             // Space before the subtitle
             [title appendAttributedString:[[NSAttributedString alloc] initWithString:@"  "]];
@@ -435,11 +451,22 @@ enum ZNGConversationSections
         [title appendAttributedString:subtitle];
     }
 
-    // Removing the title label from the navigation item is necessary when changing its size to avoid some clipping shenanigans
+    // Removing the title label from the navigation item and re-adding it next run loop cycle is necessary when changing
+    //  its size to avoid some clipping shenanigans  We will do that if useSingleLine changed above, setting deferUpdateToNextRunLoopCycle.
     self.navigationItem.titleView = nil;
     titleLabel.attributedText = title;
-    [titleLabel sizeToFit];
-    self.navigationItem.titleView = titleLabel;
+    
+    void (^sizeAndPlaceTitle)(void) = ^{
+        CGSize size = [titleLabel intrinsicContentSize];
+        titleLabel.frame = CGRectMake(0.0, 0.0, size.width, size.height);
+        self.navigationItem.titleView = titleLabel;
+    };
+    
+    if (deferUpdateToNextRunLoopCycle) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), sizeAndPlaceTitle);
+    } else {
+        sizeAndPlaceTitle();
+    }
 }
 
 - (NSMutableAttributedString *) subtitle

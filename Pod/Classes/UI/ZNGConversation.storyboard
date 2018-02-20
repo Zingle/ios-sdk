@@ -955,17 +955,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="172"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="anonymousAvatarBig" translatesAutoresizingMaskIntoConstraints="NO" id="Fyn-VN-Ojh">
-                                                    <rect key="frame" x="14" y="8" width="64" height="64"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kbt-DW-Nbq" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="102" y="122" width="258" height="43"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="width" constant="64" id="d7b-LO-QdW"/>
-                                                        <constraint firstAttribute="height" constant="64" id="sUh-ID-wOf"/>
-                                                    </constraints>
-                                                </imageView>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ljm-8I-NYe" customClass="ZNGContactEditFloatLabeledTextField">
-                                                    <rect key="frame" x="102" y="65" width="258" height="43"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="43" id="10f-6O-InA"/>
+                                                        <constraint firstAttribute="height" constant="43" id="hYq-xz-tS6"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
@@ -996,10 +989,10 @@
                                                         <outlet property="delegate" destination="zLT-so-Bb8" id="WPp-3A-OV5"/>
                                                     </connections>
                                                 </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Last Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="kbt-DW-Nbq" customClass="ZNGContactEditFloatLabeledTextField">
-                                                    <rect key="frame" x="102" y="122" width="258" height="43"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="First Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ljm-8I-NYe" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="102" y="65" width="258" height="43"/>
                                                     <constraints>
-                                                        <constraint firstAttribute="height" constant="43" id="hYq-xz-tS6"/>
+                                                        <constraint firstAttribute="height" constant="43" id="10f-6O-InA"/>
                                                     </constraints>
                                                     <nil key="textColor"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
@@ -1010,9 +1003,45 @@
                                                         </userDefinedRuntimeAttribute>
                                                     </userDefinedRuntimeAttributes>
                                                     <connections>
-                                                        <outlet property="delegate" destination="zLT-so-Bb8" id="byH-i4-uJh"/>
+                                                        <outlet property="delegate" destination="zLT-so-Bb8" id="u1n-Sx-zYU"/>
                                                     </connections>
                                                 </textField>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="anonymousAvatarBig" translatesAutoresizingMaskIntoConstraints="NO" id="Fyn-VN-Ojh">
+                                                    <rect key="frame" x="21" y="11" width="64" height="64"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="64" id="d7b-LO-QdW"/>
+                                                        <constraint firstAttribute="height" constant="64" id="sUh-ID-wOf"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Mbh-fG-1DU" userLabel="eye container">
+                                                    <rect key="frame" x="28.5" y="26" width="48" height="15"/>
+                                                    <subviews>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W8x-Pn-BJV" userLabel="left eye">
+                                                            <rect key="frame" x="0.0" y="0.0" width="15" height="15"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                            <constraints>
+                                                                <constraint firstAttribute="width" constant="15" id="lFe-HO-DVa"/>
+                                                                <constraint firstAttribute="height" constant="15" id="vGf-Ss-7s3"/>
+                                                            </constraints>
+                                                        </view>
+                                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="v3C-3v-wb1" userLabel="right eye">
+                                                            <rect key="frame" x="33" y="0.0" width="15" height="15"/>
+                                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                        </view>
+                                                    </subviews>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <constraints>
+                                                        <constraint firstItem="W8x-Pn-BJV" firstAttribute="top" secondItem="Mbh-fG-1DU" secondAttribute="top" id="63W-5q-NYc"/>
+                                                        <constraint firstAttribute="bottom" secondItem="W8x-Pn-BJV" secondAttribute="bottom" id="Djn-cq-Pdi"/>
+                                                        <constraint firstItem="v3C-3v-wb1" firstAttribute="leading" secondItem="W8x-Pn-BJV" secondAttribute="trailing" constant="18" id="EG8-8I-hug"/>
+                                                        <constraint firstItem="v3C-3v-wb1" firstAttribute="top" secondItem="Mbh-fG-1DU" secondAttribute="top" id="YcI-I1-ZUB"/>
+                                                        <constraint firstItem="W8x-Pn-BJV" firstAttribute="leading" secondItem="Mbh-fG-1DU" secondAttribute="leading" id="eBv-8m-RNv"/>
+                                                        <constraint firstAttribute="bottom" secondItem="v3C-3v-wb1" secondAttribute="bottom" id="fqp-bg-Cde"/>
+                                                        <constraint firstAttribute="trailing" secondItem="v3C-3v-wb1" secondAttribute="trailing" id="gQE-u6-3LB"/>
+                                                        <constraint firstItem="v3C-3v-wb1" firstAttribute="width" secondItem="W8x-Pn-BJV" secondAttribute="width" id="oWy-jC-lXP"/>
+                                                        <constraint firstItem="v3C-3v-wb1" firstAttribute="height" secondItem="W8x-Pn-BJV" secondAttribute="height" id="qsz-N1-ycX"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="Ljm-8I-NYe" firstAttribute="leading" secondItem="7pc-rO-cRK" secondAttribute="leading" id="13B-xu-RiQ"/>
@@ -1020,10 +1049,12 @@
                                                 <constraint firstItem="Fyn-VN-Ojh" firstAttribute="leading" secondItem="ZlN-uS-4Wf" secondAttribute="leadingMargin" constant="6" id="DqN-KG-sC3"/>
                                                 <constraint firstItem="kbt-DW-Nbq" firstAttribute="leading" secondItem="Ljm-8I-NYe" secondAttribute="leading" id="Hw1-8k-zdW"/>
                                                 <constraint firstItem="kbt-DW-Nbq" firstAttribute="top" secondItem="Ljm-8I-NYe" secondAttribute="bottom" constant="14" id="Kmo-3a-Ec9"/>
+                                                <constraint firstItem="Mbh-fG-1DU" firstAttribute="centerX" secondItem="Fyn-VN-Ojh" secondAttribute="centerX" id="NnS-10-VCz"/>
                                                 <constraint firstItem="Fyn-VN-Ojh" firstAttribute="top" secondItem="ZlN-uS-4Wf" secondAttribute="topMargin" id="Owj-01-PdO"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Ljm-8I-NYe" secondAttribute="trailing" id="QNk-hg-Is0"/>
+                                                <constraint firstItem="Mbh-fG-1DU" firstAttribute="top" secondItem="Fyn-VN-Ojh" secondAttribute="top" constant="15" id="Xgm-CZ-pYL"/>
                                                 <constraint firstItem="Ljm-8I-NYe" firstAttribute="top" secondItem="7pc-rO-cRK" secondAttribute="bottom" constant="14" id="YzA-jL-rvc"/>
-                                                <constraint firstItem="7pc-rO-cRK" firstAttribute="top" secondItem="ZlN-uS-4Wf" secondAttribute="topMargin" id="cSC-18-p7o"/>
+                                                <constraint firstItem="7pc-rO-cRK" firstAttribute="top" secondItem="ZlN-uS-4Wf" secondAttribute="top" constant="8" id="cSC-18-p7o"/>
                                                 <constraint firstAttribute="bottom" secondItem="kbt-DW-Nbq" secondAttribute="bottom" constant="7" id="f9S-8E-eWS"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="kbt-DW-Nbq" secondAttribute="trailing" id="skl-Nl-1Sn"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="7pc-rO-cRK" secondAttribute="trailing" id="tEo-XJ-0og"/>
@@ -1033,6 +1064,8 @@
                                             <outlet property="avatarImageView" destination="Fyn-VN-Ojh" id="uLb-f0-c9G"/>
                                             <outlet property="firstNameField" destination="Ljm-8I-NYe" id="6SL-qr-Gqp"/>
                                             <outlet property="lastNameField" destination="kbt-DW-Nbq" id="ADZ-tG-MsP"/>
+                                            <outlet property="leftEyeContainer" destination="W8x-Pn-BJV" id="0j4-6U-4i2"/>
+                                            <outlet property="rightEyeContainer" destination="v3C-3v-wb1" id="kPd-w1-AmZ"/>
                                             <outlet property="titleField" destination="7pc-rO-cRK" id="LBB-Hr-D2Q"/>
                                         </connections>
                                     </tableViewCell>

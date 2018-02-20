@@ -19,6 +19,9 @@
 @property (nonatomic, strong, nullable) IBOutlet JVFloatLabeledTextField * firstNameField;
 @property (nonatomic, strong, nullable) IBOutlet JVFloatLabeledTextField * lastNameField;
 
+@property (nonatomic, strong, nullable) IBOutlet UIView * leftEyeContainer;
+@property (nonatomic, strong, nullable) IBOutlet UIView * rightEyeContainer;
+
 /**
  *  A contact reference, used only to populate the avatar.  This object will not be modified.
  */

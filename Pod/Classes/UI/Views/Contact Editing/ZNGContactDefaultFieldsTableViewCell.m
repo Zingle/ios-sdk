@@ -18,6 +18,7 @@
 #import "ZNGContactFieldValue.h"
 #import "ZNGContactField.h"
 #import "ZNGFieldOption.h"
+#import "ZNGGooglyEye.h"
 
 @import SDWebImage;
 
@@ -27,6 +28,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     UIColor * defaultTextFieldBackgroundColor;
     BOOL justClearedTitle;
+    
+    ZNGGooglyEye * leftEye;
+    ZNGGooglyEye * rightEye;
 }
 
 - (void) awakeFromNib
@@ -43,6 +47,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     // Make avatar round
     self.avatarImageView.layer.cornerRadius = self.avatarImageView.frame.size.width / 2.0;
     self.avatarImageView.layer.masksToBounds = YES;
+    
+    // Googly eye touching
+    UILongPressGestureRecognizer * eyeToucher = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(touchedAvatar:)];
+    eyeToucher.minimumPressDuration = 0.0;  // Instant on touch down
+    self.avatarImageView.userInteractionEnabled = YES;
+    [self.avatarImageView addGestureRecognizer:eyeToucher];
 }
 
 #pragma mark - Setters
@@ -201,6 +211,37 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self.titleFieldValue.selectedCustomFieldOptionId = option.optionId;
     self.titleFieldValue.value = option.value;
     self.titleField.text = option.value;
+}
+
+#pragma mark - Eye touching
+- (void) touchedAvatar:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    switch (gestureRecognizer.state) {
+        case UIGestureRecognizerStateBegan:
+            if ((leftEye.superview != nil) || (rightEye.superview != nil)) {
+                ZNGLogInfo(@"A googly eye already seems to exist.  Declining to make another.");
+                return;
+            }
+            
+            leftEye = [[ZNGGooglyEye alloc] initWithFrame:self.leftEyeContainer.bounds];
+            rightEye = [[ZNGGooglyEye alloc] initWithFrame:self.rightEyeContainer.bounds];
+            [self.leftEyeContainer addSubview:leftEye];
+            [self.rightEyeContainer addSubview:rightEye];
+            break;
+            
+        case UIGestureRecognizerStateFailed:
+        case UIGestureRecognizerStateCancelled:
+        case UIGestureRecognizerStateEnded:
+            [leftEye removeFromSuperview];
+            [rightEye removeFromSuperview];
+            leftEye = nil;
+            rightEye = nil;
+            break;
+            
+        default:
+            // Irrelevant
+            break;
+    }
 }
 
 @end

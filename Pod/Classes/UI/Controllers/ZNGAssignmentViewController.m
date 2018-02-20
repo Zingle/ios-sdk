@@ -78,6 +78,32 @@ enum TopSectionRows {
     }
     
     [self updateDataForSearchText:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyKeyboardFrameChanged:) name:UIKeyboardDidChangeFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyKeyboardWillDismiss:) name:UIKeyboardWillHideNotification object:nil];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) notifyKeyboardFrameChanged:(NSNotification *)notification
+{
+    CGSize keyboardSize = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
+    [self adjustTableViewContentForBottomInset:keyboardSize.height];
+}
+
+- (void) notifyKeyboardWillDismiss:(NSNotification *)notification
+{
+    [self adjustTableViewContentForBottomInset:0.0];
+}
+
+- (void) adjustTableViewContentForBottomInset:(CGFloat)bottomInset
+{
+    UIEdgeInsets oldInsets = self.tableView.contentInset;
+    self.tableView.contentInset = UIEdgeInsetsMake(oldInsets.top, oldInsets.left, bottomInset, oldInsets.right);
+    self.tableView.scrollIndicatorInsets = self.tableView.contentInset;
 }
 
 - (void) updateDataForSearchText:(NSString *)searchText

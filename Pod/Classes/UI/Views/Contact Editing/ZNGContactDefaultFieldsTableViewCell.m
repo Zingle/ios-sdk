@@ -19,6 +19,7 @@
 #import "ZNGContactField.h"
 #import "ZNGFieldOption.h"
 #import "ZNGGooglyEye.h"
+#import "ZNGAnalytics.h"
 
 @import SDWebImage;
 
@@ -28,6 +29,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     UIColor * defaultTextFieldBackgroundColor;
     BOOL justClearedTitle;
+    
+    __weak NSTimer * logEasterEggTimer;
     
     ZNGGooglyEye * leftEye;
     ZNGGooglyEye * rightEye;
@@ -223,6 +226,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                 return;
             }
             
+            // If the user keeps his finger down for more than one second, consider it an easter egg action for analytics
+            logEasterEggTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(notifyEggHeldLongEnoughToCount:) userInfo:nil repeats:NO];
+            
             leftEye = [[ZNGGooglyEye alloc] initWithFrame:self.leftEyeContainer.bounds];
             rightEye = [[ZNGGooglyEye alloc] initWithFrame:self.rightEyeContainer.bounds];
             [self.leftEyeContainer addSubview:leftEye];
@@ -232,6 +238,9 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         case UIGestureRecognizerStateFailed:
         case UIGestureRecognizerStateCancelled:
         case UIGestureRecognizerStateEnded:
+            [logEasterEggTimer invalidate];
+            logEasterEggTimer = nil;
+            
             [leftEye removeFromSuperview];
             [rightEye removeFromSuperview];
             leftEye = nil;
@@ -242,6 +251,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             // Irrelevant
             break;
     }
+}
+
+- (void) notifyEggHeldLongEnoughToCount:(NSTimer *)timer
+{
+    [[ZNGAnalytics sharedAnalytics] trackEasterEggNamed:@"Edit contact avatar"];
 }
 
 @end

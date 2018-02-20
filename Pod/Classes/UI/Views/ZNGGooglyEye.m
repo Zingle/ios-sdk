@@ -86,7 +86,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     [self addSubview:pupil];
     
     collision = [[UICollisionBehavior alloc] initWithItems:@[pupil]];
-    UIBezierPath * boundaryPath = [UIBezierPath bezierPathWithOvalInRect:self.bounds];
+    UIBezierPath * boundaryPath = [UIBezierPath bezierPathWithOvalInRect:CGRectInset(self.bounds, -2.5, -2.5)]; // Allow slight overflow of pupils outside whites
     [collision addBoundaryWithIdentifier:@"circleBoundary" forPath:boundaryPath];
     
     gravity = [[UIGravityBehavior alloc] initWithItems:@[pupil]];
@@ -146,7 +146,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     CGFloat magnitude = sqrt(pow(data.userAcceleration.x, 2) + pow(data.userAcceleration.y, 2));
     ZNGLogVerbose(@"User acceleration is %.2f in the direction (%.2f, %.2f)", (float)magnitude, (float)pushDirection.dx, (float)pushDirection.dy);
     userForce.pushDirection = pushDirection;
-    userForce.magnitude = magnitude * 0.5;  // Reduce magnitude a tiny bit from the raw value
+    userForce.magnitude = magnitude * 0.25;  // Reduce magnitude a tiny bit from the raw value
 }
 
 @end

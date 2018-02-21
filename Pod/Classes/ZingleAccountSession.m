@@ -29,6 +29,7 @@
 #import "ZNGInboxStatistician.h"
 #import "ZNGTeamClient.h"
 #import "ZNGInboxStatsEntry.h"
+#import "ZNGAssignmentViewController.h"
 
 @import AFNetworking;
 
@@ -765,6 +766,14 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
     ZNGContactEditViewController * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"editContact"];
     vc.service = self.service;
     vc.contactClient = self.contactClient;
+    return vc;
+}
+
+- (ZNGAssignmentViewController *) assignmentViewControllerForContact:(ZNGContact *)contact;
+{
+    ZNGAssignmentViewController * vc = [[self storyboard] instantiateViewControllerWithIdentifier:@"assignment"];
+    vc.session = self;
+    vc.contact = contact;
     return vc;
 }
 

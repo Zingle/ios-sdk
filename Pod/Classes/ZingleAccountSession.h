@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGNetworkLookout;
 @class ZNGInboxStatistician;
 @class ZNGTeamClient;
+@class ZNGAssignmentViewController;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -208,6 +209,12 @@ extern NSString * const ZingleConversationNotificationContactIdKey;
  *  Returns a modal view controller for creating a new contact.  This view will dismiss itself when appropriate.
  */
 - (ZNGContactEditViewController *) contactEditViewControllerForNewContact;
+
+/**
+ *  Returns a modal view controller used to assign the provided contact.
+ *  Note that the assignment delegate will need to be manually set for this view to accomplish anything.
+ */
+- (ZNGAssignmentViewController *) assignmentViewControllerForContact:(ZNGContact *)contact;
 
 /**
  *  Send a message to multiple recipients.  This can be used to send to a single recipient, but it is prefered to use a ZNGConversation object in order to 

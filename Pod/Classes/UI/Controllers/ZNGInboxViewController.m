@@ -762,6 +762,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 {
     // TODO: Add analytics tracking once that PR is merged
     
+    [self.data contactWasChangedLocally:contact];
     [contact assignToTeamWithId:team.teamId];
 }
 
@@ -769,6 +770,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 {
     // TODO: Add analytics tracking once that PR is merged
 
+    [self.data contactWasChangedLocally:contact];
     [contact assignToUserWithId:user.userId];
 }
 
@@ -776,6 +778,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 {
     // TODO: Add analytics tracking once that PR is merged
 
+    [self.data contactWasChangedLocally:contact];
     [contact unassign];
 }
 

@@ -629,6 +629,24 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         return NO;
     }
     
+    if ([self.assignedTeamId length] > 0) {
+        if (![contact.assignedToTeamId isEqualToString:self.assignedTeamId]) {
+            return NO;
+        }
+    }
+    
+    if ([self.assignedUserId length] > 0) {
+        if (![contact.assignedToUserId isEqualToString:self.assignedUserId]) {
+            return NO;
+        }
+    }
+    
+    if (self.unassigned) {
+        if (([contact.assignedToTeamId length] > 0) || ([contact.assignedToUserId length] > 0)) {
+            return NO;
+        }
+    }
+    
     if ([self.labelIds count] > 0) {
         __block BOOL matchingLabelFound = NO;
         

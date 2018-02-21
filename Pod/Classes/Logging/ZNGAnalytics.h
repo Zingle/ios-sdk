@@ -18,7 +18,9 @@
 @class ZNGLabel;
 @class ZNGContactGroup;
 @class ZNGMessage;
+@class ZNGTeam;
 @class ZNGTemplate;
+@class ZNGUser;
 @class ZNGUserAuthorization;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -72,6 +74,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) trackEditedExistingContact:(ZNGContact *)contact;
 - (void) trackAddedLabel:(ZNGLabel *)label toContact:(ZNGContact *)contact;
 - (void) trackRemovedLabel:(ZNGLabel *)label fromContact:(ZNGContact *)contact;
+- (void) trackContactUnassigned:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType;
+- (void) trackContact:(ZNGContact *)contact assignedToTeam:(ZNGTeam *)team fromUIType:(nullable NSString *)sourceType;
+- (void) trackContact:(ZNGContact *)contact assignedToUser:(ZNGUser *)user fromUIType:(nullable NSString *)sourceType;
 
 #pragma mark - Easter eggs
 - (void) trackEasterEggNamed:(NSString *)eggName;

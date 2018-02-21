@@ -17,6 +17,9 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGLabel.h"
 #import "ZNGContactGroup.h"
+#import "ZNGTeam.h"
+#import "ZNGUser.h"
+
 @import Analytics;
 
 static const int zngLogLevel = ZNGLogLevelInfo;
@@ -132,7 +135,11 @@ static NSString * const HostPropertyName = @"Host";
 {
     // Segment does not give the product people any way to filter by platform or OS, so we have to prepend this ugly identifier :(
     NSString * prefixedEventName = [NSString stringWithFormat:@"ios_%@", event];
-    [[self segment] track:prefixedEventName properties:properties];
+    
+    // Exclude Intercom since Intercom only allows a tiny number of events.  We'll keep iOS events out of it.
+    NSDictionary * options = @{ @"integrations": @{ @"All": @YES, @"Intercom": @NO } };
+    
+    [[self segment] track:prefixedEventName properties:properties options:options];
 }
 
 #pragma mark - Login
@@ -425,6 +432,51 @@ static NSString * const HostPropertyName = @"Host";
     
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     [properties setValue:label.displayName forKey:@"labelName"];
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackContactUnassigned:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
+{
+    NSString * event = @"Unassigned contact";
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
+    }
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackContact:(ZNGContact *)contact assignedToTeam:(ZNGTeam *)team fromUIType:(nullable NSString *)sourceType
+{
+    NSString * event = @"Assigned contact to team";
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    
+    properties[@"teamName"] = team.displayName;
+    properties[@"teamId"] = team.teamId;
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
+    }
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackContact:(ZNGContact *)contact assignedToUser:(ZNGUser *)user fromUIType:(nullable NSString *)sourceType
+{
+    NSString * event = @"Assigned contact to user";
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    
+    properties[@"userName"] = [user fullName];
+    properties[@"userId"] = user.userId;
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
+    }
     
     [self _track:event properties:properties];
 }

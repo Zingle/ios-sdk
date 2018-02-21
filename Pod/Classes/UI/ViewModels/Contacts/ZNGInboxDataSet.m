@@ -137,14 +137,69 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     [fetchQueue cancelAllOperations];
 }
 
-+ (NSString *) description
-{
-    return @"Unfiltered inbox data";
-}
-
 - (NSString *) description
 {
-    return [NSString stringWithFormat:@"<%@: %p>", [self class], self];
+    NSArray<NSString *> * descriptionItems = [self descriptionItems];
+    NSUInteger count = [descriptionItems count];
+    
+    NSMutableString * description = [[NSMutableString alloc] initWithString:@"Inbox"];
+    
+    if (count > 0) {
+        [description appendString:@": "];
+        
+        [descriptionItems enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            [description appendString:obj];
+            
+            if (idx < (count - 1)) {
+                [description appendString:@", "];
+            }
+        }];
+    }
+
+    return description;
+}
+
+- (NSArray<NSString *> *) descriptionItems
+{
+    NSMutableArray<NSString *> * words = [[NSMutableArray alloc] init];
+    
+    if (self.unassigned) {
+        [words addObject:@"Unassigned"];
+    } else if ([self.assignedTeamId length] > 0) {
+        [words addObject:[NSString stringWithFormat:@"Assigned to team %@", self.assignedTeamId]];
+    } else if ([self.assignedUserId length] > 0) {
+        [words addObject:[NSString stringWithFormat:@"Assigned to user %@", self.assignedUserId]];
+    }
+    
+    if (self.unconfirmed) {
+        [words addObject:@"Unread"];
+    }
+    
+    switch (self.openStatus) {
+        case ZNGInboxDataSetOpenStatusClosed:
+            [words addObject:@"Only closed"];
+            break;
+        case ZNGInboxDataSetOpenStatusBoth:
+            [words addObject:@"Both open and closed"];
+            break;
+        default:
+            // Open only is default, so we will not add anything to the description.
+            break;
+    }
+    
+    if ([self.searchText length] > 0) {
+        [words addObject:[NSString stringWithFormat:@"Searching for \"%@\"", self.searchText]];
+    }
+    
+    if ([self.labelIds count] > 0) {
+        [words addObject:@"Searching label(s)"];
+    }
+    
+    if ([self.groupIds count] > 0) {
+        [words addObject:@"Searching group(s)"];
+    }
+    
+    return words;
 }
 
 - (NSString *) title

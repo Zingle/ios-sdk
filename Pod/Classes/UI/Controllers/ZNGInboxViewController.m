@@ -22,6 +22,7 @@
 #import "ZNGLabelGridView.h"
 #import "ZNGInboxDataSet.h"
 #import "ZNGContactDataSetBuilder.h"
+#import "ZNGTeam.h"
 
 static int const zngLogLevel = ZNGLogLevelInfo;
 
@@ -30,6 +31,8 @@ static NSString * const ZNGKVOContactsLoadingInitialDataPath = @"data.loadingIni
 static NSString * const ZNGKVOContactsLoadingPath = @"data.loading";
 static NSString * const ZNGKVOContactsPath = @"data.contacts";
 static NSString * const ZNGKVOServicePath = @"session.service";
+
+static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 
 @interface ZNGInboxViewController ()
 
@@ -698,42 +701,52 @@ static NSString * const ZNGKVOServicePath = @"session.service";
 - (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
 {
     MGSwipeButton * closeButton;
-    ZNGContact * contactAfterChange = [contact copy];
-    contactAfterChange.isClosed = !contact.isClosed;
-    contactAfterChange.isConfirmed = contactAfterChange.isClosed ? YES : contact.isConfirmed;   // Closing will also confirm
-    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
+    ZNGContact * contactAfterCloseOrOpen = [contact copy];
+    contactAfterCloseOrOpen.isClosed = !contact.isClosed;
+    contactAfterCloseOrOpen.isConfirmed = contactAfterCloseOrOpen.isClosed ? YES : contact.isConfirmed;   // Closing will also confirm
+    BOOL closeOrOpenWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterCloseOrOpen];
     
-    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
-    settings.buttonIndex = 0;
-    settings.fillOnTrigger = changeWillCauseRemoval;
-    settings.threshold = 2.0;
+    MGSwipeExpansionSettings * closeOpenSettings = [[MGSwipeExpansionSettings alloc] init];
+    closeOpenSettings.buttonIndex = 0;
+    closeOpenSettings.fillOnTrigger = closeOrOpenWillCauseRemoval;
+    closeOpenSettings.threshold = 2.0;
     
     __weak ZNGInboxViewController * weakSelf = self;
     
     if (contact.isClosed) {
         closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [weakSelf.data contactWasChangedLocally:contactAfterChange];
+            [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
             
             [contact reopen];
             [[ZNGAnalytics sharedAnalytics] trackOpenedContact:contact fromUIType:@"swipe"];
             [weakSelf clearSwipeActiveFlag];
 
-            return !changeWillCauseRemoval;
+            return !closeOrOpenWillCauseRemoval;
         }];
     } else {
         closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [weakSelf.data contactWasChangedLocally:contactAfterChange];
+            [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
             
             [contact close];
             [[ZNGAnalytics sharedAnalytics] trackClosedContact:contact fromUIType:@"swipe"];
             [weakSelf clearSwipeActiveFlag];
             
-            return !changeWillCauseRemoval;
+            return !closeOrOpenWillCauseRemoval;
         }];
     }
     
-    cell.rightButtons = @[closeButton];
-    cell.rightExpansion = settings;
+    MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        // Go go gadget assignment view
+        ZNGAssignmentViewController * assignView = [self.session assignmentViewControllerForContact:contact];
+        assignView.delegate = self;
+        
+        UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:assignView];
+        [self presentViewController:navController animated:YES completion:nil];
+        return YES;
+    }];
+    
+    cell.rightButtons = @[closeButton, assignButton];
+    cell.rightExpansion = closeOpenSettings;
 }
 
 /**
@@ -742,6 +755,28 @@ static NSString * const ZNGKVOServicePath = @"session.service";
 - (void) clearSwipeActiveFlag
 {
     swipeActive = NO;
+}
+
+#pragma mark - Assignment
+- (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
+{
+    // TODO: Add analytics tracking once that PR is merged
+    
+    [contact assignToTeamWithId:team.teamId];
+}
+
+- (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
+{
+    // TODO: Add analytics tracking once that PR is merged
+
+    [contact assignToUserWithId:user.userId];
+}
+
+- (void) userChoseToUnassignContact:(ZNGContact *)contact
+{
+    // TODO: Add analytics tracking once that PR is merged
+
+    [contact unassign];
 }
 
 #pragma mark - UITableViewDelegate

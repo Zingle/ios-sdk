@@ -132,7 +132,11 @@ static NSString * const HostPropertyName = @"Host";
 {
     // Segment does not give the product people any way to filter by platform or OS, so we have to prepend this ugly identifier :(
     NSString * prefixedEventName = [NSString stringWithFormat:@"ios_%@", event];
-    [[self segment] track:prefixedEventName properties:properties];
+    
+    // Exclude Intercom since Intercom only allows a tiny number of events.  We'll keep iOS events out of it.
+    NSDictionary * options = @{ @"integrations": @{ @"All": @YES, @"Intercom": @NO } };
+    
+    [[self segment] track:prefixedEventName properties:properties options:options];
 }
 
 #pragma mark - Login

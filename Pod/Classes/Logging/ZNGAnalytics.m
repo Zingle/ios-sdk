@@ -17,6 +17,9 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGLabel.h"
 #import "ZNGContactGroup.h"
+#import "ZNGTeam.h"
+#import "ZNGUser.h"
+
 @import Analytics;
 
 static const int zngLogLevel = ZNGLogLevelInfo;
@@ -429,6 +432,51 @@ static NSString * const HostPropertyName = @"Host";
     
     NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
     [properties setValue:label.displayName forKey:@"labelName"];
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackContactUnassigned:(ZNGContact *)contact fromUIType:(nullable NSString *)sourceType
+{
+    NSString * event = @"Unassigned contact";
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
+    }
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackContact:(ZNGContact *)contact assignedToTeam:(ZNGTeam *)team fromUIType:(nullable NSString *)sourceType
+{
+    NSString * event = @"Assigned contact to team";
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    
+    properties[@"teamName"] = team.displayName;
+    properties[@"teamId"] = team.teamId;
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
+    }
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackContact:(ZNGContact *)contact assignedToUser:(ZNGUser *)user fromUIType:(nullable NSString *)sourceType
+{
+    NSString * event = @"Assigned contact to user";
+    NSMutableDictionary * properties = [self defaultPropertiesWithDestinationContact:contact];
+    
+    properties[@"userName"] = [user fullName];
+    properties[@"userId"] = user.userId;
+    
+    if ([sourceType length] > 0) {
+        properties[@"source"] = sourceType;
+        event = [event stringByAppendingFormat:@" by %@", sourceType];
+    }
     
     [self _track:event properties:properties];
 }

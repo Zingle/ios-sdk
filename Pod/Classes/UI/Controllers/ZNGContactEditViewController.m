@@ -38,6 +38,7 @@
 #import "ZNGAssignmentViewController.h"
 #import "ZNGEditContactTransition.h"
 #import "ZNGEditContactExitTransition.h"
+#import "ZNGConversationServiceToContact.h"
 
 enum  {
     ContactSectionDefaultCustomFields,
@@ -374,6 +375,21 @@ static NSString * const AssignSegueIdentifier = @"assign";
         ZNGLogInfo(@"Contact editing screen is being dismissed via \"Save,\" but no changes were made.");
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
+    }
+    
+    // Log any assignment changes to Segment
+    if ([self.contact assignmentHasChangedSince:originalContact]) {
+        static NSString * const AssignmentUIType = @"edit contact view";
+        
+        if ([self.contact.assignedToTeamId length] > 0) {
+            ZNGTeam * team = [self.service teamWithId:self.contact.assignedToTeamId];
+            [[ZNGAnalytics sharedAnalytics] trackContact:self.contact assignedToTeam:team fromUIType:AssignmentUIType];
+        } else if ([self.contact.assignedToUserId length] > 0) {
+            ZNGUser * dude = [self.conversation.session userWithId:self.contact.assignedToUserId];
+            [[ZNGAnalytics sharedAnalytics] trackContact:self.contact assignedToUser:dude fromUIType:AssignmentUIType];
+        } else {
+            [[ZNGAnalytics sharedAnalytics] trackContactUnassigned:self.contact fromUIType:AssignmentUIType];
+        }
     }
     
     [self.contactClient updateContactFrom:originalContact to:self.contact success:^(ZNGContact * _Nonnull contact) {

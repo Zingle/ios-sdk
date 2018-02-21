@@ -42,6 +42,8 @@
 
 static const int zngLogLevel = ZNGLogLevelInfo;
 
+static NSString * const AssignmentUITypeActionMenu = @"action menu";
+
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
@@ -1659,16 +1661,19 @@ enum ZNGConversationSections
 #pragma mark - Assignment
 - (void) userChoseToUnassignContact:(ZNGContact *)contact
 {
+    [[ZNGAnalytics sharedAnalytics] trackContactUnassigned:contact fromUIType:AssignmentUITypeActionMenu];
     [contact unassign];
 }
 
 - (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
 {
+    [[ZNGAnalytics sharedAnalytics] trackContact:contact assignedToTeam:team fromUIType:AssignmentUITypeActionMenu];
     [contact assignToTeamWithId:team.teamId];
 }
 
 - (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
 {
+    [[ZNGAnalytics sharedAnalytics] trackContact:contact assignedToUser:user fromUIType:AssignmentUITypeActionMenu];
     [contact assignToUserWithId:user.userId];
 }
 

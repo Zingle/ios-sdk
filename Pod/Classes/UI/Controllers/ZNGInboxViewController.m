@@ -737,11 +737,11 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     
     MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
         // Go go gadget assignment view
-        ZNGAssignmentViewController * assignView = [self.session assignmentViewControllerForContact:contact];
-        assignView.delegate = self;
+        ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];
+        assignView.delegate = weakSelf;
         
         UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:assignView];
-        [self presentViewController:navController animated:YES completion:nil];
+        [weakSelf presentViewController:navController animated:YES completion:nil];
         return YES;
     }];
     

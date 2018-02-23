@@ -200,6 +200,11 @@ enum TopSectionRows {
     }
 }
 
+- (UIFont *)avatarFont
+{
+    return [UIFont latoFontOfSize:15.0];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
@@ -214,7 +219,7 @@ enum TopSectionRows {
                                                                                            size:cell.avatarContainer.bounds.size
                                                                                 backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
                                                                                       textColor:[UIColor whiteColor]
-                                                                                           font:[UIFont latoFontOfSize:36.0]];
+                                                                                           font:[self avatarFont]];
                     avatar.frame = cell.avatarContainer.bounds;
                     [cell.avatarContainer addSubview:avatar];
                     
@@ -257,7 +262,7 @@ enum TopSectionRows {
                                                                                    size:cell.avatarContainer.bounds.size
                                                                         backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
                                                                               textColor:[UIColor whiteColor]
-                                                                                   font:[UIFont latoFontOfSize:17.0]];
+                                                                                   font:[self avatarFont]];
             
             [cell.avatarContainer addSubview:avatar];
             cell.nameLabel.text = [user fullName];

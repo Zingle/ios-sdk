@@ -475,6 +475,15 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
 }
 
+- (void) setUsers:(NSArray<ZNGUser *> *)users
+{
+    // Sort users by online status and then first name
+    NSSortDescriptor * activeStatus = [NSSortDescriptor sortDescriptorWithKey:@"isOnline" ascending:NO];
+    NSSortDescriptor * firstName = [NSSortDescriptor sortDescriptorWithKey:@"fullName" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    _users = [users sortedArrayUsingDescriptors:@[activeStatus, firstName]];
+}
+
 /**
  *  Go acquire some data that the v1 API does not supply, namely numeric IDs that the socket server throws at us.
  */

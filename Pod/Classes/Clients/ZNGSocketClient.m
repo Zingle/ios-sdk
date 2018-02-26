@@ -207,6 +207,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf receivedFeedUpdated:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"feedCreated" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedFeedUpdated:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"nodeControllerBindSuccess" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidBindNodeController];
     }];

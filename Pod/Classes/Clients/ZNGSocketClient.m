@@ -211,6 +211,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [weakSelf receivedFeedUpdated:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"refreshFeeds" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedRefreshFeeds:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"nodeControllerBindSuccess" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf socketDidBindNodeController];
     }];
@@ -385,6 +389,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     } else {
         ZNGLogWarn(@"feedUpdated event arrived without a uuid: %@", data);
     }
+}
+
+- (void) receivedRefreshFeeds:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:ZingleFeedListShouldBeRefreshedNotification object:nil];
 }
 
 - (void) receivedUserData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter

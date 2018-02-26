@@ -40,6 +40,12 @@ extern NSString * const ZingleUserChangedDetailedEventsPreferenceNotification;
 extern NSString * const ZingleConversationDataArrivedNotification;
 extern NSString * const ZingleConversationNotificationContactIdKey;
 
+/**
+ *  Notification posted when feed/conversation lists should be refreshed.  Maybe a contact was deleted.  Maybe a segment changed.
+ *  All we know is that the world is now somehow different.
+ */
+extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
+
 @interface ZingleAccountSession : ZingleSession <NSCacheDelegate>
 
 #pragma mark - Account/Service selection

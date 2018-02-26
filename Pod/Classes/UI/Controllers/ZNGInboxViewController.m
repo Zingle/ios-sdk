@@ -760,7 +760,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 #pragma mark - Assignment
 - (void) userChoseToAssignContact:(ZNGContact *)contact toTeam:(ZNGTeam *)team
 {
-    // TODO: Add analytics tracking once that PR is merged
+    [[ZNGAnalytics sharedAnalytics] trackContact:contact assignedToTeam:team fromUIType:AssignmentSwipeActionUIType];
     
     [self.data contactWasChangedLocally:contact];
     [contact assignToTeamWithId:team.teamId];
@@ -768,7 +768,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 
 - (void) userChoseToAssignContact:(ZNGContact *)contact toUser:(ZNGUser *)user
 {
-    // TODO: Add analytics tracking once that PR is merged
+    [[ZNGAnalytics sharedAnalytics] trackContact:contact assignedToUser:user fromUIType:AssignmentSwipeActionUIType];
 
     [self.data contactWasChangedLocally:contact];
     [contact assignToUserWithId:user.userId];
@@ -776,7 +776,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 
 - (void) userChoseToUnassignContact:(ZNGContact *)contact
 {
-    // TODO: Add analytics tracking once that PR is merged
+    [[ZNGAnalytics sharedAnalytics] trackContactUnassigned:contact fromUIType:AssignmentSwipeActionUIType];
 
     [self.data contactWasChangedLocally:contact];
     [contact unassign];

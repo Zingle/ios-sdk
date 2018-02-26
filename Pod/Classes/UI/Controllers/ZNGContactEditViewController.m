@@ -629,7 +629,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                                                     size:CGSizeMake(32.0, 32.0)
                                          backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
                                                textColor:[UIColor whiteColor]
-                                                    font:[UIFont latoFontOfSize:17.0]];
+                                                    font:[UIFont latoFontOfSize:14.0]];
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

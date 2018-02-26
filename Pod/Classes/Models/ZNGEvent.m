@@ -287,6 +287,8 @@ NSString * const ZNGEventTypeAssignmentChange = @"assignment_changed";
         // It's arguable that this appending should be added to every single return value instead of just assignment.
         if (self.triggeredByUser.userId != nil) {
             [description appendFormat:@" by %@", [self.triggeredByUser fullName]];
+        } else if (self.automation.automationId != nil) {
+            [description appendFormat:@" by \"%@\"", self.automation.displayName];
         }
         
         return description;

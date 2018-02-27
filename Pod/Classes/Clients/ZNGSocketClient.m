@@ -404,7 +404,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     ZingleAccountSession * session = (ZingleAccountSession *)self.session;
     
-    NSMutableArray<ZNGUser *> * users = [[NSMutableArray alloc] initWithCapacity:[data count]];
+    NSMutableArray<ZNGUser *> * users = [[NSMutableArray alloc] init];
     
     for (NSDictionary * userDictionary in [data firstObject]) {
         [users addObject:[ZNGUser userFromSocketData:userDictionary]];

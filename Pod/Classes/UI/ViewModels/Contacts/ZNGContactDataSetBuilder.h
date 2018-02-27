@@ -10,6 +10,7 @@
 #import <Mantle/Mantle.h>
 #import "ZNGInboxDataSet.h"
 
+@class ZingleAccountSession;
 @class ZNGContactClient;
 
 @interface ZNGContactDataSetBuilder : MTLModel <MTLJSONSerializing>
@@ -89,5 +90,11 @@
 @property (nonatomic, strong, nonnull) ZNGContactClient * contactClient;
 
 - (nonnull ZNGInboxDataSet *)build;
+
+/**
+ *  Confirms that an inbox data set made with this builder can be used with the provided session.
+ *  Fails if a group/label/user/team specified in the data set is not present in the provided session.
+ */
+- (BOOL) canBeUsedForSession:(ZingleAccountSession * _Nonnull)session;
 
 @end

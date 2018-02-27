@@ -35,7 +35,7 @@
 
 static NSString * const kSocketConnectedKeyPath = @"socketClient.connected";
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 
 NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"ZingleUserChangedDetailedEventsPreferenceNotification";
 NSString * const ZingleConversationDataArrivedNotification = @"ZingleConversationDataArrivedNotification";
@@ -57,6 +57,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     ZNGService * _service;
     NSDate * serviceSetDate;
     
+    dispatch_semaphore_t initialUserDataSemaphore;
+    
     NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
     
     UIStoryboard * _storyboard;
@@ -68,6 +70,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     if (self != nil) {
         contactClientSemaphore = dispatch_semaphore_create(0);
+        initialUserDataSemaphore = dispatch_semaphore_create(0);
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -437,16 +440,32 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     // We now have both an account and a service selected.
     
     [self initializeAllClients];
-    [self retrieveSupplementalV2ApiData];
+    
+    if (self.users != nil) {
+        // We already have user data.  Go ahead and signal the semaphore so it does not block us below.
+        dispatch_semaphore_signal(initialUserDataSemaphore);
+    }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSDate * before = [NSDate date];
+        dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+
         [self synchronouslyRetrieveUserData];
+        [self synchronouslyRetrieveTeamsData];
+        
+        long waitResult = dispatch_semaphore_wait(self->initialUserDataSemaphore, tenSecondTimeout);
+        
+        if (waitResult == 0) {
+            NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:before];
+            ZNGLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
+        } else {
+            ZNGLogError(@"Timed out waiting for user and team data on initial login.  Assignment functionality may be broken until this arrives.");
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.available = YES;
         });
     });
-    
 }
 
 - (void) initializeAllClients
@@ -483,18 +502,35 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     NSSortDescriptor * firstName = [NSSortDescriptor sortDescriptorWithKey:@"fullName" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
     
     _users = [users sortedArrayUsingDescriptors:@[activeStatus, firstName]];
+    dispatch_semaphore_signal(initialUserDataSemaphore);
 }
 
 /**
  *  Go acquire some data that the v1 API does not supply, namely numeric IDs that the socket server throws at us.
  */
-- (void) retrieveSupplementalV2ApiData
+- (void) synchronouslyRetrieveTeamsData
 {
+    if ([[NSThread currentThread] isMainThread]) {
+        ZNGLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
+        return;
+    }
+    
+    if (self.teamClient == nil) {
+        return;
+    }
+    
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+    
     [self.teamClient teamListWithSuccess:^(NSArray<ZNGTeamV2 *> * _Nullable teams) {
         [self.inboxStatistician updateWithV2TeamsData:teams];
+        dispatch_semaphore_signal(semaphore);
     } failure:^(ZNGError * _Nullable error) {
         ZNGLogError(@"Unable to retrieve team IDs from v2 API.");
+        dispatch_semaphore_signal(semaphore);
     }];
+    
+    dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+    dispatch_semaphore_wait(semaphore, tenSecondTimeout);
 }
 
 - (void) updateUserData
@@ -532,11 +568,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
     dispatch_semaphore_wait(semaphore, tenSecondTimeout);
-    
-    if ([self.userAuthorization.userId length] == 0) {
-        // We failed to get the user ID; we cannot get the user object below.
-        return;
-    }
 }
 
 - (void) notifyShowDetailedEventsPreferenceChanged:(NSNotification *)notification

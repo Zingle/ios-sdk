@@ -113,6 +113,7 @@
 - (void) testSingleAccountSingleServiceLogin
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -157,6 +158,7 @@
 - (void) testAccountChooserBlock
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -187,6 +189,7 @@
 - (void) testServiceChooserBlock
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -232,6 +235,7 @@
 - (void) testUserAuthorizationAvailableImmediately
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -270,6 +274,7 @@
 - (void) testRegisteredForPushNotifications
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push
@@ -317,6 +322,7 @@
 - (void) testLogoutRemovesPushNotificationSubscription
 {
     ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
 #pragma clang diagnostic push

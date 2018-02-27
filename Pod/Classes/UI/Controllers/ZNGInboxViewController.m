@@ -706,6 +706,8 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 
 - (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
 {
+    NSMutableArray<MGSwipeButton *> * buttons = [[NSMutableArray alloc] initWithCapacity:2];
+    
     MGSwipeButton * closeButton;
     ZNGContact * contactAfterCloseOrOpen = [contact copy];
     contactAfterCloseOrOpen.isClosed = !contact.isClosed;
@@ -741,17 +743,23 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         }];
     }
     
-    MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-        // Go go gadget assignment view
-        ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];
-        assignView.delegate = weakSelf;
-        
-        UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:assignView];
-        [weakSelf presentViewController:navController animated:YES completion:nil];
-        return YES;
-    }];
+    [buttons addObject:closeButton];
     
-    cell.rightButtons = @[closeButton, assignButton];
+    if ([self.session.service allowsAssignment]) {
+        MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+            // Go go gadget assignment view
+            ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];
+            assignView.delegate = weakSelf;
+            
+            UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:assignView];
+            [weakSelf presentViewController:navController animated:YES completion:nil];
+            return YES;
+        }];
+        
+        [buttons addObject:assignButton];
+    }
+    
+    cell.rightButtons = buttons;
     cell.rightExpansion = closeOpenSettings;
 }
 

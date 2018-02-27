@@ -95,6 +95,6 @@
  *  Confirms that an inbox data set made with this builder can be used with the provided session.
  *  Fails if a group/label/user/team specified in the data set is not present in the provided session.
  */
-- (BOOL) builderCanBeUsedForSession:(ZingleAccountSession * _Nonnull)session;
+- (BOOL) canBeUsedForSession:(ZingleAccountSession * _Nonnull)session;
 
 @end

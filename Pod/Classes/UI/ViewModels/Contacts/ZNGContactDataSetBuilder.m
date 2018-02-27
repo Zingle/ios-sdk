@@ -62,7 +62,7 @@
              };
 }
 
-- (BOOL) builderCanBeUsedForSession:(ZingleAccountSession *)session
+- (BOOL) canBeUsedForSession:(ZingleAccountSession *)session
 {
     if (self.unassigned) {
         if (![session.service allowsAssignment]) {

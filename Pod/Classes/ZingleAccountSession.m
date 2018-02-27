@@ -40,6 +40,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"ZingleUserChangedDetailedEventsPreferenceNotification";
 NSString * const ZingleConversationDataArrivedNotification = @"ZingleConversationDataArrivedNotification";
 NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
+NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListShouldBeRefreshedNotification";
 
 // Override readonly properties with strong properties to get proper KVO
 @interface ZingleAccountSession ()

@@ -19,7 +19,7 @@
 @import SocketIO;
 
 #if DEBUG
-static const int zngLogLevel = ZNGLogLevelInfo;
+static const int zngLogLevel = ZNGLogLevelDebug;
 #else
 static const int zngLogLevel = ZNGLogLevelWarning;
 #endif

@@ -446,16 +446,16 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSDate * before = [NSDate date];
+        dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
+
         [self synchronouslyRetrieveUserData];
         [self synchronouslyRetrieveTeamsData];
         
-        NSDate * before = [NSDate date];
-        
-        dispatch_time_t fiveSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC));
-        dispatch_semaphore_wait(self->initialUserDataSemaphore, fiveSecondTimeout);
+        dispatch_semaphore_wait(self->initialUserDataSemaphore, tenSecondTimeout);
         
         NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:before];
-        ZNGLogDebug(@"Waited %.2f seconds for user data on login", (float)duration);
+        ZNGLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.available = YES;

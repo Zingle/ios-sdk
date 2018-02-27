@@ -109,6 +109,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyConversationUpdated:) name:ZingleConversationDataArrivedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyFeedsShouldBeUpdated:) name:ZingleFeedListShouldBeRefreshedNotification object:nil];
 }
 
 - (void) dealloc
@@ -311,6 +312,11 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         // Rather than doing a deep comparison of groups/labels, we will refresh our inbox data any time a service change is detected.
         [self.data refresh];
     }
+}
+
+- (void) notifyFeedsShouldBeUpdated:(NSNotification *)notification
+{
+    [self.data refresh];
 }
 
 - (void) notifyContactSelfMutated:(NSNotification *)notification

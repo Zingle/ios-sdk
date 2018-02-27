@@ -452,10 +452,14 @@ NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
         [self synchronouslyRetrieveUserData];
         [self synchronouslyRetrieveTeamsData];
         
-        dispatch_semaphore_wait(self->initialUserDataSemaphore, tenSecondTimeout);
+        long waitResult = dispatch_semaphore_wait(self->initialUserDataSemaphore, tenSecondTimeout);
         
-        NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:before];
-        ZNGLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
+        if (waitResult == 0) {
+            NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:before];
+            ZNGLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
+        } else {
+            ZNGLogError(@"Timed out waiting for user and team data on initial login.  Assignment functionality may be broken until this arrives.");
+        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.available = YES;

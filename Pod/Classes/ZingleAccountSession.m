@@ -93,6 +93,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
 - (void) dealloc
 {
+    [self.socketClient disconnect];
+    
     [self removeObserver:self forKeyPath:kSocketConnectedKeyPath];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -127,6 +129,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) logout
 {
     [_conversationCache removeAllObjects];
+    [self.socketClient disconnect];
     [super logout];
 }
 

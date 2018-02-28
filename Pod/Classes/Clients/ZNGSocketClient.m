@@ -380,7 +380,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     NSDictionary * feedData = [data firstObject];
     NSDictionary * contact = feedData[@"contact"];
-    NSString * feedId = contact[@"uuid"];
+    NSString * feedId = ([contact isKindOfClass:[NSDictionary class]]) ? contact[@"uuid"] : nil;
     
     if ([feedId length] > 0) {
         NSDictionary * userInfo = @{ZingleConversationNotificationContactIdKey: feedId};

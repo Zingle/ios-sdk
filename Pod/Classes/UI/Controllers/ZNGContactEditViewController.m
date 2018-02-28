@@ -86,7 +86,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     [super viewDidLoad];
     
     // If someone else has specified their own transitioningDelegate, we will relinquish control of our transitioning to them.
-    if (self.transitioningDelegate == nil) {
+    if ((self.transitioningDelegate == nil) && (!self.useDefaultTransition)) {
         self.transitioningDelegate = self;
     }
     

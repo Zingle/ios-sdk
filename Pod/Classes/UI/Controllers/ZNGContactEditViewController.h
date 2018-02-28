@@ -47,6 +47,8 @@
 @property (nonatomic, strong) ZNGService * service;
 @property (nonatomic, copy) ZNGContact * contact;
 
+@property (nonatomic, assign) BOOL useDefaultTransition;
+
 @property (nonatomic, weak) id <ZNGContactEditDelegate> delegate;
 
 - (IBAction)pressedCancel:(id)sender;

@@ -59,6 +59,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
         [self addObserver:self forKeyPath:ChannelsKVOPath options:NSKeyValueObservingOptionNew context:nil];
         
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyContactSelfMutated:) name:ZNGContactNotificationSelfMutated object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyConversationDataReceived:) name:ZingleConversationDataArrivedNotification object:nil];
     }
     
     return self;
@@ -136,6 +137,13 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 - (NSString *)remoteName
 {
     return [_contact fullName];
+}
+
+- (void) notifyConversationDataReceived:(NSNotification *)notification
+{
+    if ([self notificationRelevantToThisConversation:notification]) {
+        [self.contact updateRemotely];
+    }
 }
 
 - (BOOL) notificationRelevantToThisConversation:(NSNotification *)notification

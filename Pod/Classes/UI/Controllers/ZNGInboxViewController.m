@@ -690,7 +690,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         }];
     } else {
         confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [self.data contactWasChangedLocally:contactAfterChange];
+            [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact confirm];
             [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:contact fromUIType:@"swipe"];

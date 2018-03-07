@@ -149,6 +149,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (ZNGContactDataSetBuilder *) builder;
 
+#pragma mark - Comparison
+
+/**
+ *  Tests whether two data sets are equal when ignoring open/closed status.
+ */
+- (BOOL) isEqualDisregardingOpenStatus:(ZNGInboxDataSet *)object;
+
 #pragma mark - Actions
 /**
  *  Refreshes the first page of data.  This data will be merged into the contacts array without resetting the loadingInitialData property.

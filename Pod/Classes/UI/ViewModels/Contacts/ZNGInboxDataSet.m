@@ -302,6 +302,16 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     return [[self parameters] isEqualToDictionary:[object parameters]];
 }
 
+- (BOOL) isEqualDisregardingOpenStatus:(ZNGInboxDataSet *)object
+{
+    NSMutableDictionary * myParameters = [[self parameters] mutableCopy];
+    NSMutableDictionary * otherParameters = [[object parameters] mutableCopy];
+    [myParameters removeObjectForKey:ParameterKeyIsClosed];
+    [otherParameters removeObjectForKey:ParameterKeyIsClosed];
+    
+    return [myParameters isEqualToDictionary:otherParameters];
+}
+
 #pragma mark - Loading data
 - (void) refresh
 {

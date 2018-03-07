@@ -334,7 +334,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Sockety goodness
 - (void) socketEvent:(SocketAnyEvent *)event
 {
-    ZNGLogDebug(@"Received socket event of type %@", event.event);
+    ZNGLogDebug(@"%p received socket event of type %@", self, event.event);
     ZNGLogVerbose(@"%@", event);
 }
 
@@ -380,7 +380,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     NSDictionary * feedData = [data firstObject];
     NSDictionary * contact = feedData[@"contact"];
-    NSString * feedId = contact[@"uuid"];
+    NSString * feedId = ([contact isKindOfClass:[NSDictionary class]]) ? contact[@"uuid"] : nil;
     
     if ([feedId length] > 0) {
         NSDictionary * userInfo = @{ZingleConversationNotificationContactIdKey: feedId};

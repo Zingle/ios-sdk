@@ -24,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGInboxStatistician;
 @class ZNGTeamClient;
 @class ZNGAssignmentViewController;
+@class ZNGNotificationSettingsClient;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -129,6 +130,7 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nullable) ZNGUserClient * userClient;
 @property (nonatomic, strong, nullable) ZNGTeamClient * teamClient;
+@property (nonatomic, strong, nullable) ZNGNotificationSettingsClient * notificationSettingsClient;
 
 #pragma mark - Network diagnostics
 @property (nonatomic, strong, nullable) ZNGNetworkLookout * networkLookout;

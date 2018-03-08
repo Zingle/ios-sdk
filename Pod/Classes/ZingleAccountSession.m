@@ -30,6 +30,7 @@
 #import "ZNGTeamClient.h"
 #import "ZNGInboxStatsEntry.h"
 #import "ZNGAssignmentViewController.h"
+#import "ZNGNotificationSettingsClient.h"
 
 @import AFNetworking;
 
@@ -482,6 +483,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
     self.teamClient = [[ZNGTeamClient alloc] initWithSession:self serviceId:serviceId];
+    self.notificationSettingsClient = [[ZNGNotificationSettingsClient alloc] initWithSession:self serviceId:serviceId];
     
     // A lazy way to keep us from overwriting a mocked client in unit tests.
     // This is a bit of a code smell :(

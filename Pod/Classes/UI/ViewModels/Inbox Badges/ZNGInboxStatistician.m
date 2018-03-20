@@ -98,13 +98,13 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
 {
     if ([team.teamId length] == 0) {
         ZNGLogWarn(@"%s called with a team with no UUID.  Returning 0.", __PRETTY_FUNCTION__);
-        return 0;
+        return nil;
     }
     
     NSNumber * teamId = teamNumericIdsByUuid[team.teamId];
     
     if (teamId == nil) {
-        return 0;
+        return nil;
     }
     
     return teamStats[teamId];

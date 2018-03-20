@@ -42,6 +42,24 @@
     return user;
 }
 
+- (NSArray<NSDictionary *> *) socketDataWithZeroEverythingData
+{
+    ZNGUser * user = [self user];
+    ZNGTeamV2 * team = [self team];
+    ZNGInboxStatsEntry * zeroStats = [[ZNGInboxStatsEntry alloc] init];
+    NSDictionary * zeroStatsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:zeroStats error:nil];
+
+    return @[@{
+                 @"unassigned": zeroStatsDictionary,
+                 @"teams": @{
+                         @(team.numericId): zeroStatsDictionary,
+                         },
+                 @"users": @{
+                         @(user.numericId): zeroStatsDictionary,
+                         },
+                 }];
+}
+
 - (NSArray<NSDictionary *> *) socketDataWithZeroUnassignedAndNonZeroTeamAndUser
 {
     ZNGUser * user = [self user];
@@ -140,6 +158,52 @@
     XCTAssertNotEqual(dudeStats.unreadCount, 0);
     XCTAssertNotEqual(dudeStats.openCount, 0);
     XCTAssertNotNil(dudeStats.oldestUnconfirmed);
+}
+
+#pragma mark - Changing data tests
+- (void) testUserDataFromZeroToNonZero
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    ZNGUser * dude = [self user];
+    [stats updateWithSocketData:[self socketDataWithZeroEverythingData]];
+
+    // First verify that everything is 0/nil
+    ZNGInboxStatsEntry * dudeStats = [stats statsForUser:dude];
+    XCTAssertEqual(dudeStats.openCount, 0);
+    XCTAssertEqual(dudeStats.unreadCount, 0);
+    XCTAssertNil(dudeStats.oldestUnconfirmed);
+    
+    // Update stats with non zero data
+    [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
+    
+    // Verify non zero stats
+    dudeStats = [stats statsForUser:dude];
+    XCTAssertNotEqual(dudeStats.openCount, 0);
+    XCTAssertNotEqual(dudeStats.unreadCount, 0);
+    XCTAssertNotNil(dudeStats.oldestUnconfirmed);
+}
+
+// Opposite of above test
+- (void) testUserDataFromNonZeroToZero
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    ZNGUser * dude = [self user];
+    [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
+    
+    // First verify that everything is non zero
+    ZNGInboxStatsEntry * dudeStats = [stats statsForUser:dude];
+    XCTAssertNotEqual(dudeStats.openCount, 0);
+    XCTAssertNotEqual(dudeStats.unreadCount, 0);
+    XCTAssertNotNil(dudeStats.oldestUnconfirmed);
+    
+    // Update stats with zeroed data
+    [stats updateWithSocketData:[self socketDataWithZeroEverythingData]];
+    
+    // Verify zero stats
+    dudeStats = [stats statsForUser:dude];
+    XCTAssertEqual(dudeStats.openCount, 0);
+    XCTAssertEqual(dudeStats.unreadCount, 0);
+    XCTAssertNil(dudeStats.oldestUnconfirmed);
 }
 
 @end

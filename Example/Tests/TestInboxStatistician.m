@@ -60,11 +60,21 @@
                  }];
 }
 
+- (NSArray<NSDictionary *> *) socketDataWithNonZeroUnassigned
+{
+    ZNGInboxStatsEntry * nonZeroStats = [[ZNGInboxStatsEntry alloc] init];
+    nonZeroStats.unreadCount = 1;
+    nonZeroStats.openCount = 1;
+    nonZeroStats.oldestUnconfirmed = [NSDate dateWithTimeIntervalSince1970:1494115200.0];
+    NSDictionary * nonZeroDictionary = [MTLJSONAdapter JSONDictionaryFromModel:nonZeroStats error:nil];
+    
+    return @[@{
+                 @"unassigned": nonZeroDictionary,
+                 }];
+}
+
 - (NSArray<NSDictionary *> *) socketDataWithZeroRelevantDataButSomeRandomTeamAndUserData
 {
-    ZNGInboxStatsEntry * zeroStats = [[ZNGInboxStatsEntry alloc] init];
-    NSDictionary * zeroStatsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:zeroStats error:nil];
-    
     ZNGInboxStatsEntry * nonZeroUser = [[ZNGInboxStatsEntry alloc] init];
     nonZeroUser.unreadCount = 1;
     nonZeroUser.openCount = 1;
@@ -188,6 +198,28 @@
 }
 
 #pragma mark - Changing data tests
+// An empty update should set all counts/badges to 0
+- (void) testEmptyUpdateClearsUnassigned
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    [stats updateWithSocketData:[self socketDataWithNonZeroUnassigned]];
+    
+    // Verify we're non zero
+    ZNGInboxStatsEntry * unassignedStats = [stats statsForUnassigned];
+    XCTAssertNotEqual(unassignedStats.unreadCount, 0);
+    XCTAssertNotEqual(unassignedStats.openCount, 0);
+    XCTAssertNotNil(unassignedStats.oldestUnconfirmed);
+    
+    // Send empty data to clear everything
+    [stats updateWithSocketData:@[@{}]];
+    
+    // No we should be zero
+    unassignedStats = [stats statsForUnassigned];
+    XCTAssertEqual(unassignedStats.unreadCount, 0);
+    XCTAssertEqual(unassignedStats.openCount, 0);
+    XCTAssertNil(unassignedStats.oldestUnconfirmed);
+}
+
 - (void) testUserDataFromZeroToNonZero
 {
     ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];

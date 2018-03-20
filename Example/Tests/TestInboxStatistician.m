@@ -60,6 +60,33 @@
                  }];
 }
 
+- (NSArray<NSDictionary *> *) socketDataWithZeroRelevantDataButSomeRandomTeamAndUserData
+{
+    ZNGInboxStatsEntry * zeroStats = [[ZNGInboxStatsEntry alloc] init];
+    NSDictionary * zeroStatsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:zeroStats error:nil];
+    
+    ZNGInboxStatsEntry * nonZeroUser = [[ZNGInboxStatsEntry alloc] init];
+    nonZeroUser.unreadCount = 1;
+    nonZeroUser.openCount = 1;
+    nonZeroUser.oldestUnconfirmed = [NSDate dateWithTimeIntervalSince1970:1494115200.0];
+    NSDictionary * nonZeroUserDictionary = [MTLJSONAdapter JSONDictionaryFromModel:nonZeroUser error:nil];
+    
+    ZNGInboxStatsEntry * nonZeroTeam = [[ZNGInboxStatsEntry alloc] init];
+    nonZeroTeam.unreadCount = 2;
+    nonZeroTeam.openCount = 2;
+    nonZeroTeam.oldestUnconfirmed = [NSDate dateWithTimeIntervalSince1970:1462579200.0];
+    NSDictionary * nonZeroTeamDictionary = [MTLJSONAdapter JSONDictionaryFromModel:nonZeroTeam error:nil];
+    
+    return @[@{
+                 @"teams": @{
+                         @12345: nonZeroTeamDictionary,
+                         },
+                 @"users": @{
+                         @5678: nonZeroUserDictionary,
+                         },
+                 }];
+}
+
 - (NSArray<NSDictionary *> *) socketDataWithZeroUnassignedAndNonZeroTeamAndUser
 {
     ZNGUser * user = [self user];
@@ -251,6 +278,55 @@
     XCTAssertEqual(teamStats.openCount, 0);
     XCTAssertEqual(teamStats.unreadCount, 0);
     XCTAssertNil(teamStats.oldestUnconfirmed);
+}
+
+/**
+ *  Badge data should always be complete.  Verify that missing data is assumed zero.
+ */
+- (void) testDataWithOnlyIrrelevantTeamsErasesPreviousTeamsData
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    ZNGTeamV2 * team = [self team];
+    [stats updateWithV2TeamsData:@[team]];
+    [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
+    
+    // Ensure we start with non zero
+    ZNGInboxStatsEntry * teamStats = [stats statsForTeam:team];
+    XCTAssertNotEqual(teamStats.openCount, 0);
+    XCTAssertNotEqual(teamStats.unreadCount, 0);
+    XCTAssertNotNil(teamStats.oldestUnconfirmed);
+    
+    // Update the statistician with data for some other teams/users with nothing for the current team
+    [stats updateWithSocketData:[self socketDataWithZeroRelevantDataButSomeRandomTeamAndUserData]];
+    
+    // Data for our team should now be 0/nil
+    teamStats = [stats statsForTeam:team];
+    XCTAssertEqual(teamStats.openCount, 0);
+    XCTAssertEqual(teamStats.unreadCount, 0);
+    XCTAssertNil(teamStats.oldestUnconfirmed);
+}
+
+// Same as above test but for user
+- (void) testDataWithOnlyIrrelevantUsersErasesPreviousUsersData
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    ZNGUser * dude = [self user];
+    [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
+    
+    // Ensure we start with non zero
+    ZNGInboxStatsEntry * dudeStats = [stats statsForUser:dude];
+    XCTAssertNotEqual(dudeStats.openCount, 0);
+    XCTAssertNotEqual(dudeStats.unreadCount, 0);
+    XCTAssertNotNil(dudeStats.oldestUnconfirmed);
+    
+    // Update the statistician with data for some other teams/users with nothing for the current user
+    [stats updateWithSocketData:[self socketDataWithZeroRelevantDataButSomeRandomTeamAndUserData]];
+    
+    // Data for our user should now be 0/nil
+    dudeStats = [stats statsForUser:dude];
+    XCTAssertEqual(dudeStats.openCount, 0);
+    XCTAssertEqual(dudeStats.unreadCount, 0);
+    XCTAssertNil(dudeStats.oldestUnconfirmed);
 }
 
 @end

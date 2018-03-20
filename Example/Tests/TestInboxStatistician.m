@@ -206,4 +206,51 @@
     XCTAssertNil(dudeStats.oldestUnconfirmed);
 }
 
+// Verify that a badgeData update from socket that neglects a team/user indicates that the data for that user should be 0/nil
+- (void) testOmittedUserDataAssumedZero
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    ZNGUser * dude = [self user];
+    [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
+    
+    // Ensure we start with non zero
+    ZNGInboxStatsEntry * dudeStats = [stats statsForUser:dude];
+    XCTAssertNotEqual(dudeStats.openCount, 0);
+    XCTAssertNotEqual(dudeStats.unreadCount, 0);
+    XCTAssertNotNil(dudeStats.oldestUnconfirmed);
+    
+    // Send an empty update
+    [stats updateWithSocketData:@[@{}]];
+    
+    // All user data should now be 0/nil
+    dudeStats = [stats statsForUser:dude];
+    XCTAssertEqual(dudeStats.openCount, 0);
+    XCTAssertEqual(dudeStats.unreadCount, 0);
+    XCTAssertNil(dudeStats.oldestUnconfirmed);
+}
+
+// Same as above test but for teams
+- (void) testOmittedTeamDataAssumedZero
+{
+    ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
+    ZNGTeamV2 * team = [self team];
+    [stats updateWithV2TeamsData:@[team]];
+    [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
+    
+    // Ensure we start with non zero
+    ZNGInboxStatsEntry * teamStats = [stats statsForTeam:team];
+    XCTAssertNotEqual(teamStats.openCount, 0);
+    XCTAssertNotEqual(teamStats.unreadCount, 0);
+    XCTAssertNotNil(teamStats.oldestUnconfirmed);
+    
+    // Send an empty update
+    [stats updateWithSocketData:@[@{}]];
+    
+    // All team data should now be 0/nil
+    teamStats = [stats statsForTeam:team];
+    XCTAssertEqual(teamStats.openCount, 0);
+    XCTAssertEqual(teamStats.unreadCount, 0);
+    XCTAssertNil(teamStats.oldestUnconfirmed);
+}
+
 @end

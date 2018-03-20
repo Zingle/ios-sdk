@@ -59,18 +59,40 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     
     if ([unassigned isKindOfClass:[NSDictionary class]]) {
         unassignedStatsEntry = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:unassigned error:nil];
+    } else {
+        unassignedStatsEntry = nil;
     }
     
     if ([teams isKindOfClass:[NSDictionary class]]) {
         [teams enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull teamId, NSDictionary * _Nonnull teamData, BOOL * _Nonnull stop) {
             self->teamStats[@([teamId intValue])] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:teamData error:nil];;
         }];
+        
+        // Remove any unincluded teams
+        for (NSNumber * teamId in [[teamStats allKeys] copy]) {
+            if (teams[teamId] == nil) {
+                [teamStats removeObjectForKey:teamId];
+            }
+        }
+    } else {
+        // No teams data at all.  Delete it all.
+        [teamStats removeAllObjects];
     }
     
     if ([users isKindOfClass:[NSDictionary class]]) {
         [users enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull userId, NSDictionary * _Nonnull userData, BOOL * _Nonnull stop) {
             self->userStats[@([userId intValue])] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:userData error:nil];
         }];
+        
+        // Remove any unincluded users
+        for (NSNumber * userId in [[userStats allKeys] copy]) {
+            if (users[userId] == nil) {
+                [userStats removeObjectForKey:userId];
+            }
+        }
+    } else {
+        // No users data at all.  Delete it.
+        [userStats removeAllObjects];
     }
     
     // Check for changes and send a notification if any exist
@@ -98,13 +120,13 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
 {
     if ([team.teamId length] == 0) {
         ZNGLogWarn(@"%s called with a team with no UUID.  Returning 0.", __PRETTY_FUNCTION__);
-        return 0;
+        return nil;
     }
     
     NSNumber * teamId = teamNumericIdsByUuid[team.teamId];
     
     if (teamId == nil) {
-        return 0;
+        return nil;
     }
     
     return teamStats[teamId];

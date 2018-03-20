@@ -47,6 +47,7 @@
 		96E0AACA1E6F978000911146 /* tinyJpg.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 96E0AAC81E6F978000911146 /* tinyJpg.jpg */; };
 		96E0AACB1E6F978000911146 /* tinyPng.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E0AAC91E6F978000911146 /* tinyPng.png */; };
 		96E0AACD1E6F997000911146 /* 1280.png in Resources */ = {isa = PBXBuildFile; fileRef = 96E0AACC1E6F997000911146 /* 1280.png */; };
+		96E47006206188C200A16704 /* TestInboxStatistician.m in Sources */ = {isa = PBXBuildFile; fileRef = 96E47005206188C200A16704 /* TestInboxStatistician.m */; };
 		96EBB5691E0877900048218C /* TestTemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = 96EBB5681E0877900048218C /* TestTemplate.m */; };
 		A78335518F7C2A3EB1F4BDB2 /* Pods_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB342B2296015BCAFE19431E /* Pods_Tests.framework */; };
 		DF7FF2571C87671800BC720E /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DF7FF2561C87671800BC720E /* Launch Screen.storyboard */; };
@@ -127,6 +128,7 @@
 		96E0AAC81E6F978000911146 /* tinyJpg.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = tinyJpg.jpg; path = data/tinyJpg.jpg; sourceTree = "<group>"; };
 		96E0AAC91E6F978000911146 /* tinyPng.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tinyPng.png; path = data/tinyPng.png; sourceTree = "<group>"; };
 		96E0AACC1E6F997000911146 /* 1280.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 1280.png; path = data/1280.png; sourceTree = "<group>"; };
+		96E47005206188C200A16704 /* TestInboxStatistician.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestInboxStatistician.m; sourceTree = "<group>"; };
 		96EBB5681E0877900048218C /* TestTemplate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TestTemplate.m; sourceTree = "<group>"; };
 		AE385D757B07F4CC44B4B927 /* Pods_ZingleSDK_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZingleSDK_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13A1200A131472A6B4930EA /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -239,12 +241,13 @@
 				9622B33C1DC284F700957C5F /* Mock Clients */,
 				9622B3371DC2848800957C5F /* Data */,
 				960FCBB21D0F6E9C00B7E82C /* Info.plist */,
-				96A85E3C2019442D00C23F03 /* TestInboxStatsEntry.m */,
 				96A05BCD1DCBA68700E0E6D8 /* TestAccountSession.m */,
 				969AC8F31DC1600600D0E5D8 /* TestContactSession.m */,
 				969F7C501F16CF020062CE9E /* TestContacts.m */,
 				96E0AABB1E6F8D2400911146 /* TestImageAttachmentSending.m */,
 				96C5E7E51DB7F9C7005A17AC /* TestInboxDataSet.m */,
+				96A85E3C2019442D00C23F03 /* TestInboxStatsEntry.m */,
+				96E47005206188C200A16704 /* TestInboxStatistician.m */,
 				961847251E96CF9500AB3D45 /* TestConversation.m */,
 				96EBB5681E0877900048218C /* TestTemplate.m */,
 				967032D61F798DD100E87B3D /* TestUser.m */,
@@ -615,6 +618,7 @@
 				9624FB8E202CD98E000191B0 /* TestAttributedStringGrouping.m in Sources */,
 				96A85E3D2019442D00C23F03 /* TestInboxStatsEntry.m in Sources */,
 				9622B3421DC2852200957C5F /* ZNGMockContactServiceClient.m in Sources */,
+				96E47006206188C200A16704 /* TestInboxStatistician.m in Sources */,
 				96E0AABA1E6F87CE00911146 /* ZNGMockMessageClient.m in Sources */,
 				96EBB5691E0877900048218C /* TestTemplate.m in Sources */,
 				9622B3601DC2CB8400957C5F /* ZNGMockUserAuthorizationClient.m in Sources */,

@@ -7,7 +7,6 @@
 //
 
 #import "ZNGConversationServiceToContact.h"
-#import "ZNGLogging.h"
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
 #import "ZNGContactClient.h"
@@ -18,7 +17,7 @@
 #import "ZingleAccountSession.h"
 #import "ZNGUserAuthorization.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 static NSString * const ChannelsKVOPath = @"contact.channels";
 
@@ -100,7 +99,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
             NSUInteger channelIndex = [self.contact.channels indexOfObject:self.channel];
             
             if (channelIndex == NSNotFound) {
-                ZNGLogError(@"Received a KVO update to update channels, but our current channel no longer exists in the contact's %llu channels.  Help.", (unsigned long long)[self.contact.channels count]);
+                SBLogError(@"Received a KVO update to update channels, but our current channel no longer exists in the contact's %llu channels.  Help.", (unsigned long long)[self.contact.channels count]);
                 self.channel = nil;
                 return;
             }
@@ -108,7 +107,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
             ZNGChannel * updatedChannel = self.contact.channels[channelIndex];
             
             if ([updatedChannel changedSince:self.channel]) {
-                ZNGLogDebug(@"Our current channel seems to have changed.  Updating.");
+                SBLogDebug(@"Our current channel seems to have changed.  Updating.");
                 self.channel = updatedChannel;
             }
         }
@@ -213,12 +212,12 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     NSString * channelTypeId = self.channel.channelType.channelTypeId;
     
     if (recipient == nil) {
-        ZNGLogError(@"Recipient is nil.  Unable to send message.");
+        SBLogError(@"Recipient is nil.  Unable to send message.");
         return nil;
     }
     
     if (channelTypeId == nil) {
-        ZNGLogError(@"Channel type is nil.  Unable to send message.");
+        SBLogError(@"Channel type is nil.  Unable to send message.");
         return nil;
     }
     
@@ -297,7 +296,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     NSUInteger channelIndex = [self.contact.channels indexOfObject:channel];
     
     if (channelIndex == NSNotFound) {
-        ZNGLogInfo(@"Trying to find %@ (%@) in %@'s channels, but it does not exist.  Was this channel deleted?  Some data will probably be stale.",
+        SBLogInfo(@"Trying to find %@ (%@) in %@'s channels, but it does not exist.  Was this channel deleted?  Some data will probably be stale.",
                    channel.value, channel.channelType.displayName, [self.contact fullName]);
         
         return nil;
@@ -331,7 +330,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
                     success(status);
                 }
             } failure:^(ZNGError * _Nullable error) {
-                ZNGLogWarn(@"Adding the internal note succeeded, but the request to retrieve event data afterward failed.  This is probably fine: %@", error);
+                SBLogWarning(@"Adding the internal note succeeded, but the request to retrieve event data afterward failed.  This is probably fine: %@", error);
                 
                 if (success) {
                     success(status);

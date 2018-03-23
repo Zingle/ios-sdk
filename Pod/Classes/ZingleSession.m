@@ -7,7 +7,6 @@
 //
 
 #import "ZingleSession.h"
-#import "ZNGLogging.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import "ZNGAccountClient.h"
 #import "ZNGContactServiceClient.h"
@@ -17,8 +16,9 @@
 #import "ZNGAnalytics.h"
 #import <objc/runtime.h>
 #import "ZNGImageSizeCache.h"
-#import "ZNGLogFormatter.h"
 #import <UserNotifications/UserNotifications.h>
+
+@import SBObjectiveCWrapper;
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
@@ -31,8 +31,6 @@ static NSString * const ZNGClientIDField = @"x-zingle-client-id";
 static NSString * const ZNGClientVersionField = @"x-zingle-client-version";
 
 static NSString * const DeviceTokenUpdatedNotification = @"DeviceTokenUpdatedNotification";
-
-static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZingleSession
 {
@@ -118,7 +116,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     Class appDelegateClass = [[[UIApplication sharedApplication] delegate] class];
     
     if (appDelegateClass == nil) {
-        ZNGLogError(@"Unable to find app delegate class.  Push notifications cannot be swizzled.");
+        SBLogError(@"Unable to find app delegate class.  Push notifications cannot be swizzled.");
         return;
     }
 
@@ -154,17 +152,6 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         _urlString = LiveBaseURL;
         _token = [token copy];
         _key = [key copy];
-        
-        // Logging
-        DDTTYLogger * logger = [DDTTYLogger sharedInstance];
-        logger.logFormatter = [[ZNGLogFormatter alloc] init];
-        [DDLog addLogger:logger];
-        
-        DDFileLogger * fileLogger = [[DDFileLogger alloc] init];
-        fileLogger.rollingFrequency = 60 * 60 * 24; // 24 hour rolling
-        fileLogger.logFileManager.maximumNumberOfLogFiles = 7;
-        [DDLog addLogger:fileLogger];
-        
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
@@ -207,14 +194,14 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     NSURL * url = [NSURL URLWithString:urlString];
     
     if (url == nil) {
-        ZNGLogError(@"Unable to set URL to %@", urlString);
+        SBLogError(@"Unable to set URL to %@", urlString);
         return;
     }
     
     _urlString = urlString;
     
     if (![self.sessionManager.baseURL isEqual:url]) {
-        ZNGLogInfo(@"Creating new AF HTTP session manager for new URL of %@", urlString);
+        SBLogInfo(@"Creating new AF HTTP session manager for new URL of %@", urlString);
         self.sessionManager = [[self class] anonymousSessionManagerWithURL:url];
         [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
@@ -246,7 +233,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     NSString * emailMinusWhitespace = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     if ([emailMinusWhitespace length]  == 0) {
-        ZNGLogError(@"Reset password called with a blank email address");
+        SBLogError(@"Reset password called with a blank email address");
         completion(NO);
         return;
     }
@@ -260,7 +247,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:nil];
         
         if (status.statusCode != 200) {
-            ZNGLogWarn(@"Server returned %llu when attempting to reset password.", (unsigned long long)status.statusCode);
+            SBLogWarning(@"Server returned %llu when attempting to reset password.", (unsigned long long)status.statusCode);
             
             if (completion != nil) {
                 completion(NO);
@@ -268,14 +255,14 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
             return;
         }
         
-        ZNGLogInfo(@"Reset password succeeded.");
+        SBLogInfo(@"Reset password succeeded.");
         
         if (completion != nil) {
             completion(YES);
         }
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        ZNGLogWarn(@"Reset password request failed: %@", [error localizedDescription]);
+        SBLogWarning(@"Reset password request failed: %@", [error localizedDescription]);
         
         if (completion != nil) {
             completion(NO);
@@ -285,7 +272,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 
 - (void) connect
 {
-    ZNGLogError(@"Connect called on abstract ZingleSession class.");
+    SBLogError(@"Connect called on abstract ZingleSession class.");
 }
 
 #pragma mark - Setters
@@ -350,14 +337,14 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     
     if (tokenData == nil) {
         pushNotificationQueuedServiceIds = serviceIds;
-        ZNGLogDebug(@"Not registering for push notifications because no device token has been set.");
+        SBLogDebug(@"Not registering for push notifications because no device token has been set.");
         return;
     }
     
     pushNotificationQueuedServiceIds = nil;
     
     if ([serviceIds count] == 0) {
-        ZNGLogInfo(@"No service IDs provided to register for push notifications method.  Ignoring.");
+        SBLogInfo(@"No service IDs provided to register for push notifications method.  Ignoring.");
         return;
     }
     
@@ -365,9 +352,9 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     
     void (^registerForNotifications)(void) = ^{
         [self.notificationsClient registerForNotificationsWithDeviceId:tokenString withServiceIds:serviceIds success:^(ZNGStatus *status) {
-            ZNGLogDebug(@"Registered for push notifications successfully as %@", tokenString);
+            SBLogDebug(@"Registered for push notifications successfully as %@", tokenString);
         } failure:^(ZNGError *error) {
-            ZNGLogWarn(@"Failed to register for push notifications: %@", error);
+            SBLogWarning(@"Failed to register for push notifications: %@", error);
         }];
     };
     
@@ -377,7 +364,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         [self.notificationsClient unregisterForNotificationsWithDeviceId:tokenString success:^(ZNGStatus *status) {
             registerForNotifications();
         } failure:^(ZNGError *error) {
-            ZNGLogWarn(@"Failed to unregister for push notifications before registering for a new service ID: %@\nAttempting to register the new ID anyway...", error);
+            SBLogWarning(@"Failed to unregister for push notifications before registering for a new service ID: %@\nAttempting to register the new ID anyway...", error);
             registerForNotifications();
         }];
     }
@@ -389,18 +376,18 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
 
     if ([tokenString length] == 0) {
-        ZNGLogDebug(@"Not unregistering for push notifications because no device token has been set.");
+        SBLogDebug(@"Not unregistering for push notifications because no device token has been set.");
         return;
     }
     
     [self.notificationsClient unregisterForNotificationsWithDeviceId:tokenString success:nil failure:^(ZNGError *error) {
-        ZNGLogWarn(@"Unable to unregister for push notifications: %@", error);
+        SBLogWarning(@"Unable to unregister for push notifications: %@", error);
     }];
 }
 
 - (void) notifyPushNotificationReceived:(NSNotification *)notification
 {
-    ZNGLogInfo(@"Push notification received: %@", notification.userInfo);
+    SBLogInfo(@"Push notification received: %@", notification.userInfo);
 }
 
 

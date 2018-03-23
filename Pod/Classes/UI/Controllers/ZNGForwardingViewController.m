@@ -12,11 +12,10 @@
 #import "ZNGMessage.h"
 #import "ZNGPrinter.h"
 #import "ZNGService.h"
-#import "ZNGLogging.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGHotsosClient.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 #define kToolbarHeightKVOPath @"contentView.textView.contentSize"
 
@@ -243,7 +242,7 @@ enum {
     
     if ([term length] == 0) {
         // It should be pretty self explanatory if there is no text entered.  I'd rather not honk away with a modal alert.
-        ZNGLogInfo(@"User pressed \"search\" in the HotSOS issue box, but there is no text entered.  Ignoring.");
+        SBLogInfo(@"User pressed \"search\" in the HotSOS issue box, but there is no text entered.  Ignoring.");
         return;
     }
     
@@ -331,7 +330,7 @@ enum {
     for (ZNGPrinter * printer in self.activeService.printers) {
         
         if (printer.printerId == nil) {
-            ZNGLogWarn(@"Printer does not have an ID.  Not listing as a forwarding option.");
+            SBLogWarning(@"Printer does not have an ID.  Not listing as a forwarding option.");
             continue;
         }
         
@@ -458,7 +457,7 @@ enum {
             }
         }
         
-        ZNGLogDebug(@"Only found %llu numbers in the recipient field.  We require at least %llu for a phone number.", (unsigned long long)numberCount, (unsigned long long)minimumDigitsInPhoneNumber);
+        SBLogDebug(@"Only found %llu numbers in the recipient field.  We require at least %llu for a phone number.", (unsigned long long)numberCount, (unsigned long long)minimumDigitsInPhoneNumber);
         return NO;
     } else if (recipientType == RECIPIENT_TYPE_HOTSOS) {
         return ([selectedHotsosIssueName length] > 0);
@@ -485,7 +484,7 @@ enum {
 - (void) messagesInputToolbar:(JSQMessagesInputToolbar *)toolbar didPressRightBarButton:(UIButton *)sender
 {
     if (![self sufficientRecipientDataExists]) {
-        ZNGLogError(@"Insufficient recipient data exists, but the user was still able to press the forward button.  This is odd.");
+        SBLogError(@"Insufficient recipient data exists, but the user was still able to press the forward button.  This is odd.");
         return;
     }
     
@@ -528,7 +527,7 @@ enum {
             [self.conversation forwardMessage:self.message withBody:body toHotsosWithHotsosIssueName:selectedHotsosIssueName room:self.roomNumberTextField.text success:success failure:failure];
             break;
         default:
-            ZNGLogError(@"Something horrible is happening.  They hit forward without selecting a forward type.  Help.");
+            SBLogError(@"Something horrible is happening.  They hit forward without selecting a forward type.  Help.");
     }
 }
 

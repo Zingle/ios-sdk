@@ -7,10 +7,9 @@
 //
 
 #import "ZNGImageSizeCache.h"
-#import "ZNGLogging.h"
 #import "ZNGMessage.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 #define kCacheFileName @"imageSizeCache.dat"
 
@@ -67,14 +66,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         NSMutableDictionary * loadedSizes = [[NSKeyedUnarchiver unarchiveObjectWithFile:self->cacheFilePath] mutableCopy];
         
         if ([loadedSizes count] > 0) {
-            ZNGLogInfo(@"Loaded %llu cached image sizes from %@", (unsigned long long)[loadedSizes count], self->cacheFilePath);
+            SBLogInfo(@"Loaded %llu cached image sizes from %@", (unsigned long long)[loadedSizes count], self->cacheFilePath);
             
             dispatch_sync(dispatch_get_main_queue(), ^{
                 [loadedSizes addEntriesFromDictionary:self->sizes];   // Merge any sizes that were recorded while our cache was loading from disk.
                 self->sizes = loadedSizes;
             });
         } else {
-            ZNGLogInfo(@"No cached image sizes were found at %@", self->cacheFilePath);
+            SBLogInfo(@"No cached image sizes were found at %@", self->cacheFilePath);
         }
         
         self->loading = NO;
@@ -84,7 +83,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) saveCachedSizes
 {
     dispatch_async(fileThread, ^{
-        ZNGLogInfo(@"Writing %llu cached sizes to %@", (unsigned long long)[self->sizes count], self->cacheFilePath);
+        SBLogInfo(@"Writing %llu cached sizes to %@", (unsigned long long)[self->sizes count], self->cacheFilePath);
         [NSKeyedArchiver archiveRootObject:self->sizes toFile:self->cacheFilePath];
     });
 }
@@ -93,7 +92,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if (loading) {
         // Our cache has not yet loaded.
-        ZNGLogInfo(@"Returning 0x0 as cached size because our cache has not yet loaded.");
+        SBLogInfo(@"Returning 0x0 as cached size because our cache has not yet loaded.");
         return CGSizeZero;
     }
     
@@ -104,7 +103,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * name = [filename lastPathComponent];
     CGSize size = [sizes[name] CGSizeValue];
     
-    ZNGLogDebug(@"Returning %@ as cached size for %@", NSStringFromCGSize(size), name);
+    SBLogDebug(@"Returning %@ as cached size for %@", NSStringFromCGSize(size), name);
     
     return size;
 }
@@ -113,7 +112,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     NSString * name = [filename lastPathComponent];
     
-    ZNGLogDebug(@"Saving size of %@ for %@", NSStringFromCGSize(size), name);
+    SBLogDebug(@"Saving size of %@ for %@", NSStringFromCGSize(size), name);
     
     if (name == nil) {
         return;

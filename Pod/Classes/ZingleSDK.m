@@ -7,7 +7,6 @@
 //
 
 #import "ZingleSDK.h"
-#import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
 #import "ZingleContactSession.h"
 

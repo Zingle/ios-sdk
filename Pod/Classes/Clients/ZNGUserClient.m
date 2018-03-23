@@ -8,10 +8,9 @@
 
 #import "ZNGUserClient.h"
 #import "NSData+ImageType.h"
-#import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGUserClient
 
@@ -54,7 +53,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         if (([imageData length] == 0) || ([contentType length] == 0)) {
             NSString * errorString = [NSString stringWithFormat:@"Unable to parse image data and content type from %@ image and %llu bytes",
                                       NSStringFromCGSize(avatarImage.size), (unsigned long long)[imageData length]];
-            ZNGLogError(@"%@", errorString);
+            SBLogError(@"%@", errorString);
             
             if (failure != nil) {
                 ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: errorString }];

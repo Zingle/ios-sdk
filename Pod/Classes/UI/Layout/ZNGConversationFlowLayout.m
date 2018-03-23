@@ -12,9 +12,8 @@
 #import "ZNGBubblesSizeCalculator.h"
 #import "UIFont+Lato.h"
 #import "ZNGMessageData.h"
-#import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @interface JSQMessagesCollectionViewFlowLayout ()
 - (void)jsq_configureFlowLayout;
@@ -65,7 +64,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     [allAttributes enumerateObjectsUsingBlock:^(UICollectionViewLayoutAttributes * _Nonnull attributes, NSUInteger idx, BOOL * _Nonnull stop) {
         if (attributes.representedElementCategory == UICollectionElementCategorySupplementaryView) {
-            ZNGLogVerbose(@"%s: Setting %@ frame for %@ view", __PRETTY_FUNCTION__, NSStringFromCGRect(attributes.frame), attributes.representedElementKind);
+            SBLogVerbose(@"%s: Setting %@ frame for %@ view", __PRETTY_FUNCTION__, NSStringFromCGRect(attributes.frame), attributes.representedElementKind);
             attributes.zIndex = 10;
         }
     }];

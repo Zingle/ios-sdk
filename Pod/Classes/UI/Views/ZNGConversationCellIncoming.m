@@ -7,9 +7,8 @@
 //
 
 #import "ZNGConversationCellIncoming.h"
-#import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGConversationCellIncoming
 {
@@ -39,18 +38,18 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) applyLayoutAttributes:(UICollectionViewLayoutAttributes *)layoutAttributes
 {
-    ZNGLogVerbose(@"Before layout attributes: Mediaview is %@, its layer is %@, and its layer mask is %@", NSStringFromCGSize(self.mediaView.frame.size), NSStringFromCGSize(self.mediaView.layer.frame.size), NSStringFromCGSize(self.mediaView.layer.mask.frame.size));
+    SBLogVerbose(@"Before layout attributes: Mediaview is %@, its layer is %@, and its layer mask is %@", NSStringFromCGSize(self.mediaView.frame.size), NSStringFromCGSize(self.mediaView.layer.frame.size), NSStringFromCGSize(self.mediaView.layer.mask.frame.size));
     
     [super applyLayoutAttributes:layoutAttributes];
     
-    ZNGLogVerbose(@"After layout attributes: Mediaview is %@, its layer is %@, and its layer mask is %@", NSStringFromCGSize(self.mediaView.frame.size), NSStringFromCGSize(self.mediaView.layer.frame.size), NSStringFromCGSize(self.mediaView.layer.mask.frame.size));
+    SBLogVerbose(@"After layout attributes: Mediaview is %@, its layer is %@, and its layer mask is %@", NSStringFromCGSize(self.mediaView.frame.size), NSStringFromCGSize(self.mediaView.layer.frame.size), NSStringFromCGSize(self.mediaView.layer.mask.frame.size));
     
     // This delay shows a flaw in my understanding of the collection view cell lifecycle.  Removing this delay causes the media view layer mask to remain in its initial, small
     //  size until the device is redrawn.  Shame on me.  #fornow
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self applyMediaViewMask];
         
-        ZNGLogVerbose(@"After after layout attributes: Mediaview is %@, its layer is %@, and its layer mask is %@", NSStringFromCGSize(self.mediaView.frame.size), NSStringFromCGSize(self.mediaView.layer.frame.size), NSStringFromCGSize(self.mediaView.layer.mask.frame.size));
+        SBLogVerbose(@"After after layout attributes: Mediaview is %@, its layer is %@, and its layer mask is %@", NSStringFromCGSize(self.mediaView.frame.size), NSStringFromCGSize(self.mediaView.layer.frame.size), NSStringFromCGSize(self.mediaView.layer.mask.frame.size));
     });
 }
 
@@ -93,7 +92,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     self.mediaView.layer.mask = mediaMask;
     self.mediaView.layer.masksToBounds = YES;
     
-    ZNGLogDebug(@"%p Setting a %@ mask with contentsCenter of %@ onto a %@ %@ media view", self, NSStringFromCGSize(mediaMask.frame.size), NSStringFromCGRect(mediaMask.contentsCenter), NSStringFromCGSize(self.mediaView.frame.size), [self.mediaView class]);
+    SBLogDebug(@"%p Setting a %@ mask with contentsCenter of %@ onto a %@ %@ media view", self, NSStringFromCGSize(mediaMask.frame.size), NSStringFromCGRect(mediaMask.contentsCenter), NSStringFromCGSize(self.mediaView.frame.size), [self.mediaView class]);
 }
 
 @end

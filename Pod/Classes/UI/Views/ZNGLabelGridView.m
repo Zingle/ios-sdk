@@ -11,10 +11,9 @@
 #import "ZNGLabel.h"
 #import "ZNGContactGroup.h"
 #import "UIColor+ZingleSDK.h"
-#import "ZNGLogging.h"
 #import "UIFont+Lato.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGLabelGridView
 {
@@ -310,7 +309,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         moreLabel = [[UILabel alloc] init];
     }
     
-    ZNGLogDebug(@"Replacing %llu existing labels with %llu labels.", (unsigned long long)[labelViews count], (unsigned long long)[newLabelViews count]);
+    SBLogDebug(@"Replacing %llu existing labels with %llu labels.", (unsigned long long)[labelViews count], (unsigned long long)[newLabelViews count]);
     
     for (ZNGDashedBorderLabel * label in labelViews) {
         [label removeFromSuperview];
@@ -318,7 +317,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     labelViews = newLabelViews;
     
-    ZNGLogDebug(@"%@ now has %llu subviews", [self class], (unsigned long long)[self.subviews count]);
+    SBLogDebug(@"%@ now has %llu subviews", [self class], (unsigned long long)[self.subviews count]);
     
     [self layoutIfNeeded];
 }

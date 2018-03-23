@@ -17,7 +17,6 @@
 #import "ZNGContactChannelTableViewCell.h"
 #import "ZNGContactPhoneNumberTableViewCell.h"
 #import "ZNGContactLabelsTableViewCell.h"
-#import "ZNGLogging.h"
 #import "ZNGChannel.h"
 #import "ZNGLabelRoundedCollectionViewCell.h"
 #import "ZNGLabel.h"
@@ -40,6 +39,8 @@
 #import "ZNGEditContactExitTransition.h"
 #import "ZNGConversationServiceToContact.h"
 
+@import SBObjectiveCWrapper;
+
 enum  {
     ContactSectionDefaultCustomFields,
     ContactSectionAssignment,
@@ -49,8 +50,6 @@ enum  {
     ContactSectionOptionalCustomFields,
     ContactSectionCount
 };
-
-static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
@@ -142,7 +141,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     originalContact = contact;
  
     if (contact == nil) {
-        ZNGLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
+        SBLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
         _contact = [[ZNGContact alloc] init];
     } else {
         // ZNGContact's copy is a deep copy
@@ -155,7 +154,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (void) updateUIForNewContact
 {
     if (self.contact == nil) {
-        ZNGLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
+        SBLogInfo(@"Edit contact screen has been loaded with no contact.  Assuming a new contact.");
         _contact = [[ZNGContact alloc] init];
     }
     
@@ -372,7 +371,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     
     // If we have no changes, we can just go poof
     if (![self contactHasBeenChanged]) {
-        ZNGLogInfo(@"Contact editing screen is being dismissed via \"Save,\" but no changes were made.");
+        SBLogInfo(@"Contact editing screen is being dismissed via \"Save,\" but no changes were made.");
         [self dismissViewControllerAnimated:YES completion:nil];
         return;
     }
@@ -407,7 +406,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     } failure:^(ZNGError * _Nonnull error) {
         [self.loadingGradient stopAnimating];
         self.saveButton.enabled = YES;
-        ZNGLogError(@"Unable to save contact: %@", error);
+        SBLogError(@"Unable to save contact: %@", error);
         
         NSString * description;
         
@@ -487,7 +486,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     NSUInteger indexInPhoneChannels = [phoneNumberChannels indexOfObject:channel];
     
     if (indexInPhoneChannels == NSNotFound) {
-        ZNGLogError(@"User pressed delete on a phone number table cell, but the cell's channel does not appear in our contact's %llu phone number channels", (unsigned long long)[phoneNumberChannels count]);
+        SBLogError(@"User pressed delete on a phone number table cell, but the cell's channel does not appear in our contact's %llu phone number channels", (unsigned long long)[phoneNumberChannels count]);
         return;
     }
     
@@ -501,7 +500,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     phoneNumberChannels = mutablePhoneChannels;
     
     if (indexPath == nil) {
-        ZNGLogWarn(@"Unable to find row for delete animation after removing phone number channel.  Reloading entire channel section.");
+        SBLogWarning(@"Unable to find row for delete animation after removing phone number channel.  Reloading entire channel section.");
         NSIndexSet * indexSet = [NSIndexSet indexSetWithIndex:ContactSectionChannels];
         [self.tableView reloadSections:indexSet withRowAnimation:UITableViewRowAnimationAutomatic];
     } else {
@@ -583,7 +582,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
             header.sectionImage.image = [UIImage imageNamed:@"editIconCustomFields" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         default:
-            ZNGLogError(@"Unexpected section %lld encountered in contact editing screen.", (long long)section);
+            SBLogError(@"Unexpected section %lld encountered in contact editing screen.", (long long)section);
             header.sectionLabel.text = @"OTHER";
             header.sectionImage.image = nil;
             break;
@@ -669,7 +668,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 ZNGTeam * team = [self.service teamWithId:self.contact.assignedToTeamId];
                 
                 if (team == nil) {
-                    ZNGLogWarn(@"%@ is assigned to team %@, but that team does not appear in our data.", [self.contact fullName], self.contact.assignedToTeamId);
+                    SBLogWarning(@"%@ is assigned to team %@, but that team does not appear in our data.", [self.contact fullName], self.contact.assignedToTeamId);
                     cell.nameLabel.text = @"A team";
                     cell.emojiLabel.text = @"?";
                 } else {
@@ -774,7 +773,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
         }
     }
     
-    ZNGLogError(@"Unknown section %lld in contact editing table view", (long long)indexPath.section);
+    SBLogError(@"Unknown section %lld in contact editing table view", (long long)indexPath.section);
     return nil;
 }
 
@@ -816,7 +815,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (void) labelGrid:(ZNGLabelGridView *)grid pressedRemoveLabel:(ZNGLabel *)label
 {
     if (label == nil) {
-        ZNGLogError(@"Remove label delegate method was called, but with no label selected.  Ignoring.");
+        SBLogError(@"Remove label delegate method was called, but with no label selected.  Ignoring.");
         return;
     }
     

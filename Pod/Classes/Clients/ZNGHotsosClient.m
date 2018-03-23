@@ -8,16 +8,15 @@
 
 #import "ZNGHotsosClient.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
-#import "ZNGLogging.h"
 #import "ZNGService.h"
 #import "ZNGSettingsField.h"
 #import "ZNGSetting.h"
 
+@import SBObjectiveCWrapper;
+
 #define kHotsosURLCode          @"hotsos_url"
 #define kHotsosUsernameCode     @"hotsos_username"
 #define kHotsosPasswordCode     @"hotsos_password"
-
-static const int zngLogLevel = ZNGLogLevelDebug;
 
 @implementation ZNGHotsosClient
 {
@@ -34,7 +33,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         BOOL allHotsosFieldsPresent = (([[service hotsosHostName] length]) && ([[service hotsosUserName] length]) && ([[service hotsosPassword] length]));
         
         if (!allHotsosFieldsPresent) {
-            ZNGLogError(@"Unable to find HotSOS URL, username, and/or password in settings: %@", service.settings);
+            SBLogError(@"Unable to find HotSOS URL, username, and/or password in settings: %@", service.settings);
             return nil;
         }
         
@@ -86,7 +85,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [sessionManager GET:[self hotsosIssuePathForTerm:term] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSXMLParser * _Nullable responseObject) {
         responseObject.delegate = self;
         [responseObject parse];
-        ZNGLogInfo(@"HotSOS returned %llu issues matching \"%%%@%%\"", (unsigned long long)[self->matchingIssueNames count], term);
+        SBLogInfo(@"HotSOS returned %llu issues matching \"%%%@%%\"", (unsigned long long)[self->matchingIssueNames count], term);
         
         // Sanity check for non nil completion block
         if (completion == nil) {
@@ -110,7 +109,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 #pragma mark - XML parsing
 - (void) parserDidStartDocument:(NSXMLParser *)parser
 {
-    ZNGLogDebug(@"Began parsing XML");
+    SBLogDebug(@"Began parsing XML");
     matchingIssueNames = [[NSMutableArray alloc] init];
 }
 

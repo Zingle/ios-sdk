@@ -8,13 +8,11 @@
 
 #import "ZNGContactCustomFieldTableViewCell.h"
 #import "ZNGContactFieldValue.h"
-#import "ZNGLogging.h"
 #import "ZNGFieldOption.h"
 #import "UIColor+ZingleSDK.h"
 
 @import JVFloatLabeledTextField;
-
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGContactCustomFieldTableViewCell
 {
@@ -69,7 +67,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) setCustomFieldValue:(ZNGContactFieldValue *)customFieldValue
 {
-    ZNGLogVerbose(@"%@ custom field type set to %@ (type %@), was %@", [self class], customFieldValue.customField.displayName, customFieldValue.customField.dataType, _customFieldValue.customField.displayName);
+    SBLogVerbose(@"%@ custom field type set to %@ (type %@), was %@", [self class], customFieldValue.customField.displayName, customFieldValue.customField.dataType, _customFieldValue.customField.displayName);
     
     _customFieldValue = customFieldValue;
     
@@ -324,7 +322,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     if (row >= [self.customFieldValue.customField.options count]) {
-        ZNGLogError(@"Out of bounds when retrieving single select custom field picker options.  %lld >= our total of %llu options", (long long)row, (unsigned long long)[self.customFieldValue.customField.options count]);
+        SBLogError(@"Out of bounds when retrieving single select custom field picker options.  %lld >= our total of %llu options", (long long)row, (unsigned long long)[self.customFieldValue.customField.options count]);
         return nil;
     }
     

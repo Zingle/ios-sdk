@@ -7,7 +7,6 @@
 //
 
 #import "ZNGInboxDataSet.h"
-#import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGStatus.h"
 #import "ZingleSDK.h"
@@ -15,7 +14,7 @@
 #import "ZNGLabel.h"
 #import "ZingleAccountSession.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+@import SBObjectiveCWrapper;
 
 static NSString * const ParameterKeyPageIndex              = @"page";
 static NSString * const ParameterKeyPageSize               = @"page_size";
@@ -106,11 +105,11 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             _assignedUserId = builder.assignedUserId;
             
             if (([_assignedTeamId length] > 0) && ([_assignedUserId length] > 0)) {
-                ZNGLogError(@"Both team ID and user ID provided as assignment filters.  This is probably in error.");
+                SBLogError(@"Both team ID and user ID provided as assignment filters.  This is probably in error.");
             }
         } else {
             if (([builder.assignedTeamId length] > 0) || ([builder.assignedUserId length] > 0)) {
-                ZNGLogError(@"Unassigned flag is set to YES, but there were team or user assignment IDs also provided.  They are ignored.");
+                SBLogError(@"Unassigned flag is set to YES, but there were team or user assignment IDs also provided.  They are ignored.");
             }
         }
         
@@ -254,7 +253,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if ([self.labelIds count] > 0) {
         if ([self.labelIds count] > 1) {
             // TODO: Support multiple label searching
-            ZNGLogWarn(@"%llu label IDs were provided for contact searching, but the API only supports one.  Gross.  We'll send one.", (unsigned long long)[self.labelIds count]);
+            SBLogWarning(@"%llu label IDs were provided for contact searching, but the API only supports one.  Gross.  We'll send one.", (unsigned long long)[self.labelIds count]);
         }
         
         parameters[ParameterKeyLabelId] = [self.labelIds firstObject];
@@ -263,7 +262,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if ([self.groupIds count] > 0) {
         if ([self.groupIds count] > 1) {
             // TODO: Support multiple group searching
-            ZNGLogWarn(@"%llu group IDs were provided for contact searching, but the API only supports one.  Gross.  We'll send one.", (unsigned long long)[self.groupIds count]);
+            SBLogWarning(@"%llu group IDs were provided for contact searching, but the API only supports one.  Gross.  We'll send one.", (unsigned long long)[self.groupIds count]);
         }
         
         parameters[ParameterKeyGroupId] = [self.groupIds firstObject];
@@ -336,12 +335,12 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     
     // Sanity check how many pages we plan to load if we have any existing pagination data.
     if ((totalPageCount > 0) && (lastPageToLoad > totalPageCount)) {
-        ZNGLogWarn(@"A request was made to load up to the %ld page of data, but we only expect to have %ld pages total.  This may fire off several requests that will return no data.",
+        SBLogWarning(@"A request was made to load up to the %ld page of data, but we only expect to have %ld pages total.  This may fire off several requests that will return no data.",
                    (unsigned long)lastPageToLoad, (unsigned long)totalPageCount);
         
         // If the value is total nonsense, ignore it
         if ((lastPageToLoad - totalPageCount) > 10) {
-            ZNGLogError(@"Refusing to request extra pages of data beyond expected index.");
+            SBLogError(@"Refusing to request extra pages of data beyond expected index.");
             return;
         }
     }
@@ -371,7 +370,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     
     if ([pagesToRefresh count] == 0) {
         // Nothing to refresh
-        ZNGLogInfo(@"Refresh was called to start with index of %ld, but there is no additional data available (%ld total items, %llu pages loading already).",
+        SBLogInfo(@"Refresh was called to start with index of %ld, but there is no additional data available (%ld total items, %llu pages loading already).",
                    (unsigned long)index, (unsigned long)totalPageCount, (unsigned long long)[loadingPages count]);
         return;
     }
@@ -420,7 +419,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             NSMutableDictionary * parameters = [weakSelf parameters];
             parameters[ParameterKeyPageIndex] = @(page);
             
-            ZNGLogInfo(@"%@ (%p) is loading page #%llu/%llu of data...", [weakSelf class], weakSelf, (unsigned long long)page, (unsigned long long)self.totalPageCount);
+            SBLogInfo(@"%@ (%p) is loading page #%llu/%llu of data...", [weakSelf class], weakSelf, (unsigned long long)page, (unsigned long long)self.totalPageCount);
             
             [strongContactClient contactListWithParameters:parameters success:^(NSArray<ZNGContact *> *contacts, ZNGStatus *status) {
                 weakSelf.totalPageCount = status.totalPages;
@@ -437,7 +436,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                 }
                 dispatch_semaphore_signal(semaphore);
             } failure:^(ZNGError *error) {
-                ZNGLogWarn(@"Unable to fetch inbox data for page %llu: %@", (unsigned long long)page, error);
+                SBLogWarning(@"Unable to fetch inbox data for page %llu: %@", (unsigned long long)page, error);
                 [self _removeLoadingPage:page];
                 dispatch_semaphore_signal(semaphore);
             }];
@@ -464,7 +463,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                     NSRange removalRange = NSMakeRange(indexAfterCurrentData, [mutable count] - indexAfterCurrentData);
                     NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:removalRange];
                     
-                    ZNGLogVerbose(@"Removing %ld objects that occur past the current refresh range.", (unsigned long)removalRange.length);
+                    SBLogVerbose(@"Removing %ld objects that occur past the current refresh range.", (unsigned long)removalRange.length);
                     
                     [mutable removeObjectsAtIndexes:indexSet];
                 }
@@ -504,7 +503,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     }
     
     if ([incomingContacts count] == 0) {
-        ZNGLogDebug(@"Received 0 contacts in response");
+        SBLogDebug(@"Received 0 contacts in response");
         
         if ((status.totalRecords == 0) && ([self.contacts count] > 0)) {
             NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
@@ -537,10 +536,10 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if (startIndex >= [self.contacts count]) {
         // Sanity check
         if (startIndex > [self.contacts count]) {
-            ZNGLogWarn(@"Incoming data starts at index %ld, but we only have %ld items in our current data.  Appending anyway (at incorrect indices.)", (unsigned long)startIndex, (unsigned long)oldDataCount);
+            SBLogWarning(@"Incoming data starts at index %ld, but we only have %ld items in our current data.  Appending anyway (at incorrect indices.)", (unsigned long)startIndex, (unsigned long)oldDataCount);
         }
         
-        ZNGLogVerbose(@"Appending %ld objects that all appear outside of our current range.", (unsigned long)[incomingContacts count]);
+        SBLogVerbose(@"Appending %ld objects that all appear outside of our current range.", (unsigned long)[incomingContacts count]);
         
         // Append all of the objects.
         // Note that insertObjects:atIndexes: is used instead of addObjectsFromArray: because the latter does one by one updates, causing
@@ -561,7 +560,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             replacements = [replacements subarrayWithRange:NSMakeRange(0, overlapRangeInTotalData.length)];
         }
         
-        ZNGLogVerbose(@"We received %ld contacts, %ld of which extend past our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
+        SBLogVerbose(@"We received %ld contacts, %ld of which extend past our current data.", (unsigned long)[incomingContacts count], (long)overflowCount);
         
         // We have two very specific simple cases that result from refreshes.
         //  1) Some data disappeared
@@ -581,7 +580,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                 }];
                 
                 if ([removedIndexes count] == 0) {
-                    ZNGLogWarn(@"Our incoming data shows %llu contacts vs. our %llu, but we were unable to find which contacts have disappeared.  Logic no longer applies.",
+                    SBLogWarning(@"Our incoming data shows %llu contacts vs. our %llu, but we were unable to find which contacts have disappeared.  Logic no longer applies.",
                                (unsigned long long)[incomingContacts count], (unsigned long long)[mutableContacts count]);
                 } else {
                     [mutableContacts removeObjectsAtIndexes:removedIndexes];
@@ -598,7 +597,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                     if (newHeadFoundInOldData) {
                         // This looks like a simple reordering!  Hooray!
                         simpleReorderingOrRefresh = YES;
-                        ZNGLogVerbose(@"Moving contact from a later position to head");
+                        SBLogVerbose(@"Moving contact from a later position to head");
                         
                         [mutableContacts removeObject:firstNewContact];
                         [mutableContacts insertObject:firstNewContact atIndex:0];
@@ -612,7 +611,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                         ZNGContact * newContact = incomingContacts[idx];
                         
                         if ([newContact changedSince:contact]) {
-                            ZNGLogDebug(@"Refreshing %@, last updated %.0f seconds ago", [newContact fullName], [[NSDate date] timeIntervalSinceDate:newContact.updatedAt]);
+                            SBLogDebug(@"Refreshing %@, last updated %.0f seconds ago", [newContact fullName], [[NSDate date] timeIntervalSinceDate:newContact.updatedAt]);
                             [mutableContacts replaceObjectAtIndex:idx+startIndex withObject:incomingContacts[idx]];
                             
                             ZingleAccountSession * session = (ZingleAccountSession *)self.contactClient.session;
@@ -622,7 +621,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                             }
                             
                         } else {
-                            ZNGLogVerbose(@"Failing to replace %@ since the updated at timestamp has not changed.", [contact fullName]);
+                            SBLogVerbose(@"Failing to replace %@ since the updated at timestamp has not changed.", [contact fullName]);
                         }
                     }];
                 }
@@ -632,7 +631,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         if (!simpleReorderingOrRefresh) {
             // Sanity check
             if ((overlapRangeInTotalData.location + overlapRangeInTotalData.length) > [mutableContacts count]) {
-                ZNGLogWarn(@"New inbox data overlap range is out of bounds.  Help.  Refreshing all data.");
+                SBLogWarning(@"New inbox data overlap range is out of bounds.  Help.  Refreshing all data.");
                 [self refresh];
                 return;
             }
@@ -664,7 +663,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     BOOL wasPresent = [self.contacts containsObject:contact];
     
     if ((!stillBelongsInThisDataSet) && (wasPresent)) {
-        ZNGLogInfo(@"Removing %@ from our current data set due to a local change.", [contact fullName]);
+        SBLogInfo(@"Removing %@ from our current data set due to a local change.", [contact fullName]);
         NSMutableOrderedSet * mutableContacts = [self mutableOrderedSetValueForKey:NSStringFromSelector(@selector(contacts))];
         self.count = self.count - 1;
         [mutableContacts removeObject:contact];

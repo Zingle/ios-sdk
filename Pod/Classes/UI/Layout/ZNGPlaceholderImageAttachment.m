@@ -7,9 +7,8 @@
 //
 
 #import "ZNGPlaceholderImageAttachment.h"
-#import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 #define kDefaultPlaceholderSize CGSizeMake(250.0, 250.0)
 
@@ -119,7 +118,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     }
     
     self.image = UIGraphicsGetImageFromCurrentImageContext();
-    ZNGLogDebug(@"Rendered a %@ placeholder image", NSStringFromCGSize(self.image.size));
+    SBLogDebug(@"Rendered a %@ placeholder image", NSStringFromCGSize(self.image.size));
     
     UIGraphicsEndImageContext();
 }
@@ -128,7 +127,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if ((imageSize.height == 0) || (imageSize.width == 0)) {
         CGRect bounds = [super attachmentBoundsForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
-        ZNGLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
+        SBLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
         return bounds;
     }
     
@@ -146,7 +145,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [self setImageScale:downscale];
     
     CGRect bounds = CGRectIntegral(CGRectMake(0.0, 0.0, self.image.size.width, self.image.size.height));
-    ZNGLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
+    SBLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
     return bounds;
 }
 

@@ -9,9 +9,10 @@
 #import "ZNGNetworkLookout.h"
 #import "ZingleAccountSession.h"
 #import "ZNGSocketClient.h"
-#import "ZNGLogging.h"
 #import "ZNGReachability.h"
 #import "ZNGUserAuthorizationClient.h"
+
+@import SBObjectiveCWrapper;
 
 // Override the readonly status property so we get a free KVO setter
 @interface ZNGNetworkLookout()
@@ -21,8 +22,6 @@
 static const NSTimeInterval delayAfterLoginBeforeCheckingSocket = 3.0;
 NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChanged";
 
-static const int zngLogLevel = ZNGLogLevelDebug;
-
 @implementation ZNGNetworkLookout
 {
     NSTimer * checkSocketAfterDelayTimer;
@@ -31,7 +30,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 - (void) setStatus:(ZNGNetworkLookoutStatus)status
 {
     if (_status != status) {
-        ZNGLogDebug(@"Status changing from %@ to %@", [self debugDescriptionForStatus:_status], [self debugDescriptionForStatus:status]);
+        SBLogDebug(@"Status changing from %@ to %@", [self debugDescriptionForStatus:_status], [self debugDescriptionForStatus:status]);
         _status = status;
         
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGNetworkLookoutStatusChanged object:self];
@@ -82,7 +81,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     checkSocketAfterDelayTimer = nil;
     
     if (self.session == nil) {
-        ZNGLogInfo(@"We do not have a session object set, so we are unable to verify socket server status.");
+        SBLogInfo(@"We do not have a session object set, so we are unable to verify socket server status.");
         return;
     }
     
@@ -109,7 +108,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 {
     // If we do not have a session object set, we have to immediately mark this as a problem (since we are unable to recheck in a moment.)
     if (self.session == nil) {
-        ZNGLogInfo(@"Socket disconnected.  We do not have a session weak reference, so this is immediately being marked as a connection failure.");
+        SBLogInfo(@"Socket disconnected.  We do not have a session weak reference, so this is immediately being marked as a connection failure.");
         [self diagnoseFailure];
         return;
     }
@@ -135,9 +134,9 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     // We will then check if we can even reach the API
     if (self.session.userAuthorizationClient != nil) {
         [self.session.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
-            ZNGLogInfo(@"We are still able to reach the API.  This looks like a socket only problem.  Leaving status as Socket Disconnected.");
+            SBLogInfo(@"We are still able to reach the API.  This looks like a socket only problem.  Leaving status as Socket Disconnected.");
         } failure:^(ZNGError *error) {
-            ZNGLogInfo(@"Unable to reach Zingle API: %@", error);
+            SBLogInfo(@"Unable to reach Zingle API: %@", error);
             self.status = ZNGNetworkStatusZingleAPIUnreachable;
         }];
     }

@@ -14,7 +14,6 @@
 #import "JSQMessagesBubbleImageFactory.h"
 #import "JSQMessagesTimestampFormatter.h"
 #import "ZNGServiceConversationToolbarContentView.h"
-#import "ZNGLogging.h"
 #import "ZNGImageViewController.h"
 #import "UIImage+ZingleSDK.h"
 #import "ZNGEventCollectionViewCell.h"
@@ -28,10 +27,10 @@
 #import "ZNGConversationCellIncoming.h"
 #import "ZNGEventViewModel.h"
 #import "UIImage+animatedGIF.h"
-@import Photos;
-@import Shimmer;
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+@import Photos;
+@import SBObjectiveCWrapper;
+@import Shimmer;
 
 // How directly does the left panning gesture translate to speed of the time labels appearing on screen?
 // 1.0 is an exact match
@@ -365,7 +364,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSArray<UIBarButtonItem *> * barItems = [self rightBarButtonItems];
     
     if ([barItems count] == 0) {
-        ZNGLogDebug(@"There are no right bar button items.");
+        SBLogDebug(@"There are no right bar button items.");
         return;
     }
     
@@ -402,7 +401,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) updateUUID
 {
     NSString * newUUID = [[[NSUUID alloc] init] UUIDString];
-    ZNGLogVerbose(@"Updating message UUID from %@ to %@", uuid, newUUID);
+    SBLogVerbose(@"Updating message UUID from %@ to %@", uuid, newUUID);
     uuid = newUUID;
 }
 
@@ -643,13 +642,13 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                     }];
                     
                     // If we successfully get here, we will tell the collection view to insert the items and then return before calling finishReceivingMessageAnimated:
-                    ZNGLogVerbose(@"Inserting %llu events into collection view to bring total to %llu", (unsigned long long)[insertions count], (unsigned long long)[self.conversation.events count]);
+                    SBLogVerbose(@"Inserting %llu events into collection view to bring total to %llu", (unsigned long long)[insertions count], (unsigned long long)[self.conversation.events count]);
                     [self insertEventsAtIndexesWithoutScrolling:indexPaths];
                     return;
                 }
             }
             
-            ZNGLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events, %@ received data already.",
+            SBLogVerbose(@"Calling finishReceivingMessagesAnimated: with %llu total events, %@ received data already.",
                           (unsigned long long)[self.conversation.events count],
                           hasDisplayedInitialData ? @"HAS" : @"HAS NOT");
             [self finishReceivingMessageAnimated:hasDisplayedInitialData];  // Do not animate the initial scroll to bottom if this is our first data
@@ -675,7 +674,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         case NSKeyValueChangeReplacement:
         default:
             // Any of these cases, we will be safe and reload
-            ZNGLogVerbose(@"Reloading collection view with %llu total events.", (unsigned long long)[self.conversation.events count]);
+            SBLogVerbose(@"Reloading collection view with %llu total events.", (unsigned long long)[self.conversation.events count]);
             [self.collectionView reloadData];
         
             if (!hasDisplayedInitialData) {
@@ -736,7 +735,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     ZNGEventViewModel * viewModel = notification.object;
     
     if (![viewModel isKindOfClass:[ZNGEventViewModel class]]) {
-        ZNGLogError(@"%@ notification was received, but the attached object is %@ instead of ZNGEventViewModel.  Weird.", ZNGEventViewModelImageSizeChangedNotification, [viewModel class]);
+        SBLogError(@"%@ notification was received, but the attached object is %@ instead of ZNGEventViewModel.  Weird.", ZNGEventViewModelImageSizeChangedNotification, [viewModel class]);
         return;
     }
     
@@ -748,7 +747,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         return;
     }
     
-    ZNGLogDebug(@"Reloading message %@ due to an image size change", viewModel.event.eventId);
+    SBLogDebug(@"Reloading message %@ due to an image size change", viewModel.event.eventId);
     
     NSArray<NSIndexPath *> * visibleIndexPaths = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
     NSIndexPath * topPath = [visibleIndexPaths lastObject];
@@ -849,7 +848,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     alert.popoverPresentationController.sourceRect = popoverSource.bounds;
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
-        ZNGLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");
+        SBLogInfo(@"The user's current device does not have a camera, does not allow camera access, or the camera is currently unavailable.");
     } else {
         UIAlertAction * takePhoto = [UIAlertAction actionWithTitle:@"Take a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self showImagePickerWithCameraMode:YES];
@@ -858,7 +857,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     if (![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-        ZNGLogInfo(@"The user's photo library is currently not available or is empty.");
+        SBLogInfo(@"The user's photo library is currently not available or is empty.");
     } else {
         UIAlertAction * choosePhoto = [UIAlertAction actionWithTitle:@"Choose a photo" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             [self showImagePickerWithCameraMode:NO];
@@ -896,7 +895,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSArray<UIAlertAction *> * alertActions = [self alertActionsForDetailsButton];
     
     if ([alertActions count] == 0) {
-        ZNGLogDebug(@"No actions available for details button.");
+        SBLogDebug(@"No actions available for details button.");
         return;
     }
     
@@ -959,7 +958,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         // This is probably straight from the camera; we do not have PH asset info to go along with the image.
         [self attachImageWithInfo:info];
     } else {
-        ZNGLogError(@"Image picker did not return any any \"original image\" data.");
+        SBLogError(@"Image picker did not return any any \"original image\" data.");
         [self showImageAttachmentError];
     }
 }
@@ -988,7 +987,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     UIImage * image = info[UIImagePickerControllerOriginalImage];
     
     if (image == nil) {
-        ZNGLogError(@"The user selected an image, but no image was found in the callback info dictionary.  What are we supposed to do now?");
+        SBLogError(@"The user selected an image, but no image was found in the callback info dictionary.  What are we supposed to do now?");
         [self showImageAttachmentError];
         return;
     }
@@ -1015,7 +1014,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     NSURL * url = info[UIImagePickerControllerReferenceURL];
 
     if (url == nil) {
-        ZNGLogError(@"The user selected an image, but we did not receieve a reference URL to retrieve it.  Drat.");
+        SBLogError(@"The user selected an image, but we did not receieve a reference URL to retrieve it.  Drat.");
         [self showImageAttachmentError];
         return;
     }
@@ -1023,14 +1022,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // In the cases that we already have permission, this extra call to request permission will have no visible effect.
     [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
         if (status != PHAuthorizationStatusAuthorized) {
-            ZNGLogError(@"The user has not granted us permission to use an image from their library.  Silly human.");
+            SBLogError(@"The user has not granted us permission to use an image from their library.  Silly human.");
             return;
         }
     
         PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
         
         if (asset == nil) {
-            ZNGLogError(@"Unable to retrieve the selected image asset from disk.  Odd.");
+            SBLogError(@"Unable to retrieve the selected image asset from disk.  Odd.");
             [self showImageAttachmentError];
             return;
         }
@@ -1186,7 +1185,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 }
 - (BOOL) automaticallyScrollsToMostRecentMessage
 {
-    ZNGLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", self.stuckToBottom ? @"YES" : @"NO");
+    SBLogVerbose(@"Returning %@ for automaticallyScrollsToMostRecentMessage", self.stuckToBottom ? @"YES" : @"NO");
 
     return self.stuckToBottom;
 }
@@ -1321,7 +1320,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     // If we are nearing the top of our loaded data and more data exists, go grab it
     NSUInteger proximityToTopOfDataToTriggerMoreDataLoad = 5;
     if ((hasDisplayedInitialData) && (moreMessagesAvailableRemotely) && (!self.conversation.loading) && (indexPath.section == 0) && (indexPath.row <= proximityToTopOfDataToTriggerMoreDataLoad)) {
-        ZNGLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
+        SBLogDebug(@"Scrolled near the top of our current events.  Loading older events...");
         [self.conversation loadOlderData];
     }
 
@@ -1569,7 +1568,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 id<JSQMessageBubbleImageDataSource> bubbleImageDataSource = [self messageBubbleMediaMaskDataForEvent:event];
                 mediaCell.mediaViewMaskingImage = [bubbleImageDataSource messageBubbleImage];
             } else {
-                ZNGLogError(@"Collection view cell of type %@ does not respond to %@ as expected.", [cell class], NSStringFromSelector(@selector(setMediaViewMaskingImage:)));
+                SBLogError(@"Collection view cell of type %@ does not respond to %@ as expected.", [cell class], NSStringFromSelector(@selector(setMediaViewMaskingImage:)));
             }
         } else {
             UIColor * textColor;

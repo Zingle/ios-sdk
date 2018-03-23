@@ -12,7 +12,6 @@
 #import "ZNGLabel.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactGroup.h"
-#import "ZNGLogging.h"
 #import "ZingleSDK.h"
 #import "ZNGNewChannel.h"
 #import "ZNGAnalytics.h"
@@ -21,7 +20,7 @@
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+@import SBObjectiveCWrapper;
 
 NSString * __nonnull const ZNGContactNotificationSelfMutated = @"ZNGContactNotificationSelfMutated";
 
@@ -59,14 +58,14 @@ static NSString * const ParameterNameClosed = @"is_closed";
     [self.contactClient contactWithId:self.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
         [self updateWithNewData:contact];
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to refresh contact: %@", error);
+        SBLogError(@"Unable to refresh contact: %@", error);
     }];
 }
 
 - (void) updateWithNewData:(ZNGContact *)contact
 {
     if (![self.contactId isEqualToString:contact.contactId]) {
-        ZNGLogError(@"Contact %@ was told to update with a new contact object, but that object has an ID of %@.  Ignoring.", self.contactId, contact.contactId);
+        SBLogError(@"Contact %@ was told to update with a new contact object, but that object has an ID of %@.  Ignoring.", self.contactId, contact.contactId);
         return;
     }
     
@@ -89,7 +88,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         
         if (!allChannelsEqual) {
             self.channels = contact.channels;
-            ZNGLogDebug(@"Updating contact's channels due to one or more mutated channels.");
+            SBLogDebug(@"Updating contact's channels due to one or more mutated channels.");
         }
     }
     
@@ -449,7 +448,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
     }
     
     if (![old.contactId isEqualToString:self.contactId]) {
-        ZNGLogError(@"%@ is being checked against %@ as if they were the same contact, but they have different IDs (%@ vs. %@).", [old fullName], [self fullName], old.contactId, self.contactId);
+        SBLogError(@"%@ is being checked against %@ as if they were the same contact, but they have different IDs (%@ vs. %@).", [old fullName], [self fullName], old.contactId, self.contactId);
         return NO;
     }
     
@@ -574,7 +573,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
     [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
         
         if (contact.isConfirmed != isConfirmed) {
-            ZNGLogError(@"Our POST to set isConfirmed to %@ succeeded, but the contact returned by the server is still %@",
+            SBLogError(@"Our POST to set isConfirmed to %@ succeeded, but the contact returned by the server is still %@",
                         (isConfirmed) ? @"YES" : @"NO",
                         (contact.isConfirmed) ? @"confirmed" : @"not confirmed");
         }
@@ -582,7 +581,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         self.isConfirmed = contact.isConfirmed;
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Failed to update contact %@: %@", self.contactId, error);
+        SBLogError(@"Failed to update contact %@: %@", self.contactId, error);
 
         self.isConfirmed = oldValue;
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
@@ -611,7 +610,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
     
     // Per MOBILE-371, closing an unconfirmed conversation should confirm the conversation
     if (isClosed && !self.isConfirmed) {
-        ZNGLogInfo(@"Closing an unconfirmed contact.  This contact will be confirmed at the same time.");
+        SBLogInfo(@"Closing an unconfirmed contact.  This contact will be confirmed at the same time.");
         
         NSMutableDictionary * mutableParams = [params mutableCopy];
         mutableParams[ParameterNameConfirmed] = @YES;
@@ -625,7 +624,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
     [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
         
         if (contact.isClosed != isClosed) {
-            ZNGLogError(@"Our POST to set isClosed to %@ succeeded, but the contact returned by the server is still %@",
+            SBLogError(@"Our POST to set isClosed to %@ succeeded, but the contact returned by the server is still %@",
                         (isClosed) ? @"YES" : @"NO",
                         (contact.isClosed) ? @"closed" : @"open");
         }
@@ -635,7 +634,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
         
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to update %@'s closed status: %@", [self fullName], error);
+        SBLogError(@"Unable to update %@'s closed status: %@", [self fullName], error);
         
         self.isClosed = oldClosed;
         self.isConfirmed = oldConfirmed;
@@ -646,7 +645,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
 - (void) assignToTeamWithId:(NSString *)teamId
 {
     if ([teamId length] == 0) {
-        ZNGLogError(@"%s called with no team ID.  Ignoring.", __PRETTY_FUNCTION__);
+        SBLogError(@"%s called with no team ID.  Ignoring.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -661,7 +660,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         [self _atomicallySetAssignedTeamId:contact.assignedToTeamId andUserId:contact.assignedToUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Assigning contact %@ to team %@ failed: %@", [self fullName], teamId, error);
+        SBLogError(@"Assigning contact %@ to team %@ failed: %@", [self fullName], teamId, error);
         
         [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
@@ -671,7 +670,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
 - (void) assignToUserWithId:(NSString *)userId
 {
     if ([userId length] == 0) {
-        ZNGLogError(@"%s called with no user ID.  Ignoring.", __PRETTY_FUNCTION__);
+        SBLogError(@"%s called with no user ID.  Ignoring.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -686,7 +685,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         [self _atomicallySetAssignedTeamId:contact.assignedToTeamId andUserId:contact.assignedToUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Assigning contact %@ to user %@ failed: %@", [self fullName], userId, error);
+        SBLogError(@"Assigning contact %@ to user %@ failed: %@", [self fullName], userId, error);
         
         [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
@@ -702,7 +701,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
     [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
 
     [self.contactClient unassignContactWithId:self.contactId success:nil failure:^(ZNGError *error) {
-        ZNGLogError(@"Unassigning contact %@ failed: %@", [self fullName], error);
+        SBLogError(@"Unassigning contact %@ failed: %@", [self fullName], error);
         
         [self _atomicallySetAssignedTeamId:oldTeamId andUserId:oldUserId];
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];

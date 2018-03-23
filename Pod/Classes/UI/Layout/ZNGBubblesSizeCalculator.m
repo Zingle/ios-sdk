@@ -25,7 +25,8 @@
 #import "ZNGMessage.h"
 #import "ZNGMessageData.h"
 
-#import "ZNGLogging.h"
+@import SBObjectiveCWrapper;
+
 
 @interface ZNGBubblesSizeCalculator ()
 
@@ -38,8 +39,6 @@
 @property (assign, nonatomic) CGFloat layoutWidthForFixedWidthBubbles;
 
 @end
-
-static const int zngLogLevel = ZNGLogLevelWarning;
 
 
 @implementation ZNGBubblesSizeCalculator
@@ -113,7 +112,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * cacheID = nil;
     
     if (![viewModel isKindOfClass:[ZNGEventViewModel class]]) {
-        ZNGLogError(@"Non-ZNGEventViewModel object (%@) used as message data for a message bubble.  This is unexpected.", NSStringFromClass([messageData class]));
+        SBLogError(@"Non-ZNGEventViewModel object (%@) used as message data for a message bubble.  This is unexpected.", NSStringFromClass([messageData class]));
         return CGSizeZero;
     }
     
@@ -124,12 +123,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         NSValue * cachedSize = [cache objectForKey:cacheID];
         
         if (cachedSize != nil) {
-            ZNGLogVerbose(@"Using cached size value");
+            SBLogVerbose(@"Using cached size value");
             return [cachedSize CGSizeValue];
         }
     }
     
-    ZNGLogVerbose(@"No cached size value could be found.  Calculating message size.");
+    SBLogVerbose(@"No cached size value could be found.  Calculating message size.");
     
     CGSize avatarSize = [self jsq_avatarSizeForMessageData:viewModel withLayout:layout];
     

@@ -11,7 +11,8 @@
 #import "UIColor+ZingleSDK.h"
 #import "ZNGChannel.h"
 #import "UIFont+Lato.h"
-#import "ZNGLogging.h"
+
+@import SBObjectiveCWrapper;
 
 @implementation ZNGServiceConversationInputToolbar
 {

@@ -7,10 +7,9 @@
 //
 
 #import "ZNGConversationTextView.h"
-#import "ZNGLogging.h"
 #import <objc/runtime.h>
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 // Private method to configure views because JSQ is a jerk
 @interface JSQMessagesComposerTextView()
@@ -106,7 +105,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         }
     }
     
-    ZNGLogVerbose(@"Returning %@ for %@ %@", canPerform ? @"YES" : @"NO", NSStringFromSelector(_cmd), NSStringFromSelector(action));
+    SBLogVerbose(@"Returning %@ for %@ %@", canPerform ? @"YES" : @"NO", NSStringFromSelector(_cmd), NSStringFromSelector(action));
     
     return canPerform;
 }

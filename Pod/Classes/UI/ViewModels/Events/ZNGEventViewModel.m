@@ -8,12 +8,10 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGEvent.h"
 #import "ZNGImageSizeCache.h"
-#import "ZNGLogging.h" 
 
+@import SBObjectiveCWrapper;
 @import SDWebImage;
 @import FLAnimatedImage;
-
-static const int zngLogLevel = ZNGLogLevelWarning;
 
 NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewModelImageSizeChangedNotification";
 
@@ -52,7 +50,7 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     NSString * extension = [[[self attachmentName] pathExtension] lowercaseString];
 
     if (![[self recognizedAttachmentFileExtensions] containsObject:extension]) {
-        ZNGLogInfo(@"Unsupported file extension (%@) for attachment: %@", extension, attachmentPath);
+        SBLogInfo(@"Unsupported file extension (%@) for attachment: %@", extension, attachmentPath);
         return NO;
     }
     
@@ -102,7 +100,7 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     
     // Are we within bounds for normal message attachments?
     if (self.index >= [self.event.message.attachments count]) {
-        ZNGLogError(@"Our %@ index is %llu, but we only have %llu image attachments and %llu outgoing image attachments.  This is odd.", [self class], (unsigned long long)self.index, (unsigned long long)[self.event.message.attachments count], (unsigned long long)[self.event.message.outgoingImageAttachments count]);
+        SBLogError(@"Our %@ index is %llu, but we only have %llu image attachments and %llu outgoing image attachments.  This is odd.", [self class], (unsigned long long)self.index, (unsigned long long)[self.event.message.attachments count], (unsigned long long)[self.event.message.outgoingImageAttachments count]);
         
         return nil;
     }
@@ -210,7 +208,7 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
                 [[NSNotificationCenter defaultCenter] postNotificationName:ZNGEventViewModelImageSizeChangedNotification object:self];
             }
         } else if (imageURL != nil) {
-            ZNGLogInfo(@"Setting event view model image view to %@ failed: %@", imageURL, error);
+            SBLogInfo(@"Setting event view model image view to %@ failed: %@", imageURL, error);
             self.attachmentStatus = ZNGEventViewModelAttachmentStatusFailed;
             
             // Ensure that the content mode is still center and the placeholder image is now a failed download image

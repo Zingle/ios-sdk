@@ -8,7 +8,6 @@
 
 #import "ZingleContactSession.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
-#import "ZNGLogging.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactServiceClient.h"
 #import "ZNGEventClient.h"
@@ -20,7 +19,7 @@
 #import "ZNGContactToServiceViewController.h"
 #import "ZNGSocketClient.h"
 
-static const int zngLogLevel = ZNGLogLevelDebug;
+@import SBObjectiveCWrapper;
 
 // Override our read only array properties to get free KVO compliant setters
 @interface ZingleContactSession ()
@@ -90,7 +89,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         }
     } failure:^(ZNGError *error) {
         self.mostRecentError = error;
-        ZNGLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", self.channelValue, self.channelTypeID);
+        SBLogInfo(@"Unable to find a contact service match for value \"%@\" of type \"%@\"", self.channelValue, self.channelTypeID);
     }];
 }
 
@@ -127,7 +126,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     BOOL shouldRefresh = NO;
     
     if (serviceUpdateTime == nil) {
-        ZNGLogError(@"Our service object is set, but we do not have a timestamp of our last update.  Refreshing.");
+        SBLogError(@"Our service object is set, but we do not have a timestamp of our last update.  Refreshing.");
         shouldRefresh = YES;
     } else {
         NSTimeInterval timeSinceUpdate = [[NSDate date] timeIntervalSinceDate:serviceUpdateTime];
@@ -161,7 +160,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     ZNGContactService * selectedContactService = contactService;
     
     if ((![self.availableContactServices containsObject:selectedContactService]) && (selectedContactService != nil)) {
-        ZNGLogError(@"Our %ld available contact services do not include the selection of %@", (unsigned long)[self.availableContactServices count], contactService);
+        SBLogError(@"Our %ld available contact services do not include the selection of %@", (unsigned long)[self.availableContactServices count], contactService);
         selectedContactService = nil;
     }
     
@@ -200,7 +199,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
                         self.completion = nil;
                     }
                 } else {
-                    ZNGLogWarn(@"Initialization failed.  Unable to create conversation.");
+                    SBLogWarning(@"Initialization failed.  Unable to create conversation.");
                     
                     if (self.completion != nil) {
                         self.completion(nil, nil, self.mostRecentError);
@@ -220,7 +219,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 - (void) setConversationForContactService
 {
     if (self.contact.contactId != nil) {
-        ZNGLogDebug(@"Creating conversation object.");
+        SBLogDebug(@"Creating conversation object.");
         self.conversation = [[ZNGConversationContactToService alloc] initFromContactChannelValue:self.channelValue
                                                                                    channelTypeId:self.channelTypeID
                                                                                        contactId:self.contact.contactId
@@ -263,7 +262,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.mostRecentError = error;
-            ZNGLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", self->_channelValue, self->_channelTypeID);
+            SBLogError(@"Unable to find nor create contact for value \"%@\" of channel type ID \"%@\".  Request failed.", self->_channelValue, self->_channelTypeID);
             dispatch_semaphore_signal(semaphore);
         });
     }];
@@ -273,7 +272,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     if (timedOut) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ZNGLogError(@"Timed out waiting for findOrcreateContactWithChannelTypeID:");
+            SBLogError(@"Timed out waiting for findOrcreateContactWithChannelTypeID:");
             ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for find or create contact request response semaphore" }];
             self.mostRecentError = error;
         });
@@ -283,7 +282,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 - (void) synchronouslyRetrieveServiceObject
 {
     if ([self.contactService.serviceId length] == 0) {
-        ZNGLogWarn(@"retrieveServiceObject was called, but we do not have a service ID in our %@ contact service", self.contactService.serviceDisplayName);
+        SBLogWarning(@"retrieveServiceObject was called, but we do not have a service ID in our %@ contact service", self.contactService.serviceDisplayName);
         return;
     }
     
@@ -298,7 +297,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     } failure:^(ZNGError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.mostRecentError = error;
-            ZNGLogError(@"Unable to retrieve %@ service: %@", self.contactService.serviceId, error);
+            SBLogError(@"Unable to retrieve %@ service: %@", self.contactService.serviceId, error);
             dispatch_semaphore_signal(semaphore);
         });
     }];
@@ -308,7 +307,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     if (timedOut) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ZNGLogError(@"Timed out waiting for GET service object response");
+            SBLogError(@"Timed out waiting for GET service object response");
             ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for a service object GET response" }];
             self.mostRecentError = error;
         });
@@ -344,7 +343,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     }
     
     if ([defaultCustomFields count] < defaultCount) {
-        ZNGLogWarn(@"%llu default custom field names were listed, but only %llu were found in the service object.", (unsigned long long)defaultCount, (unsigned long long)[defaultCustomFields count]);
+        SBLogWarning(@"%llu default custom field names were listed, but only %llu were found in the service object.", (unsigned long long)defaultCount, (unsigned long long)[defaultCustomFields count]);
     }
     
     // Build our array of custom field values for all of the missing custom fields
@@ -371,7 +370,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization *userAuthorization, ZNGStatus *status) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (userAuthorization == nil) {
-                ZNGLogError(@"Server did not respond with a user authorization object.");
+                SBLogError(@"Server did not respond with a user authorization object.");
                 ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Server did not respond with a user authorization object" }];
                 self.mostRecentError = error;
                 dispatch_semaphore_signal(semaphore);
@@ -381,7 +380,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
             if ([userAuthorization.authorizationClass isEqualToString:@"contact"]) {
                 [self.sessionManager.requestSerializer setValue:self.contact.contactId forHTTPHeaderField:@"x-zingle-contact-id"];
             } else {
-                ZNGLogWarn(@"User is of type \"%@,\" not contact.  Is the wrong type of session object being used?", userAuthorization.authorizationClass);
+                SBLogWarning(@"User is of type \"%@,\" not contact.  Is the wrong type of session object being used?", userAuthorization.authorizationClass);
                 [self.sessionManager.requestSerializer setValue:nil forHTTPHeaderField:@"x-zingle-contact-id"];
             }
         
@@ -391,7 +390,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     } failure:^(ZNGError *error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             self.mostRecentError = error;
-            ZNGLogError(@"Unable to check user authorization status: %@", error);
+            SBLogError(@"Unable to check user authorization status: %@", error);
             dispatch_semaphore_signal(semaphore);
         });
     }];
@@ -401,7 +400,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
     
     if (timedOut) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            ZNGLogError(@"Timed out waiting for user auth header");
+            SBLogError(@"Timed out waiting for user auth header");
             ZNGError * error = [ZNGError errorWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey: @"Timed out waiting for user authorization response semaphore" }];
             self.mostRecentError = error;
         });
@@ -411,7 +410,7 @@ static const int zngLogLevel = ZNGLogLevelDebug;
 - (void) registerForPushNotifications
 {
     if (self.contactService.serviceId == nil) {
-        ZNGLogWarn(@"Unable to register for push notifications with no selected contact service.");
+        SBLogWarning(@"Unable to register for push notifications with no selected contact service.");
         return;
     }
     

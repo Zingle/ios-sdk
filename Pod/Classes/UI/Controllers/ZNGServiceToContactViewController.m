@@ -538,25 +538,28 @@ enum ZNGConversationSections
 
 - (NSAttributedString *) attributedTextForAutomationBanner:(NSString *)description
 {
-    NSRange inAutomationRange = [description rangeOfString:@"in automation:" options:NSCaseInsensitiveSearch];
-    
-    if ((description == nil) || (inAutomationRange.location == NSNotFound)) {
-        // This is not an 'in automation' lock string
+    if ([description length] == 0) {
         return nil;
+    }
+    
+    NSRange inZingRange = [description rangeOfString:@"in zing:" options:NSCaseInsensitiveSearch];
+    
+    if (inZingRange.location == NSNotFound) {
+        inZingRange = [description rangeOfString:@"in automation:" options:NSCaseInsensitiveSearch];
     }
     
     NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc] initWithString:description];
     
-    NSUInteger firstBoldIndex = inAutomationRange.location + inAutomationRange.length;
-    NSRange rangeToBoldify;
-    
-    // Bold the automation name
-    if (firstBoldIndex < [description length]) {
-        rangeToBoldify = NSMakeRange(firstBoldIndex, [description length] - firstBoldIndex);
+    // Bold the automation name if possible
+    if (inZingRange.location != NSNotFound) {
+        NSUInteger firstBoldIndex = inZingRange.location + inZingRange.length;
         
-        UIFont * normalFont = self.automationLabel.font ?: [UIFont systemFontOfSize:15.0];
-        UIFont * boldFont = [UIFont latoBoldFontOfSize:normalFont.pointSize];
-        [attributedString addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
+        if (firstBoldIndex < [description length]) {
+            NSRange rangeToBoldify = NSMakeRange(firstBoldIndex, [description length] - firstBoldIndex);
+            UIFont * normalFont = self.automationLabel.font ?: [UIFont systemFontOfSize:15.0];
+            UIFont * boldFont = [UIFont latoBoldFontOfSize:normalFont.pointSize];
+            [attributedString addAttribute:NSFontAttributeName value:boldFont range:rangeToBoldify];
+        }
     }
     
     return attributedString;

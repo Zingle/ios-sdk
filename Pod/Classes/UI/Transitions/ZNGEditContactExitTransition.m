@@ -10,12 +10,11 @@
 #import "ZNGContactEditViewController.h"
 #import "UIButton+VisualCopy.h"
 #import "ZNGServiceToContactViewController.h"
-#import "ZNGLogging.h"
 #import "NSAttributedString+GroupingSubstrings.h"
 #import "UILabel+SubstringRect.h"
 #import "UIViewController+ChildViewControllerOfType.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGEditContactExitTransition
 
@@ -92,7 +91,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             conversationTitleLabel.attributedText = mutableName;
         }
     } else {
-        ZNGLogWarn(@"Unable to find title label in conversation view when exiting contact edit view.  The name will not animate.");
+        SBLogWarning(@"Unable to find title label in conversation view when exiting contact edit view.  The name will not animate.");
     }
     
     // Remove the actual from view

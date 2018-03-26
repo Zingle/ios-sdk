@@ -7,7 +7,6 @@
 //
 
 #import "ZNGSocketClient.h"
-#import "ZNGLogging.h"
 #import "ZingleSession.h"
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import "NSURL+Zingle.h"
@@ -16,13 +15,9 @@
 #import "ZingleAccountSession.h"
 #import "ZNGUserAuthorization.h"
 #import "ZNGInboxStatistician.h"
-@import SocketIO;
 
-#if DEBUG
-static const int zngLogLevel = ZNGLogLevelDebug;
-#else
-static const int zngLogLevel = ZNGLogLevelWarning;
-#endif
+@import SBObjectiveCWrapper;
+@import SocketIO;
 
 @interface ZNGSocketClient()
 @property (nonatomic, assign) BOOL connected;
@@ -61,7 +56,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         NSString * zinglePrefix = [session.sessionManager.baseURL zingleServerPrefix];
         
         if (zinglePrefix == nil) {
-            ZNGLogWarn(@"ZingleSession's base URL of %@ does not appear to be a Zingle URL.  Using production Zingle URL.", session.sessionManager.baseURL);
+            SBLogWarning(@"ZingleSession's base URL of %@ does not appear to be a Zingle URL.  Using production Zingle URL.", session.sessionManager.baseURL);
         }
         
         if ([zinglePrefix length] > 0) {
@@ -72,7 +67,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             nodePath = @"https://socket.zingle.me/";
         }
         
-        ZNGLogDebug(@"Auth path is %@, node path is %@", authPath, nodePath);
+        SBLogDebug(@"Auth path is %@, node path is %@", authPath, nodePath);
     }
     
     return self;
@@ -103,10 +98,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) _authenticateAndConnect
 {
-    ZNGLogVerbose(@"Request session cookie through a POST...");
+    SBLogVerbose(@"Request session cookie through a POST...");
     
     if (initializingSession) {
-        ZNGLogDebug(@"Already starting connection.  Ignoring call to %s", __func__);
+        SBLogDebug(@"Already starting connection.  Ignoring call to %s", __func__);
         return;
     }
     
@@ -124,7 +119,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] removeCookiesSinceDate:[NSDate dateWithTimeIntervalSince1970:0.0]];
     
     [session POST:@"auth" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        ZNGLogDebug(@"Auth request succeeded.");
+        SBLogDebug(@"Auth request succeeded.");
         self->authSucceeded = YES;
         [self _connectSocket];
         self->initializingSession = NO;
@@ -132,11 +127,11 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         self->initializingSession = NO;
         
         if (error != nil) {
-            ZNGLogWarn(@"Error sending request to auth URL: %@", error.localizedDescription);
+            SBLogWarning(@"Error sending request to auth URL: %@", error.localizedDescription);
             return;
         }
         
-        ZNGLogWarn(@"Request to auth at %@ failued for an unknown reason.", self->authPath);
+        SBLogWarning(@"Request to auth at %@ failued for an unknown reason.", self->authPath);
     }];
     
     [self _uncoverNumericIdForCurrentService];
@@ -147,14 +142,14 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) _uncoverNumericIdForCurrentService
 {
     if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
-        ZNGLogInfo(@"Neglecting to find service numeric ID because we do not have a ZingleAccountSession.");
+        SBLogInfo(@"Neglecting to find service numeric ID because we do not have a ZingleAccountSession.");
         return;
     }
 
     ZingleAccountSession * session = (ZingleAccountSession *)self.session;
     
     if ([session.service.serviceId length] == 0) {
-        ZNGLogWarn(@"Neglecting to find service numeric ID because there is no UUID for the current service.");
+        SBLogWarning(@"Neglecting to find service numeric ID because there is no UUID for the current service.");
         return;
     }
     
@@ -168,21 +163,19 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             // We found an ID!
             self->currentServiceNumericId = [responseObject[@"id"] intValue];
         } else {
-            ZNGLogWarn(@"Unable to find service numeric ID in v2 API response.");
+            SBLogWarning(@"Unable to find service numeric ID in v2 API response.");
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        ZNGLogError(@"Error attempting to fetch service data from v2 API: %@", error);
+        SBLogError(@"Error attempting to fetch service data from v2 API: %@", error);
     }];
 }
 
 - (void) _connectSocket
 {
     NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:authPath]];
-    ZNGLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
+    SBLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
     
-    NSNumber * shouldLog = (zngLogLevel & DDLogFlagVerbose) ? @YES : @NO;
-    
-    socketManager = [[SocketManager alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : shouldLog }];
+    socketManager = [[SocketManager alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : @NO }];
     SocketIOClient * socketClient = [socketManager defaultSocket];
     
     __weak ZNGSocketClient * weakSelf = self;
@@ -266,7 +259,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if (![self connected]) {
         // We're not yet connected.  We will subscribe to an active conversation as soon as we connect.
-        ZNGLogVerbose(@"%@ was called, but we are not yet connected.  Delaying subscription until a successful connection.", NSStringFromSelector(_cmd));
+        SBLogVerbose(@"%@ was called, but we are not yet connected.  Delaying subscription until a successful connection.", NSStringFromSelector(_cmd));
         return;
     }
     
@@ -279,10 +272,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         ZNGConversationContactToService * serviceConversation = (ZNGConversationContactToService *)conversation;
         feedId = serviceConversation.contactService.serviceId;
     } else if (conversation != nil) {
-        ZNGLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
+        SBLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
     }
     
-    ZNGLogDebug(@"Setting active feed to %@", feedId);
+    SBLogDebug(@"Setting active feed to %@", feedId);
     [[socketManager defaultSocket] emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
 }
 
@@ -295,12 +288,12 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) userDidType:(NSString *)input
 {
     if ([input length] == 0) {
-        ZNGLogInfo(@"%s was called with no user input.  No message is sent to socket for the user clearing input, so this is ignored.", __PRETTY_FUNCTION__);
+        SBLogInfo(@"%s was called with no user input.  No message is sent to socket for the user clearing input, so this is ignored.", __PRETTY_FUNCTION__);
         return;
     }
     
     if (![self.activeConversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
-        ZNGLogWarn(@"%@ was called, but the current conversation is a %@.  Ignoring.", NSStringFromSelector(_cmd), [self.activeConversation class]);
+        SBLogWarning(@"%@ was called, but the current conversation is a %@.  Ignoring.", NSStringFromSelector(_cmd), [self.activeConversation class]);
         return;
     }
     
@@ -322,7 +315,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     payload[@"type"] = @"message";
     payload[@"user"] = user;
     
-    ZNGLogInfo(@"Emitting %@ for feed %@", event, conversation.contact.contactId);
+    SBLogInfo(@"Emitting %@ for feed %@", event, conversation.contact.contactId);
     [[socketManager defaultSocket] emit:event with:@[payload]];
 }
 
@@ -334,8 +327,8 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 #pragma mark - Sockety goodness
 - (void) socketEvent:(SocketAnyEvent *)event
 {
-    ZNGLogDebug(@"%p received socket event of type %@", self, event.event);
-    ZNGLogVerbose(@"%@", event);
+    SBLogDebug(@"%p received socket event of type %@", self, event.event);
+    SBLogVerbose(@"%@", event);
 }
 
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
@@ -345,7 +338,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     authRetryTimer = nil;
     self.connected = YES;
     
-    ZNGLogInfo(@"Web socket connected.");
+    SBLogInfo(@"Web socket connected.");
     [[socketManager defaultSocket] emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
 }
 
@@ -356,7 +349,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
     }
     
-    ZNGLogDebug(@"Node controller bind succeeded.");
+    SBLogDebug(@"Node controller bind succeeded.");
     if (self.activeConversation != nil) {
         [self subscribeForFeedUpdatesForConversation:self.activeConversation];
     }
@@ -366,7 +359,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 //  (that does not exist in the API and should also not be used, even by socket, honestly.)
 - (void) receivedEventListData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
-    ZNGLogDebug(@"Received event data.");
+    SBLogDebug(@"Received event data.");
     
     NSDictionary * eventData = [data firstObject];
     NSNumber * feedId = eventData[@"requestFeedId"];
@@ -384,10 +377,10 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     if ([feedId length] > 0) {
         NSDictionary * userInfo = @{ZingleConversationNotificationContactIdKey: feedId};
-        ZNGLogDebug(@"Posting %@ notification for %@", ZingleConversationDataArrivedNotification, feedId);
+        SBLogDebug(@"Posting %@ notification for %@", ZingleConversationDataArrivedNotification, feedId);
         [[NSNotificationCenter defaultCenter] postNotificationName:ZingleConversationDataArrivedNotification object:nil userInfo:userInfo];
     } else {
-        ZNGLogWarn(@"feedUpdated event arrived without a uuid: %@", data);
+        SBLogWarning(@"feedUpdated event arrived without a uuid: %@", data);
     }
 }
 
@@ -448,7 +441,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) socketDidEncounterErrorWithData:(NSArray *)data
 {
-    ZNGLogWarn(@"Web socket did receive error: %@", data);
+    SBLogWarning(@"Web socket did receive error: %@", data);
     
     if ([[data firstObject] isKindOfClass:[NSString class]]) {
         NSString * errorString = [data firstObject];
@@ -490,7 +483,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) socketDidDisconnect
 {
-    ZNGLogInfo(@"Web socket disconnected");
+    SBLogInfo(@"Web socket disconnected");
     self.connected = NO;
 }
 
@@ -506,7 +499,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     BOOL isWorkflowLock = [info[@"lockedByType"] isEqual:@"Workflow"];
     
     if (!isWorkflowLock) {
-        ZNGLogWarn(@"Unrecognized feedLocked type: %@", info[@"lockedByType"]);
+        SBLogWarning(@"Unrecognized feedLocked type: %@", info[@"lockedByType"]);
         return;
     }
     
@@ -518,7 +511,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     BOOL lockedByMeMyselfAndI = (([meId length] > 0) && ([lockedByUserID isEqualToString:meId]));
     
     if (!lockedByMeMyselfAndI) {
-        ZNGLogInfo(@"Conversation was locked: %@", description);
+        SBLogInfo(@"Conversation was locked: %@", description);
         self.activeConversation.lockedDescription = description;
     }
 }
@@ -535,7 +528,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     BOOL isNote = [data[@"type"] isEqualToString:@"note"];
     
     if (userData[@"id"] == nil) {
-        ZNGLogWarn(@"Received a userIsReplying notification with no user ID.  Ignoring: %@", data);
+        SBLogWarning(@"Received a userIsReplying notification with no user ID.  Ignoring: %@", data);
         return;
     }
     
@@ -545,7 +538,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     // The socket data currently uses sequential IDs instead of our UUIDs.  This means that we cannot check vs. our own ID.
     // Should we check vs. our email/username?
     if ((self.ignoreCurrentUserTypingIndicator) && ([user.email isEqualToString:accountSession.userAuthorization.email])) {
-        ZNGLogDebug(@"Received a userIsReplying notification for our current user.  Ignoring.");
+        SBLogDebug(@"Received a userIsReplying notification for our current user.  Ignoring.");
         return;
     }
     
@@ -554,7 +547,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 
 - (void) feedUnlocked:(NSArray *)data
 {
-    ZNGLogInfo(@"Conversation was unlocked");
+    SBLogInfo(@"Conversation was unlocked");
     self.activeConversation.lockedDescription = nil;
 }
 

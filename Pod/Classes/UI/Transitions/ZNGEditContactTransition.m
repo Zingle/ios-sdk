@@ -6,14 +6,13 @@
 //
 
 #import "ZNGEditContactTransition.h"
-#import "ZNGLogging.h"
 #import "ZNGContactEditViewController.h"
 #import "ZNGServiceToContactViewController.h"
 #import "UIButton+VisualCopy.h"
 #import "UILabel+SubstringRect.h"
 #import "UIViewController+ChildViewControllerOfType.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGEditContactTransition
 
@@ -133,7 +132,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             }
         }
     } else {
-        ZNGLogWarn(@"Unable to find conversation view's title UILabel to animate.  Sad.");
+        SBLogWarning(@"Unable to find conversation view's title UILabel to animate.  Sad.");
     }
 
     // Hide the title background that we have copied and will animate into place

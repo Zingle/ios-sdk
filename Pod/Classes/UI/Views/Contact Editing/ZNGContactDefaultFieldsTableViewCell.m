@@ -14,16 +14,14 @@
 #import "ZNGContact.h"
 #import "ZNGInitialsAvatar.h"
 #import "UIFont+Lato.h"
-#import "ZNGLogging.h"
 #import "ZNGContactFieldValue.h"
 #import "ZNGContactField.h"
 #import "ZNGFieldOption.h"
 #import "ZNGGooglyEye.h"
 #import "ZNGAnalytics.h"
 
+@import SBObjectiveCWrapper;
 @import SDWebImage;
-
-static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGContactDefaultFieldsTableViewCell
 {
@@ -195,7 +193,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     if (row >= [self.titleFieldValue.customField.options count]) {
-        ZNGLogError(@"Out of bounds displaying a title option (%llu available)", (unsigned long long)[self.titleFieldValue.customField.options count]);
+        SBLogError(@"Out of bounds displaying a title option (%llu available)", (unsigned long long)[self.titleFieldValue.customField.options count]);
         return nil;
     }
     
@@ -206,7 +204,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
     if (row >= [self.titleFieldValue.customField.options count]) {
-        ZNGLogError(@"Out of bounds selecting a title option (%llu available)", (unsigned long long)[self.titleFieldValue.customField.options count]);
+        SBLogError(@"Out of bounds selecting a title option (%llu available)", (unsigned long long)[self.titleFieldValue.customField.options count]);
         return;
     }
     
@@ -222,7 +220,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     switch (gestureRecognizer.state) {
         case UIGestureRecognizerStateBegan:
             if ((leftEye.superview != nil) || (rightEye.superview != nil)) {
-                ZNGLogInfo(@"A googly eye already seems to exist.  Declining to make another.");
+                SBLogInfo(@"A googly eye already seems to exist.  Declining to make another.");
                 return;
             }
             

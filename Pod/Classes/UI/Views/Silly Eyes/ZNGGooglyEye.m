@@ -7,11 +7,9 @@
 
 #import "ZNGGooglyEye.h"
 #import "ZNGGooglyEyePupil.h"
-#import "ZNGLogging.h"
-
-static const int zngLogLevel = ZNGLogLevelInfo;
 
 @import CoreMotion;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGGooglyEye
 {
@@ -110,7 +108,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
             [weakSelf handleMotionData:motion];
         }];
     } else {
-        ZNGLogDebug(@"Device motion is not available.  Physics will not apply to eyeballs :(");
+        SBLogDebug(@"Device motion is not available.  Physics will not apply to eyeballs :(");
     }
 }
 
@@ -139,12 +137,12 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     }
     
     CGVector gravityAcceleration = [self orientationRelativeAccelerationFromDeviceRelativeAcceleration:data.gravity];
-    ZNGLogVerbose(@"Gravity is (%.2f, %.2f)", (float)gravityAcceleration.dx, (float)gravityAcceleration.dy);
+    SBLogVerbose(@"Gravity is (%.2f, %.2f)", (float)gravityAcceleration.dx, (float)gravityAcceleration.dy);
     gravity.gravityDirection = gravityAcceleration;
     
     CGVector pushDirection = [self orientationRelativeAccelerationFromDeviceRelativeAcceleration:data.userAcceleration];
     CGFloat magnitude = sqrt(pow(data.userAcceleration.x, 2) + pow(data.userAcceleration.y, 2));
-    ZNGLogVerbose(@"User acceleration is %.2f in the direction (%.2f, %.2f)", (float)magnitude, (float)pushDirection.dx, (float)pushDirection.dy);
+    SBLogVerbose(@"User acceleration is %.2f in the direction (%.2f, %.2f)", (float)magnitude, (float)pushDirection.dx, (float)pushDirection.dy);
     userForce.pushDirection = pushDirection;
     userForce.magnitude = magnitude * 0.25;  // Reduce magnitude a tiny bit from the raw value
 }

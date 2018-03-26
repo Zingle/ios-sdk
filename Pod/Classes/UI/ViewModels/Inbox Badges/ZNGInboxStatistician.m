@@ -7,11 +7,11 @@
 
 #import "ZNGInboxStatistician.h"
 #import "ZNGTeamV2.h"
-#import "ZNGLogging.h"
 #import "ZNGUser.h"
 #import "ZNGInboxStatsEntry.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
+
 NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatisticianDataChangedNotification";
 
 
@@ -40,7 +40,7 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
 #pragma mark - Writing
 - (void) updateWithSocketData:(NSArray<NSDictionary *> *)socketData
 {
-    ZNGLogVerbose(@"Updating inbox stats with socket data: %@", socketData);
+    SBLogVerbose(@"Updating inbox stats with socket data: %@", socketData);
     
     // Record old values to determine if things have changed
     ZNGInboxStatsEntry * oldUnassignedStats = unassignedStatsEntry;
@@ -119,7 +119,7 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
 - (ZNGInboxStatsEntry *) statsForTeam:(ZNGTeam *)team
 {
     if ([team.teamId length] == 0) {
-        ZNGLogWarn(@"%s called with a team with no UUID.  Returning 0.", __PRETTY_FUNCTION__);
+        SBLogWarning(@"%s called with a team with no UUID.  Returning 0.", __PRETTY_FUNCTION__);
         return nil;
     }
     

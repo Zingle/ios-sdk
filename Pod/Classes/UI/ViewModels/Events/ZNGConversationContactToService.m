@@ -8,10 +8,9 @@
 
 #import "ZNGConversationContactToService.h"
 #import "ZNGContactService.h"
-#import "ZNGLogging.h"
 #import "ZNGEvent.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGConversationContactToService
 
@@ -95,7 +94,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 - (void) deleteMessage:(ZNGMessage *)message
 {
     if (message == nil) {
-        ZNGLogError(@"Tried to delete a nil message.");
+        SBLogError(@"Tried to delete a nil message.");
         return;
     }
     
@@ -114,7 +113,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             [mutableEvents removeObjectAtIndex:correspondingEventIndex];
         }
     } failure:^(ZNGError *error) {
-        ZNGLogWarn(@"Unable to delete message %@: %@", message.messageId, error);
+        SBLogWarning(@"Unable to delete message %@: %@", message.messageId, error);
     }];
 }
 
@@ -144,7 +143,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
             }
         }
     } failure:^(ZNGError *error) {
-        ZNGLogWarn(@"Unable to delete messages for contact ID %@: %@", self->contactId, error);
+        SBLogWarning(@"Unable to delete messages for contact ID %@: %@", self->contactId, error);
     }];
 }
 

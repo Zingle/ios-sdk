@@ -14,7 +14,6 @@
 #import "UIColor+ZingleSDK.h"
 #import "ZNGContactClient.h"
 #import "ZNGContactField.h"
-#import "ZNGLogging.h"
 #import "ZNGConversationDetailedEvents.h"
 #import "ZNGEventCollectionViewCell.h"
 #import "ZNGConversationFlowLayout.h"
@@ -23,7 +22,6 @@
 #import "ZNGContactEditViewController.h"
 #import "ZNGAnalytics.h"
 #import "ZingleAccountSession.h"
-#import "ZNGLogging.h"
 #import "ZNGForwardingViewController.h"
 #import "ZNGInitialsAvatarCache.h"
 #import "ZNGEventViewModel.h"
@@ -38,9 +36,8 @@
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
 
+@import SBObjectiveCWrapper;
 @import SDWebImage;
-
-static const int zngLogLevel = ZNGLogLevelInfo;
 
 static NSString * const AssignmentUITypeActionMenu = @"action menu";
 
@@ -283,7 +280,7 @@ enum ZNGConversationSections
     viewHasAppeared = YES;
     
     if ((self.stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
-        ZNGLogInfo(@"Confirming contact due to conversation view appearance.");
+        SBLogInfo(@"Confirming contact due to conversation view appearance.");
         [self.conversation.contact confirm];
     }
     
@@ -400,7 +397,7 @@ enum ZNGConversationSections
     
     if (topStatusChanged) {
         BOOL automationTextExists = ([topString length] > 0);
-        ZNGLogDebug(@"Top automation banner is %@", automationTextExists ? @"appearing" : @"disappearing");
+        SBLogDebug(@"Top automation banner is %@", automationTextExists ? @"appearing" : @"disappearing");
         
         [self updateInputStatus];
         
@@ -580,7 +577,7 @@ enum ZNGConversationSections
         
         // Mark the conversation read (confirmed) if we are just scrolling down
         if ((stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
-            ZNGLogInfo(@"Marking conversation as read due to scroll to bottom.");
+            SBLogInfo(@"Marking conversation as read due to scroll to bottom.");
             [self.conversation.contact confirm];
         }
     }
@@ -592,7 +589,7 @@ enum ZNGConversationSections
     
     // Do we need to mark this conversation as read?
     if ((self.stuckToBottom) && (!conversation.contact.isConfirmed)) {
-        ZNGLogInfo(@"Marking conversation as read on load.");
+        SBLogInfo(@"Marking conversation as read on load.");
         [conversation.contact confirm];
     }
 }
@@ -745,7 +742,7 @@ enum ZNGConversationSections
     NSTimeInterval particleLifetime = 0.75;
     
     if (duration < particleLifetime) {
-        ZNGLogError(@"Particle lifetime of %.2f seconds is too long to exist within the %.2f second duration.", particleLifetime, duration);
+        SBLogError(@"Particle lifetime of %.2f seconds is too long to exist within the %.2f second duration.", particleLifetime, duration);
         return;
     }
     
@@ -1041,7 +1038,7 @@ enum ZNGConversationSections
         shouldDisableInput = YES;
     } else if (![self.conversation.contact.channels containsObject:self.conversation.channel]) {
         // Our channel disappeared
-        ZNGLogWarn(@"Currently selected channel is not present in the contact data.  Deselecting.");
+        SBLogWarning(@"Currently selected channel is not present in the contact data.  Deselecting.");
         self.inputToolbar.noSelectedChannelText = @"Select a channel";
         shouldDisableInput = YES;
     }
@@ -1325,7 +1322,7 @@ enum ZNGConversationSections
 
             if ([channelString length] == 0) {
                 channelString = @"Unknown channel";
-                ZNGLogWarn(@"Channel display value is missing for channel %@", channel.channelId);
+                SBLogWarning(@"Channel display value is missing for channel %@", channel.channelId);
             }
             
             NSString * displayString = [NSString stringWithFormat:@"\n%@",channelString];
@@ -1389,7 +1386,7 @@ enum ZNGConversationSections
     }
     
     if (indexPath.row >= [self.conversation.pendingResponses count]) {
-        ZNGLogError(@"Out of bounds retrieving user at index %lld in our %llu currently replying users.", (long long)indexPath.row, (unsigned long long)[self.conversation.pendingResponses count]);
+        SBLogError(@"Out of bounds retrieving user at index %lld in our %llu currently replying users.", (long long)indexPath.row, (unsigned long long)[self.conversation.pendingResponses count]);
         return nil;
     }
     
@@ -1417,7 +1414,7 @@ enum ZNGConversationSections
         }
         
         // Unrecognized type.  Use the normal outgoing bubble image.
-        ZNGLogError(@"Unexpected pending response type found: %@", pendingResponse.eventType);
+        SBLogError(@"Unexpected pending response type found: %@", pendingResponse.eventType);
         return self.outgoingBubbleImageData;
     }
 
@@ -1585,7 +1582,7 @@ enum ZNGConversationSections
     }
     
     if (event.message.executeAt == nil) {
-        ZNGLogWarn(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", event.eventId);
+        SBLogWarning(@"Message %@ is delayed but has no execute_at date.  Showing ambiguous \"sending later\" header.", event.eventId);
         return @"Sending later";
     }
     
@@ -1596,7 +1593,7 @@ enum ZNGConversationSections
     }
     
     if (timeUntilSending < 0.0) {
-        ZNGLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", event.eventId);
+        SBLogInfo(@"Message %@ still shows up as delayed, but its send time has passed.  Showing \"sending soon.\"", event.eventId);
         return @"Sending soon";
     }
     

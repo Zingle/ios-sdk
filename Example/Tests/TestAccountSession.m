@@ -15,7 +15,6 @@
 #import "ZNGMockServiceClient.h"
 #import "ZNGMockUserAuthorizationClient.h"
 #import "ZNGMockUserClient.h"
-@import CocoaLumberjack;
 
 @interface TestAccountSession : XCTestCase
 
@@ -38,10 +37,6 @@
 - (void)setUp
 {
     [super setUp];
-    
-    // Console logging
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];
-    [DDLog addLogger:[DDASLLogger sharedInstance]];
     
     // File names of the test data in our bundle
     NSString * account1FileName = @"devTestAccount";

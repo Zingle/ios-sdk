@@ -11,7 +11,6 @@
 #import "ZNGContactClient.h"
 #import "ZNGServiceClient.h"
 #import "ZNGTableViewCell.h"
-#import "ZNGLogging.h"
 #import "ZingleAccountSession.h"
 #import "UIColor+ZingleSDK.h"
 #import "ZNGConversationServiceToContact.h"
@@ -24,7 +23,7 @@
 #import "ZNGContactDataSetBuilder.h"
 #import "ZNGTeam.h"
 
-static int const zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 static void * ZNGInboxKVOContext  =   &ZNGInboxKVOContext;
 static NSString * const ZNGKVOContactsLoadingInitialDataPath = @"data.loadingInitialData";
@@ -241,13 +240,13 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 - (void) setData:(ZNGInboxDataSet *)data
 {
     if ([data isEqual:self.data]) {
-        ZNGLogInfo(@"Neglecting to replace current %@ with %@ due to equality.", [self.data class], [data class]);
+        SBLogInfo(@"Neglecting to replace current %@ with %@ due to equality.", [self.data class], [data class]);
         return;
     }
     
-    ZNGLogDebug(@"Inbox data changed from %@ to %@", _data, data);
+    SBLogDebug(@"Inbox data changed from %@ to %@", _data, data);
     
-    ZNGLogVerbose(@"Setting pendingReloadBlockedBySwipe and swipeActive to NO due to data change.");
+    SBLogVerbose(@"Setting pendingReloadBlockedBySwipe and swipeActive to NO due to data change.");
     pendingReloadBlockedBySwipe = NO;
     swipeActive = NO;
     
@@ -352,13 +351,13 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     switch (changeType)
     {
         case NSKeyValueChangeInsertion:
-            ZNGLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
+            SBLogVerbose(@"Inserting %ld items", (unsigned long)[paths count]);
             
             [self reloadTableData];
             break;
             
         case NSKeyValueChangeRemoval:
-            ZNGLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
+            SBLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
             
             if (([paths count] == 1) && (!pendingReloadBlockedBySwipe)) {
                 [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
@@ -371,7 +370,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
             
         case NSKeyValueChangeReplacement:
         {
-            ZNGLogVerbose(@"Replacing %ld items", (unsigned long)[paths count]);
+            SBLogVerbose(@"Replacing %ld items", (unsigned long)[paths count]);
             [self reloadTableData];
 
             break;
@@ -379,7 +378,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
             
         case NSKeyValueChangeSetting:
         default:
-            ZNGLogVerbose(@"Reloading the table to new data with %llu items", (unsigned long long)[self.data.contacts count]);
+            SBLogVerbose(@"Reloading the table to new data with %llu items", (unsigned long long)[self.data.contacts count]);
             // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
             [self reloadTableData];
     }
@@ -394,8 +393,8 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         [self.tableView reloadData];
         [self retainSelection];
     } else {
-        ZNGLogDebug(@"Delaying refresh while some swiping is happening.");
-        ZNGLogVerbose(@"Setting pendingReloadBlockedBySwipe to YES due to active swipe during a reload");
+        SBLogDebug(@"Delaying refresh while some swiping is happening.");
+        SBLogVerbose(@"Setting pendingReloadBlockedBySwipe to YES due to active swipe during a reload");
         pendingReloadBlockedBySwipe = YES;
     }
 }
@@ -403,7 +402,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 - (void) swipeTableCellWillBeginSwiping:(MGSwipeTableCell *)cell
 {
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
-    ZNGLogVerbose(@"%@ swiping began (setting swipeActive to YES)", indexPath);
+    SBLogVerbose(@"%@ swiping began (setting swipeActive to YES)", indexPath);
     
     [self resetCancelSwipesTimer];
     
@@ -414,11 +413,11 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 {
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
     
-    ZNGLogVerbose(@"%@ swiping ended (setting swipeActive to NO)", indexPath);
+    SBLogVerbose(@"%@ swiping ended (setting swipeActive to NO)", indexPath);
     swipeActive = NO;
     
     if (pendingReloadBlockedBySwipe) {
-        ZNGLogVerbose(@"Clearing pendingReloadBlockedBySwipe to NO as we finally refresh the table after swipe-induced delay");
+        SBLogVerbose(@"Clearing pendingReloadBlockedBySwipe to NO as we finally refresh the table after swipe-induced delay");
         pendingReloadBlockedBySwipe = NO;
         [self.tableView reloadData];
     }
@@ -453,11 +452,11 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         }
     }
     
-    ZNGLogVerbose(@"Clearing swipeActive flag to NO while collapsing all swipe gestures");
+    SBLogVerbose(@"Clearing swipeActive flag to NO while collapsing all swipe gestures");
     swipeActive = NO;
     
     if (pendingReloadBlockedBySwipe) {
-        ZNGLogVerbose(@"... also clearing pendingReloadBlockedBySwipe to NO as we refresh while canceling all swipe gestures");
+        SBLogVerbose(@"... also clearing pendingReloadBlockedBySwipe to NO as we refresh while canceling all swipe gestures");
         pendingReloadBlockedBySwipe = NO;
         [self.tableView reloadData];
     }
@@ -653,7 +652,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     NSIndexPath * indexPath = timer.userInfo;
     
     if (![indexPath isKindOfClass:[NSIndexPath class]]) {
-        ZNGLogError(@"Refresh inbox table cell timer was triggered with no index path data.  Ignoring.");
+        SBLogError(@"Refresh inbox table cell timer was triggered with no index path data.  Ignoring.");
         return;
     }
     
@@ -816,7 +815,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 - (void) tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if ([self shouldRequestNewDataAfterViewingIndexPath:indexPath]) {
-        ZNGLogDebug(@"Requesting data around index #%lld", (long long)indexPath.row + 10);
+        SBLogDebug(@"Requesting data around index #%lld", (long long)indexPath.row + 10);
         [self.data refreshStartingAtIndex:indexPath.row + 10 removingTail:YES];
     }
 }
@@ -834,7 +833,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 - (BOOL) _shouldShowConversation:(ZNGConversation *)conversation
 {
     if (conversation == nil) {
-        ZNGLogWarn(@"Selected conversation is nil.  Neglecting to ask delegate nor to display the conversation view.");
+        SBLogWarning(@"Selected conversation is nil.  Neglecting to ask delegate nor to display the conversation view.");
         return NO;
     }
     

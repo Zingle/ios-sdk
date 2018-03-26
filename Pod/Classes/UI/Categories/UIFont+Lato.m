@@ -8,10 +8,8 @@
 
 #import "UIFont+Lato.h"
 #import "ZingleSDK.h"
-#import "ZNGLogging.h"
 @import CoreText;
-
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation UIFont (Lato)
 
@@ -30,7 +28,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         
         if (!CTFontManagerRegisterGraphicsFont(font, &error)) {
             CFStringRef errorDescription = CFErrorCopyDescription(error);
-            ZNGLogError(@"Unable to load Lato font data");
+            SBLogError(@"Unable to load Lato font data");
             CFRelease(errorDescription);
         }
         

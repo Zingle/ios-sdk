@@ -11,9 +11,8 @@
 #import "ZNGNewMessageResponse.h"
 #import "ZNGMessageForwardingRequest.h"
 #import "ZNGError.h"
-#import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGMessageClient
 
@@ -84,7 +83,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
                 failure:(void (^)(ZNGError* error))failure
 {
     if ([forwardingRequest.message.messageId length] == 0) {
-        ZNGLogError(@"Unable to forward message with no message ID.");
+        SBLogError(@"Unable to forward message with no message ID.");
         
         if (failure != nil) {
             ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Unable to forward a message with no message ID" }];

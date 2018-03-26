@@ -14,7 +14,6 @@
 #import "ZNGMessageClient.h"
 #import "ZNGServiceClient.h"
 #import "ZingleSession.h"
-#import "ZNGLogging.h"
 #import "ZNGNewMessageResponse.h"
 #import "ZNGAnalytics.h"
 #import <ImageIO/ImageIO.h>
@@ -23,7 +22,7 @@
 #import "ZNGPendingResponseOrNote.h"
 #import "ZNGUserAuthorization.h"
 
-static const int zngLogLevel = ZNGLogLevelVerbose;
+@import SBObjectiveCWrapper;
 
 static const NSUInteger kDefaultPageSize = 100;
 
@@ -152,7 +151,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (void) setPageSize:(NSUInteger)pageSize
 {
     if (pageSize == 0) {
-        ZNGLogError(@"Page size must be non-zero.  Ignoring new value.");
+        SBLogError(@"Page size must be non-zero.  Ignoring new value.");
         return;
     }
     
@@ -168,7 +167,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (void)loadRecentEventsErasingOlderData:(BOOL)replace
 {
     if (self.loading) {
-        ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
+        SBLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
         return;
     }
     
@@ -178,7 +177,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         
         [self.eventClient eventListWithParameters:parameters success:^(NSArray<ZNGEvent *> *events, ZNGStatus *status) {
             if (status.totalRecords > self.totalEventCount) {
-                ZNGLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
+                SBLogDebug(@"There appears to be more event data available (%lld vs our local count of %lld.)  Fetching...", (long long)status.totalRecords, (long long)self.totalEventCount);
                 self.totalEventCount = status.totalRecords;
                 [self _loadRecentEventsErasing:replace removingSendingEvents:NO success:nil failure:nil];
             } else if ([self lastPageContainsMutableEvent]) {
@@ -186,14 +185,14 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                 //  existing data at the same time.
                 BOOL countDecreased = (status.totalRecords < self.totalEventCount);
                 
-                ZNGLogInfo(@"We have one or more deletable event types in data.  Total event count was %llu and is now %llu. \
+                SBLogInfo(@"We have one or more deletable event types in data.  Total event count was %llu and is now %llu. \
                            Reloading most recent data...", (unsigned long long)self.totalEventCount, (unsigned long long)status.totalRecords);
                 [self _loadRecentEventsErasing:countDecreased removingSendingEvents:NO success:nil failure:nil];
             } else {
-                ZNGLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
+                SBLogDebug(@"There are still only %lld events available.", (long long)status.totalRecords);
             }
         } failure:^(ZNGError *error) {
-            ZNGLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
+            SBLogError(@"Unable to retrieve status from empty event request.  Loading all data, since we cannot tell if we have any new data.");
             [self _loadRecentEventsErasing:replace removingSendingEvents:NO success:nil failure:nil];
         }];
     } else {
@@ -222,7 +221,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     // Avoid double loading.  If our caller is relying on us to remove sending events on success or failure,
     //  we will go ahead and double load.
     if ((self.loading) && (!removeSending)) {
-        ZNGLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
+        SBLogInfo(@"Ignoring call to loadRecentEventsErasingOlderData: because a load is already in progress.");
         return;
     }
     
@@ -259,7 +258,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             [self removeSendingEvents];
         }
         
-        ZNGLogError(@"Unable to load events: %@", error);
+        SBLogError(@"Unable to load events: %@", error);
         self.loading = NO;
         
         if (failure != nil) {
@@ -313,7 +312,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             }];
             
             if ([oldViewModelIndexes count] == 0) {
-                ZNGLogError(@"Unable to find updated event in view models array even though it was found in the events array.  Help.");
+                SBLogError(@"Unable to find updated event in view models array even though it was found in the events array.  Help.");
                 return;
             }
             
@@ -372,7 +371,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     
     if ([newEvents count] == 0) {
         // No new events.  It is odd that we made it this far, but this should be harmless.
-        ZNGLogInfo(@"%s was called, but no new event data was found.", __PRETTY_FUNCTION__);
+        SBLogInfo(@"%s was called, but no new event data was found.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -383,7 +382,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }
     
     if (![indexesOfNewEventsInIncomingEvents isContinuous]) {
-        ZNGLogError(@"%s was called, but there is a non-continuous delta between our old data and this new data.  This would likely cause duplicate event data.\n\
+        SBLogError(@"%s was called, but there is a non-continuous delta between our old data and this new data.  This would likely cause duplicate event data.\n\
                       Reloading all data.", __PRETTY_FUNCTION__);
         _loading = NO;  // Remove loading flag without triggering KVO so that the load below is not skipped.
         [self loadRecentEventsErasingOlderData:YES];
@@ -408,7 +407,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             }];
             
             if ([viewModelPostInsertionIndexes count] == 0) {
-                ZNGLogError(@"Unable to find our insertion target event in the view models array.  Something has gone wacky.  Clearing all data and reloading...");
+                SBLogError(@"Unable to find our insertion target event in the view models array.  Something has gone wacky.  Clearing all data and reloading...");
                 _loading = NO;  // Remove loading flag without triggering KVO so that the load below is not skipped.
                 [self loadRecentEventsErasingOlderData:YES];
                 return;
@@ -429,7 +428,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
             
             return;
         } else {
-            ZNGLogWarn(@"We expected the new %llu events appearing in this new data to be inserted above our tail, but we were unable to find the event below this new data.  Appending new data to tail..",
+            SBLogWarning(@"We expected the new %llu events appearing in this new data to be inserted above our tail, but we were unable to find the event below this new data.  Appending new data to tail..",
                        (unsigned long long)[newEvents count]);
             // Fall through to the appendEvents: below
         }
@@ -461,13 +460,13 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (void) loadOlderData
 {
     if (self.totalEventCount == 0) {
-        ZNGLogInfo(@"loadOlderData called with no existing data.  Fetching initial data...");
+        SBLogInfo(@"loadOlderData called with no existing data.  Fetching initial data...");
         [self loadRecentEventsErasingOlderData:NO];
         return;
     }
     
     if ([self.events count] >= self.totalEventCount) {
-        ZNGLogInfo(@"loadOlderData called, but there is no data available beyond our current %llu items.", (unsigned long long)[self.events count]);
+        SBLogInfo(@"loadOlderData called, but there is no data available beyond our current %llu items.", (unsigned long long)[self.events count]);
         return;
     }
     
@@ -475,7 +474,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     NSUInteger nextPageToFetch = lastPageAlreadyFetched + 1;
     
     if (([self.events count] % self.pageSize) != 0) {
-        ZNGLogWarn(@"Our current event data does not fall on page boundaries.  The older data loaded will not fill an entire page.");
+        SBLogWarning(@"Our current event data does not fall on page boundaries.  The older data loaded will not fill an entire page.");
         nextPageToFetch++;
     }
     
@@ -487,13 +486,13 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         
         self.totalEventCount = status.totalRecords;
         
-        ZNGLogDebug(@"Loaded %llu more events", (unsigned long long)[events count]);
+        SBLogDebug(@"Loaded %llu more events", (unsigned long long)[events count]);
         
         NSArray<ZNGEvent *> * sortedEvents = [[events reverseObjectEnumerator] allObjects];
         [self mergeNewDataAtHead:sortedEvents];
         self.loading = NO;
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to load older event data: %@", error);
+        SBLogError(@"Unable to load older event data: %@", error);
         self.loading = NO;
     }];
 }
@@ -504,7 +503,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     [self addMissingMessageIdsToMessageEvents:incomingEvents];
     
     if ([self.events count] == 0) {
-        ZNGLogWarn(@"mergeNewDataAtHead: called without any existing data.  This was probably accidental.");
+        SBLogWarning(@"mergeNewDataAtHead: called without any existing data.  This was probably accidental.");
         [self appendEvents:incomingEvents];
         return;
     }
@@ -689,13 +688,13 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                                               readAt:readAt
                                              success:^(ZNGStatus *status) {
         if (status.statusCode == 200) {
-            ZNGLogDebug(@"Messages marked as read.");
+            SBLogDebug(@"Messages marked as read.");
         } else {
-            ZNGLogError(@"Failed to mark messages marked as read. statusCode = %ld", (long)status.statusCode);
+            SBLogError(@"Failed to mark messages marked as read. statusCode = %ld", (long)status.statusCode);
         }
                                                  
     } failure:^(ZNGError *error) {
-            ZNGLogError(@"Error marking messages as read. Error = %@", error.localizedDescription);
+            SBLogError(@"Error marking messages as read. Error = %@", error.localizedDescription);
     }];
 }
 
@@ -730,7 +729,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     }];
     
     if ([pendingIndexes count] > 0) {
-        ZNGLogDebug(@"Removing %llu pending messages.", (unsigned long long)[pendingIndexes count]);
+        SBLogDebug(@"Removing %llu pending messages.", (unsigned long long)[pendingIndexes count]);
         NSMutableArray * mutableEvents = [self mutableArrayValueForKey:NSStringFromSelector(@selector(events))];
         [mutableEvents removeObjectsAtIndexes:pendingIndexes];
         
@@ -769,7 +768,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
     newMessage.uuid = uuid;
     self.loading = YES;
     ZNGParticipant * recipient = [newMessage.recipients firstObject];
-    ZNGLogVerbose(@"Sending \"%@\" to %@", body, recipient.channelValue);
+    SBLogVerbose(@"Sending \"%@\" to %@", body, recipient.channelValue);
     
     if ([imageDatas count] == 0) {
         [self _sendMessage:newMessage success:success failure:failure];
@@ -816,7 +815,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                         imageData = resizedData;
                         contentType = NSDataImageContentTypeJpeg;
                     } else {
-                        ZNGLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
+                        SBLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
                     }
                 }
             }
@@ -885,7 +884,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         NSMutableArray * mutableViewModels = [self mutableArrayValueForKey:NSStringFromSelector(@selector(eventViewModels))];
         [mutableViewModels addObjectsFromArray:pendingEvent.viewModels];
     } else {
-        ZNGLogError(@"Unable to generate pending message event object.  Message will not appear as an in progress message.");
+        SBLogError(@"Unable to generate pending message event object.  Message will not appear as an in progress message.");
     }
     
     [self.messageClient sendMessage:message success:^(ZNGNewMessageResponse *newMessageResponse, ZNGStatus *status) {
@@ -893,7 +892,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
         NSString * messageId = [[newMessageResponse messageIds] firstObject];
         
         if (![messageId isKindOfClass:[NSString class]]) {
-            ZNGLogError(@"Message send reported success, but we did not receive a message ID in response.  Our new message will not appear in the conversation until it is refreshed elsewhere.");
+            SBLogError(@"Message send reported success, but we did not receive a message ID in response.  Our new message will not appear in the conversation until it is refreshed elsewhere.");
             
             if (success) {
                 success(status);
@@ -909,7 +908,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
                     success(status);
                 }
             } failure:^(ZNGError * _Nullable error) {
-                ZNGLogWarn(@"Message send succeeded, but retrieving data afterward failed.  This is probably fine: %@", error);
+                SBLogWarning(@"Message send succeeded, but retrieving data afterward failed.  This is probably fine: %@", error);
                 
                 if (success != nil) {
                     success(status);
@@ -965,7 +964,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 - (void) otherUserIsReplying:(ZNGUser * _Nonnull)user isInternalNote:(BOOL)isNote
 {
     if ([user.userId length] == 0) {
-        ZNGLogError(@"%s called with no user ID: %@", __PRETTY_FUNCTION__, user);
+        SBLogError(@"%s called with no user ID: %@", __PRETTY_FUNCTION__, user);
         return;
     }
 
@@ -1013,7 +1012,7 @@ static const CGFloat imageAttachmentMaxHeight = 800.0;
 
 - (NSString *)remoteName
 {
-    ZNGLogWarn(@"Using empty implementation of %s", __PRETTY_FUNCTION__);
+    SBLogWarning(@"Using empty implementation of %s", __PRETTY_FUNCTION__);
     return @"";
 }
 

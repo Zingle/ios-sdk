@@ -7,7 +7,6 @@
 //
 
 #import "ZNGAnalytics.h"
-#import "ZNGLogging.h"
 #import "ZNGContact.h"
 #import "ZNGUserAuthorization.h"
 #import "ZNGInboxDataSet.h"
@@ -21,8 +20,7 @@
 #import "ZNGUser.h"
 
 @import Analytics;
-
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 static NSString * const HostPropertyName = @"Host";
 
@@ -58,7 +56,7 @@ static NSString * const HostPropertyName = @"Host";
 - (void) setSegmentWriteKey:(NSString *)segmentWriteKey
 {
     if ([_segmentWriteKey length] > 0) {
-        ZNGLogError(@"Segment write key being set, but it was already set earlier.  Ignoring.");
+        SBLogError(@"Segment write key being set, but it was already set earlier.  Ignoring.");
         return;
     }
     

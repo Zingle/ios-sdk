@@ -7,9 +7,8 @@
 //
 
 #import "ZNGImageAttachment.h"
-#import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGImageAttachment
 {
@@ -67,7 +66,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
 {
     if ((self.image.size.height == 0) || (self.image.size.width == 0)) {
         CGRect bounds = [super attachmentBoundsForTextContainer:textContainer proposedLineFragment:lineFrag glyphPosition:position characterIndex:charIndex];
-        ZNGLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
+        SBLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
         return bounds;
     }
     
@@ -84,7 +83,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     [self setImageScale:downscale];
     
     CGRect bounds = CGRectIntegral(CGRectMake(0.0, 0.0, self.image.size.width * downscale, self.image.size.height * downscale));
-    ZNGLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
+    SBLogDebug(@"Returning %@ as bounds for a %@", NSStringFromCGRect(bounds), [self class]);
     return bounds;
 }
 

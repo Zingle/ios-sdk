@@ -7,7 +7,6 @@
 //
 
 #import "ZingleAccountSession.h"
-#import "ZNGLogging.h"
 #import "ZNGAccount.h"
 #import "ZNGService.h"
 #import "ZNGAccountClient.h"
@@ -33,10 +32,9 @@
 #import "ZNGNotificationSettingsClient.h"
 
 @import AFNetworking;
+@import SBObjectiveCWrapper;
 
 static NSString * const kSocketConnectedKeyPath = @"socketClient.connected";
-
-static const int zngLogLevel = ZNGLogLevelDebug;
 
 NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"ZingleUserChangedDetailedEventsPreferenceNotification";
 NSString * const ZingleConversationDataArrivedNotification = @"ZingleConversationDataArrivedNotification";
@@ -165,7 +163,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUnassignedAndUser:self.userAuthorization andTeams:[self teamsToWhichCurrentUserBelongs]];
     
     if (self.totalUnreadCount != totalStats.unreadCount) {
-        ZNGLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);
+        SBLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);
         self.totalUnreadCount = totalStats.unreadCount;
     }
 }
@@ -174,7 +172,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) requestAPushNotification
 {
     if (self.service.serviceId == nil) {
-        ZNGLogWarn(@"%s was called, but there is no active service.  Ignoring.", __PRETTY_FUNCTION__);
+        SBLogWarning(@"%s was called, but there is no active service.  Ignoring.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -185,7 +183,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) setAccount:(ZNGAccount *)account
 {
     if ((_account != nil) && (![_account isEqual:account])) {
-        ZNGLogError(@"Account was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _account ,account);
+        SBLogError(@"Account was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _account ,account);
         [self willChangeValueForKey:NSStringFromSelector(@selector(service))];
         [self willChangeValueForKey:NSStringFromSelector(@selector(available))];
         _service = nil;
@@ -270,14 +268,14 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
             _service = service;
             return;
         } else {
-            ZNGLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
+            SBLogError(@"Service was already set to %@ but is being changed to %@ without creating a new session object.  This may have undesired effects.  A new session object should be created.", _service ,service);
         }
     }
     
     NSUInteger serviceIndex = [self.availableServices indexOfObject:service];
     
     if (serviceIndex == NSNotFound) {
-        ZNGLogError(@"setService was called with service ID %@, but it does not exist within our %lld available services.  Ignoring.", service.serviceId, (unsigned long long)[self.availableServices count]);
+        SBLogError(@"setService was called with service ID %@, but it does not exist within our %lld available services.  Ignoring.", service.serviceId, (unsigned long long)[self.availableServices count]);
 
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"Selected service is not available" }];
         self.mostRecentError = error;
@@ -305,7 +303,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     BOOL shouldRefresh = NO;
     
     if (serviceSetDate == nil) {
-        ZNGLogError(@"Our service object is set, but we do not have a timestamp of our last update.  Refreshing.");
+        SBLogError(@"Our service object is set, but we do not have a timestamp of our last update.  Refreshing.");
         shouldRefresh = YES;
     } else {
         NSTimeInterval timeSinceUpdate = [[NSDate date] timeIntervalSinceDate:serviceSetDate];
@@ -321,7 +319,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) updateCurrentService
 {
     if (self.service == nil) {
-        ZNGLogInfo(@"updateCurrentService was called, but we do not have a service selected.");
+        SBLogInfo(@"updateCurrentService was called, but we do not have a service selected.");
         return;
     }
     
@@ -331,7 +329,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
             NSUInteger serviceIndex = [self.availableServices indexOfObject:service];
             
             if (serviceIndex == NSNotFound) {
-                ZNGLogWarn(@"Successfully refreshed our current service, but it does not appear in our %llu availableServices.  This is odd.", (unsigned long long)[self.availableServices count]);
+                SBLogWarning(@"Successfully refreshed our current service, but it does not appear in our %llu availableServices.  This is odd.", (unsigned long long)[self.availableServices count]);
             } else {
                 NSMutableArray<ZNGService *> * newAvailableServices = [self mutableArrayValueForKey:NSStringFromSelector(@selector(availableServices))];
                 [newAvailableServices replaceObjectAtIndex:serviceIndex withObject:service];
@@ -344,10 +342,10 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
                 conversation.service = service;
             }
         } else {
-            ZNGLogError(@"Service update request returned 200 but no service object.  Help.");
+            SBLogError(@"Service update request returned 200 but no service object.  Help.");
         }
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Failed to refresh current service of %@ (%@): %@", self.service.displayName, self.service.serviceId, error);
+        SBLogError(@"Failed to refresh current service of %@ (%@): %@", self.service.displayName, self.service.serviceId, error);
         self.mostRecentError = error;
     }];
 }
@@ -433,7 +431,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     // Sanity check to prevent https://fabric.io/zingle/ios/apps/com.zingleme.zingle/issues/582f5a410aeb16625b04605e
     if (self.service.serviceId == nil) {
-        ZNGLogError(@"We have selected a service with a null service ID.  This is irrecoverable.");
+        SBLogError(@"We have selected a service with a null service ID.  This is irrecoverable.");
         self.account = nil;
         self.service = nil;
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedDescriptionKey : @"No service ID could be found on the selected service." }];
@@ -461,9 +459,9 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         
         if (waitResult == 0) {
             NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:before];
-            ZNGLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
+            SBLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
         } else {
-            ZNGLogError(@"Timed out waiting for user and team data on initial login.  Assignment functionality may be broken until this arrives.");
+            SBLogError(@"Timed out waiting for user and team data on initial login.  Assignment functionality may be broken until this arrives.");
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -516,7 +514,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) synchronouslyRetrieveTeamsData
 {
     if ([[NSThread currentThread] isMainThread]) {
-        ZNGLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
+        SBLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -530,7 +528,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         [self.inboxStatistician updateWithV2TeamsData:teams];
         dispatch_semaphore_signal(semaphore);
     } failure:^(ZNGError * _Nullable error) {
-        ZNGLogError(@"Unable to retrieve team IDs from v2 API.");
+        SBLogError(@"Unable to retrieve team IDs from v2 API.");
         dispatch_semaphore_signal(semaphore);
     }];
     
@@ -551,7 +549,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) synchronouslyRetrieveUserData
 {
     if ([[NSThread currentThread] isMainThread]) {
-        ZNGLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
+        SBLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -567,7 +565,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
         dispatch_semaphore_signal(semaphore);
     } failure:^(ZNGError *error) {
-        ZNGLogError(@"Unable to retrieve current user info from the root URL: %@", error);
+        SBLogError(@"Unable to retrieve current user info from the root URL: %@", error);
         dispatch_semaphore_signal(semaphore);
     }];
     
@@ -638,7 +636,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 {
     // We cannot return anything meaningful if we are not yet logged in
     if (self.userAuthorization == nil) {
-        ZNGLogWarn(@"%s called before a userAuthorization object is available.  Returning empty array.", __PRETTY_FUNCTION__);
+        SBLogWarning(@"%s called before a userAuthorization object is available.  Returning empty array.", __PRETTY_FUNCTION__);
         return @[];
     }
     
@@ -681,7 +679,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     NSString * contactId = contact.contactId;
     
     if ([contactId length] == 0) {
-        ZNGLogWarn(@"%s called with no contact ID supplied.", __PRETTY_FUNCTION__);
+        SBLogWarning(@"%s called with no contact ID supplied.", __PRETTY_FUNCTION__);
         return;
     }
     
@@ -746,7 +744,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     void (^success)(ZNGContact *, ZNGStatus *) = ^(ZNGContact *contact, ZNGStatus *status) {
         if (contact == nil) {
-            ZNGLogWarn(@"No contact could be retrieved with the ID of %@", contactId);
+            SBLogWarning(@"No contact could be retrieved with the ID of %@", contactId);
             return;
         }
         
@@ -756,7 +754,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     };
     
     void (^failure)(ZNGError *) = ^(ZNGError *error) {
-        ZNGLogWarn(@"Unable to retrieve contact with ID of %@.", contactId);
+        SBLogWarning(@"Unable to retrieve contact with ID of %@.", contactId);
         completion(nil);
     };
 
@@ -773,7 +771,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         
         dispatch_async(dispatch_get_main_queue(), ^{
             if ((semaphoreValue) || (self.contactClient == nil)) {
-                ZNGLogWarn(@"We waited for a contact client before attempting to retrieve contact data for contact #%@, but we never got a contact client :(", contactId);
+                SBLogWarning(@"We waited for a contact client before attempting to retrieve contact data for contact #%@, but we never got a contact client :(", contactId);
                 completion(nil);
                 return;
             }
@@ -798,7 +796,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (ZNGServiceToContactViewController *) conversationViewControllerForConversation:(ZNGConversationServiceToContact *)conversation
 {
     if (conversation == nil) {
-        ZNGLogError(@"Attempted to display view controller for a nil conversation.");
+        SBLogError(@"Attempted to display view controller for a nil conversation.");
         return nil;
     }
     
@@ -834,13 +832,13 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[groups count] + (BOOL)[phoneNumbers count];
     
     if (typeCount == 0) {
-        ZNGLogError(@"No recipients provided to sendMessage:.  Ignoring.");
+        SBLogError(@"No recipients provided to sendMessage:.  Ignoring.");
         completion(NO);
         return;
     }
     
     if ([self _freshOutgoingMessageWithUUID:uuid] == nil) {
-        ZNGLogError(@"Unable to generate a clean outgoing message.");
+        SBLogError(@"Unable to generate a clean outgoing message.");
 
         if (completion != nil) {
             completion(NO);
@@ -883,7 +881,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
                     // This one sent.  Cool.
                     dispatch_semaphore_signal(semaphore);
                 } failure:^(ZNGError *error) {
-                    ZNGLogError(@"Failed to send message: %@", error);
+                    SBLogError(@"Failed to send message: %@", error);
                 
                     failed = YES;
                     dispatch_semaphore_signal(semaphore);
@@ -895,7 +893,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
             long returnValue = dispatch_semaphore_wait(semaphore, tenSecondsFromNow);
             
             if (returnValue != 0) {
-                ZNGLogError(@"Timed out after %.0f seconds waiting for response from message send.", [[NSDate date] timeIntervalSinceDate:date]);
+                SBLogError(@"Timed out after %.0f seconds waiting for response from message send.", [[NSDate date] timeIntervalSinceDate:date]);
                 failed = YES;
             }
             
@@ -938,14 +936,14 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     ZNGChannelType * phoneNumberChannelType = [self.service phoneNumberChannelType];
     
     if (phoneNumberChannelType == nil) {
-        ZNGLogError(@"Unable to send outgoing messages.  No phone number channel type exists.  This server is unhappy :(");
+        SBLogError(@"Unable to send outgoing messages.  No phone number channel type exists.  This server is unhappy :(");
         return nil;
     }
     
     ZNGChannel * phoneNumberChannel = [self.service defaultPhoneNumberChannel];
     
     if (phoneNumberChannel == nil) {
-        ZNGLogError(@"Unable to send outgoing message.  This service does not have an outgoing phone number channel configured.");
+        SBLogError(@"Unable to send outgoing message.  This service does not have an outgoing phone number channel configured.");
         return nil;
     }
     
@@ -972,7 +970,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         ZNGChannel * channel = [contact phoneNumberChannel];
         
         if (channel == nil) {
-            ZNGLogError(@"Unable to find a phone number channel for %@ (%@).", [contact fullName], contact.contactId);
+            SBLogError(@"Unable to find a phone number channel for %@ (%@).", [contact fullName], contact.contactId);
             continue;
         }
         

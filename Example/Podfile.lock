@@ -7,12 +7,6 @@ PODS:
   - AFNetworking/Security (3.1.0)
   - AFNetworking/Serialization (3.1.0)
   - Analytics (3.6.4)
-  - CocoaLumberjack (3.3.0):
-    - CocoaLumberjack/Default (= 3.3.0)
-    - CocoaLumberjack/Extensions (= 3.3.0)
-  - CocoaLumberjack/Default (3.3.0)
-  - CocoaLumberjack/Extensions (3.3.0):
-    - CocoaLumberjack/Default
   - FLAnimatedImage (1.0.12)
   - JSQMessagesViewController (7.3.5):
     - JSQSystemSoundPlayer (~> 2.0.1)
@@ -22,6 +16,8 @@ PODS:
     - Mantle/extobjc (= 2.1.0)
   - Mantle/extobjc (2.1.0)
   - MGSwipeTableCell (1.5.6)
+  - SBObjectiveCWrapper (1.4.0):
+    - SwiftyBeaver (~> 1.4.0)
   - SDWebImage/Core (4.1.0)
   - SDWebImage/GIF (4.1.0):
     - FLAnimatedImage (~> 1.0)
@@ -30,14 +26,15 @@ PODS:
   - Socket.IO-Client-Swift (13.0.1):
     - Starscream (~> 3.0.2)
   - Starscream (3.0.2)
+  - SwiftyBeaver (1.4.4)
   - ZingleSDK (1.1.0):
     - AFNetworking/NSURLSession
     - Analytics (~> 3.0)
-    - CocoaLumberjack
     - JSQMessagesViewController
     - JVFloatLabeledTextField
     - Mantle
     - MGSwipeTableCell
+    - SBObjectiveCWrapper
     - SDWebImage/GIF
     - Shimmer
     - Socket.IO-Client-Swift (~> 13.0)
@@ -52,18 +49,19 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 5e0e199f73d8626b11e79750991f5d173d1f8b67
   Analytics: a24b6b80f9f16dfb69aac605da5c3854bdfb328a
-  CocoaLumberjack: 3c8c74683302f9012bb168e1c4b7ae3c0b558431
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JVFloatLabeledTextField: 96c0c1b6739001801340d25b86aff990d67c4181
   Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   MGSwipeTableCell: 616700eb0ffd1c611ba909066cb7fd739790a0a7
+  SBObjectiveCWrapper: 854ea56b37cd0031af2b1d6e12c2f965fc4ff86d
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   Socket.IO-Client-Swift: 7055c89b7a9926b343194c4cac75998329c4a95a
   Starscream: b512c62f6706421221b5ceb2ba01a9f58aca5bea
-  ZingleSDK: 07e38ea444be9ed2a4b0766e0ace67093e1aa30e
+  SwiftyBeaver: 25bd76281f49ca989ec2e3cbde9af89c15bc1432
+  ZingleSDK: 5cc1f593fe5b65db0e0b23a26fe89ba58ffc0b56
 
 PODFILE CHECKSUM: 464b08e8c3623a07348286e12398a869002c1600
 

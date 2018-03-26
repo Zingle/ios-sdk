@@ -14,12 +14,11 @@
 #import "ZNGAssignUserTableViewCell.h"
 #import "ZNGAvatarImageView.h"
 #import "ZNGConversationServiceToContact.h"
-#import "ZNGLogging.h"
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
 #import "ZNGUserAuthorization.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 @interface ZNGAssignmentViewController ()
 
@@ -271,7 +270,7 @@ enum TopSectionRows {
         }
     }
     
-    ZNGLogError(@"Unexpected indexPath of %@ in ZNGAssignmentViewController %s", indexPath, __PRETTY_FUNCTION__);
+    SBLogError(@"Unexpected indexPath of %@ in ZNGAssignmentViewController %s", indexPath, __PRETTY_FUNCTION__);
     return nil;
 }
 

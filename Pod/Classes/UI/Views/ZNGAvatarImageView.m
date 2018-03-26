@@ -8,12 +8,10 @@
 
 #import "ZNGAvatarImageView.h"
 #import "ZNGInitialsAvatar.h"
-#import "ZNGLogging.h"
 #import "UIImage+CircleCrop.h"
 
+@import SBObjectiveCWrapper;
 @import SDWebImage;
-
-static const int zngLogLevel = ZNGLogLevelWarning;
 
 @implementation ZNGAvatarImageView
 {
@@ -103,7 +101,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     CGPoint newBoundsCenter = CGPointMake(CGRectGetMidX(newBounds), CGRectGetMidY(newBounds));
     CGPoint newCenter = [self convertPoint:newBoundsCenter toView:self.superview];
     
-    ZNGLogDebug(@"%@ %p: Request to set centerOfImage to %@ results in setting center to %@", [self class], self, NSStringFromCGPoint(centerOfImage), NSStringFromCGPoint(newCenter));
+    SBLogDebug(@"%@ %p: Request to set centerOfImage to %@ results in setting center to %@", [self class], self, NSStringFromCGPoint(centerOfImage), NSStringFromCGPoint(newCenter));
     
     self.center = newCenter;
 }
@@ -120,7 +118,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     
     CGPoint centerOfImage = [self convertPoint:boundsCenter toView:self.superview];
     
-    ZNGLogDebug(@"%@ %p: Current center is %@, making centerOfImage %@", [self class], self, NSStringFromCGPoint(self.center), NSStringFromCGPoint(centerOfImage));
+    SBLogDebug(@"%@ %p: Current center is %@, making centerOfImage %@", [self class], self, NSStringFromCGPoint(self.center), NSStringFromCGPoint(centerOfImage));
     
     return centerOfImage;
 }

@@ -8,13 +8,12 @@
 
 #import "ZNGContactClient.h"
 #import "ZNGNewContact.h"
-#import "ZNGLogging.h"
 #import "ZNGLabel.h"
 #import "ZNGError.h"
 #import "ZNGNewChannel.h"
 #import "ZNGContactAssignment.h"
 
-static const int zngLogLevel = ZNGLogLevelInfo;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGContactClient
 
@@ -204,7 +203,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                       failure:(void (^)(ZNGError* error))failure
 {
     if (([teamId length] + [userId length]) == 0) {
-        ZNGLogWarn(@"%s was called with no teamId nor userId.  Calling /unassign.", __PRETTY_FUNCTION__);
+        SBLogWarning(@"%s was called with no teamId nor userId.  Calling /unassign.", __PRETTY_FUNCTION__);
         [self unassignContactWithId:contactId success:success failure:failure];
         return;
     }
@@ -227,7 +226,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
 {
     NSString* path = [NSString stringWithFormat:@"services/%@/contacts/%@", self.serviceId, contactId];
     
-    ZNGLogVerbose(@"Updating contact %@ with parameters: %@", contactId, parameters);
+    SBLogVerbose(@"Updating contact %@ with parameters: %@", contactId, parameters);
     
     [self putWithPath:path
            parameters:parameters
@@ -345,7 +344,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     BOOL creatingNewContact = ([newContact.contactId length] == 0);
     
     void (^contactUpdateSuccessBlock)(ZNGContact *, ZNGStatus *) = ^void(ZNGContact * contact, ZNGStatus * status) {
-        ZNGLogDebug(@"Updating %@ (%@) (but not yet labels or channels if present) succeeded.", [contact fullName], contact.isConfirmed ? @"confirmed" : @"unconfirmed");
+        SBLogDebug(@"Updating %@ (%@) (but not yet labels or channels if present) succeeded.", [contact fullName], contact.isConfirmed ? @"confirmed" : @"unconfirmed");
         contact.contactClient = self;
         
         // Assignment?
@@ -438,7 +437,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                             [oldContact updateWithNewData:updatedContact];
                             success(updatedContact);
                         } failure:^(ZNGError *error) {
-                            ZNGLogWarn(@"Creating/updating %@ was fully successful, but the request for most up to date data failed after all updates.  Data returned may be \
+                            SBLogWarning(@"Creating/updating %@ was fully successful, but the request for most up to date data failed after all updates.  Data returned may be \
                                        slightly stale", [contact fullName]);
                             success(contact);
                         }];
@@ -448,14 +447,14 @@ static const int zngLogLevel = ZNGLogLevelInfo;
                     // We failed, if we were creating a new contact, we need to roll back the creation
                     if (creatingNewContact) {
                         [self deleteContactWithId:contact.contactId success:^(ZNGStatus *status) {
-                            ZNGLogWarn(@"Creating the new contact succeeded, but one of the follow up requests to add channel or label information failed: %@\n\nContact was deleted successfully after the error.", error);
+                            SBLogWarning(@"Creating the new contact succeeded, but one of the follow up requests to add channel or label information failed: %@\n\nContact was deleted successfully after the error.", error);
                             
                             if (failure != nil) {
                                 failure(error);
                             }
                         } failure:^(ZNGError *deletionError) {
-                            ZNGLogError(@"An error was encountered while adding labels or channels after successfully creating a contact: %@", error);
-                            ZNGLogError(@"Additionally, an error was encountered while attempting to clean up and delete this contact: %@", deletionError);
+                            SBLogError(@"An error was encountered while adding labels or channels after successfully creating a contact: %@", error);
+                            SBLogError(@"Additionally, an error was encountered while attempting to clean up and delete this contact: %@", deletionError);
                             
                             if (failure != nil) {
                                 failure(error);
@@ -486,7 +485,7 @@ static const int zngLogLevel = ZNGLogLevelInfo;
         parameters[@"is_starred"] = changedContact.isStarred ? @YES : @NO;
         parameters[@"is_confirmed"] = changedContact.isConfirmed ? @YES : @NO;
         
-        ZNGLogDebug(@"Updating contact %@ with: %@", changedContact.contactId, parameters);
+        SBLogDebug(@"Updating contact %@ with: %@", changedContact.contactId, parameters);
         
         [self updateContactWithId:newContact.contactId withParameters:parameters success:contactUpdateSuccessBlock failure:failure];
     }
@@ -499,11 +498,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     __block BOOL success;
     
     [self addLabelWithId:label.labelId withContactId:contact.contactId success:^(ZNGContact *contact, ZNGStatus *status) {
-        ZNGLogVerbose(@"Added label %@ to %@", label.displayName, [contact fullName]);
+        SBLogVerbose(@"Added label %@ to %@", label.displayName, [contact fullName]);
         dispatch_semaphore_signal(semaphore);
         success = YES;
     } failure:^(ZNGError * anError) {
-        ZNGLogError(@"Unable to add label %@ to %@: %@", label.displayName, [contact fullName], anError);
+        SBLogError(@"Unable to add label %@ to %@: %@", label.displayName, [contact fullName], anError);
         dispatch_semaphore_signal(semaphore);
         success = NO;
         *error = anError;
@@ -520,11 +519,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     __block BOOL success;
     
     [self removeLabelWithId:label.labelId withContactId:contact.contactId success:^(ZNGStatus *status) {
-        ZNGLogVerbose(@"Removed label %@ from %@", label.displayName, [contact fullName]);
+        SBLogVerbose(@"Removed label %@ from %@", label.displayName, [contact fullName]);
         dispatch_semaphore_signal(semaphore);
         success = YES;
     } failure:^(ZNGError * anError) {
-        ZNGLogError(@"Unable to remove label %@ from %@: %@", label.displayName, [contact fullName], anError);
+        SBLogError(@"Unable to remove label %@ from %@: %@", label.displayName, [contact fullName], anError);
         dispatch_semaphore_signal(semaphore);
         success = NO;
         *error = anError;
@@ -542,11 +541,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     
     ZNGNewChannel * newChannel = [[ZNGNewChannel alloc] initWithChannel:channel];
     [self saveContactChannel:newChannel withContactId:contact.contactId success:^(ZNGChannel *contactChannel, ZNGStatus *status) {
-        ZNGLogVerbose(@"Added channel %@ to %@", channel.value, [contact fullName]);
+        SBLogVerbose(@"Added channel %@ to %@", channel.value, [contact fullName]);
         dispatch_semaphore_signal(semaphore);
         success = YES;
     } failure:^(ZNGError * anError) {
-        ZNGLogError(@"Unable to add channel %@ to %@: %@", channel.value, [contact fullName], anError);
+        SBLogError(@"Unable to add channel %@ to %@: %@", channel.value, [contact fullName], anError);
         dispatch_semaphore_signal(semaphore);
         success = NO;
         *error = anError;
@@ -563,11 +562,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     __block BOOL success;
     
     [self updateChannel:channel fromContact:contact success:^(ZNGChannel *channel, ZNGStatus *status) {
-        ZNGLogVerbose(@"Updated %@ channel", channel.formattedValue);
+        SBLogVerbose(@"Updated %@ channel", channel.formattedValue);
         dispatch_semaphore_signal(semaphore);
         success = YES;
     } failure:^(ZNGError * anError) {
-        ZNGLogError(@"Unable to update %@ channel: %@", channel.formattedValue, anError);
+        SBLogError(@"Unable to update %@ channel: %@", channel.formattedValue, anError);
         success = NO;
         *error = anError;
     }];
@@ -583,11 +582,11 @@ static const int zngLogLevel = ZNGLogLevelInfo;
     __block BOOL success;
     
     [self deleteContactChannelWithId:channel.channelId withContactId:contact.contactId success:^(ZNGStatus *status) {
-        ZNGLogVerbose(@"Removed channel %@ from %@", channel.value, [contact fullName]);
+        SBLogVerbose(@"Removed channel %@ from %@", channel.value, [contact fullName]);
         dispatch_semaphore_signal(semaphore);
         success = YES;
     } failure:^(ZNGError * anError) {
-        ZNGLogError(@"Unable to remove channel %@ from %@: %@", channel.value, [contact fullName], anError);
+        SBLogError(@"Unable to remove channel %@ from %@: %@", channel.value, [contact fullName], anError);
         dispatch_semaphore_signal(semaphore);
         success = NO;
         *error = anError;

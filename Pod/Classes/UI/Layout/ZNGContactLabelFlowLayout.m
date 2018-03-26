@@ -7,9 +7,8 @@
 //
 
 #import "ZNGContactLabelFlowLayout.h"
-#import "ZNGLogging.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGContactLabelFlowLayout
 
@@ -23,7 +22,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
         if (attributes.indexPath.section == 0) {
             
             if (foundItemInSectionZero) {
-                ZNGLogWarn(@"Found multiple items in section 0 of labels collection view.  Section 0 is expected to have only one item.");
+                SBLogWarning(@"Found multiple items in section 0 of labels collection view.  Section 0 is expected to have only one item.");
             }
             
             attributes.frame = CGRectMake(self.sectionInset.left, attributes.frame.origin.y, attributes.frame.size.width, attributes.frame.size.height);

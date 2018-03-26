@@ -7,10 +7,9 @@
 //
 
 #import "ZNGLabel.h"
-#import "ZNGLogging.h"
 #import "UIColor+ZingleSDK.h"
 
-static const int zngLogLevel = ZNGLogLevelWarning;
+@import SBObjectiveCWrapper;
 
 @implementation ZNGLabel
 
@@ -44,7 +43,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * colorString = self.textColor;
     
     if ([colorString length] == 0) {
-        ZNGLogInfo(@"%@ label has no text color information.  Using default #ffffff", self.displayName);
+        SBLogInfo(@"%@ label has no text color information.  Using default #ffffff", self.displayName);
         colorString = @"#ffffff";
     }
     
@@ -56,7 +55,7 @@ static const int zngLogLevel = ZNGLogLevelWarning;
     NSString * colorString = self.backgroundColor;
     
     if ([colorString length] == 0) {
-        ZNGLogInfo(@"%@ label has no text color information.  Using default #595959", self.displayName);
+        SBLogInfo(@"%@ label has no text color information.  Using default #595959", self.displayName);
         colorString = @"#595959";
     }
     

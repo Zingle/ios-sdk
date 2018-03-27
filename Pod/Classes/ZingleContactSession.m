@@ -109,7 +109,7 @@
     // We only care about push notifications that specify our current service ID
     NSString * serviceId = notification.userInfo[@"aps"][@"service"];
     
-    if ([serviceId isEqualToString:self.contactService.serviceId]) {
+    if ([serviceId isEqual:self.contactService.serviceId]) {
         [self updateCurrentService];
     }
 }

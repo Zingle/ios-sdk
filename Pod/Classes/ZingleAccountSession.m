@@ -353,7 +353,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (BOOL) notificationRelevantToCurrentService:(NSNotification *)notification
 {
     NSString * serviceId = notification.userInfo[@"aps"][@"service"];
-    return [serviceId isEqualToString:self.service.serviceId];
+    return [serviceId isEqual:self.service.serviceId];
 }
 
 - (void) notifyBecameActive:(NSNotification *)notification

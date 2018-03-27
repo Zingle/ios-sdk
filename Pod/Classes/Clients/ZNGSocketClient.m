@@ -508,7 +508,7 @@
     NSString * lockedByUserID = info[@"lockedByUuid"];
     NSString * meId = accountSession.userAuthorization.userId;
     
-    BOOL lockedByMeMyselfAndI = (([meId length] > 0) && ([lockedByUserID isEqualToString:meId]));
+    BOOL lockedByMeMyselfAndI = (([meId length] > 0) && ([lockedByUserID isEqual:meId]));
     
     if (!lockedByMeMyselfAndI) {
         SBLogInfo(@"Conversation was locked: %@", description);
@@ -525,7 +525,7 @@
     
     NSDictionary * data = [dataArray firstObject];
     NSDictionary * userData = data[@"user"];
-    BOOL isNote = [data[@"type"] isEqualToString:@"note"];
+    BOOL isNote = [data[@"type"] isEqual:@"note"];
     
     if (userData[@"id"] == nil) {
         SBLogWarning(@"Received a userIsReplying notification with no user ID.  Ignoring: %@", data);

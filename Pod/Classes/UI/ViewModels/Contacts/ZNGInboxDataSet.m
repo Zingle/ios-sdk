@@ -404,12 +404,15 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     //  filtering based on a live-typed search term.  (We can expect many ZNGInboxDataSearch objects to be created and destroyed as the
     //  user types.)
     [pages enumerateIndexesUsingBlock:^(NSUInteger page, BOOL * _Nonnull stop) {
-        __block NSBlockOperation * operation = [NSBlockOperation blockOperationWithBlock:^{
+        NSBlockOperation * operation = [[NSBlockOperation alloc] init];
+        __weak NSBlockOperation * weakOperation = operation;
+        
+        [operation addExecutionBlock:^{
             // Grab a strong reference to the client before we set our semaphore
             ZNGContactClient * strongContactClient = weakContactClient;
             
             // Ensure we are still on schedule and our contact client has not disappeared
-            if ((operation.cancelled) || (strongContactClient == nil)) {
+            if ((weakOperation.isCancelled) || (strongContactClient == nil)) {
                 return;
             }
             
@@ -430,14 +433,14 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
                     contact.contactClient = strongContactClient;
                 }
                 
-                if (!(operation.cancelled)) {
-                    [self _removeLoadingPage:page];
+                if (!(weakOperation.isCancelled)) {
+                    [weakSelf _removeLoadingPage:page];
                     [weakSelf mergeNewData:contacts withStatus:status];
                 }
                 dispatch_semaphore_signal(semaphore);
             } failure:^(ZNGError *error) {
                 SBLogWarning(@"Unable to fetch inbox data for page %llu: %@", (unsigned long long)page, error);
-                [self _removeLoadingPage:page];
+                [weakSelf _removeLoadingPage:page];
                 dispatch_semaphore_signal(semaphore);
             }];
             

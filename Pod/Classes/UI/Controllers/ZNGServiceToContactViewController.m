@@ -318,9 +318,16 @@ enum ZNGConversationSections
             // Reload just the typing indicators section.  Warning: Using insert/delete here is hopelessly perilous due to
             //  our superclasses calling reloadData.
             [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:ZNGConversationSectionTypingIndicators]];
-
-            if (([change[NSKeyValueChangeKindKey] intValue] == NSKeyValueChangeInsertion) && (self.stuckToBottom)) {
-                [self scrollToBottomAnimated:YES];
+            
+            NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
+            
+            // We'll scroll if we're stuck to the bottom and this is an insertion
+            BOOL isInsertion = ([change[NSKeyValueChangeKindKey] intValue] == NSKeyValueChangeInsertion);
+            BOOL hasIndex = ([indexes count] > 0);
+            
+            if ((isInsertion) && (hasIndex) && (self.stuckToBottom)) {
+                SBLogDebug(@"Scrolling to show a new typing indicator.");
+                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[indexes firstIndex] inSection:ZNGConversationSectionTypingIndicators] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
             }
         } else if ([keyPath isEqualToString:KVOTeamAssignment]) {
             [self updateTitle];

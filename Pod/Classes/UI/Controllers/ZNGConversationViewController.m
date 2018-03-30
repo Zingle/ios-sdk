@@ -698,6 +698,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     //  would scroll down to see just the top of the new bubble but not the entire bubble.
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         CGRect bottomLeft = CGRectMake(0.0, self.collectionView.contentSize.height - 1.0, 1.0, 1.0);
+        SBLogVerbose(@"Scrolling conversation view down to %@", NSStringFromCGRect(bottomLeft));
         [self.collectionView scrollRectToVisible:bottomLeft animated:animated];
     });
 }

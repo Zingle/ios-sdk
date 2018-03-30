@@ -137,7 +137,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         
 + (BOOL) pushNotificationIsRelevantToZingle:(NSDictionary *)userInfo
 {
-    return [userInfo[@"aps"][@"category"] isEqualToString:@"Zingle"];
+    return [userInfo[@"aps"][@"category"] isEqual:@"Zingle"];
 }
 
 #pragma mark - Initializers

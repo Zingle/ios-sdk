@@ -647,9 +647,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             if (overflowCount > 0) {
                 NSRange overflowRangeInIncomingData = NSMakeRange(overlapRangeInTotalData.length, [incomingContacts count] - overlapRangeInTotalData.length);
                 NSArray * overflow = [incomingContacts subarrayWithRange:overflowRangeInIncomingData];
-                NSRange appendRange = NSMakeRange([mutableContacts count], [overflow count]);
-                NSIndexSet * indexSet = [NSIndexSet indexSetWithIndexesInRange:appendRange];
-                [mutableContacts insertObjects:overflow atIndexes:indexSet];    // See note above about insertObjects:AtIndexes: vs. addObjectsFromArray; re: KVO
+                [mutableContacts addObjectsFromArray:overflow];
             }
         }
     }

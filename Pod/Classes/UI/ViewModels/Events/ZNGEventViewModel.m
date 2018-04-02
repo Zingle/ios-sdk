@@ -105,7 +105,14 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
         return nil;
     }
     
-    return self.event.message.attachments[self.index];
+    NSString * attachmentName = self.event.message.attachments[self.index];
+    
+    // Ensure this is an NSString and not NSNull
+    if ([attachmentName isKindOfClass:[NSString class]]) {
+        return attachmentName;
+    }
+    
+    return nil;
 }
 
 - (UIImage *) outgoingImageAttachment

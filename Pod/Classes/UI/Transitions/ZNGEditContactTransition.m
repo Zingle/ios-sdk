@@ -172,25 +172,24 @@
         // Bring the view up into the frame
         toSnapshot.frame = toViewFinalFrame;
     } completion:^(BOOL finished) {
-        // Restore any text that we hid above
+        // Restore hidden things
         toViewController.assignmentLabel.hidden = NO;
         fromTitleLabel.alpha = 1.0;
         conversationViewController.hideContactName = NO;
-        
-        // Restore the header color and button visibility
+        conversationViewController.navigationItem.titleView.hidden = NO;
         toViewController.titleContainer.backgroundColor = headerColor;
         toViewController.cancelButton.hidden = NO;
         toViewController.saveButton.hidden = NO;
-        
-        conversationViewController.navigationItem.titleView.hidden = NO;
-        
         toViewController.view.hidden = NO;
+        
+        // Remove our animating views
         [toSnapshot removeFromSuperview];
         [animatingHeader removeFromSuperview];
         [animatingTitle removeFromSuperview];
         [oldColorAnimatingTitle removeFromSuperview];
         [animatingNameLabel removeFromSuperview];
         
+        // We done
         [transitionContext completeTransition:YES];
     }];
 }

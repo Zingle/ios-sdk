@@ -62,7 +62,7 @@
     CGRect nameDestinationFrame = CGRectNull;
     UILabel * blueAnimatingNameLabel = nil;
     UILabel * whiteAnimatingNameLabel = nil;
-    NSRange nameRange = NSMakeRange(NSNotFound, 0);
+    __block NSRange nameRange = NSMakeRange(NSNotFound, 0);
     
     if ([conversationTitleLabel isKindOfClass:[UILabel class]]) {
         NSString * contactName = [[conversationTitleLabel.attributedText substringsByLineAndAttributes] firstObject];
@@ -114,6 +114,10 @@
         
         // Unhide contact name
         NSMutableAttributedString * mutableName = [conversationTitleLabel.attributedText mutableCopy];
+        NSString * contactName = [[conversationTitleLabel.attributedText substringsByLineAndAttributes] firstObject];
+        
+        // Re-calculate name range.  If a contact's name is being edited, the name will have changed between when we started this transition and now.  Scary.
+        nameRange = [mutableName.string rangeOfString:contactName];
         [mutableName removeAttribute:NSForegroundColorAttributeName range:nameRange];
         conversationTitleLabel.attributedText = mutableName;
         

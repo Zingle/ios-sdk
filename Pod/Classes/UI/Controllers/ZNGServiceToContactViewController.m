@@ -100,6 +100,8 @@ enum ZNGConversationSections
     BOOL viewHasAppeared;
     BOOL titleWasSingleLineLastUpdate;
     
+    BOOL _hideContactName;
+    
     /**
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
@@ -293,6 +295,12 @@ enum ZNGConversationSections
     [self updateTitle];
 }
 
+- (void) setHideContactName:(BOOL)hideContactName
+{
+    _hideContactName = hideContactName;
+    [self updateTitle];
+}
+
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (context == KVOContext) {
@@ -400,6 +408,11 @@ enum ZNGConversationSections
     }
     
     NSMutableAttributedString * title = [[NSMutableAttributedString alloc] initWithString:[self.conversation remoteName]];
+    
+    if (self.hideContactName) {
+        [title addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(0, [title length])];
+    }
+    
     NSMutableAttributedString * subtitle = [self subtitle];
     BOOL deferUpdateToNextRunLoopCycle = NO;
     

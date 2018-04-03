@@ -315,39 +315,20 @@ enum ZNGConversationSections
             
             [self updateForInputLockedStatus:lockedString oldStatus:oldLockedString];
         } else if ([keyPath isEqualToString:KVOReplyingUsersPath]) {
+            // Reload just the typing indicators section.  Warning: Using insert/delete here is hopelessly perilous due to
+            //  our superclasses calling reloadData.
+            [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:ZNGConversationSectionTypingIndicators]];
             
-            switch ([change[NSKeyValueChangeKindKey] intValue]) {
-                case NSKeyValueChangeInsertion:
-                {
-                    NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
-                    [self.collectionView performBatchUpdates:^{
-                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-                            [self.collectionView insertItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:idx inSection:ZNGConversationSectionTypingIndicators]]];
-                        }];
-                    } completion:^(BOOL finished) {
-                        if (self.stuckToBottom) {
-                            [self scrollToBottomAnimated:YES];
-                        }
-                    }];
-                    break;
-                }
-                    
-                case NSKeyValueChangeRemoval:
-                {
-                    NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
-                    [self.collectionView performBatchUpdates:^{
-                        [indexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-                            [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:idx inSection:ZNGConversationSectionTypingIndicators]]];
-                        }];
-                    } completion:nil];
-                    break;
-                }
-                    
-                default:
-                    [self.collectionView reloadSections:[NSIndexSet indexSetWithIndex:ZNGConversationSectionTypingIndicators]];
-                    
+            NSIndexSet * indexes = change[NSKeyValueChangeIndexesKey];
+            
+            // We'll scroll if we're stuck to the bottom and this is an insertion
+            BOOL isInsertion = ([change[NSKeyValueChangeKindKey] intValue] == NSKeyValueChangeInsertion);
+            BOOL hasIndex = ([indexes count] > 0);
+            
+            if ((isInsertion) && (hasIndex) && (self.stuckToBottom)) {
+                SBLogDebug(@"Scrolling to show a new typing indicator.");
+                [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:[indexes firstIndex] inSection:ZNGConversationSectionTypingIndicators] atScrollPosition:UICollectionViewScrollPositionNone animated:YES];
             }
-            
         } else if ([keyPath isEqualToString:KVOTeamAssignment]) {
             [self updateTitle];
         } else if ([keyPath isEqualToString:KVOUserAssignment]) {

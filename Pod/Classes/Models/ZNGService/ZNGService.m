@@ -272,17 +272,20 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
 
 - (BOOL) allowsAssignment
 {
-    ZNGSetting * assignmentSetting = [self settingWithCode:@"assignment_enabled"];
+    return NO;
     
-    // First check if the setting is enabled.
-    // It is possible for the service to have the feature but also have the feature disabled via the setting.
-    if (![assignmentSetting.value boolValue]) {
-        return NO;
-    }
-    
-    // We're in nonsense land if the assignment_enabled setting is true above but the feature is missing.
-    // We'll check anyway.
-    return ([self.features containsObject:ZNGServiceFeatureAssignment]);
+    // TODO: Restore assignment for the teams release
+//    ZNGSetting * assignmentSetting = [self settingWithCode:@"assignment_enabled"];
+//    
+//    // First check if the setting is enabled.
+//    // It is possible for the service to have the feature but also have the feature disabled via the setting.
+//    if (![assignmentSetting.value boolValue]) {
+//        return NO;
+//    }
+//    
+//    // We're in nonsense land if the assignment_enabled setting is true above but the feature is missing.
+//    // We'll check anyway.
+//    return ([self.features containsObject:ZNGServiceFeatureAssignment]);
 }
 
 - (BOOL) allowsTeamAssignment

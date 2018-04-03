@@ -71,8 +71,6 @@
     
     UILabel * animatingNameLabel = nil;
     CGRect animatingNameFinalFrame = CGRectZero;
-    NSRange hiddenTitleRange = NSMakeRange(NSNotFound, 0);
-    __block UIColor * hiddenTitleColor = nil;
     
     // Find the location of the contact's name in our old header
     UILabel * fromTitleLabel = (UILabel *)conversationViewController.navigationItem.titleView;
@@ -92,14 +90,7 @@
         
         if (animatingName != nil) {
             // Hide the name
-            hiddenTitleRange = [fromTitleLabel.text rangeOfString:animatingName];
-            NSMutableAttributedString * attributedTitleText = [fromTitleLabel.attributedText mutableCopy];
-            [attributedTitleText enumerateAttribute:NSForegroundColorAttributeName inRange:hiddenTitleRange options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-                hiddenTitleColor = value;
-                *stop = YES;
-            }];
-            [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:hiddenTitleRange];
-            fromTitleLabel.attributedText = attributedTitleText;
+            conversationViewController.hideContactName = YES;
             
             CGRect animatingNameStartBounds = [self frameForSubstring:animatingName withinLabel:fromTitleLabel];
             CGRect animatingNameStartFrame = [fromTitleLabel convertRect:animatingNameStartBounds toView:fromViewController.view];
@@ -125,10 +116,8 @@
                 animatingNameLabel.transform = CGAffineTransformMakeScale(startingScale, startingScale);
                 animatingNameLabel.alpha = 0.58;
                 
-                // Hide the name that we are animating and the destination label
+                // Hide the destination label
                 toViewController.assignmentLabel.hidden = YES;
-                [attributedTitleText addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:hiddenTitleRange];
-                fromTitleLabel.attributedText = attributedTitleText;
             }
         }
     } else {
@@ -186,16 +175,7 @@
         // Restore any text that we hid above
         toViewController.assignmentLabel.hidden = NO;
         fromTitleLabel.alpha = 1.0;
-        NSMutableAttributedString * text = [fromTitleLabel.attributedText mutableCopy];
-        [text enumerateAttribute:NSForegroundColorAttributeName inRange:NSMakeRange(0, [text length]) options:0 usingBlock:^(UIColor * _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-            if ([value isEqual:[UIColor clearColor]]) {
-                [text removeAttribute:NSForegroundColorAttributeName range:range];
-            }
-        }];
-        if (hiddenTitleColor != nil) {
-            [text addAttribute:NSForegroundColorAttributeName value:hiddenTitleColor range:hiddenTitleRange];
-        }
-        fromTitleLabel.attributedText = text;
+        conversationViewController.hideContactName = NO;
         
         // Restore the header color and button visibility
         toViewController.titleContainer.backgroundColor = headerColor;

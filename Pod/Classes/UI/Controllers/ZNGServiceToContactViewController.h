@@ -32,6 +32,12 @@
 
 @property (nonatomic, weak, nullable) id <ZNGServiceToContactViewDelegate> delegate;
 
+/**
+ *  Setting this flag hides the contact name (potentially only the first line of the title on services with assignment).
+ *  Used for animated transitions.
+ */
+@property (nonatomic, assign) BOOL hideContactName;
+
 @property (nonatomic, strong, nullable) IBOutlet UIView * automationBannerContainerView;
 @property (nonatomic, strong, nullable) IBOutlet UIView * automationBanner;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * automationLabel;

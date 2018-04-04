@@ -62,11 +62,10 @@
     CGRect nameDestinationFrame = CGRectNull;
     UILabel * blueAnimatingNameLabel = nil;
     UILabel * whiteAnimatingNameLabel = nil;
-    NSRange nameRange = NSMakeRange(NSNotFound, 0);
     
     if ([conversationTitleLabel isKindOfClass:[UILabel class]]) {
         NSString * contactName = [[conversationTitleLabel.attributedText substringsByLineAndAttributes] firstObject];
-        nameRange = [conversationTitleLabel.text rangeOfString:contactName];
+        NSRange nameRange = [conversationTitleLabel.text rangeOfString:contactName];
         CGRect nameBounds = [conversationTitleLabel boundingRectForTextRange:nameRange];
         
         if (!CGRectIsEmpty(nameBounds)) {
@@ -86,9 +85,7 @@
             [transitionContext.containerView addSubview:whiteAnimatingNameLabel];
             
             // Hide the original name while we animate this name up
-            NSMutableAttributedString * mutableName = [conversationTitleLabel.attributedText mutableCopy];
-            [mutableName addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:nameRange];
-            conversationTitleLabel.attributedText = mutableName;
+            conversationViewController.hideContactName = YES;
         }
     } else {
         SBLogWarning(@"Unable to find title label in conversation view when exiting contact edit view.  The name will not animate.");
@@ -113,9 +110,7 @@
         [animatingBlueness removeFromSuperview];
         
         // Unhide contact name
-        NSMutableAttributedString * mutableName = [conversationTitleLabel.attributedText mutableCopy];
-        [mutableName removeAttribute:NSForegroundColorAttributeName range:nameRange];
-        conversationTitleLabel.attributedText = mutableName;
+        conversationViewController.hideContactName = NO;
         
         [transitionContext completeTransition:YES];
     }];

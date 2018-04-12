@@ -9,7 +9,7 @@
 #import <XCTest/XCTest.h>
 #import "ZingleSDK/ZNGInboxStatistician.h"
 #import "ZingleSDK/ZNGInboxStatsEntry.h"
-#import "ZingleSDK/ZNGTeamV2.h"
+#import "ZingleSDK/ZNGTeam.h"
 #import "ZingleSDK/ZNGUser.h"
 
 @interface TestInboxStatistician : XCTestCase
@@ -19,12 +19,11 @@
 @implementation TestInboxStatistician
 
 #pragma mark - Data
-- (ZNGTeamV2 *) team
+- (ZNGTeam *) team
 {
-    ZNGTeamV2 * team = [[ZNGTeamV2 alloc] init];
+    ZNGTeam * team = [[ZNGTeam alloc] init];
     team.teamId = @"12341234-1234123412341-12341234";
     team.displayName = @"Some Team";
-    team.numericId = 5;
     
     return team;
 }
@@ -37,7 +36,6 @@
     user.lastName = @"Personson";
     user.username = @"dude.personson@fake.mail";
     user.email = user.username;
-    user.numericId = 69;
     
     return user;
 }
@@ -45,17 +43,17 @@
 - (NSArray<NSDictionary *> *) socketDataWithZeroEverythingData
 {
     ZNGUser * user = [self user];
-    ZNGTeamV2 * team = [self team];
+    ZNGTeam * team = [self team];
     ZNGInboxStatsEntry * zeroStats = [[ZNGInboxStatsEntry alloc] init];
     NSDictionary * zeroStatsDictionary = [MTLJSONAdapter JSONDictionaryFromModel:zeroStats error:nil];
 
     return @[@{
                  @"unassigned": zeroStatsDictionary,
                  @"teams": @{
-                         @(team.numericId): zeroStatsDictionary,
+                         team.teamId: zeroStatsDictionary,
                          },
                  @"users": @{
-                         @(user.numericId): zeroStatsDictionary,
+                         user.userId: zeroStatsDictionary,
                          },
                  }];
 }
@@ -100,7 +98,7 @@
 - (NSArray<NSDictionary *> *) socketDataWithZeroUnassignedAndNonZeroTeamAndUser
 {
     ZNGUser * user = [self user];
-    ZNGTeamV2 * team = [self team];
+    ZNGTeam * team = [self team];
     ZNGInboxStatsEntry * zeroUnassigned = [[ZNGInboxStatsEntry alloc] init];
     NSDictionary * zeroUnassignedDictionary = [MTLJSONAdapter JSONDictionaryFromModel:zeroUnassigned error:nil];
     
@@ -119,10 +117,10 @@
     return @[@{
              @"unassigned": zeroUnassignedDictionary,
              @"teams": @{
-                     @(team.numericId): nonZeroTeamDictionary,
+                     team.teamId: nonZeroTeamDictionary,
                      },
              @"users": @{
-                     @(user.numericId): nonZeroUserDictionary,
+                     user.userId: nonZeroUserDictionary,
                      },
              }];
 }
@@ -175,8 +173,7 @@
 - (void) testNonZeroTeamData
 {
     ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
-    ZNGTeamV2 * team = [self team];
-    [stats updateWithV2TeamsData:@[team]];
+    ZNGTeam * team = [self team];
     [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
     
     ZNGInboxStatsEntry * teamStats = [stats statsForTeam:team];
@@ -292,8 +289,7 @@
 - (void) testOmittedTeamDataAssumedZero
 {
     ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
-    ZNGTeamV2 * team = [self team];
-    [stats updateWithV2TeamsData:@[team]];
+    ZNGTeam * team = [self team];
     [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
     
     // Ensure we start with non zero
@@ -318,8 +314,7 @@
 - (void) testDataWithOnlyIrrelevantTeamsErasesPreviousTeamsData
 {
     ZNGInboxStatistician * stats = [[ZNGInboxStatistician alloc] init];
-    ZNGTeamV2 * team = [self team];
-    [stats updateWithV2TeamsData:@[team]];
+    ZNGTeam * team = [self team];
     [stats updateWithSocketData:[self socketDataWithZeroUnassignedAndNonZeroTeamAndUser]];
     
     // Ensure we start with non zero

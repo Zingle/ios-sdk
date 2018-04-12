@@ -21,11 +21,6 @@ extern NSString * const ZNGInboxStatisticianDataChangedNotification;
 #pragma mark - Writing
 - (void) updateWithSocketData:(NSArray<NSDictionary *> *)socketData;
 
-/**
- *  Necessary to associate UUIDs with numeric IDs.
- */
-- (void) updateWithV2TeamsData:(NSArray<ZNGTeamV2 *> *)teams;
-
 #pragma mark - Reading
 - (ZNGInboxStatsEntry * _Nullable) statsForUnassigned;
 - (ZNGInboxStatsEntry * _Nullable) statsForTeam:(ZNGTeam *)team;

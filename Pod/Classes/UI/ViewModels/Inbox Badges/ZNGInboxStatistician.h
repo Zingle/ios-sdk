@@ -27,6 +27,7 @@ extern NSString * const ZNGInboxStatisticianDataChangedNotification;
 - (void) updateWithV2TeamsData:(NSArray<ZNGTeamV2 *> *)teams;
 
 #pragma mark - Reading
+- (ZNGInboxStatsEntry * _Nullable) combinedStatsForAll;
 - (ZNGInboxStatsEntry * _Nullable) statsForUnassigned;
 - (ZNGInboxStatsEntry * _Nullable) statsForTeam:(ZNGTeam *)team;
 - (ZNGInboxStatsEntry * _Nullable) statsForUser:(ZNGUser *)user;

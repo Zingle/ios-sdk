@@ -137,6 +137,22 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     return userStats[@(user.numericId)];
 }
 
+- (ZNGInboxStatsEntry * _Nullable) combinedStatsForAll
+{
+    NSMutableArray<ZNGInboxStatsEntry *> * stats = [[NSMutableArray alloc] initWithCapacity:[userStats count] + [teamStats count] + 1];
+    
+    ZNGInboxStatsEntry * unassigned = [self statsForUnassigned];
+    
+    if (unassigned != nil) {
+        [stats addObject:unassigned];
+    }
+    
+    [stats addObjectsFromArray:[teamStats allValues]];
+    [stats addObjectsFromArray:[userStats allValues]];
+    
+    return [[ZNGInboxStatsEntry alloc] initByCombiningEntries:stats];
+}
+
 - (ZNGInboxStatsEntry * _Nullable) combinedStatsForUnassignedAndUser:(ZNGUser *)user andTeams:(NSArray<ZNGTeam *> *)teams
 {
     NSMutableArray<ZNGInboxStatsEntry *> * stats = [[NSMutableArray alloc] initWithCapacity:[teams count] + 2];

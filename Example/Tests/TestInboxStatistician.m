@@ -52,10 +52,10 @@
     return @[@{
                  @"unassigned": zeroStatsDictionary,
                  @"teams": @{
-                         @(team.numericId): zeroStatsDictionary,
+                         [@(team.numericId) stringValue]: zeroStatsDictionary,
                          },
                  @"users": @{
-                         @(user.numericId): zeroStatsDictionary,
+                         [@(user.numericId) stringValue]: zeroStatsDictionary,
                          },
                  }];
 }
@@ -89,10 +89,10 @@
     
     return @[@{
                  @"teams": @{
-                         @12345: nonZeroTeamDictionary,
+                         @"12345": nonZeroTeamDictionary,
                          },
                  @"users": @{
-                         @5678: nonZeroUserDictionary,
+                         @"5678": nonZeroUserDictionary,
                          },
                  }];
 }
@@ -119,10 +119,10 @@
     return @[@{
              @"unassigned": zeroUnassignedDictionary,
              @"teams": @{
-                     @(team.numericId): nonZeroTeamDictionary,
+                     [@(team.numericId) stringValue]: nonZeroTeamDictionary,
                      },
              @"users": @{
-                     @(user.numericId): nonZeroUserDictionary,
+                     [@(user.numericId) stringValue]: nonZeroUserDictionary,
                      },
              }];
 }

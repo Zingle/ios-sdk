@@ -70,7 +70,7 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
         
         // Remove any unincluded teams
         for (NSNumber * teamId in [[teamStats allKeys] copy]) {
-            if (teams[teamId] == nil) {
+            if (teams[[teamId stringValue]] == nil) {
                 [teamStats removeObjectForKey:teamId];
             }
         }
@@ -86,7 +86,7 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
         
         // Remove any unincluded users
         for (NSNumber * userId in [[userStats allKeys] copy]) {
-            if (users[userId] == nil) {
+            if (users[[userId stringValue]] == nil) {
                 [userStats removeObjectForKey:userId];
             }
         }

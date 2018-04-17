@@ -160,7 +160,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
 - (void) notifyBadgeDataChanged:(NSNotification *)notification
 {
-    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUnassignedAndUser:self.userAuthorization andTeams:[self teamsToWhichCurrentUserBelongs]];
+    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUser:self.userAuthorization teams:[self teamsToWhichCurrentUserBelongs] includeUnassigned:YES];
     
     if (self.totalUnreadCount != totalStats.unreadCount) {
         SBLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);

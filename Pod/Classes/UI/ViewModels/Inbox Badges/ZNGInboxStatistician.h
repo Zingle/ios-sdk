@@ -31,7 +31,7 @@ extern NSString * const ZNGInboxStatisticianDataChangedNotification;
 - (ZNGInboxStatsEntry * _Nullable) statsForUnassigned;
 - (ZNGInboxStatsEntry * _Nullable) statsForTeam:(ZNGTeam *)team;
 - (ZNGInboxStatsEntry * _Nullable) statsForUser:(ZNGUser *)user;
-- (ZNGInboxStatsEntry * _Nullable) combinedStatsForUnassignedAndUser:(ZNGUser *)user andTeams:(NSArray<ZNGTeam *> *)teams;
+- (ZNGInboxStatsEntry * _Nullable) combinedStatsForUser:(ZNGUser * _Nullable)user teams:(NSArray<ZNGTeam *> * _Nullable)teams includeUnassigned:(BOOL)includeUnassigned;
 
 @end
 

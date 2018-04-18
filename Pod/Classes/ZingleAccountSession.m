@@ -632,6 +632,12 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     return [self teamsToWhichCurrentUserBelongs];
 }
 
+- (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichUserBelongsWithId:(NSString * _Nonnull)userId
+{
+    NSPredicate * oneOfHisTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", userId];
+    return [self.service.teams filteredArrayUsingPredicate:oneOfHisTeams];
+}
+
 - (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichCurrentUserBelongs
 {
     // We cannot return anything meaningful if we are not yet logged in
@@ -640,8 +646,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         return @[];
     }
     
-    NSPredicate * oneOfMyTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", self.userAuthorization.userId];
-    return [self.service.teams filteredArrayUsingPredicate:oneOfMyTeams];
+    return [self teamsToWhichUserBelongsWithId:self.userAuthorization.userId];
 }
 
 #pragma mark - Users

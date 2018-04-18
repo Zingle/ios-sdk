@@ -178,6 +178,11 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 - (NSArray<ZNGTeam *> * _Nonnull) teamsVisibleToCurrentUser;
 
 /**
+ *  Teams to which the specified user belongs.
+ */
+- (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichUserBelongsWithId:(NSString * _Nonnull)userId;
+
+/**
  *  For non-admin users, this will be identicial to `teamsVisibleToCurrentUser`
  */
 - (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichCurrentUserBelongs;

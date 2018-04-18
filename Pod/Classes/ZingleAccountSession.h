@@ -129,7 +129,6 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nullable) ZNGUserClient * userClient;
-@property (nonatomic, strong, nullable) ZNGTeamClient * teamClient;
 @property (nonatomic, strong, nullable) ZNGNotificationSettingsClient * notificationSettingsClient;
 
 #pragma mark - Network diagnostics

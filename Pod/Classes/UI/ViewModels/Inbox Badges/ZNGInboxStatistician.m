@@ -6,9 +6,9 @@
 //
 
 #import "ZNGInboxStatistician.h"
-#import "ZNGTeamV2.h"
 #import "ZNGUser.h"
 #import "ZNGInboxStatsEntry.h"
+#import "ZNGTeam.h"
 
 @import SBObjectiveCWrapper;
 
@@ -17,11 +17,9 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
 
 @implementation ZNGInboxStatistician
 {
-    NSMutableDictionary <NSString *, NSNumber *> * teamNumericIdsByUuid;
-    
     ZNGInboxStatsEntry * unassignedStatsEntry;
-    NSMutableDictionary<NSNumber *, ZNGInboxStatsEntry *> * teamStats;
-    NSMutableDictionary<NSNumber *, ZNGInboxStatsEntry *> * userStats;
+    NSMutableDictionary<NSString *, ZNGInboxStatsEntry *> * teamStats;
+    NSMutableDictionary<NSString *, ZNGInboxStatsEntry *> * userStats;
 }
 
 - (id) init
@@ -29,7 +27,6 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     self = [super init];
     
     if (self != nil) {
-        teamNumericIdsByUuid = [[NSMutableDictionary alloc] init];
         teamStats = [[NSMutableDictionary alloc] init];
         userStats = [[NSMutableDictionary alloc] init];
     }
@@ -65,12 +62,12 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     
     if ([teams isKindOfClass:[NSDictionary class]]) {
         [teams enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull teamId, NSDictionary * _Nonnull teamData, BOOL * _Nonnull stop) {
-            self->teamStats[@([teamId intValue])] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:teamData error:nil];;
+            self->teamStats[teamId] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:teamData error:nil];;
         }];
         
         // Remove any unincluded teams
-        for (NSNumber * teamId in [[teamStats allKeys] copy]) {
-            if (teams[[teamId stringValue]] == nil) {
+        for (NSString * teamId in [[teamStats allKeys] copy]) {
+            if (teams[teamId] == nil) {
                 [teamStats removeObjectForKey:teamId];
             }
         }
@@ -81,12 +78,12 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     
     if ([users isKindOfClass:[NSDictionary class]]) {
         [users enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull userId, NSDictionary * _Nonnull userData, BOOL * _Nonnull stop) {
-            self->userStats[@([userId intValue])] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:userData error:nil];
+            self->userStats[userId] = [MTLJSONAdapter modelOfClass:[ZNGInboxStatsEntry class] fromJSONDictionary:userData error:nil];
         }];
         
         // Remove any unincluded users
-        for (NSNumber * userId in [[userStats allKeys] copy]) {
-            if (users[[userId stringValue]] == nil) {
+        for (NSString * userId in [[userStats allKeys] copy]) {
+            if (users[userId] == nil) {
                 [userStats removeObjectForKey:userId];
             }
         }
@@ -98,15 +95,6 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
     // Check for changes and send a notification if any exist
     if ((![unassignedStatsEntry isEqual:oldUnassignedStats]) || (![teamStats isEqualToDictionary:oldTeamsStats]) || (![userStats isEqualToDictionary:oldUserStats])) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGInboxStatisticianDataChangedNotification object:self];
-    }
-}
-
-- (void) updateWithV2TeamsData:(NSArray<ZNGTeamV2 *> *)teams
-{
-    for (ZNGTeamV2 * team in teams) {
-        if (([team.teamId length] > 0) && (team.numericId > 0)) {
-            teamNumericIdsByUuid[team.teamId] = @(team.numericId);
-        }
     }
 }
 
@@ -123,18 +111,17 @@ NSString * const ZNGInboxStatisticianDataChangedNotification = @"ZNGInboxStatist
         return nil;
     }
     
-    NSNumber * teamId = teamNumericIdsByUuid[team.teamId];
-    
-    if (teamId == nil) {
-        return nil;
-    }
-    
-    return teamStats[teamId];
+    return teamStats[team.teamId];
 }
 
 - (ZNGInboxStatsEntry *) statsForUser:(ZNGUser *)user
 {
-    return userStats[@(user.numericId)];
+    if ([user.userId length] == 0) {
+        SBLogWarning(@"%s called with a user with no UUID.  Returning 0.", __PRETTY_FUNCTION__);
+        return nil;
+    }
+    
+    return userStats[user.userId];
 }
 
 - (ZNGInboxStatsEntry * _Nullable) combinedStatsForAll

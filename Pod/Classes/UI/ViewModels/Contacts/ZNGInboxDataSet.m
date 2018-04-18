@@ -13,6 +13,7 @@
 #import "ZNGContactDataSetBuilder.h"
 #import "ZNGLabel.h"
 #import "ZingleAccountSession.h"
+#import "ZNGTeam.h"
 
 @import SBObjectiveCWrapper;
 
@@ -25,6 +26,7 @@ static NSString * const ParameterKeyIsClosed               = @"is_closed";
 static NSString * const ParameterKeyUnassigned             = @"is_unassigned";
 static NSString * const ParameterKeyAssignedUserId         = @"assigned_to_user_id";
 static NSString * const ParameterKeyAssignedTeamId         = @"assigned_to_team_id";
+static NSString * const ParameterKeyRelevantUserId         = @"relative_id";
 static NSString * const ParameterKeyLabelId                = @"label_id";
 static NSString * const ParameterKeyGroupId                = @"contact_group_id";
 static NSString * const ParameterKeyQuery                  = @"query";
@@ -107,8 +109,10 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             if (([_assignedTeamId length] > 0) && ([_assignedUserId length] > 0)) {
                 SBLogError(@"Both team ID and user ID provided as assignment filters.  This is probably in error.");
             }
+            
+            _assignedRelevantToUserId = builder.assignedRelevantToUserId;
         } else {
-            if (([builder.assignedTeamId length] > 0) || ([builder.assignedUserId length] > 0)) {
+            if (([builder.assignedTeamId length] > 0) || ([builder.assignedUserId length] > 0) || ([builder.assignedRelevantToUserId length] > 0)) {
                 SBLogError(@"Unassigned flag is set to YES, but there were team or user assignment IDs also provided.  They are ignored.");
             }
         }
@@ -168,6 +172,8 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         [words addObject:[NSString stringWithFormat:@"Assigned to team %@", self.assignedTeamId]];
     } else if ([self.assignedUserId length] > 0) {
         [words addObject:[NSString stringWithFormat:@"Assigned to user %@", self.assignedUserId]];
+    } else if ([self.assignedRelevantToUserId length] > 0) {
+        [words addObject:[NSString stringWithFormat:@"Assigned to user %@ or one of his teams", self.assignedRelevantToUserId]];
     }
     
     if (self.unconfirmed) {
@@ -221,6 +227,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     builder.unassigned = self.unassigned;
     builder.assignedTeamId = self.assignedTeamId;
     builder.assignedUserId = self.assignedUserId;
+    builder.assignedRelevantToUserId = self.assignedRelevantToUserId;
     builder.searchText = self.searchText;
     builder.searchMessageBodies = self.searchMessageBodies;
     builder.contactClient = self.contactClient;
@@ -271,13 +278,17 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if (self.unassigned) {
         parameters[ParameterKeyUnassigned] = ParameterValueTrue;
     } else {
-        // We only expect one of these two assignment fields to be populated, but there is no need to silently enforce that here.
+        // We only expect one of these three assignment fields to be populated, but there is no need to silently enforce that here.
         if ([self.assignedUserId length] > 0) {
             parameters[ParameterKeyAssignedUserId] = self.assignedUserId;
         }
         
         if ([self.assignedTeamId length] > 0) {
             parameters[ParameterKeyAssignedTeamId] = self.assignedTeamId;
+        }
+        
+        if ([self.assignedRelevantToUserId length] > 0) {
+            parameters[ParameterKeyRelevantUserId] = self.assignedRelevantToUserId;
         }
     }
     
@@ -703,6 +714,39 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if ([self.assignedUserId length] > 0) {
         if (![contact.assignedToUserId isEqualToString:self.assignedUserId]) {
             return NO;
+        }
+    }
+    
+    if ([self.assignedRelevantToUserId length] > 0) {
+        // This filter set is for a specific user and his teams.  It's easy to first determine if the contact is assigned to an entirely different user.
+        if ([contact.assignedToUserId length] > 0) {
+            // This contact is assigned to a user.  Is it our dude?
+            if (![contact.assignedToUserId isEqualToString:self.assignedRelevantToUserId]) {
+                return NO;
+            }
+        } else {
+            // No user assignment.  If there is also no team assignment, this contact is now irrelevant.
+            if ([contact.assignedToTeamId length] == 0) {
+                return NO;
+            }
+            
+            // So there is a team assignment.  It's a bit ugly to go frolicking through the session object by way of the
+            //  contact client, but it gets the job done!
+            if ([self.contactClient.session isKindOfClass:[ZingleAccountSession class]]) {
+                NSArray<ZNGTeam *> * relevantTeams = [(ZingleAccountSession *)self.contactClient.session teamsToWhichUserBelongsWithId:self.assignedRelevantToUserId];
+                BOOL foundTeam = NO;
+                
+                for (ZNGTeam * team in relevantTeams) {
+                    if ([team.teamId isEqualToString:contact.assignedToTeamId]) {
+                        foundTeam = YES;
+                        break;
+                    }
+                }
+                
+                if (!foundTeam) {
+                    return NO;
+                }
+            }
         }
     }
     

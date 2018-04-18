@@ -31,6 +31,7 @@
     self.unassigned = baseDataSet.unassigned;
     self.assignedUserId = baseDataSet.assignedUserId;
     self.assignedTeamId = baseDataSet.assignedTeamId;
+    self.assignedRelevantToUserId = baseDataSet.assignedRelevantToUserId;
     self.searchText = baseDataSet.searchText;
     self.searchMessageBodies = baseDataSet.searchMessageBodies;
     self.allowContactsWithNoMessages = baseDataSet.allowContactsWithNoMessages;
@@ -57,6 +58,7 @@
              NSStringFromSelector(@selector(unassigned)): NSStringFromSelector(@selector(unassigned)),
              NSStringFromSelector(@selector(assignedTeamId)): NSStringFromSelector(@selector(assignedTeamId)),
              NSStringFromSelector(@selector(assignedUserId)): NSStringFromSelector(@selector(assignedUserId)),
+             NSStringFromSelector(@selector(assignedRelevantToUserId)): NSStringFromSelector(@selector(assignedRelevantToUserId)),
              NSStringFromSelector(@selector(searchText)): NSStringFromSelector(@selector(searchText)),
              NSStringFromSelector(@selector(searchMessageBodies)): NSStringFromSelector(@selector(searchMessageBodies)),
              };
@@ -86,6 +88,16 @@
         }
         
         if ([session.service teamWithId:self.assignedTeamId] == nil) {
+            return NO;
+        }
+    }
+    
+    if ([self.assignedRelevantToUserId length] > 0) {
+        if (![session.service allowsAssignment]) {
+            return NO;
+        }
+        
+        if ([session userWithId:self.assignedRelevantToUserId] == nil) {
             return NO;
         }
     }

@@ -29,6 +29,7 @@
 #import "ZNGInboxStatsEntry.h"
 #import "ZNGAssignmentViewController.h"
 #import "ZNGNotificationSettingsClient.h"
+#import "ZNGTeam.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -630,6 +631,35 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     for (ZNGUser * dude in self.users) {
         if (![dude.userId isEqualToString:self.userAuthorization.userId]) {
             [filteredUsers addObject:dude];
+        }
+    }
+    
+    return filteredUsers;
+}
+
+- (NSArray<ZNGUser *> * _Nonnull) usersOnCommonTeamsIncludingSelf:(BOOL)includeSelf
+{
+    if (![self.service allowsTeamAssignment]) {
+        return @[];
+    }
+    
+    NSArray<ZNGTeam *> * currentUserTeams = [self teamsToWhichCurrentUserBelongs];
+    NSMutableArray<ZNGUser *> * filteredUsers = [[NSMutableArray alloc] init];
+    
+    for (ZNGUser * dude in self.users) {
+        if ([dude.userId isEqualToString:self.userAuthorization.userId]) {
+            // This is the current user
+            if (includeSelf) {
+                [filteredUsers addObject:dude];
+            }
+        } else {
+            // This is someone else.  Do they have any of our teams in common?
+            for (ZNGTeam * team in currentUserTeams) {
+                if ([team.userIds containsObject:dude.userId]) {
+                    [filteredUsers addObject:dude];
+                    break;
+                }
+            }
         }
     }
     

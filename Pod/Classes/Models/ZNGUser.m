@@ -10,6 +10,7 @@
 #import "ZNGService.h"
 #import "ZNGUserAuthorization.h"
 #import "UIImage+CircleCrop.h"
+#import "ZNGUserSettings.h"
 
 @import SDWebImage;
 
@@ -29,7 +30,23 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
              @"serviceIds" : @"service_ids",
              @"avatarUri" : @"avatar_uri",
              NSStringFromSelector(@selector(servicePrivileges)): @"service_privileges",
+             NSStringFromSelector(@selector(settings)): @"settings",
              };
+}
+
++ (NSValueTransformer *)settingsJSONTransformer
+{
+    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGUserSettings class]];
+}
+
+#warning Remove temporary testing getter
+- (ZNGUserSettings *) settings
+{
+    if (_settings == nil) {
+        _settings = [[ZNGUserSettings alloc] init];
+    }
+    
+    return _settings;
 }
 
 - (BOOL) isEqual:(ZNGUser *)other

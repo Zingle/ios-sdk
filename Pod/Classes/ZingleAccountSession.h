@@ -192,6 +192,13 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 - (NSArray<ZNGUser *> * _Nonnull) usersIncludingSelf:(BOOL)includeSelf;
 
 /**
+ *  Returns only users that share at least one team with the current user.
+ *  Includes the current user if `includeSelf` is YES.
+ *  Returns @[] if team assignment is not enabled on the service.
+ */
+- (NSArray<ZNGUser *> * _Nonnull) usersOnCommonTeamsIncludingSelf:(BOOL)includeSelf;
+
+/**
  *  The user with the provided UUID, if available
  */
 - (ZNGUser * _Nullable) userWithId:(NSString *)userId;

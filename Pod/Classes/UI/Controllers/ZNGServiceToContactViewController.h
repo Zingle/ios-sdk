@@ -38,6 +38,12 @@
  */
 @property (nonatomic, assign) BOOL hideContactName;
 
+/**
+ *  Setting this flag hides the assignment name, e.g. "Jason" in "Assigned to Jason".
+ *  Used for animated transitions.
+ */
+@property (nonatomic, assign) BOOL hideAssignmentName;
+
 @property (nonatomic, strong, nullable) IBOutlet UIView * automationBannerContainerView;
 @property (nonatomic, strong, nullable) IBOutlet UIView * automationBanner;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * automationLabel;

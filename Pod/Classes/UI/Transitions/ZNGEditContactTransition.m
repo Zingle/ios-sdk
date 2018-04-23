@@ -96,6 +96,15 @@
             CGRect animatingNameStartBounds = [self frameForSubstring:animatingName withinLabel:fromTitleLabel];
             CGRect animatingNameStartFrame = [fromTitleLabel convertRect:animatingNameStartBounds toView:fromViewController.view];
             
+            // As of iOS SDK 11.3, the above convertRect:toView: adjusts the Y coordinate correctly but does not adjust X.
+            // We will manually Xify the frame.  This adjustment will have no effect if this bug is fixed later.
+            CGFloat nameDistanceFromCenterX = animatingNameStartBounds.origin.x - (fromTitleLabel.bounds.size.width / 2.0);
+            CGFloat animatingNameStartX = (fromViewController.view.bounds.size.width / 2.0) + nameDistanceFromCenterX;
+            animatingNameStartFrame = CGRectMake(animatingNameStartX,
+                                                 animatingNameStartFrame.origin.y,
+                                                 animatingNameStartFrame.size.width,
+                                                 animatingNameStartFrame.size.height);
+            
             if (!CGRectIsEmpty(animatingNameStartFrame) && (toViewController.assignmentLabel != nil)) {
                 CGFloat startingPointSize = [fromTitleLabel fontSizeOfSubstring:animatingName];
                 CGFloat startingScale = startingPointSize / toViewController.assignmentLabel.font.pointSize;

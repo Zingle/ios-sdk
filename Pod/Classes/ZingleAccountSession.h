@@ -129,7 +129,6 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;
 @property (nonatomic, strong, nullable) ZNGUserClient * userClient;
-@property (nonatomic, strong, nullable) ZNGTeamClient * teamClient;
 @property (nonatomic, strong, nullable) ZNGNotificationSettingsClient * notificationSettingsClient;
 
 #pragma mark - Network diagnostics
@@ -176,6 +175,11 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
  *   users will see all teams.
  */
 - (NSArray<ZNGTeam *> * _Nonnull) teamsVisibleToCurrentUser;
+
+/**
+ *  Teams to which the specified user belongs.
+ */
+- (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichUserBelongsWithId:(NSString * _Nonnull)userId;
 
 /**
  *  For non-admin users, this will be identicial to `teamsVisibleToCurrentUser`

@@ -78,6 +78,14 @@
 @property (nonatomic, copy, nullable) NSString * assignedUserId;
 
 /**
+ *  When this user ID is set, matching contacts will either be assigned to this specific user or to a team
+ *   to which this user belongs.
+ *
+ *  Behavior is undefined if this is set in addition to either assignedTeamId or assignedUserId.
+ */
+@property (nonatomic, copy, nullable) NSString * assignedRelevantToUserId;
+
+/**
  *  Search text.  searchMessageBodies determines whether this searches only contact fields or also message contents to/from that contact.
  */
 @property (nonatomic, copy, nullable) NSString * searchText;

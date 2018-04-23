@@ -26,7 +26,6 @@
 #import "ZNGNetworkLookout.h"
 #import "ZNGContactGroup.h"
 #import "ZNGInboxStatistician.h"
-#import "ZNGTeamClient.h"
 #import "ZNGInboxStatsEntry.h"
 #import "ZNGAssignmentViewController.h"
 #import "ZNGNotificationSettingsClient.h"
@@ -160,7 +159,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
 - (void) notifyBadgeDataChanged:(NSNotification *)notification
 {
-    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUnassignedAndUser:self.userAuthorization andTeams:[self teamsToWhichCurrentUserBelongs]];
+    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUser:self.userAuthorization teams:[self teamsToWhichCurrentUserBelongs] includeUnassigned:YES];
     
     if (self.totalUnreadCount != totalStats.unreadCount) {
         SBLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);
@@ -453,7 +452,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
 
         [self synchronouslyRetrieveUserData];
-        [self synchronouslyRetrieveTeamsData];
         
         long waitResult = dispatch_semaphore_wait(self->initialUserDataSemaphore, tenSecondTimeout);
         
@@ -480,7 +478,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     self.labelClient = [[ZNGLabelClient alloc] initWithSession:self serviceId:serviceId];
     self.eventClient = [[ZNGEventClient alloc] initWithSession:self serviceId:serviceId];
     self.messageClient = [[ZNGMessageClient alloc] initWithSession:self serviceId:serviceId];
-    self.teamClient = [[ZNGTeamClient alloc] initWithSession:self serviceId:serviceId];
     self.notificationSettingsClient = [[ZNGNotificationSettingsClient alloc] initWithSession:self serviceId:serviceId];
     
     // A lazy way to keep us from overwriting a mocked client in unit tests.
@@ -506,34 +503,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     _users = [users sortedArrayUsingDescriptors:@[activeStatus, firstName]];
     dispatch_semaphore_signal(initialUserDataSemaphore);
-}
-
-/**
- *  Go acquire some data that the v1 API does not supply, namely numeric IDs that the socket server throws at us.
- */
-- (void) synchronouslyRetrieveTeamsData
-{
-    if ([[NSThread currentThread] isMainThread]) {
-        SBLogError(@"%s called on main thread.  Returning without fetching user data to prevent deadlock.", __PRETTY_FUNCTION__);
-        return;
-    }
-    
-    if (self.teamClient == nil) {
-        return;
-    }
-    
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    
-    [self.teamClient teamListWithSuccess:^(NSArray<ZNGTeamV2 *> * _Nullable teams) {
-        [self.inboxStatistician updateWithV2TeamsData:teams];
-        dispatch_semaphore_signal(semaphore);
-    } failure:^(ZNGError * _Nullable error) {
-        SBLogError(@"Unable to retrieve team IDs from v2 API.");
-        dispatch_semaphore_signal(semaphore);
-    }];
-    
-    dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
-    dispatch_semaphore_wait(semaphore, tenSecondTimeout);
 }
 
 - (void) updateUserData
@@ -632,6 +601,12 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     return [self teamsToWhichCurrentUserBelongs];
 }
 
+- (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichUserBelongsWithId:(NSString * _Nonnull)userId
+{
+    NSPredicate * oneOfHisTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", userId];
+    return [self.service.teams filteredArrayUsingPredicate:oneOfHisTeams];
+}
+
 - (NSArray<ZNGTeam *> * _Nonnull) teamsToWhichCurrentUserBelongs
 {
     // We cannot return anything meaningful if we are not yet logged in
@@ -640,8 +615,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         return @[];
     }
     
-    NSPredicate * oneOfMyTeams = [NSPredicate predicateWithFormat:@"%@ IN userIds", self.userAuthorization.userId];
-    return [self.service.teams filteredArrayUsingPredicate:oneOfMyTeams];
+    return [self teamsToWhichUserBelongsWithId:self.userAuthorization.userId];
 }
 
 #pragma mark - Users

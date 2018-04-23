@@ -91,6 +91,7 @@
         if (animatingName != nil) {
             // Hide the name
             conversationViewController.hideContactName = YES;
+            conversationViewController.hideAssignmentName = YES;
             
             CGRect animatingNameStartBounds = [self frameForSubstring:animatingName withinLabel:fromTitleLabel];
             CGRect animatingNameStartFrame = [fromTitleLabel convertRect:animatingNameStartBounds toView:fromViewController.view];
@@ -176,6 +177,7 @@
         toViewController.assignmentLabel.hidden = NO;
         fromTitleLabel.alpha = 1.0;
         conversationViewController.hideContactName = NO;
+        conversationViewController.hideAssignmentName = NO;
         conversationViewController.navigationItem.titleView.hidden = NO;
         toViewController.titleContainer.backgroundColor = headerColor;
         toViewController.cancelButton.hidden = NO;

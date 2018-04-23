@@ -18,6 +18,20 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
 
 @implementation ZNGUser
 
+- (id) initWithDictionary:(NSDictionary *)dictionaryValue error:(NSError *__autoreleasing *)error
+{
+    self = [super initWithDictionary:dictionaryValue error:error];
+    
+    if (self != nil) {
+        // If settings is nil, set an empty settings object to allow local defaults
+        if (_settings == nil) {
+            _settings = [[ZNGUserSettings alloc] init];
+        }
+    }
+    
+    return self;
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{
@@ -32,21 +46,6 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
              NSStringFromSelector(@selector(servicePrivileges)): @"service_privileges",
              NSStringFromSelector(@selector(settings)): @"settings",
              };
-}
-
-+ (NSValueTransformer *)settingsJSONTransformer
-{
-    return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGUserSettings class]];
-}
-
-#warning Remove temporary testing getter
-- (ZNGUserSettings *) settings
-{
-    if (_settings == nil) {
-        _settings = [[ZNGUserSettings alloc] init];
-    }
-    
-    return _settings;
 }
 
 - (BOOL) isEqual:(ZNGUser *)other

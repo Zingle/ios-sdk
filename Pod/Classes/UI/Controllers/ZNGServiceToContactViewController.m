@@ -514,7 +514,7 @@ enum ZNGConversationSections
         return subtitle;
     }
     
-    // Otherwise it is unasigned
+    // Otherwise it is unassigned
     return [[NSAttributedString alloc] initWithString:@"Unassigned" attributes:subtitleAttributes];
 }
 

@@ -494,6 +494,7 @@ enum ZNGConversationSections
         }
     }
     
+    // Smaller and lighter text for the subtitle
     NSDictionary<NSAttributedStringKey, id> * subtitleAttributes = @{
                                                                      NSFontAttributeName: [UIFont latoFontOfSize:14.0],
                                                                      NSForegroundColorAttributeName: [UIColor colorWithWhite:0.58 alpha:1.0],
@@ -501,12 +502,11 @@ enum ZNGConversationSections
     
     if (assignmentName != nil) {
         NSMutableAttributedString * subtitle = [[NSMutableAttributedString alloc] initWithString:@"Assigned to " attributes:subtitleAttributes];
-        NSDictionary<NSAttributedStringKey, id> * nameAttributes = subtitleAttributes;
+        NSMutableDictionary<NSAttributedStringKey, id> * nameAttributes = [subtitleAttributes mutableCopy];
         
+        // If we are supposed to hide the assignment name, we will replace the normal light grey color with clear.
         if (self.hideAssignmentName) {
-            NSMutableDictionary<NSAttributedStringKey, id> * mutableAttributes = [subtitleAttributes mutableCopy];
-            mutableAttributes[NSForegroundColorAttributeName] = [UIColor clearColor];
-            nameAttributes = mutableAttributes;
+            nameAttributes[NSForegroundColorAttributeName] = [UIColor clearColor];
         }
         
         NSAttributedString * name = [[NSAttributedString alloc] initWithString:assignmentName attributes:nameAttributes];

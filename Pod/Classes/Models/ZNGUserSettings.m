@@ -17,7 +17,7 @@
              };
 }
 
-// Default to YES for showOnlyMyTeammates
+// Default to YES for showUnassignedConversations
 - (NSNumber *) showUnassignedConversations
 {
     if (_showUnassignedConversations == nil) {
@@ -25,6 +25,16 @@
     }
 
     return _showUnassignedConversations;
+}
+
+// Default to YES for showOnlyMyTeammates
+- (NSNumber *) showOnlyMyTeammates
+{
+    if (_showOnlyMyTeammates == nil) {
+        return @YES;
+    }
+    
+    return _showOnlyMyTeammates;
 }
 
 @end

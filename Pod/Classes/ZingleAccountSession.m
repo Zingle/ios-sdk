@@ -644,6 +644,12 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         }
     }
     
+    // Just in case user data is missing/unavailable and userId corresponds to the current user, we can send
+    //  that same data from our user auth.
+    if ([self.userAuthorization.userId isEqualToString:userId]) {
+        return self.userAuthorization;
+    }
+    
     return nil;
 }
 

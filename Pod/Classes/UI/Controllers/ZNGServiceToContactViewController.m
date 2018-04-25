@@ -301,6 +301,12 @@ enum ZNGConversationSections
     [self updateTitle];
 }
 
+- (void) setHideAssignmentName:(BOOL)hideAssignmentName
+{
+    _hideAssignmentName = hideAssignmentName;
+    [self updateTitle];
+}
+
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSString *,id> *)change context:(void *)context
 {
     if (context == KVOContext) {
@@ -413,15 +419,10 @@ enum ZNGConversationSections
         [title addAttribute:NSForegroundColorAttributeName value:[UIColor clearColor] range:NSMakeRange(0, [title length])];
     }
     
-    NSMutableAttributedString * subtitle = [self subtitle];
+    NSAttributedString * subtitle = [self subtitle];
     BOOL deferUpdateToNextRunLoopCycle = NO;
     
     if ([subtitle length] > 0) {
-        // Set smaller font/lighter color for subtitle
-        NSRange range = NSMakeRange(0, [subtitle length]);
-        [subtitle addAttribute:NSFontAttributeName value:[UIFont latoFontOfSize:14.0] range:range];
-        [subtitle addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithWhite:0.58 alpha:1.0] range:range];
-        
         // Check if our subtitle will be on a new line (usually) or the same line (iPhone landscape)
         BOOL isPhone = ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone);
         UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
@@ -462,43 +463,59 @@ enum ZNGConversationSections
     }
 }
 
-- (NSMutableAttributedString *) subtitle
+- (NSAttributedString *) subtitle
 {
     if (![self.conversation.session.service allowsAssignment]) {
         // This service does not have assignment enabled.  No subtitle.
         return nil;
     }
     
+    NSString * assignmentName = nil;
+    
     if ([self.conversation.contact.assignedToTeamId length] > 0) {
         ZNGTeam * team = [self.conversation.session.service teamWithId:self.conversation.contact.assignedToTeamId];
         
-        if (team != nil) {
-            return [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"Assigned to %@", team.displayName]];
+        if ([team.displayName length] > 0) {
+            assignmentName = team.displayName;
         } else {
-            return [[NSMutableAttributedString alloc] initWithString:@"Assigned to a team"];
+            assignmentName = @"a team";
         }
     }
     
     if ([self.conversation.contact.assignedToUserId length] > 0) {
         ZNGUser * user = [self.conversation.session userWithId:self.conversation.contact.assignedToUserId];
         
-        if (user != nil) {
-            NSMutableAttributedString * name = [[NSMutableAttributedString alloc] init];
-            
-            if ([user.userId isEqualToString:self.conversation.session.userAuthorization.userId]) {
-                [name appendAttributedString:[[NSAttributedString alloc] initWithString:@"Assigned to You"]];
-            } else {
-                [name appendAttributedString:[[NSAttributedString alloc] initWithString:@"Assigned to "]];
-                [name appendAttributedString:[[NSAttributedString alloc] initWithString:[user fullName]]];
-            }
-            
-            return name;
+        if ([user.userId isEqualToString:self.conversation.session.userAuthorization.userId]) {
+            assignmentName = @"You";
+        } else if ([[user fullName] length] > 0) {
+            assignmentName = [user fullName];
         } else {
-            return [[NSMutableAttributedString alloc] initWithString:@"Assigned to a teammate"];
+            assignmentName = @"a teammate";
         }
     }
     
-    return [[NSMutableAttributedString alloc] initWithString:@"Unassigned"];
+    // Smaller and lighter text for the subtitle
+    NSDictionary<NSAttributedStringKey, id> * subtitleAttributes = @{
+                                                                     NSFontAttributeName: [UIFont latoFontOfSize:14.0],
+                                                                     NSForegroundColorAttributeName: [UIColor colorWithWhite:0.58 alpha:1.0],
+                                                                     };
+    
+    if (assignmentName != nil) {
+        NSMutableAttributedString * subtitle = [[NSMutableAttributedString alloc] initWithString:@"Assigned to " attributes:subtitleAttributes];
+        NSMutableDictionary<NSAttributedStringKey, id> * nameAttributes = [subtitleAttributes mutableCopy];
+        
+        // If we are supposed to hide the assignment name, we will replace the normal light grey color with clear.
+        if (self.hideAssignmentName) {
+            nameAttributes[NSForegroundColorAttributeName] = [UIColor clearColor];
+        }
+        
+        NSAttributedString * name = [[NSAttributedString alloc] initWithString:assignmentName attributes:nameAttributes];
+        [subtitle appendAttributedString:name];
+        return subtitle;
+    }
+    
+    // Otherwise it is unassigned
+    return [[NSAttributedString alloc] initWithString:@"Unassigned" attributes:subtitleAttributes];
 }
 
 - (NSString *) commaAndifiedString:(NSArray<NSString *> *)components

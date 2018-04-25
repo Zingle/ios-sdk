@@ -225,7 +225,7 @@
     }];
     
     [socketClient on:@"serviceUsersData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
-        [weakSelf receivedUserData:data ackEmitter:ackEmitter];
+        [weakSelf receivedUsersData:data ackEmitter:ackEmitter];
     }];
     
     [socketClient on:@"badgeData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
@@ -403,7 +403,7 @@
     [session updateUserData];
 }
 
-- (void) receivedUserData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+- (void) receivedUsersData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
     if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
         return;

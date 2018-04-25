@@ -220,6 +220,10 @@
         [weakSelf receivedServiceData:data ackEmitter:ackEmitter];
     }];
     
+    [socketClient on:@"userUpdated" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedCurrentUserData:data ackEmitter:ackEmitter];
+    }];
+    
     [socketClient on:@"serviceUsersData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
         [weakSelf receivedUserData:data ackEmitter:ackEmitter];
     }];
@@ -387,6 +391,16 @@
 - (void) receivedRefreshFeeds:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:ZingleFeedListShouldBeRefreshedNotification object:nil];
+}
+
+- (void) receivedCurrentUserData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+{
+    if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
+        return;
+    }
+    
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    [session updateUserData];
 }
 
 - (void) receivedUserData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter

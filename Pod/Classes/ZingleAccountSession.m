@@ -514,7 +514,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 }
 
 /**
- *  Retrieve ZNGUserAuthorization and ZNGUser objects.  Method returns once both requests complete.
+ *  Retrieve ZNGUserAuthorization object.  Method returns once the request completes.
  */
 - (void) synchronouslyRetrieveUserData
 {

@@ -161,7 +161,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
 - (void) notifyBadgeDataChanged:(NSNotification *)notification
 {
-    BOOL countUnassigned = [self.userAuthorization.settings.showUnassignedConversations boolValue];
+    BOOL assignmentDisabled = !([self.service allowsAssignment]);
+    BOOL countUnassigned = ((assignmentDisabled) || ([self.userAuthorization.settings.showUnassignedConversations boolValue]));
     ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUser:self.userAuthorization teams:[self teamsToWhichCurrentUserBelongs] includeUnassigned:countUnassigned];
     
     if (self.totalUnreadCount != totalStats.unreadCount) {

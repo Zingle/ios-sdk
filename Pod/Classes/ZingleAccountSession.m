@@ -30,6 +30,7 @@
 #import "ZNGAssignmentViewController.h"
 #import "ZNGNotificationSettingsClient.h"
 #import "ZNGTeam.h"
+#import "ZNGUserSettings.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -160,7 +161,9 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
 - (void) notifyBadgeDataChanged:(NSNotification *)notification
 {
-    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUser:self.userAuthorization teams:[self teamsToWhichCurrentUserBelongs] includeUnassigned:YES];
+    BOOL assignmentDisabled = !([self.service allowsAssignment]);
+    BOOL countUnassigned = ((assignmentDisabled) || ([self.userAuthorization.settings.showUnassignedConversations boolValue]));
+    ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUser:self.userAuthorization teams:[self teamsToWhichCurrentUserBelongs] includeUnassigned:countUnassigned];
     
     if (self.totalUnreadCount != totalStats.unreadCount) {
         SBLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);
@@ -504,6 +507,19 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     _users = [users sortedArrayUsingDescriptors:@[activeStatus, firstName]];
     dispatch_semaphore_signal(initialUserDataSemaphore);
+}
+
+- (void) setUserAuthorization:(ZNGUserAuthorization *)userAuthorization
+{
+    ZNGUserSettings * oldSettings = self.userAuthorization.settings;
+    
+    _userAuthorization = userAuthorization;
+    
+    // If "show unassigned" has changed, we need to refresh the badge count
+    if ([oldSettings.showUnassignedConversations boolValue] != [userAuthorization.settings.showUnassignedConversations boolValue]) {
+        SBLogInfo(@"Re-calculating badge count due to a change in the user's view unassigned setting.");
+        [self notifyBadgeDataChanged:nil];
+    }
 }
 
 - (void) updateUserData

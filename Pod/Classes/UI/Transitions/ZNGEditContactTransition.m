@@ -98,8 +98,9 @@
             
             // As of iOS SDK 11.3, the above convertRect:toView: adjusts the Y coordinate correctly but does not adjust X.
             // We will manually Xify the frame.  This adjustment will have no effect if this bug is fixed later.
+            CGPoint conversationCenterInWindow = [conversationViewController.view convertPoint:conversationViewController.view.center toView:nil];
             CGFloat nameDistanceFromCenterX = animatingNameStartBounds.origin.x - (fromTitleLabel.bounds.size.width / 2.0);
-            CGFloat animatingNameStartX = (fromViewController.view.bounds.size.width / 2.0) + nameDistanceFromCenterX;
+            CGFloat animatingNameStartX = conversationCenterInWindow.x + nameDistanceFromCenterX;
             animatingNameStartFrame = CGRectMake(animatingNameStartX,
                                                  animatingNameStartFrame.origin.y,
                                                  animatingNameStartFrame.size.width,

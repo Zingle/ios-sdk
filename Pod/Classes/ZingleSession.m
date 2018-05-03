@@ -137,7 +137,15 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         
 + (BOOL) pushNotificationIsRelevantToZingle:(NSDictionary *)userInfo
 {
-    return [userInfo[@"aps"][@"category"] isEqual:@"Zingle"];
+    NSString * category = userInfo[@"aps"][@"category"];
+    
+    if (![category isKindOfClass:[NSString class]]) {
+        return NO;
+    }
+    
+    // Does the category start with "Zingle"?
+    NSRange zinglePrefixRange = [category rangeOfString:@"zingle" options:NSCaseInsensitiveSearch];
+    return (zinglePrefixRange.location == 0);
 }
 
 #pragma mark - Initializers

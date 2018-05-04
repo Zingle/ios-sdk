@@ -153,6 +153,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) assignToUserWithId:(NSString *)userId;
 - (void) unassign;
 
+- (void) closeWithCompletion:(void (^_Nullable)(BOOL succeeded))completion;
+- (void) reopenWithCompletion:(void (^_Nullable)(BOOL succeeded))completion;
+- (void) confirmWithCompletion:(void (^_Nullable)(BOOL succeeded))completion;
+- (void) unconfirmWithCompletion:(void (^_Nullable)(BOOL succeeded))completion;
+
+
 NS_ASSUME_NONNULL_END
 
 @end

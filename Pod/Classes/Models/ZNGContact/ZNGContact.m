@@ -551,15 +551,15 @@ static NSString * const ParameterNameClosed = @"is_closed";
 #pragma mark - Mutators
 - (void) confirm
 {
-    [self _setConfirmed:YES];
+    [self confirmWithCompletion:nil];
 }
 
 - (void) unconfirm
 {
-    [self _setConfirmed:NO];
+    [self unconfirmWithCompletion:nil];
 }
 
-- (void) _setConfirmed:(BOOL)isConfirmed
+- (void) _setConfirmed:(BOOL)isConfirmed completion:(void (^_Nullable)(BOOL succeeded))completion
 {
     BOOL oldValue = self.isConfirmed;
     
@@ -571,7 +571,6 @@ static NSString * const ParameterNameClosed = @"is_closed";
     [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     
     [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        
         if (contact.isConfirmed != isConfirmed) {
             SBLogError(@"Our POST to set isConfirmed to %@ succeeded, but the contact returned by the server is still %@",
                         (isConfirmed) ? @"YES" : @"NO",
@@ -580,25 +579,33 @@ static NSString * const ParameterNameClosed = @"is_closed";
         
         self.isConfirmed = contact.isConfirmed;
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+        
+        if (completion != nil) {
+            completion(YES);
+        }
     } failure:^(ZNGError *error) {
         SBLogError(@"Failed to update contact %@: %@", self.contactId, error);
 
         self.isConfirmed = oldValue;
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+        
+        if (completion != nil) {
+            completion(NO);
+        }
     }];
 }
 
 - (void) close
 {
-    [self _setClosed:YES];
+    [self _setClosed:YES completion:nil];
 }
 
 - (void) reopen
 {
-    [self _setClosed:NO];
+    [self _setClosed:NO completion:nil];
 }
 
-- (void) _setClosed:(BOOL)isClosed
+- (void) _setClosed:(BOOL)isClosed completion:(void (^_Nullable)(BOOL succeeded))completion
 {
     BOOL oldClosed = self.isClosed;
     BOOL oldConfirmed = self.isConfirmed;
@@ -622,7 +629,6 @@ static NSString * const ParameterNameClosed = @"is_closed";
     [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
     
     [self.contactClient updateContactWithId:self.contactId withParameters:params success:^(ZNGContact *contact, ZNGStatus *status) {
-        
         if (contact.isClosed != isClosed) {
             SBLogError(@"Our POST to set isClosed to %@ succeeded, but the contact returned by the server is still %@",
                         (isClosed) ? @"YES" : @"NO",
@@ -633,13 +639,40 @@ static NSString * const ParameterNameClosed = @"is_closed";
         self.isConfirmed = contact.isConfirmed;
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
         
+        if (completion != nil) {
+            completion(YES);
+        }
     } failure:^(ZNGError *error) {
         SBLogError(@"Unable to update %@'s closed status: %@", [self fullName], error);
         
         self.isClosed = oldClosed;
         self.isConfirmed = oldConfirmed;
         [[NSNotificationCenter defaultCenter] postNotificationName:ZNGContactNotificationSelfMutated object:self];
+        
+        if (completion != nil) {
+            completion(NO);
+        }
     }];
+}
+
+- (void) closeWithCompletion:(void (^_Nullable)(BOOL succeeded))completion
+{
+    [self _setClosed:YES completion:completion];
+}
+
+- (void) reopenWithCompletion:(void (^_Nullable)(BOOL succeeded))completion
+{
+    [self _setClosed:NO completion:completion];
+}
+
+- (void) confirmWithCompletion:(void (^_Nullable)(BOOL succeeded))completion
+{
+    [self _setConfirmed:YES completion:completion];
+}
+
+- (void) unconfirmWithCompletion:(void (^_Nullable)(BOOL succeeded))completion
+{
+    [self _setConfirmed:NO completion:completion];
 }
 
 - (void) assignToTeamWithId:(NSString *)teamId

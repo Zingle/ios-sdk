@@ -27,14 +27,4 @@
     return _showUnassignedConversations;
 }
 
-// Default to YES for showOnlyMyTeammates
-- (NSNumber *) showOnlyMyTeammates
-{
-    if (_showOnlyMyTeammates == nil) {
-        return @YES;
-    }
-    
-    return _showOnlyMyTeammates;
-}
-
 @end

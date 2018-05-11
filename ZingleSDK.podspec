@@ -23,33 +23,44 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '9.0'
   s.watchos.deployment_target = '2.0'
   s.requires_arc = true
-
-# Cross-platform source files (non-UI)
-  s.source_files = [
-	  'Pod/Classes/*.{h,m}',
-	  'Pod/Classes/Clients/**/*.{h,m}',		
-	  'Pod/Classes/Logging/**/*.{h,m}',
-	  'Pod/Classes/Models/**/*.{h,m}',
-	  'Pod/Classes/NetworkDiagnostics/**/*.{h,m}',
-	  'Pod/Classes/UI/ViewModels/**/*.{h,m}',
-	  'Pod/Classes/ValueTransformers/**/*.{h,m}'
-  ]
-
-# iOS-specific source and resource files (all source/resource files not added above)
-  s.ios.source_files = 'Pod/Classes/**/*.{h,m}'
-  s.ios.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
-
-# Cross-platform dependencies
-  s.dependency 'AFNetworking/NSURLSession'
-  s.dependency 'Mantle'
-  s.dependency 'Socket.IO-Client-Swift', '~> 13.0'
   
-# iOS-specific dependencies
-  s.ios.dependency 'JVFloatLabeledTextField'  
-  s.ios.dependency 'SBObjectiveCWrapper'
-  s.ios.dependency 'JSQMessagesViewController'
-  s.ios.dependency 'Analytics', '~> 3.0'
-  s.ios.dependency 'MGSwipeTableCell'
-  s.ios.dependency 'SDWebImage/GIF'
-  s.ios.dependency 'Shimmer'
+  s.default_subspec = 'Core'
+  
+  s.subspec 'Core' do |core|
+  
+	  # Cross-platform source files (non-UI)
+	  s.source_files = [
+		  'Pod/Classes/*.{h,m}',
+		  'Pod/Classes/Clients/**/*.{h,m}',		
+		  'Pod/Classes/Logging/**/*.{h,m}',
+		  'Pod/Classes/Models/**/*.{h,m}',
+		  'Pod/Classes/NetworkDiagnostics/**/*.{h,m}',
+		  'Pod/Classes/UI/ViewModels/**/*.{h,m}',
+		  'Pod/Classes/ValueTransformers/**/*.{h,m}'
+	  ]
+
+	  # iOS-specific source and resource files (all source/resource files not added above)
+	  s.ios.source_files = 'Pod/Classes/**/*.{h,m}'
+	  s.ios.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
+
+	  # Cross-platform dependencies
+	  s.dependency 'AFNetworking/NSURLSession'
+	  s.dependency 'Mantle'
+	  s.dependency 'Socket.IO-Client-Swift', '~> 13.0'
+  
+	  # iOS-specific dependencies
+	  s.ios.dependency 'JVFloatLabeledTextField'  
+	  s.ios.dependency 'SBObjectiveCWrapper'
+	  s.ios.dependency 'JSQMessagesViewController'
+	  s.ios.dependency 'Analytics', '~> 3.0'
+	  s.ios.dependency 'MGSwipeTableCell'
+	  s.ios.dependency 'SDWebImage/GIF'
+	  s.ios.dependency 'Shimmer'
+  end
+  
+# Extension subspec, including everything in 'Core' plus a compile flag
+  s.subspec 'Extension' do |extension|
+     extension.dependency 'ZingleSDK/Core'
+  end
+
 end

@@ -273,6 +273,12 @@ enum ZNGConversationSections
     UIMenuItem * forward = [[UIMenuItem alloc] initWithTitle:@"Forward" action:@selector(forwardMessage:)];
     [[UIMenuController sharedMenuController] setMenuItems:@[forward]];
     [JSQMessagesCollectionViewCell registerMenuAction:@selector(forwardMessage:)];
+    
+    // Mark read
+    if ((self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
+        SBLogInfo(@"Confirming contact due to conversation view appearance.");
+        [self.conversation.contact confirm];
+    }
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -280,12 +286,6 @@ enum ZNGConversationSections
     [super viewDidAppear:animated];
     
     viewHasAppeared = YES;
-    
-    if ((self.stuckToBottom) && (self.conversation.contact != nil) && (!self.conversation.contact.isConfirmed)) {
-        SBLogInfo(@"Confirming contact due to conversation view appearance.");
-        [self.conversation.contact confirm];
-    }
-    
     [self updateTopInset];
 }
 

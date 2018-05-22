@@ -10,6 +10,10 @@
 #import "ZNGLabel.h"
 #import "UIFont+Lato.h"
 #import "UIColor+ZingleSDK.h"
+#import "ZNGLabelTableViewCell.h"
+#import "ZNGDashedBorderLabel.h"
+
+static NSString * const LabelCellId = @"labelCell";
 
 @interface ZNGLabelSelectViewController ()
 
@@ -17,8 +21,9 @@
 
 @implementation ZNGLabelSelectViewController
 {
-    NSBundle * bundle;
     NSArray<ZNGLabel *> * filteredLabels;
+    
+    UIImage * labelIcon;
     
     UISearchController * searchController;
 }
@@ -26,7 +31,13 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
-    bundle = [NSBundle bundleForClass:[self class]];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    labelIcon = [[UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    UINib * labelCellNib = [UINib nibWithNibName:NSStringFromClass([ZNGLabelTableViewCell class]) bundle:bundle];
+    [self.tableView registerNib:labelCellNib forCellReuseIdentifier:LabelCellId];
+    
+    self.tableView.estimatedRowHeight = 42.0;
     
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchResultsUpdater = self;
@@ -80,23 +91,27 @@
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString * const cellID = @"cell";
-    UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellID];
-    
-    if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
-        cell.textLabel.font = [UIFont latoFontOfSize:17.0];
-    }
-    
+    ZNGLabelTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:LabelCellId forIndexPath:indexPath];
     ZNGLabel * label = [self labelForIndexPath:indexPath];
-    cell.textLabel.text = label.displayName;
     
-    UIImage * labelImage = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
-    UIImageView * imageView = [[UIImageView alloc] initWithImage:labelImage];
-    imageView.tintColor = label.backgroundUIColor;
+    UIColor * foregroundColor = [label textUIColor];
+    cell.labelLabel.textColor = foregroundColor;
+    cell.labelLabel.borderColor = foregroundColor;
+    cell.labelLabel.backgroundColor = [label backgroundUIColor];
     
-    cell.accessoryView = imageView;
+    NSTextAttachment * iconAttachment = [[NSTextAttachment alloc] init];
+    iconAttachment.image = labelIcon;
+    iconAttachment.bounds = CGRectMake(0.0, cell.labelLabel.font.descender, labelIcon.size.width, labelIcon.size.height);
+    NSAttributedString * iconString = [NSAttributedString attributedStringWithAttachment:iconAttachment];
     
+    // Add a leading space, otherwise tinting the NSTextAttachment does not work
+    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:@" "];
+    [text appendAttributedString:iconString];
+    NSString * displayNameWithPadding = [NSString stringWithFormat:@"  %@  ", [label.displayName uppercaseString]];
+    [text appendAttributedString:[[NSAttributedString alloc] initWithString:displayNameWithPadding]];
+   
+    cell.labelLabel.attributedText = text;
+
     return cell;
 }
 

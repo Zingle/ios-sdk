@@ -84,6 +84,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable ZNGChannel *)channelOfType:(ZNGChannelType *)type;
 
 - (nullable NSString *)fullName;
+
+/**
+ *  `fullName` defaults to the contact's default channel value if no name data exists.  This method and its `unformattedPhoneNumber`
+ *   parameter allow the caller to specify formatted or non-formatted phone number for that fall back.
+ */
+- (nullable NSString *)fullNameUsingUnformattedPhoneNumberValue:(BOOL)unformattedPhoneNumber;
+
 - (nullable NSString *) initials;
 
 /**

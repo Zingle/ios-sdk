@@ -599,8 +599,10 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     [refreshUnconfirmedTimers removeObjectForKey:indexPath];
     
     if (contact != nil) {
+        ZNGChannel * phoneChannel = [contact phoneNumberChannel];
+        BOOL shouldUseUnformattedChannelForDisplay = [self.session.service shouldDisplayRawValueForChannel:phoneChannel];
+        cell.contactName.text = [contact fullNameUsingUnformattedPhoneNumberValue:shouldUseUnformattedChannelForDisplay];
         
-        cell.contactName.text = [contact fullName];
         NSUInteger lastMessageAttachmentCount = [contact.lastMessage.attachments count];
         
         if ([contact.lastMessage.body length] > 0) {

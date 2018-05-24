@@ -1789,15 +1789,7 @@ enum ZNGConversationSections
 {
     CGRect sourceRect = [self.view convertRect:toolbar.contentView.templateButton.frame fromView:toolbar.contentView.templateButton.superview];
     
-    NSMutableArray<ZNGTemplate *> * generalTemplates = [[NSMutableArray alloc] initWithCapacity:[self.conversation.service.templates count]];
-    
-    for (ZNGTemplate * template in self.conversation.service.templates) {
-        if ([template.type isEqualToString:ZNGTemplateTypeGeneral]) {
-            [generalTemplates addObject:template];
-        }
-    }
-    
-    [self presentUserWithChoiceOfTemplate:generalTemplates fromRect:sourceRect inView:self.view completion:^(NSString * selectedTemplateBody, ZNGTemplate * selectedTemplate) {
+    [self presentUserWithChoiceOfTemplate:self.conversation.service.templates fromRect:sourceRect inView:self.view completion:^(NSString * selectedTemplateBody, ZNGTemplate * selectedTemplate) {
         if (selectedTemplateBody != nil) {
             [self appendStringToMessageInput:selectedTemplateBody];
             [[ZNGAnalytics sharedAnalytics] trackInsertedTemplate:selectedTemplate intoConversation:self.conversation];

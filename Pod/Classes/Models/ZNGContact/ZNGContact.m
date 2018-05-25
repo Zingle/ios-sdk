@@ -298,39 +298,49 @@ static NSString * const ParameterNameClosed = @"is_closed";
     return nil;
 }
 
-- (NSString *)fullName
+- (NSString *)fullNameUsingUnformattedPhoneNumberValue:(BOOL)unformattedPhoneNumber
 {
-    NSString *title = [self titleFieldValue].value;
-    NSString *firstName = [self firstNameFieldValue].value;
-    NSString *lastName = [self lastNameFieldValue].value;
+    NSString *title = [[self titleFieldValue] value];
+    NSString *firstName = [[self firstNameFieldValue] value];
+    NSString *lastName = [[self lastNameFieldValue] value];
     
-    if(firstName.length < 1 && lastName.length < 1)
-    {
-        NSString *phoneNumber = [self phoneNumberChannel].formattedValue;
-        if (phoneNumber) {
-            return phoneNumber;
-        } else {
-            return @"Anonymous User";
-        }
-    }
-    else
-    {
-        NSString *name = @"";
+    if ([firstName length] + [lastName length] == 0) {
+        ZNGChannel * phoneChannel = [self phoneNumberChannel];
         
-        if(title.length > 0)
-        {
-            name = [name stringByAppendingString:[NSString stringWithFormat:@"%@ ", title]];
+        if (phoneChannel != nil) {
+            if (unformattedPhoneNumber) {
+                return [phoneChannel displayValueUsingRawValue];
+            }
+            
+            return [phoneChannel displayValueUsingFormattedValue];
         }
-        if(firstName.length > 0)
+
+        return @"Anonymous User";
+    } else {
+        NSMutableString * name = [[NSMutableString alloc] init];
+        
+        if ([title length] > 0)
         {
-            name = [name stringByAppendingString:[NSString stringWithFormat:@"%@ ", firstName]];
+            [name appendFormat:@"%@ ", title];
         }
-        if(lastName.length > 0)
+        
+        if ([firstName length] > 0)
         {
-            name = [name stringByAppendingString:lastName];
+            [name appendFormat:@"%@ ", firstName];
         }
+        
+        if ([lastName length] > 0)
+        {
+            [name appendString:lastName];
+        }
+        
         return [name stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
+}
+
+- (NSString *)fullName
+{
+    return [self fullNameUsingUnformattedPhoneNumberValue:NO];
 }
 
 - (NSString *) initials

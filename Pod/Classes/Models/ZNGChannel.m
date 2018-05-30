@@ -99,23 +99,14 @@
     self.formattedValue = newValue;
 }
 
-- (NSString *) _displayValueWithSuppliedValue:(NSString *)value
-{
-    NSString * prefix = ([self.displayName length] > 0) ? self.displayName : self.channelType.displayName;
-    
-    NSUInteger totalLength = [prefix length] + [value length];
-    
-    return (totalLength > 0) ? [NSString stringWithFormat:@"%@ - %@", prefix?: @"", value ?: @""] : nil;
-}
-
 - (NSString *) displayValueUsingRawValue
 {
-    return [self _displayValueWithSuppliedValue:self.value];
+    return self.value;
 }
 
 - (NSString *) displayValueUsingFormattedValue
 {
-    return [self _displayValueWithSuppliedValue:self.formattedValue];
+    return self.formattedValue;
 }
 
 @end

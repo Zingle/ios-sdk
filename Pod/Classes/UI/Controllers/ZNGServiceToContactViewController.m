@@ -1320,7 +1320,6 @@ enum ZNGConversationSections
         ZNGChannel * channel = [[event.message contactCorrespondent] channel];
         
         if (channel != nil) {
-            
             // Find a more complete copy of this channel object from the contact object if possible.
             for (ZNGChannel * testChannel in self.conversation.contact.channels) {
                 if ([testChannel.channelId isEqualToString:channel.channelId]) {

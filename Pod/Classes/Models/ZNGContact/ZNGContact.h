@@ -44,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSString * assignedToUserId;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;
+@property(nonatomic, strong, nullable) NSDate* unconfirmedAt;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;
 
 @property (nonatomic, weak, nullable) ZNGContactClient * contactClient;
@@ -149,7 +150,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Returns a date, after which, this contact will be highlighted as "urgent" if still unconfirmed.
  */
-- (NSDate *) lateUnconfirmedTime;
+- (nullable NSDate *) lateUnconfirmedTime;
 
 #pragma mark - Mutators
 - (void) confirm;

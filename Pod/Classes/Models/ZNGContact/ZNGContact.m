@@ -28,6 +28,7 @@ static NSString * const ParameterNameStarred = @"is_starred";
 static NSString * const ParameterNameConfirmed = @"is_confirmed";
 static NSString * const ParameterNameClosed = @"is_closed";
 
+static const NSTimeInterval LateTimeSeconds = 5.0 * 60.0;  // How long before an unconfirmed contact is 'late' (five minutes)
 
 @implementation ZNGContact
 
@@ -569,7 +570,7 @@ static NSString * const ParameterNameClosed = @"is_closed";
         return nil;
     }
     
-    return [lateDate dateByAddingTimeInterval:(5.0 * 60.0)];
+    return [lateDate dateByAddingTimeInterval:LateTimeSeconds];
 }
 
 #pragma mark - Mutators

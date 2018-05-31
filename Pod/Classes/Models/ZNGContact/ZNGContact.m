@@ -136,7 +136,8 @@ static NSString * const ParameterNameClosed = @"is_closed";
              NSStringFromSelector(@selector(assignedToUserId)): @"assigned_to_user_id",
              @"createdAt" : @"created_at",
              @"updatedAt" : @"updated_at",
-             NSStringFromSelector(@selector(avatarUri)) : @"avatar_uri"
+             NSStringFromSelector(@selector(avatarUri)) : @"avatar_uri",
+             NSStringFromSelector(@selector(unconfirmedAt)): @"unconfirmed_at",
              };
 }
 
@@ -190,6 +191,11 @@ static NSString * const ParameterNameClosed = @"is_closed";
 }
 
 + (NSValueTransformer*)updatedAtJSONTransformer
+{
+    return [ZingleValueTransformers dateValueTransformer];
+}
+
++ (NSValueTransformer *)unconfirmedAtJSONTransformer
 {
     return [ZingleValueTransformers dateValueTransformer];
 }
@@ -555,7 +561,15 @@ static NSString * const ParameterNameClosed = @"is_closed";
 
 - (NSDate *) lateUnconfirmedTime
 {
-    return [self.lastMessage.createdAt dateByAddingTimeInterval:(5.0 * 60.0)];
+    // If the API is up to date and has the newer unconfirmed_at date, use that; otherwise default to
+    //  the old behavior and use the timestamp of the last message
+    NSDate * lateDate = self.unconfirmedAt ?: self.lastMessage.createdAt;
+    
+    if (lateDate == nil) {
+        return nil;
+    }
+    
+    return [lateDate dateByAddingTimeInterval:(5.0 * 60.0)];
 }
 
 #pragma mark - Mutators

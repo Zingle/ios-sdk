@@ -675,7 +675,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
     settings.buttonIndex = 0;
     settings.fillOnTrigger = changeWillCauseRemoval;
-    settings.threshold = 1.4;
+    settings.threshold = 2.0;
     
     __weak ZNGInboxViewController * weakSelf = self;
     
@@ -708,6 +708,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 - (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
 {
     NSMutableArray<MGSwipeButton *> * buttons = [[NSMutableArray alloc] initWithCapacity:2];
+    BOOL showAssign = [self.session.service allowsAssignment];
     
     MGSwipeButton * closeButton;
     ZNGContact * contactAfterCloseOrOpen = [contact copy];
@@ -718,7 +719,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     MGSwipeExpansionSettings * closeOpenSettings = [[MGSwipeExpansionSettings alloc] init];
     closeOpenSettings.buttonIndex = 0;
     closeOpenSettings.fillOnTrigger = closeOrOpenWillCauseRemoval;
-    closeOpenSettings.threshold = 2.0;
+    closeOpenSettings.threshold = showAssign ? 1.5 : 2.0;   // Adjust swipe threshold for one vs. two buttons
     
     __weak ZNGInboxViewController * weakSelf = self;
     
@@ -746,7 +747,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     
     [buttons addObject:closeButton];
     
-    if ([self.session.service allowsAssignment]) {
+    if (showAssign) {
         MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             // Go go gadget assignment view
             ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];

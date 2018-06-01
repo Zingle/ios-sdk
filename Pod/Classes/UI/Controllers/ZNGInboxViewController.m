@@ -592,7 +592,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 {
     ZNGContact * contact = [self contactAtIndexPath:indexPath];
     ZNGTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[ZNGTableViewCell cellReuseIdentifier]];
-    cell.delegate = self;
+//    cell.delegate = self;
     
     NSTimer * timer = refreshUnconfirmedTimers[indexPath];
     [timer invalidate];
@@ -635,8 +635,8 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         cell.labelGrid.font = [UIFont latoSemiBoldFontOfSize:9.0];
         cell.dateLabel.text = [self dateStringForContact:contact];
         
-        [self configureLeftButtonsForCell:cell contact:contact];
-        [self configureRightButtonsForCell:cell contact:contact];
+//        [self configureLeftButtonsForCell:cell contact:contact];
+//        [self configureRightButtonsForCell:cell contact:contact];
     } else {
         cell.contactName.text = nil;
         cell.lastMessage.text = nil;
@@ -675,112 +675,112 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     return NO;
 }
 
-- (void) configureLeftButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
-{
-    if ([self useStockIosSwipeActions]) {
-        return;
-    }
-    
-    MGSwipeButton * confirmButton;
-    ZNGContact * contactAfterChange = [contact copy];
-    contactAfterChange.isConfirmed = !contactAfterChange.isConfirmed;
-    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
-    
-    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
-    settings.buttonIndex = 0;
-    settings.fillOnTrigger = changeWillCauseRemoval;
-    settings.threshold = 1.4;
-    
-    __weak ZNGInboxViewController * weakSelf = self;
-    
-    if (contact.isConfirmed) {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nunread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [weakSelf.data contactWasChangedLocally:contactAfterChange];
-            
-            [contact unconfirm];
-            [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:contact fromUIType:@"swipe"];
-            [weakSelf clearSwipeActiveFlag];
-            
-            return !changeWillCauseRemoval;
-        }];
-    } else {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [weakSelf.data contactWasChangedLocally:contactAfterChange];
-            
-            [contact confirm];
-            [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:contact fromUIType:@"swipe"];
-            [weakSelf clearSwipeActiveFlag];
-
-            return !changeWillCauseRemoval;
-        }];
-    }
-    
-    cell.leftButtons = @[confirmButton];
-    cell.leftExpansion = settings;
-}
-
-- (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
-{
-    if ([self useStockIosSwipeActions]) {
-        return;
-    }
-    
-    NSMutableArray<MGSwipeButton *> * buttons = [[NSMutableArray alloc] initWithCapacity:2];
-    
-    MGSwipeButton * closeButton;
-    ZNGContact * contactAfterCloseOrOpen = [contact copy];
-    contactAfterCloseOrOpen.isClosed = !contact.isClosed;
-    contactAfterCloseOrOpen.isConfirmed = contactAfterCloseOrOpen.isClosed ? YES : contact.isConfirmed;   // Closing will also confirm
-    BOOL closeOrOpenWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterCloseOrOpen];
-    
-    MGSwipeExpansionSettings * closeOpenSettings = [[MGSwipeExpansionSettings alloc] init];
-    closeOpenSettings.buttonIndex = 0;
-    closeOpenSettings.fillOnTrigger = closeOrOpenWillCauseRemoval;
-    closeOpenSettings.threshold = 2.0;
-    
-    __weak ZNGInboxViewController * weakSelf = self;
-    
-    if (contact.isClosed) {
-        closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
-            
-            [contact reopen];
-            [[ZNGAnalytics sharedAnalytics] trackOpenedContact:contact fromUIType:@"swipe"];
-            [weakSelf clearSwipeActiveFlag];
-
-            return !closeOrOpenWillCauseRemoval;
-        }];
-    } else {
-        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
-            
-            [contact close];
-            [[ZNGAnalytics sharedAnalytics] trackClosedContact:contact fromUIType:@"swipe"];
-            [weakSelf clearSwipeActiveFlag];
-            
-            return !closeOrOpenWillCauseRemoval;
-        }];
-    }
-    
-    [buttons addObject:closeButton];
-    
-    if ([self.session.service allowsAssignment]) {
-        MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
-            // Go go gadget assignment view
-            ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];
-            assignView.delegate = weakSelf;
-            
-            UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:assignView];
-            [weakSelf presentViewController:navController animated:YES completion:nil];
-            return YES;
-        }];
-        
-        [buttons addObject:assignButton];
-    }
-    
-    cell.rightButtons = buttons;
-    cell.rightExpansion = closeOpenSettings;
-}
+//- (void) configureLeftButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
+//{
+//    if ([self useStockIosSwipeActions]) {
+//        return;
+//    }
+//
+//    MGSwipeButton * confirmButton;
+//    ZNGContact * contactAfterChange = [contact copy];
+//    contactAfterChange.isConfirmed = !contactAfterChange.isConfirmed;
+//    BOOL changeWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterChange];
+//
+//    MGSwipeExpansionSettings * settings = [[MGSwipeExpansionSettings alloc] init];
+//    settings.buttonIndex = 0;
+//    settings.fillOnTrigger = changeWillCauseRemoval;
+//    settings.threshold = 1.4;
+//
+//    __weak ZNGInboxViewController * weakSelf = self;
+//
+//    if (contact.isConfirmed) {
+//        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nunread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+//            [weakSelf.data contactWasChangedLocally:contactAfterChange];
+//
+//            [contact unconfirm];
+//            [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:contact fromUIType:@"swipe"];
+//            [weakSelf clearSwipeActiveFlag];
+//
+//            return !changeWillCauseRemoval;
+//        }];
+//    } else {
+//        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+//            [weakSelf.data contactWasChangedLocally:contactAfterChange];
+//
+//            [contact confirm];
+//            [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:contact fromUIType:@"swipe"];
+//            [weakSelf clearSwipeActiveFlag];
+//
+//            return !changeWillCauseRemoval;
+//        }];
+//    }
+//
+//    cell.leftButtons = @[confirmButton];
+//    cell.leftExpansion = settings;
+//}
+//
+//- (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
+//{
+//    if ([self useStockIosSwipeActions]) {
+//        return;
+//    }
+//
+//    NSMutableArray<MGSwipeButton *> * buttons = [[NSMutableArray alloc] initWithCapacity:2];
+//
+//    MGSwipeButton * closeButton;
+//    ZNGContact * contactAfterCloseOrOpen = [contact copy];
+//    contactAfterCloseOrOpen.isClosed = !contact.isClosed;
+//    contactAfterCloseOrOpen.isConfirmed = contactAfterCloseOrOpen.isClosed ? YES : contact.isConfirmed;   // Closing will also confirm
+//    BOOL closeOrOpenWillCauseRemoval = ![self.data contactBelongsInDataSet:contactAfterCloseOrOpen];
+//
+//    MGSwipeExpansionSettings * closeOpenSettings = [[MGSwipeExpansionSettings alloc] init];
+//    closeOpenSettings.buttonIndex = 0;
+//    closeOpenSettings.fillOnTrigger = closeOrOpenWillCauseRemoval;
+//    closeOpenSettings.threshold = 2.0;
+//
+//    __weak ZNGInboxViewController * weakSelf = self;
+//
+//    if (contact.isClosed) {
+//        closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+//            [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
+//
+//            [contact reopen];
+//            [[ZNGAnalytics sharedAnalytics] trackOpenedContact:contact fromUIType:@"swipe"];
+//            [weakSelf clearSwipeActiveFlag];
+//
+//            return !closeOrOpenWillCauseRemoval;
+//        }];
+//    } else {
+//        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+//            [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
+//
+//            [contact close];
+//            [[ZNGAnalytics sharedAnalytics] trackClosedContact:contact fromUIType:@"swipe"];
+//            [weakSelf clearSwipeActiveFlag];
+//
+//            return !closeOrOpenWillCauseRemoval;
+//        }];
+//    }
+//
+//    [buttons addObject:closeButton];
+//
+//    if ([self.session.service allowsAssignment]) {
+//        MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+//            // Go go gadget assignment view
+//            ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];
+//            assignView.delegate = weakSelf;
+//
+//            UINavigationController * navController = [[UINavigationController alloc] initWithRootViewController:assignView];
+//            [weakSelf presentViewController:navController animated:YES completion:nil];
+//            return YES;
+//        }];
+//
+//        [buttons addObject:assignButton];
+//    }
+//
+//    cell.rightButtons = buttons;
+//    cell.rightExpansion = closeOpenSettings;
+//}
 
 /**
  *  Used so the button actions above can clear the flag without requiring a strong reference
@@ -838,6 +838,44 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         SBLogDebug(@"Requesting data around index #%lld", (long long)indexPath.row + 10);
         [self.data refreshStartingAtIndex:indexPath.row + 10 removingTail:YES];
     }
+}
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView leadingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0))
+{
+    ZNGContact * dude = [self contactAtIndexPath:indexPath];
+    BOOL isAlreadyConfirmed = dude.isConfirmed;
+    NSString * actionString = isAlreadyConfirmed ? @"Mark\nunread" : @"Mark\nread";
+    
+    if (dude == nil) {
+        return nil;
+    }
+    
+    __weak ZNGInboxViewController * weakSelf = self;
+    
+    UIContextualAction * markReadAction = [UIContextualAction contextualActionWithStyle:UIContextualActionStyleNormal title:actionString handler:^(UIContextualAction * _Nonnull action, __kindof UIView * _Nonnull sourceView, void (^ _Nonnull completionHandler)(BOOL)) {
+        
+        [weakSelf.data contactWasChangedLocally:dude];
+        
+        if (isAlreadyConfirmed) {
+            [dude unconfirm];
+            [[ZNGAnalytics sharedAnalytics] trackUnconfirmedContact:dude fromUIType:@"swipe"];
+        } else {
+            [dude confirm];
+            [[ZNGAnalytics sharedAnalytics] trackConfirmedContact:dude fromUIType:@"swipe"];
+        }
+        
+        completionHandler(YES);
+    }];
+    
+    markReadAction.backgroundColor = [UIColor zng_lightBlue];
+    
+    return [UISwipeActionsConfiguration configurationWithActions:@[markReadAction]];
+}
+
+- (UISwipeActionsConfiguration *)tableView:(UITableView *)tableView trailingSwipeActionsConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath API_AVAILABLE(ios(11.0))
+{
+    // TODO: do it
+    return nil;
 }
 
 - (BOOL) shouldRequestNewDataAfterViewingIndexPath:(NSIndexPath *)indexPath

@@ -12,7 +12,7 @@
 
 @class ZNGLabelGridView;
 
-@interface ZNGTableViewCell : MGSwipeTableCell
+@interface ZNGTableViewCell : UITableViewCell
 
 + (NSString *)cellReuseIdentifier;
 

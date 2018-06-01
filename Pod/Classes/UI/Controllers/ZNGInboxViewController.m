@@ -665,8 +665,22 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     }
 }
 
+// Returns YES if the iOS version supports UIContextualAction
+- (BOOL) useStockIosSwipeActions
+{
+    if (@available(iOS 11.0, *)) {
+        return YES;
+    }
+    
+    return NO;
+}
+
 - (void) configureLeftButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
 {
+    if ([self useStockIosSwipeActions]) {
+        return;
+    }
+    
     MGSwipeButton * confirmButton;
     ZNGContact * contactAfterChange = [contact copy];
     contactAfterChange.isConfirmed = !contactAfterChange.isConfirmed;
@@ -707,6 +721,10 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 
 - (void) configureRightButtonsForCell:(ZNGTableViewCell *)cell contact:(ZNGContact *)contact
 {
+    if ([self useStockIosSwipeActions]) {
+        return;
+    }
+    
     NSMutableArray<MGSwipeButton *> * buttons = [[NSMutableArray alloc] initWithCapacity:2];
     
     MGSwipeButton * closeButton;

@@ -44,6 +44,9 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     NSDateFormatter * dateWithYearFormatter;
     NSDateFormatter * timeFormatter;
     
+    UISelectionFeedbackGenerator * fullSwipeFeedbackGenerator;
+    BOOL lastStateWasExpanded;
+    
     NSTimer * refreshTimer;
     
     UIImage * unconfirmedImage;
@@ -406,7 +409,13 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     
     [self resetCancelSwipesTimer];
     
+    lastStateWasExpanded = NO;
     swipeActive = YES;
+    
+    if (@available(iOS 10.0, *)) {
+        fullSwipeFeedbackGenerator = [[UISelectionFeedbackGenerator alloc] init];
+        [fullSwipeFeedbackGenerator prepare];
+    }
 }
 
 - (void) swipeTableCellWillEndSwiping:(MGSwipeTableCell *)cell
@@ -414,12 +423,26 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     NSIndexPath * indexPath = [self.tableView indexPathForCell:cell];
     
     SBLogVerbose(@"%@ swiping ended (setting swipeActive to NO)", indexPath);
+    fullSwipeFeedbackGenerator = nil;
     swipeActive = NO;
     
     if (pendingReloadBlockedBySwipe) {
         SBLogVerbose(@"Clearing pendingReloadBlockedBySwipe to NO as we finally refresh the table after swipe-induced delay");
         pendingReloadBlockedBySwipe = NO;
         [self.tableView reloadData];
+    }
+}
+
+-(void) swipeTableCell:(nonnull MGSwipeTableCell*) cell didChangeSwipeState:(MGSwipeState) state gestureIsActive:(BOOL) gestureIsActive
+{
+    BOOL isExpanding = ((state == MGSwipeStateExpandingLeftToRight) || (state == MGSwipeStateExpandingRightToLeft));
+    BOOL isDeexpanding = ((lastStateWasExpanded) && (!isExpanding));
+    lastStateWasExpanded = isExpanding;
+    
+    // Deliver haptic feedback if selection state is changing
+    if ((isExpanding) || (isDeexpanding)) {
+        [fullSwipeFeedbackGenerator selectionChanged];
+        [fullSwipeFeedbackGenerator prepare];
     }
 }
 

@@ -855,8 +855,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         phoneNumbers:(NSArray<NSString *> *)phoneNumbers
           completion:(void (^_Nullable)(BOOL succeeded))completion
 {
-    NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[groups count] + (BOOL)[phoneNumbers count];
-    
+    NSUInteger typeCount = MIN([contacts count], 1) + MIN([labels count], 1) + MIN([groups count], 1) + MIN([phoneNumbers count], 1);
+        
     if (typeCount == 0) {
         SBLogError(@"No recipients provided to sendMessage:.  Ignoring.");
         completion(NO);

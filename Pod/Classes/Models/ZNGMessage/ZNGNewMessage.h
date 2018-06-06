@@ -28,11 +28,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSArray<UIImage *> * outgoingImageAttachments;
 
 /**
- *  Asynchronously attaches the provided image data, resizing if necessary and populating outgoingImageAttachments.
+ *  Attaches the provided image data, resizing if necessary and populating outgoingImageAttachments.
+ *  This can safely be called from a background thread to avoid using main thread time to resize/encode images.
  *
  *  @params maxSize Optional maximum image size.  Defaults to 800x800 if maxSize is CGSizeZero.
  */
-- (void) attachImageData:(NSData *)imageData withMaximumSize:(CGSize)maxSize removingExisting:(BOOL)removeExisting completion:(void (^ _Nullable)(BOOL success))completion;
+- (void) attachImageData:(NSData *)imageData withMaximumSize:(CGSize)maxSize removingExisting:(BOOL)removeExisting;
 
 @end
 

@@ -773,38 +773,8 @@ NSString * const kMessageDirectionOutbound = @"outbound";
     // We have one or more image attachments
     // Hop onto a background thread and create the attachments
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        __block BOOL failed = NO;
-        
         for (NSData * imageData in imageDatas) {
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            
-            [newMessage attachImageData:imageData withMaximumSize:CGSizeZero removingExisting:NO completion:^(BOOL success) {
-                if (!success) {
-                    failed = YES;
-                }
-                
-                dispatch_semaphore_signal(semaphore);
-            }];
-            
-            dispatch_time_t fiveSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC));
-            long waitResult = dispatch_semaphore_wait(semaphore, fiveSecondTimeout);
-            
-            if (waitResult != 0) {
-                SBLogError(@"Timed out attaching %llu byte image.", (unsigned long long)[imageData length]);
-                failed = YES;
-            }
-        }
-        
-        if (failed) {
-            SBLogError(@"Failed to attach %llu images.", (unsigned long long)[imageDatas count]);
-            
-            if (failure != nil) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    failure(nil);
-                });
-            }
-            
-            return;
+            [newMessage attachImageData:imageData withMaximumSize:CGSizeZero removingExisting:NO];
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{

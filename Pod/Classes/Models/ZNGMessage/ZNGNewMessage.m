@@ -45,17 +45,10 @@ static NSString * const AttachementBase64 = @"base64";
     return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGParticipant class]];
 }
 
-- (void) attachImageData:(NSData *)originalImageData withMaximumSize:(CGSize)theMaxSize removingExisting:(BOOL)removeExisting completion:(void (^ _Nullable)(BOOL success))completion;
+- (void) attachImageData:(NSData *)originalImageData withMaximumSize:(CGSize)theMaxSize removingExisting:(BOOL)removeExisting
 {
     if ([originalImageData length] == 0) {
         SBLogWarning(@"%s called with no imageData.  Ignoring.", __PRETTY_FUNCTION__);
-        
-        if (completion != nil) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                completion(NO);
-            });
-        }
-        
         return;
     }
     
@@ -65,82 +58,75 @@ static NSString * const AttachementBase64 = @"base64";
         maxSize = CGSizeMake(ImageAttachmentMaxWidth, ImageAttachmentMaxHeight);
     }
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray<UIImage *> * mutableOutgoingImages = [[NSMutableArray alloc] init];
-        NSMutableArray<NSDictionary *> * mutableAttachments = [[NSMutableArray alloc] init];
-        
-        // Preserve existing attachments if the removal flag is not set (from the main thread)
-        if (!removeExisting) {
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([self.outgoingImageAttachments count] > 0) {
-                    [mutableOutgoingImages addObjectsFromArray:self.outgoingImageAttachments];
-                }
-                
-                if ([self.attachments count] > 0) {
-                    [mutableAttachments addObjectsFromArray:self.attachments];
-                }
-                
-                dispatch_semaphore_signal(semaphore);
-            });
-            
-            dispatch_time_t fiveSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5.0 * NSEC_PER_SEC));
-            long semaphoreWaitResult = dispatch_semaphore_wait(semaphore, fiveSecondTimeout);
-            
-            if (semaphoreWaitResult != 0) {
-                SBLogError(@"Timed out copying existing attachments in a %@.  Attachments may be lost.", [self class]);
-            }
-        }
+    NSMutableArray<UIImage *> * mutableOutgoingImages = [[NSMutableArray alloc] init];
+    NSMutableArray<NSDictionary *> * mutableAttachments = [[NSMutableArray alloc] init];
     
-        NSData * imageData = originalImageData;
-        NSString * contentType = [originalImageData imageContentType];
-        UIImage * imageForLocalDisplay;
-        CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)imageData, NULL);
-        size_t const frameCount = CGImageSourceGetCount(imageSource);
-        CFRelease(imageSource);
+    // Do we need to grab our preexisting attachments?
+    if (!removeExisting) {
+        void (^grabExistingAttachments)(void) = ^{
+            if ([self.outgoingImageAttachments count] > 0) {
+                [mutableOutgoingImages addObjectsFromArray:self.outgoingImageAttachments];
+            }
+            
+            if ([self.attachments count] > 0) {
+                [mutableAttachments addObjectsFromArray:self.attachments];
+            }
+        };
         
-        if (frameCount > 1) {
-            // This is an animated GIF.
-            imageForLocalDisplay = [UIImage animatedImageWithAnimatedGIFData:originalImageData];
-            contentType = NSDataImageContentTypeGif;
+        if ([[NSThread currentThread] isMainThread]) {
+            // We're already on the main thread.  Do it here.
+            grabExistingAttachments();
         } else {
-            // This is a single frame image.
-            imageForLocalDisplay = [[UIImage alloc] initWithData:imageData];
+            // Hop over onto the main thread and grab existing attachments.
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                grabExistingAttachments();
+            });
+        }
+    }
+
+    NSData * imageData = originalImageData;
+    NSString * contentType = [originalImageData imageContentType];
+    UIImage * imageForLocalDisplay;
+    CGImageSourceRef imageSource = CGImageSourceCreateWithData((__bridge CFTypeRef)imageData, NULL);
+    size_t const frameCount = CGImageSourceGetCount(imageSource);
+    CFRelease(imageSource);
+    
+    if (frameCount > 1) {
+        // This is an animated GIF.
+        imageForLocalDisplay = [UIImage animatedImageWithAnimatedGIFData:originalImageData];
+        contentType = NSDataImageContentTypeGif;
+    } else {
+        // This is a single frame image.
+        imageForLocalDisplay = [[UIImage alloc] initWithData:imageData];
+        
+        // Do we need to resize?
+        BOOL needsResize = ((imageForLocalDisplay.size.width > maxSize.width) || (imageForLocalDisplay.size.height > maxSize.height));
+        
+        if (needsResize) {
+            NSData * resizeData = [self resizedJpegImageDataForImage:imageForLocalDisplay withMaxSize:maxSize];
             
-            // Do we need to resize?
-            BOOL needsResize = ((imageForLocalDisplay.size.width > maxSize.width) || (imageForLocalDisplay.size.height > maxSize.height));
-            
-            if (needsResize) {
-                NSData * resizeData = [self resizedJpegImageDataForImage:imageForLocalDisplay withMaxSize:maxSize];
-                
-                if (resizeData != nil) {
-                    imageData = resizeData;
-                    contentType = NSDataImageContentTypeJpeg;
-                } else {
-                    SBLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
-                }
+            if (resizeData != nil) {
+                imageData = resizeData;
+                contentType = NSDataImageContentTypeJpeg;
+            } else {
+                SBLogError(@"Unable to resize %@ image before sending.  It will be sent in its original form.", NSStringFromCGSize(imageForLocalDisplay.size));
             }
         }
-        
-        // We have a (maybe resized) imageData to send and imageForLocalDisplay
-        // Now for the base64 encoding:
-        NSData * base64Data = [imageData base64EncodedDataWithOptions:0];
-        NSString * base64String = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
-        NSDictionary * attachment = @{ AttachmentContentTypeKey: contentType, AttachementBase64: base64String };
-        
-        [mutableAttachments addObject:attachment];
-        [mutableOutgoingImages addObject:imageForLocalDisplay];
-        
-        // Hop back onto the main thread to put our work in place and call the completion block
-        dispatch_async(dispatch_get_main_queue(), ^{
-            self.outgoingImageAttachments = mutableOutgoingImages;
-            self.attachments = mutableAttachments;
-            
-            if (completion != nil) {
-                completion(YES);
-            }
-        });
+    }
+    
+    // We have a (maybe resized) imageData to send and imageForLocalDisplay
+    // Now for the base64 encoding:
+    NSData * base64Data = [imageData base64EncodedDataWithOptions:0];
+    NSString * base64String = [[NSString alloc] initWithData:base64Data encoding:NSUTF8StringEncoding];
+    NSDictionary * attachment = @{ AttachmentContentTypeKey: contentType, AttachementBase64: base64String };
+    
+    [mutableAttachments addObject:attachment];
+    [mutableOutgoingImages addObject:imageForLocalDisplay];
+    
+    // Ensure we are on the main thread to put our work in place
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.outgoingImageAttachments = mutableOutgoingImages;
+        self.attachments = mutableAttachments;
     });
 }
 

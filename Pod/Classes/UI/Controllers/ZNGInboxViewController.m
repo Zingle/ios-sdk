@@ -44,7 +44,10 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     NSDateFormatter * dateWithYearFormatter;
     NSDateFormatter * timeFormatter;
     
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunguarded-availability"
     UISelectionFeedbackGenerator * fullSwipeFeedbackGenerator;
+#pragma clang diagnostic pop
     BOOL lastStateWasExpanded;
     
     NSTimer * refreshTimer;

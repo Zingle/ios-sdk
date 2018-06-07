@@ -9,6 +9,7 @@
 #import <JSQMessagesViewController/JSQMessagesViewController.h>
 #import "ZNGServiceConversationInputToolbar.h"
 #import "ZNGConversationCollectionView.h"
+#import "ZNGImageAttachmentController.h"
 
 @class ZNGConversation;
 @class ZNGConversationCollectionView;
@@ -20,7 +21,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGConversationViewController : JSQMessagesViewController <UIImagePickerControllerDelegate, UINavigationControllerDelegate, ZNGServiceConversationInputToolbarDelegate, UIGestureRecognizerDelegate>
+@interface ZNGConversationViewController : JSQMessagesViewController <ZNGServiceConversationInputToolbarDelegate, UIGestureRecognizerDelegate, ZNGImageAttachmentDelegate>
 
 @property (nonatomic, strong, nullable) ZNGConversation * conversation;
 

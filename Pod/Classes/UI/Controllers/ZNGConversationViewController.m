@@ -799,8 +799,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             // Note that mutation *is* allowed during this enumeration, per the documentation as of iOS 10.2.
             // We will remove any other image attachments that happen to be in this string.
             NSMutableAttributedString * result = [textView.attributedText mutableCopy];
-            [result enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, [result length]) options:0 usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop) {
-                [result deleteCharactersInRange:range];
+            [result enumerateAttribute:NSAttachmentAttributeName inRange:NSMakeRange(0, [result length]) options:0 usingBlock:^(id  _Nullable value, NSRange attrRange, BOOL * _Nonnull stop) {
+                if (value != nil) {
+                    [result deleteCharactersInRange:attrRange];
+                }
             }];
             
             textView.attributedText = result;

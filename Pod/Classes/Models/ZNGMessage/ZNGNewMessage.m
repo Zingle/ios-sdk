@@ -124,10 +124,16 @@ static NSString * const AttachementBase64 = @"base64";
     [mutableOutgoingImages addObject:imageForLocalDisplay];
     
     // Ensure we are on the main thread to put our work in place
-    dispatch_async(dispatch_get_main_queue(), ^{
+    void (^putWorkInPlace)(void) = ^{
         self.outgoingImageAttachments = mutableOutgoingImages;
         self.attachments = mutableAttachments;
-    });
+    };
+    
+    if ([[NSThread currentThread] isMainThread]) {
+        putWorkInPlace();
+    } else {
+        dispatch_sync(dispatch_get_main_queue(), putWorkInPlace);
+    }
 }
 
 -(NSData *)resizedJpegImageDataForImage:(UIImage *)image withMaxSize:(CGSize)maxSize

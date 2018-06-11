@@ -78,9 +78,7 @@ static NSString * const AttachementBase64 = @"base64";
             grabExistingAttachments();
         } else {
             // Hop over onto the main thread and grab existing attachments.
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                grabExistingAttachments();
-            });
+            dispatch_sync(dispatch_get_main_queue(), grabExistingAttachments);
         }
     }
 

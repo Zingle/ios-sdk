@@ -847,19 +847,26 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     return vc;
 }
 
-- (void) sendMessage:(NSString *)body
+- (void) sendMessage:(nullable NSString *)body
+ imageAttachmentData:(nullable NSArray<NSData *> *)attachments
             withUUID:(nullable NSString *)uuid
-          toContacts:(NSArray<ZNGContact *> *)contacts
-              labels:(NSArray<ZNGLabel *> *)labels
-              groups:(NSArray<ZNGContactGroup *> *)groups
-        phoneNumbers:(NSArray<NSString *> *)phoneNumbers
-          completion:(void (^_Nullable)(BOOL succeeded))completion
+          toContacts:(nullable NSArray<ZNGContact *> *)contacts
+              labels:(nullable NSArray<ZNGLabel *> *)labels
+              groups:(nullable NSArray<ZNGContactGroup *> *)groups
+        phoneNumbers:(nullable NSArray<NSString *> *)phoneNumbers
+          completion:(void (^_Nullable)(BOOL succeeded))completion;
 {
-    NSUInteger typeCount = (BOOL)[contacts count] + (BOOL)[labels count] + (BOOL)[groups count] + (BOOL)[phoneNumbers count];
-    
+    NSUInteger typeCount = MIN([contacts count], 1) + MIN([labels count], 1) + MIN([groups count], 1) + MIN([phoneNumbers count], 1);
+        
     if (typeCount == 0) {
         SBLogError(@"No recipients provided to sendMessage:.  Ignoring.");
-        completion(NO);
+        
+        if (completion != nil) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(NO);
+            });
+        }
+        
         return;
     }
     
@@ -867,8 +874,12 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         SBLogError(@"Unable to generate a clean outgoing message.");
 
         if (completion != nil) {
-            completion(NO);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completion(NO);
+            });
         }
+        
+        return;
     }
     
     // Since message PUT requires a recipient type for the entire message (contact vs. label,) we will have to send
@@ -899,6 +910,10 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
         for (ZNGNewMessage * message in messages) {
             message.body = body;
+            
+            for (NSData * imageData in attachments) {
+                [message attachImageData:imageData withMaximumSize:CGSizeZero removingExisting:NO];
+            }
             
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             

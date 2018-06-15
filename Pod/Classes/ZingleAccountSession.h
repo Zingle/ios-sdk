@@ -241,12 +241,13 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
  *
  *  At least one value must be present in the contacts, labels, groups, or phoneNumbers arrays.
  */
-- (void) sendMessage:(NSString *)body
+- (void) sendMessage:(nullable NSString *)body
+ imageAttachmentData:(nullable NSArray<NSData *> *)attachments
             withUUID:(nullable NSString *)uuid
-          toContacts:(NSArray<ZNGContact *> *)contacts
-              labels:(NSArray<ZNGLabel *> *)labels
-              groups:(NSArray<ZNGContactGroup *> *)groups
-        phoneNumbers:(NSArray<NSString *> *)phoneNumbers
+          toContacts:(nullable NSArray<ZNGContact *> *)contacts
+              labels:(nullable NSArray<ZNGLabel *> *)labels
+              groups:(nullable NSArray<ZNGContactGroup *> *)groups
+        phoneNumbers:(nullable NSArray<NSString *> *)phoneNumbers
           completion:(void (^_Nullable)(BOOL succeeded))completion;
 
 @end

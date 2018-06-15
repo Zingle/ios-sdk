@@ -429,32 +429,6 @@ static NSString * const AssignSegueIdentifier = @"assign";
 }
 
 #pragma mark - Phone number cell delegate
-- (void) userClickedPhoneNumberTypeButtonOnCell:(ZNGContactPhoneNumberTableViewCell *)cell
-{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Phone number type" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    
-    alert.popoverPresentationController.sourceRect = cell.displayNameButton.bounds;
-    alert.popoverPresentationController.sourceView = cell.displayNameButton;
-    
-    UIAlertAction * mobile = [UIAlertAction actionWithTitle:@"Mobile" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        cell.displayName = @"MOBILE";
-    }];
-    UIAlertAction * home = [UIAlertAction actionWithTitle:@"Home" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        cell.displayName = @"HOME";
-    }];
-    UIAlertAction * business = [UIAlertAction actionWithTitle:@"Business" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        cell.displayName = @"BUSINESS";
-    }];
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    
-    [alert addAction:mobile];
-    [alert addAction:home];
-    [alert addAction:business];
-    [alert addAction:cancel];
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void) userClickedDeleteOnPhoneNumberTableCell:(ZNGContactPhoneNumberTableViewCell *)cell
 {
     [self saveAnyEditsInProgress];

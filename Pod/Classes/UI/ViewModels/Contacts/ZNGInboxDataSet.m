@@ -78,6 +78,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if (self != nil) {
         _sortFields = @[[NSString stringWithFormat:@"%@ %@", ZNGInboxDataSetSortFieldLastMessageCreatedAt, ZNGInboxDataSetSortDirectionDescending]];
         loadingPages = [[NSMutableIndexSet alloc] init];
+        _maximumPageSize = 500;
     }
     
     return self;
@@ -92,7 +93,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     if (self != nil) {
         _contactClient = builder.contactClient;
         
-        _pageSize = builder.pageSize;
+        _initialPageSize = builder.initialPageSize;
         _allowContactsWithNoMessages = builder.allowContactsWithNoMessages;
         _openStatus = builder.openStatus;
         _unconfirmed = builder.unconfirmed;
@@ -121,8 +122,8 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
             _sortFields = builder.sortFields;
         }
         
-        if (_pageSize == 0) {
-            _pageSize = 25;
+        if (_initialPageSize == 0) {
+            _initialPageSize = 25;
         }
         
         fetchQueue = [[NSOperationQueue alloc] init];
@@ -217,7 +218,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 {
     ZNGContactDataSetBuilder * builder = [[ZNGContactDataSetBuilder alloc] init];
     
-    builder.pageSize = self.pageSize;
+    builder.initialPageSize = self.initialPageSize;
     builder.openStatus = self.openStatus;
     builder.unconfirmed = self.unconfirmed;
     builder.allowContactsWithNoMessages = self.allowContactsWithNoMessages;
@@ -238,9 +239,14 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 #pragma mark - Filtering
 - (nonnull NSMutableDictionary *) parameters
 {
+    return [self parametersWithPageSize:0];
+}
+
+- (nonnull NSMutableDictionary *) parametersWithPageSize:(NSUInteger)pageSize
+{
     NSMutableDictionary * parameters = [[NSMutableDictionary alloc] init];
-    parameters[ParameterKeyPageSize] = @(self.pageSize);
     
+    parameters[ParameterKeyPageSize] = (pageSize > 0) ? @(pageSize) : @(self.initialPageSize);
     parameters[ParameterKeySortFields] = self.sortFields;
     
     if (self.openStatus == ZNGInboxDataSetOpenStatusOpen) {
@@ -337,7 +343,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
 - (void) refreshStartingAtIndex:(NSUInteger)index removingTail:(BOOL)removeTail
 {
     // Calculate what page indices should be loaded in order to load some data starting at the specified index.
-    
+        
     NSUInteger pageSize = self.pageSize;
     NSMutableIndexSet * pagesToRefresh = [[NSMutableIndexSet alloc] init];
     NSUInteger loadedCount = [_contacts count];

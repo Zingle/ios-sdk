@@ -52,9 +52,19 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSUInteger count;
 
 /**
- *  Page size!
+ *  The size of the initial page of data to load.  Actual page size may vary as more data is fetched.
+ *
+ *  Defaults to 25.
  */
-@property (nonatomic, readonly) NSUInteger pageSize;
+@property (nonatomic, readonly) NSUInteger initialPageSize;
+
+/**
+ *  The maximum number of contacts to be retrieved in a single request.  Page size may dynamically increase from `initialPageSize` to
+ *   this value.
+ *
+ *  Defaults to 500.
+ */
+@property (nonatomic, readonly) NSUInteger maximumPageSize;
 
 /**
  *  A human-readable title for the current filter set.

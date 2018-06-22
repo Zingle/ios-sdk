@@ -23,7 +23,7 @@
 {
     _baseDataSet = baseDataSet;
     
-    self.pageSize = baseDataSet.pageSize;
+    self.initialPageSize = baseDataSet.initialPageSize;
     self.openStatus = baseDataSet.openStatus;
     self.unconfirmed = baseDataSet.unconfirmed;
     self.labelIds = baseDataSet.labelIds;
@@ -48,7 +48,7 @@
 + (NSDictionary *) JSONKeyPathsByPropertyKey
 {
     return @{
-             NSStringFromSelector(@selector(pageSize)): NSStringFromSelector(@selector(pageSize)),
+             NSStringFromSelector(@selector(initialPageSize)): NSStringFromSelector(@selector(initialPageSize)),
              NSStringFromSelector(@selector(openStatus)): NSStringFromSelector(@selector(openStatus)),
              NSStringFromSelector(@selector(unconfirmed)): NSStringFromSelector(@selector(unconfirmed)),
              NSStringFromSelector(@selector(allowContactsWithNoMessages)): NSStringFromSelector(@selector(allowContactsWithNoMessages)),

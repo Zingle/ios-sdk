@@ -1901,7 +1901,19 @@ enum ZNGConversationSections
 - (void) appendStringToMessageInput:(NSString *)text
 {
     [self updateUUID];
-    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
+    
+    UITextView * textView = self.inputToolbar.contentView.textView;
+    
+    // Use the attributed text to preserve any image attachments
+    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text];
+    NSMutableAttributedString * attributedText = [textView.attributedText mutableCopy];
+    [attributedText appendAttributedString:newAttributedText];
+    
+    // Font must be manually preserved when the text is changed to avoid a UIKit bug
+    UIFont * font = textView.font;
+    textView.attributedText = attributedText;
+    textView.font = font;
+    
     [self.inputToolbar toggleSendButtonEnabled];
     [self.inputToolbar collapseInputButtons];
 }

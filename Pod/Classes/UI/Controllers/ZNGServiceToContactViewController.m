@@ -1724,31 +1724,6 @@ enum ZNGConversationSections
     }
 }
 
-- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender
-{
-    CGRect sourceRect = [self.view convertRect:toolbar.contentView.customFieldButton.frame fromView:toolbar.contentView.customFieldButton.superview];
-    
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Select a custom field to insert" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
-    alert.popoverPresentationController.sourceView = self.view;
-    alert.popoverPresentationController.sourceRect = sourceRect;
-    
-    NSArray<ZNGContactField *> * alphabeticalCustomFields = [self.conversation.service.contactCustomFields sortedArrayUsingComparator:^NSComparisonResult(ZNGContactField * _Nonnull obj1, ZNGContactField * _Nonnull obj2) {
-        return [obj1.displayName compare:obj2.displayName options:NSCaseInsensitiveSearch];
-    }];
-    
-    for (ZNGContactField * customField in alphabeticalCustomFields) {
-        UIAlertAction * action = [UIAlertAction actionWithTitle:customField.displayName style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            [self insertCustomField:customField];
-        }];
-        [alert addAction:action];
-    }
-    
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    [alert addAction:cancel];
-    
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"editContact"]) {
@@ -1926,7 +1901,19 @@ enum ZNGConversationSections
 - (void) appendStringToMessageInput:(NSString *)text
 {
     [self updateUUID];
-    self.inputToolbar.contentView.textView.text = [self.inputToolbar.contentView.textView.text stringByAppendingString:text];
+    
+    UITextView * textView = self.inputToolbar.contentView.textView;
+    
+    // Use the attributed text to preserve any image attachments
+    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text];
+    NSMutableAttributedString * attributedText = [textView.attributedText mutableCopy];
+    [attributedText appendAttributedString:newAttributedText];
+    
+    // Font must be manually preserved when the text is changed to avoid a UIKit bug
+    UIFont * font = textView.font;
+    textView.attributedText = attributedText;
+    textView.font = font;
+    
     [self.inputToolbar toggleSendButtonEnabled];
     [self.inputToolbar collapseInputButtons];
 }

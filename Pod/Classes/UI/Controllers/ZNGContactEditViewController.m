@@ -734,6 +734,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
             
             if ([channel isPhoneNumber]) {
                 ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];
+                cell.service = self.service;
                 cell.channel = channel;
                 cell.editingLocked = locked;
                 cell.delegate = self;

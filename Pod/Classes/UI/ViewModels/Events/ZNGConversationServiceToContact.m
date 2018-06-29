@@ -135,7 +135,14 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 
 - (NSString *)remoteName
 {
-    return [_contact fullName];
+    BOOL useUnformattedPhoneValue = YES;
+    ZNGChannel * phoneChannel = [self.contact phoneNumberChannel];
+    
+    if (phoneChannel != nil) {
+        useUnformattedPhoneValue = [self.service shouldDisplayRawValueForChannel:phoneChannel];
+    }
+    
+    return [_contact fullNameUsingUnformattedPhoneNumberValue:useUnformattedPhoneValue];
 }
 
 - (void) notifyConversationDataReceived:(NSNotification *)notification

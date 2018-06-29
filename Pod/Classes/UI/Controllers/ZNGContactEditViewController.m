@@ -161,7 +161,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
     [self showOrHideLockedContactBar];
     NSString * saveOrCreate = (originalContact != nil) ? @"Save" : @"Create";
     [self.saveButton setTitle:saveOrCreate forState:UIControlStateNormal];
-    NSString * name = [originalContact fullName];
+    NSString * name = [self.conversation remoteName];
     self.titleLabel.text = ([name length] > 0) ? name : @"Create Contact";
     
     [self generateDataArrays];
@@ -734,6 +734,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
             
             if ([channel isPhoneNumber]) {
                 ZNGContactPhoneNumberTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"phone" forIndexPath:indexPath];
+                cell.service = self.service;
                 cell.channel = channel;
                 cell.editingLocked = locked;
                 cell.delegate = self;

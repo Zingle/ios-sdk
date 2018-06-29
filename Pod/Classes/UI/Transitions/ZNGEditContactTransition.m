@@ -223,7 +223,8 @@
 
 - (CGRect) frameForSubstring:(NSString *)substring withinLabel:(UILabel *)label
 {
-    NSRange animatingTextRange = [label.text rangeOfString:substring];
+    // Reversing the search direction handles the case of a conversation that is assigned to an employee with the same as the contact.
+    NSRange animatingTextRange = [label.text rangeOfString:substring options:NSBackwardsSearch];
     return [label boundingRectForTextRange:animatingTextRange];
 }
 

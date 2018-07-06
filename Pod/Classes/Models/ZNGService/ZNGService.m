@@ -18,6 +18,7 @@
 #import "ZNGSettingsField.h"
 #import "ZNGPrinter.h"
 #import "ZNGContactGroup.h"
+#import "ZNGCalendarEventType.h"
 
 #define kServiceSettingHotsosURLKey         @"hotsos_url"
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
@@ -60,6 +61,7 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
              @"automations" : @"automations",
              @"printers" : @"printers",
              NSStringFromSelector(@selector(contactGroups)): @"contact_groups",
+             NSStringFromSelector(@selector(calendarEventTypes)): @"calendar_event_types",
              NSStringFromSelector(@selector(teams)): @"teams",
              @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
@@ -131,6 +133,11 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
 + (NSValueTransformer *) contactGroupsJSONTransformer
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactGroup class]];
+}
+
++ (NSValueTransformer *)calendarEventTypesJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGCalendarEventType class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer

@@ -22,6 +22,7 @@
 @class ZNGTemplate;
 @class ZNGContactGroup;
 @class ZNGTeam;
+@class ZNGCalendarEventType;
 
 extern NSString * _Nonnull const ZNGServiceFeatureTeams;
 extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
@@ -45,6 +46,7 @@ extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
 @property(nonatomic, strong, nullable) NSArray<ZNGTemplate *> * templates;
 @property(nonatomic, strong, nullable) NSArray<ZNGPrinter *> * printers;
 @property(nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * contactGroups;
+@property(nonatomic, strong, nullable) NSArray<ZNGCalendarEventType *> * calendarEventTypes;
 @property(nonatomic, strong, nullable) ZNGServiceAddress* serviceAddress;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;

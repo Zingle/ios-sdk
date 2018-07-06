@@ -19,6 +19,7 @@
 #import "NSString+Initials.h"
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
+#import "ZNGCalendarEvent.h"
 
 @import SBObjectiveCWrapper;
 
@@ -139,6 +140,7 @@ static const NSTimeInterval LateTimeSeconds = 5.0 * 60.0;  // How long before an
              @"updatedAt" : @"updated_at",
              NSStringFromSelector(@selector(avatarUri)) : @"avatar_uri",
              NSStringFromSelector(@selector(unconfirmedAt)): @"unconfirmed_at",
+             NSStringFromSelector(@selector(calendarEvents)): @"calendar_events",
              };
 }
 
@@ -184,6 +186,11 @@ static const NSTimeInterval LateTimeSeconds = 5.0 * 60.0;  // How long before an
 + (NSValueTransformer *) groupsJSONTransformer
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactGroup class]];
+}
+
++ (NSValueTransformer *)calendarEventsJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGCalendarEvent class]];
 }
 
 + (NSValueTransformer*)createdAtJSONTransformer

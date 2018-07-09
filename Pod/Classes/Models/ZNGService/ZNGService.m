@@ -26,6 +26,7 @@
 
 NSString * const ZNGServiceFeatureTeams = @"teams";
 NSString * const ZNGServiceFeatureAssignment = @"assignment";
+NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
 
 @implementation ZNGService
 
@@ -300,6 +301,11 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
     }
     
     return ([self.features containsObject:ZNGServiceFeatureTeams]);
+}
+
+- (BOOL) allowsCalendarEvents
+{
+    return ([self.features containsObject:ZNGServiceFeatureCalendarEvents]);
 }
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId

@@ -38,11 +38,14 @@
 #import "ZNGEditContactTransition.h"
 #import "ZNGEditContactExitTransition.h"
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGCalendarEvent.h"
+#import "ZNGContactEventTableViewCell.h"
 
 @import SBObjectiveCWrapper;
 
 enum  {
     ContactSectionDefaultCustomFields,
+    ContactSectionCalendarEvents,
     ContactSectionAssignment,
     ContactSectionChannels,
     ContactSectionGroups,
@@ -78,6 +81,10 @@ static NSString * const AssignSegueIdentifier = @"assign";
     UIImage * deleteXImage;
     
     __weak ZNGContactLabelsTableViewCell * labelsGridCell;
+    
+    NSDateFormatter * eventDayFormatter;
+    NSDateFormatter * eventMonthFormatter;
+    NSDateFormatter * eventTimeFormatter;
 }
 
 - (void)viewDidLoad
@@ -88,6 +95,14 @@ static NSString * const AssignSegueIdentifier = @"assign";
     if ((self.transitioningDelegate == nil) && (!self.useDefaultTransition)) {
         self.transitioningDelegate = self;
     }
+    
+    eventDayFormatter = [[NSDateFormatter alloc] init];
+    eventDayFormatter.dateFormat = @"d";
+    eventMonthFormatter = [[NSDateFormatter alloc] init];
+    eventMonthFormatter.dateFormat = @"MMMM";
+    eventTimeFormatter = [[NSDateFormatter alloc] init];
+    eventTimeFormatter.dateStyle = NSDateFormatterNoStyle;
+    eventTimeFormatter.timeStyle = NSDateFormatterShortStyle;
     
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
     
@@ -505,6 +520,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return ([self.service allowsAssignment]);
 }
 
+- (BOOL) shouldShowCalendarEventsSection
+{
+    return ([self.service allowsCalendarEvents]);
+}
+
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -515,6 +535,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
     
     // If we have no assignment section, make sure it has no header
     if ((section == ContactSectionAssignment) && (![self shouldShowAssignmentSection])) {
+        return 0.0;
+    }
+    
+    // Same with calendar events
+    if ((section == ContactSectionCalendarEvents) && (![self shouldShowCalendarEventsSection])) {
         return 0.0;
     }
     
@@ -535,6 +560,10 @@ static NSString * const AssignSegueIdentifier = @"assign";
         case ContactSectionDefaultCustomFields:
             // No header for top section
             return nil;
+        case ContactSectionCalendarEvents:
+            header.sectionLabel.text = @"EVENTS";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconCalendarEvents" inBundle:bundle compatibleWithTraitCollection:nil];
+            break;
         case ContactSectionAssignment:
             header.sectionLabel.text = @"ASSIGNMENT";
             header.sectionImage.image = [UIImage imageNamed:@"editIconAssignment" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -579,6 +608,12 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section) {
+        case ContactSectionCalendarEvents:
+            if (![self shouldShowCalendarEventsSection]) {
+                return 0;
+            }
+            
+            return [self.contact.calendarEvents count];
         case ContactSectionAssignment:
             return ([self shouldShowAssignmentSection]) ? 1 : 0;
         case ContactSectionDefaultCustomFields:
@@ -608,6 +643,45 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
+        case ContactSectionCalendarEvents:
+        {
+            ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"event" forIndexPath:indexPath];
+            
+            if (indexPath.row > [self.contact.calendarEvents count]) {
+                SBLogError(@"Out of bounds displaying event %lld (out of %llu) for %@",
+                           (long long)indexPath.row,
+                           (unsigned long long)[self.contact.calendarEvents count],
+                           [self.contact fullName]);
+                
+                cell.dayLabel.text = nil;
+                cell.monthLabel.text = nil;
+                cell.timeLabel.text = nil;
+                cell.eventNameLabel.text = nil;
+                return cell;
+            }
+            
+            ZNGCalendarEvent * event = self.contact.calendarEvents[indexPath.row];
+            
+            if ((event.startsAt == nil) || (event.endsAt == nil)) {
+                SBLogError(@"Missing either start date (%@) or end date (%@) for event.", event.startsAt, event.endsAt);
+                cell.dayLabel.text = nil;
+                cell.monthLabel.text = nil;
+                cell.timeLabel.text = nil;
+                cell.eventNameLabel.text = nil;
+                return cell;
+            }
+            
+            cell.eventNameLabel.text = event.eventDescription;
+            cell.dayLabel.text = [eventDayFormatter stringFromDate:event.startsAt];
+            cell.monthLabel.text = [eventMonthFormatter stringFromDate:event.startsAt];
+            
+            NSString * startTime = [eventTimeFormatter stringFromDate:event.startsAt];
+            NSString * endTime = [eventTimeFormatter stringFromDate:event.endsAt];
+            cell.timeLabel.text = [NSString stringWithFormat:@"%@ - %@", startTime, endTime];
+            
+            return cell;
+        }
+            
         case ContactSectionAssignment:
         {
             if ([self.contact.assignedToUserId length] > 0) {

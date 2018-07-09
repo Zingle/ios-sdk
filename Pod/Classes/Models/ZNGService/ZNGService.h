@@ -26,6 +26,7 @@
 
 extern NSString * _Nonnull const ZNGServiceFeatureTeams;
 extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
+extern NSString * _Nonnull const ZNGServiceFeatureCalendarEvents;
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -78,6 +79,11 @@ extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
  *  Whether this service allows conversations to be assigned to teams.  Returns NO if allowsAssignment is NO.
  */
 - (BOOL) allowsTeamAssignment;
+
+/**
+ *  Whether this service supports calendar events for contacts.
+ */
+- (BOOL) allowsCalendarEvents;
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId;
 

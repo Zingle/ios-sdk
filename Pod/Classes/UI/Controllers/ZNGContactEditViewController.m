@@ -679,6 +679,16 @@ static NSString * const AssignSegueIdentifier = @"assign";
             NSString * endTime = [eventTimeFormatter stringFromDate:event.endsAt];
             cell.timeLabel.text = [NSString stringWithFormat:@"%@ - %@", startTime, endTime];
             
+            UIColor * textColor = [self.service textColorForCalendarEvent:event];
+            UIColor * backgroundColor = [self.service backgroundColorForCalendarEvent:event];
+            cell.roundedBackgroundView.backgroundColor = backgroundColor;
+            cell.roundedBackgroundView.layer.borderColor = [textColor CGColor];
+            cell.dividerLine.backgroundColor = textColor;
+            
+            for (UILabel * label in cell.textLabels) {
+                label.textColor = textColor;
+            }
+            
             return cell;
         }
             

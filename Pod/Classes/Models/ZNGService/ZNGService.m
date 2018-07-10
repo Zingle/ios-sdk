@@ -19,6 +19,10 @@
 #import "ZNGPrinter.h"
 #import "ZNGContactGroup.h"
 #import "ZNGCalendarEventType.h"
+#import "ZNGCalendarEvent.h"
+#import "UIColor+ZingleSDK.h"
+
+@import SBObjectiveCWrapper;
 
 #define kServiceSettingHotsosURLKey         @"hotsos_url"
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
@@ -306,6 +310,52 @@ NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
 - (BOOL) allowsCalendarEvents
 {
     return ([self.features containsObject:ZNGServiceFeatureCalendarEvents]);
+}
+
+- (UIColor *) backgroundColorForCalendarEvent:(ZNGCalendarEvent *)event
+{
+    UIColor * const defaultColor = [UIColor lightGrayColor];
+    
+    for (ZNGCalendarEventType * type in self.calendarEventTypes) {
+        if ([type.eventTypeId isEqualToString:event.eventTypeId]) {
+            NSString * colorString = type.backgroundColor;
+            
+            if ([colorString length] > 0) {
+                return [UIColor colorFromHexString:colorString];
+            }
+            
+            SBLogWarning(@"Found event type for %@, but the background color is %@ instead of a hex color string.", event.eventTypeId, colorString);
+            return defaultColor;
+        }
+    }
+    
+    SBLogWarning(@"Unable to find event type with ID of %@.  Returning fallback background color.", event.eventTypeId);
+    return defaultColor;
+}
+
+/**
+ *  Returns an appropriate text color for the specified calendar event.
+ *  Returns black if no matching event type can be found.
+ */
+- (UIColor *) textColorForCalendarEvent:(ZNGCalendarEvent *)event
+{
+    UIColor * const defaultColor = [UIColor blackColor];
+    
+    for (ZNGCalendarEventType * type in self.calendarEventTypes) {
+        if ([type.eventTypeId isEqualToString:event.eventTypeId]) {
+            NSString * colorString = type.textColor;
+            
+            if ([colorString length] > 0) {
+                return [UIColor colorFromHexString:colorString];
+            }
+            
+            SBLogWarning(@"Found event type for %@, but the text color is %@ instead of a hex color string.", event.eventTypeId, colorString);
+            return defaultColor;
+        }
+    }
+    
+    SBLogWarning(@"Unable to find event type with ID of %@.  Returning fallback text color.", event.eventTypeId);
+    return defaultColor;
 }
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId

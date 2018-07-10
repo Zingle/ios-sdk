@@ -17,5 +17,6 @@
 @property (nonatomic, strong, nullable) IBOutlet UILabel * eventNameLabel;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * timeLabel;
 
+@property (nonatomic, readonly, nullable) NSArray<UILabel *> * textLabels;
 
 @end

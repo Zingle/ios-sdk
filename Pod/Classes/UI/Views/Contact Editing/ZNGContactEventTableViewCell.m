@@ -17,4 +17,27 @@
     self.roundedBackgroundView.layer.borderWidth = 1.0;
 }
 
+- (NSArray<UILabel *> *) textLabels
+{
+    NSMutableArray<UILabel *> * labels = [[NSMutableArray alloc] initWithCapacity:4];
+    
+    if (_monthLabel != nil) {
+        [labels addObject:_monthLabel];
+    }
+    
+    if (_dayLabel != nil) {
+        [labels addObject:_dayLabel];
+    }
+    
+    if (_eventNameLabel != nil) {
+        [labels addObject:_eventNameLabel];
+    }
+    
+    if (_timeLabel != nil) {
+        [labels addObject:_timeLabel];
+    }
+    
+    return labels;
+}
+
 @end

@@ -23,6 +23,7 @@
 @class ZNGContactGroup;
 @class ZNGTeam;
 @class ZNGCalendarEventType;
+@class ZNGCalendarEvent;
 
 extern NSString * _Nonnull const ZNGServiceFeatureTeams;
 extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
@@ -84,6 +85,18 @@ extern NSString * _Nonnull const ZNGServiceFeatureCalendarEvents;
  *  Whether this service supports calendar events for contacts.
  */
 - (BOOL) allowsCalendarEvents;
+
+/**
+ *  Returns an appropriate background color for the specified calendar event.
+ *  Returns light grey if no matching event type can be found.
+ */
+- (UIColor *) backgroundColorForCalendarEvent:(ZNGCalendarEvent *)event;
+
+/**
+ *  Returns an appropriate text color for the specified calendar event.
+ *  Returns black if no matching event type can be found.
+ */
+- (UIColor *) textColorForCalendarEvent:(ZNGCalendarEvent *)event;
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId;
 

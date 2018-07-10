@@ -673,7 +673,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
             
             cell.eventNameLabel.text = event.title;
             cell.dayLabel.text = [eventDayFormatter stringFromDate:event.startsAt];
-            cell.monthLabel.text = [eventMonthFormatter stringFromDate:event.startsAt];
+            cell.monthLabel.text = [[eventMonthFormatter stringFromDate:event.startsAt] uppercaseString];
             
             NSString * startTime = [eventTimeFormatter stringFromDate:event.startsAt];
             NSString * endTime = [eventTimeFormatter stringFromDate:event.endsAt];

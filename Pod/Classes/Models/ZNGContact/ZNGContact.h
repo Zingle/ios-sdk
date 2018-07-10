@@ -49,6 +49,21 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong, nullable) NSDate* unconfirmedAt;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;
 
+/**
+ *  Calendar events that have already finished.
+ */
+@property (nonatomic, readonly, nullable) NSArray<ZNGCalendarEvent *> * pastCalendarEvents;
+
+/**
+ *  Calendar events that are currently occurring.
+ */
+@property (nonatomic, readonly, nullable) NSArray<ZNGCalendarEvent *> * ongoingCalendarEvents;
+
+/**
+ *  Calendar events that have not yet started.
+ */
+@property (nonatomic, readonly, nullable) NSArray<ZNGCalendarEvent *> * futureCalendarEvents;
+
 @property (nonatomic, weak, nullable) ZNGContactClient * contactClient;
 
 -(nullable ZNGContactFieldValue *)titleFieldValue;

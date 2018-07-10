@@ -370,6 +370,82 @@ static const NSTimeInterval LateTimeSeconds = 5.0 * 60.0;  // How long before an
     return [name initials];
 }
 
+- (NSArray<ZNGCalendarEvent *> *) pastCalendarEvents
+{
+    if (self.calendarEvents == nil) {
+        return nil;
+    }
+    
+    NSMutableArray<ZNGCalendarEvent *> * events = [[NSMutableArray alloc] init];
+    NSDate * now = [NSDate date];
+    
+    for (ZNGCalendarEvent * event in self.calendarEvents) {
+        if (event.endsAt == nil) {
+            SBLogWarning(@"%@ (%@) event has no \"ends_at\" timestamp.", event.title, event.calendarEventId);
+            continue;
+        }
+        
+        NSTimeInterval timeSinceEnd = [now timeIntervalSinceDate:event.endsAt];
+        
+        if (timeSinceEnd > 0.0) {
+            [events addObject:event];
+        }
+    }
+    
+    return events;
+}
+
+- (NSArray<ZNGCalendarEvent *> *) ongoingCalendarEvents
+{
+    if (self.calendarEvents == nil) {
+        return nil;
+    }
+    
+    NSMutableArray<ZNGCalendarEvent *> * events = [[NSMutableArray alloc] init];
+    NSDate * now = [NSDate date];
+    
+    for (ZNGCalendarEvent * event in self.calendarEvents) {
+        if ((event.endsAt == nil) || (event.startsAt == nil)) {
+            SBLogWarning(@"%@ (%@) event is missing either \"starts_at\" or \"ends_at.\"", event.title, event.calendarEventId);
+            continue;
+        }
+        
+        NSTimeInterval timeSinceStart = [now timeIntervalSinceDate:event.startsAt];
+        NSTimeInterval timeSinceEnd = [now timeIntervalSinceDate:event.endsAt];
+        
+        if ((timeSinceStart > 0.0) && (timeSinceEnd < 0.0)) {
+            [events addObject:event];
+        }
+    }
+    
+    return events;
+}
+
+- (NSArray<ZNGCalendarEvent *> *) futureCalendarEvents
+{
+    if (self.calendarEvents == nil) {
+        return nil;
+    }
+    
+    NSMutableArray<ZNGCalendarEvent *> * events = [[NSMutableArray alloc] init];
+    NSDate * now = [NSDate date];
+    
+    for (ZNGCalendarEvent * event in self.calendarEvents) {
+        if (event.startsAt == nil) {
+            SBLogWarning(@"%@ (%@) event has no \"starts_at\" timestamp.", event.title, event.calendarEventId);
+            continue;
+        }
+        
+        NSTimeInterval timeSinceStart = [now timeIntervalSinceDate:event.startsAt];
+        
+        if (timeSinceStart < 0.0) {
+            [events addObject:event];
+        }
+    }
+    
+    return events;
+}
+
 - (NSArray<ZNGChannel *> *) channelsWithValues
 {
     NSMutableArray<ZNGChannel *> * populatedChannels = [[NSMutableArray alloc] initWithCapacity:[self.channels count]];

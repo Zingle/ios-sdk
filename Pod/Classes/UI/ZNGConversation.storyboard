@@ -1413,7 +1413,7 @@
                                             <outlet property="nameLabel" destination="qKD-A7-hvH" id="81y-Te-ag7"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="event" rowHeight="80" id="JUf-cU-1L7" customClass="ZNGContactEventTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="event" rowHeight="80" id="JUf-cU-1L7" customClass="ZNGContactEventTableViewCell">
                                         <rect key="frame" x="0.0" y="710" width="375" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="JUf-cU-1L7" id="bH5-n3-HkW">

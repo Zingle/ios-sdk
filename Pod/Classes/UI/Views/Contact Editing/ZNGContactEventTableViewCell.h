@@ -10,6 +10,7 @@
 @interface ZNGContactEventTableViewCell : UITableViewCell
 
 @property (nonatomic, strong, nullable) IBOutlet UIView * roundedBackgroundView;
+@property (nonatomic, strong, nullable) IBOutlet UIView * dividerLine;
 
 @property (nonatomic, strong, nullable) IBOutlet UILabel * monthLabel;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * dayLabel;

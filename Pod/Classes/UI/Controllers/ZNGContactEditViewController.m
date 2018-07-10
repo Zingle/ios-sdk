@@ -562,7 +562,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
             return nil;
         case ContactSectionCalendarEvents:
             header.sectionLabel.text = @"EVENTS";
-            header.sectionImage.image = [UIImage imageNamed:@"editIconCalendarEvents" inBundle:bundle compatibleWithTraitCollection:nil];
+            header.sectionImage.image = [UIImage imageNamed:@"editIconEvents" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionAssignment:
             header.sectionLabel.text = @"ASSIGNMENT";

@@ -1512,7 +1512,7 @@
                                             <constraints>
                                                 <constraint firstAttribute="trailingMargin" secondItem="0aK-qq-Wuf" secondAttribute="trailing" id="Ots-ei-2PN"/>
                                                 <constraint firstItem="0aK-qq-Wuf" firstAttribute="top" secondItem="bH5-n3-HkW" secondAttribute="top" constant="4" id="RLP-ZA-ajX"/>
-                                                <constraint firstItem="0aK-qq-Wuf" firstAttribute="leading" secondItem="bH5-n3-HkW" secondAttribute="leadingMargin" id="eS1-AN-Woo"/>
+                                                <constraint firstItem="0aK-qq-Wuf" firstAttribute="leading" secondItem="bH5-n3-HkW" secondAttribute="leadingMargin" constant="30" id="eS1-AN-Woo"/>
                                                 <constraint firstAttribute="bottom" secondItem="0aK-qq-Wuf" secondAttribute="bottom" constant="4" id="xCg-bT-2Xg"/>
                                             </constraints>
                                         </tableViewCellContentView>

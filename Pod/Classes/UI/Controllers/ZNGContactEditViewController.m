@@ -696,31 +696,6 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return nil;
 }
 
-- (NSString *) descriptionForAdditionalEvents
-{
-    NSMutableString * string = [[NSMutableString alloc] init];
-    NSUInteger pastEventCount = [[self.contact pastCalendarEvents] count];
-    NSUInteger additionalFutureEventCount = futureEventTotalCount - [futureEvents count];
-    
-    if (pastEventCount > 0) {
-        [string appendFormat:@"%llu old events", (unsigned long long)pastEventCount];
-    }
-    
-    if (additionalFutureEventCount > 0) {
-        if ([string length] > 0) {
-            [string appendString:@", "];
-        }
-        
-        [string appendFormat:@"%llu more future events", (unsigned long long)additionalFutureEventCount];
-    }
-    
-    if ([string length] == 0) {
-        return nil;
-    }
-    
-    return string;
-}
-
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
@@ -735,14 +710,12 @@ static NSString * const AssignSegueIdentifier = @"assign";
             // If there is no event for this index path, we'll assume we have the "more events" row
             if (event == nil) {
                 ZNGContactMoreEventsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"moreEvents" forIndexPath:indexPath];
-                NSString * additionalEventDescription = [self descriptionForAdditionalEvents];
+                NSUInteger additionalFutureEventCount = futureEventTotalCount - [futureEvents count];
                 
-                if ([additionalEventDescription length] > 0) {
-                    cell.moreEventsLabel.text = [NSString stringWithFormat:@"View more events (%@)", additionalEventDescription];
+                if (additionalFutureEventCount > 0) {
+                    cell.moreEventsLabel.text = [NSString stringWithFormat:@"+%llu more", (unsigned long long)additionalFutureEventCount];
                 } else {
-                    // This is odd.
-                    SBLogWarning(@"Showing a \"view more events\" cell, but no description was found for additional event count.  Something is fishy.");
-                    cell.moreEventsLabel.text = @"View more events";
+                    cell.moreEventsLabel.text = @"View all events";
                 }
                 
                 return cell;

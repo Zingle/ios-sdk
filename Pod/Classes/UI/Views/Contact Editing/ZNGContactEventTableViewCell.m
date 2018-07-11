@@ -13,7 +13,7 @@
 {
     [super awakeFromNib];
     
-    self.roundedBackgroundView.layer.cornerRadius = 5.0;
+    self.roundedBackgroundView.layer.cornerRadius = 3.0;
     self.roundedBackgroundView.layer.borderWidth = 1.0;
 }
 

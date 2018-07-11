@@ -926,7 +926,18 @@ static NSString * const AssignSegueIdentifier = @"assign";
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == ContactSectionChannels) {
+    if (indexPath.section == ContactSectionCalendarEvents) {
+        if ([self eventForIndexPath:indexPath] == nil) {
+            // This must be the "show more" row
+            
+            // TODO: Show a new view with all events
+            
+            // De-select after the transition
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            });
+        }
+    } else if (indexPath.section == ContactSectionChannels) {
         if (indexPath.row >= [self.contact.channels count]) {
             // This is the "Add phone number" row
             ZNGChannel * newPhoneChannel = [[ZNGChannel alloc] init];

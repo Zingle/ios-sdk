@@ -10,6 +10,20 @@
 
 @implementation ZNGCalendarEvent
 
+- (BOOL) isEqual:(ZNGCalendarEvent *)other
+{
+    if (![other isKindOfClass:[ZNGCalendarEvent class]]) {
+        return NO;
+    }
+    
+    return [self.calendarEventId isEqualToString:other.calendarEventId];
+}
+
+- (NSUInteger) hash
+{
+    return [self.calendarEventId hash];
+}
+
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
     return @{

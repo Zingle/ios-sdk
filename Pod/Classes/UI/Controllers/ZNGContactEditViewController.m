@@ -737,6 +737,7 @@ static NSString * const EventCellId = @"event";
             }
             
             ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:EventCellId forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
             if ((event.startsAt == nil) || (event.endsAt == nil)) {
                 SBLogError(@"Missing either start date (%@) or end date (%@) for event.", event.startsAt, event.endsAt);

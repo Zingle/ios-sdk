@@ -1565,12 +1565,11 @@
                                                 </imageView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="t2m-hG-qfW" firstAttribute="leading" secondItem="Bik-Fc-hlz" secondAttribute="leadingMargin" constant="30" id="BO4-2j-u5i"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="c38-fj-bfu" secondAttribute="trailing" id="OUk-eZ-pjL"/>
                                                 <constraint firstItem="t2m-hG-qfW" firstAttribute="centerY" secondItem="Bik-Fc-hlz" secondAttribute="centerY" id="Oo4-3i-1MN"/>
                                                 <constraint firstItem="c38-fj-bfu" firstAttribute="centerY" secondItem="Bik-Fc-hlz" secondAttribute="centerY" id="SYP-9C-BSS"/>
                                                 <constraint firstItem="t2m-hG-qfW" firstAttribute="top" secondItem="Bik-Fc-hlz" secondAttribute="top" constant="8" id="aUz-76-rwC"/>
-                                                <constraint firstItem="c38-fj-bfu" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="t2m-hG-qfW" secondAttribute="trailing" constant="4" id="lm3-tv-aKw"/>
+                                                <constraint firstItem="t2m-hG-qfW" firstAttribute="centerX" secondItem="Bik-Fc-hlz" secondAttribute="centerX" id="gHd-ZN-oam"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>

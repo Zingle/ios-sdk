@@ -464,6 +464,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return [self.contact hasBeenEditedSince:originalContact];
 }
 
+- (void) pressedViewAllEvents:(id)sender
+{
+    // TODO: Implement
+}
+
 #pragma mark - Phone number cell delegate
 - (void) userClickedDeleteOnPhoneNumberTableCell:(ZNGContactPhoneNumberTableViewCell *)cell
 {
@@ -589,6 +594,14 @@ static NSString * const AssignSegueIdentifier = @"assign";
         case ContactSectionCalendarEvents:
             header.sectionLabel.text = @"EVENTS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconEvents" inBundle:bundle compatibleWithTraitCollection:nil];
+            
+            if ([self shouldShowCalendarEventsSection]) {
+                [header.moreButton setTitle:@"View all" forState:UIControlStateNormal];
+                [header.moreButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [header.moreButton addTarget:self action:@selector(pressedViewAllEvents:) forControlEvents:UIControlEventTouchUpInside];
+                header.moreButton.hidden = NO;
+            }
+            
             break;
         case ContactSectionAssignment:
             header.sectionLabel.text = @"ASSIGNMENT";
@@ -644,9 +657,8 @@ static NSString * const AssignSegueIdentifier = @"assign";
             if (eventCount > 0) {
                 NSUInteger rowCount = eventCount;
                 
-                // If there are additional events, (either completed, past events or more future events),
-                //  show one additional row for "more events"
-                if ((futureEventTotalCount > [futureEvents count]) || ([[self.contact pastCalendarEvents] count] > 0)) {
+                // If there are additional events in the future, show one additional row for "more events"
+                if (futureEventTotalCount > [futureEvents count]) {
                     rowCount++;
                 }
                 
@@ -713,7 +725,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 NSUInteger additionalFutureEventCount = futureEventTotalCount - [futureEvents count];
                 
                 if (additionalFutureEventCount > 0) {
-                    cell.moreEventsLabel.text = [NSString stringWithFormat:@"+%llu more", (unsigned long long)additionalFutureEventCount];
+                    cell.moreEventsLabel.text = [NSString stringWithFormat:@"+%llu MORE", (unsigned long long)additionalFutureEventCount];
                 } else {
                     cell.moreEventsLabel.text = @"View all events";
                 }

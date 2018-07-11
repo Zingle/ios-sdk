@@ -59,6 +59,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 static NSString * const AssignSegueIdentifier = @"assign";
+static NSString * const EventCellId = @"event";
 
 @interface ZNGContactEditViewController () <ZNGLabelGridViewDelegate>
 
@@ -121,6 +122,8 @@ static NSString * const AssignSegueIdentifier = @"assign";
     UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
     [self.tableView registerNib:footerNib forHeaderFooterViewReuseIdentifier:FooterReuseIdentifier];
+    UINib * eventNib = [UINib nibWithNibName:NSStringFromClass([ZNGContactEventTableViewCell class]) bundle:bundle];
+    [self.tableView registerNib:eventNib forCellReuseIdentifier:EventCellId];
     
     self.tableView.estimatedRowHeight = 44.0;
     
@@ -733,7 +736,7 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 return cell;
             }
             
-            ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"event" forIndexPath:indexPath];
+            ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:EventCellId forIndexPath:indexPath];
             
             if ((event.startsAt == nil) || (event.endsAt == nil)) {
                 SBLogError(@"Missing either start date (%@) or end date (%@) for event.", event.startsAt, event.endsAt);

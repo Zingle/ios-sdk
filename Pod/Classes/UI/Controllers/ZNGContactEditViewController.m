@@ -522,6 +522,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
 
 - (BOOL) shouldShowCalendarEventsSection
 {
+    // Don't show events for a new contact
+    if (originalContact == nil) {
+        return NO;
+    }
+    
     return ([self.service allowsCalendarEvents]);
 }
 
@@ -613,7 +618,14 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 return 0;
             }
             
-            return [self.contact.calendarEvents count];
+            NSUInteger eventCount = [self.contact.calendarEvents count];
+            
+            if (eventCount > 0) {
+                return eventCount;
+            }
+            
+            // This contact has no events.  Show one row for "no events."
+            return 1;
         case ContactSectionAssignment:
             return ([self shouldShowAssignmentSection]) ? 1 : 0;
         case ContactSectionDefaultCustomFields:
@@ -645,6 +657,10 @@ static NSString * const AssignSegueIdentifier = @"assign";
     switch (indexPath.section) {
         case ContactSectionCalendarEvents:
         {
+            if ([self.contact.calendarEvents count] == 0) {
+                return [tableView dequeueReusableCellWithIdentifier:@"noEvents" forIndexPath:indexPath];
+            }
+            
             ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"event" forIndexPath:indexPath];
             
             if (indexPath.row > [self.contact.calendarEvents count]) {

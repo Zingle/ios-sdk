@@ -99,7 +99,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="124" y="4.5" width="128.5" height="20"/>
+                                                <rect key="frame" x="123.5" y="4.5" width="128.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -671,7 +671,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYt-3Q-GWh">
-                                <rect key="frame" x="50" y="80" width="46" height="33"/>
+                                <rect key="frame" x="50" y="79.5" width="46" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Select">
                                     <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -681,14 +681,14 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-wd-LW9">
-                                <rect key="frame" x="106" y="85.5" width="14" height="22"/>
+                                <rect key="frame" x="106" y="85" width="14" height="22"/>
                                 <state key="normal" image="chevronRight"/>
                                 <connections>
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="4eI-y5-Pku"/>
                                 </connections>
                             </button>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
-                                <rect key="frame" x="139" y="81.5" width="220" height="30"/>
+                                <rect key="frame" x="139" y="81" width="220" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
@@ -697,7 +697,7 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="131" width="375" height="84"/>
+                                <rect key="frame" x="0.0" y="130.5" width="375" height="84"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
                                         <rect key="frame" x="312" y="-3.5" width="51" height="33"/>
@@ -1421,26 +1421,26 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0aK-qq-Wuf">
-                                                    <rect key="frame" x="8" y="8" width="359" height="63"/>
+                                                    <rect key="frame" x="38" y="4" width="329" height="71.5"/>
                                                     <subviews>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Rsv-5m-ioE" userLabel="Divider">
-                                                            <rect key="frame" x="100" y="0.0" width="1" height="63.5"/>
+                                                            <rect key="frame" x="100" y="0.0" width="1" height="72"/>
                                                             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                             <constraints>
                                                                 <constraint firstAttribute="width" constant="1" id="MK8-X8-1b6"/>
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VCF-Mh-NKG" userLabel="Left Container">
-                                                            <rect key="frame" x="0.0" y="11" width="100" height="41.5"/>
+                                                            <rect key="frame" x="0.0" y="15.5" width="100" height="41"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="22" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ulI-eF-Oox">
-                                                                    <rect key="frame" x="37.5" y="0.0" width="26" height="26.5"/>
+                                                                    <rect key="frame" x="38" y="0.0" width="26" height="26"/>
                                                                     <fontDescription key="fontDescription" name="Lato-Bold" family="Lato" pointSize="22"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
                                                                 </label>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="900" text="SEPTEMBER" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iBu-41-rM6">
-                                                                    <rect key="frame" x="10" y="24.5" width="79.5" height="17"/>
+                                                                    <rect key="frame" x="10" y="24" width="79.5" height="17"/>
                                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -1461,10 +1461,10 @@
                                                             </constraints>
                                                         </view>
                                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ed6-7j-ZKz" userLabel="Right Container">
-                                                            <rect key="frame" x="101" y="12.5" width="258" height="39"/>
+                                                            <rect key="frame" x="101" y="17" width="228" height="39"/>
                                                             <subviews>
                                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="A calendar event" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HA8-jO-849">
-                                                                    <rect key="frame" x="14" y="0.0" width="133" height="22"/>
+                                                                    <rect key="frame" x="14" y="0.0" width="132.5" height="22"/>
                                                                     <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                                                     <nil key="textColor"/>
                                                                     <nil key="highlightedColor"/>
@@ -1525,6 +1525,27 @@
                                             <outlet property="timeLabel" destination="emR-5a-8DS" id="BcT-Y7-lkD"/>
                                         </connections>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="noEvents" rowHeight="30" id="rWt-gE-abB" customClass="ZNGContactEventTableViewCell">
+                                        <rect key="frame" x="0.0" y="790" width="375" height="40"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rWt-gE-abB" id="bJK-ww-iGq">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="40"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="388-gi-zcm">
+                                                    <rect key="frame" x="34" y="8" width="62.5" height="23"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="388-gi-zcm" firstAttribute="top" secondItem="bJK-ww-iGq" secondAttribute="top" constant="3" id="bDo-Le-U9E"/>
+                                                <constraint firstItem="388-gi-zcm" firstAttribute="leading" secondItem="bJK-ww-iGq" secondAttribute="leadingMargin" constant="30" id="oSW-uJ-jS4"/>
+                                                <constraint firstItem="388-gi-zcm" firstAttribute="centerY" secondItem="bJK-ww-iGq" secondAttribute="centerY" id="rTN-Jl-9rB"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
                                 </prototypes>
                                 <connections>
                                     <outlet property="dataSource" destination="EHd-00-ynV" id="xWc-RK-2GA"/>
@@ -1551,13 +1572,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
-                                        <rect key="frame" x="156.5" y="30" width="63" height="22"/>
+                                        <rect key="frame" x="156" y="30" width="63" height="22"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1567,7 +1588,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
-                                        <rect key="frame" x="324" y="25" width="35" height="33"/>
+                                        <rect key="frame" x="324" y="25.5" width="35" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

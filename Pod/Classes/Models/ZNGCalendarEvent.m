@@ -44,4 +44,11 @@
     return [ZingleValueTransformers millisecondDateValueTransformer];
 }
 
++ (NSArray<NSSortDescriptor *> * _Nonnull) sortDescriptors
+{
+    NSSortDescriptor * startTime = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(startsAt)) ascending:YES];
+    NSSortDescriptor * endTime = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(endsAt)) ascending:YES];
+    return @[startTime, endTime];
+}
+
 @end

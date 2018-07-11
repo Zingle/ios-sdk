@@ -40,6 +40,7 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGCalendarEvent.h"
 #import "ZNGContactEventTableViewCell.h"
+#import "ZNGContactMoreEventsTableViewCell.h"
 
 @import SBObjectiveCWrapper;
 
@@ -77,6 +78,10 @@ static NSString * const AssignSegueIdentifier = @"assign";
     NSArray<ZNGContactFieldValue *> * optionalCustomFields;
     NSArray<ZNGChannel *> * phoneNumberChannels;
     NSArray<ZNGChannel *> * nonPhoneNumberChannels;
+    
+    NSArray<ZNGCalendarEvent *> * ongoingEvents;
+    NSArray<ZNGCalendarEvent *> * futureEvents;
+    NSUInteger futureEventTotalCount;
     
     UIImage * deleteXImage;
     
@@ -161,6 +166,22 @@ static NSString * const AssignSegueIdentifier = @"assign";
     } else {
         // ZNGContact's copy is a deep copy
         _contact = [contact copy];
+        
+        NSArray<NSSortDescriptor *> * sortDescriptors = [ZNGCalendarEvent sortDescriptors];
+        
+        // Show all ongoing events
+        ongoingEvents = [[_contact ongoingCalendarEvents] sortedArrayUsingDescriptors:sortDescriptors];
+        
+        // Show at most two future events
+        static const NSUInteger maxFutureEventCount = 2;
+        NSArray<ZNGCalendarEvent *> * allFutureEvents = [[_contact futureCalendarEvents] sortedArrayUsingDescriptors:sortDescriptors];
+        futureEventTotalCount = [allFutureEvents count];
+        
+        if (futureEventTotalCount < maxFutureEventCount) {
+            futureEvents = allFutureEvents;
+        } else {
+            futureEvents = [allFutureEvents subarrayWithRange:NSMakeRange(0, maxFutureEventCount)];
+        }
     }
 
     [self updateUIForNewContact];
@@ -618,10 +639,18 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 return 0;
             }
             
-            NSUInteger eventCount = [self.contact.calendarEvents count];
+            NSUInteger eventCount = [ongoingEvents count] + [futureEvents count];
             
             if (eventCount > 0) {
-                return eventCount;
+                NSUInteger rowCount = eventCount;
+                
+                // If there are additional events, (either completed, past events or more future events),
+                //  show one additional row for "more events"
+                if ((futureEventTotalCount > [futureEvents count]) || ([[self.contact pastCalendarEvents] count] > 0)) {
+                    rowCount++;
+                }
+                
+                return rowCount;
             }
             
             // This contact has no events.  Show one row for "no events."
@@ -652,6 +681,46 @@ static NSString * const AssignSegueIdentifier = @"assign";
                                                     font:[UIFont latoFontOfSize:14.0]];
 }
 
+- (ZNGCalendarEvent *) eventForIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < [ongoingEvents count]) {
+        return ongoingEvents[indexPath.row];
+    }
+    
+    NSUInteger futureEventIndex = indexPath.row - [ongoingEvents count];
+    
+    if (futureEventIndex < [futureEvents count]) {
+        return futureEvents[futureEventIndex];
+    }
+    
+    return nil;
+}
+
+- (NSString *) descriptionForAdditionalEvents
+{
+    NSMutableString * string = [[NSMutableString alloc] init];
+    NSUInteger pastEventCount = [[self.contact pastCalendarEvents] count];
+    NSUInteger additionalFutureEventCount = futureEventTotalCount - [futureEvents count];
+    
+    if (pastEventCount > 0) {
+        [string appendFormat:@"%llu old events", (unsigned long long)pastEventCount];
+    }
+    
+    if (additionalFutureEventCount > 0) {
+        if ([string length] > 0) {
+            [string appendString:@", "];
+        }
+        
+        [string appendFormat:@"%llu more future events", (unsigned long long)additionalFutureEventCount];
+    }
+    
+    if ([string length] == 0) {
+        return nil;
+    }
+    
+    return string;
+}
+
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
@@ -661,22 +730,25 @@ static NSString * const AssignSegueIdentifier = @"assign";
                 return [tableView dequeueReusableCellWithIdentifier:@"noEvents" forIndexPath:indexPath];
             }
             
-            ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"event" forIndexPath:indexPath];
+            ZNGCalendarEvent * event = [self eventForIndexPath:indexPath];
             
-            if (indexPath.row > [self.contact.calendarEvents count]) {
-                SBLogError(@"Out of bounds displaying event %lld (out of %llu) for %@",
-                           (long long)indexPath.row,
-                           (unsigned long long)[self.contact.calendarEvents count],
-                           [self.contact fullName]);
+            // If there is no event for this index path, we'll assume we have the "more events" row
+            if (event == nil) {
+                ZNGContactMoreEventsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"moreEvents" forIndexPath:indexPath];
+                NSString * additionalEventDescription = [self descriptionForAdditionalEvents];
                 
-                cell.dayLabel.text = nil;
-                cell.monthLabel.text = nil;
-                cell.timeLabel.text = nil;
-                cell.eventNameLabel.text = nil;
+                if ([additionalEventDescription length] > 0) {
+                    cell.moreEventsLabel.text = [NSString stringWithFormat:@"View more events (%@)", additionalEventDescription];
+                } else {
+                    // This is odd.
+                    SBLogWarning(@"Showing a \"view more events\" cell, but no description was found for additional event count.  Something is fishy.");
+                    cell.moreEventsLabel.text = @"View more events";
+                }
+                
                 return cell;
             }
             
-            ZNGCalendarEvent * event = self.contact.calendarEvents[indexPath.row];
+            ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"event" forIndexPath:indexPath];
             
             if ((event.startsAt == nil) || (event.endsAt == nil)) {
                 SBLogError(@"Missing either start date (%@) or end date (%@) for event.", event.startsAt, event.endsAt);

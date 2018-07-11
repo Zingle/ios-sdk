@@ -18,4 +18,6 @@
 @property (nonatomic, strong, nullable) NSDate * startsAt;
 @property (nonatomic, strong, nullable) NSDate * endsAt;
 
++ (NSArray<NSSortDescriptor *> * _Nonnull) sortDescriptors;
+
 @end

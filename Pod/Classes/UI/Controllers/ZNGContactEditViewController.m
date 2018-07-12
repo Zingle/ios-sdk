@@ -104,13 +104,9 @@ static NSString * const EventCellId = @"event";
         self.transitioningDelegate = self;
     }
     
-    eventDayFormatter = [[NSDateFormatter alloc] init];
-    eventDayFormatter.dateFormat = @"d";
-    eventMonthFormatter = [[NSDateFormatter alloc] init];
-    eventMonthFormatter.dateFormat = @"MMM";
-    eventTimeFormatter = [[NSDateFormatter alloc] init];
-    eventTimeFormatter.dateStyle = NSDateFormatterNoStyle;
-    eventTimeFormatter.timeStyle = NSDateFormatterShortStyle;
+    eventDayFormatter = [ZNGCalendarEvent eventDayFormatter];
+    eventMonthFormatter = [ZNGCalendarEvent eventMonthFormatter];
+    eventTimeFormatter = [ZNGCalendarEvent eventTimeFormatter];
     
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
     

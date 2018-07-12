@@ -18,6 +18,21 @@
 @property (nonatomic, strong, nullable) NSDate * startsAt;
 @property (nonatomic, strong, nullable) NSDate * endsAt;
 
+/**
+ *  Creates and returns a date formatter to be used to display events' days of the month.
+ */
++ (NSDateFormatter * _Nonnull) eventDayFormatter;
+
+/**
+ *  Creates and returns a date formatter to be used to display events' three letter months.
+ */
++ (NSDateFormatter * _Nonnull) eventMonthFormatter;
+
+/**
+ *  Creates and returns a date formatter to be used to display events' times.
+ */
++ (NSDateFormatter * _Nonnull) eventTimeFormatter;
+
 + (NSArray<NSSortDescriptor *> * _Nonnull) sortDescriptors;
 
 @end

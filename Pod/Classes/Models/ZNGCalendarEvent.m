@@ -19,6 +19,28 @@
     return [self.calendarEventId isEqualToString:other.calendarEventId];
 }
 
++ (NSDateFormatter *) eventDayFormatter
+{
+    NSDateFormatter * eventDayFormatter = [[NSDateFormatter alloc] init];
+    eventDayFormatter.dateFormat = @"d";
+    return eventDayFormatter;
+}
+
++ (NSDateFormatter *) eventMonthFormatter
+{
+    NSDateFormatter * eventMonthFormatter = [[NSDateFormatter alloc] init];
+    eventMonthFormatter.dateFormat = @"MMM";
+    return eventMonthFormatter;
+}
+
++ (NSDateFormatter *) eventTimeFormatter
+{
+    NSDateFormatter * eventTimeFormatter = [[NSDateFormatter alloc] init];
+    eventTimeFormatter.dateStyle = NSDateFormatterNoStyle;
+    eventTimeFormatter.timeStyle = NSDateFormatterShortStyle;
+    return eventTimeFormatter;
+}
+
 - (NSUInteger) hash
 {
     return [self.calendarEventId hash];

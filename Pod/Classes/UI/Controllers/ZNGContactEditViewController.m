@@ -41,6 +41,7 @@
 #import "ZNGCalendarEvent.h"
 #import "ZNGContactEventTableViewCell.h"
 #import "ZNGContactMoreEventsTableViewCell.h"
+#import "ZNGContactEventsViewController.h"
 
 @import SBObjectiveCWrapper;
 
@@ -59,6 +60,7 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 static NSString * const AssignSegueIdentifier = @"assign";
+static NSString * const EventsSegueIdentifier = @"events";
 static NSString * const EventCellId = @"event";
 
 @interface ZNGContactEditViewController () <ZNGLabelGridViewDelegate>
@@ -469,7 +471,7 @@ static NSString * const EventCellId = @"event";
 
 - (void) pressedViewAllEvents:(id)sender
 {
-    // TODO: Implement
+    [self performSegueWithIdentifier:EventsSegueIdentifier sender:self];
 }
 
 #pragma mark - Phone number cell delegate
@@ -919,7 +921,8 @@ static NSString * const EventCellId = @"event";
         if ([self eventForIndexPath:indexPath] == nil) {
             // This must be the "show more" row
             
-            // TODO: Show a new view with all events
+            // Show a new view with all events
+            [self performSegueWithIdentifier:EventsSegueIdentifier sender:self];
             
             // De-select after the transition
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -1038,6 +1041,9 @@ static NSString * const EventCellId = @"event";
         assignView.session = (ZingleAccountSession *)self.contactClient.session;
         assignView.contact = self.contact;
         assignView.delegate = self;
+    } else if ([segue.identifier isEqualToString:EventsSegueIdentifier]) {
+        ZNGContactEventsViewController * eventsView = segue.destinationViewController;
+        eventsView.conversation = self.conversation;
     }
 }
 

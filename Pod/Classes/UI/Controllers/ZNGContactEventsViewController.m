@@ -10,10 +10,13 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGCalendarEvent.h"
 #import "ZNGContactEventTableViewCell.h"
+#import "ZNGCalendarEventHeaderView.h"
+#import "UIFont+Lato.h"
 
 @import SBObjectiveCWrapper;
 
 static NSString * const EventCellId = @"event";
+static NSString * const HeaderCellId = @"header";
 
 @interface ZNGContactEventsViewController ()
 
@@ -49,6 +52,8 @@ static NSString * const EventCellId = @"event";
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactEventsViewController class]];
     UINib * eventCellNib = [UINib nibWithNibName:NSStringFromClass([ZNGContactEventTableViewCell class]) bundle:bundle];
     [self.tableView registerNib:eventCellNib forCellReuseIdentifier:EventCellId];
+    UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGCalendarEventHeaderView class]) bundle:bundle];
+    [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderCellId];
     
     eventDayFormatter = [ZNGCalendarEvent eventDayFormatter];
     eventMonthFormatter = [ZNGCalendarEvent eventMonthFormatter];
@@ -150,14 +155,26 @@ static NSString * const EventCellId = @"event";
     return [eventsByDateString[dateString] count];
 }
 
-- (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+- (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
+    ZNGCalendarEventHeaderView * header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderCellId];
+    
     if (section > [eventDateStringsInOrder count]) {
-        SBLogError(@"Out of bounds finding date string at index %lld (of %llu)", (long long)section, (unsigned long long)[eventDateStringsInOrder count]);
-        return nil;
+        SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)section, (unsigned long long)[eventDateStringsInOrder count]);
+        header.todayLabel = nil;
+        return header;
     }
     
-    return eventDateStringsInOrder[section];
+    NSString * dateString = eventDateStringsInOrder[section];
+    header.dateLabel.text = dateString;
+    header.dateLabel.font = [UIFont latoFontOfSize:14.0];
+    
+    if ([dateString isEqualToString:todayString]) {
+        header.dateLabel.textColor = [UIColor blackColor];
+        header.todayLabel.hidden = NO;
+    }
+    
+    return header;
 }
 
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

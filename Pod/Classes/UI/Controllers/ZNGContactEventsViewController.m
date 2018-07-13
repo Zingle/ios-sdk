@@ -116,23 +116,20 @@ static NSString * const EventCellId = @"event";
     }
     
     // Sort the dates themselves and record the order
-    if ([newEventsByDate count] > 0) {
-        NSMutableArray<NSString *> * newDateStringsInOrder = [[NSMutableArray alloc] initWithCapacity:[newEventsByDate count]];
-        
-        NSArray<NSDateComponents *> * sortedDateComponents = [[dateStringsByComponents allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSDateComponents * dc1, NSDateComponents * dc2) {
-            NSDate * date1 = [calendar dateFromComponents:dc1];
-            NSDate * date2 = [calendar dateFromComponents:dc2];
-            return [date1 compare:date2];
-        }];
-        
-        for (NSDateComponents * dateComponents in sortedDateComponents) {
-            NSString * dateString = dateStringsByComponents[dateComponents];
-            [newDateStringsInOrder addObject:dateString];
-        }
-        
-        eventDateStringsInOrder = newDateStringsInOrder;
+    NSMutableArray<NSString *> * newDateStringsInOrder = [[NSMutableArray alloc] init];
+    
+    NSArray<NSDateComponents *> * sortedDateComponents = [[dateStringsByComponents allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSDateComponents * dc1, NSDateComponents * dc2) {
+        NSDate * date1 = [calendar dateFromComponents:dc1];
+        NSDate * date2 = [calendar dateFromComponents:dc2];
+        return [date1 compare:date2];
+    }];
+    
+    for (NSDateComponents * dateComponents in sortedDateComponents) {
+        NSString * dateString = dateStringsByComponents[dateComponents];
+        [newDateStringsInOrder addObject:dateString];
     }
     
+    eventDateStringsInOrder = newDateStringsInOrder;
     eventsByDateString = newEventsByDate;
 }
 

@@ -145,6 +145,7 @@
                 <outlet property="dayLabel" destination="N6G-Y9-aBk" id="oex-b6-Oae"/>
                 <outlet property="dividerLine" destination="vVL-RZ-tOh" id="veW-tL-gN7"/>
                 <outlet property="eventNameLabel" destination="jsL-rX-lQE" id="58u-Od-HJN"/>
+                <outlet property="leftnessConstraint" destination="fto-kk-zKn" id="VFc-We-kQp"/>
                 <outlet property="monthLabel" destination="x12-Gd-u4W" id="Oz9-tg-JRf"/>
                 <outlet property="roundedBackgroundView" destination="uI1-6U-W2C" id="K2I-9D-9lL"/>
                 <outlet property="timeLabel" destination="Y6G-iP-NUN" id="jOW-qt-raC"/>

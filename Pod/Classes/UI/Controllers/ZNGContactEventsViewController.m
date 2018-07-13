@@ -18,6 +18,7 @@
 
 static NSString * const EventCellId = @"event";
 static NSString * const HeaderCellId = @"header";
+static const CGFloat LeftMarginSize = 16.0;
 
 @interface ZNGContactEventsViewController ()
 
@@ -171,10 +172,8 @@ static NSString * const HeaderCellId = @"header";
     header.dateLabel.font = [UIFont latoFontOfSize:14.0];
     
     if ([dateString isEqualToString:todayString]) {
-        header.headerBackgroundView.backgroundColor = [UIColor zng_lightBlue];
-        header.dateLabel.textColor = [UIColor whiteColor];
-        header.todayLabel.textColor = [UIColor whiteColor];
         header.todayLabel.hidden = NO;
+        header.todayBottomBorder.hidden = NO;
     }
     
     return header;
@@ -183,6 +182,7 @@ static NSString * const HeaderCellId = @"header";
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:EventCellId forIndexPath:indexPath];
+    cell.leftnessConstraint.constant = LeftMarginSize;
     
     if (indexPath.section > [eventDateStringsInOrder count]) {
         SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)indexPath.section, (unsigned long long)[eventDateStringsInOrder count]);

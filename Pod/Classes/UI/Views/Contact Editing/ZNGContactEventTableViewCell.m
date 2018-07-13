@@ -13,6 +13,7 @@
 {
     [super awakeFromNib];
     
+    self.leftnessConstraint.constant = 46.0;
     self.roundedBackgroundView.layer.cornerRadius = 3.0;
     self.roundedBackgroundView.layer.borderWidth = 1.0;
 }

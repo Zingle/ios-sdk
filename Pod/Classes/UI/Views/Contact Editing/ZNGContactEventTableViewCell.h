@@ -9,6 +9,8 @@
 
 @interface ZNGContactEventTableViewCell : UITableViewCell
 
+@property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * leftnessConstraint;
+
 @property (nonatomic, strong, nullable) IBOutlet UIView * roundedBackgroundView;
 @property (nonatomic, strong, nullable) IBOutlet UIView * dividerLine;
 

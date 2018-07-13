@@ -9,7 +9,7 @@
 
 @class ZNGConversationServiceToContact;
 
-@interface ZNGContactEventsViewController : UIViewController
+@interface ZNGContactEventsViewController : UIViewController <UITableViewDataSource>
 
 /**
  *  The conversation whose events we will show.

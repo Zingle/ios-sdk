@@ -78,7 +78,14 @@ static const CGFloat LeftMarginSize = 16.0;
 {
     [super viewWillAppear:animated];
     
-    // TODO: Scroll to show today (in case there are a billion finished events pushing future events off screen)
+    // Scroll to show today (in case there are a billion finished events pushing future events off screen)
+    NSUInteger todayIndex = [eventDateStringsInOrder indexOfObject:todayString];
+    
+    if (todayIndex != NSNotFound) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:todayIndex] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        });
+    }
 }
 
 #pragma mark - Date crunching

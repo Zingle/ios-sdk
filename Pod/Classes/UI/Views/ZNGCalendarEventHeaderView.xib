@@ -63,6 +63,7 @@
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
                 <outlet property="dateLabel" destination="BbI-hf-Gx6" id="dcK-AJ-PcA"/>
+                <outlet property="headerBackgroundView" destination="Qos-hV-219" id="GHj-Tu-wBl"/>
                 <outlet property="todayLabel" destination="uxm-Gc-zcf" id="qUx-Jk-j1T"/>
             </connections>
             <point key="canvasLocation" x="34.5" y="-260"/>

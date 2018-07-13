@@ -12,6 +12,7 @@
 #import "ZNGContactEventTableViewCell.h"
 #import "ZNGCalendarEventHeaderView.h"
 #import "UIFont+Lato.h"
+#import "UIColor+ZingleSDK.h"
 
 @import SBObjectiveCWrapper;
 
@@ -170,7 +171,9 @@ static NSString * const HeaderCellId = @"header";
     header.dateLabel.font = [UIFont latoFontOfSize:14.0];
     
     if ([dateString isEqualToString:todayString]) {
-        header.dateLabel.textColor = [UIColor blackColor];
+        header.headerBackgroundView.backgroundColor = [UIColor zng_lightBlue];
+        header.dateLabel.textColor = [UIColor whiteColor];
+        header.todayLabel.textColor = [UIColor whiteColor];
         header.todayLabel.hidden = NO;
     }
     

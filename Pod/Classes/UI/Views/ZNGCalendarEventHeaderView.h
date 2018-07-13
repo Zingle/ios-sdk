@@ -9,6 +9,7 @@
 
 @interface ZNGCalendarEventHeaderView : UITableViewHeaderFooterView
 
+@property (nonatomic, strong, nullable) IBOutlet UIView * headerBackgroundView;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * dateLabel;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * todayLabel;
 

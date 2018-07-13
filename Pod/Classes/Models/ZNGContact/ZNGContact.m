@@ -547,6 +547,20 @@ static const NSTimeInterval LateTimeSeconds = 5.0 * 60.0;  // How long before an
         return YES;
     }
     
+    BOOL hasEvents = ((self.calendarEvents != nil) || (old.calendarEvents != nil));
+    
+    if (hasEvents) {
+        BOOL onlyOneHasEvents = (!!self.calendarEvents != !!old.calendarEvents);
+
+        if (onlyOneHasEvents) {
+            return YES;
+        }
+        
+        if (![self.calendarEvents isEqualToArray:old.calendarEvents]) {
+            return YES;
+        }
+    }
+    
     if (![old.contactId isEqualToString:self.contactId]) {
         SBLogError(@"%@ is being checked against %@ as if they were the same contact, but they have different IDs (%@ vs. %@).", [old fullName], [self fullName], old.contactId, self.contactId);
         return NO;

@@ -8,6 +8,8 @@
 #import "ZNGCalendarEvent.h"
 #import "ZingleValueTransformers.h"
 
+@import SBObjectiveCWrapper;
+
 @implementation ZNGCalendarEvent
 
 - (BOOL) isEqual:(ZNGCalendarEvent *)other
@@ -17,6 +19,26 @@
     }
     
     return [self.calendarEventId isEqualToString:other.calendarEventId];
+}
+
+- (NSUInteger) hash
+{
+    return [self.calendarEventId hash];
+}
+
+- (BOOL) singleDay
+{
+    if ((self.startsAt == nil) || (self.endsAt == nil)) {
+        SBLogWarning(@"%@ event is missing either start (%@) or end date (%@)", self.calendarEventId, self.startsAt, self.endsAt);
+        return NO;
+    }
+    
+    NSCalendar * calendar = [NSCalendar currentCalendar];
+    NSCalendarUnit calendarUnit = (NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay);
+    NSDateComponents * startComponents = [calendar components:calendarUnit fromDate:self.startsAt];
+    NSDateComponents * endComponents = [calendar components:calendarUnit fromDate:self.endsAt];
+    
+    return ((startComponents.day == endComponents.day) && (startComponents.month == endComponents.month) && (startComponents.year == endComponents.year));
 }
 
 + (NSDateFormatter *) eventDayFormatter
@@ -41,9 +63,11 @@
     return eventTimeFormatter;
 }
 
-- (NSUInteger) hash
++ (NSDateFormatter * _Nonnull) eventMonthDayTimeFormatter
 {
-    return [self.calendarEventId hash];
+    NSDateFormatter * eventMonthDayTimeFormatter = [[NSDateFormatter alloc] init];
+    eventMonthDayTimeFormatter.dateFormat = @"MMM d h:m a";
+    return eventMonthDayTimeFormatter;
 }
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey

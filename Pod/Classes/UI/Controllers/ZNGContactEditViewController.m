@@ -93,6 +93,7 @@ static NSString * const EventCellId = @"event";
     NSDateFormatter * eventDayFormatter;
     NSDateFormatter * eventMonthFormatter;
     NSDateFormatter * eventTimeFormatter;
+    NSDateFormatter * eventMonthDayTimeFormatter;
 }
 
 - (void)viewDidLoad
@@ -107,6 +108,7 @@ static NSString * const EventCellId = @"event";
     eventDayFormatter = [ZNGCalendarEvent eventDayFormatter];
     eventMonthFormatter = [ZNGCalendarEvent eventMonthFormatter];
     eventTimeFormatter = [ZNGCalendarEvent eventTimeFormatter];
+    eventMonthDayTimeFormatter = [ZNGCalendarEvent eventMonthDayTimeFormatter];
     
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
     
@@ -751,7 +753,8 @@ static NSString * const EventCellId = @"event";
             cell.monthLabel.text = [[eventMonthFormatter stringFromDate:event.startsAt] uppercaseString];
             
             NSString * startTime = [eventTimeFormatter stringFromDate:event.startsAt];
-            NSString * endTime = [eventTimeFormatter stringFromDate:event.endsAt];
+            NSDateFormatter * endTimeFormatter = ([event singleDay]) ? eventTimeFormatter : eventMonthDayTimeFormatter;
+            NSString * endTime = [endTimeFormatter stringFromDate:event.endsAt];
             cell.timeLabel.text = [NSString stringWithFormat:@"%@ - %@", startTime, endTime];
             
             UIColor * textColor = [self.service textColorForCalendarEvent:event];

@@ -36,6 +36,7 @@ static const CGFloat LeftMarginSize = 16.0;
     NSDateFormatter * eventDayFormatter;
     NSDateFormatter * eventMonthFormatter;
     NSDateFormatter * eventTimeFormatter;
+    NSDateFormatter * eventMonthDayTimeFormatter;
     
     // Formatter that returns a string uniquely representing a calendar day.  This can be used both to group
     //  events by day and to display a title string for each day.  e.g. "May 7, 1985"
@@ -60,6 +61,7 @@ static const CGFloat LeftMarginSize = 16.0;
     eventDayFormatter = [ZNGCalendarEvent eventDayFormatter];
     eventMonthFormatter = [ZNGCalendarEvent eventMonthFormatter];
     eventTimeFormatter = [ZNGCalendarEvent eventTimeFormatter];
+    eventMonthDayTimeFormatter = [ZNGCalendarEvent eventMonthDayTimeFormatter];
     
     // e.g. "May 7, 1985"
     eventCategorizationFormatter = [[NSDateFormatter alloc] init];
@@ -223,7 +225,8 @@ static const CGFloat LeftMarginSize = 16.0;
     cell.monthLabel.text = [[eventMonthFormatter stringFromDate:event.startsAt] uppercaseString];
 
     NSString * startTime = [eventTimeFormatter stringFromDate:event.startsAt];
-    NSString * endTime = [eventTimeFormatter stringFromDate:event.endsAt];
+    NSDateFormatter * endTimeFormatter = ([event singleDay]) ? eventTimeFormatter : eventMonthDayTimeFormatter;
+    NSString * endTime = [endTimeFormatter stringFromDate:event.endsAt];
     cell.timeLabel.text = [NSString stringWithFormat:@"%@ - %@", startTime, endTime];
 
     UIColor * textColor = [self.conversation.service textColorForCalendarEvent:event];

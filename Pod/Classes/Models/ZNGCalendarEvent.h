@@ -34,8 +34,22 @@
 + (NSDateFormatter * _Nonnull) eventTimeFormatter;
 
 /**
+ *  Creates and returns a date formatter to be used to display month, day, and time.
+ *  e.g. "May 8 1:00 AM"
+ *
+ *  Generally used to display ends_at that occurs on different day than starts_at,
+ *  e.g. the latter half of "11:00 PM - May 8 1:00 AM" for a two hour event on May 7 11:00 PM.
+ */
++ (NSDateFormatter * _Nonnull) eventMonthDayTimeFormatter;
+
+/**
  *  Sort descriptors to chronologically sort events
  */
 + (NSArray<NSSortDescriptor *> * _Nonnull) sortDescriptors;
+
+/**
+ *  Returns YES if the starts_at and ends_at dates occur on the same calendar day.
+ */
+- (BOOL) singleDay;
 
 @end

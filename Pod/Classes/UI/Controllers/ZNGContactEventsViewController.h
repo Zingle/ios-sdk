@@ -13,7 +13,7 @@
 
 /**
  *  The conversation whose events we will show.
- *  A cnversation is used instead of `ZNGContact` to make proper formatting of phone number
+ *  A conversation is used instead of `ZNGContact` to make proper formatting of phone number
  *   values easier when a contact does not have a name.
  */
 @property (nonatomic, strong, nullable) ZNGConversationServiceToContact * conversation;

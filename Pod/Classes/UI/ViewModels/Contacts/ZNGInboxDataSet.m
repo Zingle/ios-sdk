@@ -644,7 +644,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         
         if (!simpleReorderingOrRefresh) {
             // Sanity check
-            if ((overlapRangeInTotalData.location + overlapRangeInTotalData.length) > [mutableContacts count]) {
+            if ((overlapRangeInTotalData.location + overlapRangeInTotalData.length) >= [mutableContacts count]) {
                 SBLogWarning(@"New inbox data overlap range is out of bounds.  Help.  Refreshing all data.");
                 [self refresh];
                 return;

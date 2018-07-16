@@ -33,6 +33,9 @@
  */
 + (NSDateFormatter * _Nonnull) eventTimeFormatter;
 
+/**
+ *  Sort descriptors to chronologically sort events
+ */
 + (NSArray<NSSortDescriptor *> * _Nonnull) sortDescriptors;
 
 @end

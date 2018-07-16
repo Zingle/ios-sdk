@@ -155,7 +155,7 @@ static const CGFloat LeftMarginSize = 16.0;
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section > [eventDateStringsInOrder count]) {
+    if (section >= [eventDateStringsInOrder count]) {
         SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)section, (unsigned long long)[eventDateStringsInOrder count]);
         return 0;
     }
@@ -168,7 +168,7 @@ static const CGFloat LeftMarginSize = 16.0;
 {
     ZNGCalendarEventHeaderView * header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderCellId];
     
-    if (section > [eventDateStringsInOrder count]) {
+    if (section >= [eventDateStringsInOrder count]) {
         SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)section, (unsigned long long)[eventDateStringsInOrder count]);
         header.todayLabel = nil;
         return header;
@@ -191,7 +191,7 @@ static const CGFloat LeftMarginSize = 16.0;
     ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:EventCellId forIndexPath:indexPath];
     cell.leftnessConstraint.constant = LeftMarginSize;
     
-    if (indexPath.section > [eventDateStringsInOrder count]) {
+    if (indexPath.section >= [eventDateStringsInOrder count]) {
         SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)indexPath.section, (unsigned long long)[eventDateStringsInOrder count]);
         
         cell.eventNameLabel.text = nil;
@@ -204,7 +204,7 @@ static const CGFloat LeftMarginSize = 16.0;
     NSString * dateString = eventDateStringsInOrder[indexPath.section];
     NSArray<ZNGCalendarEvent *> * eventsThisDay = eventsByDateString[dateString];
     
-    if (indexPath.row > [eventsThisDay count]) {
+    if (indexPath.row >= [eventsThisDay count]) {
         SBLogError(@"Out of bounds (%lld of %llu) when retrieving event on %@", (long long)indexPath.row, (unsigned long long)[eventsThisDay count], dateString);
         
         cell.eventNameLabel.text = nil;

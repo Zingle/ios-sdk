@@ -926,7 +926,7 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="32"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Locked Contact" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="liU-S1-boT">
-                                        <rect key="frame" x="126.5" y="6" width="122" height="20"/>
+                                        <rect key="frame" x="129.5" y="6" width="116" height="20"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1155,7 +1155,7 @@
                                                     <rect key="frame" x="44" y="20" width="22" height="22"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
-                                                    <rect key="frame" x="78" y="22" width="72.5" height="18"/>
+                                                    <rect key="frame" x="78" y="22" width="70" height="18"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <color key="textColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -1289,13 +1289,13 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😬" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOQ-wT-pfx">
-                                                    <rect key="frame" x="37" y="10" width="28" height="33"/>
+                                                    <rect key="frame" x="37" y="9.5" width="28" height="34"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="28"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uA-D6-pXP">
-                                                    <rect key="frame" x="84" y="16" width="96" height="21"/>
+                                                    <rect key="frame" x="84" y="15.5" width="93.5" height="22"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1331,7 +1331,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0jS-BD-iG2">
-                                                    <rect key="frame" x="92" y="16" width="96" height="21"/>
+                                                    <rect key="frame" x="92" y="15.5" width="93.5" height="22"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1375,7 +1375,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unassigned" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qKD-A7-hvH">
-                                                    <rect key="frame" x="92" y="16" width="95.5" height="21"/>
+                                                    <rect key="frame" x="92" y="15.5" width="91" height="22"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1417,7 +1417,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="388-gi-zcm">
-                                                    <rect key="frame" x="38" y="3" width="63.5" height="22.5"/>
+                                                    <rect key="frame" x="38" y="3" width="62.5" height="22.5"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -1486,13 +1486,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
-                                        <rect key="frame" x="156" y="31" width="64.5" height="21"/>
+                                        <rect key="frame" x="156" y="30" width="63" height="22"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="26" width="53" height="32"/>
+                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1502,7 +1502,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
-                                        <rect key="frame" x="321" y="25.5" width="38" height="32"/>
+                                        <rect key="frame" x="324" y="25" width="35" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1656,7 +1656,7 @@
                                     <outlet property="delegate" destination="puP-UH-5Vg" id="wgM-IS-07A"/>
                                 </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Smg-bO-0xY">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Smg-bO-0xY" userLabel="Header">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name's Events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9kh-hc-buG">
@@ -1686,14 +1686,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="lva-zo-hfK" firstAttribute="trailing" secondItem="kmh-n2-6ru" secondAttribute="trailing" id="30R-8Y-39G"/>
+                            <constraint firstItem="lva-zo-hfK" firstAttribute="trailing" secondItem="D2p-zk-mCd" secondAttribute="trailing" id="30R-8Y-39G"/>
                             <constraint firstItem="Smg-bO-0xY" firstAttribute="top" secondItem="D2p-zk-mCd" secondAttribute="top" id="DjB-9h-obE"/>
-                            <constraint firstItem="Smg-bO-0xY" firstAttribute="trailing" secondItem="kmh-n2-6ru" secondAttribute="trailing" id="PCA-ea-z0d"/>
+                            <constraint firstItem="Smg-bO-0xY" firstAttribute="trailing" secondItem="D2p-zk-mCd" secondAttribute="trailing" id="PCA-ea-z0d"/>
                             <constraint firstItem="ayX-gL-mWz" firstAttribute="leading" secondItem="kmh-n2-6ru" secondAttribute="leading" constant="16" id="R4W-mv-9QN"/>
-                            <constraint firstItem="lva-zo-hfK" firstAttribute="leading" secondItem="kmh-n2-6ru" secondAttribute="leading" id="YQU-b9-ggg"/>
-                            <constraint firstItem="lva-zo-hfK" firstAttribute="bottom" secondItem="kmh-n2-6ru" secondAttribute="bottom" id="aSe-4r-rop"/>
+                            <constraint firstItem="lva-zo-hfK" firstAttribute="leading" secondItem="D2p-zk-mCd" secondAttribute="leading" id="YQU-b9-ggg"/>
+                            <constraint firstItem="lva-zo-hfK" firstAttribute="bottom" secondItem="D2p-zk-mCd" secondAttribute="bottom" id="aSe-4r-rop"/>
                             <constraint firstItem="lva-zo-hfK" firstAttribute="top" secondItem="Smg-bO-0xY" secondAttribute="bottom" id="dcm-bH-az3"/>
-                            <constraint firstItem="Smg-bO-0xY" firstAttribute="leading" secondItem="kmh-n2-6ru" secondAttribute="leading" id="fiM-iJ-Xyo"/>
+                            <constraint firstItem="Smg-bO-0xY" firstAttribute="leading" secondItem="D2p-zk-mCd" secondAttribute="leading" id="fiM-iJ-Xyo"/>
                             <constraint firstItem="kmh-n2-6ru" firstAttribute="top" secondItem="Smg-bO-0xY" secondAttribute="bottom" constant="-44" id="oyX-Bm-Igs"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kmh-n2-6ru"/>

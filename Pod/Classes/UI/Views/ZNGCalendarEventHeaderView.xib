@@ -52,20 +52,20 @@
                         <constraint firstAttribute="trailing" secondItem="iNJ-FZ-Tul" secondAttribute="trailing" id="9iX-kA-af8"/>
                         <constraint firstItem="uxm-Gc-zcf" firstAttribute="baseline" secondItem="BbI-hf-Gx6" secondAttribute="baseline" id="BLM-DM-rmg"/>
                         <constraint firstItem="BbI-hf-Gx6" firstAttribute="top" secondItem="Qos-hV-219" secondAttribute="top" priority="950" constant="7" id="HwO-59-z9G"/>
-                        <constraint firstItem="BbI-hf-Gx6" firstAttribute="leading" secondItem="Qos-hV-219" secondAttribute="leading" constant="16" id="Jqc-UB-pIq"/>
                         <constraint firstItem="iNJ-FZ-Tul" firstAttribute="leading" secondItem="Qos-hV-219" secondAttribute="leading" id="Oxl-Ff-QVi"/>
                         <constraint firstItem="BbI-hf-Gx6" firstAttribute="centerY" secondItem="Qos-hV-219" secondAttribute="centerY" id="Vdg-se-f2f"/>
                         <constraint firstAttribute="bottom" secondItem="iNJ-FZ-Tul" secondAttribute="bottom" id="csB-OO-Qf5"/>
                         <constraint firstItem="uxm-Gc-zcf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="BbI-hf-Gx6" secondAttribute="trailing" constant="4" id="oeV-ze-e5w"/>
-                        <constraint firstAttribute="trailing" secondItem="uxm-Gc-zcf" secondAttribute="trailing" constant="16" id="s5J-Dw-ERl"/>
                     </constraints>
                 </view>
             </subviews>
             <constraints>
                 <constraint firstItem="Qos-hV-219" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="GqE-Xr-sBc"/>
-                <constraint firstItem="Qos-hV-219" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="WCR-46-sLB"/>
-                <constraint firstItem="Qos-hV-219" firstAttribute="trailing" secondItem="vUN-kp-3ea" secondAttribute="trailing" id="YVB-ea-1Bl"/>
+                <constraint firstItem="Qos-hV-219" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WCR-46-sLB"/>
+                <constraint firstItem="Qos-hV-219" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="YVB-ea-1Bl"/>
+                <constraint firstItem="BbI-hf-Gx6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="hLa-CN-6lK"/>
                 <constraint firstItem="Qos-hV-219" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="uLS-Gy-AKa"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="uxm-Gc-zcf" secondAttribute="trailing" constant="16" id="x3k-3H-Tz0"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>
             <nil key="simulatedBottomBarMetrics"/>

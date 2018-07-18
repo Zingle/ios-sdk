@@ -31,7 +31,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uI1-6U-W2C">
-                            <rect key="frame" x="46" y="4" width="313" height="72"/>
+                            <rect key="frame" x="46" y="1" width="313" height="72"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vVL-RZ-tOh" userLabel="Divider">
                                     <rect key="frame" x="66" y="0.0" width="1" height="72"/>
@@ -121,8 +121,8 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="uI1-6U-W2C" secondAttribute="bottom" constant="4" id="PqM-zv-uyi"/>
-                        <constraint firstItem="uI1-6U-W2C" firstAttribute="top" secondItem="Xqh-5p-NEP" secondAttribute="top" constant="4" id="nM1-eH-Ufe"/>
+                        <constraint firstAttribute="bottom" secondItem="uI1-6U-W2C" secondAttribute="bottom" constant="7" id="PqM-zv-uyi"/>
+                        <constraint firstItem="uI1-6U-W2C" firstAttribute="top" secondItem="Xqh-5p-NEP" secondAttribute="top" constant="1" id="nM1-eH-Ufe"/>
                     </constraints>
                 </view>
             </subviews>

@@ -21,21 +21,24 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="ZNGCalendarEventHeaderView">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="28"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Qos-hV-219">
-                    <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="28"/>
                     <subviews>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNJ-FZ-Tul">
-                            <rect key="frame" x="0.0" y="30" width="375" height="2"/>
+                            <rect key="frame" x="0.0" y="26" width="375" height="2"/>
                             <color key="backgroundColor" white="0.74252232142857144" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="ead-pB-OJh"/>
                             </constraints>
                         </view>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="December 31, 1969" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BbI-hf-Gx6">
-                            <rect key="frame" x="16" y="7" width="131.5" height="18"/>
+                            <rect key="frame" x="16" y="7" width="132" height="18"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="18" id="VB9-x3-kZx"/>
+                            </constraints>
                             <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                             <color key="textColor" red="0.41960784313725491" green="0.41960784313725491" blue="0.41960784313725491" alpha="1" colorSpace="calibratedRGB"/>
                             <nil key="highlightedColor"/>
@@ -49,22 +52,22 @@
                     </subviews>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
+                        <constraint firstItem="uxm-Gc-zcf" firstAttribute="centerY" secondItem="BbI-hf-Gx6" secondAttribute="centerY" id="1K8-Wh-VMN"/>
                         <constraint firstAttribute="trailing" secondItem="iNJ-FZ-Tul" secondAttribute="trailing" id="9iX-kA-af8"/>
-                        <constraint firstItem="uxm-Gc-zcf" firstAttribute="baseline" secondItem="BbI-hf-Gx6" secondAttribute="baseline" id="BLM-DM-rmg"/>
-                        <constraint firstItem="BbI-hf-Gx6" firstAttribute="top" secondItem="Qos-hV-219" secondAttribute="top" priority="950" constant="7" id="HwO-59-z9G"/>
                         <constraint firstItem="iNJ-FZ-Tul" firstAttribute="leading" secondItem="Qos-hV-219" secondAttribute="leading" id="Oxl-Ff-QVi"/>
-                        <constraint firstItem="BbI-hf-Gx6" firstAttribute="centerY" secondItem="Qos-hV-219" secondAttribute="centerY" id="Vdg-se-f2f"/>
-                        <constraint firstAttribute="bottom" secondItem="iNJ-FZ-Tul" secondAttribute="bottom" id="csB-OO-Qf5"/>
+                        <constraint firstItem="BbI-hf-Gx6" firstAttribute="centerY" secondItem="Qos-hV-219" secondAttribute="centerY" constant="2" id="Vdg-se-f2f"/>
+                        <constraint firstAttribute="bottom" secondItem="BbI-hf-Gx6" secondAttribute="bottom" constant="3" id="aLE-SP-0dz"/>
                         <constraint firstItem="uxm-Gc-zcf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="BbI-hf-Gx6" secondAttribute="trailing" constant="4" id="oeV-ze-e5w"/>
+                        <constraint firstAttribute="bottom" secondItem="iNJ-FZ-Tul" secondAttribute="bottom" id="uZ3-o0-ovL"/>
                     </constraints>
                 </view>
             </subviews>
             <constraints>
-                <constraint firstItem="Qos-hV-219" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="GqE-Xr-sBc"/>
+                <constraint firstItem="Qos-hV-219" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="GqE-Xr-sBc"/>
                 <constraint firstItem="Qos-hV-219" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="WCR-46-sLB"/>
                 <constraint firstItem="Qos-hV-219" firstAttribute="trailing" secondItem="iN0-l3-epB" secondAttribute="trailing" id="YVB-ea-1Bl"/>
-                <constraint firstItem="BbI-hf-Gx6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="hLa-CN-6lK"/>
-                <constraint firstItem="Qos-hV-219" firstAttribute="bottom" secondItem="vUN-kp-3ea" secondAttribute="bottom" id="uLS-Gy-AKa"/>
+                <constraint firstItem="BbI-hf-Gx6" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" constant="16" id="gih-gO-aN7"/>
+                <constraint firstItem="Qos-hV-219" firstAttribute="bottom" secondItem="iN0-l3-epB" secondAttribute="bottom" id="uLS-Gy-AKa"/>
                 <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="uxm-Gc-zcf" secondAttribute="trailing" constant="16" id="x3k-3H-Tz0"/>
             </constraints>
             <nil key="simulatedTopBarMetrics"/>

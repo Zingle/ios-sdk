@@ -18,6 +18,11 @@
 #import "ZNGSettingsField.h"
 #import "ZNGPrinter.h"
 #import "ZNGContactGroup.h"
+#import "ZNGCalendarEventType.h"
+#import "ZNGCalendarEvent.h"
+#import "UIColor+ZingleSDK.h"
+
+@import SBObjectiveCWrapper;
 
 #define kServiceSettingHotsosURLKey         @"hotsos_url"
 #define kServiceSettingHotsosUserNameKey    @"hotsos_username"
@@ -25,6 +30,7 @@
 
 NSString * const ZNGServiceFeatureTeams = @"teams";
 NSString * const ZNGServiceFeatureAssignment = @"assignment";
+NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
 
 @implementation ZNGService
 
@@ -60,6 +66,7 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
              @"automations" : @"automations",
              @"printers" : @"printers",
              NSStringFromSelector(@selector(contactGroups)): @"contact_groups",
+             NSStringFromSelector(@selector(calendarEventTypes)): @"calendar_event_types",
              NSStringFromSelector(@selector(teams)): @"teams",
              @"templates" : @"templates",
              @"serviceAddress" : @"service_address",
@@ -131,6 +138,11 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
 + (NSValueTransformer *) contactGroupsJSONTransformer
 {
     return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGContactGroup class]];
+}
+
++ (NSValueTransformer *)calendarEventTypesJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGCalendarEventType class]];
 }
 
 + (NSValueTransformer*)serviceAddressJSONTransformer
@@ -293,6 +305,65 @@ NSString * const ZNGServiceFeatureAssignment = @"assignment";
     }
     
     return ([self.features containsObject:ZNGServiceFeatureTeams]);
+}
+
+- (BOOL) allowsCalendarEvents
+{
+    return ([self.features containsObject:ZNGServiceFeatureCalendarEvents]);
+}
+
+- (UIColor *) backgroundColorForCalendarEvent:(ZNGCalendarEvent *)event
+{
+    UIColor * const defaultColor = [UIColor lightGrayColor];
+    static const CGFloat pastEventAlpha = 0.5;
+    
+    BOOL isPastEvent = ([event.endsAt timeIntervalSinceNow] < 0.0);
+    CGFloat alpha = isPastEvent ? pastEventAlpha : 1.0;
+    
+    for (ZNGCalendarEventType * type in self.calendarEventTypes) {
+        if ([type.eventTypeId isEqualToString:event.eventTypeId]) {
+            NSString * colorString = type.backgroundColor;
+            
+            if ([colorString length] > 0) {
+                return [[UIColor colorFromHexString:colorString] colorWithAlphaComponent:alpha];
+            }
+            
+            SBLogWarning(@"Found event type for %@, but the background color is %@ instead of a hex color string.", event.eventTypeId, colorString);
+            return [defaultColor colorWithAlphaComponent:alpha];
+        }
+    }
+    
+    SBLogWarning(@"Unable to find event type with ID of %@.  Returning fallback background color.", event.eventTypeId);
+    return [defaultColor colorWithAlphaComponent:alpha];
+}
+
+/**
+ *  Returns an appropriate text color for the specified calendar event.
+ *  Returns black if no matching event type can be found.
+ */
+- (UIColor *) textColorForCalendarEvent:(ZNGCalendarEvent *)event
+{
+    UIColor * const defaultColor = [UIColor blackColor];
+    static const CGFloat pastEventAlpha = 0.5;
+    
+    BOOL isPastEvent = ([event.endsAt timeIntervalSinceNow] < 0.0);
+    CGFloat alpha = isPastEvent ? pastEventAlpha : 1.0;
+    
+    for (ZNGCalendarEventType * type in self.calendarEventTypes) {
+        if ([type.eventTypeId isEqualToString:event.eventTypeId]) {
+            NSString * colorString = type.textColor;
+            
+            if ([colorString length] > 0) {
+                return [[UIColor colorFromHexString:colorString] colorWithAlphaComponent:alpha];
+            }
+            
+            SBLogWarning(@"Found event type for %@, but the text color is %@ instead of a hex color string.", event.eventTypeId, colorString);
+            return [defaultColor colorWithAlphaComponent:alpha];
+        }
+    }
+    
+    SBLogWarning(@"Unable to find event type with ID of %@.  Returning fallback text color.", event.eventTypeId);
+    return [defaultColor colorWithAlphaComponent:alpha];
 }
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId

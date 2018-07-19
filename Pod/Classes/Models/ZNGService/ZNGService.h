@@ -22,9 +22,12 @@
 @class ZNGTemplate;
 @class ZNGContactGroup;
 @class ZNGTeam;
+@class ZNGCalendarEventType;
+@class ZNGCalendarEvent;
 
 extern NSString * _Nonnull const ZNGServiceFeatureTeams;
 extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
+extern NSString * _Nonnull const ZNGServiceFeatureCalendarEvents;
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -45,6 +48,7 @@ extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
 @property(nonatomic, strong, nullable) NSArray<ZNGTemplate *> * templates;
 @property(nonatomic, strong, nullable) NSArray<ZNGPrinter *> * printers;
 @property(nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * contactGroups;
+@property(nonatomic, strong, nullable) NSArray<ZNGCalendarEventType *> * calendarEventTypes;
 @property(nonatomic, strong, nullable) ZNGServiceAddress* serviceAddress;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;
@@ -76,6 +80,25 @@ extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
  *  Whether this service allows conversations to be assigned to teams.  Returns NO if allowsAssignment is NO.
  */
 - (BOOL) allowsTeamAssignment;
+
+/**
+ *  Whether this service supports calendar events for contacts.
+ */
+- (BOOL) allowsCalendarEvents;
+
+/**
+ *  Returns an appropriate background color for the specified calendar event.
+ *  Returns light grey if no matching event type can be found.
+ *  The returned color has reduced opacity if the event has already completed.
+ */
+- (UIColor *) backgroundColorForCalendarEvent:(ZNGCalendarEvent *)event;
+
+/**
+ *  Returns an appropriate text color for the specified calendar event.
+ *  Returns black if no matching event type can be found.
+ *  The returned color has reduced opacity if the event has already completed.
+ */
+- (UIColor *) textColorForCalendarEvent:(ZNGCalendarEvent *)event;
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId;
 

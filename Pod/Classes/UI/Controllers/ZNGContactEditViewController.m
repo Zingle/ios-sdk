@@ -38,11 +38,16 @@
 #import "ZNGEditContactTransition.h"
 #import "ZNGEditContactExitTransition.h"
 #import "ZNGConversationServiceToContact.h"
+#import "ZNGCalendarEvent.h"
+#import "ZNGContactEventTableViewCell.h"
+#import "ZNGContactMoreEventsTableViewCell.h"
+#import "ZNGContactEventsViewController.h"
 
 @import SBObjectiveCWrapper;
 
 enum  {
     ContactSectionDefaultCustomFields,
+    ContactSectionCalendarEvents,
     ContactSectionAssignment,
     ContactSectionChannels,
     ContactSectionGroups,
@@ -55,6 +60,8 @@ static NSString * const HeaderReuseIdentifier = @"EditContactHeader";
 static NSString * const FooterReuseIdentifier = @"EditContactFooter";
 static NSString * const SelectLabelSegueIdentifier = @"selectLabel";
 static NSString * const AssignSegueIdentifier = @"assign";
+static NSString * const EventsSegueIdentifier = @"events";
+static NSString * const EventCellId = @"event";
 
 @interface ZNGContactEditViewController () <ZNGLabelGridViewDelegate>
 
@@ -75,9 +82,18 @@ static NSString * const AssignSegueIdentifier = @"assign";
     NSArray<ZNGChannel *> * phoneNumberChannels;
     NSArray<ZNGChannel *> * nonPhoneNumberChannels;
     
+    NSArray<ZNGCalendarEvent *> * ongoingEvents;
+    NSArray<ZNGCalendarEvent *> * futureEvents;
+    NSUInteger futureEventTotalCount;
+    
     UIImage * deleteXImage;
     
     __weak ZNGContactLabelsTableViewCell * labelsGridCell;
+    
+    NSDateFormatter * eventDayFormatter;
+    NSDateFormatter * eventMonthFormatter;
+    NSDateFormatter * eventTimeFormatter;
+    NSDateFormatter * eventMonthDayTimeFormatter;
 }
 
 - (void)viewDidLoad
@@ -88,6 +104,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
     if ((self.transitioningDelegate == nil) && (!self.useDefaultTransition)) {
         self.transitioningDelegate = self;
     }
+    
+    eventDayFormatter = [ZNGCalendarEvent eventDayFormatter];
+    eventMonthFormatter = [ZNGCalendarEvent eventMonthFormatter];
+    eventTimeFormatter = [ZNGCalendarEvent eventTimeFormatter];
+    eventMonthDayTimeFormatter = [ZNGCalendarEvent eventMonthDayTimeFormatter];
     
     lockedContactHeight = self.lockedContactHeightConstraint.constant;
     
@@ -101,6 +122,8 @@ static NSString * const AssignSegueIdentifier = @"assign";
     UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
     [self.tableView registerNib:footerNib forHeaderFooterViewReuseIdentifier:FooterReuseIdentifier];
+    UINib * eventNib = [UINib nibWithNibName:NSStringFromClass([ZNGContactEventTableViewCell class]) bundle:bundle];
+    [self.tableView registerNib:eventNib forCellReuseIdentifier:EventCellId];
     
     self.tableView.estimatedRowHeight = 44.0;
     
@@ -146,6 +169,22 @@ static NSString * const AssignSegueIdentifier = @"assign";
     } else {
         // ZNGContact's copy is a deep copy
         _contact = [contact copy];
+        
+        NSArray<NSSortDescriptor *> * sortDescriptors = [ZNGCalendarEvent sortDescriptors];
+        
+        // Show all ongoing events
+        ongoingEvents = [[_contact ongoingCalendarEvents] sortedArrayUsingDescriptors:sortDescriptors];
+        
+        // Show at most two future events
+        static const NSUInteger maxFutureEventCount = 2;
+        NSArray<ZNGCalendarEvent *> * allFutureEvents = [[_contact futureCalendarEvents] sortedArrayUsingDescriptors:sortDescriptors];
+        futureEventTotalCount = [allFutureEvents count];
+        
+        if (futureEventTotalCount < maxFutureEventCount) {
+            futureEvents = allFutureEvents;
+        } else {
+            futureEvents = [allFutureEvents subarrayWithRange:NSMakeRange(0, maxFutureEventCount)];
+        }
     }
 
     [self updateUIForNewContact];
@@ -428,6 +467,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return [self.contact hasBeenEditedSince:originalContact];
 }
 
+- (void) pressedViewAllEvents:(id)sender
+{
+    [self performSegueWithIdentifier:EventsSegueIdentifier sender:self];
+}
+
 #pragma mark - Phone number cell delegate
 - (void) userClickedDeleteOnPhoneNumberTableCell:(ZNGContactPhoneNumberTableViewCell *)cell
 {
@@ -505,6 +549,16 @@ static NSString * const AssignSegueIdentifier = @"assign";
     return ([self.service allowsAssignment]);
 }
 
+- (BOOL) shouldShowCalendarEventsSection
+{
+    // Don't show events for a new contact
+    if (originalContact == nil) {
+        return NO;
+    }
+    
+    return ([self.service allowsCalendarEvents]);
+}
+
 #pragma mark - Table view delegate
 - (CGFloat) tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
@@ -515,6 +569,11 @@ static NSString * const AssignSegueIdentifier = @"assign";
     
     // If we have no assignment section, make sure it has no header
     if ((section == ContactSectionAssignment) && (![self shouldShowAssignmentSection])) {
+        return 0.0;
+    }
+    
+    // Same with calendar events
+    if ((section == ContactSectionCalendarEvents) && (![self shouldShowCalendarEventsSection])) {
         return 0.0;
     }
     
@@ -535,6 +594,18 @@ static NSString * const AssignSegueIdentifier = @"assign";
         case ContactSectionDefaultCustomFields:
             // No header for top section
             return nil;
+        case ContactSectionCalendarEvents:
+            header.sectionLabel.text = @"EVENTS";
+            header.sectionImage.image = [UIImage imageNamed:@"editIconEvents" inBundle:bundle compatibleWithTraitCollection:nil];
+            
+            if ([self shouldShowCalendarEventsSection]) {
+                [header.moreButton setTitle:@"View all" forState:UIControlStateNormal];
+                [header.moreButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [header.moreButton addTarget:self action:@selector(pressedViewAllEvents:) forControlEvents:UIControlEventTouchUpInside];
+                header.moreButton.hidden = NO;
+            }
+            
+            break;
         case ContactSectionAssignment:
             header.sectionLabel.text = @"ASSIGNMENT";
             header.sectionImage.image = [UIImage imageNamed:@"editIconAssignment" inBundle:bundle compatibleWithTraitCollection:nil];
@@ -579,6 +650,26 @@ static NSString * const AssignSegueIdentifier = @"assign";
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     switch (section) {
+        case ContactSectionCalendarEvents:
+            if (![self shouldShowCalendarEventsSection]) {
+                return 0;
+            }
+            
+            NSUInteger eventCount = [ongoingEvents count] + [futureEvents count];
+            
+            if (eventCount > 0) {
+                NSUInteger rowCount = eventCount;
+                
+                // If there are additional events in the future, show one additional row for "more events"
+                if (futureEventTotalCount > [futureEvents count]) {
+                    rowCount++;
+                }
+                
+                return rowCount;
+            }
+            
+            // This contact has no events.  Show one row for "no events."
+            return 1;
         case ContactSectionAssignment:
             return ([self shouldShowAssignmentSection]) ? 1 : 0;
         case ContactSectionDefaultCustomFields:
@@ -605,9 +696,80 @@ static NSString * const AssignSegueIdentifier = @"assign";
                                                     font:[UIFont latoFontOfSize:14.0]];
 }
 
+- (ZNGCalendarEvent *) eventForIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row < [ongoingEvents count]) {
+        return ongoingEvents[indexPath.row];
+    }
+    
+    NSUInteger futureEventIndex = indexPath.row - [ongoingEvents count];
+    
+    if (futureEventIndex < [futureEvents count]) {
+        return futureEvents[futureEventIndex];
+    }
+    
+    return nil;
+}
+
 - (UITableViewCell *) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
+        case ContactSectionCalendarEvents:
+        {
+            if ([self.contact.calendarEvents count] == 0) {
+                return [tableView dequeueReusableCellWithIdentifier:@"noEvents" forIndexPath:indexPath];
+            }
+            
+            ZNGCalendarEvent * event = [self eventForIndexPath:indexPath];
+            
+            // If there is no event for this index path, we'll assume we have the "more events" row
+            if (event == nil) {
+                ZNGContactMoreEventsTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"moreEvents" forIndexPath:indexPath];
+                NSUInteger additionalFutureEventCount = futureEventTotalCount - [futureEvents count];
+                
+                if (additionalFutureEventCount > 0) {
+                    cell.moreEventsLabel.text = [NSString stringWithFormat:@"+%llu MORE", (unsigned long long)additionalFutureEventCount];
+                } else {
+                    cell.moreEventsLabel.text = @"View all events";
+                }
+                
+                return cell;
+            }
+            
+            ZNGContactEventTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:EventCellId forIndexPath:indexPath];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+            if ((event.startsAt == nil) || (event.endsAt == nil)) {
+                SBLogError(@"Missing either start date (%@) or end date (%@) for event.", event.startsAt, event.endsAt);
+                cell.dayLabel.text = nil;
+                cell.monthLabel.text = nil;
+                cell.timeLabel.text = nil;
+                cell.eventNameLabel.text = nil;
+                return cell;
+            }
+            
+            cell.eventNameLabel.text = event.title;
+            cell.dayLabel.text = [eventDayFormatter stringFromDate:event.startsAt];
+            cell.monthLabel.text = [[eventMonthFormatter stringFromDate:event.startsAt] uppercaseString];
+            
+            NSString * startTime = [eventTimeFormatter stringFromDate:event.startsAt];
+            NSDateFormatter * endTimeFormatter = ([event singleDay]) ? eventTimeFormatter : eventMonthDayTimeFormatter;
+            NSString * endTime = [endTimeFormatter stringFromDate:event.endsAt];
+            cell.timeLabel.text = [NSString stringWithFormat:@"%@ - %@", startTime, endTime];
+            
+            UIColor * textColor = [self.service textColorForCalendarEvent:event];
+            UIColor * backgroundColor = [self.service backgroundColorForCalendarEvent:event];
+            cell.roundedBackgroundView.backgroundColor = backgroundColor;
+            cell.roundedBackgroundView.layer.borderColor = [textColor CGColor];
+            cell.dividerLine.backgroundColor = textColor;
+            
+            for (UILabel * label in cell.textLabels) {
+                label.textColor = textColor;
+            }
+            
+            return cell;
+        }
+            
         case ContactSectionAssignment:
         {
             if ([self.contact.assignedToUserId length] > 0) {
@@ -754,7 +916,19 @@ static NSString * const AssignSegueIdentifier = @"assign";
 
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == ContactSectionChannels) {
+    if (indexPath.section == ContactSectionCalendarEvents) {
+        if ([self eventForIndexPath:indexPath] == nil) {
+            // This must be the "show more" row
+            
+            // Show a new view with all events
+            [self performSegueWithIdentifier:EventsSegueIdentifier sender:self];
+            
+            // De-select after the transition
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [tableView deselectRowAtIndexPath:indexPath animated:NO];
+            });
+        }
+    } else if (indexPath.section == ContactSectionChannels) {
         if (indexPath.row >= [self.contact.channels count]) {
             // This is the "Add phone number" row
             ZNGChannel * newPhoneChannel = [[ZNGChannel alloc] init];
@@ -866,6 +1040,9 @@ static NSString * const AssignSegueIdentifier = @"assign";
         assignView.session = (ZingleAccountSession *)self.contactClient.session;
         assignView.contact = self.contact;
         assignView.delegate = self;
+    } else if ([segue.identifier isEqualToString:EventsSegueIdentifier]) {
+        ZNGContactEventsViewController * eventsView = segue.destinationViewController;
+        eventsView.conversation = self.conversation;
     }
 }
 

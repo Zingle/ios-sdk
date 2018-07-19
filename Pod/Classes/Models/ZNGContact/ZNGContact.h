@@ -19,6 +19,7 @@
 @class ZNGNewChannel;
 @class ZNGTeam;
 @class ZNGUser;
+@class ZNGCalendarEvent;
 
 /**
  *  The notification posted whenever a contact mutates itself.  The object in the NSNotification will be the updated ZNGContact
@@ -37,15 +38,31 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, copy, nullable) NSString * lockedBySource;
 @property(nonatomic, strong, nullable) ZNGMessage* lastMessage;
 @property(nonatomic, strong, nullable) NSArray<ZNGChannel *> * channels; // Array of ZNGChannel
-@property(nonatomic, strong, nullable) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue.  Why do these two classes both exist?
+@property(nonatomic, strong, nullable) NSArray * customFieldValues; // Array of ZNGContactFieldValue or ZNGNewContactFieldValue
 @property(nonatomic, strong, nullable) NSArray<ZNGLabel *> * labels; // Array of ZNGLabel
 @property(nonatomic, strong, nullable) NSArray<ZNGContactGroup *> * groups;
+@property(nonatomic, strong, nullable) NSArray<ZNGCalendarEvent *> * calendarEvents;
 @property(nonatomic, strong, nullable) NSString * assignedToTeamId;
 @property(nonatomic, strong, nullable) NSString * assignedToUserId;
 @property(nonatomic, strong, nullable) NSDate* createdAt;
 @property(nonatomic, strong, nullable) NSDate* updatedAt;
 @property(nonatomic, strong, nullable) NSDate* unconfirmedAt;
 @property(nonatomic, strong, nullable) NSURL * avatarUri;
+
+/**
+ *  Calendar events that have already finished.
+ */
+@property (nonatomic, readonly, nullable) NSArray<ZNGCalendarEvent *> * pastCalendarEvents;
+
+/**
+ *  Calendar events that are currently occurring.
+ */
+@property (nonatomic, readonly, nullable) NSArray<ZNGCalendarEvent *> * ongoingCalendarEvents;
+
+/**
+ *  Calendar events that have not yet started.
+ */
+@property (nonatomic, readonly, nullable) NSArray<ZNGCalendarEvent *> * futureCalendarEvents;
 
 @property (nonatomic, weak, nullable) ZNGContactClient * contactClient;
 

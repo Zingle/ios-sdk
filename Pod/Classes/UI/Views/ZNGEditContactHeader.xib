@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13173"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
+        <array key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </array>
         <array key="Lato-Semibold.ttf">
             <string>Lato-Semibold</string>
         </array>
@@ -38,12 +42,25 @@
                             <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
                             <nil key="highlightedColor"/>
                         </label>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OG0-NH-T8d">
+                            <rect key="frame" x="323" y="1" width="45" height="28"/>
+                            <constraints>
+                                <constraint firstAttribute="width" priority="950" constant="45" id="o8p-rd-5of"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
+                            <state key="normal" title="View all">
+                                <color key="titleColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="calibratedRGB"/>
+                            </state>
+                        </button>
                     </subviews>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstItem="k1f-GL-88w" firstAttribute="centerY" secondItem="V0b-Hz-vQ8" secondAttribute="centerY" id="9f0-l9-f2l"/>
                         <constraint firstAttribute="bottom" secondItem="V0b-Hz-vQ8" secondAttribute="bottom" constant="14" id="A7x-2I-K9S"/>
                         <constraint firstItem="V0b-Hz-vQ8" firstAttribute="centerY" secondItem="3gO-wE-4ph" secondAttribute="centerY" id="I6n-QQ-2AZ"/>
+                        <constraint firstItem="OG0-NH-T8d" firstAttribute="baseline" secondItem="k1f-GL-88w" secondAttribute="baseline" id="IZH-i0-FwH"/>
+                        <constraint firstItem="OG0-NH-T8d" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="k1f-GL-88w" secondAttribute="trailing" constant="4" id="MRJ-92-2yB"/>
+                        <constraint firstAttribute="trailingMargin" secondItem="OG0-NH-T8d" secondAttribute="trailing" constant="10" id="jLP-e5-GmN"/>
                         <constraint firstItem="k1f-GL-88w" firstAttribute="leading" secondItem="V0b-Hz-vQ8" secondAttribute="trailing" constant="7" id="oA1-DN-UT4"/>
                     </constraints>
                     <variation key="default">
@@ -66,6 +83,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="Qlm-2A-omw"/>
             <connections>
+                <outlet property="moreButton" destination="OG0-NH-T8d" id="EUN-bl-wAp"/>
                 <outlet property="sectionImage" destination="V0b-Hz-vQ8" id="izO-r2-9Fa"/>
                 <outlet property="sectionLabel" destination="k1f-GL-88w" id="jnY-6N-eYt"/>
             </connections>

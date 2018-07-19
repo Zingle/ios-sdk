@@ -10,4 +10,12 @@
 
 @implementation ZNGEditContactHeader
 
+- (void) prepareForReuse
+{
+    [super prepareForReuse];
+    
+    self.moreButton.hidden = YES;
+    [self.moreButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+}
+
 @end

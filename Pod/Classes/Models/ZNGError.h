@@ -30,4 +30,9 @@ typedef enum {
  */
 - (BOOL) isAuthenticationFailure;
 
+/**
+ *  Returns YES if this error indicates that the user's email needs to be verified
+ */
+- (BOOL) isUnverifiedEmailError;
+
 @end

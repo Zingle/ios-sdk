@@ -18,6 +18,8 @@ NSString *const kErrorStatusCode = @"status_code";
 NSString *const kErrorDescription = @"description";
 NSString* const kZingleErrorDomain = @"ZINGLE ERROR";
 
+static NSString * const EmailUnverifiedDescription = @"email is not verified";
+
 - (id)initWithAPIError:(NSError *)error
 {
     NSDictionary *status;
@@ -59,6 +61,16 @@ NSString* const kZingleErrorDomain = @"ZINGLE ERROR";
         default:
             return NO;
     }
+}
+
+- (BOOL) isUnverifiedEmailError
+{
+    if (self.httpStatusCode != 401) {
+        return NO;
+    }
+    
+    NSRange unverifiedStringRange = [self.errorDescription rangeOfString:EmailUnverifiedDescription options:NSCaseInsensitiveSearch];
+    return (unverifiedStringRange.location != NSNotFound);
 }
 
 @end

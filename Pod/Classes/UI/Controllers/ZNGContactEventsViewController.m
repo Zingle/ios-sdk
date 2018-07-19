@@ -154,13 +154,14 @@ static const CGFloat LeftMarginSize = 16.0;
 #pragma mark - Table data
 - (NSInteger) numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [eventsByDateString count];
+    // Show at least one section so that we have a "no events" row with no data
+    return MAX([eventsByDateString count], 1);
 }
 
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section >= [eventDateStringsInOrder count]) {
-        SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)section, (unsigned long long)[eventDateStringsInOrder count]);
+        // Out of bounds.  Do not log an error since this normally occurs for empty data.
         return 0;
     }
     
@@ -176,16 +177,16 @@ static const CGFloat LeftMarginSize = 16.0;
 - (UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     ZNGCalendarEventHeaderView * header = [tableView dequeueReusableHeaderFooterViewWithIdentifier:HeaderCellId];
+    header.dateLabel.font = [UIFont latoFontOfSize:14.0];
     
     if (section >= [eventDateStringsInOrder count]) {
-        SBLogError(@"Out of bounds (%lld of %llu) when retrieving events by date", (long long)section, (unsigned long long)[eventDateStringsInOrder count]);
-        header.todayLabel = nil;
+        // This is either out of bounds (oops!) or a "no events" section (I meant to do that!).
+        header.dateLabel.text = @"No events";
         return header;
     }
     
     NSString * dateString = eventDateStringsInOrder[section];
     header.dateLabel.text = dateString;
-    header.dateLabel.font = [UIFont latoFontOfSize:14.0];
     
     if ([dateString isEqualToString:todayString]) {
         header.todayLabel.hidden = NO;

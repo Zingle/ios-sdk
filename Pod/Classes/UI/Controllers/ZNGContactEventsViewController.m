@@ -98,11 +98,13 @@ static const CGFloat LeftMarginSize = 16.0;
     NSCalendar * calendar = [NSCalendar currentCalendar];
     
     // Ensure that we have an item for today, whether or not it will contain any events
-    NSDate * now = [NSDate date];
-    todayString = [eventCategorizationFormatter stringFromDate:now];
-    newEventsByDate[todayString] = [[NSMutableArray alloc] init];
-    NSDateComponents * todayComponents = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:now];
-    dateStringsByComponents[todayComponents] = todayString;
+    if ([self.conversation.contact.calendarEvents count] > 0) {
+        NSDate * now = [NSDate date];
+        todayString = [eventCategorizationFormatter stringFromDate:now];
+        newEventsByDate[todayString] = [[NSMutableArray alloc] init];
+        NSDateComponents * todayComponents = [calendar components:(NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay) fromDate:now];
+        dateStringsByComponents[todayComponents] = todayString;
+    }
     
     for (ZNGCalendarEvent * event in self.conversation.contact.calendarEvents) {
         if (event.startsAt == nil) {

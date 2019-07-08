@@ -34,6 +34,6 @@ Pod::Spec.new do |s|
   s.dependency 'Analytics', '~> 3.0'
   s.dependency 'MGSwipeTableCell'
   s.dependency 'SDWebImage/GIF'
-  s.dependency 'Socket.IO-Client-Swift', '~> 13.0'
+  s.dependency 'Socket.IO-Client-Swift'
   s.dependency 'Shimmer'
 end

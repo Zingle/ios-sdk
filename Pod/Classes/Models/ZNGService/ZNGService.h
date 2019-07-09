@@ -91,14 +91,14 @@ extern NSString * _Nonnull const ZNGServiceFeatureCalendarEvents;
  *  Returns light grey if no matching event type can be found.
  *  The returned color has reduced opacity if the event has already completed.
  */
-- (UIColor *) backgroundColorForCalendarEvent:(ZNGCalendarEvent *)event;
+- (UIColor * _Nonnull) backgroundColorForCalendarEvent:(ZNGCalendarEvent * _Nonnull)event;
 
 /**
  *  Returns an appropriate text color for the specified calendar event.
  *  Returns black if no matching event type can be found.
  *  The returned color has reduced opacity if the event has already completed.
  */
-- (UIColor *) textColorForCalendarEvent:(ZNGCalendarEvent *)event;
+- (UIColor * _Nonnull) textColorForCalendarEvent:(ZNGCalendarEvent * _Nonnull)event;
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId;
 

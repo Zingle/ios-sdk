@@ -62,7 +62,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     ZNGContact * lastLocallyRemovedContact;
 }
 
-+ (nonnull instancetype) dataSetWithBlock:(void (^ _Nonnull)(ZNGContactDataSetBuilder *))builderBlock
++ (nonnull instancetype) dataSetWithBlock:(__attribute__((noescape)) void (^ _Nonnull)(ZNGContactDataSetBuilder *))builderBlock
 {
     NSParameterAssert(builderBlock);
     

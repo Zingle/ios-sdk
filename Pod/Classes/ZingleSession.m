@@ -21,7 +21,6 @@
 @import SBObjectiveCWrapper;
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
-NSString * const DebugBaseURL = @"https://qa-api.zingle.me/v1/";
 
 NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
 
@@ -157,34 +156,40 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     self = [super init];
     
     if (self != nil) {
-        _urlString = LiveBaseURL;
         _token = [token copy];
         _key = [key copy];
-        
-        _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
-        
-        _sessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:self.urlString]];
-        [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
-        
-        NSString * v2ApiPath = [self.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
-        _v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiPath]];
-        [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
-        
-        self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
-        self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
-        self.notificationsClient = [[ZNGNotificationsClient alloc] initWithSession:self];
-        self.notificationsClient.ignoreErrors = YES;
-        self.serviceClient = [[ZNGServiceClient alloc] initWithSession:self];
-        self.userAuthorizationClient = [[ZNGUserAuthorizationClient alloc] initWithSession:self];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDeviceTokenRegistered:) name:DeviceTokenUpdatedNotification object:nil];
-        
-        // Allow our image size cache to load well ahead of it when it will be needed.
-        [ZNGImageSizeCache sharedCache];
+
+        [self commonInit];
     }
     
     return self;
+}
+
+- (void) commonInit
+{
+    _urlString = LiveBaseURL;
+    
+    _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
+    
+    _sessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:self.urlString]];
+    [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
+    
+    NSString * v2ApiPath = [self.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
+    _v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiPath]];
+    [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
+    
+    self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
+    self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
+    self.notificationsClient = [[ZNGNotificationsClient alloc] initWithSession:self];
+    self.notificationsClient.ignoreErrors = YES;
+    self.serviceClient = [[ZNGServiceClient alloc] initWithSession:self];
+    self.userAuthorizationClient = [[ZNGUserAuthorizationClient alloc] initWithSession:self];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDeviceTokenRegistered:) name:DeviceTokenUpdatedNotification object:nil];
+    
+    // Allow our image size cache to load well ahead of it when it will be needed.
+    [ZNGImageSizeCache sharedCache];
 }
 
 - (void) dealloc

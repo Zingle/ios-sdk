@@ -69,26 +69,31 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     self = [super initWithToken:token key:key];
     
     if (self != nil) {
-        contactClientSemaphore = dispatch_semaphore_create(0);
-        initialUserDataSemaphore = dispatch_semaphore_create(0);
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBadgeDataChanged:) name:ZNGInboxStatisticianDataChangedNotification object:nil];
-        
-        [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
-        
-        allLoadedConversationIds = [[NSMutableSet alloc] init];
-        _conversationCache = [[NSCache alloc] init];
-        _conversationCache.countLimit = 10;
-        _conversationCache.delegate = self;
-                
-        self.inboxStatistician = [[ZNGInboxStatistician alloc] init];
-        
-        _automaticallyUpdateServiceWhenReturningFromBackground = YES;
+        [self commonInit];
     }
     
     return self;
+}
+
+- (void) commonInit
+{
+    contactClientSemaphore = dispatch_semaphore_create(0);
+    initialUserDataSemaphore = dispatch_semaphore_create(0);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBadgeDataChanged:) name:ZNGInboxStatisticianDataChangedNotification object:nil];
+    
+    [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
+    
+    allLoadedConversationIds = [[NSMutableSet alloc] init];
+    _conversationCache = [[NSCache alloc] init];
+    _conversationCache.countLimit = 10;
+    _conversationCache.delegate = self;
+    
+    self.inboxStatistician = [[ZNGInboxStatistician alloc] init];
+    
+    _automaticallyUpdateServiceWhenReturningFromBackground = YES;
 }
 
 - (void) dealloc

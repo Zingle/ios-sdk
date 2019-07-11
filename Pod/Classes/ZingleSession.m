@@ -159,13 +159,13 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         _token = [token copy];
         _key = [key copy];
 
-        [self commonInit];
+        [self _commonInit];
     }
     
     return self;
 }
 
-- (void) commonInit
+- (void) _commonInit
 {
     _urlString = LiveBaseURL;
     

@@ -165,6 +165,21 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     return self;
 }
 
+- (nonnull instancetype) initWithJWT:(nonnull NSString *)jwt
+{
+    NSParameterAssert([jwt length] > 0);
+    
+    self = [super init];
+    
+    if (self != nil) {
+        _jwt = [jwt copy];
+    
+        [self _commonInit];
+    }
+    
+    return self;
+}
+
 - (void) _commonInit
 {
     _urlString = LiveBaseURL;
@@ -187,9 +202,15 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDeviceTokenRegistered:) name:DeviceTokenUpdatedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notifyApplicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     // Allow our image size cache to load well ahead of it when it will be needed.
     [ZNGImageSizeCache sharedCache];
+}
+
+- (void) _notifyApplicationDidBecomeActive:(NSNotification *)notification
+{
+    [self vetJwtAfterResumingActive];
 }
 
 - (void) dealloc
@@ -241,6 +262,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     return session;
 }
 
+#pragma mark - Password Reset
 + (void) resetPasswordForEmail:(NSString *)email completion:(void (^_Nullable)(BOOL success))completion
 {
     NSString * emailMinusWhitespace = [email stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
@@ -286,6 +308,45 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 - (void) connect
 {
     SBLogError(@"Connect called on abstract ZingleSession class.");
+}
+
+#pragma mark - JWT Support
+/**
+ * If a JWT exists, this checks if it is valid/expired and refreshes if needed.  Safe to call in non-JWT sessions.
+ */
+- (void) vetJwtAfterResumingActive
+{
+    if ([self.jwt length] == 0) {
+        // No JWT = nothing to do here
+        return;
+    }
+    
+    if ([self jwtIsValid]) {
+        // It's still good.  Nothing to do.
+        return;
+    }
+    
+    // The JWT is no longer valid
+    // Can we easily refresh it?
+    if ([self jwtIsRefreshable]) {
+        // TODO: Refresh JWT
+        return;
+    }
+    
+    // Our JWT is fully expired.  We must boot the user back to his IDP for authentication.
+    // TODO: The above
+}
+
+- (BOOL) jwtIsValid
+{
+    // TODO: Implement beyond just checking for existence
+    return ([self.jwt length] > 0);
+}
+
+- (BOOL) jwtIsRefreshable
+{
+    // TODO: Implement
+    return YES;
 }
 
 #pragma mark - Setters

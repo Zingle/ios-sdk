@@ -75,6 +75,17 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     return self;
 }
 
+- (id) initWithJWT:(NSString *)jwt
+{
+    self = [super initWithJWT:jwt];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
 - (void) commonInit
 {
     contactClientSemaphore = dispatch_semaphore_create(0);

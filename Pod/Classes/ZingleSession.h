@@ -32,12 +32,17 @@
 /**
  *  The token identifying the API user.  Immutable after initialization.
  */
-@property (nonatomic, readonly, nonnull) NSString * token;
+@property (nonatomic, readonly, nullable) NSString * token;
 
 /**
  *  The security key/password of the current API user.  Immutable after initialization.
  */
-@property (nonatomic, readonly, nonnull) NSString * key;
+@property (nonatomic, readonly, nullable) NSString * key;
+
+/**
+ *  The JWT token of the current user.  Immutable after initialization.  This will be refreshed and replaced automatically.
+ */
+@property (nonatomic, readonly, nullable) NSString * jwt;
 
 /**
  *  KVO compliant flag that indicates when the session has been fully initialized and may take requests.
@@ -89,6 +94,8 @@
  *  @param key Security key for Zingle API user
  */
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_DESIGNATED_INITIALIZER;
+
+- (nonnull instancetype) initWithJWT:(nonnull NSString *)jwt NS_DESIGNATED_INITIALIZER;
 
 /**
  *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.

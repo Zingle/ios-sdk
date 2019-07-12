@@ -22,16 +22,21 @@
 /**
  *  Returns the v1 API URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.
  */
-- (NSURL * _Nullable) apiUrlV1;
+- (NSURL * _Nullable)apiUrlV1;
+
+/**
+ *  Returns the v2 API URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.
+ */
+- (NSURL * _Nullable)apiUrlV2;
 
 /**
  *  Returns the secure auth URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.
  */
-- (NSURL * _Nullable) authUrl;
+- (NSURL * _Nullable)authUrl;
 
 /**
  *  Returns the socket URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.
  */
-- (NSURL * _Nullable) socketUrl;
+- (NSURL * _Nullable)socketUrl;
 
 @end

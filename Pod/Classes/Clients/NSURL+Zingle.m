@@ -50,6 +50,18 @@
     return [NSURL URLWithString:path];
 }
 
+- (NSURL * _Nullable)apiUrlV2
+{
+    NSString * prefix = [self zingleServerPrefix];
+    
+    if (prefix == nil) {
+        return nil;
+    }
+    
+    NSString * path = ([prefix length] > 0) ? [NSString stringWithFormat:@"https://%@-api.zingle.me/v2", prefix] : @"https://api.zingle.me/v2";
+    return [NSURL URLWithString:path];
+}
+
 - (NSURL * _Nullable)authUrl
 {
     NSString * prefix = [self zingleServerPrefix];

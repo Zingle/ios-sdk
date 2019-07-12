@@ -10,9 +10,11 @@
 #import "NSURL+Zingle.h"
 
 static NSString * const ProductionApiPath = @"https://api.zingle.me/v1";
+static NSString * const ProductionApiV2Path = @"https://api.zingle.me/v2";
 static NSString * const ProductionAuthPath = @"https://app.zingle.me/auth";
 static NSString * const ProductionSocketPath = @"https://socket.zingle.me/";
 static NSString * const CiApiPath = @"https://ci-api.zingle.me/v1";
+static NSString * const CiApiV2Path = @"https://ci-api.zingle.me/v2";
 static NSString * const CiAuthPath = @"https://ci-app.zingle.me/auth";
 static NSString * const CiSocketPath = @"https://ci-app.zingle.me:8000/";
 static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart/";
@@ -56,6 +58,17 @@ static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart
 {
     NSURL * url = [NSURL URLWithString:ProductionApiPath];
     XCTAssertEqualObjects(url, [url apiUrlV1], @"Calling `apiUrlV1` should be an identity operation on a v1 API URL");
+}
+
+- (void) testV2ApiPathFromV1
+{
+    NSURL * v1Url = [NSURL URLWithString:ProductionApiPath];
+    NSURL * expectedV2Url = [NSURL URLWithString:ProductionApiV2Path];
+    XCTAssertEqualObjects([v1Url apiUrlV2], expectedV2Url, @"Production V2 API URL should be calculable from V1");
+    
+    NSURL * ciV1Url = [NSURL URLWithString:CiApiPath];
+    NSURL * expectedCiV2Url = [NSURL URLWithString:CiApiV2Path];
+    XCTAssertEqualObjects([ciV1Url apiUrlV2], expectedCiV2Url, @"CI V2 API URL should be calculable from V1");
 }
 
 - (void) testNonZingleUrlProducesNilZinglePaths

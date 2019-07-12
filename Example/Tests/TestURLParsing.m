@@ -23,21 +23,21 @@ static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart
 
 @implementation TestURLParsing
 
-- (void) testProductionAPIURL
+- (void) testProductionApiUrl
 {
     NSURL * url = [NSURL URLWithString:ProductionApiPath];
     NSString * prefix = [url zingleServerPrefix];
     XCTAssertEqualObjects(prefix, @"", @"Server prefix for api.zingle.me should return an empty string");
 }
 
-- (void) testCIAPIURL
+- (void) testCiApiUrl
 {
     NSURL * url = [NSURL URLWithString:CiApiPath];
     NSString * prefix = [url zingleServerPrefix];
     XCTAssertEqualObjects(prefix, @"ci", @"Server prefix for qa-api.zingle.me should be \"qa\"");
 }
 
-- (void) testProductionComplexURL
+- (void) testProductionComplexUrl
 {
     NSString * path = @"https://api.zingle.me/things/stuff?moreThings=please";
     NSURL * url = [NSURL URLWithString:path];
@@ -45,7 +45,7 @@ static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart
     XCTAssertEqualObjects(prefix, @"", @"Server prefix for api.zingle.me, even with additional path information and a query string, should return an empty string");
 }
 
-- (void) testNonZingleURLReturnsNil
+- (void) testNonZingleUrlReturnsNil
 {
     NSURL * url = [NSURL URLWithString:NonZinglePath];
     NSString * prefix = [url zingleServerPrefix];

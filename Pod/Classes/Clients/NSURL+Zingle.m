@@ -38,5 +38,51 @@
     return [path substringWithRange:prefixRange];
 }
 
+- (NSURL * _Nullable)apiUrlV1
+{
+    NSString * prefix = [self zingleServerPrefix];
+    
+    if (prefix == nil) {
+        return nil;
+    }
+    
+    NSString * path = ([prefix length] > 0) ? [NSString stringWithFormat:@"https://%@-api.zingle.me/v1", prefix] : @"https://api.zingle.me/v1";
+    return [NSURL URLWithString:path];
+}
+
+- (NSURL * _Nullable)authUrl
+{
+    NSString * prefix = [self zingleServerPrefix];
+    
+    if (prefix == nil) {
+        return nil;
+    }
+    
+    if ([prefix length] == 0) {
+        // Empty string means production (per `zingleServerPrefix` documentation)
+        return [NSURL URLWithString:@"https://app.zingle.me/auth"];
+    }
+    
+    // We have a non-production prefix
+    NSString * path = [NSString stringWithFormat:@"https://%@-app.zingle.me/auth", prefix];
+    return [NSURL URLWithString:path];
+}
+
+- (NSURL *)socketUrl
+{
+    NSString * prefix = [self zingleServerPrefix];
+    
+    if (prefix == nil) {
+        return nil;
+    }
+    
+    if ([prefix length] == 0) {
+        return [NSURL URLWithString:@"https://socket.zingle.me/"];
+    }
+    
+    // We have a non-production prefix
+    NSString * path = [NSString stringWithFormat:@"https://%@-app.zingle.me:8000/", prefix];
+    return [NSURL URLWithString:path];
+}
 
 @end

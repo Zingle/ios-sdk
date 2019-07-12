@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface UIColor (ZingleSDK)
 
 #pragma mark - Message bubble colors
@@ -73,7 +75,7 @@
  *
  *  @return A new color object matching a the RGB hex value.
  */
-+ (UIColor *)colorFromHexString:(NSString *)hexString;
++ (UIColor * _Nullable)colorFromHexString:(NSString *)hexString;
 
 #pragma mark - Utilities
 
@@ -89,3 +91,5 @@
 - (UIColor *)zng_colorByDarkeningColorWithValue:(CGFloat)value;
 
 @end
+
+NS_ASSUME_NONNULL_END

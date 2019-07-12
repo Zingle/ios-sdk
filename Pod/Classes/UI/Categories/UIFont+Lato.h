@@ -10,8 +10,8 @@
 
 @interface UIFont (Lato)
 
-+ (UIFont *) latoFontOfSize:(CGFloat)size;
-+ (UIFont  *) latoSemiBoldFontOfSize:(CGFloat)size;
-+ (UIFont *) latoBoldFontOfSize:(CGFloat)size;
++ (UIFont * _Nonnull) latoFontOfSize:(CGFloat)size;
++ (UIFont  * _Nonnull) latoSemiBoldFontOfSize:(CGFloat)size;
++ (UIFont * _Nonnull) latoBoldFontOfSize:(CGFloat)size;
 
 @end

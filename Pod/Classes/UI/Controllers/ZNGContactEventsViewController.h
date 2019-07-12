@@ -21,6 +21,6 @@
 @property (nonatomic, strong, nullable) IBOutlet UILabel * titleLabel;
 @property (nonatomic, strong, nullable) IBOutlet UITableView * tableView;
 
-- (IBAction) pressedDone:(id)sender;
+- (IBAction) pressedDone:(id _Nullable)sender;
 
 @end

@@ -29,8 +29,8 @@
     
     int currentServiceNumericId;
     
-    NSString * authPath;
-    NSString * nodePath;
+    NSURL * authUrl;
+    NSURL * socketUrl;
     
     // YES if we are currently waiting on our initial auth request
     BOOL initializingSession;
@@ -53,21 +53,15 @@
         _ignoreCurrentUserTypingIndicator = YES;
 #endif 
         
-        NSString * zinglePrefix = [session.sessionManager.baseURL zingleServerPrefix];
+        authUrl = [session.sessionManager.baseURL authUrl];
+        socketUrl = [session.sessionManager.baseURL socketUrl];
         
-        if (zinglePrefix == nil) {
-            SBLogWarning(@"ZingleSession's base URL of %@ does not appear to be a Zingle URL.  Using production Zingle URL.", session.sessionManager.baseURL);
+        if ((authUrl == nil) || (socketUrl == nil)) {
+            SBLogError(@"Unable to derive auth and/or socket URL from %@ URL", [session.sessionManager.baseURL absoluteString]);
+            return nil;
         }
         
-        if ([zinglePrefix length] > 0) {
-            authPath = [NSString stringWithFormat:@"https://%@-app.zingle.me/", zinglePrefix];
-            nodePath = [NSString stringWithFormat:@"https://%@-app.zingle.me:8000", zinglePrefix];
-        } else {
-            authPath = @"https://secure.zingle.me/";
-            nodePath = @"https://socket.zingle.me/";
-        }
-        
-        SBLogDebug(@"Auth path is %@, node path is %@", authPath, nodePath);
+        SBLogDebug(@"Auth path is %@, node path is %@", [authUrl absoluteString], [socketUrl absoluteString]);
     }
     
     return self;
@@ -108,9 +102,7 @@
     authSucceeded = NO;
     initializingSession = YES;
     
-    NSURL * url = [NSURL URLWithString:authPath];
-    
-    AFHTTPSessionManager * session = [ZingleSession anonymousSessionManagerWithURL:url];
+    AFHTTPSessionManager * session = [ZingleSession anonymousSessionManagerWithURL:authUrl];
     [session.requestSerializer setAuthorizationHeaderFieldWithUsername:self.session.token password:self.session.key];
     session.responseSerializer = [AFHTTPResponseSerializer serializer];
     
@@ -118,7 +110,7 @@
     // Bad NSHTTPCookieStorage.  Bad.
     [[NSHTTPCookieStorage sharedHTTPCookieStorage] removeCookiesSinceDate:[NSDate dateWithTimeIntervalSince1970:0.0]];
     
-    [session POST:@"auth" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    [session POST:@"" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         SBLogDebug(@"Auth request succeeded.");
         self->authSucceeded = YES;
         [self _connectSocket];
@@ -131,7 +123,7 @@
             return;
         }
         
-        SBLogWarning(@"Request to auth at %@ failued for an unknown reason.", self->authPath);
+        SBLogWarning(@"Request to auth at %@ failued for an unknown reason.", [self->authUrl absoluteString]);
     }];
     
     [self _uncoverNumericIdForCurrentService];
@@ -172,10 +164,10 @@
 
 - (void) _connectSocket
 {
-    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:[NSURL URLWithString:authPath]];
+    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:authUrl];
     SBLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
     
-    socketManager = [[SocketManager alloc] initWithSocketURL:[NSURL URLWithString:nodePath] config:@{ @"cookies" : cookies, @"log" : @NO }];
+    socketManager = [[SocketManager alloc] initWithSocketURL:socketUrl config:@{ @"cookies" : cookies, @"log" : @NO }];
     SocketIOClient * socketClient = [socketManager defaultSocket];
     
     __weak ZNGSocketClient * weakSelf = self;

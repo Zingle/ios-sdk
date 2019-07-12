@@ -14,7 +14,7 @@ static NSString * const ProductionAuthPath = @"https://app.zingle.me/auth";
 static NSString * const ProductionSocketPath = @"https://socket.zingle.me/";
 static NSString * const CiApiPath = @"https://ci-api.zingle.me/v1";
 static NSString * const CiAuthPath = @"https://ci-app.zingle.me/auth";
-static NSString * const CISocketPath = @"https://ci-app.zingle.me:8000/";
+static NSString * const CiSocketPath = @"https://ci-app.zingle.me:8000/";
 static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart/";
 
 @interface TestURLParsing : XCTestCase
@@ -93,7 +93,7 @@ static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart
 - (void) testCiSocketPathFromApiPath
 {
     NSURL * apiUrl = [NSURL URLWithString:CiApiPath];
-    NSURL * expectedSocketUrl = [NSURL URLWithString:CISocketPath];
+    NSURL * expectedSocketUrl = [NSURL URLWithString:CiSocketPath];
     
     XCTAssertEqualObjects([apiUrl socketUrl], expectedSocketUrl, @"`socketUrl` from API URL should produce %@", expectedSocketUrl);
 }

@@ -18,6 +18,7 @@
 #import "ZNGImageSizeCache.h"
 #import <UserNotifications/UserNotifications.h>
 #import "NSURL+Zingle.h"
+#import "ZNGJWTClient.h"
 
 @import SBObjectiveCWrapper;
 
@@ -39,6 +40,8 @@ static NSString * const DeviceTokenUpdatedNotification = @"DeviceTokenUpdatedNot
     // If we try to register for push notifications but do not have a device token, the relevant service IDs will be saved here.
     // If our device token is then set later, we will register for these services.
     NSArray<NSString *> * pushNotificationQueuedServiceIds;
+    
+    ZNGJWTClient * jwtRefreshClient;
 }
 
 #pragma mark - Push notification swizzle magic
@@ -257,6 +260,34 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         [self.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
         [self.v2SessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
     }
+}
+
+/**
+ *  Refreshes the current JWT if possible.  Note: Calling multiple times in rapid succession may result in one only call to the completion block.
+ */
+- (void) refreshJwt:(void (^_Nullable)(BOOL success, NSError * error))completion
+{
+    if (jwtRefreshClient.requestPending) {
+        SBLogError(@"refreshJwt was called while a refresh operation is already pending.  Ignoring.");
+        return;
+    }
+    
+    jwtRefreshClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
+    [jwtRefreshClient refreshJwt:self.jwt success:^(NSString * _Nonnull jwt) {
+        SBLogInfo(@"JWT was successfully refreshed.");
+        self.jwt = jwt;
+        
+        if (completion != nil) {
+            completion(YES, nil);
+        }
+    } failure:^(NSError * _Nonnull error) {
+        SBLogError(@"Error refreshing JWT: %@", [error localizedDescription]);
+        self.jwt = nil;
+        
+        if (completion != nil) {
+            completion(NO, error);
+        }
+    }];
 }
 
 #pragma mark - Session

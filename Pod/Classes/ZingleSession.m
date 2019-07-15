@@ -251,10 +251,12 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 {
     _jwt = [jwt copy];;
     
-    [self.sessionManager.requestSerializer clearAuthorizationHeader];
-    [self.v2SessionManager.requestSerializer clearAuthorizationHeader];
-    [self.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
-    [self.v2SessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+    if (jwt != nil) {
+        [self.sessionManager.requestSerializer clearAuthorizationHeader];
+        [self.v2SessionManager.requestSerializer clearAuthorizationHeader];
+        [self.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+        [self.v2SessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+    }
 }
 
 #pragma mark - Session

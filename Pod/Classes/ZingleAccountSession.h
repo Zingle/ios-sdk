@@ -51,6 +51,12 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 
 #pragma mark - Account/Service selection
 /**
+ *  Either a JWT used at initialization or a JWT that was acquired on login/refresh.  Note that this JWT *will* mutate as tokens
+ *  are refreshed.
+ */
+@property (nonatomic, copy, nullable) NSString * jwt;
+
+/**
  *  All accounts available to this user.  This array will be set to an empty array @[] if a response has arrived from the server
  *   that does not contain any accounts.
  */
@@ -124,6 +130,13 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
  *  The total number of unread conversations relevant to this user.  This should always match the badge number sent in push notifications.
  */
 @property (nonatomic, assign) NSUInteger totalUnreadCount;
+
+#pragma mark - Settings
+/**
+ *  If set, login will occur with basic auth, then a JWT will be acquired and used.  Defaults to NO.
+ *  This flag will be set to NO if a JWT request fails.
+ */
+@property (nonatomic) BOOL useJwt;
 
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;

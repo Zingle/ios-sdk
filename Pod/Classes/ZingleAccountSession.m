@@ -31,6 +31,7 @@
 #import "ZNGNotificationSettingsClient.h"
 #import "ZNGTeam.h"
 #import "ZNGUserSettings.h"
+#import "ZNGJWTClient.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -62,6 +63,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
     
     UIStoryboard * _storyboard;
+    
+    ZNGJWTClient * jwtClient;
 }
 
 - (id) initWithToken:(NSString *)token key:(NSString *)key
@@ -97,6 +100,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
     
+    _useJwt = NO;
     allLoadedConversationIds = [[NSMutableSet alloc] init];
     _conversationCache = [[NSCache alloc] init];
     _conversationCache.countLimit = 10;
@@ -459,6 +463,33 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     }
     
     // We now have both an account and a service selected.
+    
+    // Do they want/need a JWT?
+    if ((self.useJwt) && ([self.jwt length] == 0)) {
+        if (jwtClient.requestPending) {
+            SBLogError(@"updateStateForNewAccountOrService was called while a JWT request is already over the wire.  Ignoring this call.");
+            return;
+        }
+        
+        jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
+        [jwtClient acquireZingleJwtForUser:self.token password:self.key success:^(NSString * _Nonnull jwt) {
+            SBLogInfo(@"Received a JWT.  Swapping in for basic auth.");
+            self.jwt = jwt;
+            
+            [self.sessionManager.requestSerializer clearAuthorizationHeader];
+            [self.v2SessionManager.requestSerializer clearAuthorizationHeader];
+            [self.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+            [self.v2SessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+            
+            [self updateStateForNewAccountOrService];
+        } failure:^(NSError * _Nonnull error) {
+            SBLogError(@"Unable to acquire a JWT.  Setting useJwt to NO and proceding with basic auth.");
+            self.useJwt = NO;
+            [self updateStateForNewAccountOrService];
+        }];
+        
+        return;
+    }
     
     [self initializeAllClients];
     

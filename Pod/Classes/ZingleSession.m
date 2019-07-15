@@ -17,6 +17,7 @@
 #import <objc/runtime.h>
 #import "ZNGImageSizeCache.h"
 #import <UserNotifications/UserNotifications.h>
+#import "NSURL+Zingle.h"
 
 @import SBObjectiveCWrapper;
 
@@ -163,11 +164,11 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         
         _jsonProcessingQueue = dispatch_queue_create("com.zingleme.sdk.jsonProcessing", NULL);
         
-        _sessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:self.urlString]];
+        NSURL * v1Url = [[NSURL URLWithString:self.urlString] apiUrlV1];
+        _sessionManager = [[self class] anonymousSessionManagerWithURL:v1Url];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
         
-        NSString * v2ApiPath = [self.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
-        _v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiPath]];
+        _v2SessionManager = [[self class] anonymousSessionManagerWithURL:[v1Url apiUrlV2]];
         [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:token password:key];
         
         self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
@@ -214,8 +215,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
         
-        NSString * v2Path = [urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
-        self.v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2Path]];
+        self.v2SessionManager = [[self class] anonymousSessionManagerWithURL:[url apiUrlV2]];
         [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
     }
 }

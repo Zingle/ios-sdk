@@ -13,11 +13,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL requestPending;
 
+- (id) init NS_UNAVAILABLE;
+
 /**
  *  Initialize with a Zingle URL.  Note that this URL is just used to derive the correct JWT URL and does not need to be any
  *  more specific than "ci-app.zingle.me" for a CI instance or "app.zingle.me" for production.
  */
-- (instancetype) initWithZingleURL:(NSURL *)url;
+- (instancetype) initWithZingleURL:(NSURL *)url NS_DESIGNATED_INITIALIZER;
 
 - (void) acquireZingleJwtForUser:(NSString *)user
                         password:(NSString *)password

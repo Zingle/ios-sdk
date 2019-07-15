@@ -17,6 +17,7 @@
 #import <objc/runtime.h>
 #import "ZNGImageSizeCache.h"
 #import <UserNotifications/UserNotifications.h>
+#import "NSURL+Zingle.h"
 
 @import SBObjectiveCWrapper;
 
@@ -240,8 +241,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         [[ZNGAnalytics sharedAnalytics] setZingleURL:url];
         [_sessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
         
-        NSString * v2Path = [urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
-        self.v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2Path]];
+        self.v2SessionManager = [[self class] anonymousSessionManagerWithURL:[url apiUrlV2]];
         [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
     }
 }

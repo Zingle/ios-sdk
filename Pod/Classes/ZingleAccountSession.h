@@ -51,12 +51,6 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 
 #pragma mark - Account/Service selection
 /**
- *  Either a JWT used at initialization or a JWT that was acquired on login/refresh.  Note that this JWT *will* mutate as tokens
- *  are refreshed.
- */
-@property (nonatomic, copy, nullable) NSString * jwt;
-
-/**
  *  All accounts available to this user.  This array will be set to an empty array @[] if a response has arrived from the server
  *   that does not contain any accounts.
  */

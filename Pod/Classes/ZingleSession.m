@@ -246,6 +246,18 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     }
 }
 
+#pragma mark - JWT
+- (void)setJwt:(NSString *)jwt
+{
+    _jwt = [jwt copy];;
+    
+    [self.sessionManager.requestSerializer clearAuthorizationHeader];
+    [self.v2SessionManager.requestSerializer clearAuthorizationHeader];
+    [self.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+    [self.v2SessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+}
+
+#pragma mark - Session
 /**
  *  Returns a session manager with all appropriate meta data.  Can be used for a normal login session or for an anonymous request such as a password reset.
  */

@@ -40,9 +40,9 @@
 @property (nonatomic, readonly, nullable) NSString * key;
 
 /**
- *  The JWT token of the current user.  Immutable after initialization.  This will be refreshed and replaced automatically.
+ *  The JWT token of the current user.  This will be refreshed and replaced automatically.
  */
-@property (nonatomic, readonly, nullable) NSString * jwt;
+@property (nonatomic, copy, nullable) NSString * jwt;
 
 /**
  *  KVO compliant flag that indicates when the session has been fully initialized and may take requests.

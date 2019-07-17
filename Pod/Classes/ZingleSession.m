@@ -41,8 +41,6 @@ static NSString * const DeviceTokenUpdatedNotification = @"DeviceTokenUpdatedNot
     // If we try to register for push notifications but do not have a device token, the relevant service IDs will be saved here.
     // If our device token is then set later, we will register for these services.
     NSArray<NSString *> * pushNotificationQueuedServiceIds;
-    
-    ZNGJWTClient * jwtRefreshClient;
 }
 
 #pragma mark - Push notification swizzle magic
@@ -281,13 +279,20 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
  */
 - (void) refreshJwt:(void (^_Nullable)(BOOL success, NSError * error))completion
 {
-    if (jwtRefreshClient.requestPending) {
+    if (self.jwtClient.requestPending) {
         SBLogError(@"refreshJwt was called while a refresh operation is already pending.  Ignoring.");
         return;
     }
     
-    jwtRefreshClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
-    [jwtRefreshClient refreshJwt:self.jwt success:^(NSString * _Nonnull jwt) {
+    NSURLComponents * desiredUrlComponents = [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES];
+    NSURLComponents * currentUrlComponents = (self.jwtClient != nil) ? [NSURLComponents componentsWithURL:self.jwtClient.url resolvingAgainstBaseURL:YES] : nil;
+    
+    // Do we need a new JWT client?  Note that this allows JWTClient mocking for unit testing.
+    if (![currentUrlComponents.host isEqualToString:desiredUrlComponents.host]) {
+        self.jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
+    }
+    
+    [self.jwtClient refreshJwt:self.jwt success:^(NSString * _Nonnull jwt) {
         SBLogInfo(@"JWT was successfully refreshed.");
         self.jwt = jwt;
         

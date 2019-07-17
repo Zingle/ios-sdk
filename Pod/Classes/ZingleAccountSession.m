@@ -63,8 +63,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
     
     UIStoryboard * _storyboard;
-    
-    ZNGJWTClient * jwtClient;
 }
 
 - (id) initWithToken:(NSString *)token key:(NSString *)key
@@ -465,13 +463,20 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     // Do they want/need a JWT?
     if ([self.jwt length] == 0) {
-        if (jwtClient.requestPending) {
+        if (self.jwtClient.requestPending) {
             SBLogError(@"updateStateForNewAccountOrService was called while a JWT request is already over the wire.  Ignoring this call.");
             return;
         }
         
-        jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
-        [jwtClient acquireZingleJwtForUser:self.token password:self.key success:^(NSString * _Nonnull jwt) {
+        // Only make a new JWT client if needed.  This also allows mocking during testing.
+        NSURLComponents * desiredUrlComponents = (self.sessionManager.baseURL != nil) ? [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES] : nil;
+        NSURLComponents * currentUrlComponents = (self.jwtClient != nil) ? [NSURLComponents componentsWithURL:self.jwtClient.url resolvingAgainstBaseURL:YES] : nil;
+        
+        if ((desiredUrlComponents != nil) && (![currentUrlComponents.host isEqualToString:desiredUrlComponents.host])) {
+            self.jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
+        }
+        
+        [self.jwtClient acquireZingleJwtForUser:self.token password:self.key success:^(NSString * _Nonnull jwt) {
             SBLogInfo(@"Received a JWT.  Swapping in for basic auth.");
             self.jwt = jwt;  // This setter automatically swaps older credentials with an Authorization: Bearer header.
             [self updateStateForNewAccountOrService];

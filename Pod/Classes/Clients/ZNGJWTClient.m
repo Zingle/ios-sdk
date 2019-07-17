@@ -30,6 +30,11 @@
     return self;
 }
 
+- (NSURL *)url
+{
+    return session.baseURL;
+}
+
 - (void) acquireZingleJwtForUser:(NSString *)user
                         password:(NSString *)password
                          success:(void (^_Nullable)(NSString * jwt))success

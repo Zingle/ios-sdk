@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZNGJWTClient : NSObject
 
 @property (nonatomic, readonly) BOOL requestPending;
+@property (nonatomic, readonly) NSURL * url;
 
 - (id) init NS_UNAVAILABLE;
 

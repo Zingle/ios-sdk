@@ -175,7 +175,7 @@
     [session connectWithAccountChooser:^ZNGAccount * _Nullable(NSArray<ZNGAccount *> * _Nonnull availableAccounts) {
         XCTAssertEqualObjects(availableAccounts, accountClient.accounts, @"Account chooser block provides the expected account choices.");
         [accountChooserCalled fulfill];
-        return account1;
+        return self->account1;
     } serviceChooser:nil completion:nil];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];

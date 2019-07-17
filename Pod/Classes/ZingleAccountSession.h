@@ -125,13 +125,6 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
  */
 @property (nonatomic, assign) NSUInteger totalUnreadCount;
 
-#pragma mark - Settings
-/**
- *  If set, login will occur with basic auth, then a JWT will be acquired and used.  Defaults to NO.
- *  This flag will be set to NO if a JWT request fails.
- */
-@property (nonatomic) BOOL useJwt;
-
 #pragma mark - Clients
 @property (nonatomic, strong, nullable) ZNGAutomationClient * automationClient;
 @property (nonatomic, strong, nullable) ZNGLabelClient * labelClient;

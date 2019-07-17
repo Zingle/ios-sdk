@@ -15,6 +15,7 @@
 #import "ZingleAccountSession.h"
 #import "ZNGUserAuthorization.h"
 #import "ZNGInboxStatistician.h"
+#import "AFHTTPSessionManager+ZNGJWT.h"
 
 @import SBObjectiveCWrapper;
 @import SocketIO;
@@ -29,17 +30,7 @@
     
     int currentServiceNumericId;
     
-    NSURL * authUrl;
     NSURL * socketUrl;
-    
-    // YES if we are currently waiting on our initial auth request
-    BOOL initializingSession;
-    
-    // YES if we have completed an auth request and set our session cookies
-    BOOL authSucceeded;
-    
-    NSUInteger authFailureCount;
-    NSTimer * authRetryTimer;
 }
 
 - (id) initWithSession:(ZingleSession *)session
@@ -53,15 +44,14 @@
         _ignoreCurrentUserTypingIndicator = YES;
 #endif 
         
-        authUrl = [session.sessionManager.baseURL authUrl];
         socketUrl = [session.sessionManager.baseURL socketUrl];
         
-        if ((authUrl == nil) || (socketUrl == nil)) {
-            SBLogError(@"Unable to derive auth and/or socket URL from %@ URL", [session.sessionManager.baseURL absoluteString]);
+        if (socketUrl == nil) {
+            SBLogError(@"Unable to derive socket URL from %@ URL", [session.sessionManager.baseURL absoluteString]);
             return nil;
         }
         
-        SBLogDebug(@"Auth path is %@, node path is %@", [authUrl absoluteString], [socketUrl absoluteString]);
+        SBLogDebug(@"Node path is %@", [socketUrl absoluteString]);
     }
     
     return self;
@@ -70,7 +60,7 @@
 - (BOOL) active
 {
     int status = [socketManager status];
-    return ((status == SocketIOStatusConnected) || (status == SocketIOStatusConnecting) || (initializingSession));
+    return ((status == SocketIOStatusConnected) || (status == SocketIOStatusConnecting));
 }
 
 - (void) setActiveConversation:(ZNGConversation *)activeConversation
@@ -82,50 +72,14 @@
 #pragma mark - Actions
 - (void) connect
 {
-    if (authSucceeded) {
-        // We already have our session data
-        [self _connectSocket];
-    } else {
-        [self _authenticateAndConnect];
-    }
+    [self _connectSocket];
 }
 
 - (void) _authenticateAndConnect
 {
     SBLogVerbose(@"Request session cookie through a POST...");
-    
-    if (initializingSession) {
-        SBLogDebug(@"Already starting connection.  Ignoring call to %s", __func__);
-        return;
-    }
-    
-    authSucceeded = NO;
-    initializingSession = YES;
-    
-    AFHTTPSessionManager * session = [ZingleSession anonymousSessionManagerWithURL:authUrl];
-    [session.requestSerializer setAuthorizationHeaderFieldWithUsername:self.session.token password:self.session.key];
-    session.responseSerializer = [AFHTTPResponseSerializer serializer];
-    
-    // If we have ever switched from, for example, qa-zingle.zingle.me to zingle.zingle.me, NSHTTPCookieStorage will give us the cookie from the old instance since they share a domain.
-    // Bad NSHTTPCookieStorage.  Bad.
-    [[NSHTTPCookieStorage sharedHTTPCookieStorage] removeCookiesSinceDate:[NSDate dateWithTimeIntervalSince1970:0.0]];
-    
-    [session POST:@"" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
-        SBLogDebug(@"Auth request succeeded.");
-        self->authSucceeded = YES;
-        [self _connectSocket];
-        self->initializingSession = NO;
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        self->initializingSession = NO;
-        
-        if (error != nil) {
-            SBLogWarning(@"Error sending request to auth URL: %@", error.localizedDescription);
-            return;
-        }
-        
-        SBLogWarning(@"Request to auth at %@ failued for an unknown reason.", [self->authUrl absoluteString]);
-    }];
-    
+
+    [self _connectSocket];
     [self _uncoverNumericIdForCurrentService];
 }
 
@@ -145,9 +99,8 @@
         return;
     }
     
-    NSString * v2ApiString = [session.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
-    AFHTTPSessionManager * httpSession = [ZingleSession anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiString]];
-    [httpSession.requestSerializer setAuthorizationHeaderFieldWithUsername:self.session.token password:self.session.key];
+    AFHTTPSessionManager * httpSession = [ZingleSession anonymousSessionManagerWithURL:[socketUrl apiUrlV2]];
+    [httpSession applyJwt:self.session.jwt];
     
     NSString * path = [NSString stringWithFormat:@"services/%@", session.service.serviceId];
     [httpSession GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -164,10 +117,7 @@
 
 - (void) _connectSocket
 {
-    NSArray * cookies = [[NSHTTPCookieStorage sharedHTTPCookieStorage] cookiesForURL:authUrl];
-    SBLogVerbose(@"Copying %llu cookies from our auth connection to the web socket connection", (unsigned long long)[cookies count]);
-    
-    socketManager = [[SocketManager alloc] initWithSocketURL:socketUrl config:@{ @"cookies" : cookies, @"log" : @NO }];
+    socketManager = [[SocketManager alloc] initWithSocketURL:socketUrl config:@{@"log": @NO, @"connectParams": @{@"token": self.session.jwt}}];
     SocketIOClient * socketClient = [socketManager defaultSocket];
     
     __weak ZNGSocketClient * weakSelf = self;
@@ -245,9 +195,6 @@
 
 - (void) disconnect
 {
-    authFailureCount = 0;
-    [authRetryTimer invalidate];
-    authRetryTimer = nil;
     [socketManager disconnect];
 }
 
@@ -329,9 +276,6 @@
 
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
-    authFailureCount = 0;
-    [authRetryTimer invalidate];
-    authRetryTimer = nil;
     self.connected = YES;
     
     SBLogInfo(@"Web socket connected.");
@@ -448,38 +392,6 @@
 - (void) socketDidEncounterErrorWithData:(NSArray *)data
 {
     SBLogWarning(@"Web socket did receive error: %@", data);
-    
-    if ([[data firstObject] isKindOfClass:[NSString class]]) {
-        NSString * errorString = [data firstObject];
-        
-        if ([errorString.lowercaseString containsString:@"session became invalid"]) {
-            authSucceeded = NO;
-            initializingSession = YES;
-            [socketManager disconnect];
-            
-            authFailureCount++;
-            [authRetryTimer invalidate];
-            authRetryTimer = [NSTimer scheduledTimerWithTimeInterval:[self authRetryDelay] target:self selector:@selector(connect) userInfo:nil repeats:NO];
-        }
-    }
-}
-
-- (NSTimeInterval) authRetryDelay
-{
-    switch (authFailureCount) {
-        case 0:
-        case 1:
-            return 1.0;
-            
-        case 2:
-            return 5.0;
-            
-        case 4:
-            return 10.0;
-            
-        default:
-            return 30.0;
-    }
 }
 
 - (void) socketReconnecting

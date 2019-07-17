@@ -100,7 +100,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
     
-    _useJwt = NO;
     allLoadedConversationIds = [[NSMutableSet alloc] init];
     _conversationCache = [[NSCache alloc] init];
     _conversationCache.countLimit = 10;
@@ -465,7 +464,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     // We now have both an account and a service selected.
     
     // Do they want/need a JWT?
-    if ((self.useJwt) && ([self.jwt length] == 0)) {
+    if ([self.jwt length] == 0) {
         if (jwtClient.requestPending) {
             SBLogError(@"updateStateForNewAccountOrService was called while a JWT request is already over the wire.  Ignoring this call.");
             return;
@@ -477,9 +476,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
             self.jwt = jwt;  // This setter automatically swaps older credentials with an Authorization: Bearer header.
             [self updateStateForNewAccountOrService];
         } failure:^(NSError * _Nonnull error) {
-            SBLogError(@"Unable to acquire a JWT.  Setting useJwt to NO and proceding with basic auth.");
-            self.useJwt = NO;
-            [self updateStateForNewAccountOrService];
+            SBLogError(@"Unable to acquire a JWT.  Unable to login.");
         }];
         
         return;

@@ -19,6 +19,7 @@
 #import <UserNotifications/UserNotifications.h>
 #import "NSURL+Zingle.h"
 #import "ZNGJWTClient.h"
+#import "AFHTTPSessionManager+ZNGJWT.h"
 
 @import SBObjectiveCWrapper;
 
@@ -176,8 +177,8 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     self = [super init];
     
     if (self != nil) {
-        _jwt = [jwt copy];
-    
+        _jwt = jwt;
+        
         [self _commonInit];
     }
     
@@ -196,6 +197,10 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     NSString * v2ApiPath = [self.urlString stringByReplacingOccurrencesOfString:@"v1" withString:@"v2"];
     _v2SessionManager = [[self class] anonymousSessionManagerWithURL:[NSURL URLWithString:v2ApiPath]];
     [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
+    
+    if ([self.jwt length] > 0) {
+        [self applyJwtToSession];
+    }
     
     self.accountClient = [[ZNGAccountClient alloc] initWithSession:self];
     self.contactServiceClient = [[ZNGContactServiceClient alloc] initWithSession:self];
@@ -246,6 +251,10 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         
         self.v2SessionManager = [[self class] anonymousSessionManagerWithURL:[url apiUrlV2]];
         [_v2SessionManager.requestSerializer setAuthorizationHeaderFieldWithUsername:self.token password:self.key];
+        
+        if ([self.jwt length] > 0) {
+            [self applyJwtToSession];
+        }
     }
 }
 
@@ -255,11 +264,16 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     _jwt = [jwt copy];;
     
     if (jwt != nil) {
-        [self.sessionManager.requestSerializer clearAuthorizationHeader];
-        [self.v2SessionManager.requestSerializer clearAuthorizationHeader];
-        [self.sessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
-        [self.v2SessionManager.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
+        [self applyJwtToSession];
+        
+        // TODO: Set a timer to refresh
     }
+}
+
+- (void) applyJwtToSession
+{
+    [self.sessionManager applyJwt:self.jwt];
+    [self.v2SessionManager applyJwt:self.jwt];
 }
 
 /**
@@ -288,6 +302,44 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
             completion(NO, error);
         }
     }];
+}
+
+/**
+ * If a JWT exists, this checks if it is valid/expired and refreshes if needed.  Safe to call in non-JWT sessions.
+ */
+- (void) vetJwtAfterResumingActive
+{
+    if ([self.jwt length] == 0) {
+        // No JWT = nothing to do here
+        return;
+    }
+    
+    if ([self jwtIsValid]) {
+        // It's still good.  Nothing to do.
+        return;
+    }
+    
+    // The JWT is no longer valid
+    // Can we easily refresh it?
+    if ([self jwtIsRefreshable]) {
+        // TODO: Refresh JWT
+        return;
+    }
+    
+    // Our JWT is fully expired.  We must boot the user back to his IDP for authentication.
+    // TODO: The above
+}
+
+- (BOOL) jwtIsValid
+{
+    // TODO: Implement beyond just checking for existence
+    return ([self.jwt length] > 0);
+}
+
+- (BOOL) jwtIsRefreshable
+{
+    // TODO: Implement
+    return YES;
 }
 
 #pragma mark - Session
@@ -353,45 +405,6 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 - (void) connect
 {
     SBLogError(@"Connect called on abstract ZingleSession class.");
-}
-
-#pragma mark - JWT Support
-/**
- * If a JWT exists, this checks if it is valid/expired and refreshes if needed.  Safe to call in non-JWT sessions.
- */
-- (void) vetJwtAfterResumingActive
-{
-    if ([self.jwt length] == 0) {
-        // No JWT = nothing to do here
-        return;
-    }
-    
-    if ([self jwtIsValid]) {
-        // It's still good.  Nothing to do.
-        return;
-    }
-    
-    // The JWT is no longer valid
-    // Can we easily refresh it?
-    if ([self jwtIsRefreshable]) {
-        // TODO: Refresh JWT
-        return;
-    }
-    
-    // Our JWT is fully expired.  We must boot the user back to his IDP for authentication.
-    // TODO: The above
-}
-
-- (BOOL) jwtIsValid
-{
-    // TODO: Implement beyond just checking for existence
-    return ([self.jwt length] > 0);
-}
-
-- (BOOL) jwtIsRefreshable
-{
-    // TODO: Implement
-    return YES;
 }
 
 #pragma mark - Setters

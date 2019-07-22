@@ -284,6 +284,16 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         return;
     }
     
+    if (![self jwtIsRefreshable]) {
+        SBLogWarning(@"refreshJwt: was called, but a JWT is either missing or too old to refresh.");
+        
+        if (completion != nil) {
+            NSString * description = [NSString stringWithFormat:@"Unable to refresh an existing JWT (%ud bytes)", (unsigned int)[self.jwt length]];
+            NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
+            completion(nil, error);
+        }
+    }
+    
     NSURLComponents * desiredUrlComponents = [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES];
     NSURLComponents * currentUrlComponents = (self.jwtClient != nil) ? [NSURLComponents componentsWithURL:self.jwtClient.url resolvingAgainstBaseURL:YES] : nil;
     
@@ -344,7 +354,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 - (BOOL) jwtIsRefreshable
 {
     // TODO: Implement
-    return YES;
+    return [self jwtIsValid];
 }
 
 #pragma mark - Session

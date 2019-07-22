@@ -34,16 +34,24 @@
     return [NSDate dateWithTimeIntervalSince1970:[expNumber doubleValue]];
 }
 
-- (NSDate * _Nullable) jwtRefreshExpiration
+- (NSDate * _Nullable) jwtIssueDate
 {
-    NSDictionary<NSString *, id> * payload = [self jwtPayload];
-    NSTimeInterval issueTimestamp = [payload[@"iat"] doubleValue];
+    NSNumber * iatNumber = [self jwtPayload][@"iat"];
     
-    if (issueTimestamp == 0.0) {
+    if ([iatNumber doubleValue] == 0.0) {
         return nil;
     }
     
-    NSDate * issueDate = [[NSDate alloc] initWithTimeIntervalSince1970:issueTimestamp];
+    return [NSDate dateWithTimeIntervalSince1970:[iatNumber doubleValue]];
+}
+
+- (NSDate * _Nullable) jwtRefreshExpiration
+{
+    NSDate * issueDate = [self jwtIssueDate];
+    
+    if (issueDate == nil) {
+        return nil;
+    }
     
     // TODO: Pull the actual refresh expiration out of the payload if it is ever added
     NSTimeInterval fourteenDays = 14.0 * 24.0 * 60.0 * 60.0;

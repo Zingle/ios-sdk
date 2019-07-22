@@ -20,4 +20,9 @@
  */
 - (NSDate * _Nullable) jwtRefreshExpiration;
 
+/**
+ *  The issue date for this JWT.  Nil if not a JWT.
+ */
+- (NSDate * _Nullable) jwtIssueDate;
+
 @end

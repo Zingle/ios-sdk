@@ -90,14 +90,25 @@
 - (nonnull id) init NS_UNAVAILABLE;
 
 /**
- *  Initializer for a Zingle session object.
+ *  Basic auth initializer for a Zingle session object.
  *
  *  @param token Token for Zingle API user
  *  @param key Security key for Zingle API user
  */
 - (nonnull instancetype) initWithToken:(nonnull NSString *)token key:(nonnull NSString *)key NS_DESIGNATED_INITIALIZER;
 
+/**
+ *  JWT initializer for a Zingle session object.
+ *
+ *  @param jwt A valid Zingle JWT
+ */
 - (nonnull instancetype) initWithJWT:(nonnull NSString *)jwt NS_DESIGNATED_INITIALIZER;
+
+/**
+ *  Refreshes an existing JWT if possible.  Fails if the JWT is too old to refresh or no JWT is present.
+ *  Calling mutiple times simultaneously may result in a single completion callback.
+ */
+- (void) refreshJwt:(void (^_Nullable)(BOOL success, NSError * _Nullable error))completion;
 
 /**
  *  To be called if the user specifically logs out (vs. just changing account or service.)  This will unregister for push notifications.

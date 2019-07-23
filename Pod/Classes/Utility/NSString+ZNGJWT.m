@@ -73,4 +73,9 @@
     return [NSDate dateWithTimeInterval:fourteenDays sinceDate:issueDate];
 }
 
+- (NSURL * _Nullable) jwtIssuingUrl
+{
+    return [NSURL URLWithString:[self jwtPayload][@"iss"]];
+}
+
 @end

@@ -25,4 +25,9 @@
  */
 - (NSDate * _Nullable) jwtIssueDate;
 
+/**
+ *  The URL that issued this JWT.  Nil if not a JWT.
+ */
+- (NSURL * _Nullable) jwtIssuingUrl;
+
 @end

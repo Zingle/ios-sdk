@@ -7,6 +7,8 @@
 
 #import "NSString+ZNGJWT.h"
 
+@import SBObjectiveCWrapper;
+
 @implementation NSString (ZNGJWT)
 
 - (NSDictionary<NSString *, id> * _Nullable) jwtPayload
@@ -18,8 +20,21 @@
         return nil;
     }
     
+    // Objective-C's base64 decoding demands a multiple of four length, padded by `=` if needed.
+    // This is idiotic and would actually violate the JWT spec.
+    NSString * payload = jwtComponents[1];
+    NSUInteger paddingNeeded = (4 - ([payload length] % 4)) % 4;
+    NSUInteger paddedLength = [payload length] + paddingNeeded;
+    NSString * paddedPayload = [payload stringByPaddingToLength:paddedLength withString:@"=" startingAtIndex:0];
+    
     // The payload (jwtComponents[1]) is a base 64 encoded JSON dictionary
-    NSData * data = [[NSData alloc] initWithBase64EncodedString:jwtComponents[1] options:0];
+    NSData * data = [[NSData alloc] initWithBase64EncodedString:paddedPayload options:0];
+    
+    if (data == nil) {
+        SBLogError(@"Unable to decode JWT payload.  Base 64 decode failed.");
+        return nil;
+    }
+    
     return [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
 }
 

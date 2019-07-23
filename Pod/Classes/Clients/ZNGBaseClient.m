@@ -23,9 +23,9 @@
 
 @implementation ZNGBaseClient
 
-NSString *const kBaseClientStatus = @"status";
-NSString *const kBaseClientResult = @"result";
-NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
+NSString * const kBaseClientStatus = @"status";
+NSString * const kBaseClientResult = @"result";
+NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 
 - (instancetype) initWithSession:(__weak ZingleSession *)aSession
 {
@@ -106,7 +106,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             }
         });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGError * zngError = [[ZNGError alloc] initWithAPIError:error response:task.response];
         SBLogInfo(@"GET failed to %@: %@", path, zngError);
         
         if (failure) {
@@ -171,7 +171,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             }
         });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGError * zngError = [[ZNGError alloc] initWithAPIError:error response:task.response];
         SBLogInfo(@"GET failed to %@: %@", path, zngError);
         
         if (failure) {
@@ -246,7 +246,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             }
         });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGError * zngError = [[ZNGError alloc] initWithAPIError:error response:task.response];
         SBLogInfo(@"PUT failed to %@: %@", path, zngError);
         
         if (failure) {
@@ -332,7 +332,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             }
         });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGError * zngError = [[ZNGError alloc] initWithAPIError:error response:task.response];
         SBLogInfo(@"POST failed to %@: %@", path, zngError);
         
         if (failure) {
@@ -397,7 +397,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             }
         });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGError * zngError = [[ZNGError alloc] initWithAPIError:error response:task.response];
         SBLogInfo(@"POST failed to %@: %@", path, zngError);
         
         if (failure) {
@@ -431,7 +431,7 @@ NSString* const kJSONParseErrorDomain = @"JSON PARSE ERROR";
             }
         });
     } failure:^(NSURLSessionDataTask* _Nullable task, NSError* _Nonnull error) {
-        ZNGError* zngError = [[ZNGError alloc] initWithAPIError:error];
+        ZNGError * zngError = [[ZNGError alloc] initWithAPIError:error response:task.response];
         SBLogInfo(@"DELETE failed to %@: %@", path, zngError);
         
         if (failure) {

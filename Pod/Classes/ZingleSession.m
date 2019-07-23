@@ -178,8 +178,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     self = [super init];
     
     if (self != nil) {
-        _jwt = jwt;
-        
+        self.jwt = jwt;
         [self _commonInit];
     }
     

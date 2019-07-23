@@ -20,6 +20,7 @@
 #import "NSURL+Zingle.h"
 #import "ZNGJWTClient.h"
 #import "AFHTTPSessionManager+ZNGJWT.h"
+#import "NSString+ZNGJWT.h"
 
 @import SBObjectiveCWrapper;
 
@@ -41,6 +42,8 @@ static NSString * const DeviceTokenUpdatedNotification = @"DeviceTokenUpdatedNot
     // If we try to register for push notifications but do not have a device token, the relevant service IDs will be saved here.
     // If our device token is then set later, we will register for these services.
     NSArray<NSString *> * pushNotificationQueuedServiceIds;
+    
+    NSTimer * jwtRefreshTimer;
 }
 
 #pragma mark - Push notification swizzle magic
@@ -209,20 +212,15 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyPushNotificationReceived:) name:ZNGPushNotificationReceived object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyDeviceTokenRegistered:) name:DeviceTokenUpdatedNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(_notifyApplicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     // Allow our image size cache to load well ahead of it when it will be needed.
     [ZNGImageSizeCache sharedCache];
 }
 
-- (void) _notifyApplicationDidBecomeActive:(NSNotification *)notification
-{
-    [self vetJwtAfterResumingActive];
-}
-
 - (void) dealloc
 {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [jwtRefreshTimer invalidate];
 }
 
 - (void) logout
@@ -264,7 +262,19 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     if (jwt != nil) {
         [self applyJwtToSession];
         
-        // TODO: Set a timer to refresh
+        [jwtRefreshTimer invalidate];
+        NSDate * refreshDate = [self jwtRefreshDate];
+        
+        if (refreshDate == nil) {
+            SBLogWarning(@"Unable to calculate JWT refresh date.  JWT will likely eventually expire.");
+        } else {
+            ZingleSession * __weak weakSelf = self;
+            jwtRefreshTimer = [NSTimer scheduledTimerWithTimeInterval:[refreshDate timeIntervalSinceNow]
+                                                              repeats:NO
+                                                                block:^(NSTimer * _Nonnull timer) {
+                                                                    [weakSelf refreshJwt:nil];
+                                                                }];
+        }
     }
 }
 
@@ -319,42 +329,35 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     }];
 }
 
-/**
- * If a JWT exists, this checks if it is valid/expired and refreshes if needed.  Safe to call in non-JWT sessions.
- */
-- (void) vetJwtAfterResumingActive
+- (NSDate *) jwtRefreshDate
 {
-    if ([self.jwt length] == 0) {
-        // No JWT = nothing to do here
-        return;
+    NSDate * issueDate = [self.jwt jwtIssueDate];
+    NSDate * expiration = [self.jwt jwtExpiration];
+    NSDate * refreshExpiration = [self.jwt jwtRefreshExpiration];
+
+    if ((issueDate == nil) || (expiration == nil) || (refreshExpiration == nil)) {
+        return nil;
     }
-    
-    if ([self jwtIsValid]) {
-        // It's still good.  Nothing to do.
-        return;
-    }
-    
-    // The JWT is no longer valid
-    // Can we easily refresh it?
-    if ([self jwtIsRefreshable]) {
-        // TODO: Refresh JWT
-        return;
-    }
-    
-    // Our JWT is fully expired.  We must boot the user back to his IDP for authentication.
-    // TODO: The above
+
+    NSTimeInterval totalLifetime = [expiration timeIntervalSinceDate:issueDate];
+    NSTimeInterval totalRefreshLifetime = [refreshExpiration timeIntervalSinceDate:issueDate];
+
+    // We'll aim to refresh at either 25% of JWT lifetime or refresh lifetime
+    NSTimeInterval lifetimeBeforeRefresh = MIN(totalLifetime * 0.25, totalRefreshLifetime * 0.25);
+
+    return [issueDate dateByAddingTimeInterval:lifetimeBeforeRefresh];
 }
 
 - (BOOL) jwtIsValid
 {
-    // TODO: Implement beyond just checking for existence
-    return ([self.jwt length] > 0);
+    NSDate * expiration = [self.jwt jwtExpiration];
+    return ([expiration timeIntervalSinceNow] > 0.0);
 }
 
 - (BOOL) jwtIsRefreshable
 {
-    // TODO: Implement
-    return [self jwtIsValid];
+    NSDate * expiration = [self.jwt jwtRefreshExpiration];
+    return ([expiration timeIntervalSinceNow] > 0.0);
 }
 
 #pragma mark - Session

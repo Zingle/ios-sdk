@@ -31,6 +31,7 @@
 #import "ZNGNotificationSettingsClient.h"
 #import "ZNGTeam.h"
 #import "ZNGUserSettings.h"
+#import "ZNGJWTClient.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -69,26 +70,42 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     self = [super initWithToken:token key:key];
     
     if (self != nil) {
-        contactClientSemaphore = dispatch_semaphore_create(0);
-        initialUserDataSemaphore = dispatch_semaphore_create(0);
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBadgeDataChanged:) name:ZNGInboxStatisticianDataChangedNotification object:nil];
-        
-        [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
-        
-        allLoadedConversationIds = [[NSMutableSet alloc] init];
-        _conversationCache = [[NSCache alloc] init];
-        _conversationCache.countLimit = 10;
-        _conversationCache.delegate = self;
-                
-        self.inboxStatistician = [[ZNGInboxStatistician alloc] init];
-        
-        _automaticallyUpdateServiceWhenReturningFromBackground = YES;
+        [self commonInit];
     }
     
     return self;
+}
+
+- (id) initWithJWT:(NSString *)jwt
+{
+    self = [super initWithJWT:jwt];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    contactClientSemaphore = dispatch_semaphore_create(0);
+    initialUserDataSemaphore = dispatch_semaphore_create(0);
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBadgeDataChanged:) name:ZNGInboxStatisticianDataChangedNotification object:nil];
+    
+    [self addObserver:self forKeyPath:kSocketConnectedKeyPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:NULL];
+    
+    allLoadedConversationIds = [[NSMutableSet alloc] init];
+    _conversationCache = [[NSCache alloc] init];
+    _conversationCache.countLimit = 10;
+    _conversationCache.delegate = self;
+    
+    self.inboxStatistician = [[ZNGInboxStatistician alloc] init];
+    
+    _automaticallyUpdateServiceWhenReturningFromBackground = YES;
 }
 
 - (void) dealloc
@@ -443,6 +460,34 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     }
     
     // We now have both an account and a service selected.
+    
+    // Do they want/need a JWT?
+    if ([self.jwt length] == 0) {
+        if (self.jwtClient.requestPending) {
+            SBLogError(@"updateStateForNewAccountOrService was called while a JWT request is already over the wire.  Ignoring this call.");
+            return;
+        }
+        
+        // Only make a new JWT client if needed.  This also allows mocking during testing.
+        NSURLComponents * desiredUrlComponents = (self.sessionManager.baseURL != nil) ? [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES] : nil;
+        NSURLComponents * currentUrlComponents = (self.jwtClient != nil) ? [NSURLComponents componentsWithURL:self.jwtClient.url resolvingAgainstBaseURL:YES] : nil;
+        
+        // Note that we only create a new client if `desiredUrlComponents` is non nil, but we continue on if it _is_ nil.  This
+        //  allows unit testing to easily work with a mocked `ZNGJWTClient`.
+        if ((desiredUrlComponents != nil) && (![currentUrlComponents.host isEqualToString:desiredUrlComponents.host])) {
+            self.jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
+        }
+        
+        [self.jwtClient acquireJwtForUser:self.token password:self.key success:^(NSString * _Nonnull jwt) {
+            SBLogInfo(@"Received a JWT.  Swapping in for basic auth.");
+            self.jwt = jwt;  // This setter automatically swaps older credentials with an Authorization: Bearer header.
+            [self updateStateForNewAccountOrService];
+        } failure:^(NSError * _Nonnull error) {
+            SBLogError(@"Unable to acquire a JWT.  Unable to login.");
+        }];
+        
+        return;
+    }
     
     [self initializeAllClients];
     

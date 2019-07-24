@@ -11,6 +11,7 @@
 #import "ZingleSDK/ZingleAccountSession.h"
 #import "ZNGMockAccountClient.h"
 #import "ZNGMockContactClient.h"
+#import "ZNGMockJWTClient.h"
 #import "ZNGMockNotificationsClient.h"
 #import "ZNGMockServiceClient.h"
 #import "ZNGMockUserAuthorizationClient.h"
@@ -133,6 +134,9 @@
     userClient.user = user1;
     session.userClient = userClient;
     
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
+    
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithAccountChooser:^ZNGAccount * _Nullable(NSArray<ZNGAccount *> * _Nonnull availableAccounts) {
@@ -169,13 +173,16 @@
     serviceClient.services = @[account1service1, account2service1, account2service2];
     session.serviceClient = serviceClient;
     
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
+    
     XCTestExpectation * accountChooserCalled = [self expectationWithDescription:@"Account chooser block called"];
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(account)) expectedValue:account1];
     
     [session connectWithAccountChooser:^ZNGAccount * _Nullable(NSArray<ZNGAccount *> * _Nonnull availableAccounts) {
         XCTAssertEqualObjects(availableAccounts, accountClient.accounts, @"Account chooser block provides the expected account choices.");
         [accountChooserCalled fulfill];
-        return account1;
+        return self->account1;
     } serviceChooser:nil completion:nil];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
@@ -208,6 +215,9 @@
     ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account2.accountId];
     userClient.user = user1;
     session.userClient = userClient;
+    
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
     
     XCTestExpectation * serviceChooserCalled = [self expectationWithDescription:@"Service chooser block called"];
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(service)) expectedValue:account2service1];
@@ -255,6 +265,9 @@
     userClient.user = user1;
     session.userClient = userClient;
     
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
+    
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithCompletion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
@@ -296,6 +309,9 @@
     ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
     userClient.user = user1;
     session.userClient = userClient;
+    
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
     
     [ZingleSDK setPushNotificationDeviceToken:deviceToken];
     
@@ -344,6 +360,9 @@
     ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
     userClient.user = user1;
     session.userClient = userClient;
+    
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
     
     [ZingleSDK setPushNotificationDeviceToken:deviceToken];
     

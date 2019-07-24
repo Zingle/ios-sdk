@@ -142,6 +142,8 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 #pragma mark - Initialization
 - (id) initWithToken:(NSString *)token key:(NSString *)key;
 
+- (id) initWithJWT:(NSString *)jwt;
+
 - (void) connect;
 
 - (void) connectWithCompletion:(nullable ZNGAccountSessionCallback)completion;

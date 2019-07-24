@@ -22,10 +22,16 @@ static NSString * const EmailUnverifiedDescription = @"email is not verified";
 
 - (id)initWithAPIError:(NSError *)error
 {
-    NSDictionary *status;
-    NSInteger code;
+    return [self initWithAPIError:error response:nil];
+}
+
+- (id)initWithAPIError:(NSError *)error response:(NSURLResponse *)response
+{
+    NSDictionary * status = nil;
+    NSInteger code = 0;
     
     NSData* errorData = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+    
     if (errorData) {
         NSDictionary* serializedData = [NSJSONSerialization JSONObjectWithData:errorData options:kNilOptions error:nil];
         status = [serializedData objectForKey:kErrorStatus];
@@ -34,7 +40,7 @@ static NSString * const EmailUnverifiedDescription = @"email is not verified";
         code = error.code;
         status = error.userInfo;
     }
-
+    
     self = [super initWithDomain:kZingleErrorDomain code:code userInfo:status];
     
     if (self) {
@@ -42,6 +48,10 @@ static NSString * const EmailUnverifiedDescription = @"email is not verified";
         _httpStatusCode = [[status objectForKey:kErrorStatusCode] integerValue];
         _zingleErrorCode = [[status objectForKey:kErrorCode] integerValue];
         _errorDescription = [status objectForKey:kErrorDescription];
+        
+        if ((_httpStatusCode == 0) && ([response isKindOfClass:[NSHTTPURLResponse class]])) {
+            _httpStatusCode = ((NSHTTPURLResponse *)response).statusCode;
+        }
     }
     
     return self;
@@ -66,6 +76,10 @@ static NSString * const EmailUnverifiedDescription = @"email is not verified";
 - (BOOL) isUnverifiedEmailError
 {
     if (self.httpStatusCode != 401) {
+        return NO;
+    }
+    
+    if (self.errorDescription == nil) {
         return NO;
     }
     

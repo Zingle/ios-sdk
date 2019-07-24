@@ -141,7 +141,7 @@ static NSString * const HostPropertyName = @"Host";
 }
 
 #pragma mark - Login
-- (void) trackLoginFailureWithToken:(NSString *)token
+- (void) trackLoginFailure
 {
     NSString * event = @"Login failed";
     NSMutableDictionary * properties = [self defaultProperties];

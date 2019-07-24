@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy) NSURL * zingleURL;
 
 #pragma mark - Login
-- (void) trackLoginFailureWithToken:(NSString *)token;
+- (void) trackLoginFailure;
 - (void) trackLoginSuccessWithToken:(NSString *)token andUserAuthorizationObject:(ZNGUserAuthorization *)userAuthorization;
 
 #pragma mark - Inbox

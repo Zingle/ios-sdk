@@ -472,6 +472,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         NSURLComponents * desiredUrlComponents = (self.sessionManager.baseURL != nil) ? [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES] : nil;
         NSURLComponents * currentUrlComponents = (self.jwtClient != nil) ? [NSURLComponents componentsWithURL:self.jwtClient.url resolvingAgainstBaseURL:YES] : nil;
         
+        // Note that we only create a new client if `desiredUrlComponents` is non nil, but we continue on if it _is_ nil.  This
+        //  allows unit testing to easily work with a mocked `ZNGJWTClient`.
         if ((desiredUrlComponents != nil) && (![currentUrlComponents.host isEqualToString:desiredUrlComponents.host])) {
             self.jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
         }

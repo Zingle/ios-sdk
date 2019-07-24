@@ -22,10 +22,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype) initWithZingleURL:(NSURL *)url NS_DESIGNATED_INITIALIZER;
 
-- (void) acquireZingleJwtForUser:(NSString *)user
-                        password:(NSString *)password
-                         success:(void (^_Nullable)(NSString * jwt))success
-                         failure:(void (^_Nullable)(NSError * error))failure;
+- (void) acquireJwtForUser:(NSString *)user
+                  password:(NSString *)password
+                   success:(void (^_Nullable)(NSString * jwt))success
+                   failure:(void (^_Nullable)(NSError * error))failure;
 
 - (void) refreshJwt:(NSString *)jwt
             success:(void (^_Nullable)(NSString * jwt))success

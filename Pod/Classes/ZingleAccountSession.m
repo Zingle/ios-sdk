@@ -478,7 +478,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
             self.jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
         }
         
-        [self.jwtClient acquireZingleJwtForUser:self.token password:self.key success:^(NSString * _Nonnull jwt) {
+        [self.jwtClient acquireJwtForUser:self.token password:self.key success:^(NSString * _Nonnull jwt) {
             SBLogInfo(@"Received a JWT.  Swapping in for basic auth.");
             self.jwt = jwt;  // This setter automatically swaps older credentials with an Authorization: Bearer header.
             [self updateStateForNewAccountOrService];

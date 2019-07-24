@@ -36,10 +36,10 @@
     return session.baseURL;
 }
 
-- (void) acquireZingleJwtForUser:(NSString *)user
-                        password:(NSString *)password
-                         success:(void (^_Nullable)(NSString * jwt))success
-                         failure:(void (^_Nullable)(NSError * error))failure
+- (void) acquireJwtForUser:(NSString *)user
+                  password:(NSString *)password
+                   success:(void (^_Nullable)(NSString * jwt))success
+                   failure:(void (^_Nullable)(NSError * error))failure
 {
     AFHTTPSessionManager * authedSession = [session copy];
     [authedSession.requestSerializer setAuthorizationHeaderFieldWithUsername:user password:password];

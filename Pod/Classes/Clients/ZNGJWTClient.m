@@ -8,6 +8,7 @@
 #import "ZNGJWTClient.h"
 #import "ZingleSession.h"
 #import "NSURL+Zingle.h"
+#import "NSString+ZNGJWT.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -80,7 +81,23 @@
         return;
     }
     
-    // TODO: Check if the JWT can actually be refreshed.  We may not have visibility into that yet.
+    NSDate * refreshExpiration = [jwt jwtRefreshExpiration];
+    
+    if (refreshExpiration == nil) {
+        SBLogWarning(@"Unable to determine refrehs window for the refreshing JWT.  This may fail.");
+    } else {
+        if ([refreshExpiration timeIntervalSinceNow] <= 0.0) {
+            NSString * description = [NSString stringWithFormat:@"Unable to refresh JWT.  Its refresh window closed at %@", refreshExpiration];
+            SBLogWarning(@"%@", description);
+            
+            if (failure != nil) {
+                NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
+                failure(error);
+            }
+            
+            return;
+        }
+    }
     
     AFHTTPSessionManager * authedSession = [session copy];
     [authedSession.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];

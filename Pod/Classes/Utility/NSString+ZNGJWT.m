@@ -68,7 +68,6 @@
         return nil;
     }
     
-    // TODO: Pull the actual refresh expiration out of the payload if it is ever added
     NSTimeInterval fourteenDays = 14.0 * 24.0 * 60.0 * 60.0;
     return [NSDate dateWithTimeInterval:fourteenDays sinceDate:issueDate];
 }

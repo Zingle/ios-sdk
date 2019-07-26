@@ -11,7 +11,9 @@
 #import "ZNGSocketClient.h"
 #import "ZNGReachability.h"
 #import "ZNGUserAuthorizationClient.h"
+#import "NSURL+Zingle.h"
 
+@import AFNetworking;
 @import SBObjectiveCWrapper;
 
 // Override the readonly status property so we get a free KVO setter
@@ -42,6 +44,8 @@ NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChang
     switch (status) {
         case ZNGNetworkStatusConnected:
             return @"Connected";
+        case ZNGNetworkStatusConnectedToDevelopmentInstance:
+            return @"Connected to a development instance";
         case ZNGNetworkStatusZingleAPIUnreachable:
             return @"API unreachable";
         case ZNGNetworkStatusInternetUnreachable:
@@ -58,7 +62,7 @@ NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChang
 - (void) recordLogin
 {
     // Set status to connected.  This will allow the socket connection some time to connect.
-    self.status = ZNGNetworkStatusConnected;
+    [self _setStatusToConnected];
     
     // If our socket server has not yet connected (likely,) we will delay and then check it again before marking failure
     if (!self.session.socketClient.connected) {
@@ -87,7 +91,7 @@ NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChang
     
     if (self.session.socketClient.connected) {
         // Looks like we recovered.  Hooray!
-        self.status = ZNGNetworkStatusConnected;
+        [self _setStatusToConnected];
         return;
     }
     
@@ -95,10 +99,21 @@ NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChang
     [self diagnoseFailure];
 }
 
+- (void) _setStatusToConnected
+{
+    NSString * nonProductionPrefix = [self.session.sessionManager.baseURL zingleServerPrefix];
+    
+    if ([nonProductionPrefix length] > 0) {
+        self.status = ZNGNetworkStatusConnectedToDevelopmentInstance;
+    } else {
+        self.status = ZNGNetworkStatusConnected;
+    }
+}
+
 - (void) recordSocketConnected
 {
     // Everything is great now!
-    self.status = ZNGNetworkStatusConnected;
+    [self _setStatusToConnected];
     
     [checkSocketAfterDelayTimer invalidate];
     checkSocketAfterDelayTimer = nil;

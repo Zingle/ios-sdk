@@ -17,6 +17,7 @@ typedef enum {
     ZNGNetworkStatusInternetUnreachable,
     ZNGNetworkStatusZingleAPIUnreachable,
     ZNGNetworkStatusZingleSocketDisconnected,
+    ZNGNetworkStatusConnectedToDevelopmentInstance,
     ZNGNetworkStatusConnected
 } ZNGNetworkLookoutStatus;
 

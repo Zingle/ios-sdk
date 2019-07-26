@@ -14,6 +14,11 @@
 - (void) updateWithNetworkStatus:(ZNGNetworkLookoutStatus)status
 {
     switch (status) {
+        case ZNGNetworkStatusConnectedToDevelopmentInstance:
+            self.backgroundColor = [UIColor zng_lightBlue];
+            self.text = @"This is a non-production server instance. 🤡";
+            return;
+            
         case ZNGNetworkStatusUnknown:
         case ZNGNetworkStatusConnected:
             self.text = nil;

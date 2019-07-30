@@ -71,6 +71,16 @@ static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart
     XCTAssertEqualObjects([ciV1Url apiUrlV2], expectedCiV2Url, @"CI V2 API URL should be calculable from V1");
 }
 
+- (void) testApiPathsFromPrefixedSocketPath
+{
+    NSURL * socketUrl = [NSURL URLWithString:CiSocketPath];
+    NSURL * expectedV1ApiUrl = [NSURL URLWithString:CiApiPath];
+    NSURL * expectedV2ApiUrl = [NSURL URLWithString:CiApiV2Path];
+    
+    XCTAssertEqualObjects([socketUrl apiUrlV1], expectedV1ApiUrl, @"CI V1 API URL should be calculable from socket URL %@", CiSocketPath);
+    XCTAssertEqualObjects([socketUrl apiUrlV2], expectedV2ApiUrl, @"CI V2 API URL should be calculable from socket URL %@", CiSocketPath);
+}
+
 - (void) testNonZingleUrlProducesNilZinglePaths
 {
     NSURL * url = [NSURL URLWithString:NonZinglePath];

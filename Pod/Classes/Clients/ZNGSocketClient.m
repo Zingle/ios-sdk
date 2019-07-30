@@ -73,13 +73,6 @@
 - (void) connect
 {
     [self _connectSocket];
-}
-
-- (void) _authenticateAndConnect
-{
-    SBLogVerbose(@"Request session cookie through a POST...");
-
-    [self _connectSocket];
     [self _uncoverNumericIdForCurrentService];
 }
 

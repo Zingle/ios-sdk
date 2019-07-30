@@ -117,6 +117,10 @@ static const NSTimeInterval LateTimeSeconds = 5.0 * 60.0;  // How long before an
     if (![self.assignedToTeamId isEqualToString:contact.assignedToTeamId]) {
         self.assignedToTeamId = contact.assignedToTeamId;
     }
+    
+    if (![self.calendarEvents isEqualToArray:contact.calendarEvents]) {
+        self.calendarEvents = contact.calendarEvents;
+    }
 }
 
 #pragma mark - Mantle

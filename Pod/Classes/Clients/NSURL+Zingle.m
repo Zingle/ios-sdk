@@ -12,9 +12,10 @@
 
 - (NSString *)zingleServerPrefix
 {
-    NSString * path = self.absoluteString;
-    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^(https?:\\/\\/)?((\\w+)-)?\\w+.zingle.me(\\/.*)?$" options:NSRegularExpressionCaseInsensitive error:nil];
-    NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:path options:0 range:NSMakeRange(0, [path length])];
+    NSURLComponents * components = [NSURLComponents componentsWithURL:self resolvingAgainstBaseURL:YES];
+    NSString * host = components.host;
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^((\\w+)-)?\\w+.zingle.me$" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:host options:0 range:NSMakeRange(0, [host length])];
     NSTextCheckingResult * match = [matches firstObject];
     
     if (match == nil) {
@@ -22,20 +23,20 @@
         return nil;
     }
     
-    if (match.numberOfRanges < 4) {
-        // We did not find capture group 3.  This indicates a production Zingle URL with no prefix.
+    if (match.numberOfRanges < 3) {
+        // We did not find capture group 2.  This indicates a production Zingle URL with no prefix.
         return @"";
     }
     
     // We found a prefix.  Return it.
-    NSRange prefixRange = [match rangeAtIndex:3];
+    NSRange prefixRange = [match rangeAtIndex:2];
     
     if (prefixRange.location == NSNotFound) {
-        // We did not find capture group 3.  This indicates a production Zingle URL with no prefix.
+        // We did not find capture group 2.  This indicates a production Zingle URL with no prefix.
         return @"";
     }
     
-    return [path substringWithRange:prefixRange];
+    return [host substringWithRange:prefixRange];
 }
 
 - (NSURL * _Nullable)apiUrlV1

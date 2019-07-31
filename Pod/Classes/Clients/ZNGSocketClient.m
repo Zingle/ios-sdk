@@ -31,6 +31,8 @@
     int currentServiceNumericId;
     
     NSURL * socketUrl;
+    
+    BOOL needToSetServiceAndGetInitialBadges;
 }
 
 - (id) initWithSession:(ZingleSession *)session
@@ -100,6 +102,10 @@
         if (([responseObject isKindOfClass:[NSDictionary class]]) && ([responseObject[@"id"] isKindOfClass:[NSNumber class]])) {
             // We found an ID!
             self->currentServiceNumericId = [responseObject[@"id"] intValue];
+            
+            if (self->needToSetServiceAndGetInitialBadges) {
+                [self _setServiceAndGetBadges];
+            }
         } else {
             SBLogWarning(@"Unable to find service numeric ID in v2 API response.");
         }
@@ -278,14 +284,21 @@
 - (void) socketDidBindNodeController
 {
     if (currentServiceNumericId > 0) {
-        [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
-        [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
+        [self _setServiceAndGetBadges];
+    } else {
+        needToSetServiceAndGetInitialBadges = YES;
     }
     
     SBLogDebug(@"Node controller bind succeeded.");
     if (self.activeConversation != nil) {
         [self subscribeForFeedUpdatesForConversation:self.activeConversation];
     }
+}
+
+- (void) _setServiceAndGetBadges
+{
+    [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
+    [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
 }
 
 // We do not actually process the event data from socket, but we can use this event to grab our sequential ID for the feed

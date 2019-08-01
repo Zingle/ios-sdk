@@ -75,47 +75,47 @@
 - (void) connect
 {
     [self _connectSocket];
-    [self _uncoverNumericIdForCurrentService];
 }
 
-// The socket server is terribly rude and often requires numeric IDs.  We can find our current service's numeric ID
-//  leaked through the v2 API.
-- (void) _uncoverNumericIdForCurrentService
+- (void) disconnect
 {
-    if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
-        SBLogInfo(@"Neglecting to find service numeric ID because we do not have a ZingleAccountSession.");
-        return;
-    }
-
-    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
-    
-    if ([session.service.serviceId length] == 0) {
-        SBLogWarning(@"Neglecting to find service numeric ID because there is no UUID for the current service.");
-        return;
-    }
-    
-    AFHTTPSessionManager * httpSession = [ZingleSession anonymousSessionManagerWithURL:[socketUrl apiUrlV2]];
-    [httpSession applyJwt:self.session.jwt];
-    
-    NSString * path = [NSString stringWithFormat:@"services/%@", session.service.serviceId];
-    [httpSession GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        if (([responseObject isKindOfClass:[NSDictionary class]]) && ([responseObject[@"id"] isKindOfClass:[NSNumber class]])) {
-            // We found an ID!
-            self->currentServiceNumericId = [responseObject[@"id"] intValue];
-            
-            if (self->needToSetServiceAndGetInitialBadges) {
-                [self _setServiceAndGetBadges];
-            }
-        } else {
-            SBLogWarning(@"Unable to find service numeric ID in v2 API response.");
-        }
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        SBLogError(@"Error attempting to fetch service data from v2 API: %@", error);
-    }];
+    [socketManager disconnect];
 }
 
+- (void) subscribeForFeedUpdatesForConversation:(ZNGConversation *)conversation
+{
+    if (![self connected]) {
+        // We're not yet connected.  We will subscribe to an active conversation as soon as we connect.
+        SBLogVerbose(@"%@ was called, but we are not yet connected.  Delaying subscription until a successful connection.", NSStringFromSelector(_cmd));
+        return;
+    }
+    
+    id feedId = [NSNull null];
+    
+    if ([conversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
+        ZNGConversationServiceToContact * contactConversation = (ZNGConversationServiceToContact *)conversation;
+        feedId = contactConversation.contact.contactId;
+    } else if ([conversation isKindOfClass:[ZNGConversationContactToService class]]) {
+        ZNGConversationContactToService * serviceConversation = (ZNGConversationContactToService *)conversation;
+        feedId = serviceConversation.contactService.serviceId;
+    } else if (conversation != nil) {
+        SBLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
+    }
+    
+    SBLogDebug(@"Setting active feed to %@", feedId);
+    [[socketManager defaultSocket] emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
+}
+
+- (void) unsubscribeFromFeedUpdates
+{
+    [self subscribeForFeedUpdatesForConversation:nil];
+}
+
+#pragma mark - Connection lifecycle
 - (void) _connectSocket
 {
+    [self _uncoverNumericIdForCurrentServiceIfNeeded];
+    
     socketManager = [[SocketManager alloc] initWithSocketURL:socketUrl config:@{@"log": @NO, @"connectParams": @{@"token": self.session.jwt}}];
     SocketIOClient * socketClient = [socketManager defaultSocket];
     
@@ -192,38 +192,84 @@
     [socketClient connect];
 }
 
-- (void) disconnect
+// The socket server is terribly rude and requires numeric IDs.  We can find our current service's numeric ID
+//  in the v2 API.
+- (void) _uncoverNumericIdForCurrentServiceIfNeeded
 {
-    [socketManager disconnect];
-}
-
-- (void) subscribeForFeedUpdatesForConversation:(ZNGConversation *)conversation
-{
-    if (![self connected]) {
-        // We're not yet connected.  We will subscribe to an active conversation as soon as we connect.
-        SBLogVerbose(@"%@ was called, but we are not yet connected.  Delaying subscription until a successful connection.", NSStringFromSelector(_cmd));
+    if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
+        SBLogInfo(@"Neglecting to find service numeric ID because we do not have a ZingleAccountSession.");
         return;
     }
     
-    id feedId = [NSNull null];
+    ZingleAccountSession * session = (ZingleAccountSession *)self.session;
     
-    if ([conversation isKindOfClass:[ZNGConversationServiceToContact class]]) {
-        ZNGConversationServiceToContact * contactConversation = (ZNGConversationServiceToContact *)conversation;
-        feedId = contactConversation.contact.contactId;
-    } else if ([conversation isKindOfClass:[ZNGConversationContactToService class]]) {
-        ZNGConversationContactToService * serviceConversation = (ZNGConversationContactToService *)conversation;
-        feedId = serviceConversation.contactService.serviceId;
-    } else if (conversation != nil) {
-        SBLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
+    if ([session.service.serviceId length] == 0) {
+        SBLogWarning(@"Neglecting to find service numeric ID because there is no UUID for the current service.");
+        return;
     }
     
-    SBLogDebug(@"Setting active feed to %@", feedId);
-    [[socketManager defaultSocket] emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
+    if (currentServiceNumericId > 0) {
+        SBLogInfo(@"Neglecting to acquire service numeric ID because we already have it as %d", currentServiceNumericId);
+        return;
+    }
+    
+    AFHTTPSessionManager * httpSession = [ZingleSession anonymousSessionManagerWithURL:[socketUrl apiUrlV2]];
+    [httpSession applyJwt:self.session.jwt];
+    
+    NSString * path = [NSString stringWithFormat:@"services/%@", session.service.serviceId];
+    [httpSession GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        if (([responseObject isKindOfClass:[NSDictionary class]]) && ([responseObject[@"id"] isKindOfClass:[NSNumber class]])) {
+            // We found an ID!
+            self->currentServiceNumericId = [responseObject[@"id"] intValue];
+            
+            if (self->needToSetServiceAndGetInitialBadges) {
+                [self _setServiceAndGetBadges];
+            }
+        } else {
+            SBLogWarning(@"Unable to find service numeric ID in v2 API response.");
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        SBLogError(@"Error attempting to fetch service data from v2 API: %@", error);
+    }];
 }
 
-- (void) unsubscribeFromFeedUpdates
+- (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
-    [self subscribeForFeedUpdatesForConversation:nil];
+    self.connected = YES;
+    
+    SBLogInfo(@"Web socket connected.");
+    [[socketManager defaultSocket] emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
+}
+
+- (void) socketDidBindNodeController
+{
+    if (currentServiceNumericId > 0) {
+        [self _setServiceAndGetBadges];
+    } else {
+        needToSetServiceAndGetInitialBadges = YES;
+    }
+    
+    SBLogDebug(@"Node controller bind succeeded.");
+    if (self.activeConversation != nil) {
+        [self subscribeForFeedUpdatesForConversation:self.activeConversation];
+    }
+}
+
+- (void) _setServiceAndGetBadges
+{
+    [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
+    [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
+}
+
+- (void) socketReconnecting
+{
+    self.connected = NO;
+}
+
+- (void) socketDidDisconnect
+{
+    SBLogInfo(@"Web socket disconnected");
+    self.connected = NO;
 }
 
 #pragma mark - Typing indicator
@@ -271,34 +317,6 @@
 {
     SBLogDebug(@"%p received socket event of type %@", self, event.event);
     SBLogVerbose(@"%@", event);
-}
-
-- (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
-{
-    self.connected = YES;
-    
-    SBLogInfo(@"Web socket connected.");
-    [[socketManager defaultSocket] emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
-}
-
-- (void) socketDidBindNodeController
-{
-    if (currentServiceNumericId > 0) {
-        [self _setServiceAndGetBadges];
-    } else {
-        needToSetServiceAndGetInitialBadges = YES;
-    }
-    
-    SBLogDebug(@"Node controller bind succeeded.");
-    if (self.activeConversation != nil) {
-        [self subscribeForFeedUpdatesForConversation:self.activeConversation];
-    }
-}
-
-- (void) _setServiceAndGetBadges
-{
-    [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
-    [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
 }
 
 // We do not actually process the event data from socket, but we can use this event to grab our sequential ID for the feed
@@ -398,17 +416,6 @@
 - (void) socketDidEncounterErrorWithData:(NSArray *)data
 {
     SBLogWarning(@"Web socket did receive error: %@", data);
-}
-
-- (void) socketReconnecting
-{
-    self.connected = NO;
-}
-
-- (void) socketDidDisconnect
-{
-    SBLogInfo(@"Web socket disconnected");
-    self.connected = NO;
 }
 
 - (void) feedLocked:(NSArray *)data

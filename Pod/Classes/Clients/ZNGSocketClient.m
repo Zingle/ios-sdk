@@ -33,6 +33,9 @@
     NSURL * socketUrl;
     
     BOOL needToSetServiceAndGetInitialBadges;
+    BOOL controllerIsBound;
+    NSUInteger bindRetryCount;
+    NSTimer * bindRetryTimer;
 }
 
 - (id) initWithSession:(ZingleSession *)session
@@ -57,6 +60,11 @@
     }
     
     return self;
+}
+
+- (void) dealloc
+{
+    [self _cancelBindRetryTimer];
 }
 
 - (BOOL) active
@@ -189,6 +197,9 @@
         [weakSelf socketDidDisconnect];
     }];
     
+    [self _cancelBindRetryTimer];
+    controllerIsBound = NO;
+    bindRetryCount = 0;
     [socketClient connect];
 }
 
@@ -235,14 +246,64 @@
 
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
-    self.connected = YES;
-    
     SBLogInfo(@"Web socket connected.");
+    [self _bindNodeController];
+}
+
+- (void) _bindNodeController
+{
+    [self _cancelBindRetryTimer];
+    
+    if (controllerIsBound) {
+        // We're done.  Hooray.
+        return;
+    }
+    
+    if (bindRetryCount > 0) {
+        SBLogInfo(@"Retrying bindNodeController, attempt #%llu", (unsigned long long)bindRetryCount);
+    }
+    
     [[socketManager defaultSocket] emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
+    [self _scheduleBindRetryTimer];
+}
+
+/**
+ *  Starts a timer (using incremental backoff) to retry binding the node controller until it succeeds.
+ *  This is sometimes necessary due to https://github.com/socketio/socket.io-client-swift/issues/1194
+ */
+- (void) _scheduleBindRetryTimer
+{
+    [self _cancelBindRetryTimer];
+    
+    __weak ZNGSocketClient * weakSelf = self;
+    
+    bindRetryTimer = [NSTimer scheduledTimerWithTimeInterval:[self _bindRetryInterval] repeats:NO block:^(NSTimer * _Nonnull timer) {
+        [weakSelf _bindNodeController];
+    }];
+    
+    bindRetryCount++;
+}
+
+- (NSTimeInterval) _bindRetryInterval
+{
+    NSArray<NSNumber *> * const retryDelays = @[@1.0, @2.5, @5.0 , @10.0];
+    
+    NSNumber * delayNumber = (bindRetryCount < [retryDelays count]) ? retryDelays[bindRetryCount] : [retryDelays lastObject];
+    return [delayNumber doubleValue];
+}
+
+- (void) _cancelBindRetryTimer
+{
+    [bindRetryTimer invalidate];
+    bindRetryTimer = nil;
 }
 
 - (void) socketDidBindNodeController
 {
+    self.connected = YES;
+    controllerIsBound = YES;
+    [self _cancelBindRetryTimer];
+    
     if (currentServiceNumericId > 0) {
         [self _setServiceAndGetBadges];
     } else {

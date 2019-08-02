@@ -593,7 +593,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     [self.userAuthorizationClient userAuthorizationWithSuccess:^(ZNGUserAuthorization * theUserAuthorization, ZNGStatus *status) {
         self.userAuthorization = theUserAuthorization;
         
-        [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:self.token andUserAuthorizationObject:theUserAuthorization];
+        [[ZNGAnalytics sharedAnalytics] trackLoginSuccessWithToken:theUserAuthorization.username andUserAuthorizationObject:theUserAuthorization];
         dispatch_semaphore_signal(semaphore);
     } failure:^(ZNGError *error) {
         SBLogError(@"Unable to retrieve current user info from the root URL: %@", error);

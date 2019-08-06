@@ -1905,14 +1905,13 @@ enum ZNGConversationSections
     UITextView * textView = self.inputToolbar.contentView.textView;
     
     // Use the attributed text to preserve any image attachments
-    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text];
+    // Note that the font needs to be manually applied via NSAttributedString or else the font of the text field
+    //  forever changes.
+    UIFont * font = textView.font;
+    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: font}];
     NSMutableAttributedString * attributedText = [textView.attributedText mutableCopy];
     [attributedText appendAttributedString:newAttributedText];
-    
-    // Font must be manually preserved when the text is changed to avoid a UIKit bug
-    UIFont * font = textView.font;
     textView.attributedText = attributedText;
-    textView.font = font;
     
     [self.inputToolbar toggleSendButtonEnabled];
     [self.inputToolbar collapseInputButtons];

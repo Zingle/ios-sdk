@@ -607,30 +607,52 @@ NSString * const kMessageDirectionOutbound = @"outbound";
     return nil;
 }
 
-- (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message
+- (ZNGMessage *) priorMessage:(ZNGMessage *)message
 {
-    NSUInteger index = [self.events indexOfObjectPassingTest:^BOOL(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
+    NSUInteger i = [self.events indexOfObjectPassingTest:^BOOL(ZNGEvent * _Nonnull event, NSUInteger idx, BOOL * _Nonnull stop) {
         return ([event.message isEqual:message]);
     }];
     
-    if ((index == NSNotFound) || (index == 0)) {
-        // This is the first
+    if (i == NSNotFound) {
+        SBLogWarning(@"priorMessage to message %@ was requested, but that message itself cannot be found in this conversation's %llu events",
+                     message.messageId, (unsigned long long)[self.events count]);
         return nil;
     }
     
-    BOOL isOutbound = [message isOutbound];
-    
-    NSUInteger i = index;
+    if (i == 0) {
+        // This is the very first event
+        return nil;
+    }
     
     do {
         i--;
-        ZNGEvent * testEvent = self.events[i];
-        ZNGMessage * testMessage = testEvent.message;
+        ZNGEvent * event = self.events[i];
         
-        if ((testMessage != nil) && ([testMessage isOutbound] == isOutbound)) {
-            return testMessage;
+        if ([event isMessage]) {
+            return self.events[i].message;
         }
     } while (i != 0);
+    
+    return nil;
+}
+
+- (ZNGMessage *) priorMessageWithSameDirection:(ZNGMessage *)message
+{
+    BOOL isOutbound = [message isOutbound];
+    ZNGMessage * priorMessage = message;
+    
+    while (YES) {
+        priorMessage = [self priorMessage:priorMessage];
+        
+        if (priorMessage == nil) {
+            // No more prior messages
+            return nil;
+        }
+        
+        if ([priorMessage isOutbound] == isOutbound) {
+            return priorMessage;
+        }
+    }
     
     return nil;
 }

@@ -1170,12 +1170,12 @@ enum ZNGConversationSections
         return NO;
     }
     
-    ZNGEvent * event = [[self eventViewModelAtIndexPath:indexPath] event];
-    ZNGEvent * priorEvent = [self.conversation priorEvent:event];
+    ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
+    ZNGMessage * priorMessage = [self.conversation priorMessage:message];
     
     // Have channels changed?
-    ZNGChannel * thisChannel = [[event.message contactCorrespondent] channel];
-    ZNGChannel * priorChannel = [[priorEvent.message contactCorrespondent] channel];
+    ZNGChannel * thisChannel = [[message contactCorrespondent] channel];
+    ZNGChannel * priorChannel = [[priorMessage contactCorrespondent] channel];
     
     if ((thisChannel != nil) && (priorChannel != nil) && (![thisChannel isEqual:priorChannel])) {
         // The channel has changed!

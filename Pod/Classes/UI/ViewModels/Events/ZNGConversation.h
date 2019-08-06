@@ -142,6 +142,11 @@ extern NSString * _Nonnull const ZNGConversationParticipantTypeGroup;
 - (nullable ZNGEvent *) priorEvent:(nonnull ZNGEvent *)event;
 
 /**
+ *  Returns the message prior to the provided message or nil if none exists.
+ */
+- (nullable ZNGMessage *) priorMessage:(nonnull ZNGMessage *)message;
+
+/**
  *  Returns the last message sent by the same type of person, meaning this will be the prior message sent by the contact
  *   if the supplied message is sent by a contact.  If it is a service, this will likely be the prior message sent by the
  *   same person as a service, but it may also be a different employee.

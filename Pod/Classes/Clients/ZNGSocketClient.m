@@ -247,6 +247,7 @@
 - (void) socketDidConnectWithData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
     SBLogInfo(@"Web socket connected.");
+    controllerIsBound = NO;
     [self _bindNodeController];
 }
 

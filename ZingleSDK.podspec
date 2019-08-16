@@ -30,7 +30,7 @@ Pod::Spec.new do |s|
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle'
   s.dependency 'SBObjectiveCWrapper'
-  s.dependency 'JSQMessagesViewController'
+  s.dependency 'JSQMessagesViewController/xibs-without-cells'
   s.dependency 'Analytics', '~> 3.0'
   s.dependency 'MGSwipeTableCell'
   s.dependency 'SDWebImage/GIF'

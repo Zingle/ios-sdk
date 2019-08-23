@@ -16,6 +16,7 @@
 #import "ZNGPlaceholderImageAttachment.h"
 #import <ImageIO/ImageIO.h>
 #import "UIImage+animatedGIF.h"
+#import "ZNGMessageStatus.h"
 
 @implementation ZNGMessage
 {
@@ -62,6 +63,17 @@
 - (BOOL) isOutbound
 {
     return [self.communicationDirection isEqualToString:@"outbound"];
+}
+
+- (BOOL) failed
+{
+    for (ZNGMessageStatus * status in self.statuses) {
+        if ([status isFailure]) {
+            return YES;
+        }
+    }
+    
+    return NO;
 }
 
 - (NSString *) triggeredByUserIdOrSenderId
@@ -137,7 +149,8 @@
              NSStringFromSelector(@selector(forwardedByServiceId)) : @"forwarded_by_service_id",
              NSStringFromSelector(@selector(isDelayed)) : @"is_delayed",
              NSStringFromSelector(@selector(executeAt)) : @"execute_at",
-             NSStringFromSelector(@selector(executedAt)) : @"executed_at"
+             NSStringFromSelector(@selector(executedAt)) : @"executed_at",
+             NSStringFromSelector(@selector(statuses)): @"statuses",
              };
 }
 
@@ -174,6 +187,11 @@
 + (NSValueTransformer *)executedAtJSONTransformer
 {
     return [ZingleValueTransformers dateValueTransformer];
+}
+
++ (NSValueTransformer *)statusesJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGMessageStatus class]];
 }
 
 @end

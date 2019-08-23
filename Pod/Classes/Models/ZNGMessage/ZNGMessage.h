@@ -11,6 +11,8 @@
 #import "ZNGUser.h"
 #import <JSQMessagesViewController/JSQMessageData.h>
 
+@class ZNGMessageStatus;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>
@@ -37,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL isDelayed;
 @property(nonatomic, strong, nullable) NSDate * executeAt;
 @property(nonatomic, strong, nullable) NSDate * executedAt;
+@property(nonatomic, strong, nullable) NSArray<ZNGMessageStatus *> * statuses;
 
 /**
  *  If this is an inbound, this is the contact ID.  Outbound, it is the triggered by user ID.
@@ -57,6 +60,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString * _Nullable) triggeredByUserIdOrSenderId;
 
 - (BOOL) isOutbound;
+
+/**
+ *  Returns YES if this message has failed to send.  Failure information can be found in the `statuses` array.
+ */
+- (BOOL) failed;
 
 /**
  *  The sender or receiver, whichever corresponds to a contact.

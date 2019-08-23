@@ -1397,7 +1397,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        CGFloat contentAlpha = (event.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        CGFloat contentAlpha = (event.sending || event.message.isDelayed || ([event.message failed])) ? 0.5 : 1.0;
         cell.messageBubbleImageView.alpha = contentAlpha;
         cell.mediaView.alpha = contentAlpha;
         

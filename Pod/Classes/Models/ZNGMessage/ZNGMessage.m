@@ -18,6 +18,8 @@
 #import "UIImage+animatedGIF.h"
 #import "ZNGMessageStatus.h"
 
+NSUInteger const ZNGMessageMaximumCharacterLength = 1600;
+
 @implementation ZNGMessage
 {
     NSAttributedString * attributedText;

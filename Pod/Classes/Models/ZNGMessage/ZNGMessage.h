@@ -13,6 +13,8 @@
 
 @class ZNGMessageStatus;
 
+extern NSUInteger const ZNGMessageMaximumCharacterLength;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZNGMessage : MTLModel<MTLJSONSerializing, JSQMessageData>

@@ -1246,7 +1246,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     static const CGFloat heightForText = 26.0;
     
-    if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
+    if (([self shouldShowAttachmentErrorForIndexPath:indexPath]) || ([self shouldShowFailureForIndexPath:indexPath])) {
         return heightForText;
     }
     
@@ -1264,6 +1264,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     return 0.0;
+}
+
+- (BOOL) shouldShowFailureForIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    return ([viewModel.event.message failed]);
 }
 
 - (BOOL) shouldShowAttachmentErrorForIndexPath:(NSIndexPath *)indexPath
@@ -1343,7 +1349,16 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     NSString * content = nil;
     
-    if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
+    if ([self shouldShowFailureForIndexPath:indexPath]) {
+        ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+        // Does this look like a failure due to length?
+        if ([viewModel.event.message.body length] > ZNGMessageMaximumCharacterLength) {
+            content = @"Failed to send: message is too long";
+        } else {
+            content = @"Failed to send";
+        }
+    } else if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
         ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
         
         if (viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusUnrecognizedType) {

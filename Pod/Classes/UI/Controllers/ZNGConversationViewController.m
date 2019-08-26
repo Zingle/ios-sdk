@@ -1246,7 +1246,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     static const CGFloat heightForText = 26.0;
     
-    if (([self shouldShowAttachmentErrorForIndexPath:indexPath]) || ([self shouldShowFailureForIndexPath:indexPath])) {
+    if (([self shouldShowAttachmentErrorForIndexPath:indexPath]) ||
+        ([self shouldShowFailureForIndexPath:indexPath]) ||
+        ([self shouldShowSendingForIndexPath:indexPath])) {
+        
         return heightForText;
     }
     
@@ -1264,6 +1267,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     return 0.0;
+}
+
+- (BOOL) shouldShowSendingForIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    return viewModel.event.sending;
 }
 
 - (BOOL) shouldShowFailureForIndexPath:(NSIndexPath *)indexPath
@@ -1358,6 +1367,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         } else {
             content = @"Failed to send";
         }
+    } else if ([self shouldShowSendingForIndexPath:indexPath]) {
+        content = @"Sending";
     } else if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
         ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
         

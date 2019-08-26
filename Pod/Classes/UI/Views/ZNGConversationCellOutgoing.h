@@ -17,5 +17,7 @@
 
 @property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * timeOffScreenConstraint;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * exactTimeLabel;
+@property (nonatomic, strong, nullable) IBOutlet UIView * sendingErrorIconContainer;
+@property (nonatomic, strong, nullable) IBOutlet UIImageView * sendingErrorIcon;
 
 @end

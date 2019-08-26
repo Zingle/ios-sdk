@@ -1232,7 +1232,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self shouldShowTimestampAboveIndexPath:indexPath] ? 36.0 : 0.0;
+    if ([self shouldShowTimestampAboveIndexPath:indexPath]) {
+        return 36.0;
+    }
+    
+    if ([self shouldShowFailureForIndexPath:indexPath]) {
+        return 9.0;  // prevent clipping of the error icon
+    }
+    
+    return 0.0;
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
@@ -1426,6 +1434,11 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         CGFloat contentAlpha = (event.sending || event.message.isDelayed || ([event.message failed])) ? 0.5 : 1.0;
         cell.messageBubbleImageView.alpha = contentAlpha;
         cell.mediaView.alpha = contentAlpha;
+        
+        if (([self shouldShowFailureForIndexPath:indexPath]) && ([cell isKindOfClass:[ZNGConversationCellOutgoing class]])) {
+            ZNGConversationCellOutgoing * outgoingCell = (ZNGConversationCellOutgoing *)cell;
+            outgoingCell.sendingErrorIconContainer.hidden = NO;
+        }
         
         if (event.message.isDelayed) {
             [indexPathsOfVisibleCellsWithRelativeTimesToRefresh addObject:indexPath];

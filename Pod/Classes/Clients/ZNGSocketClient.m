@@ -110,7 +110,7 @@
         SBLogError(@"Unexpected conversation class %@.  Unable to find feed ID to subscribe for Socket IO udpates.", [conversation class]);
     }
     
-    SBLogDebug(@"Setting active feed to %@", feedId);
+    SBLogDebug(@"Setting active feed to %@ via \"setActiveFeed\"", feedId);
     [[socketManager defaultSocket] emit:@"setActiveFeed" with:@[@{ @"feedId" : feedId, @"eventListRecordLimit" : @0 }]];
 }
 
@@ -264,7 +264,9 @@
         SBLogInfo(@"Retrying bindNodeController, attempt #%llu", (unsigned long long)bindRetryCount);
     }
     
-    [[socketManager defaultSocket] emit:@"bindNodeController" with:@[@"dashboard.inbox"]];
+    static NSString * const Binding = @"dashboard.inbox";
+    SBLogDebug(@"Binding node controller to \"%@\"", Binding);
+    [[socketManager defaultSocket] emit:@"bindNodeController" with:@[Binding]];
     [self _scheduleBindRetryTimer];
 }
 
@@ -319,6 +321,7 @@
 
 - (void) _setServiceAndGetBadges
 {
+    SBLogDebug(@"Emitting \"setServiceIds\" and \"getServiceBadges\" with ID %d", currentServiceNumericId);
     [[socketManager defaultSocket] emit:@"setServiceIds" with:@[@[@(currentServiceNumericId)]]];
     [[socketManager defaultSocket] emit:@"getServiceBadges" with:@[@[@(currentServiceNumericId)]]];
 }

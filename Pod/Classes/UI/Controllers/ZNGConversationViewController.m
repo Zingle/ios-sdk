@@ -459,9 +459,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 //  a custom field or channel value replacement value that is empty.  See: http://jira.zinglecorp.com:8080/browse/MOBILE-316
                 errorMessage = @"The fields sent in this message are empty.  The message was not sent.";
             }
-        } else if ([text length] > 1600) {
+        } else if ([text length] > ZNGMessageMaximumCharacterLength) {
             errorTitle = @"Message is too long";
-            errorMessage = @"Messages longer than 1,600 characters cannot be sent.";
+            errorMessage = [NSString stringWithFormat:@"Messages longer than %llu characters cannot be sent.", (unsigned long long)ZNGMessageMaximumCharacterLength];
         }
         
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:errorTitle message:errorMessage preferredStyle:UIAlertControllerStyleAlert];

@@ -7,12 +7,27 @@
 //
 
 #import "ZNGConversationCellOutgoing.h"
+#import "UIColor+ZingleSDK.h"
 
 @import SBObjectiveCWrapper;
 
 @implementation ZNGConversationCellOutgoing
 {
     CALayer * mediaMask;
+}
+
+- (void) awakeFromNib
+{
+    [super awakeFromNib];
+    
+    self.sendingErrorIconContainer.layer.cornerRadius = CGRectGetWidth(self.sendingErrorIconContainer.bounds) / 2.0;
+    self.sendingErrorIcon.tintColor = [UIColor zng_strawberry]; // IB is ignoring the tintColor property in the xib for Xcode reasons
+}
+
+- (void) prepareForReuse
+{
+    [super prepareForReuse];
+    self.sendingErrorIconContainer.hidden = YES;
 }
 
 - (void) setMediaViewMaskingImage:(UIImage *)mediaViewMaskingImage

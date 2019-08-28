@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -43,7 +43,7 @@
                         </constraints>
                     </view>
                     <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="bubble top label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="p52-YN-yLu" userLabel="Bubble top label" customClass="JSQMessagesLabel">
-                        <rect key="frame" x="0.0" y="20" width="287" height="20"/>
+                        <rect key="frame" x="0.0" y="20" width="291" height="20"/>
                         <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="20" identifier="Message Bubble Top Label Height" id="8TB-va-f8L"/>
@@ -53,7 +53,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2zh-vR-QJW" userLabel="Bubble container">
-                        <rect key="frame" x="36" y="40" width="244" height="94"/>
+                        <rect key="frame" x="40" y="40" width="244" height="94"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2qm-c6-OZf" userLabel="Bubble Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="244" height="94"/>
@@ -78,8 +78,24 @@
                             <constraint firstAttribute="bottom" secondItem="2qm-c6-OZf" secondAttribute="bottom" identifier="bubble container bubble image bottom space" id="lts-Ve-wSh"/>
                         </constraints>
                     </view>
+                    <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cYE-K3-6TC" userLabel="sendingErrorIconContainer">
+                        <rect key="frame" x="265" y="29" width="22" height="22"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sendingErrorIcon" translatesAutoresizingMaskIntoConstraints="NO" id="Iyd-jN-PlN">
+                                <rect key="frame" x="2" y="2" width="18" height="18"/>
+                                <color key="tintColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="Iyd-jN-PlN" secondAttribute="width" constant="4" id="QYz-XQ-qFk"/>
+                            <constraint firstAttribute="height" secondItem="Iyd-jN-PlN" secondAttribute="height" constant="4" id="g8O-5K-5Hw"/>
+                            <constraint firstItem="Iyd-jN-PlN" firstAttribute="centerX" secondItem="cYE-K3-6TC" secondAttribute="centerX" id="iUQ-3l-gmZ"/>
+                            <constraint firstItem="Iyd-jN-PlN" firstAttribute="centerY" secondItem="cYE-K3-6TC" secondAttribute="centerY" id="nIS-Au-mWv"/>
+                        </constraints>
+                    </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="X89-B1-aAd" userLabel="Avatar container">
-                        <rect key="frame" x="282" y="100" width="34" height="34"/>
+                        <rect key="frame" x="286" y="100" width="34" height="34"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y9b-D9-Q7W" userLabel="Avatar Image View">
                                 <rect key="frame" x="0.0" y="0.0" width="34" height="34"/>
@@ -96,13 +112,13 @@
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="12:26 PM" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MtA-aS-YIJ">
-                        <rect key="frame" x="320" y="112" width="57" height="16"/>
+                        <rect key="frame" x="320" y="112" width="56" height="16"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="13"/>
                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="d5b-Qu-ohI" userLabel="Cell Bottom Label Container">
-                        <rect key="frame" x="164" y="134" width="108" height="20"/>
+                        <rect key="frame" x="168" y="134" width="108" height="20"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="cell bottom label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rxh-zX-vCu" customClass="JSQMessagesLabel">
                                 <rect key="frame" x="0.0" y="0.0" width="108" height="17"/>
@@ -124,14 +140,16 @@
             <constraints>
                 <constraint firstItem="2zh-vR-QJW" firstAttribute="top" secondItem="p52-YN-yLu" secondAttribute="bottom" identifier="space between bubble container and top label" id="3Wx-g0-fTc"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="X89-B1-aAd" secondAttribute="bottom" id="GsO-H5-D3v"/>
+                <constraint firstItem="cYE-K3-6TC" firstAttribute="centerY" secondItem="2zh-vR-QJW" secondAttribute="top" id="HkQ-Bv-5QT"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="top" secondItem="2zh-vR-QJW" secondAttribute="bottom" id="U9s-lj-C7u"/>
+                <constraint firstItem="cYE-K3-6TC" firstAttribute="centerX" secondItem="2zh-vR-QJW" secondAttribute="trailing" constant="-8" id="XKb-ui-mn6"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" id="a35-gx-RGQ"/>
                 <constraint firstAttribute="bottom" secondItem="d5b-Qu-ohI" secondAttribute="bottom" id="gNU-zx-YAN"/>
                 <constraint firstAttribute="trailing" secondItem="MtA-aS-YIJ" secondAttribute="leading" id="hw4-d1-V8R"/>
                 <constraint firstItem="MtA-aS-YIJ" firstAttribute="bottom" secondItem="2zh-vR-QJW" secondAttribute="bottom" constant="-6" id="lB7-wl-MUa"/>
                 <constraint firstItem="d5b-Qu-ohI" firstAttribute="trailing" secondItem="y9b-D9-Q7W" secondAttribute="leading" constant="-10" id="ltP-jP-Llg"/>
                 <constraint firstItem="5Gk-Ay-M9X" firstAttribute="top" secondItem="23f-xH-rkY" secondAttribute="top" id="n9g-Vi-PyP"/>
-                <constraint firstItem="MtA-aS-YIJ" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="trailing" constant="4" id="qjs-ir-Qic"/>
+                <constraint firstItem="MtA-aS-YIJ" firstAttribute="leading" secondItem="X89-B1-aAd" secondAttribute="trailing" id="qjs-ir-Qic"/>
                 <constraint firstItem="X89-B1-aAd" firstAttribute="leading" secondItem="p52-YN-yLu" secondAttribute="trailing" constant="-5" id="rTs-BO-puW"/>
                 <constraint firstItem="p52-YN-yLu" firstAttribute="leading" secondItem="23f-xH-rkY" secondAttribute="leading" identifier="bubble top label left" id="tTj-Mp-0va"/>
                 <constraint firstAttribute="trailing" secondItem="5Gk-Ay-M9X" secondAttribute="trailing" id="uCo-3l-Xom"/>
@@ -154,6 +172,8 @@
                 <outlet property="messageBubbleImageView" destination="2qm-c6-OZf" id="bpy-Gv-jSh"/>
                 <outlet property="messageBubbleTopLabel" destination="p52-YN-yLu" id="WyC-Au-w9T"/>
                 <outlet property="messageBubbleTopLabelHeightConstraint" destination="8TB-va-f8L" id="OEE-UN-JYn"/>
+                <outlet property="sendingErrorIcon" destination="Iyd-jN-PlN" id="wfY-gQ-pye"/>
+                <outlet property="sendingErrorIconContainer" destination="cYE-K3-6TC" id="QcQ-f7-8Lz"/>
                 <outlet property="textView" destination="vLY-aM-0Dr" id="YEp-mW-xIY"/>
                 <outlet property="textViewAvatarHorizontalSpaceConstraint" destination="aVg-yy-8K7" id="CIe-Bi-eng"/>
                 <outlet property="textViewBottomVerticalSpaceConstraint" destination="UbF-Bl-Q7v" id="KHP-49-3u4"/>
@@ -161,12 +181,10 @@
                 <outlet property="textViewTopVerticalSpaceConstraint" destination="RiG-21-Bqc" id="i3j-z0-feE"/>
                 <outlet property="timeOffScreenConstraint" destination="hw4-d1-V8R" id="buQ-aC-jn9"/>
             </connections>
-            <point key="canvasLocation" x="371" y="145"/>
+            <point key="canvasLocation" x="537.68115942028987" y="97.098214285714278"/>
         </collectionViewCell>
     </objects>
-    <simulatedMetricsContainer key="defaultSimulatedMetrics">
-        <simulatedStatusBarMetrics key="statusBar"/>
-        <simulatedOrientationMetrics key="orientation"/>
-        <simulatedScreenMetrics key="destination" type="retina4_7.fullscreen"/>
-    </simulatedMetricsContainer>
+    <resources>
+        <image name="sendingErrorIcon" width="18" height="18"/>
+    </resources>
 </document>

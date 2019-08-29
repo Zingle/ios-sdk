@@ -459,6 +459,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 //  a custom field or channel value replacement value that is empty.  See: http://jira.zinglecorp.com:8080/browse/MOBILE-316
                 errorMessage = @"The fields sent in this message are empty.  The message was not sent.";
             }
+        } else if ([text length] > ZNGMessageMaximumCharacterLength) {
+            errorTitle = @"Message is too long";
+            errorMessage = [NSString stringWithFormat:@"Messages longer than %llu characters cannot be sent.", (unsigned long long)ZNGMessageMaximumCharacterLength];
         }
         
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:errorTitle message:errorMessage preferredStyle:UIAlertControllerStyleAlert];
@@ -1232,7 +1235,15 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
                    layout:(JSQMessagesCollectionViewFlowLayout *)collectionViewLayout heightForCellTopLabelAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self shouldShowTimestampAboveIndexPath:indexPath] ? 36.0 : 0.0;
+    if ([self shouldShowTimestampAboveIndexPath:indexPath]) {
+        return 36.0;
+    }
+    
+    if ([self shouldShowFailureForIndexPath:indexPath]) {
+        return 9.0;  // prevent clipping of the error icon
+    }
+    
+    return 0.0;
 }
 
 - (CGFloat)collectionView:(JSQMessagesCollectionView *)collectionView
@@ -1246,7 +1257,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     static const CGFloat heightForText = 26.0;
     
-    if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
+    if (([self shouldShowAttachmentErrorForIndexPath:indexPath]) ||
+        ([self shouldShowFailureForIndexPath:indexPath]) ||
+        ([self shouldShowSendingForIndexPath:indexPath])) {
+        
         return heightForText;
     }
     
@@ -1264,6 +1278,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     }
     
     return 0.0;
+}
+
+- (BOOL) shouldShowSendingForIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    return viewModel.event.sending;
+}
+
+- (BOOL) shouldShowFailureForIndexPath:(NSIndexPath *)indexPath
+{
+    ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+    return ([viewModel.event.message failed]);
 }
 
 - (BOOL) shouldShowAttachmentErrorForIndexPath:(NSIndexPath *)indexPath
@@ -1343,7 +1369,18 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 {
     NSString * content = nil;
     
-    if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
+    if ([self shouldShowFailureForIndexPath:indexPath]) {
+        ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
+
+        // Does this look like a failure due to length?
+        if ([viewModel.event.message.body length] > ZNGMessageMaximumCharacterLength) {
+            content = @"Failed to send: message is too long";
+        } else {
+            content = @"Failed to send";
+        }
+    } else if ([self shouldShowSendingForIndexPath:indexPath]) {
+        content = @"Sending";
+    } else if ([self shouldShowAttachmentErrorForIndexPath:indexPath]) {
         ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
         
         if (viewModel.attachmentStatus == ZNGEventViewModelAttachmentStatusUnrecognizedType) {
@@ -1397,9 +1434,14 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
         JSQMessagesCollectionViewCell * cell = (JSQMessagesCollectionViewCell *)[super collectionView:collectionView cellForItemAtIndexPath:indexPath];
         cell.cellTopLabel.numberOfLines = 0;    // Support multiple lines
         
-        CGFloat contentAlpha = (event.sending || event.message.isDelayed) ? 0.5 : 1.0;
+        CGFloat contentAlpha = (event.sending || event.message.isDelayed || ([event.message failed])) ? 0.5 : 1.0;
         cell.messageBubbleImageView.alpha = contentAlpha;
         cell.mediaView.alpha = contentAlpha;
+        
+        if (([self shouldShowFailureForIndexPath:indexPath]) && ([cell isKindOfClass:[ZNGConversationCellOutgoing class]])) {
+            ZNGConversationCellOutgoing * outgoingCell = (ZNGConversationCellOutgoing *)cell;
+            outgoingCell.sendingErrorIconContainer.hidden = NO;
+        }
         
         if (event.message.isDelayed) {
             [indexPathsOfVisibleCellsWithRelativeTimesToRefresh addObject:indexPath];

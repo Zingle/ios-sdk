@@ -133,6 +133,39 @@ static NSString * const EventCellId = @"event";
     [self updateUIForNewContact];
 }
 
+// WITCHCRAFT WARNING
+//           O>         _
+//          ,/)          )_
+//      -----<---<<<   )   )
+//           ``      ` _)
+// Calling begin/end updates allows our segments and tags cells to resize correctly.  The truth is that
+//  `ZNGLabelGridView` is misusing `intrinsicContentSize` in a way that requires an extra layout pass.
+//  The correct fix is likely using something like `UILabel`'s `preferredMaxContentWidth` and/or unpairing
+//  the layout calculation from `layoutSubviews` where it happens now.
+// A few hours were spent going down the `preferredMaxContentWidth` road without pulling sizing logic out
+//  of `layoutSubviews` with little success.  The below hack has no apparent performance or behavior penalties,
+//  so we'll keep this in place instead of doing things the right/slow way.
+- (void)viewSafeAreaInsetsDidChange
+{
+    [super viewSafeAreaInsetsDidChange];
+
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    });
+}
+
+- (void) viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [super viewWillTransitionToSize:size withTransitionCoordinator:coordinator];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tableView beginUpdates];
+        [self.tableView endUpdates];
+    });
+}
+// END WITCHCRAFT
+
 - (void) viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];

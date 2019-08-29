@@ -46,6 +46,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, assign) BOOL ignoreCurrentUserTypingIndicator;
 
+/**
+ *  If this is non-nil, this user agent string will be sent in headers instead of the normal device user agent.  Defaults to nil, meaning the normal
+ *  device user agent will be used, e.g. "Zingle/2 CFNetwork/1098.1 Darwin/18.7.0"
+ *  Setting after initial connection has undefined behavior.
+ */
+@property (nonatomic, copy, nullable) NSString * userAgent;
+
 NS_ASSUME_NONNULL_END
 
 @end

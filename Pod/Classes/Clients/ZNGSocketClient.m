@@ -124,7 +124,15 @@
 {
     [self _uncoverNumericIdForCurrentServiceIfNeeded];
     
-    socketManager = [[SocketManager alloc] initWithSocketURL:socketUrl config:@{@"log": @NO, @"connectParams": @{@"token": self.session.jwt}}];
+    NSMutableDictionary<NSString *, id> * config = [[NSMutableDictionary alloc] init];
+    config[@"log"] = @NO;
+    config[@"connectParams"] = @{@"token": self.session.jwt};
+    
+    if (self.userAgent != nil) {
+        config[@"extraHeaders"] = @{@"User-Agent": self.userAgent};
+    }
+    
+    socketManager = [[SocketManager alloc] initWithSocketURL:socketUrl config:config];
     SocketIOClient * socketClient = [socketManager defaultSocket];
     
     __weak ZNGSocketClient * weakSelf = self;

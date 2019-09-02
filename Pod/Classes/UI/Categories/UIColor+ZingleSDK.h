@@ -22,8 +22,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)zng_text_gray;
 
-+ (UIColor *)zng_note_yellow;
-
 + (UIColor *)zng_strawberry;
 
 /**

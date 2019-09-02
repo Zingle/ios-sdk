@@ -14,14 +14,14 @@
 
 - (void) updateWithNetworkStatus:(ZNGNetworkLookoutStatus)status
 {
+    NSBundle * bundle = [NSBundle bundleForClass:[ZingleSDK class]];
+    UIColor * errorBackgroundColor = [UIColor colorNamed:@"ZNGDarkBannerBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    
     switch (status) {
         case ZNGNetworkStatusConnectedToDevelopmentInstance:
-        {
-            NSBundle * bundle = [NSBundle bundleForClass:[ZingleSDK class]];
             self.backgroundColor = [UIColor colorNamed:@"ZNGBrightBackground" inBundle:bundle compatibleWithTraitCollection:nil];
             self.text = @"This is a non-production server instance. 🤡";
             return;
-        }
             
         case ZNGNetworkStatusUnknown:
         case ZNGNetworkStatusConnected:
@@ -29,17 +29,17 @@
             return;
             
         case ZNGNetworkStatusZingleSocketDisconnected:
-            self.backgroundColor = [UIColor zng_errorMessageBackgroundColor];
+            self.backgroundColor = errorBackgroundColor;
             self.text = @"We're experiencing connection issues; things may be slow. 🐢";
             return;
             
         case ZNGNetworkStatusInternetUnreachable:
-            self.backgroundColor = [UIColor zng_errorMessageBackgroundColor];
+            self.backgroundColor = errorBackgroundColor;
             self.text = @"We're having trouble finding an internet connection. 🌎";
             return;
             
         case ZNGNetworkStatusZingleAPIUnreachable:
-            self.backgroundColor = [UIColor zng_errorMessageBackgroundColor];
+            self.backgroundColor = errorBackgroundColor;
             self.text = @"We're having trouble connecting to Zingle. 😰";
             return;
     }

@@ -74,6 +74,8 @@ enum ZNGConversationSections
     UIView * bannerContainer;
     UILabel * titleLabel;
     
+    UIColor * errorBackgroundColor;
+    
     UIView * blockedChannelBanner;
     UILabel * blockedChannelLabel;
     NSLayoutConstraint * blockedChannelOnScreenConstraint;
@@ -193,6 +195,8 @@ enum ZNGConversationSections
     titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n'
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
+    
+    errorBackgroundColor = [UIColor colorNamed:@"ZNGErrorBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     
     // Add a tap gesture recognizer to the title to link to the edit view
     UITapGestureRecognizer * titleTapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedEditContact)];
@@ -1100,7 +1104,7 @@ enum ZNGConversationSections
             CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
             blockedChannelBanner = [[UIView alloc] initWithFrame:rect];
             blockedChannelBanner.translatesAutoresizingMaskIntoConstraints = NO;
-            blockedChannelBanner.backgroundColor = [UIColor zng_strawberry];
+            blockedChannelBanner.backgroundColor = errorBackgroundColor;
             NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
             NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
             NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];

@@ -5,11 +5,6 @@
 
 #pragma mark - Message bubble colors
 
-+ (UIColor *)zng_errorMessageBackgroundColor
-{
-    return [UIColor colorFromHexString:@"#2e3c54"];
-}
-
 + (UIColor *)zng_unconfirmedMessageGreen
 {
     return [UIColor colorFromHexString:@"#6CDB9B"];
@@ -28,11 +23,6 @@
 + (UIColor *)zng_text_gray
 {
     return [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-}
-
-+ (UIColor *)zng_yellow
-{
-    return [UIColor colorFromHexString:@"#FFCF3A"];
 }
 
 + (UIColor *)zng_note_yellow

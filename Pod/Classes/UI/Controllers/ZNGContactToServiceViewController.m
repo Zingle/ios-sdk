@@ -56,7 +56,7 @@
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactToServiceViewController class]];
     UIImage * photoImage = [UIImage imageNamed:@"attachImage" inBundle:bundle compatibleWithTraitCollection:nil];
     UIButton * photoButton = [[UIButton alloc] initWithFrame:CGRectMake(0.0, 0.0, 24.0, 24.0)];
-    photoButton.tintColor = [UIColor zng_gray];
+    photoButton.tintColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
     [photoButton setImage:photoImage forState:UIControlStateNormal];
     [photoButton addTarget:self action:@selector(pressedAttachImage:) forControlEvents:UIControlEventTouchUpInside];
     self.inputToolbar.contentView.leftBarButtonItem = photoButton;

@@ -18,12 +18,13 @@
 {
     [super awakeFromNib];
     
-    UIColor * gray = [UIColor zng_gray];
-    self.templateButton.tintColor = gray;
-    self.customFieldButton.tintColor = gray;
-    self.automationButton.tintColor = gray;
-    self.imageButton.tintColor = gray;
-    self.noteButton.tintColor = gray;
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationToolbarContentView class]];
+    UIColor * buttonColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
+    self.templateButton.tintColor = buttonColor;
+    self.customFieldButton.tintColor = buttonColor;
+    self.automationButton.tintColor = buttonColor;
+    self.imageButton.tintColor = buttonColor;
+    self.noteButton.tintColor = buttonColor;
 }
 
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled

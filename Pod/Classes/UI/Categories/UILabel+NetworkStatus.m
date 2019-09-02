@@ -6,6 +6,7 @@
 //
 //
 
+#import "ZingleSDK.h"
 #import "UILabel+NetworkStatus.h"
 #import "UIColor+ZingleSDK.h"
 
@@ -15,9 +16,12 @@
 {
     switch (status) {
         case ZNGNetworkStatusConnectedToDevelopmentInstance:
-            self.backgroundColor = [UIColor zng_lightBlue];
+        {
+            NSBundle * bundle = [NSBundle bundleForClass:[ZingleSDK class]];
+            self.backgroundColor = [UIColor colorNamed:@"ZNGBrightBackground" inBundle:bundle compatibleWithTraitCollection:nil];
             self.text = @"This is a non-production server instance. 🤡";
             return;
+        }
             
         case ZNGNetworkStatusUnknown:
         case ZNGNetworkStatusConnected:

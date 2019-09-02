@@ -54,6 +54,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     
     UIImage * unconfirmedImage;
     UIImage * unconfirmedLateImage;
+    UIColor * textLinkColor;
     
     NSMutableDictionary<NSIndexPath *, NSTimer *> * refreshUnconfirmedTimers;
     NSTimer * cancelSwipesTimer;
@@ -144,6 +145,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGInboxViewController class]];
     unconfirmedImage = [UIImage imageNamed:@"unconfirmedCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
+    textLinkColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
     
@@ -179,7 +181,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 {
     UIRefreshControl * refresher = [[UIRefreshControl alloc] init];
     refresher.backgroundColor = [UIColor whiteColor];
-    refresher.tintColor = [UIColor zng_lightBlue];
+    refresher.tintColor = textLinkColor;
     [refresher addTarget:self action:@selector(refresh:) forControlEvents:UIControlEventValueChanged];
     return refresher;
 }
@@ -706,7 +708,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     __weak ZNGInboxViewController * weakSelf = self;
     
     if (contact.isConfirmed) {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nunread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nunread" backgroundColor:textLinkColor callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact unconfirm];
@@ -716,7 +718,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
             return !changeWillCauseRemoval;
         }];
     } else {
-        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        confirmButton = [MGSwipeButton buttonWithTitle:@"Mark\nread" backgroundColor:textLinkColor callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [weakSelf.data contactWasChangedLocally:contactAfterChange];
             
             [contact confirm];
@@ -774,7 +776,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     [buttons addObject:closeButton];
     
     if (showAssign) {
-        MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:[UIColor zng_lightBlue] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        MGSwipeButton * assignButton = [MGSwipeButton buttonWithTitle:@"Assign" backgroundColor:textLinkColor callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             // Go go gadget assignment view
             ZNGAssignmentViewController * assignView = [weakSelf.session assignmentViewControllerForContact:contact];
             assignView.delegate = weakSelf;

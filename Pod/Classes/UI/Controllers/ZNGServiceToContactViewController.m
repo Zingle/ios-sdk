@@ -185,9 +185,10 @@ enum ZNGConversationSections
     [super viewDidLoad];
 
     // Add a custom UILabel to support multi line titles
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     titleLabel = [[UILabel alloc] init];
     titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
-    titleLabel.textColor = [UIColor zng_lightBlue];
+    titleLabel.textColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     titleLabel.numberOfLines = 2;
     titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n'
     titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -198,7 +199,6 @@ enum ZNGConversationSections
     titleLabel.userInteractionEnabled = YES;
     [titleLabel addGestureRecognizer:titleTapper];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
     [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
     

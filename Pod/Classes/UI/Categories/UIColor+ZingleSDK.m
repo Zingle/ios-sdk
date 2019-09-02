@@ -10,11 +10,6 @@
     return [UIColor colorFromHexString:@"#2e3c54"];
 }
 
-+ (UIColor *)zng_messageBubbleLightGrayColor
-{
-    return [UIColor colorFromHexString:@"#F2F2F2"];
-}
-
 + (UIColor *)zng_unconfirmedMessageGreen
 {
     return [UIColor colorFromHexString:@"#6CDB9B"];
@@ -23,26 +18,6 @@
 + (UIColor *)zng_unconfirmedMessageRed
 {
     return [UIColor colorFromHexString:@"#EE8176"];
-}
-
-+ (UIColor *)zng_titleBlack
-{
-    return [UIColor colorFromHexString:@"#333333"];
-}
-
-+ (UIColor *)zng_blue
-{
-    return [UIColor colorFromHexString:@"#285C8C"];
-}
-
-+ (UIColor *)zng_lightBlue
-{
-    return [UIColor colorFromHexString:@"#00A0DE"];
-}
-
-+ (UIColor *)zng_purple
-{
-    return [UIColor colorFromHexString:@"#9B59B6"];
 }
 
 + (UIColor *)zng_green
@@ -78,16 +53,6 @@
 + (UIColor *)zng_strawberry
 {
     return [UIColor colorFromHexString:@"#E74C3C"];
-}
-
-+ (UIColor *) zng_loadingGradientInnerColor
-{
-    return [self zng_purple];
-}
-
-+ (UIColor *) zng_loadingGradientOuterColor
-{
-    return [self zng_lightBlue];
 }
 
 

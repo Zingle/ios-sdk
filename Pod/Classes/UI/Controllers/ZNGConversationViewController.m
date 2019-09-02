@@ -299,10 +299,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) setupLoadingGradient
 {
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    
     loadingGradient = [[ZNGGradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
     loadingGradient.hidesWhenStopped = YES;
-    loadingGradient.centerColor = [UIColor zng_loadingGradientInnerColor];
-    loadingGradient.edgeColor = [UIColor zng_loadingGradientOuterColor];
+    loadingGradient.centerColor = [UIColor colorNamed:@"ZNGLogoGradient" inBundle:bundle compatibleWithTraitCollection:nil];
+    loadingGradient.edgeColor = [UIColor colorNamed:@"ZNGLogo" inBundle:bundle compatibleWithTraitCollection:nil];
     
     loadingGradient.translatesAutoresizingMaskIntoConstraints = NO;
     

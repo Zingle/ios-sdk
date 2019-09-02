@@ -1482,14 +1482,14 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YWb-LP-HLJ">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="64"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
                                         <rect key="frame" x="156" y="30" width="63" height="22"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="25.5" width="51" height="33"/>
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
+                                        <rect key="frame" x="16" y="25" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1498,7 +1498,7 @@
                                             <action selector="pressedCancel:" destination="EHd-00-ynV" eventType="touchUpInside" id="U3Z-10-B8t"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
+                                    <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
                                         <rect key="frame" x="324" y="25" width="35" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
@@ -1512,7 +1512,9 @@
                                 <color key="backgroundColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="Ci6-Gc-8Uf" firstAttribute="centerX" secondItem="YWb-LP-HLJ" secondAttribute="centerX" id="0kk-No-p3e"/>
+                                    <constraint firstItem="Ci6-Gc-8Uf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="e5j-nJ-1Sw" secondAttribute="trailing" constant="4" id="Dza-MU-fJc"/>
                                     <constraint firstItem="EkH-fL-ci7" firstAttribute="baseline" secondItem="Ci6-Gc-8Uf" secondAttribute="baseline" id="Q66-SX-7SY"/>
+                                    <constraint firstItem="EkH-fL-ci7" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Ci6-Gc-8Uf" secondAttribute="trailing" constant="4" id="Yhe-VT-FCo"/>
                                     <constraint firstItem="e5j-nJ-1Sw" firstAttribute="baseline" secondItem="Ci6-Gc-8Uf" secondAttribute="baseline" id="h7H-7w-H4z"/>
                                     <constraint firstAttribute="bottom" secondItem="Ci6-Gc-8Uf" secondAttribute="bottom" constant="12" id="rWR-gn-JCV"/>
                                 </constraints>

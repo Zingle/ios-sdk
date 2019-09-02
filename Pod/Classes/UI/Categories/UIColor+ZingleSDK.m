@@ -5,38 +5,9 @@
 
 #pragma mark - Message bubble colors
 
-+ (UIColor *)zng_messageBubbleGreenColor
-{
-    return [UIColor colorWithHue:130.0f / 360.0f
-                      saturation:0.68f
-                      brightness:0.84f
-                           alpha:1.0f];
-}
-
-+ (UIColor *)zng_messageBubbleBlueColor
-{
-    return [UIColor colorWithRed:229.0f/255.0f
-                           green:245.0f/255.0f
-                            blue:252.0f/255.0f
-                           alpha:1.0f];
-}
-
-+ (UIColor *)zng_messageBubbleRedColor
-{
-    return [UIColor colorWithHue:0.0f / 360.0f
-                      saturation:0.79f
-                      brightness:1.0f
-                           alpha:1.0f];
-}
-
 + (UIColor *)zng_errorMessageBackgroundColor
 {
     return [UIColor colorFromHexString:@"#2e3c54"];
-}
-
-+ (UIColor *)zng_outgoingMessageBubbleColor
-{
-    return [UIColor colorFromHexString:@"#00A0DE"];
 }
 
 + (UIColor *)zng_messageBubbleLightGrayColor

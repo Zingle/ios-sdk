@@ -87,6 +87,7 @@ static NSString * const EventCellId = @"event";
     NSUInteger futureEventTotalCount;
     
     UIImage * deleteXImage;
+    UIColor * avatarBackgroundColor;
     
     __weak ZNGContactLabelsTableViewCell * labelsGridCell;
     
@@ -117,7 +118,9 @@ static NSString * const EventCellId = @"event";
     [self generateDataArrays];
 
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    avatarBackgroundColor = [UIColor colorNamed:@"ZNGOutboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     deleteXImage = [[UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    
     UINib * headerNib = [UINib nibWithNibName:NSStringFromClass([ZNGEditContactHeader class]) bundle:bundle];
     UINib * footerNib = [UINib nibWithNibName:@"ZNGEditContactFooter" bundle:bundle];
     [self.tableView registerNib:headerNib forHeaderFooterViewReuseIdentifier:HeaderReuseIdentifier];
@@ -729,7 +732,7 @@ static NSString * const EventCellId = @"event";
     return [[ZNGAvatarImageView alloc] initWithAvatarUrl:user.avatarUri
                                                 initials:[[user fullName] initials]
                                                     size:CGSizeMake(32.0, 32.0)
-                                         backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
+                                         backgroundColor:avatarBackgroundColor
                                                textColor:[UIColor whiteColor]
                                                     font:[UIFont latoFontOfSize:14.0]];
 }

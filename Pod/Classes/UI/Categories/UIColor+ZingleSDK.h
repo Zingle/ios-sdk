@@ -14,23 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Message bubble colors
 
-/**
- *  @return A color object containing HSB values similar to the iOS messages app green bubble color.
- */
-+ (UIColor *)zng_messageBubbleGreenColor;
-
-/**
- *  @return A color object containing HSB values similar to the Zingle dashboard blue bubble color.
- */
-+ (UIColor *)zng_messageBubbleBlueColor;
-
-+ (UIColor *)zng_outgoingMessageBubbleColor;
-
-/**
- *  @return A color object containing HSB values similar to the iOS red color.
- */
-+ (UIColor *)zng_messageBubbleRedColor;
-
 + (UIColor *)zng_unconfirmedMessageGreen;
 
 + (UIColor *)zng_unconfirmedMessageRed;

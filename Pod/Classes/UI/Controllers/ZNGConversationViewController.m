@@ -156,8 +156,9 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) _conv_commonInit
 {
     // Default property values
-    _outgoingBubbleColor = [UIColor zng_outgoingMessageBubbleColor];
-    _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    _outgoingBubbleColor = [UIColor colorNamed:@"ZNGOutboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    _incomingBubbleColor = [UIColor colorNamed:@"ZNGInboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     _internalNoteColor = [UIColor zng_note_yellow];
     _incomingTextColor = [UIColor zng_text_gray];
     _outgoingTextColor = [UIColor whiteColor];

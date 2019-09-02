@@ -20,11 +20,6 @@
     return [UIColor colorFromHexString:@"#EE8176"];
 }
 
-+ (UIColor *)zng_green
-{
-    return [UIColor colorFromHexString:@"#02CE68"];
-}
-
 + (UIColor *)zng_light_gray
 {
     return [UIColor colorFromHexString:@"#F4F4F4"];

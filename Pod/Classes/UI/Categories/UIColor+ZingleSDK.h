@@ -20,8 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)zng_errorMessageBackgroundColor;
 
-+ (UIColor *)zng_green;
-
 + (UIColor *)zng_light_gray;
 
 + (UIColor *)zng_text_gray;

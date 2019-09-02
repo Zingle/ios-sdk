@@ -29,9 +29,10 @@
     
     self.barTintColor = [UIColor whiteColor];
     
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceConversationInputToolbar class]];
     UIButton * sendButton = self.contentView.rightBarButtonItem;
     [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
-    self.sendButtonColor = [UIColor zng_green];
+    self.sendButtonColor = [UIColor colorNamed:@"ZNGPositiveAction" inBundle:bundle compatibleWithTraitCollection:nil];
     self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
     

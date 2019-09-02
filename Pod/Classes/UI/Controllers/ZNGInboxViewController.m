@@ -55,6 +55,8 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     UIImage * unconfirmedImage;
     UIImage * unconfirmedLateImage;
     UIColor * textLinkColor;
+    UIColor * openColor;
+    UIColor * closeColor;
     
     NSMutableDictionary<NSIndexPath *, NSTimer *> * refreshUnconfirmedTimers;
     NSTimer * cancelSwipesTimer;
@@ -146,6 +148,8 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     unconfirmedImage = [UIImage imageNamed:@"unconfirmedCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     unconfirmedLateImage = [UIImage imageNamed:@"unconfirmedLateCircle" inBundle:bundle compatibleWithTraitCollection:nil];
     textLinkColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
+    openColor = [UIColor colorNamed:@"ZNGPositiveAction" inBundle:bundle compatibleWithTraitCollection:nil];
+    closeColor = [UIColor colorNamed:@"ZNGNegativeAction" inBundle:bundle compatibleWithTraitCollection:nil];
     
     refreshUnconfirmedTimers = [[NSMutableDictionary alloc] init];
     
@@ -752,7 +756,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     __weak ZNGInboxViewController * weakSelf = self;
     
     if (contact.isClosed) {
-        closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:[UIColor zng_green] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        closeButton = [MGSwipeButton buttonWithTitle:@"Open" backgroundColor:openColor callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
             
             [contact reopen];
@@ -762,7 +766,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
             return !closeOrOpenWillCauseRemoval;
         }];
     } else {
-        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:[UIColor zng_strawberry] callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
+        closeButton = [MGSwipeButton buttonWithTitle:@"Close" backgroundColor:closeColor callback:^BOOL(MGSwipeTableCell * _Nonnull cell) {
             [weakSelf.data contactWasChangedLocally:contactAfterCloseOrOpen];
             
             [contact close];

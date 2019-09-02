@@ -12,18 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIColor (ZingleSDK)
 
-#pragma mark - Message bubble colors
-
-+ (UIColor *)zng_unconfirmedMessageGreen;
-
-+ (UIColor *)zng_unconfirmedMessageRed;
-
-+ (UIColor *)zng_light_gray;
-
-+ (UIColor *)zng_text_gray;
-
-+ (UIColor *)zng_strawberry;
-
 /**
  *  Creates and returns a new color object from a hex color value.
  *

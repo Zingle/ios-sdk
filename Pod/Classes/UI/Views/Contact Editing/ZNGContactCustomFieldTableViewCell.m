@@ -24,6 +24,7 @@
     NSDateFormatter * timeFormatter12HourAMPM;
     
     UIColor * defaultTextFieldBackgroundColor;
+    UIColor * lockedBackgroundColor;
     
     BOOL numericOnly;
     BOOL justCleared;
@@ -33,7 +34,9 @@
 {
     [super awakeFromNib];
     
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactCustomFieldTableViewCell class]];
     defaultTextFieldBackgroundColor = self.textField.backgroundColor;
+    lockedBackgroundColor = [UIColor colorNamed:@"ZNGDisabledBackground" inBundle:bundle compatibleWithTraitCollection:nil];
 }
 
 - (void) prepareForReuse
@@ -102,7 +105,7 @@
 - (void) updateDisplay
 {
     self.textField.enabled = !self.editingLocked;
-    self.textField.backgroundColor = (self.editingLocked) ? [UIColor zng_light_gray] : defaultTextFieldBackgroundColor;
+    self.textField.backgroundColor = (self.editingLocked) ? lockedBackgroundColor : defaultTextFieldBackgroundColor;
     self.textField.placeholder = self.customFieldValue.customField.displayName;
     
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {

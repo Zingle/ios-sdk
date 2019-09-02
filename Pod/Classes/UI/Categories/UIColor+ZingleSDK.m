@@ -3,34 +3,6 @@
 
 @implementation UIColor (ZingleSDK)
 
-#pragma mark - Message bubble colors
-
-+ (UIColor *)zng_unconfirmedMessageGreen
-{
-    return [UIColor colorFromHexString:@"#6CDB9B"];
-}
-
-+ (UIColor *)zng_unconfirmedMessageRed
-{
-    return [UIColor colorFromHexString:@"#EE8176"];
-}
-
-+ (UIColor *)zng_light_gray
-{
-    return [UIColor colorFromHexString:@"#F4F4F4"];
-}
-
-+ (UIColor *)zng_text_gray
-{
-    return [UIColor colorWithRed:51/255.0f green:51/255.0f blue:51/255.0f alpha:1.0f];
-}
-
-+ (UIColor *)zng_strawberry
-{
-    return [UIColor colorFromHexString:@"#E74C3C"];
-}
-
-
 + (UIColor *)colorFromHexString:(NSString *)hexString
 {
     if (hexString == nil) {

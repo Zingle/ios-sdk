@@ -22,14 +22,14 @@
 {
     [super awakeFromNib];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactChannelTableViewCell class]];
     UIImage * lockedImage = [UIImage imageNamed:@"lock" inBundle:bundle compatibleWithTraitCollection:nil];
     lockedRightView = [[UIImageView alloc] initWithImage:lockedImage];
     lockedRightView.contentMode = UIViewContentModeCenter;
     lockedRightView.tintColor = [UIColor lightGrayColor];
     
     defaultBackgroundColor = self.textField.backgroundColor;
-    lockedBackgroundColor = [UIColor zng_light_gray];
+    lockedBackgroundColor = [UIColor colorNamed:@"ZNGDisabledBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     
     self.textField.rightViewMode = UITextFieldViewModeAlways;
 }

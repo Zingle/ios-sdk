@@ -169,6 +169,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _showSkeletonViewWhenLoading = YES;
     _stuckToBottom = YES;
     
+    if (@available(iOS 13.0, *)) {
+        _authorTextColor = [UIColor tertiaryLabelColor];
+    }
+    
     offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
     

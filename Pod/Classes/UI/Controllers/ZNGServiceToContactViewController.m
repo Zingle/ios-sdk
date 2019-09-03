@@ -499,6 +499,12 @@ enum ZNGConversationSections
     }
     
     // Smaller and lighter text for the subtitle
+    UIColor * subtitleColor = [UIColor colorWithWhite:0.58 alpha:1.0];
+    
+    if (@available(iOS 13.0, *)) {
+        subtitleColor = [UIColor tertiaryLabelColor];
+    }
+    
     NSDictionary<NSAttributedStringKey, id> * subtitleAttributes = @{
                                                                      NSFontAttributeName: [UIFont latoFontOfSize:14.0],
                                                                      NSForegroundColorAttributeName: [UIColor colorWithWhite:0.58 alpha:1.0],

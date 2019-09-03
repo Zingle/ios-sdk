@@ -15,6 +15,10 @@
 {
     [super awakeFromNib];
     
+    if (@available(iOS 13.0, *)) {
+        self.barTintColor = [UIColor systemBackgroundColor];
+    }
+    
     UIButton * sendButton = self.contentView.rightBarButtonItem;
     [sendButton setTitle:@"Send" forState:UIControlStateNormal];
     

@@ -89,7 +89,7 @@
         <image name="insertCustomField" width="26" height="26"/>
         <image name="insertTemplate" width="28" height="28"/>
         <namedColor name="ZNGToolbarButton">
-            <color red="0.71372549019607845" green="0.72156862745098038" blue="0.72941176470588232" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.28627450980392155" green="0.27843137254901962" blue="0.27058823529411763" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

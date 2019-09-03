@@ -84,7 +84,7 @@
                                 <color key="tintColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="calibratedRGB"/>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="Iyd-jN-PlN" secondAttribute="width" constant="4" id="QYz-XQ-qFk"/>
                             <constraint firstAttribute="height" secondItem="Iyd-jN-PlN" secondAttribute="height" constant="4" id="g8O-5K-5Hw"/>

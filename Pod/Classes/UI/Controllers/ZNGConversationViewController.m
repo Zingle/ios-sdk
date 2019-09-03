@@ -237,6 +237,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.sendButtonColor = self.sendButtonColor;
     self.inputToolbar.sendButtonFont = self.sendButtonFont;
     
+    if (@available(iOS 13.0, *)) {
+        self.inputToolbar.barTintColor = [UIColor systemBackgroundColor];
+    }
+    
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
     self.collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSizeZero;

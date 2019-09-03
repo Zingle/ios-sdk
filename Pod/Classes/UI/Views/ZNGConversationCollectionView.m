@@ -16,6 +16,12 @@
 {
     [super awakeFromNib];
     
+    // Something is changing the collection view background color from its storyboard setting of systemBackgroundColor
+    //  to the old default of white.  Stop that!
+    if (@available(iOS 13.0, *)) {
+        self.backgroundColor = [UIColor systemBackgroundColor];
+    }
+    
     [self registerNib:[ZNGConversationCellIncoming nib]
 forCellWithReuseIdentifier:[ZNGConversationCellIncoming cellReuseIdentifier]];
     

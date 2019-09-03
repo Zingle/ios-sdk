@@ -25,6 +25,10 @@
     self.automationButton.tintColor = buttonColor;
     self.imageButton.tintColor = buttonColor;
     self.noteButton.tintColor = buttonColor;
+    
+    if (@available(iOS 13.0, *)) {
+        self.textView.backgroundColor = [UIColor systemBackgroundColor];
+    }
 }
 
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled

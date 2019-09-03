@@ -33,7 +33,7 @@
                             </collectionView>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0kk-eR-qEq" customClass="FBShimmeringView">
                                 <rect key="frame" x="0.0" y="44" width="375" height="546"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                             </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vm4-GP-Tqx" userLabel="Automation Banner Container">
                                 <rect key="frame" x="0.0" y="44" width="375" height="32"/>

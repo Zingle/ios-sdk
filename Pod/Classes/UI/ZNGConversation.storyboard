@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yXX-6h-nLe">
-    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <device id="retina4_7" orientation="portrait" appearance="dark"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
@@ -27,7 +27,7 @@
                         <subviews>
                             <collectionView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" minimumZoomScale="0.0" maximumZoomScale="0.0" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="G72-K8-cSu" customClass="ZNGConversationCollectionView">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="3QA-vc-BCn" customClass="ZNGConversationFlowLayout"/>
                                 <cells/>
                             </collectionView>
@@ -42,7 +42,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="900" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Hh-Uf-Tjj">
-                                                <rect key="frame" x="315" y="1" width="45" height="30"/>
+                                                <rect key="frame" x="313" y="1" width="47" height="30"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <state key="normal" title="Cancel">
                                                     <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -52,7 +52,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In automation: None" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uwr-ad-H0w">
-                                                <rect key="frame" x="36" y="7" width="271" height="18"/>
+                                                <rect key="frame" x="36" y="7" width="269" height="18"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -93,7 +93,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="123.5" y="4" width="128.5" height="20"/>
+                                                <rect key="frame" x="120" y="4" width="135" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -539,7 +539,7 @@
                                 <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </toolbar>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="E7V-XK-dac" secondAttribute="trailing" id="0QV-nR-CJF"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="1S3-q5-gQs" secondAttribute="trailing" id="53e-ge-dRW"/>
@@ -668,21 +668,22 @@
                                 <rect key="frame" x="50" y="71.5" width="46" height="33"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Select">
-                                    <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="titleColor" name="ZNGLinkText"/>
                                 </state>
                                 <connections>
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="hT9-4L-6gl"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-wd-LW9">
-                                <rect key="frame" x="106" y="77" width="14" height="22"/>
+                                <rect key="frame" x="106" y="74" width="28" height="28"/>
+                                <color key="tintColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <state key="normal" image="chevronRight"/>
                                 <connections>
                                     <action selector="selectRecipientType:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="4eI-y5-Pku"/>
                                 </connections>
                             </button>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
-                                <rect key="frame" x="139" y="71" width="220" height="34"/>
+                                <rect key="frame" x="153" y="71" width="206" height="34"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                 <connections>
@@ -696,7 +697,7 @@
                                         <rect key="frame" x="312" y="-1.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
-                                            <color key="titleColor" red="0.0" green="0.62745098040000002" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleColor" name="ZNGLinkText"/>
                                         </state>
                                         <connections>
                                             <action selector="pressedHotsosIssueSearch:" destination="9Vu-yg-VoU" eventType="touchUpInside" id="08d-a5-4Io"/>
@@ -733,7 +734,7 @@
                                         </connections>
                                     </textField>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <constraints>
                                     <constraint firstItem="SVm-1k-Gft" firstAttribute="leading" secondItem="wk5-1s-9rR" secondAttribute="trailing" constant="12" id="1ha-hs-B7n"/>
                                     <constraint firstItem="j1t-J3-wcW" firstAttribute="centerX" secondItem="SVm-1k-Gft" secondAttribute="centerX" id="2b0-Wc-nuu"/>
@@ -748,7 +749,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="NTY-5f-YkE" firstAttribute="leading" secondItem="cQI-VN-Az6" secondAttribute="leading" id="8bf-FR-saL"/>
                             <constraint firstItem="raY-Ot-4yE" firstAttribute="leading" secondItem="cQI-VN-Az6" secondAttribute="leading" id="8sZ-AY-OIN"/>
@@ -932,7 +933,7 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     </view>
                                 </subviews>
-                                <color key="backgroundColor" red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="ZNGErrorBackground"/>
                                 <constraints>
                                     <constraint firstItem="liU-S1-boT" firstAttribute="centerX" secondItem="cBV-tG-q1x" secondAttribute="centerX" id="7OY-Zf-IiF"/>
                                     <constraint firstItem="liU-S1-boT" firstAttribute="centerY" secondItem="cBV-tG-q1x" secondAttribute="centerY" id="WMD-k0-Ulw"/>
@@ -1144,12 +1145,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="plusCircle" translatesAutoresizingMaskIntoConstraints="NO" id="oPZ-Zc-3rY">
-                                                    <rect key="frame" x="44" y="20" width="22" height="22"/>
+                                                    <rect key="frame" x="44" y="9" width="44" height="44"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
-                                                    <rect key="frame" x="78" y="22" width="70" height="18"/>
+                                                    <rect key="frame" x="100" y="22" width="70" height="18"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
-                                                    <color key="textColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="textColor" name="ZNGLinkText"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
@@ -1214,7 +1215,7 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hXE-VP-2jm" customClass="ZNGLabelGridView">
                                                     <rect key="frame" x="44" y="15" width="316" height="22"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="NO"/>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="showRemovalX" value="NO"/>
@@ -1248,7 +1249,7 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="phf-Wt-fzx" customClass="ZNGLabelGridView">
                                                     <rect key="frame" x="44" y="15" width="316" height="22"/>
-                                                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                                     <userDefinedRuntimeAttributes>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="showAddLabel" value="YES"/>
                                                         <userDefinedRuntimeAttribute type="boolean" keyPath="showRemovalX" value="YES"/>
@@ -1437,7 +1438,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="c38-fj-bfu">
-                                                    <rect key="frame" x="346" y="8" width="14" height="14"/>
+                                                    <rect key="frame" x="332" y="1" width="28" height="28"/>
                                                 </imageView>
                                             </subviews>
                                             <constraints>
@@ -1504,7 +1505,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="ZNGBrightBackground"/>
                                 <constraints>
                                     <constraint firstItem="Ci6-Gc-8Uf" firstAttribute="centerX" secondItem="YWb-LP-HLJ" secondAttribute="centerX" id="0kk-No-p3e"/>
                                     <constraint firstItem="Ci6-Gc-8Uf" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="e5j-nJ-1Sw" secondAttribute="trailing" constant="4" id="Dza-MU-fJc"/>
@@ -1515,7 +1516,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="Tvn-Ae-Do9" firstAttribute="top" secondItem="YWb-LP-HLJ" secondAttribute="bottom" constant="-44" id="6ET-hG-eiS"/>
                             <constraint firstItem="emI-L2-W9W" firstAttribute="leading" secondItem="zra-gb-FUq" secondAttribute="leading" id="7vz-6x-jAk"/>
@@ -1579,13 +1580,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5h-kA-dBV">
-                                        <rect key="frame" x="147.5" y="10" width="80" height="22"/>
+                                        <rect key="frame" x="145.5" y="11" width="84" height="21"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="5" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="6" width="53" height="32"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1595,7 +1596,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" name="ZNGBrightBackground"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="M5h-kA-dBV" secondAttribute="bottom" constant="12" id="18B-xN-Hgc"/>
                                     <constraint firstItem="M5h-kA-dBV" firstAttribute="centerX" secondItem="oZX-gR-oMY" secondAttribute="centerX" id="OoX-0O-Sbj"/>
@@ -1645,13 +1646,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Name's Events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9kh-hc-buG">
-                                        <rect key="frame" x="129.5" y="10" width="116" height="22"/>
+                                        <rect key="frame" x="127" y="11" width="121.5" height="21"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ayX-gL-mWz">
-                                        <rect key="frame" x="16" y="5" width="37" height="33"/>
+                                        <rect key="frame" x="16" y="6" width="39" height="32"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Back">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1757,6 +1758,9 @@
         </namedColor>
         <namedColor name="ZNGErrorBackground">
             <color red="0.90588235294117647" green="0.29803921568627451" blue="0.23529411764705882" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="ZNGLinkText">
+            <color red="0.0" green="0.62745098039215685" blue="0.87058823529411766" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
     <inferredMetricsTieBreakers>

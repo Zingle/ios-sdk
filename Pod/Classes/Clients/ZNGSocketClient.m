@@ -69,7 +69,7 @@
 
 - (BOOL) active
 {
-    int status = [socketManager status];
+    int status = (int)[socketManager status];
     return ((status == SocketIOStatusConnected) || (status == SocketIOStatusConnecting));
 }
 

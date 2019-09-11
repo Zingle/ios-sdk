@@ -133,7 +133,11 @@
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
+    // See comments in `attachImageFromPhotoLibraryWithInfo` below for why we are still using this deprecated functionality
+#pragma diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     if (info[UIImagePickerControllerReferenceURL] != nil) {
+#pragma diagnostic pop
         // This is from the photo library.  We can load it from there.
         [self attachImageFromPhotoLibraryWithInfo:info];
     } else if (info[UIImagePickerControllerOriginalImage] != nil) {
@@ -196,7 +200,10 @@
     //  the PHAsset passed in the image picker callback the very first time it is done.  The alternative is to ask the user for permission
     //  for photo library access up front before an image is selected.  That would avoid a deprecated dictionary key at the expense of a
     //  slightly worse user experience.
+#pragma diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
     NSURL * url = info[UIImagePickerControllerReferenceURL];
+#pragma diagnostic pop
     
     if (url == nil) {
         SBLogError(@"The user selected an image, but we did not receieve a reference URL to retrieve it.  Drat.");
@@ -216,8 +223,11 @@
             return;
         }
         
+        #pragma diagnostic push
+        #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
-        
+        #pragma diagnostic pop
+
         if (asset == nil) {
             SBLogError(@"Unable to retrieve the selected image asset from disk.  Odd.");
             [self showImageAttachmentError];

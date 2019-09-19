@@ -102,7 +102,11 @@
     AFHTTPSessionManager * authedSession = [session copy];
     [authedSession.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
     
+    _requestPending = YES;
+    
     [authedSession GET:@"token/refresh" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        self->_requestPending = NO;
+        
         NSString * jwt = responseObject[@"token"];
         
         if ([jwt length] == 0) {
@@ -123,6 +127,7 @@
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         SBLogError(@"Unable to refresh JWT: %@", [error localizedDescription]);
+        self->_requestPending = NO;
         
         if (failure != nil) {
             failure(error);

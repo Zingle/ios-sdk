@@ -631,6 +631,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
+        SBLogError(@"Failed to retrieve accounts: %@", error);
+        self.mostRecentError = error;
         self.availableAccounts = @[];
         self.availableServices = nil;
     }];
@@ -648,6 +650,8 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
         
         [self updateStateForNewAccountOrService];
     } failure:^(ZNGError *error) {
+        SBLogError(@"Failed to retrieve services: %@", error);
+        self.mostRecentError = error;
         self.availableServices = @[];
     }];
 }

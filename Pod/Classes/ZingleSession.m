@@ -44,6 +44,7 @@ static NSString * const DeviceTokenUpdatedNotification = @"DeviceTokenUpdatedNot
     NSArray<NSString *> * pushNotificationQueuedServiceIds;
     
     NSTimer * jwtRefreshTimer;
+    NSDateComponentsFormatter * jwtLoggingFormatter;
 }
 
 #pragma mark - Push notification swizzle magic
@@ -214,6 +215,13 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     
     // Allow our image size cache to load well ahead of it when it will be needed.
     [ZNGImageSizeCache sharedCache];
+    
+    jwtLoggingFormatter = [[NSDateComponentsFormatter alloc] init];
+    jwtLoggingFormatter.unitsStyle = NSDateComponentsFormatterUnitsStyleFull;
+    jwtLoggingFormatter.includesApproximationPhrase = YES;
+    jwtLoggingFormatter.allowedUnits = (NSCalendarUnitSecond | NSCalendarUnitMinute | NSCalendarUnitHour | NSCalendarUnitDay);
+    jwtLoggingFormatter.formattingContext = NSFormattingContextMiddleOfSentence;
+    jwtLoggingFormatter.maximumUnitCount = 1;
 }
 
 - (void) dealloc
@@ -301,6 +309,8 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
             NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
             completion(nil, error);
         }
+        
+        return;
     }
     
     NSURLComponents * desiredUrlComponents = [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES];
@@ -310,6 +320,19 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     if (![currentUrlComponents.host isEqualToString:desiredUrlComponents.host]) {
         self.jwtClient = [[ZNGJWTClient alloc] initWithZingleURL:self.sessionManager.baseURL];
     }
+    
+    NSTimeInterval jwtAge = [[NSDate date] timeIntervalSinceDate:[self.jwt jwtIssueDate]];
+    NSTimeInterval jwtRemainingLifetime = [[self.jwt jwtExpiration] timeIntervalSinceNow];
+    NSString * ageDescription = [NSString stringWithFormat:@"%@ old", [[jwtLoggingFormatter stringFromTimeInterval:jwtAge] lowercaseString]];
+    NSString * expirationDescription;
+    
+    if (jwtRemainingLifetime >= 0.0) {
+        expirationDescription = [NSString stringWithFormat:@"expiring in %@", [[jwtLoggingFormatter stringFromTimeInterval:jwtRemainingLifetime] lowercaseString]];
+    } else {
+        expirationDescription = [NSString stringWithFormat:@"expired %@ ago", [[jwtLoggingFormatter stringFromTimeInterval:-jwtRemainingLifetime] lowercaseString]];
+    }
+    
+    SBLogInfo(@"Refreshing %llu-byte JWT, %@, %@", (unsigned long long)self.jwt.length, ageDescription, expirationDescription);
     
     [self.jwtClient refreshJwt:self.jwt success:^(NSString * _Nonnull jwt) {
         SBLogInfo(@"JWT was successfully refreshed.");

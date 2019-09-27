@@ -309,6 +309,8 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
             NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
             completion(nil, error);
         }
+        
+        return;
     }
     
     NSURLComponents * desiredUrlComponents = [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES];

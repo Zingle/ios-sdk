@@ -268,6 +268,13 @@
         return;
     }
     
+    if (bindRetryCount >= 5) {
+        SBLogWarning(@"No response has been received from bindNodeController in %d tries.  Reconnecting...", (int)bindRetryCount);
+        [self disconnect];
+        [self connect];
+        return;
+    }
+    
     if (bindRetryCount > 0) {
         SBLogInfo(@"Retrying bindNodeController, attempt #%llu", (unsigned long long)bindRetryCount);
     }

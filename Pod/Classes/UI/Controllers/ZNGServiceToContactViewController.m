@@ -1181,15 +1181,18 @@ enum ZNGConversationSections
     }
     
     ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
-    ZNGMessage * priorMessage = [self.conversation priorMessage:message];
     
-    // Have channels changed?
-    ZNGChannel * thisChannel = [[message contactCorrespondent] channel];
-    ZNGChannel * priorChannel = [[priorMessage contactCorrespondent] channel];
-    
-    if ((thisChannel != nil) && (priorChannel != nil) && (![thisChannel isEqual:priorChannel])) {
-        // The channel has changed!
-        return YES;
+    if (message != nil) {
+        ZNGMessage * priorMessage = [self.conversation priorMessage:message];
+        
+        // Have channels changed?
+        ZNGChannel * thisChannel = [[message contactCorrespondent] channel];
+        ZNGChannel * priorChannel = [[priorMessage contactCorrespondent] channel];
+        
+        if ((thisChannel != nil) && (priorChannel != nil) && (![thisChannel isEqual:priorChannel])) {
+            // The channel has changed!
+            return YES;
+        }
     }
     
     return NO;

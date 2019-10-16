@@ -91,8 +91,10 @@
             SBLogWarning(@"%@", description);
             
             if (failure != nil) {
-                NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
-                failure(error);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
+                    failure(error);
+                });
             }
             
             return;

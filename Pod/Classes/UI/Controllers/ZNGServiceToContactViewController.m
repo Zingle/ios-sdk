@@ -1182,7 +1182,9 @@ enum ZNGConversationSections
     
     ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
     
-    if (message != nil) {
+    // This silly looking logic is just a more strict `message != nil` that tolerates silly API responses with partially
+    //  populated message objects for non-message events.  Thanks, API.
+    if ([[message messageId] length] > 0) {
         ZNGMessage * priorMessage = [self.conversation priorMessage:message];
         
         // Have channels changed?

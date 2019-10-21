@@ -8,11 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@class FLAnimatedImageView;
+@class SDAnimatedImageView;
 
 @interface ZNGImageViewController : UIViewController
 
-@property (nonatomic, strong) IBOutlet FLAnimatedImageView * imageView;
+@property (nonatomic, strong) IBOutlet SDAnimatedImageView * imageView;
 @property (nonatomic, copy) NSURL * imageURL;
 
 @end

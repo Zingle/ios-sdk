@@ -172,6 +172,11 @@ static NSString * const EventCellId = @"event";
     [self showOrHideLockedContactBar];
 }
 
+- (UIModalPresentationStyle) modalPresentationStyle
+{
+    return UIModalPresentationFullScreen;
+}
+
 - (UIStatusBarStyle) preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;

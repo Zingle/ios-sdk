@@ -133,7 +133,7 @@
 
 - (void) imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
-    if (info[UIImagePickerControllerReferenceURL] != nil) {
+    if (info[UIImagePickerControllerImageURL] != nil) {
         // This is from the photo library.  We can load it from there.
         [self attachImageFromPhotoLibraryWithInfo:info];
     } else if (info[UIImagePickerControllerOriginalImage] != nil) {
@@ -177,85 +177,35 @@
         return;
     }
     
-    PHAsset * asset;
+    NSURL * imageUrl = info[UIImagePickerControllerImageURL];
     
-    // If we're in iOS 11 and have already sought photo library access permission, we will immediately get the PHAsset here.
-    if (@available(iOS 11.0, *)) {
-        asset = info[UIImagePickerControllerPHAsset];
-    }
-    
-    if (asset != nil) {
-        // That was easy
-        [self attachImageWithAsset:asset];
-        return;
-    }
-    
-    // Otherwise, we are either pre iOS 11 or do not yet have permission.  Either way, we get to go on a trip to PHPhotoLibrary town.
-    // First, ensure that we have an image URL that we can later use with PHImageManager.
-    // Note that UIImagePickerControllerReferenceURL is supposed to be deprecated in iOS 11, but I cannot find any other way to access
-    //  the PHAsset passed in the image picker callback the very first time it is done.  The alternative is to ask the user for permission
-    //  for photo library access up front before an image is selected.  That would avoid a deprecated dictionary key at the expense of a
-    //  slightly worse user experience.
-    NSURL * url = info[UIImagePickerControllerReferenceURL];
-    
-    if (url == nil) {
-        SBLogError(@"The user selected an image, but we did not receieve a reference URL to retrieve it.  Drat.");
+    if (imageUrl == nil) {
+        SBLogError(@"Selected image includes UIImagePickerControllerOriginalImage but not UIImagePickerControllerImageURL.");
         [self showImageAttachmentError];
         return;
     }
     
-    // In the cases that we already have permission, this extra call to request permission will have no visible effect.
-    [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
-        if (status != PHAuthorizationStatusAuthorized) {
-            SBLogError(@"The user has not granted us permission to use an image from their library.  Silly human.");
-            
-            if ([self.delegate respondsToSelector:@selector(imageAttachmentControllerDismissedWithoutSelection:)]) {
-                [self.delegate imageAttachmentControllerDismissedWithoutSelection:self];
-            }
-            
-            return;
-        }
-        
-        PHAsset * asset = [[PHAsset fetchAssetsWithALAssetURLs:@[url] options:nil] lastObject];
-        
-        if (asset == nil) {
-            SBLogError(@"Unable to retrieve the selected image asset from disk.  Odd.");
-            [self showImageAttachmentError];
-            return;
-        }
-        
-        [self attachImageWithAsset:asset];
-    }];
-}
-
-- (void) attachImageWithAsset:(PHAsset *)asset
-{
-    PHImageRequestOptions * options = [[PHImageRequestOptions alloc] init];
-    options.synchronous = NO;
-    options.networkAccessAllowed = NO;
-    options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+    NSData * imageData = [NSData dataWithContentsOfURL:imageUrl];
     
-    [[PHImageManager defaultManager] requestImageDataForAsset:asset options:options resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
-        if ([imageData length] == 0) {
-            // We did not get image data.  Show an error.
-            [self showImageAttachmentError];
-        } else {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                UIImage * image = [UIImage animatedImageWithAnimatedGIFData:imageData];
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (self->hostViewController != nil) {
-                        [self->hostViewController dismissViewControllerAnimated:YES completion:^{
-                            [self.delegate imageAttachmentController:self selectedImage:image imageData:imageData];
-                        }];
-                    } else {
-                        [self.delegate imageAttachmentController:self selectedImage:image imageData:imageData];
-                    }
-                });
-            });
-        }
-    }];
+    if ([imageData length] == 0) {
+        SBLogError(@"Unable to retrieve image data from %@", imageUrl);
+        [self showImageAttachmentError];
+        return;
+    }
+        
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        UIImage * imageFromData = [UIImage animatedImageWithAnimatedGIFData:imageData];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (self->hostViewController != nil) {
+                [self->hostViewController dismissViewControllerAnimated:YES completion:^{
+                    [self.delegate imageAttachmentController:self selectedImage:imageFromData imageData:imageData];
+                }];
+            } else {
+                [self.delegate imageAttachmentController:self selectedImage:imageFromData imageData:imageData];
+            }
+        });
+    });
 }
-
 
 @end

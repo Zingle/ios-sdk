@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yXX-6h-nLe">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yXX-6h-nLe">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
-        <deployment version="2304" identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -632,7 +630,7 @@
                         <outletCollection property="skeletonRectangles" destination="c91-yq-jmq" id="cJk-Ig-SsB"/>
                         <outletCollection property="skeletonRectangles" destination="pw8-OE-jLy" id="N9h-Ib-TfV"/>
                         <outletCollection property="skeletonRectangles" destination="kUY-wB-yhv" id="OIv-si-mT3"/>
-                        <segue destination="EHd-00-ynV" kind="presentation" identifier="editContact" id="phR-j8-hwa"/>
+                        <segue destination="EHd-00-ynV" kind="presentation" identifier="editContact" modalPresentationStyle="fullScreen" id="phR-j8-hwa"/>
                         <segue destination="ZM1-vb-ioJ" kind="presentation" identifier="forward" id="IQl-0u-ULV"/>
                         <segue destination="S2H-KT-IlU" kind="presentation" identifier="assign" id="vM0-Tf-hgQ"/>
                     </connections>
@@ -1625,19 +1623,10 @@
                         <viewLayoutGuide key="safeArea" id="6aC-6y-me5"/>
                     </view>
                     <connections>
-                        <outlet property="searchDisplayController" destination="fZB-BA-4Hq" id="aJI-ch-GNB"/>
                         <outlet property="tableView" destination="drN-GY-1hp" id="FXL-Qf-HjD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="pS7-m0-FYW" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="fZB-BA-4Hq">
-                    <connections>
-                        <outlet property="delegate" destination="X8F-hv-i5R" id="NuM-c7-O90"/>
-                        <outlet property="searchContentsController" destination="X8F-hv-i5R" id="Odh-gp-7Rf"/>
-                        <outlet property="searchResultsDataSource" destination="X8F-hv-i5R" id="vmY-1e-T9F"/>
-                        <outlet property="searchResultsDelegate" destination="X8F-hv-i5R" id="BrJ-Kv-xsS"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="2695" y="461"/>
         </scene>

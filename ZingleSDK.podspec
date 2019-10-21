@@ -20,7 +20,7 @@ Pod::Spec.new do |s|
   s.source           = { :git => "https://github.com/Zingle/ios-sdk.git", :tag => s.version.to_s }
   s.social_media_url = 'https://twitter.com/zingleme'
 
-  s.platform     = :ios, '10.0'
+  s.platform     = :ios, '11.0'
   s.requires_arc = true
 
   s.source_files = 'Pod/Classes/**/*.{h,m}'
@@ -30,10 +30,10 @@ Pod::Spec.new do |s|
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle'
   s.dependency 'SBObjectiveCWrapper'
-  s.dependency 'JSQMessagesViewController'
+  s.dependency 'JSQMessagesViewController/xibs-without-cells'
   s.dependency 'Analytics', '~> 3.0'
   s.dependency 'MGSwipeTableCell'
-  s.dependency 'SDWebImage/GIF'
+  s.dependency 'SDWebImage', '~> 5.0'
   s.dependency 'Socket.IO-Client-Swift'
   s.dependency 'Shimmer'
 end

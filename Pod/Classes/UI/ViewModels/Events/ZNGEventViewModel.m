@@ -11,7 +11,6 @@
 
 @import SBObjectiveCWrapper;
 @import SDWebImage;
-@import FLAnimatedImage;
 
 NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewModelImageSizeChangedNotification";
 
@@ -186,7 +185,7 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     CGSize previouslyKnownImageSize = [self mediaViewDisplaySize];
     NSURL * attachmentURL = ([self attachmentIsSupported]) ? [NSURL URLWithString:[self attachmentName]] : nil;
 
-    FLAnimatedImageView * animatedImageView = [[FLAnimatedImageView alloc] init];
+    SDAnimatedImageView * animatedImageView = [[SDAnimatedImageView alloc] init];
     animatedImageView.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.05];
     animatedImageView.tintColor = [self _placeholderTint];
     

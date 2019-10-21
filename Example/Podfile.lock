@@ -7,8 +7,16 @@ PODS:
   - AFNetworking/Security (3.2.1)
   - AFNetworking/Serialization (3.2.1)
   - Analytics (3.6.10)
-  - FLAnimatedImage (1.0.12)
   - JSQMessagesViewController (7.3.5):
+    - JSQMessagesViewController/include-cell-xibs (= 7.3.5)
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQMessagesViewController/core-resources (7.3.5):
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQMessagesViewController/include-cell-xibs (7.3.5):
+    - JSQMessagesViewController/xibs-without-cells
+    - JSQSystemSoundPlayer (~> 2.0.1)
+  - JSQMessagesViewController/xibs-without-cells (7.3.5):
+    - JSQMessagesViewController/core-resources
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
   - JVFloatLabeledTextField (1.2.1)
@@ -18,10 +26,9 @@ PODS:
   - MGSwipeTableCell (1.6.8)
   - SBObjectiveCWrapper (1.4.0):
     - SwiftyBeaver (~> 1.4.0)
-  - SDWebImage/Core (4.4.7)
-  - SDWebImage/GIF (4.4.7):
-    - FLAnimatedImage (~> 1.0)
-    - SDWebImage/Core
+  - SDWebImage (5.2.3):
+    - SDWebImage/Core (= 5.2.3)
+  - SDWebImage/Core (5.2.3)
   - Shimmer (1.0.2)
   - Socket.IO-Client-Swift (15.1.0):
     - Starscream (~> 3.1)
@@ -30,24 +37,23 @@ PODS:
   - ZingleSDK (1.1.0):
     - AFNetworking/NSURLSession
     - Analytics (~> 3.0)
-    - JSQMessagesViewController
+    - JSQMessagesViewController/xibs-without-cells
     - JVFloatLabeledTextField
     - Mantle
     - MGSwipeTableCell
     - SBObjectiveCWrapper
-    - SDWebImage/GIF
+    - SDWebImage (~> 5.0)
     - Shimmer
     - Socket.IO-Client-Swift
 
 DEPENDENCIES:
+  - JSQMessagesViewController (from `JSQMessagesViewController`)
   - ZingleSDK (from `../`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - Analytics
-    - FLAnimatedImage
-    - JSQMessagesViewController
     - JSQSystemSoundPlayer
     - JVFloatLabeledTextField
     - Mantle
@@ -60,26 +66,27 @@ SPEC REPOS:
     - SwiftyBeaver
 
 EXTERNAL SOURCES:
+  JSQMessagesViewController:
+    :path: JSQMessagesViewController
   ZingleSDK:
     :path: "../"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   Analytics: 63744ad4afa65c3bcdcdb7a94b62515bde5b3900
-  FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  JSQMessagesViewController: 6587f56aedbcb150a8ba1d968e1ef58b1bc758b7
+  JSQMessagesViewController: b0b7d079f4e5acc0809ec49ea65fad6c7501235a
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
   JVFloatLabeledTextField: cfc44e3c4d493b2ed92ede8035e8e89c2912ba64
   Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   MGSwipeTableCell: dc4eca3212ed38a563b27d6aa7b3c01ce656c1e2
   SBObjectiveCWrapper: 854ea56b37cd0031af2b1d6e12c2f965fc4ff86d
-  SDWebImage: c10d14a8883ebd89664f02a422006f66a85c0c5d
+  SDWebImage: 46a7f73228f84ce80990c786e4372cf4db5875ce
   Shimmer: c5374be1c2b0c9e292fb05b339a513cf291cac86
   Socket.IO-Client-Swift: 7cb44c0ffb86e158cee32d0642d30ec5fdcf8f61
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   SwiftyBeaver: 25bd76281f49ca989ec2e3cbde9af89c15bc1432
-  ZingleSDK: d1322b8507a756e65b45771a90c94d669eaca8fc
+  ZingleSDK: f08f0a4707b45b182c7cffa9de4b9ee4f6deb81d
 
-PODFILE CHECKSUM: 3098c657b2bfeb8114422c12164d970634fc08fa
+PODFILE CHECKSUM: 4f990b2fa41c7e8b92d657fa2c61486129ae4a47
 
-COCOAPODS: 1.7.3
+COCOAPODS: 1.8.4

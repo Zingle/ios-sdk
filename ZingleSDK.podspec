@@ -33,7 +33,7 @@ Pod::Spec.new do |s|
   s.dependency 'JSQMessagesViewController/xibs-without-cells'
   s.dependency 'Analytics', '~> 3.0'
   s.dependency 'MGSwipeTableCell'
-  s.dependency 'SDWebImage/GIF'
+  s.dependency 'SDWebImage', '~> 5.0'
   s.dependency 'Socket.IO-Client-Swift'
   s.dependency 'Shimmer'
 end

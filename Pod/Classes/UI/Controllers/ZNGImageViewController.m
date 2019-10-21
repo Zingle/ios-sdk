@@ -8,7 +8,6 @@
 
 #import "ZNGImageViewController.h"
 
-@import FLAnimatedImage;
 @import SDWebImage;
 
 @interface ZNGImageViewController ()

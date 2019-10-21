@@ -4,10 +4,12 @@ use_frameworks!
 
 target 'ZingleSDK_Example' do
   pod 'ZingleSDK', :path => '../'
+  pod 'JSQMessagesViewController', :path => 'JSQMessagesViewController'
 end
 
 target 'Tests' do
   pod 'ZingleSDK', :path => '../'
+  pod 'JSQMessagesViewController', :path => 'JSQMessagesViewController'
 end
 
 # Cocoapods 1.3.1 is setting all library Swift versions to 3.2 for some asinine reason.  I love you, Cocoapods.

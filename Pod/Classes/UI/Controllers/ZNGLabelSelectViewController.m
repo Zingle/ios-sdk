@@ -45,7 +45,6 @@ static NSString * const LabelCellId = @"labelCell";
     self.definesPresentationContext = YES;
     
     searchController.searchBar.tintColor = [UIColor whiteColor];
-    searchController.searchBar.barTintColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     
     self.tableView.tableHeaderView = searchController.searchBar;
 }

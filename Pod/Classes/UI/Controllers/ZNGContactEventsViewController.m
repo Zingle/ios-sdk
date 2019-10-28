@@ -52,6 +52,9 @@ static const CGFloat LeftMarginSize = 16.0;
 {
     [super viewDidLoad];
     
+    // Xcode is ignoring the background color from the xib again for Xcode reasons.  We'll set it manually here.
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactEventsViewController class]];
     UINib * eventCellNib = [UINib nibWithNibName:NSStringFromClass([ZNGContactEventTableViewCell class]) bundle:bundle];
     [self.tableView registerNib:eventCellNib forCellReuseIdentifier:EventCellId];

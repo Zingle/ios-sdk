@@ -27,7 +27,7 @@
                     <subviews>
                         <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iNJ-FZ-Tul">
                             <rect key="frame" x="0.0" y="26" width="375" height="2"/>
-                            <color key="backgroundColor" white="0.74252232142857144" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="backgroundColor" systemColor="separatorColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.28999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="2" id="ead-pB-OJh"/>
                             </constraints>

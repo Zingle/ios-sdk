@@ -315,26 +315,22 @@ NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
 - (UIColor *) backgroundColorForCalendarEvent:(ZNGCalendarEvent *)event
 {
     UIColor * const defaultColor = [UIColor lightGrayColor];
-    static const CGFloat pastEventAlpha = 0.5;
-    
-    BOOL isPastEvent = ([event.endsAt timeIntervalSinceNow] < 0.0);
-    CGFloat alpha = isPastEvent ? pastEventAlpha : 1.0;
     
     for (ZNGCalendarEventType * type in self.calendarEventTypes) {
         if ([type.eventTypeId isEqualToString:event.eventTypeId]) {
             NSString * colorString = type.backgroundColor;
             
             if ([colorString length] > 0) {
-                return [[UIColor colorFromHexString:colorString] colorWithAlphaComponent:alpha];
+                return [UIColor colorFromHexString:colorString];
             }
             
             SBLogWarning(@"Found event type for %@, but the background color is %@ instead of a hex color string.", event.eventTypeId, colorString);
-            return [defaultColor colorWithAlphaComponent:alpha];
+            return defaultColor;
         }
     }
     
     SBLogWarning(@"Unable to find event type with ID of %@.  Returning fallback background color.", event.eventTypeId);
-    return [defaultColor colorWithAlphaComponent:alpha];
+    return defaultColor;
 }
 
 /**
@@ -344,26 +340,22 @@ NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
 - (UIColor *) textColorForCalendarEvent:(ZNGCalendarEvent *)event
 {
     UIColor * const defaultColor = [UIColor blackColor];
-    static const CGFloat pastEventAlpha = 0.5;
-    
-    BOOL isPastEvent = ([event.endsAt timeIntervalSinceNow] < 0.0);
-    CGFloat alpha = isPastEvent ? pastEventAlpha : 1.0;
     
     for (ZNGCalendarEventType * type in self.calendarEventTypes) {
         if ([type.eventTypeId isEqualToString:event.eventTypeId]) {
             NSString * colorString = type.textColor;
             
             if ([colorString length] > 0) {
-                return [[UIColor colorFromHexString:colorString] colorWithAlphaComponent:alpha];
+                return [UIColor colorFromHexString:colorString];
             }
             
             SBLogWarning(@"Found event type for %@, but the text color is %@ instead of a hex color string.", event.eventTypeId, colorString);
-            return [defaultColor colorWithAlphaComponent:alpha];
+            return defaultColor;
         }
     }
     
     SBLogWarning(@"Unable to find event type with ID of %@.  Returning fallback text color.", event.eventTypeId);
-    return [defaultColor colorWithAlphaComponent:alpha];
+    return defaultColor;
 }
 
 - (ZNGTeam * _Nullable) teamWithId:(NSString * _Nullable)teamId

@@ -122,7 +122,7 @@
             return;
         }
         
-        SBLogInfo(@"Received %ud byte refreshed JWT", (unsigned int)[jwt length]);
+        SBLogInfo(@"Received %u byte refreshed JWT", (unsigned int)[jwt length]);
         
         if (success != nil) {
             success(jwt);

@@ -12,10 +12,19 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    
+        
     self.leftnessConstraint.constant = 46.0;
     self.roundedBackgroundView.layer.cornerRadius = 3.0;
     self.roundedBackgroundView.layer.borderWidth = 1.0;
+    
+    self.darkeningOverlay.layer.cornerRadius = self.roundedBackgroundView.layer.cornerRadius;
+    self.darkeningOverlay.alpha = self.darkenAmount;
+}
+
+- (void) setDarkenAmount:(CGFloat)darkenAmount
+{
+    _darkenAmount = darkenAmount;
+    self.darkeningOverlay.alpha = darkenAmount;
 }
 
 - (NSArray<UILabel *> *) textLabels

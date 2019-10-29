@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14865.1" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14819.2"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -95,19 +95,27 @@
                                         <constraint firstItem="jsL-rX-lQE" firstAttribute="leading" secondItem="AMf-kl-DKw" secondAttribute="leading" constant="14" id="xQM-tE-wou"/>
                                     </constraints>
                                 </view>
+                                <view alpha="0.0" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lcn-hA-8Uz">
+                                    <rect key="frame" x="0.0" y="0.0" width="313" height="72"/>
+                                    <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                </view>
                             </subviews>
                             <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstItem="vVL-RZ-tOh" firstAttribute="top" secondItem="uI1-6U-W2C" secondAttribute="top" id="3LU-6Q-6vU"/>
+                                <constraint firstItem="lcn-hA-8Uz" firstAttribute="leading" secondItem="uI1-6U-W2C" secondAttribute="leading" id="6IW-X2-lu1"/>
                                 <constraint firstItem="lzy-GI-5ag" firstAttribute="centerY" secondItem="uI1-6U-W2C" secondAttribute="centerY" id="7dY-kP-apO"/>
                                 <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="lzy-GI-5ag" secondAttribute="bottom" constant="4" id="CAh-We-U6t"/>
                                 <constraint firstAttribute="trailing" secondItem="AMf-kl-DKw" secondAttribute="trailing" id="PmQ-rf-jTF"/>
                                 <constraint firstItem="lzy-GI-5ag" firstAttribute="top" relation="greaterThanOrEqual" secondItem="uI1-6U-W2C" secondAttribute="top" constant="8" id="Qmg-Np-946"/>
                                 <constraint firstAttribute="bottom" secondItem="vVL-RZ-tOh" secondAttribute="bottom" id="Y6t-BC-Umg"/>
                                 <constraint firstItem="AMf-kl-DKw" firstAttribute="centerY" secondItem="uI1-6U-W2C" secondAttribute="centerY" id="ZT1-5j-q7H"/>
+                                <constraint firstAttribute="trailing" secondItem="lcn-hA-8Uz" secondAttribute="trailing" id="b0a-yV-yqH"/>
                                 <constraint firstItem="lzy-GI-5ag" firstAttribute="leading" secondItem="uI1-6U-W2C" secondAttribute="leading" id="eFI-Db-zRY"/>
                                 <constraint firstItem="vVL-RZ-tOh" firstAttribute="leading" secondItem="lzy-GI-5ag" secondAttribute="trailing" id="mTO-bD-x03"/>
+                                <constraint firstItem="lcn-hA-8Uz" firstAttribute="bottom" secondItem="uI1-6U-W2C" secondAttribute="bottom" id="mtM-9D-er8"/>
                                 <constraint firstItem="AMf-kl-DKw" firstAttribute="leading" secondItem="vVL-RZ-tOh" secondAttribute="trailing" id="rif-XB-k6u"/>
+                                <constraint firstAttribute="top" secondItem="lcn-hA-8Uz" secondAttribute="top" id="zTG-CS-g2Y"/>
                             </constraints>
                             <viewLayoutGuide key="safeArea" id="8ml-8P-bHX"/>
                             <variation key="default">
@@ -138,6 +146,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <connections>
+                <outlet property="darkeningOverlay" destination="lcn-hA-8Uz" id="kwY-0q-plD"/>
                 <outlet property="dayLabel" destination="N6G-Y9-aBk" id="oex-b6-Oae"/>
                 <outlet property="dividerLine" destination="vVL-RZ-tOh" id="veW-tL-gN7"/>
                 <outlet property="eventNameLabel" destination="jsL-rX-lQE" id="58u-Od-HJN"/>

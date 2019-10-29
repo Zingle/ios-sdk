@@ -16,7 +16,11 @@
 {
     [super awakeFromNib];
     
-    self.barTintColor = [UIColor whiteColor];
+    if (@available(iOS 13.0, *)) {
+        self.barTintColor = [UIColor systemBackgroundColor];
+    } else {
+        self.barTintColor = [UIColor whiteColor];
+    }
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGForwardingInputToolbar class]];
     UIButton * sendButton = self.contentView.rightBarButtonItem;

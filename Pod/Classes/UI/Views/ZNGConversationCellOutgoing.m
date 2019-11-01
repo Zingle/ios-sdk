@@ -20,8 +20,11 @@
 {
     [super awakeFromNib];
     
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationCellOutgoing class]];
     self.sendingErrorIconContainer.layer.cornerRadius = CGRectGetWidth(self.sendingErrorIconContainer.bounds) / 2.0;
-    self.sendingErrorIcon.tintColor = [UIColor zng_strawberry]; // IB is ignoring the tintColor property in the xib for Xcode reasons
+    
+    // IB is ignoring the tintColor property in the xib for Xcode reasons
+    self.sendingErrorIcon.tintColor = [UIColor colorNamed:@"ZNGNegativeAction" inBundle:bundle compatibleWithTraitCollection:nil];
 }
 
 - (void) prepareForReuse

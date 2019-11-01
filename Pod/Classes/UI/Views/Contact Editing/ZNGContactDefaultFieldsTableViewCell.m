@@ -32,12 +32,23 @@
     
     ZNGGooglyEye * leftEye;
     ZNGGooglyEye * rightEye;
+    
+    UIColor * avatarBackgroundColor;
+    UIColor * avatarTextColor;
+    UIColor * lockedBackgroundColor;
+    UIImage * anonynousAvatarImage;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
     defaultTextFieldBackgroundColor = self.firstNameField.backgroundColor;
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactDefaultFieldsTableViewCell class]];
+    avatarBackgroundColor = [UIColor colorNamed:@"ZNGInboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    avatarTextColor = [UIColor colorNamed:@"ZNGInboundBubbleText" inBundle:bundle compatibleWithTraitCollection:nil];
+    lockedBackgroundColor = [UIColor colorNamed:@"ZNGDisabledBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    anonynousAvatarImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
     
     // Title picker
     UIPickerView * picker = [[UIPickerView alloc] init];
@@ -70,15 +81,14 @@
     if ([initials length] > 0) {
         // We have initials for this contact.  Use that as a placeholder image.
         ZNGInitialsAvatar * initialsAvatar = [[ZNGInitialsAvatar alloc] initWithInitials:initials
-                                                                               textColor:[UIColor zng_text_gray]
-                                                                         backgroundColor:[UIColor zng_messageBubbleLightGrayColor]
+                                                                               textColor:avatarTextColor
+                                                                         backgroundColor:avatarBackgroundColor
                                                                                     size:self.avatarImageView.frame.size
                                                                                     font:[UIFont latoFontOfSize:20.0]];
         placeholderImage = [initialsAvatar avatarImage];
     } else {
         // We have no initials for this user.  Use the anonymous avatar image as a placeholder.
-        NSBundle * bundle = [NSBundle bundleForClass:[ZNGContactDefaultFieldsTableViewCell class]];
-        placeholderImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
+        placeholderImage = anonynousAvatarImage;
     }
     
     [self.avatarImageView sd_setImageWithURL:contact.avatarUri placeholderImage:placeholderImage];
@@ -132,7 +142,7 @@
     self.firstNameField.enabled = !editingLocked;
     self.lastNameField.enabled = !editingLocked;
     
-    UIColor * backgroundColor = (editingLocked) ? [UIColor zng_light_gray] : defaultTextFieldBackgroundColor;
+    UIColor * backgroundColor = (editingLocked) ? lockedBackgroundColor : defaultTextFieldBackgroundColor;
     self.titleField.backgroundColor = backgroundColor;
     self.firstNameField.backgroundColor = backgroundColor;
     self.lastNameField.backgroundColor = backgroundColor;

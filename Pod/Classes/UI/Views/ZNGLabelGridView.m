@@ -18,6 +18,7 @@
 @implementation ZNGLabelGridView
 {
     UIImage * xImage;
+    UIColor * moreButtonColor;
     
     CGSize totalSize;
     
@@ -61,8 +62,9 @@
     _labelTextInset = 6.0;
     _labelCornerRadius = 14.0;
     
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGLabelGridView class]];
     xImage = [UIImage imageNamed:@"deleteX" inBundle:bundle compatibleWithTraitCollection:nil];
+    moreButtonColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
     self.userInteractionEnabled = NO;
     
     _labelIcon = [[UIImage imageNamed:@"smallTag" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
@@ -385,7 +387,7 @@
         // We cannot fit all of our labels within our bounds.  Add a "x more..." label and make room as necessary
         CGFloat biggerSize = self.font.pointSize + 5.0;
         moreLabel.font = [UIFont fontWithName:self.font.fontName size:biggerSize];
-        moreLabel.textColor = [UIColor zng_gray];
+        moreLabel.textColor = moreButtonColor;
         moreLabel.backgroundColor = [UIColor clearColor];
         
         CGSize moreLabelSize = [moreLabel intrinsicContentSize];

@@ -22,6 +22,12 @@
 {
     [super jsq_configureTextView];
     
+    // The super call breaks our colors.  Fix them for dark mode.
+    if (@available(iOS 13.0, *)) {
+        self.backgroundColor = [UIColor systemBackgroundColor];
+        self.textColor = [UIColor labelColor];
+    }
+    
     self.layer.borderWidth = 0.5;
     self.layer.borderColor = [[[UIColor grayColor] colorWithAlphaComponent:0.5] CGColor];
     self.layer.cornerRadius = 15.0;

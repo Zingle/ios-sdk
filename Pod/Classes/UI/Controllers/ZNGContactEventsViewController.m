@@ -247,6 +247,8 @@ static const CGFloat LeftMarginSize = 16.0;
         label.textColor = textColor;
     }
     
+    cell.darkenAmount = ([event isPast]) ? 0.5 : 0.0;
+    
     return cell;
 }
 

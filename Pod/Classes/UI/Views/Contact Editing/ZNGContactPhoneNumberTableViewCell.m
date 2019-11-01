@@ -15,13 +15,13 @@
 @implementation ZNGContactPhoneNumberTableViewCell
 {
     UIColor * defaultTextFieldBackgroundColor;
+    UIColor * lockedBackgroundColor;
     UIImageView * lockedRightView;
 }
 
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    defaultTextFieldBackgroundColor = self.textField.backgroundColor;
     
     self.textField.rightViewMode = UITextFieldViewModeAlways;
     
@@ -30,6 +30,9 @@
     lockedRightView = [[UIImageView alloc] initWithImage:lockImage];
     lockedRightView.contentMode = UIViewContentModeCenter;
     lockedRightView.tintColor = [UIColor lightGrayColor];
+    
+    defaultTextFieldBackgroundColor = self.textField.backgroundColor;
+    lockedBackgroundColor = [UIColor colorNamed:@"ZNGDisabledBackground" inBundle:bundle compatibleWithTraitCollection:nil];
 }
 
 - (void) setService:(ZNGService *)service
@@ -54,7 +57,7 @@
 {
     self.textField.enabled = !self.editingLocked;
     self.textField.rightView = (self.editingLocked) ? lockedRightView : nil;
-    self.textField.backgroundColor = (self.editingLocked) ? [UIColor zng_light_gray] : defaultTextFieldBackgroundColor;
+    self.textField.backgroundColor = (self.editingLocked) ? lockedBackgroundColor : defaultTextFieldBackgroundColor;
     
     NSString * value = ([self.service shouldDisplayRawValueForChannel:self.channel]) ? self.channel.value : self.channel.formattedValue;
     self.textField.text = value;

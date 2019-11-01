@@ -58,9 +58,30 @@ static const CGFloat bubbleDiameter = 7.0;
     circle3.fillColor = circle1.fillColor;
 }
 
+- (void) restoreProperColors
+{
+    // Please stop resetting my colors in dark mode, iOS
+    if (@available(iOS 13.0, *)) {
+        self.contentView.backgroundColor = [UIColor systemBackgroundColor];
+        self.messageBubbleContainerView.backgroundColor = [UIColor clearColor];
+        self.messageBubbleImageView.backgroundColor = [UIColor clearColor];
+        self.avatarContainerView.backgroundColor = [UIColor clearColor];
+        self.avatarImageView.backgroundColor = [UIColor clearColor];
+        self.cellBottomLabel.backgroundColor = [UIColor clearColor];
+        self.bouncingCircleContainerView.backgroundColor = [UIColor clearColor];
+    }
+}
+
+- (void) prepareForReuse
+{
+    [super prepareForReuse];
+    [self restoreProperColors];
+}
+
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    [self restoreProperColors];
     
     // Draw the three bouncing circles for typing indicator magic.
     circle1 = [[CAShapeLayer alloc] init];

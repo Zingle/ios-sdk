@@ -156,17 +156,22 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 - (void) _conv_commonInit
 {
     // Default property values
-    _outgoingBubbleColor = [UIColor zng_outgoingMessageBubbleColor];
-    _incomingBubbleColor = [UIColor zng_messageBubbleLightGrayColor];
-    _internalNoteColor = [UIColor zng_note_yellow];
-    _incomingTextColor = [UIColor zng_text_gray];
-    _outgoingTextColor = [UIColor whiteColor];
-    _internalNoteTextColor = [UIColor zng_text_gray];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    _outgoingBubbleColor = [UIColor colorNamed:@"ZNGOutboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    _incomingBubbleColor = [UIColor colorNamed:@"ZNGInboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    _internalNoteColor = [UIColor colorNamed:@"ZNGInternalNoteBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    _incomingTextColor = [UIColor colorNamed:@"ZNGInboundBubbleText" inBundle:bundle compatibleWithTraitCollection:nil];
+    _outgoingTextColor = [UIColor colorNamed:@"ZNGOutboundBubbleText" inBundle:bundle compatibleWithTraitCollection:nil];
+    _internalNoteTextColor = [UIColor colorNamed:@"ZNGInternalNoteText" inBundle:bundle compatibleWithTraitCollection:nil];
     _authorTextColor = [UIColor lightGrayColor];
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
     _showSkeletonViewWhenLoading = YES;
     _stuckToBottom = YES;
+    
+    if (@available(iOS 13.0, *)) {
+        _authorTextColor = [UIColor tertiaryLabelColor];
+    }
     
     offScreenTimeLabelPenetration = 0.0;
     _timeLabelPenetration = offScreenTimeLabelPenetration;
@@ -231,6 +236,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     self.inputToolbar.contentView.textView.font = self.textInputFont;
     self.inputToolbar.sendButtonColor = self.sendButtonColor;
     self.inputToolbar.sendButtonFont = self.sendButtonFont;
+    
+    if (@available(iOS 13.0, *)) {
+        self.inputToolbar.barTintColor = [UIColor systemBackgroundColor];
+    }
     
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Back" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.collectionView.collectionViewLayout.incomingAvatarViewSize = CGSizeZero;
@@ -298,10 +307,12 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
 
 - (void) setupLoadingGradient
 {
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationViewController class]];
+    
     loadingGradient = [[ZNGGradientLoadingView alloc] initWithFrame:CGRectMake(0.0, 0.0, 480.0, 6.0)];
     loadingGradient.hidesWhenStopped = YES;
-    loadingGradient.centerColor = [UIColor zng_loadingGradientInnerColor];
-    loadingGradient.edgeColor = [UIColor zng_loadingGradientOuterColor];
+    loadingGradient.centerColor = [UIColor colorNamed:@"ZNGLogoGradient" inBundle:bundle compatibleWithTraitCollection:nil];
+    loadingGradient.edgeColor = [UIColor colorNamed:@"ZNGLogo" inBundle:bundle compatibleWithTraitCollection:nil];
     
     loadingGradient.translatesAutoresizingMaskIntoConstraints = NO;
     

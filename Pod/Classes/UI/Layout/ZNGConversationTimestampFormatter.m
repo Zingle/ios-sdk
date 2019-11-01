@@ -7,6 +7,7 @@
 //
 
 #import "ZNGConversationTimestampFormatter.h"
+#import "UIFont+Lato.h"
 
 @implementation ZNGConversationTimestampFormatter
 
@@ -32,11 +33,11 @@
         NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         paragraphStyle.alignment = NSTextAlignmentCenter;
         
-        self.dateTextAttributes = @{ NSFontAttributeName : [UIFont boldSystemFontOfSize:12.0f],
+        self.dateTextAttributes = @{ NSFontAttributeName : [UIFont latoBoldFontOfSize:12.0f],
                                  NSForegroundColorAttributeName : color,
                                  NSParagraphStyleAttributeName : paragraphStyle };
         
-        self.timeTextAttributes = @{ NSFontAttributeName : [UIFont systemFontOfSize:12.0f],
+        self.timeTextAttributes = @{ NSFontAttributeName : [UIFont latoFontOfSize:12.0f],
                                  NSForegroundColorAttributeName : color,
                                  NSParagraphStyleAttributeName : paragraphStyle };
     }

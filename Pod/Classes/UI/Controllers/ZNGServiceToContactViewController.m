@@ -74,6 +74,8 @@ enum ZNGConversationSections
     UIView * bannerContainer;
     UILabel * titleLabel;
     
+    UIColor * errorBackgroundColor;
+    
     UIView * blockedChannelBanner;
     UILabel * blockedChannelLabel;
     NSLayoutConstraint * blockedChannelOnScreenConstraint;
@@ -185,20 +187,22 @@ enum ZNGConversationSections
     [super viewDidLoad];
 
     // Add a custom UILabel to support multi line titles
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     titleLabel = [[UILabel alloc] init];
     titleLabel.font = [UIFont latoSemiBoldFontOfSize:18.0];
-    titleLabel.textColor = [UIColor zng_lightBlue];
+    titleLabel.textColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     titleLabel.numberOfLines = 2;
     titleLabel.lineBreakMode = NSLineBreakByTruncatingTail; // Prevent wrapping since we will manually insert a subtitle with a '\n'
     titleLabel.textAlignment = NSTextAlignmentCenter;
     self.navigationItem.titleView = titleLabel;
+    
+    errorBackgroundColor = [UIColor colorNamed:@"ZNGErrorBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     
     // Add a tap gesture recognizer to the title to link to the edit view
     UITapGestureRecognizer * titleTapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pressedEditContact)];
     titleLabel.userInteractionEnabled = YES;
     [titleLabel addGestureRecognizer:titleTapper];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceToContactViewController class]];
     UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
     [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
     
@@ -495,6 +499,12 @@ enum ZNGConversationSections
     }
     
     // Smaller and lighter text for the subtitle
+    UIColor * subtitleColor = [UIColor colorWithWhite:0.58 alpha:1.0];
+    
+    if (@available(iOS 13.0, *)) {
+        subtitleColor = [UIColor tertiaryLabelColor];
+    }
+    
     NSDictionary<NSAttributedStringKey, id> * subtitleAttributes = @{
                                                                      NSFontAttributeName: [UIFont latoFontOfSize:14.0],
                                                                      NSForegroundColorAttributeName: [UIColor colorWithWhite:0.58 alpha:1.0],
@@ -1100,7 +1110,7 @@ enum ZNGConversationSections
             CGRect rect = CGRectMake(0.0, 0.0, bannerContainer.frame.size.width, bannerContainer.frame.size.height);
             blockedChannelBanner = [[UIView alloc] initWithFrame:rect];
             blockedChannelBanner.translatesAutoresizingMaskIntoConstraints = NO;
-            blockedChannelBanner.backgroundColor = [UIColor zng_strawberry];
+            blockedChannelBanner.backgroundColor = errorBackgroundColor;
             NSLayoutConstraint * height = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0.0];
             NSLayoutConstraint * width = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
             NSLayoutConstraint * left = [NSLayoutConstraint constraintWithItem:blockedChannelBanner attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:bannerContainer attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
@@ -1172,7 +1182,9 @@ enum ZNGConversationSections
     
     ZNGMessage * message = [[[self eventViewModelAtIndexPath:indexPath] event] message];
     
-    if (message != nil) {
+    // This silly looking logic is just a more strict `message != nil` that tolerates silly API responses with partially
+    //  populated message objects for non-message events.  Thanks, API.
+    if ([[message messageId] length] > 0) {
         ZNGMessage * priorMessage = [self.conversation priorMessage:message];
         
         // Have channels changed?

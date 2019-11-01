@@ -46,6 +46,7 @@ enum TopSectionRows {
     UISearchController * searchController;
     
     UIImage * blankManImage;
+    UIColor * avatarBackgroundColor;
 }
 
 - (void)viewDidLoad
@@ -54,6 +55,7 @@ enum TopSectionRows {
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGAssignmentViewController class]];
     blankManImage = [UIImage imageNamed:@"anonymousAvatarBig" inBundle:bundle compatibleWithTraitCollection:nil];
+    avatarBackgroundColor = [UIColor colorNamed:@"ZNGOutboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     
     searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
     searchController.searchResultsUpdater = self;
@@ -216,7 +218,7 @@ enum TopSectionRows {
                     ZNGAvatarImageView * avatar = [[ZNGAvatarImageView alloc] initWithAvatarUrl:userAuth.avatarUri
                                                                                        initials:[[userAuth displayName] initials]
                                                                                            size:cell.avatarContainer.bounds.size
-                                                                                backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
+                                                                                backgroundColor:avatarBackgroundColor
                                                                                       textColor:[UIColor whiteColor]
                                                                                            font:[self avatarFont]];
                     avatar.frame = cell.avatarContainer.bounds;
@@ -259,7 +261,7 @@ enum TopSectionRows {
             ZNGAvatarImageView * avatar = [[ZNGAvatarImageView alloc] initWithAvatarUrl:user.avatarUri
                                                                                initials:[[user fullName] initials]
                                                                                    size:cell.avatarContainer.bounds.size
-                                                                        backgroundColor:[UIColor zng_outgoingMessageBubbleColor]
+                                                                        backgroundColor:avatarBackgroundColor
                                                                               textColor:[UIColor whiteColor]
                                                                                    font:[self avatarFont]];
             

@@ -52,4 +52,9 @@
  */
 - (BOOL) singleDay;
 
+/**
+ * Returns YES if the event ended in the past
+ */
+- (BOOL) isPast;
+
 @end

@@ -32,7 +32,7 @@ static NSString * const LabelCellId = @"labelCell";
 {
     [super viewDidLoad];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[self class]];
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGLabelSelectViewController class]];
     labelIcon = [[UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     UINib * labelCellNib = [UINib nibWithNibName:NSStringFromClass([ZNGLabelTableViewCell class]) bundle:bundle];
     [self.tableView registerNib:labelCellNib forCellReuseIdentifier:LabelCellId];
@@ -45,7 +45,6 @@ static NSString * const LabelCellId = @"labelCell";
     self.definesPresentationContext = YES;
     
     searchController.searchBar.tintColor = [UIColor whiteColor];
-    searchController.searchBar.barTintColor = [UIColor zng_lightBlue];
     
     self.tableView.tableHeaderView = searchController.searchBar;
 }

@@ -111,4 +111,13 @@
     return @[startTime, endTime];
 }
 
+- (BOOL) isPast
+{
+    if (self.endsAt == nil) {
+        return NO;
+    }
+    
+    return ([self.endsAt timeIntervalSinceNow] <= 0.0);
+}
+
 @end

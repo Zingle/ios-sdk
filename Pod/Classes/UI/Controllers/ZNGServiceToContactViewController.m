@@ -1923,7 +1923,8 @@ enum ZNGConversationSections
     // Note that the font needs to be manually applied via NSAttributedString or else the font of the text field
     //  forever changes.
     UIFont * font = textView.font;
-    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: font}];
+    UIColor * textColor = textView.textColor;
+    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: textColor}];
     NSMutableAttributedString * attributedText = [textView.attributedText mutableCopy];
     [attributedText appendAttributedString:newAttributedText];
     textView.attributedText = attributedText;

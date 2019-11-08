@@ -393,7 +393,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     session.requestSerializer = [AFJSONRequestSerializer serializer];
     [session.requestSerializer setValue:ZNGAgentValue forHTTPHeaderField:ZNGAgentHeaderField];
     [session.requestSerializer setValue:[[NSBundle mainBundle] bundleIdentifier] forHTTPHeaderField:ZNGClientIDField];
-    NSString * bundleVersion = [[NSBundle bundleForClass:[self class]] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
+    NSString * bundleVersion = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
     [session.requestSerializer setValue:bundleVersion forHTTPHeaderField:ZNGClientVersionField];
 
     return session;

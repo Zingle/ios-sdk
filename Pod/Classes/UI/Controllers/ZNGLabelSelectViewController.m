@@ -44,7 +44,11 @@ static NSString * const LabelCellId = @"labelCell";
     searchController.dimsBackgroundDuringPresentation = NO;
     self.definesPresentationContext = YES;
     
-    searchController.searchBar.tintColor = [UIColor whiteColor];
+    searchController.searchBar.tintColor = [UIColor blackColor];
+    
+    if (@available(iOS 13.0, *)) {
+        searchController.searchBar.tintColor = [UIColor labelColor];
+    }
     
     self.tableView.tableHeaderView = searchController.searchBar;
 }

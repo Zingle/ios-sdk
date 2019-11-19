@@ -21,6 +21,7 @@
 #import "ZNGJWTClient.h"
 #import "AFHTTPSessionManager+ZNGJWT.h"
 #import "NSString+ZNGJWT.h"
+#import "NSData+HexString.h"
 
 @import SBObjectiveCWrapper;
 
@@ -513,12 +514,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         return;
     }
     
-    const uint8_t * bytes = [legacyTokenData bytes];
-    NSUInteger length = [legacyTokenData length];
-    NSMutableString * legacyTokenString = [[NSMutableString alloc] initWithCapacity:(length * 2)];
-    for (NSUInteger i=0; i < length; i++) {
-        [legacyTokenString appendString:[NSString stringWithFormat:@"%02.2hhx", bytes[i]]];
-    }
+    NSString * legacyTokenString = [legacyTokenData hexString];
     
     [self.notificationsClient unregisterForNotificationsWithDeviceId:legacyTokenString success:^(ZNGStatus *status) {
         SBLogInfo(@"Successfully unsubscribed for notifications using legacy APNS device ID.");

@@ -38,7 +38,13 @@ typedef void (^ZNGErrorHandler)(ZNGError * _Nonnull error);
 /**
  *  Static setter for the push notification device token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.
  */
-+ (void) setPushNotificationDeviceToken:(nonnull NSData *)token;
++ (void) setPushNotificationDeviceToken:(nonnull NSData *)token
+__attribute__((deprecated("Notifications via normal APNS has been deprecated in favor of Firebase.  Use `setFirebaseToken:` instead.")));
+
+/**
+ *  Static setter for a Firebase FCM token.  This allows apps to register this push notification token for later use before a ZingleSession has been initialized.
+ */
++ (void) setFirebaseToken:(nonnull NSString *)token;
 
 #pragma mark - Contact access
 

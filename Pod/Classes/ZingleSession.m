@@ -26,7 +26,8 @@
 
 NSString * const LiveBaseURL = @"https://api.zingle.me/v1/";
 
-NSString * const PushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
+NSString * const LegacyPushNotificationDeviceTokenUserDefaultsKey = @"zng_device_token";
+NSString * const FirebaseTokenUserDefaultsKey = @"zng_fcm_token";
 
 static NSString * const ZNGAgentHeaderField = @"Zingle_Agent";
 static NSString * const ZNGAgentValue = @"iOS_SDK";
@@ -460,7 +461,13 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 #pragma mark - Push notifications
 + (void) setPushNotificationDeviceToken:(NSData *)pushNotificationDeviceToken
 {
-    [[NSUserDefaults standardUserDefaults] setValue:pushNotificationDeviceToken forKey:PushNotificationDeviceTokenUserDefaultsKey];
+    // Some extra sanity checking since tokens have changed from device ID NSData to Firebase FCM token NSStrings.
+    if (![pushNotificationDeviceToken isKindOfClass:[NSData class]]) {
+        SBLogError(@"Provided device token is %@ and not NSData.  NSData is expected.", [pushNotificationDeviceToken class]);
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setValue:pushNotificationDeviceToken forKey:LegacyPushNotificationDeviceTokenUserDefaultsKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
     
     if ([pushNotificationDeviceToken length] > 0) {
@@ -468,9 +475,17 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     }
 }
 
-- (void) setPushNotificationDeviceToken:(NSData *)pushNotificationDeviceToken
++ (void) setFirebaseToken:(nonnull NSString *)token
 {
-    [[self class] setPushNotificationDeviceToken:pushNotificationDeviceToken];
+    // Some extra sanity checking since tokens have changed from device ID NSData to Firebase FCM token NSStrings.
+    if ((token != nil) && (![token isKindOfClass:[NSString class]])) {
+        SBLogError(@"Provided Firebase token is %@ and not an NSString.  A string is expected.", [token class]);
+        return;
+    }
+    
+    [[NSUserDefaults standardUserDefaults] setValue:token forKey:FirebaseTokenUserDefaultsKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+    [[NSNotificationCenter defaultCenter] postNotificationName:DeviceTokenUpdatedNotification object:token];
 }
 
 - (void) notifyDeviceTokenRegistered:(NSNotification *)notification
@@ -480,36 +495,47 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     }
 }
 
-- (NSData *) pushNotificationDeviceToken
+- (NSData *) legacyPushNotificationDeviceToken
 {
-    return [[NSUserDefaults standardUserDefaults] valueForKey:PushNotificationDeviceTokenUserDefaultsKey];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:LegacyPushNotificationDeviceTokenUserDefaultsKey];
 }
 
-- (NSString *) _pushNotificationDeviceTokenAsHexString
+- (NSString *) firebaseToken
 {
-    NSData * tokenData = [self pushNotificationDeviceToken];
+    return [[NSUserDefaults standardUserDefaults] valueForKey:FirebaseTokenUserDefaultsKey];
+}
 
-    if (tokenData == nil) {
-        return nil;
+- (void) removeAnyLegacyNotificationTokenSubscriptions
+{
+    NSData * legacyTokenData = [self legacyPushNotificationDeviceToken];
+    
+    if ([legacyTokenData length] == 0) {
+        return;
     }
- 
-    const uint8_t * bytes = [tokenData bytes];
-    NSUInteger length = [tokenData length];
-    NSMutableString * tokenString = [[NSMutableString alloc] initWithCapacity:(length * 2)];
+    
+    const uint8_t * bytes = [legacyTokenData bytes];
+    NSUInteger length = [legacyTokenData length];
+    NSMutableString * legacyTokenString = [[NSMutableString alloc] initWithCapacity:(length * 2)];
     for (NSUInteger i=0; i < length; i++) {
-        [tokenString appendString:[NSString stringWithFormat:@"%02.2hhx", bytes[i]]];
+        [legacyTokenString appendString:[NSString stringWithFormat:@"%02.2hhx", bytes[i]]];
     }
+    
+    [self.notificationsClient unregisterForNotificationsWithDeviceId:legacyTokenString success:^(ZNGStatus *status) {
+        SBLogInfo(@"Successfully unsubscribed for notifications using legacy APNS device ID.");
         
-    return tokenString;
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:LegacyPushNotificationDeviceTokenUserDefaultsKey];
+    } failure:^(ZNGError *error) {
+        SBLogWarning(@"Failed to unsubscribe from notifications with the legacy APNS device ID.");
+    }];
 }
 
 - (void) _registerForPushNotificationsForServiceIds:(NSArray<NSString *> *)serviceIds removePreviousSubscriptions:(BOOL)removePrevious
 {
-    NSData * tokenData = [self pushNotificationDeviceToken];
-    
-    if (tokenData == nil) {
+    NSString * firebaseToken = [self firebaseToken];
+
+    if ([firebaseToken length] == 0) {
         pushNotificationQueuedServiceIds = serviceIds;
-        SBLogDebug(@"Not registering for push notifications because no device token has been set.");
+        SBLogDebug(@"Not registering for push notifications because no FCM token has been set.");
         return;
     }
     
@@ -520,11 +546,11 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         return;
     }
     
-    NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
-    
+    [self removeAnyLegacyNotificationTokenSubscriptions];
+        
     void (^registerForNotifications)(void) = ^{
-        [self.notificationsClient registerForNotificationsWithDeviceId:tokenString withServiceIds:serviceIds success:^(ZNGStatus *status) {
-            SBLogDebug(@"Registered for push notifications successfully as %@", tokenString);
+        [self.notificationsClient registerForNotificationsWithDeviceId:firebaseToken withServiceIds:serviceIds success:^(ZNGStatus *status) {
+            SBLogDebug(@"Registered for push notifications successfully as %@", firebaseToken);
         } failure:^(ZNGError *error) {
             SBLogWarning(@"Failed to register for push notifications: %@", error);
         }];
@@ -533,7 +559,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     if (!removePrevious) {
         registerForNotifications();
     } else {
-        [self.notificationsClient unregisterForNotificationsWithDeviceId:tokenString success:^(ZNGStatus *status) {
+        [self.notificationsClient unregisterForNotificationsWithDeviceId:firebaseToken success:^(ZNGStatus *status) {
             registerForNotifications();
         } failure:^(ZNGError *error) {
             SBLogWarning(@"Failed to unregister for push notifications before registering for a new service ID: %@\nAttempting to register the new ID anyway...", error);
@@ -545,14 +571,14 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 - (void) _unregisterForAllPushNotifications
 {
     pushNotificationQueuedServiceIds = nil;
-    NSString * tokenString = [self _pushNotificationDeviceTokenAsHexString];
+    NSString * firebaseToken = [self firebaseToken];
 
-    if ([tokenString length] == 0) {
-        SBLogDebug(@"Not unregistering for push notifications because no device token has been set.");
+    if ([firebaseToken length] == 0) {
+        SBLogDebug(@"Not unregistering for push notifications because no FCM token has been set.");
         return;
     }
     
-    [self.notificationsClient unregisterForNotificationsWithDeviceId:tokenString success:nil failure:^(ZNGError *error) {
+    [self.notificationsClient unregisterForNotificationsWithDeviceId:firebaseToken success:nil failure:^(ZNGError *error) {
         SBLogWarning(@"Unable to unregister for push notifications: %@", error);
     }];
 }

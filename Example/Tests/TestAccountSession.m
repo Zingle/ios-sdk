@@ -16,6 +16,7 @@
 #import "ZNGMockServiceClient.h"
 #import "ZNGMockUserAuthorizationClient.h"
 #import "ZNGMockUserClient.h"
+#import "NSData+HexString.h"
 
 @interface TestAccountSession : XCTestCase
 
@@ -23,7 +24,9 @@
 
 @implementation TestAccountSession
 {
-    NSData * deviceToken;
+    NSString * legacyDeviceTokenString;
+    NSData * legacyDeviceTokenData;
+    NSString * firebaseToken;
     
     ZNGService * account1service1;
     ZNGService * account2service1;
@@ -46,8 +49,10 @@
     NSString * service2FileName = @"luisTestService";
     NSString * service3FileName = @"luisIOSTest";
     
-    NSString * deviceTokenString = @"123456789abcdef123456789abcdef";
-    deviceToken = [deviceTokenString dataUsingEncoding:NSUTF8StringEncoding];
+    uint8_t tokenBytes[] = {0x01, 0x0a, 0xaa, 0xff};
+    legacyDeviceTokenData = [NSData dataWithBytes:tokenBytes length:sizeof(tokenBytes)];
+    legacyDeviceTokenString = [legacyDeviceTokenData hexString];
+    firebaseToken = @"abcdefg-thisisatoken-55";
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     
@@ -313,7 +318,7 @@
     ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
     session.jwtClient = jwtClient;
     
-    [ZingleSDK setPushNotificationDeviceToken:deviceToken];
+    [ZingleSDK setFirebaseToken:firebaseToken];
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
@@ -364,7 +369,7 @@
     ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
     session.jwtClient = jwtClient;
     
-    [ZingleSDK setPushNotificationDeviceToken:deviceToken];
+    [ZingleSDK setFirebaseToken:firebaseToken];
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
@@ -389,6 +394,65 @@
     [session logout];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
+}
+
+- (void) testLegacyDeviceTokenIsUnsubscribed
+{
+    ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    session.users = @[];
+        
+    // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnonnull"
+    session.sessionManager = nil;
+#pragma clang diagnostic pop
+        
+    ZNGMockAccountClient * accountClient = [[ZNGMockAccountClient alloc] initWithSession:session];
+    accountClient.accounts = @[account1];
+    session.accountClient = accountClient;
+    
+    ZNGMockServiceClient * serviceClient = [[ZNGMockServiceClient alloc] initWithSession:session];
+    serviceClient.services = @[account1service1];
+    session.serviceClient = serviceClient;
+    
+    ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
+    session.notificationsClient = notificationsClient;
+    
+    ZNGMockUserAuthorizationClient * userAuthClient = [[ZNGMockUserAuthorizationClient alloc] initWithSession:session];
+    userAuthClient.contact = contact1;
+    userAuthClient.authorizationClass = @"account";
+    session.userAuthorizationClient = userAuthClient;
+    
+    ZNGMockUserClient * userClient = [[ZNGMockUserClient alloc] initWithSession:session accountId:account1.accountId];
+    userClient.user = user1;
+    session.userClient = userClient;
+    
+    ZNGMockJWTClient * jwtClient = [[ZNGMockJWTClient alloc] init];
+    session.jwtClient = jwtClient;
+        
+    // First set a legacy device ID, emulating a previous session that used old APNS notifications instead of newer Firebase notifications
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+    [ZingleSDK setPushNotificationDeviceToken:legacyDeviceTokenData];
+#pragma GCC diagnostic pop
+
+    [ZingleSDK setFirebaseToken:firebaseToken];
+    
+    XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
+    [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
+        return (([notificationsClient.registeredServiceIds count] == 1) && ([notificationsClient.registeredServiceIds containsObject:account1service1.serviceId]));
+    }];
+    
+    [session connectWithCompletion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {
+        XCTAssertNotNil(session, @"Session is non nil in connect completion block");
+        XCTAssertNil(error, @"Error is nil in connect completion block");
+        [connected fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:2.0 handler:nil];
+    
+    // Did we unregister from notifications with the legacy token?
+    XCTAssertTrue([notificationsClient.unsubscribedDeviceIds containsObject:legacyDeviceTokenString], @"Legacy APNS token should be unsubscribed when using Firebase tokens.");
 }
 
 @end

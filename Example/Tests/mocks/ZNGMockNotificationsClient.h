@@ -15,4 +15,9 @@
  */
 @property (nonatomic, strong, nullable) NSSet<NSString *> * registeredServiceIds;
 
+/**
+ *  Set of all device IDs that have been unsubscribed from all services.
+ */
+@property (nonatomic, strong, nullable) NSSet<NSString *> * unsubscribedDeviceIds;
+
 @end

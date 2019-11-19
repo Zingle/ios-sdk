@@ -30,7 +30,7 @@
     ZNGContactService * contactService1;
     ZNGContactService * contactService2;
     
-    NSData * deviceToken;
+    NSString * firebaseToken;
     
     ZNGContact * me;
 }
@@ -48,8 +48,7 @@
     NSString * contactService1FileName = @"devEnterpriseService-contactService";
     NSString * contactService2FileName = @"luisTestService-contactService";
     
-    NSString * deviceTokenString = @"123456789abcdef123456789abcdef";
-    deviceToken = [deviceTokenString dataUsingEncoding:NSUTF8StringEncoding];
+    firebaseToken = @"abcdefg-thisisatoken-55";
     
     NSBundle * bundle = [NSBundle bundleForClass:[self class]];
     
@@ -177,7 +176,7 @@
     authClient.contact = me;
     session.userAuthorizationClient = authClient;
 
-    [ZingleSDK setPushNotificationDeviceToken:deviceToken];
+    [ZingleSDK setFirebaseToken:firebaseToken];
     
     ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
     session.notificationsClient = notificationsClient;
@@ -231,7 +230,7 @@
     authClient.contact = me;
     session.userAuthorizationClient = authClient;
     
-    [ZingleSDK setPushNotificationDeviceToken:deviceToken];
+    [ZingleSDK setFirebaseToken:firebaseToken];
     
     ZNGMockNotificationsClient * notificationsClient = [[ZNGMockNotificationsClient alloc] initWithSession:session];
     session.notificationsClient = notificationsClient;

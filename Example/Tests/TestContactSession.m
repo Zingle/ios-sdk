@@ -145,11 +145,11 @@
     
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
         if ([session.availableContactServices count] > 0) {
-            ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-            contactClient.contact = me;
+            ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:self->contactService1.serviceId];
+            contactClient.contact = self->me;
             
             session.contactClient = contactClient;
-            session.contactService = contactService1;
+            session.contactService = self->contactService1;
             
             return YES;
         }
@@ -198,18 +198,18 @@
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return [notificationsClient.registeredServiceIds containsObject:account1service1.serviceId];
+        return [notificationsClient.registeredServiceIds containsObject:self->account1service1.serviceId];
     }];
     
     [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:self->contactService1.serviceId];
+        contactClient.contact = self->me;
         
         session.contactClient = contactClient;
         
-        return contactService1;
+        return self->contactService1;
     } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        if (([contactService isEqual:contactService1]) && (error == nil)) {
+        if (([contactService isEqual:self->contactService1]) && (error == nil)) {
             [connected fulfill];
         }
     }];
@@ -252,18 +252,18 @@
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return [notificationsClient.registeredServiceIds containsObject:account1service1.serviceId];
+        return [notificationsClient.registeredServiceIds containsObject:self->account1service1.serviceId];
     }];
     
     [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:self->contactService1.serviceId];
+        contactClient.contact = self->me;
         
         session.contactClient = contactClient;
         
-        return contactService1;
+        return self->contactService1;
     } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        if (([contactService isEqual:contactService1]) && (error == nil)) {
+        if (([contactService isEqual:self->contactService1]) && (error == nil)) {
             [connected fulfill];
         }
     }];
@@ -271,7 +271,7 @@
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
     
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return ![notificationsClient.registeredServiceIds containsObject:account1service1.serviceId];
+        return ![notificationsClient.registeredServiceIds containsObject:self->account1service1.serviceId];
     }];
     
     [session logout];
@@ -310,16 +310,16 @@
     
     [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
         [contactSelectionBlockCalled fulfill];
-        XCTAssertEqual([availableContactServices firstObject], contactService1);
+        XCTAssertEqual([availableContactServices firstObject], self->contactService1);
         
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:self->contactService1.serviceId];
+        contactClient.contact = self->me;
         
         session.contactClient = contactClient;
         
-        return contactService1;
+        return self->contactService1;
     } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        if (([contactService isEqual:contactService1]) && (error == nil)) {
+        if (([contactService isEqual:self->contactService1]) && (error == nil)) {
             [connected fulfill];
         }
     }];
@@ -357,7 +357,7 @@
     session.contactServiceClient = contactServiceClient;
     
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return [session.availableContactServices isEqualToArray:@[contactService1]];
+        return [session.availableContactServices isEqualToArray:@[self->contactService1]];
     }];
     
     [session connect];
@@ -371,7 +371,7 @@
     session.contactClient = contactClient;
     
     [session setContactService:contactService1 completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        if (([contactService isEqual:contactService1]) && (error == nil)) {
+        if (([contactService isEqual:self->contactService1]) && (error == nil)) {
             [connected fulfill];
         }
     }];
@@ -409,7 +409,7 @@
     session.contactServiceClient = contactServiceClient;
     
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return [session.availableContactServices isEqualToArray:@[contactService1]];
+        return [session.availableContactServices isEqualToArray:@[self->contactService1]];
     }];
     
     [session connect];
@@ -479,7 +479,7 @@
     ZingleContactSession * session = [[ZingleContactSession alloc] initWithToken:@"token" key:@"key" channelTypeId:@"anID" channelValue:@"aValue"];
     session.contactServiceChooser = ^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
         [contactServiceChooserExpectation fulfill];
-        return contactService1;
+        return self->contactService1;
     };
     
     // Set the HTTP client to nil to prevent reaching out through the internet tubes if we forget to stub something
@@ -576,7 +576,7 @@
     
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
         if ([session.availableContactServices count] > 0) {
-            session.contactService = contactService1;
+            session.contactService = self->contactService1;
             return YES;
         }
         
@@ -630,7 +630,7 @@
     
     [self keyValueObservingExpectationForObject:session keyPath:NSStringFromSelector(@selector(availableContactServices)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
         if ([session.availableContactServices count] > 0) {
-            session.contactService = contactService1;
+            session.contactService = self->contactService1;
             return YES;
         }
         
@@ -686,19 +686,20 @@
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:self->contactService1.serviceId];
+        contactClient.contact = self->me;
         
         session.contactClient = contactClient;
         
         serviceClient.throwExceptionOnAnyServiceRequest = NO;
         
-        return contactService1;
+        return self->contactService1;
     } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        if ([contactService isEqual:contactService1]) {
+        if ([contactService isEqual:self->contactService1]) {
             [connected fulfill];
         } else {
-            XCTFail(@"Contact service was not %@ as expected.  Contact service: %@, service: %@, error: %@", contactService1.serviceId, contactService.serviceId, service.serviceId, error);
+            XCTFail(@"Contact service was not %@ as expected.  Contact service: %@, service: %@, error: %@",
+                    self->contactService1.serviceId, contactService.serviceId, service.serviceId, error);
         }
     }];
     
@@ -743,17 +744,18 @@
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     
     [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
-        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:contactService1.serviceId];
-        contactClient.contact = me;
+        ZNGMockContactClient * contactClient = [[ZNGMockContactClient alloc] initWithSession:session serviceId:self->contactService1.serviceId];
+        contactClient.contact = self->me;
         
         session.contactClient = contactClient;
         
-        return contactService1;
+        return self->contactService1;
     } completion:^(ZNGContactService * _Nullable contactService, ZNGService * _Nullable service, ZNGError * _Nullable error) {
-        if ([contactService isEqual:contactService1]) {
+        if ([contactService isEqual:self->contactService1]) {
             [connected fulfill];
         } else {
-            XCTFail(@"Contact service was not %@ as expected.  Contact service: %@, service: %@, error: %@", contactService1.serviceId, contactService.serviceId, service.serviceId, error);
+            XCTFail(@"Contact service was not %@ as expected.  Contact service: %@, service: %@, error: %@",
+                    self->contactService1.serviceId, contactService.serviceId, service.serviceId, error);
         }
     }];
     

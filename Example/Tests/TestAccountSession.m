@@ -236,7 +236,7 @@
         NSSet * expectedServicesSet = [NSSet setWithArray:serviceClient.services];
         XCTAssertEqualObjects(availableServicesSet, expectedServicesSet, @"Service chooser block provides expected services.");
         [serviceChooserCalled fulfill];
-        return account2service1;
+        return self->account2service1;
     } completion:nil];
     
     [self waitForExpectationsWithTimeout:2.0 handler:nil];
@@ -322,7 +322,9 @@
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return (([notificationsClient.registeredServiceIds count] == 1) && ([notificationsClient.registeredServiceIds containsObject:account1service1.serviceId]));
+        BOOL singleServiceIsRegistered = ([notificationsClient.registeredServiceIds count] == 1);
+        BOOL correctServiceIdIsIncluded = ([notificationsClient.registeredServiceIds containsObject:self->account1service1.serviceId]);
+        return (singleServiceIsRegistered && correctServiceIdIsIncluded);
     }];
     
     XCTAssertEqual(0, [notificationsClient.registeredServiceIds count], @"Mocked notifications client starts with no registrations.");
@@ -373,7 +375,9 @@
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return (([notificationsClient.registeredServiceIds count] == 1) && ([notificationsClient.registeredServiceIds containsObject:account1service1.serviceId]));
+        BOOL singleServiceIsRegistered = ([notificationsClient.registeredServiceIds count] == 1);
+        BOOL correctServiceIdIsIncluded = ([notificationsClient.registeredServiceIds containsObject:self->account1service1.serviceId]);
+        return (singleServiceIsRegistered && correctServiceIdIsIncluded);
     }];
     
     XCTAssertEqual(0, [notificationsClient.registeredServiceIds count], @"Mocked notifications client starts with no registrations.");
@@ -440,7 +444,9 @@
     
     XCTestExpectation * connected = [self expectationWithDescription:@"Connected successfully"];
     [self keyValueObservingExpectationForObject:notificationsClient keyPath:NSStringFromSelector(@selector(registeredServiceIds)) handler:^BOOL(id  _Nonnull observedObject, NSDictionary * _Nonnull change) {
-        return (([notificationsClient.registeredServiceIds count] == 1) && ([notificationsClient.registeredServiceIds containsObject:account1service1.serviceId]));
+        BOOL singleServiceIsRegistered = ([notificationsClient.registeredServiceIds count] == 1);
+        BOOL correctServiceIdIsIncluded = ([notificationsClient.registeredServiceIds containsObject:self->account1service1.serviceId]);
+        return (singleServiceIsRegistered && correctServiceIdIsIncluded);
     }];
     
     [session connectWithCompletion:^(ZNGService * _Nullable service, ZNGError * _Nullable error) {

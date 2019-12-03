@@ -939,19 +939,27 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     if (image == nil) {
         return;
     }
-    
-    // Due to a bug in UITextView, we must save our font before inserting the image attachment and reset it afterward.
-    // See: http://stackoverflow.com/questions/21742376/nsattributedstring-changed-font-unexpectedly-after-inserting-image
-    UIFont * font = self.inputToolbar.contentView.textView.font;
+
+    // Due to some peculiarities with UITextView, the current `typingAttributes` must be applied to the `NSAttributedString` that contains
+    //  only the image that is being attached.  If not, the `typingAttributes` are overwritten with defaults, clearing any styling from
+    //  the UITextField.  Thanks, iOS.
+    NSDictionary<NSAttributedStringKey, id> * typingAttributes = self.inputToolbar.contentView.textView.typingAttributes;
     
     ZNGImageAttachment * attachment = [[ZNGImageAttachment alloc] init];
     attachment.image = image;
-    NSAttributedString * imageString = [NSAttributedString attributedStringWithAttachment:attachment];
+    NSMutableAttributedString * imageString = [[NSAttributedString attributedStringWithAttachment:attachment] mutableCopy];
+    
+    // Add text styling to the image.  Yes, that's what I said.
+    if ([typingAttributes count] == 0) {
+        SBLogError(@"Unable to retrieve typingAttributes from the UITextView before appending an image.  Styling will likely break.");
+    } else {
+        [imageString addAttributes:typingAttributes range:NSMakeRange(0, [imageString length])];
+    }
+    
     NSMutableAttributedString * mutableString = [[self.inputToolbar.contentView.textView attributedText] mutableCopy];
     [mutableString appendAttributedString:imageString];
     
     self.inputToolbar.contentView.textView.attributedText = mutableString;
-    self.inputToolbar.contentView.textView.font = font;
     
     [self.inputToolbar.contentView.textView becomeFirstResponder];
     [self.inputToolbar toggleSendButtonEnabled];

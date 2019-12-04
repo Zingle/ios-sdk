@@ -1919,12 +1919,11 @@ enum ZNGConversationSections
     
     UITextView * textView = self.inputToolbar.contentView.textView;
     
-    // Use the attributed text to preserve any image attachments
-    // Note that the font needs to be manually applied via NSAttributedString or else the font of the text field
+    // Use the attributed text to preserve any image attachments.
+    // Note that the typing attributes need to be manually applied to this new string or else the styling of the text field
     //  forever changes.
-    UIFont * font = textView.font;
-    UIColor * textColor = textView.textColor;
-    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: font, NSForegroundColorAttributeName: textColor}];
+    NSDictionary<NSAttributedStringKey, id> * typingAttributes = textView.typingAttributes;
+    NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text attributes:typingAttributes];
     NSMutableAttributedString * attributedText = [textView.attributedText mutableCopy];
     [attributedText appendAttributedString:newAttributedText];
     textView.attributedText = attributedText;

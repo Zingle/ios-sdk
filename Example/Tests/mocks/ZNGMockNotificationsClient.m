@@ -17,6 +17,7 @@
     
     if (self != nil) {
         self.registeredServiceIds = [[NSSet alloc] init];
+        self.unsubscribedDeviceIds = [[NSSet alloc] init];
     }
     
     return self;
@@ -26,7 +27,14 @@
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSMutableSet<NSString *> * mutableIDs = [self mutableSetValueForKey:NSStringFromSelector(@selector(registeredServiceIds))];
+        NSMutableSet<NSString *> * mutableDeviceIds = [self mutableSetValueForKey:NSStringFromSelector(@selector(unsubscribedDeviceIds))];
         [mutableIDs addObjectsFromArray:serviceIds];
+        
+        if ([serviceIds count] == 0) {
+            [mutableDeviceIds addObject:deviceId];
+        } else {
+            [mutableDeviceIds removeObject:deviceId];
+        }
         
         ZNGStatus * status = [[ZNGStatus alloc] init];
         status.statusCode = 200;
@@ -41,7 +49,9 @@
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         NSMutableSet<NSString *> * mutableIDs = [self mutableSetValueForKey:NSStringFromSelector(@selector(registeredServiceIds))];
+        NSMutableSet<NSString *> * mutableDeviceIds = [self mutableSetValueForKey:NSStringFromSelector(@selector(unsubscribedDeviceIds))];
         [mutableIDs removeAllObjects];
+        [mutableDeviceIds addObject:deviceId];
         
         ZNGStatus * status = [[ZNGStatus alloc] init];
         status.statusCode = 200;

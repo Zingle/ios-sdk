@@ -36,7 +36,7 @@ static NSString *kZNGChannelValue = @"MyChatChannel1";
     __weak ContactServiceChoosingViewController * weakSelf = self;
     
     session.contactServiceChooser = ^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull theContactServices) {
-        contactServices = theContactServices;
+        self->contactServices = theContactServices;
         
         if ([theContactServices count] > 0) {
             NSMutableArray<NSIndexPath *> * indexes = [[NSMutableArray alloc] init];

@@ -539,9 +539,7 @@
     ZingleAccountSession * accountSession = ([self.session isKindOfClass:[ZingleAccountSession class]]) ? (ZingleAccountSession *)self.session : nil;
     ZNGUser * user = [ZNGUser userFromSocketData:userData];
     
-    // The socket data currently uses sequential IDs instead of our UUIDs.  This means that we cannot check vs. our own ID.
-    // Should we check vs. our email/username?
-    if ((self.ignoreCurrentUserTypingIndicator) && ([user.email isEqualToString:accountSession.userAuthorization.email])) {
+    if ((self.ignoreCurrentUserTypingIndicator) && ([user.userId isEqualToString:accountSession.userAuthorization.userId])) {
         SBLogDebug(@"Received a userIsReplying notification for our current user.  Ignoring.");
         return;
     }

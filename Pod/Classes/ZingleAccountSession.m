@@ -32,6 +32,7 @@
 #import "ZNGTeam.h"
 #import "ZNGUserSettings.h"
 #import "ZNGJWTClient.h"
+#import "ZNGUserV2.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -491,11 +492,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     
     [self initializeAllClients];
     
-    if (self.users != nil) {
-        // We already have user data.  Go ahead and signal the semaphore so it does not block us below.
-        dispatch_semaphore_signal(initialUserDataSemaphore);
-    }
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSDate * before = [NSDate date];
         dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
@@ -542,16 +538,52 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     [self.socketClient connect];
     
     [self _registerForPushNotificationsForServiceIds:@[serviceId] removePreviousSubscriptions:YES];
+    
+    [self.userClient getAllUsersInServiceId:serviceId success:^(NSArray<ZNGUserV2 *> * _Nonnull users) {
+        self.users = users;
+    } failure:^(ZNGError * _Nonnull error) {
+        SBLogError(@"Unable to get other user data: %@", error);
+    }];
 }
 
-- (void) setUsers:(NSArray<ZNGUser *> *)users
+- (void) setOnlineUserIds:(NSSet<NSString *> *)onlineUserIds
 {
-    // Sort users by online status and then first name
-    NSSortDescriptor * activeStatus = [NSSortDescriptor sortDescriptorWithKey:@"isOnline" ascending:NO];
-    NSSortDescriptor * firstName = [NSSortDescriptor sortDescriptorWithKey:@"fullName" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+    if ([self.onlineUserIds isEqualToSet:onlineUserIds]) {
+        return;
+    }
     
-    _users = [users sortedArrayUsingDescriptors:@[activeStatus, firstName]];
-    dispatch_semaphore_signal(initialUserDataSemaphore);
+    _onlineUserIds = onlineUserIds;
+    
+    // If the online status for any users has changed, the sort order of `self.users` will also need to be updated.
+    if ([self.users count] > 0) {
+        NSArray<ZNGUser *> * sortedUsers = [self sortedUsers:self.users withOnlineIds:onlineUserIds];
+        
+        if (![self.users isEqualToArray:sortedUsers]) {
+            // Our order has changed.  Alert KVO and make the change.
+            [self willChangeValueForKey:NSStringFromSelector(@selector(users))];
+            _users = sortedUsers;
+            [self didChangeValueForKey:NSStringFromSelector(@selector(users))];
+        }
+    }
+}
+
+- (NSArray<ZNGUser *> *)sortedUsers:(NSArray<ZNGUser *> *)users withOnlineIds:(NSSet<NSString *> *)onlineIds
+{
+    // Hydrate online data within the users list
+    for (ZNGUser * user in users) {
+        user.isOnline = [onlineIds containsObject:user.userId];
+    }
+    
+    // Sort by online status first, name second
+    NSSortDescriptor * activeStatus = [NSSortDescriptor sortDescriptorWithKey:@"isOnline" ascending:NO];
+    NSSortDescriptor * fullName = [NSSortDescriptor sortDescriptorWithKey:@"fullName" ascending:YES selector:@selector(localizedCaseInsensitiveCompare:)];
+    
+    return [users sortedArrayUsingDescriptors:@[activeStatus, fullName]];
+}
+
+- (void) setUsers:(NSArray<ZNGUserV2 *> *)users
+{
+    _users = [self sortedUsers:users withOnlineIds:self.onlineUserIds];
 }
 
 - (void) setUserAuthorization:(ZNGUserAuthorization *)userAuthorization
@@ -688,7 +720,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (NSArray<ZNGUser *> * _Nonnull) usersIncludingSelf:(BOOL)includeSelf
 {
     if (includeSelf) {
-        return self.users;
+        return self.users ?: @[];
     }
     
     NSMutableArray<ZNGUser *> * filteredUsers = [[NSMutableArray alloc] init];

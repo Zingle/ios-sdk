@@ -59,8 +59,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     ZNGService * _service;
     NSDate * serviceSetDate;
     
-    dispatch_semaphore_t initialUserDataSemaphore;
-    
     NSMutableSet<NSString *> * allLoadedConversationIds;    // List of all conversation IDs ever seen.  Conversations corresponding to these IDs may or may not exist in conversationCache.
     
     UIStoryboard * _storyboard;
@@ -91,7 +89,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 - (void) commonInit
 {
     contactClientSemaphore = dispatch_semaphore_create(0);
-    initialUserDataSemaphore = dispatch_semaphore_create(0);
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyShowDetailedEventsPreferenceChanged:) name:ZingleUserChangedDetailedEventsPreferenceNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyBecameActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
@@ -493,19 +490,7 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     [self initializeAllClients];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSDate * before = [NSDate date];
-        dispatch_time_t tenSecondTimeout = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(10.0 * NSEC_PER_SEC));
-
         [self synchronouslyRetrieveUserData];
-        
-        long waitResult = dispatch_semaphore_wait(self->initialUserDataSemaphore, tenSecondTimeout);
-        
-        if (waitResult == 0) {
-            NSTimeInterval duration = [[NSDate date] timeIntervalSinceDate:before];
-            SBLogDebug(@"Waited %.2f seconds for user/team data on login", (float)duration);
-        } else {
-            SBLogError(@"Timed out waiting for user and team data on initial login.  Assignment functionality may be broken until this arrives.");
-        }
         
         dispatch_async(dispatch_get_main_queue(), ^{
             self.available = YES;

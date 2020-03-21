@@ -181,8 +181,8 @@
         [weakSelf receivedCurrentUserData:data ackEmitter:ackEmitter];
     }];
     
-    [socketClient on:@"serviceUsersData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
-        [weakSelf receivedUsersData:data ackEmitter:ackEmitter];
+    [socketClient on:@"serviceUserPresenceData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
+        [weakSelf receivedUserPresenceData:data ackEmitter:ackEmitter];
     }];
     
     [socketClient on:@"badgeData" callback:^(NSArray * _Nonnull data, SocketAckEmitter * _Nonnull ackEmitter) {
@@ -443,37 +443,30 @@
     [session updateUserData];
 }
 
-- (void) receivedUsersData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
+- (void) receivedUserPresenceData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter
 {
     if (![self.session isKindOfClass:[ZingleAccountSession class]]) {
         return;
     }
     
     ZingleAccountSession * session = (ZingleAccountSession *)self.session;
+    NSArray<NSString *> * onlineIds = [data firstObject];
     
-    NSMutableArray<ZNGUser *> * users = [[NSMutableArray alloc] init];
-    
-    for (NSDictionary * userDictionary in [data firstObject]) {
-        [users addObject:[ZNGUser userFromSocketData:userDictionary]];
+    if (onlineIds == nil) {
+        return;
     }
     
-    NSSortDescriptor * firstNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(firstName)) ascending:YES];
-    NSSortDescriptor * lastNameDescriptor = [NSSortDescriptor sortDescriptorWithKey:NSStringFromSelector(@selector(lastName)) ascending:YES];
-    
-    // Sort by first then last name
-    [users sortUsingDescriptors:@[firstNameDescriptor, lastNameDescriptor]];
-    
-    session.users = users;
-    
-    // Update the user auth numeric ID while we're in here
-    if (session.userAuthorization.numericId == 0) {
-        for (ZNGUser * user in users) {
-            if ([user.userId isEqualToString:session.userAuthorization.userId]) {
-                session.userAuthorization.numericId = user.numericId;
-                break;
-            }
-        }
+    if (![onlineIds isKindOfClass:[NSArray class]]) {
+        SBLogError(@"Expected array in user presence data.  Got %@", [onlineIds class]);
+        return;
     }
+    
+    if (([onlineIds count] > 0) && (![[onlineIds firstObject] isKindOfClass:[NSString class]])) {
+        SBLogError(@"User presence data should be an array of strings.  Found a %@ in the array instead.", [[onlineIds firstObject] class]);
+        return;
+    }
+    
+    session.onlineUserIds = [[NSSet alloc] initWithArray:onlineIds];
 }
 
 - (void) receivedBadgeData:(NSArray *)data ackEmitter:(SocketAckEmitter *)ackEmitter

@@ -120,10 +120,6 @@ static NSString * const ZNGUserPrivilegeMonitorTeams = @"monitor_teams";
         user.userId = ([userIdUnknownType isKindOfClass:[NSString class]]) ? userIdUnknownType : [userIdUnknownType stringValue];
     }
     
-    if ([data[@"id"] isKindOfClass:[NSNumber class]]) {
-        user.numericId = [data[@"id"] intValue];
-    }
-    
     if ([data[@"isOnline"] isKindOfClass:[NSNumber class]]) {
         user.isOnline = [data[@"isOnline"] boolValue];
     }

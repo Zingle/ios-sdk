@@ -116,6 +116,13 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 @property (nonatomic, strong, nullable) NSArray<ZNGUser *> * users;
 
 /**
+ *  Online user status, externally set by the socket client.
+ *  Prefer using `usersIncludingSelf:`, `usersOnCommonTeamsIncludingSelf:`, etc. to get this data vs. consulting this property.
+ *  Those methods will include accurate `isOnline` flags for each user.
+*/
+@property (nonatomic, strong) NSSet<NSString *> * onlineUserIds;
+
+/**
  *  The manager of all inbox count data.
  */
 @property (nonatomic, strong, nullable) ZNGInboxStatistician * inboxStatistician;

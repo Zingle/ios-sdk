@@ -9,7 +9,9 @@
 #import "ZNGUserClient.h"
 #import "NSData+ImageType.h"
 #import "ZingleAccountSession.h"
+#import "ZNGUserV2.h"
 
+@import AFNetworking;
 @import SBObjectiveCWrapper;
 
 @implementation ZNGUserClient
@@ -24,6 +26,37 @@
                 responseClass:[ZNGUser class]
                       success:success
                       failure:failure];
+}
+
+- (void) getAllUsersInServiceId:(NSString *)serviceId
+                        success:(void (^)(NSArray<ZNGUserV2 *> * users))success
+                        failure:(void (^ _Nullable)(ZNGError * error))failure
+{
+    NSString * path = [NSString stringWithFormat:@"services/%@/users", serviceId];
+    
+    [self.session.v2SessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        NSError * serializationError = nil;
+        NSArray<ZNGUserV2 *> * users = [MTLJSONAdapter modelsOfClass:[ZNGUserV2 class] fromJSONArray:responseObject error:&serializationError];
+        
+        if ((users != nil) && (serializationError == nil)) {
+            success(users);
+            return;
+        }
+        
+        if (failure != nil) {
+            ZNGError * error = nil;
+            
+            if (serializationError != nil) {
+                error = [[ZNGError alloc] initWithAPIError:error];
+            }
+            
+            failure(error);
+        }
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        if (failure != nil) {
+            failure([[ZNGError alloc] initWithAPIError:error]);
+        }
+    }];
 }
 
 - (void) deleteAvatarForUserWithId:(NSString *)userId

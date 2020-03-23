@@ -25,6 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class ZNGTeamClient;
 @class ZNGAssignmentViewController;
 @class ZNGNotificationSettingsClient;
+@class ZNGUserV2;
 
 /**
  *  Notification name posted with an NSNumber bool as the object when the user switches to or from detailed event viewing
@@ -112,8 +113,16 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 
 /**
  *  All users in the current service.  Each ZNGUser object includes online status.
+ *  As of March 2020, this data may be incomplete vs. the old V1 API user data as found in `userAuthorization`.
  */
 @property (nonatomic, strong, nullable) NSArray<ZNGUser *> * users;
+
+/**
+ *  Online user status, externally set by the socket client.
+ *  Prefer using `usersIncludingSelf:`, `usersOnCommonTeamsIncludingSelf:`, etc. to get this data vs. consulting this property.
+ *  Those methods will include accurate `isOnline` flags for each user.
+*/
+@property (nonatomic, strong) NSSet<NSString *> * onlineUserIds;
 
 /**
  *  The manager of all inbox count data.

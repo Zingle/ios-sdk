@@ -45,12 +45,6 @@
     self.currentChannel = nil;
     
     originalTextViewTintColor = self.contentView.textView.tintColor;
-    
-    UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedTextView:)];
-    tapper.cancelsTouchesInView = NO;
-    tapper.delaysTouchesEnded = NO;
-    tapper.delegate = self;
-    [self.contentView.textView addGestureRecognizer:tapper];
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
@@ -118,6 +112,14 @@
 }
 
 #pragma mark - IBActions
+
+- (IBAction)didPressMessageModeButton:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressMessageModeButton:)]) {
+        [self.delegate inputToolbar:self didPressMessageModeButton:sender];
+    }
+}
+
 - (IBAction)didPressUseTemplate:(id)sender
 {
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressUseTemplateButton:)]) {
@@ -158,28 +160,6 @@
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressChooseChannelButton:)]) {
         [self.delegate inputToolbar:self didPressChooseChannelButton:sender];
     }
-}
-
-- (IBAction)didPressRevealButton:(id)sender
-{
-    self.contentView.textView.hideCursor = YES;
-    [self.contentView expandButtons:YES];
-}
-
-- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
-- (void) userTappedTextView:(UITapGestureRecognizer *)tapper
-{
-    [self collapseInputButtons];
-}
-
-- (void) collapseInputButtons
-{
-    self.contentView.textView.hideCursor = NO;
-    [self.contentView collapseButtons:YES];
 }
 
 @end

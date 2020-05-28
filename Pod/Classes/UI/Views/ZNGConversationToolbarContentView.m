@@ -40,15 +40,4 @@
     self.noteButton.enabled = enabled;
 }
 
-
-- (void) collapseButtons:(BOOL)animated
-{
-    // This page intentionally left blank.
-}
-
-- (void) expandButtons:(BOOL)animated
-{
-    // This page intentionally left blank.
-}
-
 @end

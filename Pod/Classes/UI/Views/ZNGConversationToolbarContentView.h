@@ -20,9 +20,6 @@
 
 @property (weak, nonatomic, readonly, nullable) ZNGConversationTextView * textView;
 
-- (void) collapseButtons:(BOOL)animated;
-- (void) expandButtons:(BOOL)animated;
-
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled;
 
 @end

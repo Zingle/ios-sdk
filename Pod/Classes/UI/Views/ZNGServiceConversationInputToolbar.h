@@ -12,6 +12,13 @@
 @class ZNGChannel;
 @class ZNGServiceConversationInputToolbar;
 
+typedef enum {
+    TOOLBAR_MODE_MESSAGE,
+    TOOLBAR_MODE_INTERNAL_NOTE,
+    TOOLBAR_MODE_NEW_MESSAGE,
+    TOOLBAR_MODE_FORWARDING
+} ZNGServiceConversationInputToolbarMode;
+
 @protocol ZNGServiceConversationInputToolbarDelegate <ZNGConversationInputToolbarDelegate>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -44,6 +51,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  The currently selected channel.  Setting this will update the UI.
  */
 @property (nonatomic, weak, nullable) ZNGChannel * currentChannel;
+
+/**
+ * The current toolbar mode, e.g. messaging, internal note, or message forwarding.  This will affect the button sets and button highlighting.
+ * Defaults to `TOOLBAR_MODE_MESSAGE`
+ */
+@property (nonatomic, assign) ZNGServiceConversationInputToolbarMode toolbarMode;
 
 - (IBAction)didPressMessageModeButton:(id)sender;
 - (IBAction)didPressUseTemplate:(id)sender;

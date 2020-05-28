@@ -72,6 +72,7 @@
 
     switch (toolbarMode) {
         case TOOLBAR_MODE_MESSAGE:
+        {
             self.contentView.messageModeButton.hidden = NO;
             self.contentView.noteButton.hidden = NO;
             self.contentView.templateButton.hidden = NO;
@@ -82,9 +83,14 @@
             self.contentView.messageModeButton.tintColor = highlightedButtonColor;
             self.contentView.noteButton.tintColor = normalButtonColor;
             
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
+            
             return;
+        }
             
         case TOOLBAR_MODE_INTERNAL_NOTE:
+        {
             self.contentView.messageModeButton.hidden = NO;
             self.contentView.noteButton.hidden = NO;
             self.contentView.templateButton.hidden = YES;
@@ -95,9 +101,14 @@
             self.contentView.messageModeButton.tintColor = normalButtonColor;
             self.contentView.noteButton.tintColor = highlightedButtonColor;
             
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:@"Add" forState:UIControlStateNormal];
+            
             return;
+        }
             
         case TOOLBAR_MODE_NEW_MESSAGE:
+        {
             self.contentView.messageModeButton.hidden = YES;
             self.contentView.noteButton.hidden = YES;
             self.contentView.templateButton.hidden = NO;
@@ -105,17 +116,26 @@
             self.contentView.imageButton.hidden = NO;
             self.contentView.automationButton.hidden = YES;
             
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:@"Send" forState:UIControlStateNormal];
+            
             return;
+        }
             
         case TOOLBAR_MODE_FORWARDING:
+        {
             self.contentView.messageModeButton.hidden = YES;
             self.contentView.noteButton.hidden = YES;
             self.contentView.templateButton.hidden = YES;
             self.contentView.customFieldButton.hidden = YES;
             self.contentView.imageButton.hidden = YES;
             self.contentView.automationButton.hidden = YES;
+
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:@"Forward" forState:UIControlStateNormal];
             
             return;
+        }
     }
 }
 

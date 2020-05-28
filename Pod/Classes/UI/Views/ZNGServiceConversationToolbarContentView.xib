@@ -45,7 +45,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="JrO-HC-ov3"/>
-                        <constraint firstAttribute="width" constant="50" id="Pma-Wf-sRs"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="Pma-Wf-sRs"/>
                     </constraints>
                 </view>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dm4-NT-mvr" customClass="ZNGConversationTextView">
@@ -55,7 +55,7 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppu-y2-IOa">
-                    <rect key="frame" x="12" y="1" width="54" height="29"/>
+                    <rect key="frame" x="12" y="1" width="56" height="29"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="29" id="35x-S5-S0X"/>
                     </constraints>
@@ -68,7 +68,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-oP-Tqy">
-                    <rect key="frame" x="82" y="4.5" width="12" height="22"/>
+                    <rect key="frame" x="84" y="4.5" width="12" height="22"/>
                     <color key="tintColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                     <state key="normal" image="chevronUp"/>
                     <connections>
@@ -76,10 +76,10 @@
                     </connections>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Era-Ze-i3c">
-                    <rect key="frame" x="12" y="76.5" width="238" height="41"/>
+                    <rect key="frame" x="12" y="77" width="238" height="40"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4S-xa-htU">
-                            <rect key="frame" x="0.0" y="0.0" width="30" height="41"/>
+                            <rect key="frame" x="0.0" y="0.0" width="30" height="40"/>
                             <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="24"/>
                             <state key="normal" title="Aa"/>
                             <connections>
@@ -87,35 +87,35 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZv-vI-ArA" userLabel="Template Button">
-                            <rect key="frame" x="45" y="6.5" width="28" height="28"/>
+                            <rect key="frame" x="45" y="6" width="28" height="28"/>
                             <state key="normal" image="insertTemplate"/>
                             <connections>
                                 <action selector="didPressUseTemplate:" destination="-2" eventType="touchUpInside" id="BB7-cd-xWS"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aRe-Pu-AIy">
-                            <rect key="frame" x="89" y="7.5" width="26" height="26"/>
+                            <rect key="frame" x="89" y="7" width="26" height="26"/>
                             <state key="normal" image="insertCustomField"/>
                             <connections>
                                 <action selector="didPressInsertCustomField:" destination="-2" eventType="touchUpOutside" id="Cpj-8b-Huk"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
-                            <rect key="frame" x="130" y="6.5" width="28" height="28"/>
+                            <rect key="frame" x="130" y="6" width="28" height="28"/>
                             <state key="normal" image="triggerAutomation"/>
                             <connections>
                                 <action selector="didPressTriggerAutomation:" destination="-2" eventType="touchUpInside" id="NbD-wf-Ekp"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EBX-4C-zka">
-                            <rect key="frame" x="173" y="8.5" width="24" height="24"/>
+                            <rect key="frame" x="173" y="8" width="24" height="24"/>
                             <state key="normal" image="attachImage"/>
                             <connections>
                                 <action selector="didPressAttachImage:" destination="-2" eventType="touchUpInside" id="HDM-LU-3uL"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Udp-Uc-I4X">
-                            <rect key="frame" x="212" y="7.5" width="26" height="26"/>
+                            <rect key="frame" x="212" y="7" width="26" height="26"/>
                             <state key="normal" image="addNote"/>
                             <connections>
                                 <action selector="didPressAddNote:" destination="-2" eventType="touchUpInside" id="a9F-nl-MhI"/>

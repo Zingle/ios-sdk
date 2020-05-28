@@ -33,6 +33,7 @@
 
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled
 {
+    self.messageModeButton.enabled = enabled;
     self.templateButton.enabled = enabled;
     self.customFieldButton.enabled = enabled;
     self.automationButton.enabled = enabled;

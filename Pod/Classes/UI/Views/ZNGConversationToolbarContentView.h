@@ -11,6 +11,7 @@
 
 @interface ZNGConversationToolbarContentView : JSQMessagesToolbarContentView
 
+@property (nonatomic, strong, nullable) IBOutlet UIButton * messageModeButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * templateButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * customFieldButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationButton;

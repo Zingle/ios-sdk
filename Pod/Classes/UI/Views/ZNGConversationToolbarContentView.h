@@ -16,7 +16,6 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * imageButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
-@property (nonatomic, strong, nullable) IBOutlet UIButton * revealButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
 
 @property (weak, nonatomic, readonly, nullable) ZNGConversationTextView * textView;

@@ -25,7 +25,7 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 81.0;
+    self.preferredDefaultHeight = 121.0;
     
     self.barTintColor = [UIColor whiteColor];
     
@@ -35,8 +35,6 @@
     self.sendButtonColor = [UIColor colorNamed:@"ZNGPositiveAction" inBundle:bundle compatibleWithTraitCollection:nil];
     self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
-    
-    [self.contentView.revealButton addTarget:self action:@selector(didPressRevealButton:) forControlEvents:UIControlEventTouchUpInside];
 
     self.clipsToBounds = YES;
     

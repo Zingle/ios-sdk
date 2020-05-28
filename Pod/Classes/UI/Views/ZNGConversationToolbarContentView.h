@@ -19,8 +19,20 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
 
+@property (nonatomic, strong, nullable) IBOutlet UIStackView * buttonStackView;
+
 @property (weak, nonatomic, readonly, nullable) ZNGConversationTextView * textView;
 
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled;
+
+/**
+ Enable/show one of the toolbar's `UIButton`s, e.g. `self.messageModeButton` or `self.imageButton`
+ */
+- (void) enableButton:(nonnull UIButton *)button;
+
+/**
+ Disable/hide one of the toolbar's `UIButton`s, e.g. `self.messageModeButton` or `self.imageButton`
+ */
+- (void) disableButton:(nonnull UIButton *)button;
 
 @end

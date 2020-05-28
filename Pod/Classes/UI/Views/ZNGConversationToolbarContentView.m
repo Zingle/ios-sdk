@@ -10,6 +10,8 @@
 #import "UIColor+ZingleSDK.h"
 #import "UIFont+Lato.h"
 
+@import SBObjectiveCWrapper;
+
 @implementation ZNGConversationToolbarContentView
 
 @dynamic textView;
@@ -39,6 +41,26 @@
     self.automationButton.enabled = enabled;
     self.imageButton.enabled = enabled;
     self.noteButton.enabled = enabled;
+}
+
+- (void) enableButton:(nonnull UIButton *)button
+{
+    if (![self.buttonStackView.arrangedSubviews containsObject:button]) {
+        SBLogError(@"enableButton: was called with a button that does not exist in our button list: %@", button);
+        return;
+    }
+    
+    button.hidden = NO;
+}
+
+- (void) disableButton:(nonnull UIButton *)button
+{
+    if (![self.buttonStackView.arrangedSubviews containsObject:button]) {
+        SBLogError(@"disableButton: was called with a button that does not exist in our button list: %@", button);
+        return;
+    }
+    
+    button.hidden = YES;
 }
 
 @end

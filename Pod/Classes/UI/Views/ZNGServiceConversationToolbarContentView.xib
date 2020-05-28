@@ -76,31 +76,46 @@
                     </connections>
                 </button>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Era-Ze-i3c">
-                    <rect key="frame" x="12" y="85" width="156" height="28"/>
+                    <rect key="frame" x="12" y="76.5" width="238" height="41"/>
                     <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4S-xa-htU">
+                            <rect key="frame" x="0.0" y="0.0" width="30" height="41"/>
+                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="24"/>
+                            <state key="normal" title="Aa"/>
+                            <connections>
+                                <action selector="didPressMessageModeButton:" destination="-2" eventType="touchUpOutside" id="q9J-0O-RsQ"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZv-vI-ArA" userLabel="Template Button">
-                            <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
+                            <rect key="frame" x="45" y="6.5" width="28" height="28"/>
                             <state key="normal" image="insertTemplate"/>
                             <connections>
                                 <action selector="didPressUseTemplate:" destination="-2" eventType="touchUpInside" id="BB7-cd-xWS"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aRe-Pu-AIy">
+                            <rect key="frame" x="89" y="7.5" width="26" height="26"/>
+                            <state key="normal" image="insertCustomField"/>
+                            <connections>
+                                <action selector="didPressInsertCustomField:" destination="-2" eventType="touchUpOutside" id="Cpj-8b-Huk"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
-                            <rect key="frame" x="43" y="0.0" width="28" height="28"/>
+                            <rect key="frame" x="130" y="6.5" width="28" height="28"/>
                             <state key="normal" image="triggerAutomation"/>
                             <connections>
                                 <action selector="didPressTriggerAutomation:" destination="-2" eventType="touchUpInside" id="NbD-wf-Ekp"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EBX-4C-zka">
-                            <rect key="frame" x="88" y="2" width="24" height="24"/>
+                            <rect key="frame" x="173" y="8.5" width="24" height="24"/>
                             <state key="normal" image="attachImage"/>
                             <connections>
                                 <action selector="didPressAttachImage:" destination="-2" eventType="touchUpInside" id="HDM-LU-3uL"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Udp-Uc-I4X">
-                            <rect key="frame" x="130" y="1" width="26" height="26"/>
+                            <rect key="frame" x="212" y="7.5" width="26" height="26"/>
                             <state key="normal" image="addNote"/>
                             <connections>
                                 <action selector="didPressAddNote:" destination="-2" eventType="touchUpInside" id="a9F-nl-MhI"/>
@@ -111,7 +126,6 @@
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
             <constraints>
-                <constraint firstItem="TAH-O8-daK" firstAttribute="bottom" secondItem="Era-Ze-i3c" secondAttribute="bottom" constant="8" id="0cW-tP-xhS"/>
                 <constraint firstItem="TAH-O8-daK" firstAttribute="trailing" secondItem="Myo-1S-Vg1" secondAttribute="trailing" constant="12" id="6jK-oL-7UM"/>
                 <constraint firstAttribute="trailing" secondItem="UUf-uA-RfU" secondAttribute="trailing" id="8cJ-41-U1S"/>
                 <constraint firstItem="TAH-O8-daK" firstAttribute="trailing" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="8" id="9Iy-bh-hdt"/>
@@ -125,6 +139,7 @@
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="8" id="OSM-hK-A8j"/>
                 <constraint firstItem="Era-Ze-i3c" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="12" id="OzQ-md-MQp"/>
                 <constraint firstItem="iTt-oP-Tqy" firstAttribute="centerY" secondItem="Ppu-y2-IOa" secondAttribute="centerY" id="Wzl-io-vIm"/>
+                <constraint firstItem="Era-Ze-i3c" firstAttribute="centerY" secondItem="Myo-1S-Vg1" secondAttribute="centerY" id="asF-Dc-BHx"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bTQ-bh-h0p"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Era-Ze-i3c" secondAttribute="trailing" constant="8" id="bvl-HB-sql"/>
                 <constraint firstAttribute="trailing" secondItem="yAc-fE-ozc" secondAttribute="trailing" id="lCS-2b-9LN"/>
@@ -140,7 +155,9 @@
             <connections>
                 <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
                 <outlet property="channelSelectButton" destination="Ppu-y2-IOa" id="0sf-Uy-Bw7"/>
+                <outlet property="customFieldButton" destination="aRe-Pu-AIy" id="Zdc-fj-qf1"/>
                 <outlet property="imageButton" destination="EBX-4C-zka" id="ViF-hY-8T6"/>
+                <outlet property="messageModeButton" destination="v4S-xa-htU" id="pdT-SS-PQ6"/>
                 <outlet property="noteButton" destination="Udp-Uc-I4X" id="Daz-tM-9cZ"/>
                 <outlet property="rightBarButtonContainerView" destination="Myo-1S-Vg1" id="0SR-cw-EkD"/>
                 <outlet property="templateButton" destination="yZv-vI-ArA" id="f46-DX-oig"/>
@@ -153,6 +170,7 @@
         <image name="addNote" width="26" height="26"/>
         <image name="attachImage" width="24" height="24"/>
         <image name="chevronUp" width="12" height="13"/>
+        <image name="insertCustomField" width="26" height="26"/>
         <image name="insertTemplate" width="28" height="28"/>
         <image name="triggerAutomation" width="28" height="28"/>
     </resources>

@@ -26,7 +26,7 @@
 {
     [super awakeFromNib];
     self.preferredDefaultHeight = 121.0;
-    self.toolbarMode = TOOLBAR_MODE_INTERNAL_NOTE;
+    self.toolbarMode = TOOLBAR_MODE_MESSAGE;
     
     self.barTintColor = [UIColor whiteColor];
     
@@ -76,6 +76,7 @@
             self.contentView.noteButton.hidden = NO;
             self.contentView.templateButton.hidden = NO;
             self.contentView.customFieldButton.hidden = YES;
+            self.contentView.imageButton.hidden = NO;
             self.contentView.automationButton.hidden = NO;
             
             self.contentView.messageModeButton.tintColor = highlightedButtonColor;
@@ -86,9 +87,10 @@
         case TOOLBAR_MODE_INTERNAL_NOTE:
             self.contentView.messageModeButton.hidden = NO;
             self.contentView.noteButton.hidden = NO;
-            self.contentView.templateButton.hidden = NO;
+            self.contentView.templateButton.hidden = YES;
             self.contentView.customFieldButton.hidden = YES;
-            self.contentView.automationButton.hidden = NO;
+            self.contentView.imageButton.hidden = YES;
+            self.contentView.automationButton.hidden = YES;
             
             self.contentView.messageModeButton.tintColor = normalButtonColor;
             self.contentView.noteButton.tintColor = highlightedButtonColor;
@@ -100,6 +102,7 @@
             self.contentView.noteButton.hidden = YES;
             self.contentView.templateButton.hidden = NO;
             self.contentView.customFieldButton.hidden = NO;
+            self.contentView.imageButton.hidden = NO;
             self.contentView.automationButton.hidden = YES;
             
             return;
@@ -109,6 +112,7 @@
             self.contentView.noteButton.hidden = YES;
             self.contentView.templateButton.hidden = YES;
             self.contentView.customFieldButton.hidden = YES;
+            self.contentView.imageButton.hidden = YES;
             self.contentView.automationButton.hidden = YES;
             
             return;

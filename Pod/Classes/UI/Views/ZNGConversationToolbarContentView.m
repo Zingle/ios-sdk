@@ -22,6 +22,7 @@
     
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationToolbarContentView class]];
     UIColor * buttonColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
+    self.messageModeButton.tintColor = buttonColor;
     self.templateButton.tintColor = buttonColor;
     self.customFieldButton.tintColor = buttonColor;
     self.automationButton.tintColor = buttonColor;

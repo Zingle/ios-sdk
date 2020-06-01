@@ -91,7 +91,7 @@
                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
                             <state key="normal" image="typeMessage"/>
                             <connections>
-                                <action selector="didPressMessageModeButton:" destination="-2" eventType="touchUpOutside" id="q9J-0O-RsQ"/>
+                                <action selector="didPressMessageModeButton:" destination="-2" eventType="touchUpInside" id="jko-s9-BRR"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yZv-vI-ArA" userLabel="Template Button">
@@ -105,7 +105,7 @@
                             <rect key="frame" x="86" y="0.0" width="28" height="28"/>
                             <state key="normal" image="insertCustomField"/>
                             <connections>
-                                <action selector="didPressInsertCustomField:" destination="-2" eventType="touchUpOutside" id="Cpj-8b-Huk"/>
+                                <action selector="didPressInsertCustomField:" destination="-2" eventType="touchUpInside" id="xvb-X2-QI8"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">

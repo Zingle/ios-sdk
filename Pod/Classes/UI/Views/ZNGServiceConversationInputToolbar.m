@@ -17,6 +17,10 @@
 @implementation ZNGServiceConversationInputToolbar
 {
     UIColor * originalTextViewTintColor;
+    UIColor * normalButtonColor;
+    UIColor * highlightedButtonColor;
+    UIImage * sendButtonEnabled;
+    UIImage * sendButtonDisabled;
 }
 
 @dynamic contentView;
@@ -25,14 +29,19 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceConversationInputToolbar class]];
+    normalButtonColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
+    highlightedButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
+    sendButtonEnabled = [UIImage imageNamed:@"sendEnabled" inBundle:bundle compatibleWithTraitCollection:nil];
+    sendButtonDisabled = [UIImage imageNamed:@"sendDisabled" inBundle:bundle compatibleWithTraitCollection:nil];
+    
     self.preferredDefaultHeight = 121.0;
     self.toolbarMode = TOOLBAR_MODE_MESSAGE;
     
     self.barTintColor = [UIColor whiteColor];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceConversationInputToolbar class]];
     UIButton * sendButton = self.contentView.rightBarButtonItem;
-    [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
     self.sendButtonColor = [UIColor colorNamed:@"ZNGPositiveAction" inBundle:bundle compatibleWithTraitCollection:nil];
     self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
@@ -65,10 +74,6 @@
 - (void) setToolbarMode:(ZNGServiceConversationInputToolbarMode)toolbarMode
 {
     _toolbarMode = toolbarMode;
-    
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceConversationInputToolbar class]];
-    UIColor * normalButtonColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
-    UIColor * highlightedButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
 
     switch (toolbarMode) {
         case TOOLBAR_MODE_MESSAGE:
@@ -87,7 +92,9 @@
             self.contentView.channelSelectArrow.hidden = NO;
             
             UIButton * sendButton = self.contentView.rightBarButtonItem;
-            [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
+            [sendButton setTitle:nil forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
             
             return;
         }
@@ -109,6 +116,8 @@
             
             UIButton * sendButton = self.contentView.rightBarButtonItem;
             [sendButton setTitle:@"Add" forState:UIControlStateNormal];
+            [sendButton setImage:nil forState:UIControlStateNormal];
+            [sendButton setImage:nil forState:UIControlStateDisabled];
             
             return;
         }
@@ -126,8 +135,10 @@
             self.contentView.channelSelectArrow.hidden = YES;
             
             UIButton * sendButton = self.contentView.rightBarButtonItem;
-            [sendButton setTitle:@"Send" forState:UIControlStateNormal];
-            
+            [sendButton setTitle:nil forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
+
             return;
         }
             
@@ -144,8 +155,10 @@
             self.contentView.channelSelectArrow.hidden = YES;
 
             UIButton * sendButton = self.contentView.rightBarButtonItem;
-            [sendButton setTitle:@"Forward" forState:UIControlStateNormal];
-            
+            [sendButton setTitle:nil forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
+
             return;
         }
     }

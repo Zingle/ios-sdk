@@ -75,7 +75,7 @@
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="JrO-HC-ov3"/>
-                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="Pma-Wf-sRs"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="20" id="Pma-Wf-sRs"/>
                     </constraints>
                 </view>
                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dm4-NT-mvr" customClass="ZNGConversationTextView">
@@ -85,7 +85,7 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Era-Ze-i3c">
-                    <rect key="frame" x="12" y="83" width="238" height="28"/>
+                    <rect key="frame" x="12" y="83" width="239.5" height="28"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4S-xa-htU">
                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
@@ -123,13 +123,16 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Udp-Uc-I4X">
-                            <rect key="frame" x="217" y="0.0" width="21" height="28"/>
+                            <rect key="frame" x="218.5" y="0.0" width="21" height="28"/>
                             <state key="normal" image="addNote"/>
                             <connections>
                                 <action selector="didPressAddNote:" destination="-2" eventType="touchUpInside" id="a9F-nl-MhI"/>
                             </connections>
                         </button>
                     </subviews>
+                    <constraints>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="239.5" id="HNq-kn-vdn"/>
+                    </constraints>
                 </stackView>
             </subviews>
             <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
@@ -146,10 +149,11 @@
                 <constraint firstItem="Era-Ze-i3c" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="12" id="OzQ-md-MQp"/>
                 <constraint firstItem="Era-Ze-i3c" firstAttribute="centerY" secondItem="Myo-1S-Vg1" secondAttribute="centerY" id="asF-Dc-BHx"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="bTQ-bh-h0p"/>
-                <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Era-Ze-i3c" secondAttribute="trailing" constant="8" id="bvl-HB-sql"/>
+                <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Era-Ze-i3c" secondAttribute="trailing" constant="6.5" id="hTZ-Yg-wS0"/>
                 <constraint firstAttribute="trailing" secondItem="yAc-fE-ozc" secondAttribute="trailing" id="lCS-2b-9LN"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="TAH-O8-daK" secondAttribute="top" constant="41" id="pzg-gL-ih2"/>
                 <constraint firstItem="yAc-fE-ozc" firstAttribute="leading" secondItem="1" secondAttribute="leading" id="tU2-qf-QIE"/>
+                <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" secondItem="Era-Ze-i3c" secondAttribute="trailing" priority="500" constant="6.5" id="uTP-1v-ni1"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>

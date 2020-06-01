@@ -13,6 +13,9 @@
 @import SBObjectiveCWrapper;
 
 @implementation ZNGConversationToolbarContentView
+{
+    UIButton * rightButton;
+}
 
 @dynamic textView;
 
@@ -62,6 +65,43 @@
     }
     
     button.hidden = YES;
+}
+
+// Override JSQMessages's right bar button setting/getting to avoid its overly strict constraints when setting
+- (void)setRightBarButtonItem:(UIButton *)newRightButton
+{
+    if (rightButton) {
+        [rightButton removeFromSuperview];
+    }
+
+    if (!newRightButton) {
+        rightButton = nil;
+        self.rightBarButtonItemWidth = 0.0f;
+        self.rightBarButtonContainerView.hidden = YES;
+        return;
+    }
+    
+    if (CGRectEqualToRect(newRightButton.frame, CGRectZero)) {
+        newRightButton.frame = self.rightBarButtonContainerView.bounds;
+    }
+
+    self.rightBarButtonContainerView.hidden = NO;
+    self.rightBarButtonItemWidth = CGRectGetWidth(newRightButton.frame);
+
+    [newRightButton setTranslatesAutoresizingMaskIntoConstraints:NO];
+
+    [self.rightBarButtonContainerView addSubview:newRightButton];
+    NSLayoutConstraint * centerY = [NSLayoutConstraint constraintWithItem:newRightButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.rightBarButtonContainerView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
+    NSLayoutConstraint * right = [NSLayoutConstraint constraintWithItem:newRightButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.rightBarButtonContainerView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
+    [self.rightBarButtonContainerView addConstraints:@[centerY, right]];
+    [self setNeedsUpdateConstraints];
+
+    rightButton = newRightButton;
+}
+
+- (UIButton *)rightBarButtonItem
+{
+    return rightButton;
 }
 
 @end

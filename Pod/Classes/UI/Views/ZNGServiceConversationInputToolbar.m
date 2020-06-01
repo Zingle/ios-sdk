@@ -82,7 +82,9 @@
             
             self.contentView.messageModeButton.tintColor = highlightedButtonColor;
             self.contentView.noteButton.tintColor = normalButtonColor;
-            self.contentView.channelSelectContainer.hidden = NO;
+
+            self.contentView.channelSelectButton.hidden = NO;
+            self.contentView.channelSelectArrow.hidden = NO;
             
             UIButton * sendButton = self.contentView.rightBarButtonItem;
             [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
@@ -101,7 +103,9 @@
             
             self.contentView.messageModeButton.tintColor = normalButtonColor;
             self.contentView.noteButton.tintColor = highlightedButtonColor;
-            self.contentView.channelSelectContainer.hidden = YES;
+
+            self.contentView.channelSelectButton.hidden = YES;
+            self.contentView.channelSelectArrow.hidden = YES;
             
             UIButton * sendButton = self.contentView.rightBarButtonItem;
             [sendButton setTitle:@"Add" forState:UIControlStateNormal];
@@ -118,7 +122,8 @@
             self.contentView.imageButton.hidden = NO;
             self.contentView.automationButton.hidden = YES;
             
-            self.contentView.channelSelectContainer.hidden = YES;
+            self.contentView.channelSelectButton.hidden = YES;
+            self.contentView.channelSelectArrow.hidden = YES;
             
             UIButton * sendButton = self.contentView.rightBarButtonItem;
             [sendButton setTitle:@"Send" forState:UIControlStateNormal];
@@ -135,7 +140,8 @@
             self.contentView.imageButton.hidden = YES;
             self.contentView.automationButton.hidden = YES;
             
-            self.contentView.channelSelectContainer.hidden = YES;
+            self.contentView.channelSelectButton.hidden = YES;
+            self.contentView.channelSelectArrow.hidden = YES;
 
             UIButton * sendButton = self.contentView.rightBarButtonItem;
             [sendButton setTitle:@"Forward" forState:UIControlStateNormal];

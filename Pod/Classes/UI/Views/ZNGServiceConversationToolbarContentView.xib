@@ -142,7 +142,7 @@
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="top" secondItem="dm4-NT-mvr" secondAttribute="bottom" constant="6" id="JOo-sq-ltv"/>
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="top" secondItem="1" secondAttribute="top" id="L3l-C0-jVd"/>
                 <constraint firstItem="TAH-O8-daK" firstAttribute="bottom" secondItem="Myo-1S-Vg1" secondAttribute="bottom" constant="8" id="MGF-Vy-f4o"/>
-                <constraint firstItem="yAc-fE-ozc" firstAttribute="top" secondItem="UUf-uA-RfU" secondAttribute="bottom" id="OGx-pP-Rwr"/>
+                <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="yAc-fE-ozc" secondAttribute="bottom" constant="7" id="NCA-Mu-yOd"/>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="8" id="OSM-hK-A8j"/>
                 <constraint firstItem="Era-Ze-i3c" firstAttribute="leading" secondItem="TAH-O8-daK" secondAttribute="leading" constant="12" id="OzQ-md-MQp"/>
                 <constraint firstItem="Era-Ze-i3c" firstAttribute="centerY" secondItem="Myo-1S-Vg1" secondAttribute="centerY" id="asF-Dc-BHx"/>
@@ -158,6 +158,7 @@
             <connections>
                 <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
                 <outlet property="buttonStackView" destination="Era-Ze-i3c" id="Ba1-bm-uuo"/>
+                <outlet property="channelSelectArrow" destination="iTt-oP-Tqy" id="zDS-7d-691"/>
                 <outlet property="channelSelectButton" destination="Ppu-y2-IOa" id="0sf-Uy-Bw7"/>
                 <outlet property="channelSelectContainer" destination="UUf-uA-RfU" id="bLF-cN-1HI"/>
                 <outlet property="customFieldButton" destination="aRe-Pu-AIy" id="Zdc-fj-qf1"/>

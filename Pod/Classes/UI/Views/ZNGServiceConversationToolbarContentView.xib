@@ -89,7 +89,7 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4S-xa-htU">
                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
-                            <state key="normal" image="type"/>
+                            <state key="normal" image="typeMessage"/>
                             <connections>
                                 <action selector="didPressMessageModeButton:" destination="-2" eventType="touchUpOutside" id="q9J-0O-RsQ"/>
                             </connections>
@@ -182,6 +182,6 @@
         <image name="insertCustomField" width="28" height="28"/>
         <image name="insertTemplate" width="28" height="28"/>
         <image name="triggerAutomation" width="28" height="28"/>
-        <image name="type" width="28" height="28"/>
+        <image name="typeMessage" width="28" height="28"/>
     </resources>
 </document>

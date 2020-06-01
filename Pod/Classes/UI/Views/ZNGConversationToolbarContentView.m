@@ -37,6 +37,23 @@
     }
 }
 
+- (void) traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if (previousTraitCollection.verticalSizeClass != self.traitCollection.verticalSizeClass) {
+        // Disable auto correction on our text field in vertically compact orientations to
+        //  hide the Siri suggestions toolbar in our already cramped space
+        BOOL hideSuggestionToolbar = self.traitCollection.verticalSizeClass == UIUserInterfaceSizeClassCompact;
+        self.textView.autocorrectionType = (hideSuggestionToolbar) ? UITextAutocorrectionTypeNo : UITextAutocorrectionTypeYes;
+        
+        if (self.textView.isFirstResponder) {
+            [self.textView resignFirstResponder];
+            [self.textView becomeFirstResponder];
+        }
+    }
+}
+
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled
 {
     self.messageModeButton.enabled = enabled;

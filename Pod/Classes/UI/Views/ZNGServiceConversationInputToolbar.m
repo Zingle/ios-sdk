@@ -16,9 +16,12 @@
 
 @implementation ZNGServiceConversationInputToolbar
 {
+    UIColor * normalBackgroundColor;
+    UIColor * noteBackgroundColor;
     UIColor * originalTextViewTintColor;
     UIColor * normalButtonColor;
     UIColor * highlightedButtonColor;
+    
     UIImage * sendButtonEnabled;
     UIImage * sendButtonDisabled;
 }
@@ -35,6 +38,8 @@
     highlightedButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     sendButtonEnabled = [UIImage imageNamed:@"sendEnabled" inBundle:bundle compatibleWithTraitCollection:nil];
     sendButtonDisabled = [UIImage imageNamed:@"sendDisabled" inBundle:bundle compatibleWithTraitCollection:nil];
+    normalBackgroundColor = self.contentView.backgroundColor;
+    noteBackgroundColor = [UIColor colorNamed:@"ZNGInternalNoteBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     
     self.preferredDefaultHeight = 121.0;
     self.toolbarMode = TOOLBAR_MODE_MESSAGE;
@@ -48,6 +53,7 @@
 
     self.clipsToBounds = YES;
     
+    self.contentView.textView.backgroundColor = [UIColor clearColor];
     self.contentView.textView.font = [UIFont latoFontOfSize:16.0];
     
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
@@ -74,6 +80,14 @@
 - (void) setToolbarMode:(ZNGServiceConversationInputToolbarMode)toolbarMode
 {
     _toolbarMode = toolbarMode;
+        
+    if (toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
+        self.contentView.textView.placeHolder = @"Write an internal note";
+        self.contentView.backgroundColor = noteBackgroundColor;
+    } else {
+        self.contentView.textView.placeHolder = @"Type a reply";
+        self.contentView.backgroundColor = normalBackgroundColor;
+    }
 
     switch (toolbarMode) {
         case TOOLBAR_MODE_MESSAGE:
@@ -232,9 +246,7 @@
 
 - (IBAction)didPressMessageModeButton:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressMessageModeButton:)]) {
-        [self.delegate inputToolbar:self didPressMessageModeButton:sender];
-    }
+    self.toolbarMode = TOOLBAR_MODE_MESSAGE;
 }
 
 - (IBAction)didPressUseTemplate:(id)sender
@@ -267,9 +279,7 @@
 
 - (IBAction)didPressAddNote:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressAddInternalNoteButton:)]) {
-        [self.delegate inputToolbar:self didPressAddInternalNoteButton:sender];
-    }
+    self.toolbarMode = TOOLBAR_MODE_INTERNAL_NOTE;
 }
 
 - (IBAction)didPressChannelSelectButton:(id)sender

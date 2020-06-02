@@ -24,7 +24,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="320" height="33"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppu-y2-IOa">
-                            <rect key="frame" x="12" y="1" width="56" height="29"/>
+                            <rect key="frame" x="12" y="1" width="54" height="29"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="29" id="35x-S5-S0X"/>
                             </constraints>
@@ -37,7 +37,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-oP-Tqy" userLabel="Arrow Button">
-                            <rect key="frame" x="84" y="4.5" width="12" height="22"/>
+                            <rect key="frame" x="82" y="4.5" width="12" height="22"/>
                             <color key="tintColor" systemColor="secondaryLabelColor" red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                             <state key="normal" image="chevronUp"/>
                             <connections>

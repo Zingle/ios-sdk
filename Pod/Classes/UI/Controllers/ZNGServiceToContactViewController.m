@@ -1809,34 +1809,6 @@ enum ZNGConversationSections
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender
-{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Enter an internal note" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"Internal note";
-    }];
-    UIAlertAction * addNote = [UIAlertAction actionWithTitle:@"Add note" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UITextField * noteField = [alert.textFields firstObject];
-        NSString * note = [noteField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        if ([note length] == 0) {
-            UIAlertController * noteAlert = [UIAlertController alertControllerWithTitle:@"Notes cannot be empty" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-            [noteAlert addAction:ok];
-            [self presentViewController:noteAlert animated:YES completion:nil];
-        } else {
-            [self addInternalNote:note];
-        }
-    }];
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    
-    [alert addAction:addNote];
-    [alert addAction:cancel];
-    
-    [self.inputToolbar.contentView.textView resignFirstResponder];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
 {
     CGRect sourceRect = [self.view convertRect:toolbar.contentView.automationButton.frame fromView:toolbar.contentView.templateButton.superview];

@@ -26,7 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel;
 
-- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressMessageModeButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;
@@ -63,7 +62,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)didPressInsertCustomField:(id)sender;
 - (IBAction)didPressTriggerAutomation:(id)sender;
 - (IBAction)didPressAttachImage:(id)sender;
-- (IBAction)didPressAddNote:(id)sender;
 
 - (IBAction)didPressChannelSelectButton:(id)sender;
 

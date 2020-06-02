@@ -377,15 +377,11 @@ enum ZNGConversationSections
             BOOL oldLoadedFlag = ([oldLoadedFlagOrNull isKindOfClass:[NSNumber class]]) ? [oldLoadedFlagOrNull boolValue] : NO;
             BOOL loadedFlag = ([loadedFlagOrNull isKindOfClass:[NSNumber class]]) ? [loadedFlagOrNull boolValue] : NO;
             
+            // Did we just finish our initial loading?
             if ((!oldLoadedFlag) && (loadedFlag)) {
                 // Set toolbar type to reflect the last outbound event type as note vs. message if present
                 ZNGEvent * lastEvent = [(ZNGConversationServiceToContact *)self.conversation mostRecentNoteOrOutboundMessage];
-                
-                if ([lastEvent isNote]) {
-                    self.inputToolbar.toolbarMode = TOOLBAR_MODE_INTERNAL_NOTE;
-                } else {
-                    self.inputToolbar.toolbarMode = TOOLBAR_MODE_MESSAGE;
-                }
+                self.inputToolbar.toolbarMode = ([lastEvent isNote]) ? TOOLBAR_MODE_INTERNAL_NOTE : TOOLBAR_MODE_MESSAGE;
             }
         }
     } else {

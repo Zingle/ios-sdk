@@ -38,8 +38,12 @@
     highlightedButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     sendButtonEnabled = [UIImage imageNamed:@"sendEnabled" inBundle:bundle compatibleWithTraitCollection:nil];
     sendButtonDisabled = [UIImage imageNamed:@"sendDisabled" inBundle:bundle compatibleWithTraitCollection:nil];
-    normalBackgroundColor = self.contentView.backgroundColor;
+    normalBackgroundColor = [UIColor whiteColor];
     noteBackgroundColor = [UIColor colorNamed:@"ZNGInternalNoteBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    if (@available(iOS 13.0, *)) {
+        normalBackgroundColor = [UIColor systemBackgroundColor];
+    }
     
     self.preferredDefaultHeight = 121.0;
     self.toolbarMode = TOOLBAR_MODE_MESSAGE;

@@ -52,6 +52,9 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationCancelButton;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * automationRobot;
 
+// A toolbar that only exists to visually cover the gap between the bottom of JSQMessage's toolbar and the bottom of the safe zone
+@property (nonatomic, strong, nullable) IBOutlet UIToolbar * lowerFacadeToolbar;
+
 - (IBAction)pressedCancelAutomation:(nullable id)sender;
 
 // Defaults to YES

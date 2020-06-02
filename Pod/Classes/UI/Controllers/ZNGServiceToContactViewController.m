@@ -51,6 +51,7 @@ static NSString * const KVOUserAssignment = @"conversation.contact.assignedToUse
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.pendingResponses";
+static NSString * const KVOToolbarModePath = @"inputToolbar.toolbarMode";
 
 static NSString * const TypingIndicatorCellID = @"typingIndicator";
 
@@ -160,6 +161,7 @@ enum ZNGConversationSections
     [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
     [self addObserver:self forKeyPath:KVOTeamAssignment options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOUserAssignment options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
+    [self addObserver:self forKeyPath:KVOToolbarModePath options:0 context:KVOContext];
 }
 
 - (void) dealloc
@@ -173,6 +175,7 @@ enum ZNGConversationSections
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
+    [self removeObserver:self forKeyPath:KVOToolbarModePath context:KVOContext];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -361,6 +364,10 @@ enum ZNGConversationSections
             }
             
             [self updateTitle];
+        } else if ([keyPath isEqualToString:KVOToolbarModePath]) {
+            // Match our facade toolbar (covering non safe area below the JSQMessages toolbar) color to the actual toolbar color since
+            //  it may change when toggling between message composition and note composition.
+            self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];

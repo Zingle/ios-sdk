@@ -581,6 +581,7 @@
                         <outlet property="automationRobot" destination="Jm4-wX-hgr" id="eqm-Ff-baH"/>
                         <outlet property="collectionView" destination="G72-K8-cSu" id="m0g-gs-Y0W"/>
                         <outlet property="inputToolbar" destination="Uqn-aA-lFp" id="vJK-sj-akg"/>
+                        <outlet property="lowerFacadeToolbar" destination="IrD-za-bqt" id="ep6-zC-m6d"/>
                         <outlet property="moreMessagesContainerView" destination="1S3-q5-gQs" id="kVr-pd-0UU"/>
                         <outlet property="moreMessagesLabel" destination="J1p-JT-Rr6" id="NXi-ic-CMc"/>
                         <outlet property="moreMessagesView" destination="MTx-YX-esM" id="QdK-6v-gWE"/>
@@ -692,10 +693,10 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="122.5" width="375" height="104"/>
+                                <rect key="frame" x="0.0" y="122.5" width="375" height="88"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
-                                        <rect key="frame" x="312" y="6.5" width="51" height="33"/>
+                                        <rect key="frame" x="312" y="-1.5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
                                             <color key="titleColor" name="ZNGLinkText"/>
@@ -705,10 +706,10 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
-                                        <rect key="frame" x="327.5" y="13" width="20" height="20"/>
+                                        <rect key="frame" x="327.5" y="5" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Room number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6v7-ZW-0uV" customClass="JVFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="58" width="110" height="46"/>
+                                        <rect key="frame" x="16" y="42" width="110" height="46"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="110" id="OAA-C6-Pj7"/>
                                             <constraint firstAttribute="height" constant="46" id="uhc-Yq-zGp"/>
@@ -725,7 +726,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="HotSOS issue name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR" customClass="ZNGContactEditFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="0.0" width="284" height="50"/>
+                                        <rect key="frame" x="16" y="0.0" width="284" height="34"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
                                         <userDefinedRuntimeAttributes>

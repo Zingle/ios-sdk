@@ -24,6 +24,9 @@
     
     UIImage * sendButtonEnabled;
     UIImage * sendButtonDisabled;
+    
+    NSAttributedString * lastMessageText;
+    NSAttributedString * lastNoteText;
 }
 
 @dynamic contentView;
@@ -83,14 +86,24 @@
 
 - (void) setToolbarMode:(ZNGServiceConversationInputToolbarMode)toolbarMode
 {
-    _toolbarMode = toolbarMode;
-        
     if (toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
         self.contentView.textView.placeHolder = @"Write an internal note";
         self.contentView.backgroundColor = noteBackgroundColor;
+        
+        if (self.toolbarMode != TOOLBAR_MODE_INTERNAL_NOTE) {
+            // We're going from non-note to note mode.  Preserve note text and restore message text.
+            lastMessageText = self.contentView.textView.attributedText;
+            self.contentView.textView.attributedText = lastNoteText;
+        }
     } else {
         self.contentView.textView.placeHolder = @"Type a reply";
         self.contentView.backgroundColor = normalBackgroundColor;
+        
+        if (self.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
+            // We're going from note mode to non-note mode.  Preserve message text and restore note text.
+            lastNoteText = self.contentView.textView.attributedText;
+            self.contentView.textView.attributedText = lastMessageText;
+        }
     }
 
     switch (toolbarMode) {
@@ -194,6 +207,8 @@
     [self.contentView.automationButton addTarget:self action:@selector(didPressTriggerAutomation:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.imageButton addTarget:self action:@selector(didPressAttachImage:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.noteButton addTarget:self action:@selector(didPressAddNote:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _toolbarMode = toolbarMode;
 }
 
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel

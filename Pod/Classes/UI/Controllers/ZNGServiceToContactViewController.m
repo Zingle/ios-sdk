@@ -1895,10 +1895,14 @@ enum ZNGConversationSections
         weakSelf.inputToolbar.inputEnabled = YES;
         [weakSelf scrollToBottomAnimated:YES];
         [[ZNGAnalytics sharedAnalytics] trackAddedNote:note toConversation:weakSelf.conversation];
+        
+        [weakSelf finishSendingMessageAnimated:YES];
     } failure:^(ZNGError * _Nonnull error) {
         weakSelf.inputToolbar.inputEnabled = YES;
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Failed to add note" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf finishSendingMessageAnimated:YES];
+        }];
         [alert addAction:ok];
         [weakSelf presentViewController:alert animated:YES completion:nil];
     }];

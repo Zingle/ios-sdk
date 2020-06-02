@@ -96,7 +96,7 @@
             [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
             [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
             
-            return;
+            break;
         }
             
         case TOOLBAR_MODE_INTERNAL_NOTE:
@@ -119,7 +119,7 @@
             [sendButton setImage:nil forState:UIControlStateNormal];
             [sendButton setImage:nil forState:UIControlStateDisabled];
             
-            return;
+            break;
         }
             
         case TOOLBAR_MODE_NEW_MESSAGE:
@@ -139,7 +139,7 @@
             [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
             [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
 
-            return;
+            break;
         }
             
         case TOOLBAR_MODE_FORWARDING:
@@ -159,9 +159,23 @@
             [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
             [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
 
-            return;
+            break;
         }
     }
+    
+    // Restore actions that tend to break themselves when buttons exist in stack views
+    [self.contentView.messageModeButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.templateButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.customFieldButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.automationButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.imageButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.noteButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.messageModeButton addTarget:self action:@selector(didPressMessageModeButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.templateButton addTarget:self action:@selector(didPressUseTemplate:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.customFieldButton addTarget:self action:@selector(didPressInsertCustomField:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.automationButton addTarget:self action:@selector(didPressTriggerAutomation:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.imageButton addTarget:self action:@selector(didPressAttachImage:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.noteButton addTarget:self action:@selector(didPressAddNote:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel

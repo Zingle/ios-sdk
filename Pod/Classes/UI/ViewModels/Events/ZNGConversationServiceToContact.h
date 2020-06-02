@@ -83,6 +83,11 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSArray<ZNGChannel *> *) usedChannels;
 
+/**
+ * The most recent outbound message or internal note in this convesration
+ */
+- (nullable ZNGEvent *) mostRecentNoteOrOutboundMessage;
+
 NS_ASSUME_NONNULL_END
 
 @end

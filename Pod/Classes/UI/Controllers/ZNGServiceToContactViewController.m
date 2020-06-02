@@ -44,6 +44,7 @@ static NSString * const AssignmentUITypeActionMenu = @"action menu";
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
+static NSString * const KVOLoadedInitialDataPath = @"conversation.loadedInitialData";
 static NSString * const KVOContactChannelsPath = @"conversation.contact.channels";
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOTeamAssignment = @"conversation.contact.assignedToTeamId";
@@ -154,6 +155,7 @@ enum ZNGConversationSections
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNetworkStatusChanged:) name:ZNGNetworkLookoutStatusChanged object:nil];
     
+    [self addObserver:self forKeyPath:KVOLoadedInitialDataPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
@@ -168,6 +170,7 @@ enum ZNGConversationSections
 {
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
+    [self removeObserver:self forKeyPath:KVOToolbarModePath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOUserAssignment context:KVOContext];
     [self removeObserver:self forKeyPath:KVOTeamAssignment context:KVOContext];
     [self removeObserver:self forKeyPath:KVOReplyingUsersPath context:KVOContext];
@@ -175,7 +178,7 @@ enum ZNGConversationSections
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
-    [self removeObserver:self forKeyPath:KVOToolbarModePath context:KVOContext];
+    [self removeObserver:self forKeyPath:KVOLoadedInitialDataPath context:KVOContext];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -368,6 +371,22 @@ enum ZNGConversationSections
             // Match our facade toolbar (covering non safe area below the JSQMessages toolbar) color to the actual toolbar color since
             //  it may change when toggling between message composition and note composition.
             self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
+        } else if ([keyPath isEqualToString:KVOLoadedInitialDataPath]) {
+            id oldLoadedFlagOrNull = change[NSKeyValueChangeOldKey];
+            id loadedFlagOrNull = change[NSKeyValueChangeNewKey];
+            BOOL oldLoadedFlag = ([oldLoadedFlagOrNull isKindOfClass:[NSNumber class]]) ? [oldLoadedFlagOrNull boolValue] : NO;
+            BOOL loadedFlag = ([loadedFlagOrNull isKindOfClass:[NSNumber class]]) ? [loadedFlagOrNull boolValue] : NO;
+            
+            if ((!oldLoadedFlag) && (loadedFlag)) {
+                // Set toolbar type to reflect the last outbound event type as note vs. message if present
+                ZNGEvent * lastEvent = [(ZNGConversationServiceToContact *)self.conversation mostRecentNoteOrOutboundMessage];
+                
+                if ([lastEvent isNote]) {
+                    self.inputToolbar.toolbarMode = TOOLBAR_MODE_INTERNAL_NOTE;
+                } else {
+                    self.inputToolbar.toolbarMode = TOOLBAR_MODE_MESSAGE;
+                }
+            }
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -1713,7 +1732,11 @@ enum ZNGConversationSections
     [textViewChangeTimer invalidate];
     textViewChangeTimer = nil;
     
-    [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
+    if (self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
+        [self addInternalNote:text];
+    } else {
+        [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
+    }
 }
 
 - (IBAction)pressedCancelAutomation:(id)sender

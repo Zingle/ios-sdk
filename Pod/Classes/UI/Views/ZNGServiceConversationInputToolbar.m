@@ -155,9 +155,9 @@
             self.contentView.channelSelectArrow.hidden = YES;
 
             UIButton * sendButton = self.contentView.rightBarButtonItem;
-            [sendButton setTitle:nil forState:UIControlStateNormal];
-            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
-            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
+            [sendButton setTitle:@"Forward" forState:UIControlStateNormal];
+            [sendButton setImage:nil forState:UIControlStateNormal];
+            [sendButton setImage:nil forState:UIControlStateDisabled];
 
             break;
         }

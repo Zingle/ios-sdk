@@ -659,7 +659,7 @@ NSString * const kMessageDirectionOutbound = @"outbound";
 
 - (ZNGMessage *) mostRecentInboundMessage
 {
-    for (ZNGEvent * event in self.events) {
+    for (ZNGEvent * event in [self.events reverseObjectEnumerator]) {
         if (([event isMessage]) && (event.message) != nil && (![event.message isOutbound])) {
             return event.message;
         }
@@ -670,7 +670,7 @@ NSString * const kMessageDirectionOutbound = @"outbound";
 
 - (ZNGMessage *) mostRecentMessage
 {
-    for (ZNGEvent * event in self.events) {
+    for (ZNGEvent * event in [self.events reverseObjectEnumerator]) {
         if ([event isMessage]) {
             return event.message;
         }

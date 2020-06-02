@@ -164,12 +164,12 @@
     }
     
     // Restore actions that tend to break themselves when buttons exist in stack views
-    [self.contentView.messageModeButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView.templateButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView.customFieldButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView.automationButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView.imageButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
-    [self.contentView.noteButton removeTarget:nil action:nil forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.messageModeButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.templateButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.customFieldButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.automationButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.imageButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.noteButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.messageModeButton addTarget:self action:@selector(didPressMessageModeButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.templateButton addTarget:self action:@selector(didPressUseTemplate:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.customFieldButton addTarget:self action:@selector(didPressInsertCustomField:) forControlEvents:UIControlEventTouchUpInside];

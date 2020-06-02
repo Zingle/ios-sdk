@@ -12,6 +12,13 @@
 @class ZNGChannel;
 @class ZNGServiceConversationInputToolbar;
 
+typedef enum {
+    TOOLBAR_MODE_MESSAGE,
+    TOOLBAR_MODE_INTERNAL_NOTE,
+    TOOLBAR_MODE_NEW_MESSAGE,
+    TOOLBAR_MODE_FORWARDING
+} ZNGServiceConversationInputToolbarMode;
+
 @protocol ZNGServiceConversationInputToolbarDelegate <ZNGConversationInputToolbarDelegate>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -19,6 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 - (NSString *)displayNameForChannel:(ZNGChannel *)channel;
 
+- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressMessageModeButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressUseTemplateButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressInsertCustomFieldButton:(id)sender;
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender;
@@ -44,6 +52,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 @property (nonatomic, weak, nullable) ZNGChannel * currentChannel;
 
+/**
+ * The current toolbar mode, e.g. messaging, internal note, or message forwarding.  This will affect the button sets and button highlighting.
+ * Defaults to `TOOLBAR_MODE_MESSAGE`
+ */
+@property (nonatomic, assign) ZNGServiceConversationInputToolbarMode toolbarMode;
+
+- (IBAction)didPressMessageModeButton:(id)sender;
 - (IBAction)didPressUseTemplate:(id)sender;
 - (IBAction)didPressInsertCustomField:(id)sender;
 - (IBAction)didPressTriggerAutomation:(id)sender;
@@ -51,8 +66,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)didPressAddNote:(id)sender;
 
 - (IBAction)didPressChannelSelectButton:(id)sender;
-
-- (void) collapseInputButtons;
 
 NS_ASSUME_NONNULL_END
 

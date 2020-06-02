@@ -17,6 +17,10 @@
 @implementation ZNGServiceConversationInputToolbar
 {
     UIColor * originalTextViewTintColor;
+    UIColor * normalButtonColor;
+    UIColor * highlightedButtonColor;
+    UIImage * sendButtonEnabled;
+    UIImage * sendButtonDisabled;
 }
 
 @dynamic contentView;
@@ -25,18 +29,22 @@
 - (void) awakeFromNib
 {
     [super awakeFromNib];
-    self.preferredDefaultHeight = 81.0;
+    
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceConversationInputToolbar class]];
+    normalButtonColor = [UIColor colorNamed:@"ZNGToolbarButton" inBundle:bundle compatibleWithTraitCollection:nil];
+    highlightedButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
+    sendButtonEnabled = [UIImage imageNamed:@"sendEnabled" inBundle:bundle compatibleWithTraitCollection:nil];
+    sendButtonDisabled = [UIImage imageNamed:@"sendDisabled" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    self.preferredDefaultHeight = 121.0;
+    self.toolbarMode = TOOLBAR_MODE_MESSAGE;
     
     self.barTintColor = [UIColor whiteColor];
     
-    NSBundle * bundle = [NSBundle bundleForClass:[ZNGServiceConversationInputToolbar class]];
     UIButton * sendButton = self.contentView.rightBarButtonItem;
-    [sendButton setTitle:@"Reply" forState:UIControlStateNormal];
     self.sendButtonColor = [UIColor colorNamed:@"ZNGPositiveAction" inBundle:bundle compatibleWithTraitCollection:nil];
     self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
-    
-    [self.contentView.revealButton addTarget:self action:@selector(didPressRevealButton:) forControlEvents:UIControlEventTouchUpInside];
 
     self.clipsToBounds = YES;
     
@@ -47,12 +55,6 @@
     self.currentChannel = nil;
     
     originalTextViewTintColor = self.contentView.textView.tintColor;
-    
-    UITapGestureRecognizer * tapper = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(userTappedTextView:)];
-    tapper.cancelsTouchesInView = NO;
-    tapper.delaysTouchesEnded = NO;
-    tapper.delegate = self;
-    [self.contentView.textView addGestureRecognizer:tapper];
 }
 
 - (JSQMessagesToolbarContentView *)loadToolbarContentView
@@ -67,6 +69,113 @@
 {
     [self.contentView enableOrDisableAllEditingButtons:inputEnabled];
     [super setInputEnabled:inputEnabled];
+}
+
+- (void) setToolbarMode:(ZNGServiceConversationInputToolbarMode)toolbarMode
+{
+    _toolbarMode = toolbarMode;
+
+    switch (toolbarMode) {
+        case TOOLBAR_MODE_MESSAGE:
+        {
+            self.contentView.messageModeButton.hidden = NO;
+            self.contentView.noteButton.hidden = NO;
+            self.contentView.templateButton.hidden = NO;
+            self.contentView.customFieldButton.hidden = YES;
+            self.contentView.imageButton.hidden = NO;
+            self.contentView.automationButton.hidden = NO;
+            
+            self.contentView.messageModeButton.tintColor = highlightedButtonColor;
+            self.contentView.noteButton.tintColor = normalButtonColor;
+
+            self.contentView.channelSelectButton.hidden = NO;
+            self.contentView.channelSelectArrow.hidden = NO;
+            
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:nil forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
+            
+            break;
+        }
+            
+        case TOOLBAR_MODE_INTERNAL_NOTE:
+        {
+            self.contentView.messageModeButton.hidden = NO;
+            self.contentView.noteButton.hidden = NO;
+            self.contentView.templateButton.hidden = YES;
+            self.contentView.customFieldButton.hidden = YES;
+            self.contentView.imageButton.hidden = YES;
+            self.contentView.automationButton.hidden = YES;
+            
+            self.contentView.messageModeButton.tintColor = normalButtonColor;
+            self.contentView.noteButton.tintColor = highlightedButtonColor;
+
+            self.contentView.channelSelectButton.hidden = YES;
+            self.contentView.channelSelectArrow.hidden = YES;
+            
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:@"Add" forState:UIControlStateNormal];
+            [sendButton setImage:nil forState:UIControlStateNormal];
+            [sendButton setImage:nil forState:UIControlStateDisabled];
+            
+            break;
+        }
+            
+        case TOOLBAR_MODE_NEW_MESSAGE:
+        {
+            self.contentView.messageModeButton.hidden = YES;
+            self.contentView.noteButton.hidden = YES;
+            self.contentView.templateButton.hidden = NO;
+            self.contentView.customFieldButton.hidden = NO;
+            self.contentView.imageButton.hidden = NO;
+            self.contentView.automationButton.hidden = YES;
+            
+            self.contentView.channelSelectButton.hidden = YES;
+            self.contentView.channelSelectArrow.hidden = YES;
+            
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:nil forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
+
+            break;
+        }
+            
+        case TOOLBAR_MODE_FORWARDING:
+        {
+            self.contentView.messageModeButton.hidden = YES;
+            self.contentView.noteButton.hidden = YES;
+            self.contentView.templateButton.hidden = YES;
+            self.contentView.customFieldButton.hidden = YES;
+            self.contentView.imageButton.hidden = YES;
+            self.contentView.automationButton.hidden = YES;
+            
+            self.contentView.channelSelectButton.hidden = YES;
+            self.contentView.channelSelectArrow.hidden = YES;
+
+            UIButton * sendButton = self.contentView.rightBarButtonItem;
+            [sendButton setTitle:nil forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonEnabled forState:UIControlStateNormal];
+            [sendButton setImage:sendButtonDisabled forState:UIControlStateDisabled];
+
+            break;
+        }
+    }
+    
+    // Restore actions that tend to break themselves when buttons exist in stack views
+    [self.contentView.messageModeButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.templateButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.customFieldButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.automationButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.imageButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.noteButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.messageModeButton addTarget:self action:@selector(didPressMessageModeButton:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.templateButton addTarget:self action:@selector(didPressUseTemplate:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.customFieldButton addTarget:self action:@selector(didPressInsertCustomField:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.automationButton addTarget:self action:@selector(didPressTriggerAutomation:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.imageButton addTarget:self action:@selector(didPressAttachImage:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.noteButton addTarget:self action:@selector(didPressAddNote:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel
@@ -120,6 +229,14 @@
 }
 
 #pragma mark - IBActions
+
+- (IBAction)didPressMessageModeButton:(id)sender
+{
+    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressMessageModeButton:)]) {
+        [self.delegate inputToolbar:self didPressMessageModeButton:sender];
+    }
+}
+
 - (IBAction)didPressUseTemplate:(id)sender
 {
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressUseTemplateButton:)]) {
@@ -160,28 +277,6 @@
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressChooseChannelButton:)]) {
         [self.delegate inputToolbar:self didPressChooseChannelButton:sender];
     }
-}
-
-- (IBAction)didPressRevealButton:(id)sender
-{
-    self.contentView.textView.hideCursor = YES;
-    [self.contentView expandButtons:YES];
-}
-
-- (BOOL) gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer
-{
-    return YES;
-}
-
-- (void) userTappedTextView:(UITapGestureRecognizer *)tapper
-{
-    [self collapseInputButtons];
-}
-
-- (void) collapseInputButtons
-{
-    self.contentView.textView.hideCursor = NO;
-    [self.contentView collapseButtons:YES];
 }
 
 @end

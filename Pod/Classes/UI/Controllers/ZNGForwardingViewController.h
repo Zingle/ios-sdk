@@ -12,7 +12,7 @@
 
 @class ZNGContact;
 @class ZNGMessage;
-@class ZNGForwardingInputToolbar;
+@class ZNGServiceConversationInputToolbar;
 @class ZNGService;
 
 @interface ZNGForwardingViewController : UIViewController <UITextViewDelegate, UITextFieldDelegate, JSQMessagesInputToolbarDelegate>
@@ -26,7 +26,7 @@
 
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * toolbarHeightConstraint;
 @property (nonatomic, strong) IBOutlet NSLayoutConstraint * toolbarBottomSpaceConstraint;
-@property (nonatomic, strong) IBOutlet ZNGForwardingInputToolbar * inputToolbar;
+@property (nonatomic, strong) IBOutlet ZNGServiceConversationInputToolbar * inputToolbar;
 @property (nonatomic, strong) IBOutlet UIView * hotsosInputView;
 @property (nonatomic, strong) IBOutlet UITextField * roomNumberTextField;
 @property (nonatomic, strong) IBOutlet UIButton * selectRecipientTypeButton;

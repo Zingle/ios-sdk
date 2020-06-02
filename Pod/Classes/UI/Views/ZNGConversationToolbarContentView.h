@@ -11,19 +11,30 @@
 
 @interface ZNGConversationToolbarContentView : JSQMessagesToolbarContentView
 
+@property (nonatomic, strong, nullable) IBOutlet UIButton * messageModeButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * templateButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * customFieldButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * imageButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
-@property (nonatomic, strong, nullable) IBOutlet UIButton * revealButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
+@property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectArrow;
+@property (nonatomic, strong, nullable) IBOutlet UIView * channelSelectContainer;
+
+@property (nonatomic, strong, nullable) IBOutlet UIStackView * buttonStackView;
 
 @property (weak, nonatomic, readonly, nullable) ZNGConversationTextView * textView;
 
-- (void) collapseButtons:(BOOL)animated;
-- (void) expandButtons:(BOOL)animated;
-
 - (void) enableOrDisableAllEditingButtons:(BOOL)enabled;
+
+/**
+ Enable/show one of the toolbar's `UIButton`s, e.g. `self.messageModeButton` or `self.imageButton`
+ */
+- (void) enableButton:(nonnull UIButton *)button;
+
+/**
+ Disable/hide one of the toolbar's `UIButton`s, e.g. `self.messageModeButton` or `self.imageButton`
+ */
+- (void) disableButton:(nonnull UIButton *)button;
 
 @end

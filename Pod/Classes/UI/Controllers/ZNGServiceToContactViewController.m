@@ -1647,7 +1647,6 @@ enum ZNGConversationSections
 - (void) textViewDidBeginEditing:(UITextView *)textView
 {
     sentInitialTypingNotification = NO;
-    [self.inputToolbar collapseInputButtons];
     [super textViewDidBeginEditing:textView];
 }
 
@@ -1656,8 +1655,6 @@ enum ZNGConversationSections
     if (textView == self.inputToolbar.contentView.textView) {
         [textViewChangeTimer invalidate];
         textViewChangeTimer = nil;
-        
-        [self.inputToolbar collapseInputButtons];
         
         if ([textView.text length] == 0) {
             [self.conversation userClearedInput];
@@ -1929,7 +1926,6 @@ enum ZNGConversationSections
     textView.attributedText = attributedText;
     
     [self.inputToolbar toggleSendButtonEnabled];
-    [self.inputToolbar collapseInputButtons];
 }
 
 - (BOOL) _shouldModallyEditContact

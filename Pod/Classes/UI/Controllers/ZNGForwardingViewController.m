@@ -7,7 +7,7 @@
 //
 
 #import "ZNGForwardingViewController.h"
-#import "ZNGForwardingInputToolbar.h"
+#import "ZNGServiceConversationInputToolbar.h"
 #import "ZNGContact.h"
 #import "ZNGMessage.h"
 #import "ZNGPrinter.h"
@@ -51,6 +51,7 @@ enum {
 {
     [super viewDidLoad];
     
+    self.inputToolbar.toolbarMode = TOOLBAR_MODE_FORWARDING;
     initialToolbarHeight = self.toolbarHeightConstraint.constant;
     
     [self.inputToolbar addObserver:self forKeyPath:kToolbarHeightKVOPath options:NSKeyValueObservingOptionOld|NSKeyValueObservingOptionNew context:NULL];

@@ -59,6 +59,11 @@ extern NSString * const ZNGEventTeamMentionAttribute;
 @property (nonatomic, readonly) NSAttributedString * attributedText;
 
 /**
+ * The extra padding to put around mentions in the `attributedText`.  Defaults to 3.0.
+ */
+@property (nonatomic, assign) CGFloat extraSpaceAroundMentions;
+
+/**
  *  The name/URL string of the attachment represented by this ZNGEventViewModel.  nil if this is a text entry.
  */
 @property (nonatomic, readonly) NSString * attachmentName;

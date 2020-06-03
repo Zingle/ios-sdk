@@ -27,6 +27,21 @@ typedef enum {
  */
 extern NSString * const ZNGEventViewModelImageSizeChangedNotification;
 
+/**
+ * The attribute applied to `attributedText` that surrounds any mention of a user or team.  Value is the UUID of the referenced entity.
+ */
+extern NSString * const ZNGEventMentionAttribute;
+
+/**
+* The attribute applied to `attributedText` that surrounds any mention user.  Value is the UUID of the referenced user.
+*/
+extern NSString * const ZNGEventUserMentionAttribute;
+
+/**
+* The attribute applied to `attributedText` that surrounds any mention of a team.  Value is the UUID of the referenced team.
+*/
+extern NSString * const ZNGEventTeamMentionAttribute;
+
 @class ZNGEvent;
 
 @interface ZNGEventViewModel : NSObject <JSQMessageData, JSQMessageMediaData>
@@ -37,6 +52,11 @@ extern NSString * const ZNGEventViewModelImageSizeChangedNotification;
 @property (nonatomic, assign) NSUInteger index;
 
 @property (nonatomic, strong) ZNGEvent * event;
+
+/**
+ * The body of the event as an `NSAttributedString`, including attributes for mentions
+ */
+@property (nonatomic, readonly) NSAttributedString * attributedText;
 
 /**
  *  The name/URL string of the attachment represented by this ZNGEventViewModel.  nil if this is a text entry.

@@ -8,11 +8,16 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGEvent.h"
 #import "ZNGImageSizeCache.h"
+#import "ZNGEventMetadataEntry.h"
 
 @import SBObjectiveCWrapper;
 @import SDWebImage;
 
 NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewModelImageSizeChangedNotification";
+
+NSString * const ZNGEventMentionAttribute = @"ZNGEventMentionAttribute";
+NSString * const ZNGEventUserMentionAttribute = @"ZNGEventUserMentionAttribute";
+NSString * const ZNGEventTeamMentionAttribute = @"ZNGEventTeamMentionAttribute";
 
 @implementation ZNGEventViewModel
 
@@ -121,6 +126,37 @@ NSString * const ZNGEventViewModelImageSizeChangedNotification = @"ZNGEventViewM
     }
     
     return self.event.message.outgoingImageAttachments[self.index];
+}
+
+- (NSAttributedString *) attributedText
+{
+    NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:self.text];
+    
+    for (ZNGEventMetadataEntry * metadata in self.event.metadata) {
+        if ((metadata.start == nil) || (metadata.end == nil)) {
+            SBLogError(@"Metadata entry has nil for either start (%@) or end (%@)", metadata.start, metadata.end);
+            continue;
+        }
+        
+        NSRange range = NSMakeRange([metadata.start unsignedIntegerValue], [metadata.end unsignedIntegerValue] - [metadata.start unsignedIntegerValue]);
+        
+        if ((range.location >= [text length]) || ((range.location + range.length) >= [text length])) {
+            SBLogError(@"Metadata entry range is out of bounds of the event text: %@", metadata);
+            continue;
+        }
+        
+        NSString * uuid = metadata.uuid ?: @"null";
+        
+        [text addAttribute:ZNGEventMentionAttribute value:uuid range:range];
+        
+        if ([metadata.type isEqualToString:ZNGEventMetadataEntryMentionTypeUser]) {
+            [text addAttribute:ZNGEventUserMentionAttribute value:uuid range:range];
+        } else if ([metadata.type isEqualToString:ZNGEventMetadataEntryMentionTypeTeam]) {
+            [text addAttribute:ZNGEventTeamMentionAttribute value:uuid range:range];
+        }
+    }
+
+    return text;
 }
 
 #pragma mark - Image attachment sizing

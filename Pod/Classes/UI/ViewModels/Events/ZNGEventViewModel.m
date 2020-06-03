@@ -158,7 +158,7 @@ NSString * const ZNGEventTeamMentionAttribute = @"ZNGEventTeamMentionAttribute";
         
         if (self.extraSpaceAroundMentions > 0.0) {
             // Extra space before the mention
-            if (range.location > 1) {
+            if (range.location > 0) {
                 [text addAttribute:NSKernAttributeName value:@(self.extraSpaceAroundMentions) range:NSMakeRange(range.location - 1, 1)];
             }
             

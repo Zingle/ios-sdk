@@ -16,11 +16,17 @@
 
 @implementation ZNGServiceConversationInputToolbar
 {
+    UIColor * normalBackgroundColor;
+    UIColor * noteBackgroundColor;
     UIColor * originalTextViewTintColor;
     UIColor * normalButtonColor;
     UIColor * highlightedButtonColor;
+    
     UIImage * sendButtonEnabled;
     UIImage * sendButtonDisabled;
+    
+    NSAttributedString * lastMessageText;
+    NSAttributedString * lastNoteText;
 }
 
 @dynamic contentView;
@@ -35,6 +41,12 @@
     highlightedButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     sendButtonEnabled = [UIImage imageNamed:@"sendEnabled" inBundle:bundle compatibleWithTraitCollection:nil];
     sendButtonDisabled = [UIImage imageNamed:@"sendDisabled" inBundle:bundle compatibleWithTraitCollection:nil];
+    normalBackgroundColor = [UIColor whiteColor];
+    noteBackgroundColor = [UIColor colorNamed:@"ZNGInternalNoteBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    
+    if (@available(iOS 13.0, *)) {
+        normalBackgroundColor = [UIColor systemBackgroundColor];
+    }
     
     self.preferredDefaultHeight = 121.0;
     self.toolbarMode = TOOLBAR_MODE_MESSAGE;
@@ -48,6 +60,7 @@
 
     self.clipsToBounds = YES;
     
+    self.contentView.textView.backgroundColor = [UIColor clearColor];
     self.contentView.textView.font = [UIFont latoFontOfSize:16.0];
     
     self.contentView.rightBarButtonItemWidth = sendButtonSize.width;
@@ -73,7 +86,25 @@
 
 - (void) setToolbarMode:(ZNGServiceConversationInputToolbarMode)toolbarMode
 {
-    _toolbarMode = toolbarMode;
+    if (toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
+        self.contentView.textView.placeHolder = @"Write an internal note";
+        self.contentView.backgroundColor = noteBackgroundColor;
+        
+        if (self.toolbarMode != TOOLBAR_MODE_INTERNAL_NOTE) {
+            // We're going from non-note to note mode.  Preserve note text and restore message text.
+            lastMessageText = self.contentView.textView.attributedText;
+            self.contentView.textView.attributedText = lastNoteText;
+        }
+    } else {
+        self.contentView.textView.placeHolder = @"Type a reply";
+        self.contentView.backgroundColor = normalBackgroundColor;
+        
+        if (self.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
+            // We're going from note mode to non-note mode.  Preserve message text and restore note text.
+            lastNoteText = self.contentView.textView.attributedText;
+            self.contentView.textView.attributedText = lastMessageText;
+        }
+    }
 
     switch (toolbarMode) {
         case TOOLBAR_MODE_MESSAGE:
@@ -176,6 +207,8 @@
     [self.contentView.automationButton addTarget:self action:@selector(didPressTriggerAutomation:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.imageButton addTarget:self action:@selector(didPressAttachImage:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.noteButton addTarget:self action:@selector(didPressAddNote:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _toolbarMode = toolbarMode;
 }
 
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel
@@ -232,9 +265,7 @@
 
 - (IBAction)didPressMessageModeButton:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressMessageModeButton:)]) {
-        [self.delegate inputToolbar:self didPressMessageModeButton:sender];
-    }
+    self.toolbarMode = TOOLBAR_MODE_MESSAGE;
 }
 
 - (IBAction)didPressUseTemplate:(id)sender
@@ -267,9 +298,7 @@
 
 - (IBAction)didPressAddNote:(id)sender
 {
-    if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressAddInternalNoteButton:)]) {
-        [self.delegate inputToolbar:self didPressAddInternalNoteButton:sender];
-    }
+    self.toolbarMode = TOOLBAR_MODE_INTERNAL_NOTE;
 }
 
 - (IBAction)didPressChannelSelectButton:(id)sender

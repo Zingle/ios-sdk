@@ -228,10 +228,6 @@ NSString * const kMessageDirectionOutbound = @"outbound";
             [self removeSendingEvents];
         }
         
-        if (!self.loadedInitialData) {
-            self.loadedInitialData = YES;
-        }
-        
         self.totalEventCount = status.totalRecords;
         
         // Since we are fetching our data in descending order (so page 1 has recent data,) we need to reverse for proper chronological order
@@ -244,6 +240,10 @@ NSString * const kMessageDirectionOutbound = @"outbound";
         
         [self mergeNewDataAtTail:sortedEvents];
         self.loading = NO;
+        
+        if (!self.loadedInitialData) {
+            self.loadedInitialData = YES;
+        }
         
         if (success) {
             success(status);
@@ -659,7 +659,7 @@ NSString * const kMessageDirectionOutbound = @"outbound";
 
 - (ZNGMessage *) mostRecentInboundMessage
 {
-    for (ZNGEvent * event in self.events) {
+    for (ZNGEvent * event in [self.events reverseObjectEnumerator]) {
         if (([event isMessage]) && (event.message) != nil && (![event.message isOutbound])) {
             return event.message;
         }
@@ -670,7 +670,7 @@ NSString * const kMessageDirectionOutbound = @"outbound";
 
 - (ZNGMessage *) mostRecentMessage
 {
-    for (ZNGEvent * event in self.events) {
+    for (ZNGEvent * event in [self.events reverseObjectEnumerator]) {
         if ([event isMessage]) {
             return event.message;
         }

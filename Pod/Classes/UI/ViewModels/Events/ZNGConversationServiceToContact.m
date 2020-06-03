@@ -145,6 +145,17 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return [_contact fullNameUsingUnformattedPhoneNumberValue:useUnformattedPhoneValue];
 }
 
+- (nullable ZNGEvent *) mostRecentNoteOrOutboundMessage
+{
+    for (ZNGEvent * event in [self.events reverseObjectEnumerator]) {
+        if (([event.message isOutbound]) || ([event isNote])) {
+            return event;
+        }
+    }
+    
+    return nil;
+}
+
 - (void) notifyConversationDataReceived:(NSNotification *)notification
 {
     if ([self notificationRelevantToThisConversation:notification]) {

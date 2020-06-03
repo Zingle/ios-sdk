@@ -44,6 +44,7 @@ static NSString * const AssignmentUITypeActionMenu = @"action menu";
 static NSString * const ConfirmedText = @" Confirmed ";
 static NSString * const UnconfirmedText = @" Unconfirmed ";
 
+static NSString * const KVOLoadedInitialDataPath = @"conversation.loadedInitialData";
 static NSString * const KVOContactChannelsPath = @"conversation.contact.channels";
 static NSString * const KVOContactCustomFieldsPath = @"conversation.contact.customFieldValues";
 static NSString * const KVOTeamAssignment = @"conversation.contact.assignedToTeamId";
@@ -51,6 +52,7 @@ static NSString * const KVOUserAssignment = @"conversation.contact.assignedToUse
 static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.pendingResponses";
+static NSString * const KVOToolbarModePath = @"inputToolbar.toolbarMode";
 
 static NSString * const TypingIndicatorCellID = @"typingIndicator";
 
@@ -153,6 +155,7 @@ enum ZNGConversationSections
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNetworkStatusChanged:) name:ZNGNetworkLookoutStatusChanged object:nil];
     
+    [self addObserver:self forKeyPath:KVOLoadedInitialDataPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOChannelPath options:NSKeyValueObservingOptionNew context:KVOContext];
@@ -160,12 +163,14 @@ enum ZNGConversationSections
     [self addObserver:self forKeyPath:KVOReplyingUsersPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
     [self addObserver:self forKeyPath:KVOTeamAssignment options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOUserAssignment options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
+    [self addObserver:self forKeyPath:KVOToolbarModePath options:0 context:KVOContext];
 }
 
 - (void) dealloc
 {
     [[ZNGInitialsAvatarCache sharedCache] clearCache];
     
+    [self removeObserver:self forKeyPath:KVOToolbarModePath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOUserAssignment context:KVOContext];
     [self removeObserver:self forKeyPath:KVOTeamAssignment context:KVOContext];
     [self removeObserver:self forKeyPath:KVOReplyingUsersPath context:KVOContext];
@@ -173,6 +178,7 @@ enum ZNGConversationSections
     [self removeObserver:self forKeyPath:KVOChannelPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactCustomFieldsPath context:KVOContext];
     [self removeObserver:self forKeyPath:KVOContactChannelsPath context:KVOContext];
+    [self removeObserver:self forKeyPath:KVOLoadedInitialDataPath context:KVOContext];
     
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
@@ -361,6 +367,22 @@ enum ZNGConversationSections
             }
             
             [self updateTitle];
+        } else if ([keyPath isEqualToString:KVOToolbarModePath]) {
+            // Match our facade toolbar (covering non safe area below the JSQMessages toolbar) color to the actual toolbar color since
+            //  it may change when toggling between message composition and note composition.
+            self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
+        } else if ([keyPath isEqualToString:KVOLoadedInitialDataPath]) {
+            id oldLoadedFlagOrNull = change[NSKeyValueChangeOldKey];
+            id loadedFlagOrNull = change[NSKeyValueChangeNewKey];
+            BOOL oldLoadedFlag = ([oldLoadedFlagOrNull isKindOfClass:[NSNumber class]]) ? [oldLoadedFlagOrNull boolValue] : NO;
+            BOOL loadedFlag = ([loadedFlagOrNull isKindOfClass:[NSNumber class]]) ? [loadedFlagOrNull boolValue] : NO;
+            
+            // Did we just finish our initial loading?
+            if ((!oldLoadedFlag) && (loadedFlag)) {
+                // Set toolbar type to reflect the last outbound event type as note vs. message if present
+                ZNGEvent * lastEvent = [(ZNGConversationServiceToContact *)self.conversation mostRecentNoteOrOutboundMessage];
+                self.inputToolbar.toolbarMode = ([lastEvent isNote]) ? TOOLBAR_MODE_INTERNAL_NOTE : TOOLBAR_MODE_MESSAGE;
+            }
         }
     } else {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
@@ -1706,7 +1728,11 @@ enum ZNGConversationSections
     [textViewChangeTimer invalidate];
     textViewChangeTimer = nil;
     
-    [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
+    if (self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
+        [self addInternalNote:text];
+    } else {
+        [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
+    }
 }
 
 - (IBAction)pressedCancelAutomation:(id)sender
@@ -1809,34 +1835,6 @@ enum ZNGConversationSections
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAddInternalNoteButton:(id)sender
-{
-    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Enter an internal note" message:nil preferredStyle:UIAlertControllerStyleAlert];
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = @"Internal note";
-    }];
-    UIAlertAction * addNote = [UIAlertAction actionWithTitle:@"Add note" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        UITextField * noteField = [alert.textFields firstObject];
-        NSString * note = [noteField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-        
-        if ([note length] == 0) {
-            UIAlertController * noteAlert = [UIAlertController alertControllerWithTitle:@"Notes cannot be empty" message:nil preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-            [noteAlert addAction:ok];
-            [self presentViewController:noteAlert animated:YES completion:nil];
-        } else {
-            [self addInternalNote:note];
-        }
-    }];
-    UIAlertAction * cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
-    
-    [alert addAction:addNote];
-    [alert addAction:cancel];
-    
-    [self.inputToolbar.contentView.textView resignFirstResponder];
-    [self presentViewController:alert animated:YES completion:nil];
-}
-
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressTriggerAutomationButton:(id)sender
 {
     CGRect sourceRect = [self.view convertRect:toolbar.contentView.automationButton.frame fromView:toolbar.contentView.templateButton.superview];
@@ -1893,10 +1891,14 @@ enum ZNGConversationSections
         weakSelf.inputToolbar.inputEnabled = YES;
         [weakSelf scrollToBottomAnimated:YES];
         [[ZNGAnalytics sharedAnalytics] trackAddedNote:note toConversation:weakSelf.conversation];
+        
+        [weakSelf finishSendingMessageAnimated:YES];
     } failure:^(ZNGError * _Nonnull error) {
         weakSelf.inputToolbar.inputEnabled = YES;
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Failed to add note" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [weakSelf finishSendingMessageAnimated:YES];
+        }];
         [alert addAction:ok];
         [weakSelf presentViewController:alert animated:YES completion:nil];
     }];

@@ -141,7 +141,7 @@ NSString * const ZNGEventTeamMentionAttribute = @"ZNGEventTeamMentionAttribute";
         
         NSRange range = NSMakeRange([metadata.start unsignedIntegerValue], [metadata.end unsignedIntegerValue] - [metadata.start unsignedIntegerValue]);
         
-        if ((range.location >= [text length]) || ((range.location + range.length) >= [text length])) {
+        if ((range.location >= [text length]) || ((range.location + range.length) > [text length])) {
             SBLogError(@"Metadata entry range is out of bounds of the event text: %@", metadata);
             continue;
         }

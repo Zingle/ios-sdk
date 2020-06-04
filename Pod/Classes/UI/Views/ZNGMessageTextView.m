@@ -100,19 +100,25 @@
         
         NSArray<NSValue *> * rects = [self rectsForTextInRange:range];
         
-        for (NSValue * rectValue in rects) {
+        [rects enumerateObjectsUsingBlock:^(NSValue * _Nonnull rectValue, NSUInteger i, BOOL * _Nonnull stop) {
             CGRect rect = [rectValue CGRectValue];
             
             // Pad a bit to the left
             rect.origin.x -= self.highlightPadding;
             rect.size.width += self.highlightPadding;
             
+            // A bit of right padding is also needed if this is a non-terminal part of a split mention
+            if (([rects count] > 1) && (i < ([rects count] - 1))) {
+                rect.size.width += self.highlightPadding;
+            }
+            
             UIView * mentionHighlight = [[UIView alloc] initWithFrame:rect];
             mentionHighlight.backgroundColor = self.mentionHighlightColor;
             mentionHighlight.layer.cornerRadius = self.mentionHighlightCornerRadius;
             [newMentionHighlights addObject:mentionHighlight];
             [self insertSubview:mentionHighlight atIndex:0];
-        }
+        }];
+
     }];
 
     mentionHighlights = newMentionHighlights;

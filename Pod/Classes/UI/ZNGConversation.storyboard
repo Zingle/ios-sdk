@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="yXX-6h-nLe">
-    <device id="retina4_7" orientation="portrait" appearance="dark"/>
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
@@ -42,7 +42,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="900" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Hh-Uf-Tjj">
-                                                <rect key="frame" x="313" y="1" width="47" height="30"/>
+                                                <rect key="frame" x="315" y="1" width="45" height="30"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <state key="normal" title="Cancel">
                                                     <color key="titleColor" cocoaTouchSystemColor="lightTextColor"/>
@@ -52,7 +52,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In automation: None" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uwr-ad-H0w">
-                                                <rect key="frame" x="36" y="7" width="269" height="18"/>
+                                                <rect key="frame" x="36" y="7" width="271" height="18"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -93,7 +93,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="120" y="4" width="135" height="20"/>
+                                                <rect key="frame" x="123.5" y="4" width="128.5" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" cocoaTouchSystemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -120,6 +120,10 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <tableView hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" placeholderIntrinsicWidth="375" placeholderIntrinsicHeight="128" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pwu-af-kcD" customClass="ZNGContentSizedTableView" customModule="ZingleSDK" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="462" width="375" height="128"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="E7V-XK-dac">
                                 <rect key="frame" x="0.0" y="44" width="375" height="546"/>
                                 <subviews>
@@ -546,23 +550,27 @@
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="1S3-q5-gQs" secondAttribute="trailing" id="53e-ge-dRW"/>
                             <constraint firstItem="0kk-eR-qEq" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="BCr-OU-jxW"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="G72-K8-cSu" secondAttribute="trailing" id="COI-bv-zcs"/>
+                            <constraint firstItem="pwu-af-kcD" firstAttribute="top" relation="greaterThanOrEqual" secondItem="Vm4-GP-Tqx" secondAttribute="bottom" constant="40" id="DwU-j1-afK"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="E7V-XK-dac" secondAttribute="bottom" id="EDx-Ch-b3F"/>
                             <constraint firstItem="0kk-eR-qEq" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="HIY-EQ-SDT"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="Vm4-GP-Tqx" secondAttribute="trailing" id="JDw-d0-zFU"/>
                             <constraint firstAttribute="trailing" secondItem="Uqn-aA-lFp" secondAttribute="trailing" id="LrH-jS-QWD"/>
                             <constraint firstItem="IrD-za-bqt" firstAttribute="top" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="Pgs-am-IVF"/>
+                            <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="pwu-af-kcD" secondAttribute="bottom" id="UPM-Vw-Nio"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="0kk-eR-qEq" secondAttribute="bottom" id="XNN-6r-9eK"/>
                             <constraint firstAttribute="bottom" secondItem="G72-K8-cSu" secondAttribute="bottom" id="Z5e-qb-Lsr"/>
                             <constraint firstItem="E7V-XK-dac" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="ZwW-bH-jKg"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="top" secondItem="1S3-q5-gQs" secondAttribute="bottom" id="e2q-0E-eOl"/>
                             <constraint firstAttribute="bottom" secondItem="IrD-za-bqt" secondAttribute="bottom" id="eCG-1k-1P5"/>
                             <constraint firstAttribute="bottomMargin" secondItem="Uqn-aA-lFp" secondAttribute="bottom" id="gMQ-Jk-t3t"/>
+                            <constraint firstItem="pwu-af-kcD" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="gfM-cY-bHm"/>
                             <constraint firstAttribute="trailing" secondItem="IrD-za-bqt" secondAttribute="trailing" id="iPl-8o-mcz"/>
                             <constraint firstItem="IrD-za-bqt" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="lao-f6-meA"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="n5E-he-CGo"/>
                             <constraint firstItem="mNq-IG-c2A" firstAttribute="trailing" secondItem="0kk-eR-qEq" secondAttribute="trailing" id="rod-aR-Di7"/>
                             <constraint firstItem="G72-K8-cSu" firstAttribute="top" secondItem="eYw-Gk-ZwV" secondAttribute="top" id="sPw-m9-Cyf"/>
                             <constraint firstItem="1S3-q5-gQs" firstAttribute="leading" secondItem="mNq-IG-c2A" secondAttribute="leading" id="sfA-yn-544"/>
+                            <constraint firstAttribute="trailing" secondItem="pwu-af-kcD" secondAttribute="trailing" id="vsj-Mq-4Yr"/>
                             <constraint firstItem="E7V-XK-dac" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="xJH-jd-HgK"/>
                             <constraint firstItem="Vm4-GP-Tqx" firstAttribute="top" secondItem="mNq-IG-c2A" secondAttribute="top" id="xcs-Tv-MJM"/>
                             <constraint firstItem="Uqn-aA-lFp" firstAttribute="leading" secondItem="eYw-Gk-ZwV" secondAttribute="leading" id="y5U-NG-cZx"/>
@@ -582,6 +590,7 @@
                         <outlet property="collectionView" destination="G72-K8-cSu" id="m0g-gs-Y0W"/>
                         <outlet property="inputToolbar" destination="Uqn-aA-lFp" id="vJK-sj-akg"/>
                         <outlet property="lowerFacadeToolbar" destination="IrD-za-bqt" id="ep6-zC-m6d"/>
+                        <outlet property="mentionsSelectionTable" destination="pwu-af-kcD" id="0Ev-iv-jQl"/>
                         <outlet property="moreMessagesContainerView" destination="1S3-q5-gQs" id="kVr-pd-0UU"/>
                         <outlet property="moreMessagesLabel" destination="J1p-JT-Rr6" id="NXi-ic-CMc"/>
                         <outlet property="moreMessagesView" destination="MTx-YX-esM" id="QdK-6v-gWE"/>
@@ -1588,13 +1597,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5h-kA-dBV">
-                                        <rect key="frame" x="145.5" y="11" width="84" height="21"/>
+                                        <rect key="frame" x="147.5" y="10" width="80" height="22"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="6" width="53" height="32"/>
+                                        <rect key="frame" x="16" y="5" width="51" height="33"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

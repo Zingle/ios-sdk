@@ -161,7 +161,8 @@
         
         CGRect rect = [self firstRectForRange:textRange];
         [wordRects addObject:[NSValue valueWithCGRect:rect]];
-        currentLocation += wordRange.length;
+        
+        currentLocation = wordRange.location + wordRange.length;
     }
     
     // We have individual rects for each word in the mention.

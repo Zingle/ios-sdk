@@ -27,28 +27,4 @@
     return CGRectMake(rightViewCenter.x - quarterHeight, rightViewCenter.y - quarterHeight, halfHeight, halfHeight);
 }
 
-// iOS 11.2 leaks every UITextField forever thanks to a circular reference in its internals.  I love Apple.
-- (void)didMoveToWindow
-{
-    [super didMoveToWindow];
-    
-    if (@available(iOS 11.2, *)) {
-        NSString *keyPath = @"textContentView.provider";
-        @try {
-            if (self.window) {
-                id provider = [self valueForKeyPath:keyPath];
-                
-                if (!provider && self.zng_originalProvider) {
-                    [self setValue:self.zng_originalProvider forKeyPath:keyPath];
-                }
-            } else {
-                self.zng_originalProvider = [self valueForKeyPath:keyPath];
-                [self setValue:nil forKeyPath:keyPath];
-            }
-        } @catch (NSException *exception) {
-            NSLog(@"%@", exception);
-        }
-    }
-}
-
 @end

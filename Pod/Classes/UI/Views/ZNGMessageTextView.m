@@ -127,48 +127,48 @@
 /**
  * One of more CGRects that visually contain the specified range.  There will be more than one if this text is wrapped.
  */
-- (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)range
+- (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)mentionRange
 {
+    UITextPosition * beginningOfMention = [self positionFromPosition:self.beginningOfDocument offset:mentionRange.location];
+    
     // The string defined by our provided range
-    NSString * substring = [[self.attributedText attributedSubstringFromRange:range] string];
+    NSString * mentionText = [[self.attributedText attributedSubstringFromRange:mentionRange] string];
     
     // The string split by whitespace into its non-whitespace components (read: words)
-    NSArray<NSString *> * components = [substring componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSArray<NSString *> * words = [mentionText componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     // This array will include one rect for each word in this mention
-    NSMutableArray<NSValue *> * componentRects = [[NSMutableArray alloc] initWithCapacity:[components count]];
+    NSMutableArray<NSValue *> * wordRects = [[NSMutableArray alloc] initWithCapacity:[words count]];
     NSUInteger currentLocation = 0;
     
     // Loop through each word of the string within our range, calculating the individual rects surrounding each word
     //  to be later joined.
-    for (NSString * component in components) {
-        NSRange searchRange = NSMakeRange(currentLocation, [substring length] - currentLocation);
-        NSRange localRange = [substring rangeOfString:component options:0 range:searchRange];
+    for (NSString * word in words) {
+        // The remaining range of mentionText, shrinking forward as we calculate rects for words
+        NSRange searchRange = NSMakeRange(currentLocation, [mentionText length] - currentLocation);
         
-        if (localRange.location == NSNotFound) {
+        // The range of this word within our mentionText
+        NSRange wordRange = [mentionText rangeOfString:word options:0 range:searchRange];
+        
+        if (wordRange.location == NSNotFound) {
             SBLogError(@"Something has gone horribly wrong when calculating mention string ranges.");
             return @[];
         }
-        
-        // The range of this component within the entire `self.attributedText`.
-        // This could be slightly simplified with more trust and understanding in exactly how UITextPosition is
-        //  calculated relatively, (probably eliminating the need for this first conversion to `globalRange`).
-        NSRange globalRange = NSMakeRange(range.location + localRange.location, localRange.length);
-        UITextPosition * beginning = self.beginningOfDocument;
-        UITextPosition * start = [self positionFromPosition:beginning offset:globalRange.location];
-        UITextPosition * end = [self positionFromPosition:start offset:globalRange.length];
-        UITextRange * textRange = [self textRangeFromPosition:start toPosition:end];
+
+        UITextPosition * wordStart = [self positionFromPosition:beginningOfMention offset:wordRange.location];
+        UITextPosition * wordEnd = [self positionFromPosition:wordStart offset:wordRange.length];
+        UITextRange * textRange = [self textRangeFromPosition:wordStart toPosition:wordEnd];
         
         CGRect rect = [self firstRectForRange:textRange];
-        [componentRects addObject:[NSValue valueWithCGRect:rect]];
-        currentLocation += localRange.length;
+        [wordRects addObject:[NSValue valueWithCGRect:rect]];
+        currentLocation += wordRange.length;
     }
     
     // We have individual rects for each word in the mention.
     // We now need to detect multiple rects that occur on the same line and combine those.
-    NSMutableArray<NSValue *> * joinedRects = [[NSMutableArray alloc] initWithCapacity:[componentRects count]];
+    NSMutableArray<NSValue *> * joinedRects = [[NSMutableArray alloc] initWithCapacity:[words count]];
     
-    for (NSValue * rectValue in componentRects) {
+    for (NSValue * rectValue in wordRects) {
         CGRect thisRect = [rectValue CGRectValue];
         NSValue * previousRect = [joinedRects lastObject];
         

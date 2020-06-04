@@ -8,6 +8,8 @@
 #import "ZNGMessageTextView.h"
 #import "ZNGEventViewModel.h"
 
+@import SBObjectiveCWrapper;
+
 @implementation ZNGMessageTextView
 {
     NSArray<UIView *> * mentionHighlights;
@@ -92,26 +94,80 @@
             return;
         }
         
-        // Let's go on a thrilling adventure through over-engineered text processing land to find the coordinates for our mention
-        UITextPosition * beginning = self.beginningOfDocument;
-        UITextPosition * start = [self positionFromPosition:beginning offset:range.location];
-        UITextPosition * end = [self positionFromPosition:start offset:range.length];
-        UITextRange * textRange = [self textRangeFromPosition:start toPosition:end];
-        CGRect rect = [self firstRectForRange:textRange];
+        NSArray<NSValue *> * rects = [self rectsForTextInRange:range];
         
-        // Pad a bit to the left
-        rect.origin.x -= self.highlightPadding;
-        rect.size.width += self.highlightPadding;
-        
-        UIView * mentionHighlight = [[UIView alloc] initWithFrame:rect];
-        mentionHighlight.backgroundColor = self.mentionHighlightColor;
-        mentionHighlight.layer.cornerRadius = self.mentionHighlightCornerRadius;
-        [newMentionHighlights addObject:mentionHighlight];
-        [self insertSubview:mentionHighlight atIndex:0];
+        for (NSValue * rectValue in rects) {
+            CGRect rect = [rectValue CGRectValue];
+            
+            // Pad a bit to the left
+            rect.origin.x -= self.highlightPadding;
+            rect.size.width += self.highlightPadding;
+            
+            UIView * mentionHighlight = [[UIView alloc] initWithFrame:rect];
+            mentionHighlight.backgroundColor = self.mentionHighlightColor;
+            mentionHighlight.layer.cornerRadius = self.mentionHighlightCornerRadius;
+            [newMentionHighlights addObject:mentionHighlight];
+            [self insertSubview:mentionHighlight atIndex:0];
+        }
     }];
 
     mentionHighlights = newMentionHighlights;
 }
 
+- (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)range
+{
+    NSString * substring = [[self.attributedText attributedSubstringFromRange:range] string];
+    NSArray<NSString *> * components = [substring componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSMutableArray<NSValue *> * componentRects = [[NSMutableArray alloc] initWithCapacity:[components count]];
+    NSUInteger currentLocation = 0;
+    
+    for (NSString * component in components) {
+        NSRange searchRange = NSMakeRange(currentLocation, [substring length] - currentLocation);
+        NSRange localRange = [substring rangeOfString:component options:0 range:searchRange];
+        
+        if (localRange.location == NSNotFound) {
+            SBLogError(@"Something has gone horribly wrong when calculating mention string ranges.");
+            return @[];
+        }
+        
+        // The range of this component within the entire `self.attributedText`.
+        // This could be slightly simplified with more trust and understanding in exactly how UITextPosition is
+        //  calculated relatively, (probably eliminating the need for this first conversion to `globalRange`).
+        NSRange globalRange = NSMakeRange(range.location + localRange.location, localRange.length);
+        UITextPosition * beginning = self.beginningOfDocument;
+        UITextPosition * start = [self positionFromPosition:beginning offset:globalRange.location];
+        UITextPosition * end = [self positionFromPosition:start offset:globalRange.length];
+        UITextRange * textRange = [self textRangeFromPosition:start toPosition:end];
+        
+        CGRect rect = [self firstRectForRange:textRange];
+        [componentRects addObject:[NSValue valueWithCGRect:rect]];
+        currentLocation += localRange.length;
+    }
+    
+    // We now have individual rects for each word in the mention. We now need to detect rects that occur on the same
+    //  line and combine those.
+    NSMutableArray<NSValue *> * joinedRects = [[NSMutableArray alloc] initWithCapacity:[componentRects count]];
+    
+    for (NSValue * rectValue in componentRects) {
+        CGRect thisRect = [rectValue CGRectValue];
+        NSValue * previousRect = [joinedRects lastObject];
+        
+        if ((previousRect != nil) && ([self rectsCoexistOnSingleLine:thisRect secondRect:[previousRect CGRectValue]])) {
+            // Join the two rects
+            [joinedRects removeLastObject];
+            [joinedRects addObject:[NSValue valueWithCGRect:CGRectUnion([previousRect CGRectValue], thisRect)]];
+        } else {
+            [joinedRects addObject:[NSValue valueWithCGRect:thisRect]];
+        }
+    }
+
+    return joinedRects;
+}
+
+- (BOOL) rectsCoexistOnSingleLine:(CGRect)rect1 secondRect:(CGRect)rect2
+{
+    // Strict comparison of X value may be good enough.  I'm not sure if descenders will break this.
+    return (rect1.origin.y == rect2.origin.y);
+}
 
 @end

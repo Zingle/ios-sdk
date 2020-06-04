@@ -89,10 +89,14 @@
     
     __block NSMutableArray<UIView *> * newMentionHighlights = [[NSMutableArray alloc] init];
     
+    // Enumerate through all attributes in our text, searching for @mention attributes
     [self.attributedText enumerateAttributesInRange:NSMakeRange(0, [self.attributedText length]) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (![[attrs allKeys] containsObject:ZNGEventMentionAttribute]) {
+            // This block of attribute(s) did not contain a mention
             return;
         }
+        
+        // We have a mention.  Let's calculate the rect(s) that contain it and add highlighter background views.
         
         NSArray<NSValue *> * rects = [self rectsForTextInRange:range];
         
@@ -114,13 +118,23 @@
     mentionHighlights = newMentionHighlights;
 }
 
+/**
+ * One of more CGRects that visually contain the specified range.  There will be more than one if this text is wrapped.
+ */
 - (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)range
 {
+    // The string defined by our provided range
     NSString * substring = [[self.attributedText attributedSubstringFromRange:range] string];
+    
+    // The string split by whitespace into its non-whitespace components (read: words)
     NSArray<NSString *> * components = [substring componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    // This array will include one rect for each word in this mention
     NSMutableArray<NSValue *> * componentRects = [[NSMutableArray alloc] initWithCapacity:[components count]];
     NSUInteger currentLocation = 0;
     
+    // Loop through each word of the string within our range, joining any rects that contain 2+ words on the same line
+    //  into single rects.
     for (NSString * component in components) {
         NSRange searchRange = NSMakeRange(currentLocation, [substring length] - currentLocation);
         NSRange localRange = [substring rangeOfString:component options:0 range:searchRange];
@@ -144,8 +158,8 @@
         currentLocation += localRange.length;
     }
     
-    // We now have individual rects for each word in the mention. We now need to detect rects that occur on the same
-    //  line and combine those.
+    // We have individual rects for each word in the mention.
+    // We now need to detect multiple rects that occur on the same line and combine those.
     NSMutableArray<NSValue *> * joinedRects = [[NSMutableArray alloc] initWithCapacity:[componentRects count]];
     
     for (NSValue * rectValue in componentRects) {
@@ -166,8 +180,11 @@
 
 - (BOOL) rectsCoexistOnSingleLine:(CGRect)rect1 secondRect:(CGRect)rect2
 {
-    // Strict comparison of X value may be good enough.  I'm not sure if descenders will break this.
-    return (rect1.origin.y == rect2.origin.y);
+    // A strict equivalency check of Y is probably good enough, but we'll be safe and
+    //  add some wiggle room equal to half rect1's height
+    CGFloat margin = rect1.size.height / 2.0;
+    CGFloat diff = fabs(rect1.origin.y - rect2.origin.y);
+    return (diff < margin);
 }
 
 @end

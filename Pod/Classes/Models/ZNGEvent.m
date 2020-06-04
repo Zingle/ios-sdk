@@ -10,6 +10,7 @@
 #import "ZNGEventViewModel.h"
 #import "ZNGContact.h"
 #import "ZingleValueTransformers.h"
+#import "ZNGEventMetadataEntry.h"
 
 NSString * const ZNGEventTypeMessage = @"message";
 NSString * const ZNGEventTypeNote = @"note";
@@ -61,6 +62,7 @@ NSString * const ZNGEventTypeAssignmentChange = @"assignment_changed";
              @"triggeredByUser" : @"triggered_by_user",
              @"automation" : @"automation",
              @"message" : @"message",
+             NSStringFromSelector(@selector(metadata)): @"metadata",
              };
 }
 
@@ -139,6 +141,11 @@ NSString * const ZNGEventTypeAssignmentChange = @"assignment_changed";
 + (NSValueTransformer*)messageJSONTransformer
 {
     return [MTLJSONAdapter dictionaryTransformerWithModelClass:[ZNGMessage class]];
+}
+
++ (NSValueTransformer *)metadataJSONTransformer
+{
+    return [MTLJSONAdapter arrayTransformerWithModelClass:[ZNGEventMetadataEntry class]];
 }
 
 - (BOOL) isEqual:(ZNGEvent *)other {

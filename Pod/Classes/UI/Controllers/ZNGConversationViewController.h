@@ -75,6 +75,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIColor * internalNoteColor;
 
 /**
+ * The highlight color for mentions in internal notes
+ */
+@property (nonatomic, strong) UIColor * mentionHighlightColor;
+
+/**
  *  Sets the text color of the incoming message text.
  *  Defaults to Zingle gray text color
  */

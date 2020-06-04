@@ -26,6 +26,8 @@
 #import "ZNGConversationCellOutgoing.h"
 #import "ZNGConversationCellIncoming.h"
 #import "ZNGEventViewModel.h"
+#import "ZNGEventMetadataEntry.h"
+#import "ZNGMessageTextView.h"
 
 @import SBObjectiveCWrapper;
 @import Shimmer;
@@ -163,6 +165,7 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
     _incomingTextColor = [UIColor colorNamed:@"ZNGInboundBubbleText" inBundle:bundle compatibleWithTraitCollection:nil];
     _outgoingTextColor = [UIColor colorNamed:@"ZNGOutboundBubbleText" inBundle:bundle compatibleWithTraitCollection:nil];
     _internalNoteTextColor = [UIColor colorNamed:@"ZNGInternalNoteText" inBundle:bundle compatibleWithTraitCollection:nil];
+    _mentionHighlightColor = [UIColor colorNamed:@"ZNGInternalNoteHighlightedBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     _authorTextColor = [UIColor lightGrayColor];
     _messageFont = [UIFont latoFontOfSize:17.0];
     _textInputFont = [UIFont latoFontOfSize:16.0];
@@ -1487,7 +1490,8 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
                 textColor = self.incomingTextColor;
             }
             
-            NSMutableAttributedString * text = [[NSMutableAttributedString alloc] initWithString:[event text]];
+            NSMutableAttributedString * text = [[viewModel attributedText] mutableCopy];
+            
             JSQMessagesCollectionViewFlowLayout * layout = (JSQMessagesCollectionViewFlowLayout *)collectionView.collectionViewLayout;
             
             NSMutableDictionary * linkAttributes = [[NSMutableDictionary alloc] init];
@@ -1500,6 +1504,10 @@ static void * ZNGConversationKVOContext  =   &ZNGConversationKVOContext;
             
             if (layout.messageBubbleFont != nil) {
                 [text addAttribute:NSFontAttributeName value:layout.messageBubbleFont range:NSMakeRange(0, [text length])];
+            }
+            
+            if ([cell.textView isKindOfClass:[ZNGMessageTextView class]]) {
+                ((ZNGMessageTextView *)cell.textView).mentionHighlightColor = self.mentionHighlightColor;
             }
             
             cell.textView.linkTextAttributes = linkAttributes;

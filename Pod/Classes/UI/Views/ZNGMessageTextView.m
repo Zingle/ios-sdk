@@ -107,8 +107,15 @@
             rect.origin.x -= self.highlightPadding;
             rect.size.width += self.highlightPadding;
             
-            // A bit of right padding is also needed if this is a non-terminal part of a split mention
-            if (([rects count] > 1) && (i < ([rects count] - 1))) {
+            // A bit of right padding is also needed if...
+            //  1) This is a non-terminal part of a split mention
+            BOOL nonTerminalWrapped = (([rects count] > 1) && (i < ([rects count] - 1)));
+            //  2) This is the very last word of the entire message
+            BOOL wordEndsMention = (i == ([rects count] - 1));
+            BOOL mentionEndsMessage = ((range.location + range.length) == [self.attributedText length]);
+            BOOL wordEndsMessage = (wordEndsMention && mentionEndsMessage);
+                                        
+            if (nonTerminalWrapped || wordEndsMessage) {
                 rect.size.width += self.highlightPadding;
             }
             

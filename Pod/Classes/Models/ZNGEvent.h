@@ -28,17 +28,19 @@ extern NSString * const ZNGEventTypeAssignmentChange;
 
 @class ZNGContact;
 @class ZNGEventViewModel;
+@class ZNGEventMetadataEntry;
 
 @interface ZNGEvent : MTLModel<MTLJSONSerializing, JSQMessageData>
 
-@property (nonatomic, strong) NSString* eventId;
-@property (nonatomic, strong, nullable) NSString* contactId;
-@property (nonatomic, strong) NSString* eventType;
-@property (nonatomic, strong, nullable) NSString* body;
-@property (nonatomic, strong) NSDate* createdAt;
-@property (nonatomic, strong, nullable) ZNGUser* triggeredByUser;
-@property (nonatomic, strong, nullable) ZNGAutomation* automation;
-@property (nonatomic, strong, nullable) ZNGMessage* message;
+@property (nonatomic, strong) NSString * eventId;
+@property (nonatomic, strong, nullable) NSString * contactId;
+@property (nonatomic, strong) NSString * eventType;
+@property (nonatomic, strong, nullable) NSString * body;
+@property (nonatomic, strong) NSDate * createdAt;
+@property (nonatomic, strong, nullable) ZNGUser * triggeredByUser;
+@property (nonatomic, strong, nullable) ZNGAutomation * automation;
+@property (nonatomic, strong, nullable) ZNGMessage * message;
+@property (nonatomic, strong, nullable) NSArray<ZNGEventMetadataEntry *> * metadata;
 
 /**
  *  The time this event actually came into existence.  For delayed messages, this will be null until the message is sent.

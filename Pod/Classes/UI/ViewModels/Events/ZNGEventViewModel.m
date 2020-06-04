@@ -161,9 +161,11 @@ NSString * const ZNGEventTeamMentionAttribute = @"ZNGEventTeamMentionAttribute";
             if (range.location > 0) {
                 [text addAttribute:NSKernAttributeName value:@(self.extraSpaceAroundMentions) range:NSMakeRange(range.location - 1, 1)];
             }
-            
+
             // Extra space after
-            [text addAttribute:NSKernAttributeName value:@(self.extraSpaceAroundMentions) range:NSMakeRange(range.location + range.length - 1, 1)];
+            if ((range.location + range.length) < [text length]) {
+                [text addAttribute:NSKernAttributeName value:@(self.extraSpaceAroundMentions) range:NSMakeRange(range.location + range.length - 1, 1)];
+            }
         }
     }
 

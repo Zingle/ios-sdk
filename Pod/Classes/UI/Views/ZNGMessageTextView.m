@@ -139,8 +139,8 @@
     NSMutableArray<NSValue *> * componentRects = [[NSMutableArray alloc] initWithCapacity:[components count]];
     NSUInteger currentLocation = 0;
     
-    // Loop through each word of the string within our range, joining any rects that contain 2+ words on the same line
-    //  into single rects.
+    // Loop through each word of the string within our range, calculating the individual rects surrounding each word
+    //  to be later joined.
     for (NSString * component in components) {
         NSRange searchRange = NSMakeRange(currentLocation, [substring length] - currentLocation);
         NSRange localRange = [substring rangeOfString:component options:0 range:searchRange];

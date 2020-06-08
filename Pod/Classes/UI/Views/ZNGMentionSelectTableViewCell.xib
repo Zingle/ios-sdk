@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Lato-Regular.ttf">
+            <string>Lato-Regular</string>
+        </array>
+    </customFonts>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="61" id="KGk-i7-Jjw" customClass="ZNGMentionSelectTableViewCell">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User or team name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gJ-0o-aJU">
+                        <rect key="frame" x="74" y="10" width="230" height="41"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="251" text="😁" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3aU-3L-d5L">
+                        <rect key="frame" x="16" y="11" width="42" height="39"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="37"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="275" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9hB-of-hlH" customClass="ZNGAvatarImageView">
+                        <rect key="frame" x="16" y="11" width="42" height="39"/>
+                    </imageView>
+                </subviews>
+                <constraints>
+                    <constraint firstItem="3aU-3L-d5L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="6Ds-YF-I5A"/>
+                    <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="9hB-of-hlH" secondAttribute="bottom" id="969-bO-aVp"/>
+                    <constraint firstItem="3aU-3L-d5L" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="BKW-mH-nSc"/>
+                    <constraint firstItem="9hB-of-hlH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="DjW-x5-B9R"/>
+                    <constraint firstAttribute="trailingMargin" secondItem="0gJ-0o-aJU" secondAttribute="trailing" id="ESR-DS-e91"/>
+                    <constraint firstItem="9hB-of-hlH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="HxJ-pR-cpt"/>
+                    <constraint firstItem="3aU-3L-d5L" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="PJS-II-17N"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="9hB-of-hlH" secondAttribute="bottom" priority="900" id="QZd-Kb-0Zc"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3aU-3L-d5L" secondAttribute="trailing" constant="16" id="RXP-eu-fRm"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Vw5-Ou-ZRB"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9hB-of-hlH" secondAttribute="trailing" constant="16" id="aBO-h9-1L4"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="3aU-3L-d5L" secondAttribute="trailing" priority="900" constant="16" id="f0E-Gh-TUC"/>
+                    <constraint firstItem="3aU-3L-d5L" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="fZA-na-70Y"/>
+                    <constraint firstItem="3aU-3L-d5L" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="l3L-Ap-hYA"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="9hB-of-hlH" secondAttribute="trailing" priority="900" constant="16" id="nju-Tp-Llw"/>
+                    <constraint firstItem="9hB-of-hlH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ujp-4R-a6F"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="3aU-3L-d5L" secondAttribute="bottom" priority="900" id="xUM-bH-d4j"/>
+                    <constraint firstAttribute="bottom" secondItem="0gJ-0o-aJU" secondAttribute="bottom" constant="10" id="yeS-XI-UGR"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
+            <connections>
+                <outlet property="avatarView" destination="9hB-of-hlH" id="FLV-kO-hND"/>
+                <outlet property="nameLabel" destination="0gJ-0o-aJU" id="ObI-8F-TUq"/>
+                <outlet property="teamEmojiLabel" destination="3aU-3L-d5L" id="nK9-bS-ggk"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="159.04017857142856"/>
+        </tableViewCell>
+    </objects>
+</document>

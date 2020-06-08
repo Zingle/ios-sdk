@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZNGMentionSelectTableViewCell : UITableViewCell
 
-@property (nonatomic, strong, nullable) IBOutlet ZNGAvatarImageView * avatarView;
+@property (nonatomic, strong, nullable) IBOutlet UIView * avatarContainer;
+@property (nonatomic, strong, nullable) ZNGAvatarImageView * avatarView;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * teamEmojiLabel;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * nameLabel;
 

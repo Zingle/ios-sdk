@@ -22,48 +22,57 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="61"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pRS-ct-BBn">
+                        <rect key="frame" x="16" y="11" width="36" height="39"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mei-ED-Y9S">
+                                <rect key="frame" x="0.0" y="0.0" width="36" height="39"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="31"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="Mei-ED-Y9S" firstAttribute="top" secondItem="pRS-ct-BBn" secondAttribute="top" id="LKw-8I-k1Z"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="QXV-tB-BZh"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="36" id="bH1-LB-P9j"/>
+                            <constraint firstAttribute="trailing" secondItem="Mei-ED-Y9S" secondAttribute="trailing" id="cLH-VI-dnu"/>
+                            <constraint firstAttribute="bottom" secondItem="Mei-ED-Y9S" secondAttribute="bottom" id="h3h-Vb-yIY"/>
+                            <constraint firstItem="Mei-ED-Y9S" firstAttribute="leading" secondItem="pRS-ct-BBn" secondAttribute="leading" id="n9u-p4-EQv"/>
+                        </constraints>
+                    </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User or team name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gJ-0o-aJU">
-                        <rect key="frame" x="74" y="10" width="230" height="41"/>
+                        <rect key="frame" x="68" y="11" width="236" height="39"/>
                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="260" verticalHuggingPriority="251" text="😁" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3aU-3L-d5L">
-                        <rect key="frame" x="16" y="11" width="42" height="39"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="37"/>
-                        <nil key="textColor"/>
-                        <nil key="highlightedColor"/>
-                    </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="275" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="9hB-of-hlH" customClass="ZNGAvatarImageView">
-                        <rect key="frame" x="16" y="11" width="42" height="39"/>
-                    </imageView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="3aU-3L-d5L" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="6Ds-YF-I5A"/>
-                    <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="9hB-of-hlH" secondAttribute="bottom" id="969-bO-aVp"/>
-                    <constraint firstItem="3aU-3L-d5L" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="BKW-mH-nSc"/>
-                    <constraint firstItem="9hB-of-hlH" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="DjW-x5-B9R"/>
                     <constraint firstAttribute="trailingMargin" secondItem="0gJ-0o-aJU" secondAttribute="trailing" id="ESR-DS-e91"/>
-                    <constraint firstItem="9hB-of-hlH" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="HxJ-pR-cpt"/>
-                    <constraint firstItem="3aU-3L-d5L" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="PJS-II-17N"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="9hB-of-hlH" secondAttribute="bottom" priority="900" id="QZd-Kb-0Zc"/>
-                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="3aU-3L-d5L" secondAttribute="trailing" constant="16" id="RXP-eu-fRm"/>
-                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="10" id="Vw5-Ou-ZRB"/>
-                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="9hB-of-hlH" secondAttribute="trailing" constant="16" id="aBO-h9-1L4"/>
-                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="3aU-3L-d5L" secondAttribute="trailing" priority="900" constant="16" id="f0E-Gh-TUC"/>
-                    <constraint firstItem="3aU-3L-d5L" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="fZA-na-70Y"/>
-                    <constraint firstItem="3aU-3L-d5L" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="l3L-Ap-hYA"/>
-                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="9hB-of-hlH" secondAttribute="trailing" priority="900" constant="16" id="nju-Tp-Llw"/>
-                    <constraint firstItem="9hB-of-hlH" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="ujp-4R-a6F"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="3aU-3L-d5L" secondAttribute="bottom" priority="900" id="xUM-bH-d4j"/>
-                    <constraint firstAttribute="bottom" secondItem="0gJ-0o-aJU" secondAttribute="bottom" constant="10" id="yeS-XI-UGR"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="FpD-np-he0"/>
+                    <constraint firstItem="pRS-ct-BBn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="I9c-5p-xph"/>
+                    <constraint firstItem="pRS-ct-BBn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="JX1-ei-gr9"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="MQi-Fq-Hqu"/>
+                    <constraint firstItem="pRS-ct-BBn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="top" id="My6-pt-2tI"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="XBe-H0-sAj"/>
+                    <constraint firstItem="pRS-ct-BBn" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Xnl-9d-y2G"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="pRS-ct-BBn" secondAttribute="bottom" priority="900" id="mge-Kh-JrG"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" priority="900" id="p99-AI-8Jr"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="pRS-ct-BBn" secondAttribute="bottom" id="tHu-jQ-5Io"/>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="pRS-ct-BBn" secondAttribute="trailing" priority="800" constant="16" id="tS0-mI-Dnh"/>
+                    <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="0gJ-0o-aJU" secondAttribute="bottom" id="yYh-Ri-TAb"/>
                 </constraints>
             </tableViewCellContentView>
+            <constraints>
+                <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="aW0-zy-SZf" secondAttribute="leading" constant="68" id="duK-ed-V06"/>
+            </constraints>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
-                <outlet property="avatarView" destination="9hB-of-hlH" id="FLV-kO-hND"/>
+                <outlet property="avatarContainer" destination="pRS-ct-BBn" id="AtY-iE-kLw"/>
                 <outlet property="nameLabel" destination="0gJ-0o-aJU" id="ObI-8F-TUq"/>
-                <outlet property="teamEmojiLabel" destination="3aU-3L-d5L" id="nK9-bS-ggk"/>
+                <outlet property="teamEmojiLabel" destination="Mei-ED-Y9S" id="RN5-HA-76E"/>
             </connections>
             <point key="canvasLocation" x="137.68115942028987" y="159.04017857142856"/>
         </tableViewCell>

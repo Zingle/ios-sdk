@@ -184,9 +184,10 @@ enum {
     NSString * verticalPin = @"V:|[avatar]|";
     NSString * horizontalPin = @"H:|[avatar]|";
     
-    NSLayoutConstraint * vertical = [NSLayoutConstraint constraintsWithVisualFormat:vertical options:0 metrics:nil views:@{@"avatar": avatar}];
-    NSLayoutConstraint * horizontal = [NSLayoutConstraint constraintsWithVisualFormat:horizontal options:0 metrics:nil views:@{@"avatar": avatar}];
-    [container addConstraints:@[horizontal, vertical]];
+    NSArray<NSLayoutConstraint *> * vertical = [NSLayoutConstraint constraintsWithVisualFormat:verticalPin options:0 metrics:nil views:@{@"avatar": avatar}];
+    NSArray<NSLayoutConstraint *> * horizontal = [NSLayoutConstraint constraintsWithVisualFormat:horizontalPin options:0 metrics:nil views:@{@"avatar": avatar}];
+    [container addConstraints:horizontal];
+    [container addConstraints:vertical];
     
     [container layoutIfNeeded];
 }
@@ -195,8 +196,8 @@ enum {
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section >= [mentionSections count]) {
-        SBLogError(@"Out of bounds in mention type-ahead sections table (%d)", (int)section);
-        return 0;
+        SBLogError(@"Out of bounds in mention type-ahead sections table (%d)", (int)indexPath.section);
+        return;
     }
     
     int thisSection = [mentionSections[indexPath.section] intValue];
@@ -219,7 +220,7 @@ enum {
         {
             if (indexPath.row > [filteredUsers count]) {
                 SBLogError(@"Out of bounds in mention type-ahead users list (%d/%d)", (int)indexPath.row, (int)[filteredUsers count]);
-                return cell;
+                return;
             }
             
             ZNGUser * user = filteredUsers[indexPath.row];

@@ -110,6 +110,9 @@ enum ZNGConversationSections
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
     NSDateComponentsFormatter * nearFutureTimeFormatter;
+    
+    ZNGMentionSelectionController * mentionSelectionController;
+    NSRange mentionInProgressRange;  // The range of an edit in progress or a range with .location == NSNotFound if none is in progress
 }
 
 @dynamic conversation;
@@ -211,6 +214,8 @@ enum ZNGConversationSections
     
     UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
     [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
+    
+    mentionSelectionController = [[ZNGMentionSelectionController alloc] initWithSelectionTable:self.mentionsSelectionTable session:self.conversation.session delegate:self];
     
     fireZIndex = INT_MAX;
     robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
@@ -371,6 +376,12 @@ enum ZNGConversationSections
             // Match our facade toolbar (covering non safe area below the JSQMessages toolbar) color to the actual toolbar color since
             //  it may change when toggling between message composition and note composition.
             self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
+            
+            // Clear the mentions type-ahead stuff if going back into messaging mode
+            if (self.inputToolbar.toolbarMode == TOOLBAR_MODE_MESSAGE) {
+                mentionSelectionController.mentionSearchText = nil;
+                mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+            }
         } else if ([keyPath isEqualToString:KVOLoadedInitialDataPath]) {
             id oldLoadedFlagOrNull = change[NSKeyValueChangeOldKey];
             id loadedFlagOrNull = change[NSKeyValueChangeNewKey];
@@ -1695,6 +1706,69 @@ enum ZNGConversationSections
     }
     
     [super textViewDidChange:textView];
+}
+
+- (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ((textView == self.inputToolbar.contentView.textView) && (self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE)) {
+        BOOL mentionInProgress = (mentionInProgressRange.location != NSNotFound);
+        BOOL isDeletion = ([text length] == 0);
+        unichar precedingCharacter = (range.location > 0) ? [textView.text characterAtIndex:range.location - 1] : '\0';
+        BOOL precedingCharacterAllowsMentionStart = ((precedingCharacter == '\0')
+                                                     || ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:precedingCharacter]));
+        BOOL newTextBeginsWithAt = (([text length] > 0) && ([text characterAtIndex:0] == '@'));
+        BOOL startingNewMention = (!mentionInProgress && newTextBeginsWithAt && precedingCharacterAllowsMentionStart);
+
+        if (mentionInProgress) {
+            NSRange rangeAffectingMentionInProgress = NSIntersectionRange(range, mentionInProgressRange);
+
+            if (isDeletion) {
+                BOOL deletionIsOutsideMention = (rangeAffectingMentionInProgress.length == 0);
+                BOOL deletingEntireMention = (rangeAffectingMentionInProgress.length == mentionInProgressRange.length);
+                
+                if (deletingEntireMention || deletionIsOutsideMention) {
+                    // Cancel the in progress mention
+                    mentionSelectionController.mentionSearchText = nil;
+                    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+                } else {
+                    // We're deleting part of a mention in progress
+                    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+                    [mutableText deleteCharactersInRange:range];
+                    textView.attributedText = mutableText;
+                    
+                    mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - rangeAffectingMentionInProgress.length);
+                    mentionSelectionController.mentionSearchText = [textView.text substringWithRange:mentionInProgressRange];
+                    
+                    // We took care of the edit ourselves
+                    [textView.delegate textViewDidChange:textView];
+                    return NO;
+                }
+            } else if ((rangeAffectingMentionInProgress.length > 0)
+                       || (range.location == (mentionInProgressRange.location + mentionInProgressRange.length))) {
+                // They are adding text to a mention in progress
+                NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+                NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text];
+                [mutableText insertAttributedString:newAttributedText atIndex:range.location];
+                textView.attributedText = mutableText;
+                
+                mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
+                mentionSelectionController.mentionSearchText = [textView.text substringWithRange:mentionInProgressRange];
+                
+                // We took care of the edit ourselves
+                [textView.delegate textViewDidChange:textView];
+                return NO;
+            } else {
+                // This new text is going somewhere else; cancel the mention in progress.
+                mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+                mentionSelectionController.mentionSearchText = nil;
+            }
+        } else if (startingNewMention) {
+            mentionInProgressRange = NSMakeRange(range.location, [text length]);
+            mentionSelectionController.mentionSearchText = text;
+        }
+    }
+    
+    return [super textView:textView shouldChangeTextInRange:range replacementText:text];
 }
 
 - (void) _textChanged

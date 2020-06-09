@@ -9,6 +9,7 @@
 #import <ZingleSDK/ZNGConversationViewController.h>
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGAssignmentViewController.h"
+#import "ZNGMentionSelectionController.h"
 
 @protocol  ZNGServiceToContactViewDelegate <NSObject>
 

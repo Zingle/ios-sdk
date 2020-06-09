@@ -83,6 +83,11 @@ enum {
         return;
     }
     
+    // Remove preceding '@' from search text, if present
+    if (([searchText length] > 0) && ([searchText characterAtIndex:0] == '@')) {
+        searchText = [searchText substringFromIndex:1];
+    }
+    
     NSPredicate * userPredicate;
     NSPredicate * teamPredicate;
     

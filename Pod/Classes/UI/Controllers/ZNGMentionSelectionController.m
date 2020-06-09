@@ -46,6 +46,8 @@ enum {
         avatarFont = [UIFont latoFontOfSize:15.0];
 
         self.tableView = tableView;
+        tableView.dataSource = self;
+        tableView.delegate = self;
         self.session = session;
         self.delegate = delegate;
         

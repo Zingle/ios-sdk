@@ -60,6 +60,8 @@ enum {
 
 - (void) setMentionSearchText:(NSString *)mentionSearchText
 {
+    _mentionSearchText = mentionSearchText;
+    
     [self updateFilteredUsersAndTeams];
     
     if (([filteredUsers count] > 0) || ([filteredTeams count] > 0)) {
@@ -84,7 +86,7 @@ enum {
     NSPredicate * userPredicate;
     NSPredicate * teamPredicate;
     
-    if ([self.mentionSearchText length] == 0) {
+    if ([searchText length] == 0) {
         // Empty search string means all users/teams
         userPredicate = [NSPredicate predicateWithValue:YES];
         teamPredicate = [NSPredicate predicateWithValue:YES];

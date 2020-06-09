@@ -238,15 +238,39 @@ enum {
 #pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
+    if (section == 0) {
+        return 30.0;
+    }
+    
     return 20.0;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
+    static const NSInteger topLineTag = 69420;
     UITableViewHeaderFooterView * header = (UITableViewHeaderFooterView *)view;
     header.tintColor = self.headerBackgroundColor;
     header.textLabel.textColor = self.headerTextColor;
     header.textLabel.font = self.headerFont;
+    
+    if (section == 0) {
+        // Add an extra grey line above the topmost header
+        UIView * topLine = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 1.0)];
+        topLine.tag = topLineTag;
+        [header addSubview:topLine];
+        topLine.backgroundColor = [UIColor lightGrayColor];
+        
+        if (@available(iOS 13.0, *)) {
+            topLine.backgroundColor = [UIColor systemGray5Color];
+        }
+        
+        topLine.translatesAutoresizingMaskIntoConstraints = NO;
+        [[topLine.heightAnchor constraintEqualToConstant:1.0] setActive:YES];
+        [[topLine.topAnchor constraintEqualToAnchor:header.topAnchor] setActive:YES];
+        [[topLine.widthAnchor constraintEqualToAnchor:header.widthAnchor] setActive:YES];
+    } else {
+        [[header viewWithTag:topLineTag] removeFromSuperview];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

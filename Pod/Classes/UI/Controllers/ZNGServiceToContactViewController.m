@@ -1732,10 +1732,9 @@ enum ZNGConversationSections
                     mentionSelectionController.mentionSearchText = nil;
                     mentionInProgressRange = NSMakeRange(NSNotFound, 0);
                 } else {
-                    // We're deleting part of a mention in progress
-                    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+                    NSMutableString * mutableText = [textView.text mutableCopy];
                     [mutableText deleteCharactersInRange:range];
-                    textView.attributedText = mutableText;
+                    textView.text = mutableText;
                     
                     mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - rangeAffectingMentionInProgress.length);
                     mentionSelectionController.mentionSearchText = [textView.text substringWithRange:mentionInProgressRange];
@@ -1747,10 +1746,9 @@ enum ZNGConversationSections
             } else if ((rangeAffectingMentionInProgress.length > 0)
                        || (range.location == (mentionInProgressRange.location + mentionInProgressRange.length))) {
                 // They are adding text to a mention in progress
-                NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
-                NSAttributedString * newAttributedText = [[NSAttributedString alloc] initWithString:text];
-                [mutableText insertAttributedString:newAttributedText atIndex:range.location];
-                textView.attributedText = mutableText;
+                NSMutableString * mutableText = [textView.text mutableCopy];
+                [mutableText insertString:text atIndex:range.location];
+                textView.text = mutableText;
                 
                 mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
                 mentionSelectionController.mentionSearchText = [textView.text substringWithRange:mentionInProgressRange];

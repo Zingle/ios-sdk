@@ -60,18 +60,27 @@ enum {
 
 - (void) setMentionSearchText:(NSString *)mentionSearchText
 {
-    if (mentionSearchText == nil) {
-        self.tableView.hidden = YES;
-    } else {
-        [self updateFilteredUsersAndTeams];
+    [self updateFilteredUsersAndTeams];
+    
+    if (([filteredUsers count] > 0) || ([filteredTeams count] > 0)) {
         [self.tableView reloadData];
         self.tableView.hidden = NO;
+    } else {
+        self.tableView.hidden = YES;
     }
 }
 
 - (void) updateFilteredUsersAndTeams
 {
     NSString * searchText = self.mentionSearchText;
+    
+    // A nil search term means no matches. Note that an empty search term instead means *all* teams/users.
+    if (searchText == nil) {
+        filteredUsers = nil;
+        filteredTeams = nil;
+        return;
+    }
+    
     NSPredicate * userPredicate;
     NSPredicate * teamPredicate;
     

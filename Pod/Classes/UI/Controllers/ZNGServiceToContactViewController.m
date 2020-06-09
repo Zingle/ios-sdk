@@ -215,6 +215,7 @@ enum ZNGConversationSections
     UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
     [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
     
+    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
     mentionSelectionController = [[ZNGMentionSelectionController alloc] initWithSelectionTable:self.mentionsSelectionTable session:self.conversation.session delegate:self];
     
     fireZIndex = INT_MAX;
@@ -377,10 +378,10 @@ enum ZNGConversationSections
             //  it may change when toggling between message composition and note composition.
             self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
             
-            // Clear the mentions type-ahead stuff if going back into messaging mode
-            if (self.inputToolbar.toolbarMode == TOOLBAR_MODE_MESSAGE) {
+            if ((self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) && (mentionInProgressRange.location != NSNotFound)) {
+                mentionSelectionController.mentionSearchText = self.inputToolbar.contentView.textView.text;
+            } else {
                 mentionSelectionController.mentionSearchText = nil;
-                mentionInProgressRange = NSMakeRange(NSNotFound, 0);
             }
         } else if ([keyPath isEqualToString:KVOLoadedInitialDataPath]) {
             id oldLoadedFlagOrNull = change[NSKeyValueChangeOldKey];

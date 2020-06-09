@@ -53,6 +53,8 @@ enum {
         
         UINib * cellNib = [UINib nibWithNibName:NSStringFromClass([ZNGMentionSelectTableViewCell class]) bundle:bundle];
         [self.tableView registerNib:cellNib forCellReuseIdentifier:MentionSelectionCellId];
+        
+        self.mentionSearchText = nil;
     }
     
     return self;

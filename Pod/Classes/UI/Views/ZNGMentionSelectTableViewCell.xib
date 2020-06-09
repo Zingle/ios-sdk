@@ -23,51 +23,49 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pRS-ct-BBn">
-                        <rect key="frame" x="16" y="11" width="36" height="39"/>
+                        <rect key="frame" x="16" y="5" width="28" height="51"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mei-ED-Y9S">
-                                <rect key="frame" x="0.0" y="0.0" width="36" height="39"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="31"/>
+                                <rect key="frame" x="0.0" y="0.0" width="28" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
+                            <constraint firstAttribute="width" priority="600" constant="28" id="BdY-os-cHZ"/>
                             <constraint firstItem="Mei-ED-Y9S" firstAttribute="top" secondItem="pRS-ct-BBn" secondAttribute="top" id="LKw-8I-k1Z"/>
-                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="36" id="QXV-tB-BZh"/>
-                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="36" id="bH1-LB-P9j"/>
+                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="28" id="QXV-tB-BZh"/>
+                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="28" id="bH1-LB-P9j"/>
                             <constraint firstAttribute="trailing" secondItem="Mei-ED-Y9S" secondAttribute="trailing" id="cLH-VI-dnu"/>
                             <constraint firstAttribute="bottom" secondItem="Mei-ED-Y9S" secondAttribute="bottom" id="h3h-Vb-yIY"/>
                             <constraint firstItem="Mei-ED-Y9S" firstAttribute="leading" secondItem="pRS-ct-BBn" secondAttribute="leading" id="n9u-p4-EQv"/>
                         </constraints>
                     </view>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User or team name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0gJ-0o-aJU">
-                        <rect key="frame" x="68" y="11" width="236" height="39"/>
-                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
+                        <rect key="frame" x="54" y="11" width="250" height="39"/>
+                        <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="16"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
                 <constraints>
+                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="pRS-ct-BBn" secondAttribute="trailing" constant="10" id="0lC-kg-wwG"/>
                     <constraint firstAttribute="trailingMargin" secondItem="0gJ-0o-aJU" secondAttribute="trailing" id="ESR-DS-e91"/>
                     <constraint firstItem="0gJ-0o-aJU" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="topMargin" id="FpD-np-he0"/>
-                    <constraint firstItem="pRS-ct-BBn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="I9c-5p-xph"/>
+                    <constraint firstItem="pRS-ct-BBn" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" constant="-6" id="I9c-5p-xph"/>
                     <constraint firstItem="pRS-ct-BBn" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="JX1-ei-gr9"/>
                     <constraint firstItem="0gJ-0o-aJU" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="MQi-Fq-Hqu"/>
-                    <constraint firstItem="pRS-ct-BBn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="top" id="My6-pt-2tI"/>
+                    <constraint firstItem="pRS-ct-BBn" firstAttribute="top" relation="greaterThanOrEqual" secondItem="H2p-sc-9uM" secondAttribute="top" constant="-6" id="My6-pt-2tI"/>
                     <constraint firstItem="0gJ-0o-aJU" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" priority="900" id="XBe-H0-sAj"/>
                     <constraint firstItem="pRS-ct-BBn" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Xnl-9d-y2G"/>
-                    <constraint firstAttribute="bottomMargin" secondItem="pRS-ct-BBn" secondAttribute="bottom" priority="900" id="mge-Kh-JrG"/>
+                    <constraint firstAttribute="bottomMargin" secondItem="pRS-ct-BBn" secondAttribute="bottom" priority="900" constant="-6" id="mge-Kh-JrG"/>
                     <constraint firstItem="0gJ-0o-aJU" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" priority="900" id="p99-AI-8Jr"/>
-                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="pRS-ct-BBn" secondAttribute="bottom" id="tHu-jQ-5Io"/>
-                    <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="pRS-ct-BBn" secondAttribute="trailing" priority="800" constant="16" id="tS0-mI-Dnh"/>
+                    <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="pRS-ct-BBn" secondAttribute="bottom" constant="-6" id="tHu-jQ-5Io"/>
                     <constraint firstAttribute="bottomMargin" relation="greaterThanOrEqual" secondItem="0gJ-0o-aJU" secondAttribute="bottom" id="yYh-Ri-TAb"/>
                 </constraints>
             </tableViewCellContentView>
-            <constraints>
-                <constraint firstItem="0gJ-0o-aJU" firstAttribute="leading" secondItem="aW0-zy-SZf" secondAttribute="leading" constant="68" id="duK-ed-V06"/>
-            </constraints>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
             <connections>
                 <outlet property="avatarContainer" destination="pRS-ct-BBn" id="AtY-iE-kLw"/>

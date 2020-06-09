@@ -38,6 +38,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nonnull) ZingleAccountSession * session;
 @property (nonatomic, weak, nullable) id<ZNGMentionSelectionDelegate> delegate;
 
+@property (nonatomic, strong, nullable) UIFont * headerFont; // defaults to Lato
+@property (nonatomic, strong, nullable) UIColor * headerTextColor; // defaults to zingle blue
+@property (nonatomic, strong, nullable) UIColor * headerBackgroundColor; // defaults to system background (or white if unsupported)
+
 @end
 
 NS_ASSUME_NONNULL_END

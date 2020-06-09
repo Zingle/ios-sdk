@@ -41,9 +41,17 @@ enum {
     if (self != nil) {
         NSBundle * bundle = [NSBundle bundleForClass:[ZNGMentionSelectionController class]];
         mentionSections = @[@(ZNGMentionSectionTeams), @(ZNGMentionSectionUsers)];
-        avatarSize = CGSizeMake(36.0, 36.0);
+        avatarSize = CGSizeMake(28.0, 28.0);
         avatarBackgroundColor = [UIColor colorNamed:@"ZNGOutboundBubbleBackground" inBundle:bundle compatibleWithTraitCollection:nil];
-        avatarFont = [UIFont latoFontOfSize:15.0];
+        avatarFont = [UIFont latoFontOfSize:11.0];
+        
+        self.headerTextColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
+        self.headerFont = [UIFont latoFontOfSize:10.0];
+        self.headerBackgroundColor = [UIColor whiteColor];
+        
+        if (@available(iOS 13.0, *)) {
+            self.headerBackgroundColor = [UIColor systemBackgroundColor];
+        }
 
         self.tableView = tableView;
         tableView.dataSource = self;
@@ -228,6 +236,19 @@ enum {
 }
 
 #pragma mark - Table view delegate
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 20.0;
+}
+
+- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
+{
+    UITableViewHeaderFooterView * header = (UITableViewHeaderFooterView *)view;
+    header.tintColor = self.headerBackgroundColor;
+    header.textLabel.textColor = self.headerTextColor;
+    header.textLabel.font = self.headerFont;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section >= [mentionSections count]) {

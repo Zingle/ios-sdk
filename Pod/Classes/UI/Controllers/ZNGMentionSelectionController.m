@@ -120,16 +120,33 @@ enum {
     return [mentionSections count];
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (section >= [mentionSections count]) {
+        SBLogError(@"Out of bounds in mention type-ahead sections table (%d)", (int)section);
+        return nil;
+    }
+    
+    switch ([mentionSections[section] intValue]) {
+        case ZNGMentionSectionTeams:
+            return @"Teams";
+            
+        case ZNGMentionSectionUsers:
+            return @"Users";
+            
+        default:
+            return nil;
+    }
+}
+
 - (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section >= [mentionSections count]) {
         SBLogError(@"Out of bounds in mention type-ahead sections table (%d)", (int)section);
         return 0;
     }
-    
-    int thisSection = [mentionSections[section] intValue];
-    
-    switch (thisSection) {
+        
+    switch ([mentionSections[section] intValue]) {
         case ZNGMentionSectionTeams:
             return [filteredTeams count];
             
@@ -155,9 +172,7 @@ enum {
         return 0;
     }
     
-    int thisSection = [mentionSections[indexPath.section] intValue];
-    
-    switch (thisSection) {
+    switch ([mentionSections[indexPath.section] intValue]) {
         case ZNGMentionSectionTeams:
         {
             if (indexPath.row > [filteredTeams count]) {

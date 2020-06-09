@@ -129,10 +129,10 @@ enum {
     
     switch ([mentionSections[section] intValue]) {
         case ZNGMentionSectionTeams:
-            return @"Teams";
+            return ([filteredTeams count] > 0) ? @"Teams" : nil;
             
         case ZNGMentionSectionUsers:
-            return @"Users";
+            return ([filteredUsers count] > 0) ? @"Users" : nil;
             
         default:
             return nil;

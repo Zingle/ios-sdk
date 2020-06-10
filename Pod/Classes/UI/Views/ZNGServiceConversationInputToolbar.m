@@ -195,6 +195,14 @@
     }
     
     // Restore actions that tend to break themselves when buttons exist in stack views
+    [self resetActions];
+    
+    _toolbarMode = toolbarMode;
+}
+
+// Restore actions that tend to break themselves when buttons exist in stack views
+- (void) resetActions
+{
     [self.contentView.messageModeButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.templateButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.customFieldButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
@@ -207,8 +215,6 @@
     [self.contentView.automationButton addTarget:self action:@selector(didPressTriggerAutomation:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.imageButton addTarget:self action:@selector(didPressAttachImage:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.noteButton addTarget:self action:@selector(didPressAddNote:) forControlEvents:UIControlEventTouchUpInside];
-    
-    _toolbarMode = toolbarMode;
 }
 
 - (void) setCurrentChannel:(ZNGChannel *)currentChannel

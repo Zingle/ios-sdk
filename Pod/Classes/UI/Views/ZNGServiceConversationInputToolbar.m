@@ -21,6 +21,8 @@
     UIColor * originalTextViewTintColor;
     UIColor * normalButtonColor;
     UIColor * highlightedButtonColor;
+    UIColor * messageTextColor;
+    UIColor * noteTextColor;
     
     UIImage * sendButtonEnabled;
     UIImage * sendButtonDisabled;
@@ -43,9 +45,12 @@
     sendButtonDisabled = [UIImage imageNamed:@"sendDisabled" inBundle:bundle compatibleWithTraitCollection:nil];
     normalBackgroundColor = [UIColor whiteColor];
     noteBackgroundColor = [UIColor colorNamed:@"ZNGInternalNoteBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    messageTextColor = [UIColor blackColor];
+    noteTextColor = [UIColor blackColor];
     
     if (@available(iOS 13.0, *)) {
         normalBackgroundColor = [UIColor systemBackgroundColor];
+        messageTextColor = [UIColor labelColor];
     }
     
     self.preferredDefaultHeight = 121.0;
@@ -89,6 +94,7 @@
     if (toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
         self.contentView.textView.placeHolder = @"Write an internal note";
         self.contentView.backgroundColor = noteBackgroundColor;
+        self.contentView.textView.textColor = noteTextColor;
         
         if (self.toolbarMode != TOOLBAR_MODE_INTERNAL_NOTE) {
             // We're going from non-note to note mode.  Preserve note text and restore message text.
@@ -98,6 +104,7 @@
     } else {
         self.contentView.textView.placeHolder = @"Type a reply";
         self.contentView.backgroundColor = normalBackgroundColor;
+        self.contentView.textView.textColor = messageTextColor;
         
         if (self.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
             // We're going from note mode to non-note mode.  Preserve message text and restore note text.

@@ -30,6 +30,7 @@
     self.customFieldButton.tintColor = buttonColor;
     self.automationButton.tintColor = buttonColor;
     self.imageButton.tintColor = buttonColor;
+    self.atButton.tintColor = buttonColor;
     self.noteButton.tintColor = buttonColor;
     
     if (@available(iOS 13.0, *)) {
@@ -61,6 +62,7 @@
     self.customFieldButton.enabled = enabled;
     self.automationButton.enabled = enabled;
     self.imageButton.enabled = enabled;
+    self.atButton.enabled = enabled;
     self.noteButton.enabled = enabled;
 }
 

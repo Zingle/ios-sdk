@@ -62,6 +62,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)didPressInsertCustomField:(id)sender;
 - (IBAction)didPressTriggerAutomation:(id)sender;
 - (IBAction)didPressAttachImage:(id)sender;
+- (IBAction)didPressAtButton:(id)sender;
 
 - (IBAction)didPressChannelSelectButton:(id)sender;
 

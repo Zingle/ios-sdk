@@ -72,7 +72,7 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Myo-1S-Vg1" userLabel="Right button container">
-                    <rect key="frame" x="258" y="81" width="50" height="32"/>
+                    <rect key="frame" x="215" y="81" width="93" height="32"/>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="32" id="JrO-HC-ov3"/>
@@ -86,7 +86,7 @@
                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                 </textView>
                 <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Era-Ze-i3c">
-                    <rect key="frame" x="12" y="83" width="239.5" height="28"/>
+                    <rect key="frame" x="12" y="83" width="196.5" height="28"/>
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="v4S-xa-htU">
                             <rect key="frame" x="0.0" y="0.0" width="28" height="28"/>
@@ -103,16 +103,16 @@
                                 <action selector="didPressUseTemplate:" destination="-2" eventType="touchUpInside" id="BB7-cd-xWS"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aRe-Pu-AIy">
-                            <rect key="frame" x="86" y="0.0" width="28" height="28"/>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aRe-Pu-AIy">
+                            <rect key="frame" x="78.5" y="0.0" width="0.0" height="28"/>
                             <color key="tintColor" name="ZNGToolbarButton"/>
                             <state key="normal" image="insertCustomField"/>
                             <connections>
                                 <action selector="didPressInsertCustomField:" destination="-2" eventType="touchUpInside" id="xvb-X2-QI8"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
-                            <rect key="frame" x="129" y="0.0" width="28" height="28"/>
+                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Mh-pU-v2i">
+                            <rect key="frame" x="78.5" y="0.0" width="0.0" height="28"/>
                             <color key="tintColor" name="ZNGToolbarButton"/>
                             <state key="normal" image="triggerAutomation"/>
                             <connections>
@@ -120,15 +120,22 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EBX-4C-zka">
-                            <rect key="frame" x="172" y="0.0" width="28" height="28"/>
+                            <rect key="frame" x="86" y="0.0" width="28" height="28"/>
                             <color key="tintColor" name="ZNGToolbarButton"/>
                             <state key="normal" image="attachImage"/>
                             <connections>
                                 <action selector="didPressAttachImage:" destination="-2" eventType="touchUpInside" id="HDM-LU-3uL"/>
                             </connections>
                         </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KHz-D3-FKq">
+                            <rect key="frame" x="131" y="2" width="24" height="24"/>
+                            <state key="normal" image="atButton"/>
+                            <connections>
+                                <action selector="didPressAtButton:" destination="-2" eventType="touchUpInside" id="98W-rS-HpY"/>
+                            </connections>
+                        </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Udp-Uc-I4X">
-                            <rect key="frame" x="218.5" y="0.0" width="21" height="28"/>
+                            <rect key="frame" x="175.5" y="0.0" width="21" height="28"/>
                             <color key="tintColor" name="ZNGToolbarButton"/>
                             <state key="normal" image="addNote"/>
                             <connections>
@@ -165,6 +172,7 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <viewLayoutGuide key="safeArea" id="TAH-O8-daK"/>
             <connections>
+                <outlet property="atButton" destination="KHz-D3-FKq" id="Ts6-sx-H0b"/>
                 <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
                 <outlet property="buttonStackView" destination="Era-Ze-i3c" id="Ba1-bm-uuo"/>
                 <outlet property="channelSelectArrow" destination="iTt-oP-Tqy" id="zDS-7d-691"/>
@@ -183,6 +191,7 @@
     </objects>
     <resources>
         <image name="addNote" width="21" height="28"/>
+        <image name="atButton" width="24" height="24"/>
         <image name="attachImage" width="28" height="28"/>
         <image name="chevronUp" width="12" height="13"/>
         <image name="insertCustomField" width="28" height="28"/>

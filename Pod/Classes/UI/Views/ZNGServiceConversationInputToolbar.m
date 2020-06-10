@@ -122,6 +122,7 @@
             self.contentView.customFieldButton.hidden = YES;
             self.contentView.imageButton.hidden = NO;
             self.contentView.automationButton.hidden = NO;
+            self.contentView.atButton.hidden = YES;
             
             self.contentView.messageModeButton.tintColor = highlightedButtonColor;
             self.contentView.noteButton.tintColor = normalButtonColor;
@@ -145,6 +146,7 @@
             self.contentView.customFieldButton.hidden = YES;
             self.contentView.imageButton.hidden = YES;
             self.contentView.automationButton.hidden = YES;
+            self.contentView.atButton.hidden = NO;
             
             self.contentView.messageModeButton.tintColor = normalButtonColor;
             self.contentView.noteButton.tintColor = highlightedButtonColor;
@@ -168,6 +170,7 @@
             self.contentView.customFieldButton.hidden = NO;
             self.contentView.imageButton.hidden = NO;
             self.contentView.automationButton.hidden = YES;
+            self.contentView.atButton.hidden = YES;
             
             self.contentView.channelSelectButton.hidden = YES;
             self.contentView.channelSelectArrow.hidden = YES;
@@ -188,6 +191,7 @@
             self.contentView.customFieldButton.hidden = YES;
             self.contentView.imageButton.hidden = YES;
             self.contentView.automationButton.hidden = YES;
+            self.contentView.atButton.hidden = YES;
             
             self.contentView.channelSelectButton.hidden = YES;
             self.contentView.channelSelectArrow.hidden = YES;
@@ -215,12 +219,14 @@
     [self.contentView.customFieldButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.automationButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.imageButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.atButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.noteButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.messageModeButton addTarget:self action:@selector(didPressMessageModeButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.templateButton addTarget:self action:@selector(didPressUseTemplate:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.customFieldButton addTarget:self action:@selector(didPressInsertCustomField:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.automationButton addTarget:self action:@selector(didPressTriggerAutomation:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.imageButton addTarget:self action:@selector(didPressAttachImage:) forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView.atButton addTarget:self action:@selector(didPressAtButton:) forControlEvents:UIControlEventTouchUpInside];
     [self.contentView.noteButton addTarget:self action:@selector(didPressAddNote:) forControlEvents:UIControlEventTouchUpInside];
 }
 
@@ -319,6 +325,11 @@
     if ([self.delegate respondsToSelector:@selector(inputToolbar:didPressChooseChannelButton:)]) {
         [self.delegate inputToolbar:self didPressChooseChannelButton:sender];
     }
+}
+
+- (IBAction)didPressAtButton:(id)sender
+{
+    // TODO:
 }
 
 @end

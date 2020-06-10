@@ -16,6 +16,7 @@
 @property (nonatomic, strong, nullable) IBOutlet UIButton * customFieldButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * imageButton;
+@property (nonatomic, strong, nullable) IBOutlet UIButton * atButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * noteButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectButton;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * channelSelectArrow;

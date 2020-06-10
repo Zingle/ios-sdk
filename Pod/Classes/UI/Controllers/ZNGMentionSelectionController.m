@@ -238,11 +238,37 @@ enum {
 #pragma mark - Table view delegate
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if (section == 0) {
+    if (section == [self indexOfFirstSectionWithData]) {
         return 30.0;
     }
     
     return 20.0;
+}
+
+- (NSUInteger) indexOfFirstSectionWithData
+{
+    __block NSUInteger firstIndexWithData = NSNotFound;
+    
+    [mentionSections enumerateObjectsUsingBlock:^(NSNumber * _Nonnull sectionIndexNumber, NSUInteger i, BOOL * _Nonnull stop) {
+        int sectionIndex = [sectionIndexNumber intValue];
+        NSArray * dataThisSection = nil;
+        
+        if (sectionIndex == ZNGMentionSectionTeams) {
+            dataThisSection = filteredTeams;
+        } else if (sectionIndex == ZNGMentionSectionUsers) {
+            dataThisSection = filteredUsers;
+        } else {
+            SBLogError(@"Mention selection table out of bounds");
+            return;
+        }
+        
+        if ([dataThisSection count] > 0) {
+            firstIndexWithData = i;
+            *stop = YES;
+        }
+    }];
+    
+    return firstIndexWithData;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
@@ -253,21 +279,23 @@ enum {
     header.textLabel.textColor = self.headerTextColor;
     header.textLabel.font = self.headerFont;
     
-    if (section == 0) {
-        // Add an extra grey line above the topmost header
-        UIView * topLine = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 1.0)];
-        topLine.tag = topLineTag;
-        [header addSubview:topLine];
-        topLine.backgroundColor = [UIColor lightGrayColor];
-        
-        if (@available(iOS 13.0, *)) {
-            topLine.backgroundColor = [UIColor systemGray5Color];
+    if (section == [self indexOfFirstSectionWithData]) {
+        if ([header viewWithTag:topLineTag] == nil) {
+            // Add an extra grey line above the topmost header
+            UIView * topLine = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, tableView.frame.size.width, 1.0)];
+            topLine.tag = topLineTag;
+            [header addSubview:topLine];
+            topLine.backgroundColor = [UIColor lightGrayColor];
+            
+            if (@available(iOS 13.0, *)) {
+                topLine.backgroundColor = [UIColor systemGray5Color];
+            }
+            
+            topLine.translatesAutoresizingMaskIntoConstraints = NO;
+            [[topLine.heightAnchor constraintEqualToConstant:1.0] setActive:YES];
+            [[topLine.topAnchor constraintEqualToAnchor:header.topAnchor] setActive:YES];
+            [[topLine.widthAnchor constraintEqualToAnchor:header.widthAnchor] setActive:YES];
         }
-        
-        topLine.translatesAutoresizingMaskIntoConstraints = NO;
-        [[topLine.heightAnchor constraintEqualToConstant:1.0] setActive:YES];
-        [[topLine.topAnchor constraintEqualToAnchor:header.topAnchor] setActive:YES];
-        [[topLine.widthAnchor constraintEqualToAnchor:header.widthAnchor] setActive:YES];
     } else {
         [[header viewWithTag:topLineTag] removeFromSuperview];
     }

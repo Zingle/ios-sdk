@@ -53,6 +53,8 @@ static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.pendingResponses";
 static NSString * const KVOToolbarModePath = @"inputToolbar.toolbarMode";
+static NSString * const KVOMentionsTableHidden = @"mentionsSelectionTable.isHidden";
+static NSString * const KVOMentionsTableSize = @"mentionsSelectionTable.frame";
 
 static NSString * const TypingIndicatorCellID = @"typingIndicator";
 
@@ -61,6 +63,8 @@ static void * KVOContext = &KVOContext;
 @interface JSQMessagesViewController (PrivateInsetManipulation)
 
 - (void)jsq_updateCollectionViewInsets;
+- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
+- (void)jsq_setToolbarBottomLayoutGuideConstant:(CGFloat)constant;
 
 @end
 
@@ -379,9 +383,10 @@ enum ZNGConversationSections
             self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
             
             if ((self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) && (mentionInProgressRange.location != NSNotFound)) {
-                mentionSelectionController.mentionSearchText = self.inputToolbar.contentView.textView.text;
+                // Retain any type-ahead mention that was in progress
+                [self setMentionTypeAheadText:[self.inputToolbar.contentView.textView.text substringWithRange:mentionInProgressRange]];
             } else {
-                mentionSelectionController.mentionSearchText = nil;
+                [self setMentionTypeAheadText:nil];
             }
         } else if ([keyPath isEqualToString:KVOLoadedInitialDataPath]) {
             id oldLoadedFlagOrNull = change[NSKeyValueChangeOldKey];
@@ -646,6 +651,21 @@ enum ZNGConversationSections
     if ((self.stuckToBottom) && (!conversation.contact.isConfirmed)) {
         SBLogInfo(@"Marking conversation as read on load.");
         [conversation.contact confirm];
+    }
+}
+
+- (void) setMentionTypeAheadText:(nullable NSString *)text
+{
+    mentionSelectionController.mentionSearchText = text;
+    
+    if (self.viewLoaded) {
+        [self jsq_updateCollectionViewInsets];
+        
+        if (self.stuckToBottom) {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                 [self scrollToBottomAnimated:YES];
+            });
+        }
     }
 }
 
@@ -1183,6 +1203,14 @@ enum ZNGConversationSections
 }
 
 #pragma mark - Collection view shenanigans
+- (void) jsq_updateCollectionViewInsets
+{
+    UIView * bottomThing = (self.mentionsSelectionTable.isHidden) ? self.inputToolbar : self.mentionsSelectionTable;
+    
+    [self jsq_setCollectionViewInsetsTopValue:self.view.safeAreaInsets.top + self.topContentAdditionalInset
+                                  bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(bottomThing.frame) + self.additionalBottomInset];
+}
+
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
@@ -1729,15 +1757,15 @@ enum ZNGConversationSections
                 
                 if (deletingEntireMention || deletionIsOutsideMention) {
                     // Cancel the in progress mention
-                    mentionSelectionController.mentionSearchText = nil;
                     mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+                    [self setMentionTypeAheadText:nil];
                 } else {
                     NSMutableString * mutableText = [textView.text mutableCopy];
                     [mutableText deleteCharactersInRange:range];
                     textView.text = mutableText;
                     
                     mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - rangeAffectingMentionInProgress.length);
-                    mentionSelectionController.mentionSearchText = [textView.text substringWithRange:mentionInProgressRange];
+                    [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
                     
                     // We took care of the edit ourselves
                     [textView.delegate textViewDidChange:textView];
@@ -1751,7 +1779,7 @@ enum ZNGConversationSections
                 textView.text = mutableText;
                 
                 mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
-                mentionSelectionController.mentionSearchText = [textView.text substringWithRange:mentionInProgressRange];
+                [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
                 
                 // We took care of the edit ourselves
                 [textView.delegate textViewDidChange:textView];
@@ -1759,11 +1787,11 @@ enum ZNGConversationSections
             } else {
                 // This new text is going somewhere else; cancel the mention in progress.
                 mentionInProgressRange = NSMakeRange(NSNotFound, 0);
-                mentionSelectionController.mentionSearchText = nil;
+                [self setMentionTypeAheadText:nil];
             }
         } else if (startingNewMention) {
             mentionInProgressRange = NSMakeRange(range.location, [text length]);
-            mentionSelectionController.mentionSearchText = text;
+            [self setMentionTypeAheadText:text];
         }
     }
     

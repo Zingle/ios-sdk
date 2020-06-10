@@ -54,7 +54,7 @@
     self.barTintColor = [UIColor whiteColor];
     
     UIButton * sendButton = self.contentView.rightBarButtonItem;
-    self.sendButtonColor = [UIColor colorNamed:@"ZNGPositiveAction" inBundle:bundle compatibleWithTraitCollection:nil];
+    self.sendButtonColor = [UIColor colorNamed:@"ZNGLinkText" inBundle:bundle compatibleWithTraitCollection:nil];
     self.sendButtonFont = [UIFont latoSemiBoldFontOfSize:17.0];
     CGSize sendButtonSize = [sendButton intrinsicContentSize];
 

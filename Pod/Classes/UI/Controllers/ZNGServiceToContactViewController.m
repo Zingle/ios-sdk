@@ -1749,11 +1749,10 @@ enum ZNGConversationSections
         BOOL startingNewMention = (!mentionInProgress && newTextBeginsWithAt && precedingCharacterAllowsMentionStart);
 
         if (mentionInProgress) {
-            NSRange rangeAffectingMentionInProgress = NSIntersectionRange(range, mentionInProgressRange);
-
             if (isDeletion) {
-                BOOL deletionIsOutsideMention = (rangeAffectingMentionInProgress.length == 0);
-                BOOL deletingEntireMention = (rangeAffectingMentionInProgress.length == mentionInProgressRange.length);
+                NSRange deletionRangeThatIncludesMentionInProgress = NSIntersectionRange(range, mentionInProgressRange);
+                BOOL deletionIsOutsideMention = (deletionRangeThatIncludesMentionInProgress.length == 0);
+                BOOL deletingEntireMention = (deletionRangeThatIncludesMentionInProgress.length == mentionInProgressRange.length);
                 
                 if (deletingEntireMention || deletionIsOutsideMention) {
                     // Cancel the in progress mention
@@ -1764,30 +1763,48 @@ enum ZNGConversationSections
                     [mutableText deleteCharactersInRange:range];
                     textView.text = mutableText;
                     
-                    mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - rangeAffectingMentionInProgress.length);
+                    mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - deletionRangeThatIncludesMentionInProgress.length);
                     [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
                     
                     // We took care of the edit ourselves
                     [textView.delegate textViewDidChange:textView];
                     return NO;
                 }
-            } else if ((rangeAffectingMentionInProgress.length > 0)
-                       || (range.location == (mentionInProgressRange.location + mentionInProgressRange.length))) {
-                // They are adding text to a mention in progress
-                NSMutableString * mutableText = [textView.text mutableCopy];
-                [mutableText insertString:text atIndex:range.location];
-                textView.text = mutableText;
+            } else { // This is an insertion/replacement not deletion
+                NSRange insertionRange = NSMakeRange(range.location, [text length]);
+                NSRange rangeWhereInsertionAffectsMention = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + 1); // allow one more character
                 
-                mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
-                [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
+                // Is this an insertion into a mention in progress?  Note that, if this replacement would replace the @ that
+                //  starts the mention (range.location <= mentionInProgress.location) we treat this as an insertion unrelated
+                //  to the mention which will cancel the mention type-ahead in progress.
+                BOOL insertingIntoMentionInProgress = ((range.location > mentionInProgressRange.location)
+                                                       && (NSIntersectionRange(rangeWhereInsertionAffectsMention, insertionRange).length > 0));
                 
-                // We took care of the edit ourselves
-                [textView.delegate textViewDidChange:textView];
-                return NO;
-            } else {
-                // This new text is going somewhere else; cancel the mention in progress.
-                mentionInProgressRange = NSMakeRange(NSNotFound, 0);
-                [self setMentionTypeAheadText:nil];
+                if (insertingIntoMentionInProgress) {
+                    NSMutableString * mutableText = [textView.text mutableCopy];
+                    
+                    // If it's a replacement, we need to first remove the old content within the range
+                    if (range.length > 0) {
+                        [mutableText deleteCharactersInRange:range];
+                    }
+                    
+                    // This is safe to the mention in progress even after doing the above because we
+                    //  checked range.location > mentionInProgressRange.location earlier
+                    [mutableText insertString:text atIndex:range.location];
+
+                    textView.text = mutableText;
+                    
+                    mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
+                    [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
+                    
+                    // We took care of the edit ourselves
+                    [textView.delegate textViewDidChange:textView];
+                    return NO;
+                } else {
+                    // This edit kills our mention in progress
+                    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+                    [self setMentionTypeAheadText:nil];
+                }
             }
         } else if (startingNewMention) {
             mentionInProgressRange = NSMakeRange(range.location, [text length]);

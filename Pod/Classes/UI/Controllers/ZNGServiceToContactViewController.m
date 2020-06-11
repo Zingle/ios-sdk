@@ -227,6 +227,7 @@ enum ZNGConversationSections
     
     [self setupBannerContainer];
     
+    self.inputToolbar.contentView.textView.attributeNamesToHighlight = @[ZNGEventMentionAttribute];
     self.inputToolbar.contentView.textView.placeHolder = @"Type a reply";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     

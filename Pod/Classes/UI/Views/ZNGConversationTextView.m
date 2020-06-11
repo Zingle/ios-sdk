@@ -49,6 +49,18 @@
     NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationTextView class]];
     self.attributeHighlightColor = [UIColor colorNamed:@"ZNGInternalNoteHighlightedBackground" inBundle:bundle compatibleWithTraitCollection:nil];
     self.attributeHighlightCornerRadius = 3.0;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyTextChanged:) name:UITextViewTextDidChangeNotification object:self];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) notifyTextChanged:(NSNotification *)notification
+{
+    [self updateHighlights];
 }
 
 - (void) setAttributedText:(NSAttributedString *)attributedText

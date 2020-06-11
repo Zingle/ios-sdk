@@ -259,7 +259,7 @@ enum {
         } else if (sectionIndex == ZNGMentionSectionUsers) {
             dataThisSection = filteredUsers;
         } else {
-            SBLogError(@"Mention selection table out of bounds");
+            SBLogError(@"Unrecognized selection table section");
             return;
         }
         
@@ -316,6 +316,7 @@ enum {
         {
             if (indexPath.row > [filteredTeams count]) {
                 SBLogError(@"Out of bounds in mention type-ahead teams list (%d/%d)", (int)indexPath.row, (int)[filteredTeams count]);
+                return;
             }
             
             ZNGTeam * team = filteredTeams[indexPath.row];

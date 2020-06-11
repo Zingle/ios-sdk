@@ -329,7 +329,29 @@
 
 - (IBAction)didPressAtButton:(id)sender
 {
-    // TODO:
+    UITextView * textView = self.contentView.textView;
+    NSRange selectedRange = textView.selectedRange;
+    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+    
+    // Insert text at the end of input if there is no cursor
+    if (selectedRange.location == NSNotFound) {
+        selectedRange = NSMakeRange([mutableText length], 0);
+    }
+    
+    if (selectedRange.length > 0) {
+        [mutableText deleteCharactersInRange:selectedRange];
+    }
+    
+    NSAttributedString * atString = [[NSAttributedString alloc] initWithString:@"@"];
+    [mutableText insertAttributedString:atString atIndex:selectedRange.location];
+    
+    if ((textView.delegate == nil) || ([textView.delegate textView:textView shouldChangeTextInRange:selectedRange replacementText:@"@"])) {
+        UIFont * font = textView.font;
+        textView.attributedText = mutableText;
+        textView.font = font;
+        [textView.delegate textViewDidChange:self.contentView.textView];
+        [textView becomeFirstResponder];
+    }
 }
 
 @end

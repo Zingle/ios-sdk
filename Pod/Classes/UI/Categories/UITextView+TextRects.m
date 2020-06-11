@@ -9,9 +9,16 @@
 
 @import SBObjectiveCWrapper;
 
+static const CGFloat DefaultPadding = 3.0;
+
 @implementation UITextView (TextRects)
 
-- (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)textRange;
+- (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)textRange
+{
+    return [self rectsForTextInRange:textRange withExtraPadding:DefaultPadding];
+}
+
+- (NSArray<NSValue *> *) rectsForTextInRange:(NSRange)textRange withExtraPadding:(CGFloat)padding
 {
     UITextPosition * beginningOfMention = [self positionFromPosition:self.beginningOfDocument offset:textRange.location];
     
@@ -64,6 +71,35 @@
         } else {
             [joinedRects addObject:[NSValue valueWithCGRect:thisRect]];
         }
+    }
+    
+    // Apply padding
+    if (padding != 0.0) {
+        NSMutableArray<NSValue *> * paddedRects = [[NSMutableArray alloc] initWithCapacity:[joinedRects count]];
+        
+        [joinedRects enumerateObjectsUsingBlock:^(NSValue * _Nonnull rectValue, NSUInteger i, BOOL * _Nonnull stop) {
+            CGRect rect = [rectValue CGRectValue];
+            
+            // Pad a bit to the left
+            rect.origin.x -= padding;
+            rect.size.width += padding;
+            
+            // A bit of right padding is also needed if...
+            //  1) This is a non-terminal part of a split mention
+            BOOL nonTerminalWrapped = (([joinedRects count] > 1) && (i < ([joinedRects count] - 1)));
+            //  or 2) This is the very last word of the entire message
+            BOOL wordEndsMention = (i == ([joinedRects count] - 1));
+            BOOL mentionEndsMessage = ((textRange.location + textRange.length) == [self.attributedText length]);
+            BOOL wordEndsMessage = (wordEndsMention && mentionEndsMessage);
+                                        
+            if (nonTerminalWrapped || wordEndsMessage) {
+                rect.size.width += padding;
+            }
+            
+            [paddedRects addObject:[NSValue valueWithCGRect:rect]];
+        }];
+    
+        joinedRects = paddedRects;
     }
 
     return joinedRects;

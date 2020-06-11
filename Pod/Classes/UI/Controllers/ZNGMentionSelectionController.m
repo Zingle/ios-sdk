@@ -260,7 +260,7 @@ enum {
             dataThisSection = filteredUsers;
         } else {
             SBLogError(@"Mention selection table out of bounds");
-            return;
+            return NSNotFound;
         }
         
         if ([dataThisSection count] > 0) {

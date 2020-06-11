@@ -76,6 +76,7 @@ enum {
     
     if (([filteredUsers count] > 0) || ([filteredTeams count] > 0)) {
         [self.tableView reloadData];
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         self.tableView.hidden = NO;
     } else {
         self.tableView.hidden = YES;

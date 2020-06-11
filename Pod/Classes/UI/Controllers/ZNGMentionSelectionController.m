@@ -222,6 +222,7 @@ enum {
     
     return cell;
 }
+
 - (void) pinAvatar:(UIView *)avatar toContainer:(UIView *)container
 {
     NSString * verticalPin = @"V:|[avatar]|";

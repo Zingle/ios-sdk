@@ -1759,9 +1759,11 @@ enum ZNGConversationSections
                     mentionInProgressRange = NSMakeRange(NSNotFound, 0);
                     [self setMentionTypeAheadText:nil];
                 } else {
-                    NSMutableString * mutableText = [textView.text mutableCopy];
+                    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
                     [mutableText deleteCharactersInRange:range];
-                    textView.text = mutableText;
+                    UIFont * font = textView.font;
+                    textView.attributedText = mutableText;
+                    textView.font = font;
                     
                     mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - deletionRangeThatIncludesMentionInProgress.length);
                     [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
@@ -1781,7 +1783,7 @@ enum ZNGConversationSections
                                                        && (NSIntersectionRange(rangeWhereInsertionAffectsMention, insertionRange).length > 0));
                 
                 if (insertingIntoMentionInProgress) {
-                    NSMutableString * mutableText = [textView.text mutableCopy];
+                    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
                     
                     // If it's a replacement, we need to first remove the old content within the range
                     if (range.length > 0) {
@@ -1790,9 +1792,11 @@ enum ZNGConversationSections
                     
                     // This is safe to the mention in progress even after doing the above because we
                     //  checked range.location > mentionInProgressRange.location earlier
-                    [mutableText insertString:text atIndex:range.location];
-
-                    textView.text = mutableText;
+                    NSAttributedString * attributedText = [[NSAttributedString alloc] initWithString:text];
+                    [mutableText insertAttributedString:attributedText atIndex:range.location];
+                    UIFont * font = textView.font;
+                    textView.attributedText = mutableText;
+                    textView.font = font;
                     
                     mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
                     [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];

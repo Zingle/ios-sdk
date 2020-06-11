@@ -25,7 +25,7 @@
 @end
 
 
-@interface ZNGServiceToContactViewController : ZNGConversationViewController <ZNGAssignmentDelegate>
+@interface ZNGServiceToContactViewController : ZNGConversationViewController <ZNGAssignmentDelegate, ZNGMentionSelectionDelegate>
 
 @property (weak, nonatomic, readonly, nullable) ZNGServiceConversationInputToolbar * inputToolbar;
 

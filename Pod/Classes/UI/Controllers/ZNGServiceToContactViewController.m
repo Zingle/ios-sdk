@@ -1824,6 +1824,44 @@ enum ZNGConversationSections
     [self.conversation userDidType:self.inputToolbar.contentView.textView.text];
 }
 
+#pragma mark - Mentions
+- (void) mentionSelectionController:(ZNGMentionSelectionController *)selectionController didSelectTeam:(ZNGTeam *)team
+{
+    NSDictionary * attributes = @{ZNGEventTeamMentionAttribute: team.teamId, ZNGEventMentionAttribute: team.teamId};
+    NSAttributedString * text = [[NSAttributedString alloc] initWithString:team.displayName attributes:attributes];
+    [self replaceMentionInProgressWithText:text];
+}
+
+- (void) mentionSelectionController:(ZNGMentionSelectionController *)selectionController didSelectUser:(ZNGUser *)user
+{
+    NSDictionary * attributes = @{ZNGEventUserMentionAttribute: user.userId, ZNGEventMentionAttribute: user.userId};
+    NSAttributedString * text = [[NSAttributedString alloc] initWithString:[user fullName] attributes:attributes];
+    [self replaceMentionInProgressWithText:text];
+}
+
+- (void) replaceMentionInProgressWithText:(NSAttributedString *)textToAdd
+{
+    if (mentionInProgressRange.location == NSNotFound) {
+        SBLogError(@"Mention selection callback was called with no active mention type-ahead range.  Ignoring.");
+        return;
+    }
+    
+    UITextView * textView = self.inputToolbar.contentView.textView;
+    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+    [mutableText deleteCharactersInRange:mentionInProgressRange];
+    [mutableText insertAttributedString:textToAdd atIndex:mentionInProgressRange.location];
+    NSAttributedString * space = [[NSAttributedString alloc] initWithString:@" "];
+    [mutableText insertAttributedString:space atIndex:mentionInProgressRange.location + [textToAdd length]];
+    
+    UIFont * font = textView.font;
+    textView.attributedText = mutableText;
+    textView.font = font;
+    [textView.delegate textViewDidChange:textView];
+    
+    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+    [self setMentionTypeAheadText:nil];
+}
+
 #pragma mark - Assignment
 - (void) userChoseToUnassignContact:(ZNGContact *)contact
 {

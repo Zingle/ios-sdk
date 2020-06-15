@@ -103,7 +103,16 @@
 - (void) layoutSubviews
 {
     [super layoutSubviews];
-    [self updateHighlights];
+    
+    // We need to update our highlights when laying out subviews, but NSTextStorage gets quite upset if we attempt to calculate coordinates
+    //  while it has an edit in progress.  We will defer to the next run loop iteration if an edit is in progress.
+    if (self.textStorage.editedRange.location == NSNotFound) {
+        [self updateHighlights];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateHighlights];
+        });
+    }
 }
 
 - (void) updateHighlights

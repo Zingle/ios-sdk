@@ -662,7 +662,10 @@ enum ZNGConversationSections
         [self jsq_updateCollectionViewInsets];
         
         if (self.stuckToBottom) {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            // Totally arbitrary quarter second delay that seems to cause less scroll breakage.  JSQMessages and perhaps our own edits tend
+            //  to be fragile with scrolling logic and calculation of content insets.
+            int64_t tinyDelay = 0.25 * NSEC_PER_SEC;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, tinyDelay, dispatch_get_main_queue(), ^{
                  [self scrollToBottomAnimated:YES];
             });
         }

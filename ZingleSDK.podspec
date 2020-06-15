@@ -23,10 +23,10 @@ Pod::Spec.new do |s|
   s.platform     = :ios, '11.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*.{h,m}'
+  s.source_files = 'Pod/Classes/**/*.{h,m,swift}'
   s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
 
-  s.dependency 'AFNetworking/NSURLSession'
+  s.dependency 'AFNetworking/NSURLSession', '~> 3.0'
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle'
   s.dependency 'SBObjectiveCWrapper'

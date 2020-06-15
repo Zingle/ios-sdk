@@ -53,6 +53,8 @@ static NSString * const KVOChannelPath = @"conversation.channel";
 static NSString * const KVOInputLockedPath = @"conversation.lockedDescription";
 static NSString * const KVOReplyingUsersPath = @"conversation.pendingResponses";
 static NSString * const KVOToolbarModePath = @"inputToolbar.toolbarMode";
+static NSString * const KVOMentionsTableHidden = @"mentionsSelectionTable.isHidden";
+static NSString * const KVOMentionsTableSize = @"mentionsSelectionTable.frame";
 
 static NSString * const TypingIndicatorCellID = @"typingIndicator";
 
@@ -61,6 +63,8 @@ static void * KVOContext = &KVOContext;
 @interface JSQMessagesViewController (PrivateInsetManipulation)
 
 - (void)jsq_updateCollectionViewInsets;
+- (void)jsq_setCollectionViewInsetsTopValue:(CGFloat)top bottomValue:(CGFloat)bottom;
+- (void)jsq_setToolbarBottomLayoutGuideConstant:(CGFloat)constant;
 
 @end
 
@@ -110,6 +114,9 @@ enum ZNGConversationSections
      *  Used for delayed messages.  Converts NSTimeInterval like 66.0 into "about a minute," etc.
      */
     NSDateComponentsFormatter * nearFutureTimeFormatter;
+    
+    ZNGMentionSelectionController * mentionSelectionController;
+    NSRange mentionInProgressRange;  // The range of an edit in progress or a range with .location == NSNotFound if none is in progress
 }
 
 @dynamic conversation;
@@ -211,6 +218,9 @@ enum ZNGConversationSections
     
     UINib * typingIndicatorNib = [UINib nibWithNibName:@"ZNGConversationTypingIndicatorCell" bundle:bundle];
     [self.collectionView registerNib:typingIndicatorNib forCellWithReuseIdentifier:TypingIndicatorCellID];
+    
+    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+    mentionSelectionController = [[ZNGMentionSelectionController alloc] initWithSelectionTable:self.mentionsSelectionTable session:self.conversation.session delegate:self];
     
     fireZIndex = INT_MAX;
     robotTouchTimes = [[NSMutableArray alloc] initWithCapacity:20];
@@ -371,6 +381,13 @@ enum ZNGConversationSections
             // Match our facade toolbar (covering non safe area below the JSQMessages toolbar) color to the actual toolbar color since
             //  it may change when toggling between message composition and note composition.
             self.lowerFacadeToolbar.barTintColor = self.inputToolbar.contentView.backgroundColor;
+            
+            if ((self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) && (mentionInProgressRange.location != NSNotFound)) {
+                // Retain any type-ahead mention that was in progress
+                [self setMentionTypeAheadText:[self.inputToolbar.contentView.textView.text substringWithRange:mentionInProgressRange]];
+            } else {
+                [self setMentionTypeAheadText:nil];
+            }
         } else if ([keyPath isEqualToString:KVOLoadedInitialDataPath]) {
             id oldLoadedFlagOrNull = change[NSKeyValueChangeOldKey];
             id loadedFlagOrNull = change[NSKeyValueChangeNewKey];
@@ -634,6 +651,24 @@ enum ZNGConversationSections
     if ((self.stuckToBottom) && (!conversation.contact.isConfirmed)) {
         SBLogInfo(@"Marking conversation as read on load.");
         [conversation.contact confirm];
+    }
+}
+
+- (void) setMentionTypeAheadText:(nullable NSString *)text
+{
+    mentionSelectionController.mentionSearchText = text;
+    
+    if (self.viewLoaded) {
+        [self jsq_updateCollectionViewInsets];
+        
+        if (self.stuckToBottom) {
+            // Totally arbitrary quarter second delay that seems to cause less scroll breakage.  JSQMessages and perhaps our own edits tend
+            //  to be fragile with scrolling logic and calculation of content insets.
+            int64_t tinyDelay = 0.25 * NSEC_PER_SEC;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, tinyDelay), dispatch_get_main_queue(), ^{
+                 [self scrollToBottomAnimated:YES];
+            });
+        }
     }
 }
 
@@ -1171,6 +1206,14 @@ enum ZNGConversationSections
 }
 
 #pragma mark - Collection view shenanigans
+- (void) jsq_updateCollectionViewInsets
+{
+    UIView * bottomThing = (self.mentionsSelectionTable.isHidden) ? self.inputToolbar : self.mentionsSelectionTable;
+    
+    [self jsq_setCollectionViewInsetsTopValue:self.view.safeAreaInsets.top + self.topContentAdditionalInset
+                                  bottomValue:CGRectGetMaxY(self.collectionView.frame) - CGRectGetMinY(bottomThing.frame) + self.additionalBottomInset];
+}
+
 - (BOOL) shouldShowTimestampAboveIndexPath:(NSIndexPath *)indexPath
 {
     ZNGEventViewModel * viewModel = [self eventViewModelAtIndexPath:indexPath];
@@ -1697,9 +1740,129 @@ enum ZNGConversationSections
     [super textViewDidChange:textView];
 }
 
+- (BOOL) textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    if ((textView == self.inputToolbar.contentView.textView) && (self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE)) {
+        BOOL mentionInProgress = (mentionInProgressRange.location != NSNotFound);
+        BOOL isDeletion = ([text length] == 0);
+        unichar precedingCharacter = (range.location > 0) ? [textView.text characterAtIndex:range.location - 1] : '\0';
+        BOOL precedingCharacterAllowsMentionStart = ((precedingCharacter == '\0')
+                                                     || ([[NSCharacterSet whitespaceAndNewlineCharacterSet] characterIsMember:precedingCharacter]));
+        BOOL newTextBeginsWithAt = (([text length] > 0) && ([text characterAtIndex:0] == '@'));
+        BOOL startingNewMention = (!mentionInProgress && newTextBeginsWithAt && precedingCharacterAllowsMentionStart);
+
+        if (mentionInProgress) {
+            if (isDeletion) {
+                NSRange deletionRangeThatIncludesMentionInProgress = NSIntersectionRange(range, mentionInProgressRange);
+                BOOL deletionIsOutsideMention = (deletionRangeThatIncludesMentionInProgress.length == 0);
+                BOOL deletingEntireMention = (deletionRangeThatIncludesMentionInProgress.length == mentionInProgressRange.length);
+                
+                if (deletingEntireMention || deletionIsOutsideMention) {
+                    // Cancel the in progress mention
+                    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+                    [self setMentionTypeAheadText:nil];
+                } else {
+                    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+                    [mutableText deleteCharactersInRange:range];
+                    UIFont * font = textView.font;
+                    textView.attributedText = mutableText;
+                    textView.font = font;
+                    
+                    mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length - deletionRangeThatIncludesMentionInProgress.length);
+                    [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
+                    
+                    // We took care of the edit ourselves
+                    [textView.delegate textViewDidChange:textView];
+                    return NO;
+                }
+            } else { // This is an insertion/replacement not deletion
+                NSRange insertionRange = NSMakeRange(range.location, [text length]);
+                NSRange rangeWhereInsertionAffectsMention = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + 1); // allow one more character
+                
+                // Is this an insertion into a mention in progress?  Note that, if this replacement would replace the @ that
+                //  starts the mention (range.location <= mentionInProgress.location) we treat this as an insertion unrelated
+                //  to the mention which will cancel the mention type-ahead in progress.
+                BOOL insertingIntoMentionInProgress = ((range.location > mentionInProgressRange.location)
+                                                       && (NSIntersectionRange(rangeWhereInsertionAffectsMention, insertionRange).length > 0));
+                
+                if (insertingIntoMentionInProgress) {
+                    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+                    
+                    // If it's a replacement, we need to first remove the old content within the range
+                    if (range.length > 0) {
+                        [mutableText deleteCharactersInRange:range];
+                    }
+                    
+                    // This is safe to the mention in progress even after doing the above because we
+                    //  checked range.location > mentionInProgressRange.location earlier
+                    NSAttributedString * attributedText = [[NSAttributedString alloc] initWithString:text];
+                    [mutableText insertAttributedString:attributedText atIndex:range.location];
+                    UIFont * font = textView.font;
+                    textView.attributedText = mutableText;
+                    textView.font = font;
+                    
+                    mentionInProgressRange = NSMakeRange(mentionInProgressRange.location, mentionInProgressRange.length + [text length] - range.length);
+                    [self setMentionTypeAheadText:[textView.text substringWithRange:mentionInProgressRange]];
+                    
+                    // We took care of the edit ourselves
+                    [textView.delegate textViewDidChange:textView];
+                    return NO;
+                } else {
+                    // This edit kills our mention in progress
+                    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+                    [self setMentionTypeAheadText:nil];
+                }
+            }
+        } else if (startingNewMention) {
+            mentionInProgressRange = NSMakeRange(range.location, [text length]);
+            [self setMentionTypeAheadText:text];
+        }
+    }
+    
+    return [super textView:textView shouldChangeTextInRange:range replacementText:text];
+}
+
 - (void) _textChanged
 {
     [self.conversation userDidType:self.inputToolbar.contentView.textView.text];
+}
+
+#pragma mark - Mentions
+- (void) mentionSelectionController:(ZNGMentionSelectionController *)selectionController didSelectTeam:(ZNGTeam *)team
+{
+    NSDictionary * attributes = @{ZNGEventTeamMentionAttribute: team.teamId, ZNGEventMentionAttribute: team.teamId};
+    NSAttributedString * text = [[NSAttributedString alloc] initWithString:team.displayName attributes:attributes];
+    [self replaceMentionInProgressWithText:text];
+}
+
+- (void) mentionSelectionController:(ZNGMentionSelectionController *)selectionController didSelectUser:(ZNGUser *)user
+{
+    NSDictionary * attributes = @{ZNGEventUserMentionAttribute: user.userId, ZNGEventMentionAttribute: user.userId};
+    NSAttributedString * text = [[NSAttributedString alloc] initWithString:[user fullName] attributes:attributes];
+    [self replaceMentionInProgressWithText:text];
+}
+
+- (void) replaceMentionInProgressWithText:(NSAttributedString *)textToAdd
+{
+    if (mentionInProgressRange.location == NSNotFound) {
+        SBLogError(@"Mention selection callback was called with no active mention type-ahead range.  Ignoring.");
+        return;
+    }
+    
+    UITextView * textView = self.inputToolbar.contentView.textView;
+    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+    [mutableText deleteCharactersInRange:mentionInProgressRange];
+    [mutableText insertAttributedString:textToAdd atIndex:mentionInProgressRange.location];
+    NSAttributedString * space = [[NSAttributedString alloc] initWithString:@" "];
+    [mutableText insertAttributedString:space atIndex:mentionInProgressRange.location + [textToAdd length]];
+    
+    UIFont * font = textView.font;
+    textView.attributedText = mutableText;
+    textView.font = font;
+    [textView.delegate textViewDidChange:textView];
+    
+    mentionInProgressRange = NSMakeRange(NSNotFound, 0);
+    [self setMentionTypeAheadText:nil];
 }
 
 #pragma mark - Assignment

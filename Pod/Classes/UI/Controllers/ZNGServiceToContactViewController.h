@@ -9,6 +9,7 @@
 #import <ZingleSDK/ZNGConversationViewController.h>
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGAssignmentViewController.h"
+#import "ZNGMentionSelectionController.h"
 
 @protocol  ZNGServiceToContactViewDelegate <NSObject>
 
@@ -24,7 +25,7 @@
 @end
 
 
-@interface ZNGServiceToContactViewController : ZNGConversationViewController <ZNGAssignmentDelegate>
+@interface ZNGServiceToContactViewController : ZNGConversationViewController <ZNGAssignmentDelegate, ZNGMentionSelectionDelegate>
 
 @property (weak, nonatomic, readonly, nullable) ZNGServiceConversationInputToolbar * inputToolbar;
 
@@ -51,6 +52,7 @@
 @property (nonatomic, strong, nullable) IBOutlet NSLayoutConstraint * automationBannerOffScreenConstraint;
 @property (nonatomic, strong, nullable) IBOutlet UIButton * automationCancelButton;
 @property (nonatomic, strong, nullable) IBOutlet UILabel * automationRobot;
+@property (nonatomic, strong, nullable) IBOutlet UITableView * mentionsSelectionTable;
 
 // A toolbar that only exists to visually cover the gap between the bottom of JSQMessage's toolbar and the bottom of the safe zone
 @property (nonatomic, strong, nullable) IBOutlet UIToolbar * lowerFacadeToolbar;

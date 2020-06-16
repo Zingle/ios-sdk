@@ -76,10 +76,32 @@ enum {
     
     if (([filteredUsers count] > 0) || ([filteredTeams count] > 0)) {
         [self.tableView reloadData];
+        [self.tableView scrollToRowAtIndexPath:[self topmostIndexPath] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         self.tableView.hidden = NO;
     } else {
         self.tableView.hidden = YES;
     }
+}
+
+- (NSIndexPath *) topmostIndexPath
+{
+    __block NSIndexPath * topmostPath = nil;
+    
+    [mentionSections enumerateObjectsUsingBlock:^(NSNumber * _Nonnull sectionNumber, NSUInteger i, BOOL * _Nonnull stop) {
+        if ([sectionNumber unsignedIntegerValue] == ZNGMentionSectionTeams) {
+            if ([filteredTeams count] > 0) {
+                topmostPath = [NSIndexPath indexPathForRow:0 inSection:i];
+                *stop = YES;
+            }
+        } else if ([sectionNumber unsignedIntegerValue] == ZNGMentionSectionUsers) {
+            if ([filteredUsers count] > 0) {
+                topmostPath = [NSIndexPath indexPathForRow:0 inSection:i];
+                *stop = YES;
+            }
+        }
+    }];
+    
+    return topmostPath;
 }
 
 - (void) updateFilteredUsersAndTeams

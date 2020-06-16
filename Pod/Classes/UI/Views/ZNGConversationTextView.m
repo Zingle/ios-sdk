@@ -8,6 +8,7 @@
 
 #import "ZNGConversationTextView.h"
 #import <objc/runtime.h>
+#import "UITextView+TextRects.h"
 
 @import SBObjectiveCWrapper;
 
@@ -17,6 +18,74 @@
 @end
 
 @implementation ZNGConversationTextView
+{
+    NSArray<UIView *> * highlightViews;
+}
+
+- (id) initWithCoder:(NSCoder *)coder
+{
+    self = [super initWithCoder:coder];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (id) initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer
+{
+    self = [super initWithFrame:frame textContainer:textContainer];
+    
+    if (self != nil) {
+        [self commonInit];
+    }
+    
+    return self;
+}
+
+- (void) commonInit
+{
+    NSBundle * bundle = [NSBundle bundleForClass:[ZNGConversationTextView class]];
+    self.attributeHighlightColor = [UIColor colorNamed:@"ZNGInternalNoteHighlightedBackground" inBundle:bundle compatibleWithTraitCollection:nil];
+    self.attributeHighlightCornerRadius = 3.0;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyTextChanged:) name:UITextViewTextDidChangeNotification object:self];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void) notifyTextChanged:(NSNotification *)notification
+{
+    [self updateHighlights];
+}
+
+- (void) setAttributedText:(NSAttributedString *)attributedText
+{
+    [super setAttributedText:attributedText];
+    [self updateHighlights];
+}
+
+- (void) setAttributeHighlightColor:(UIColor *)attributeHighlightColor
+{
+    _attributeHighlightColor = attributeHighlightColor;
+    [self updateHighlights];
+}
+
+- (void) setAttributeNamesToHighlight:(NSArray<NSString *> *)attributeNamesToHighlight
+{
+    _attributeNamesToHighlight = attributeNamesToHighlight;
+    [self updateHighlights];
+}
+
+- (void) setAttributeHighlightCornerRadius:(CGFloat)attributeHighlightCornerRadius
+{
+    _attributeHighlightCornerRadius = attributeHighlightCornerRadius;
+    [self updateHighlights];
+}
 
 - (void) jsq_configureTextView
 {
@@ -29,6 +98,54 @@
     }
 
     self.layer.borderColor = [[UIColor clearColor] CGColor];
+}
+
+- (void) layoutSubviews
+{
+    [super layoutSubviews];
+    
+    // We need to update our highlights when laying out subviews, but NSTextStorage gets quite upset if we attempt to calculate coordinates
+    //  while it has an edit in progress.  We will defer to the next run loop iteration if an edit is in progress.
+    if (self.textStorage.editedRange.location == NSNotFound) {
+        [self updateHighlights];
+    } else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateHighlights];
+        });
+    }
+}
+
+- (void) updateHighlights
+{
+    for (UIView * highlightView in highlightViews) {
+        [highlightView removeFromSuperview];
+    }
+    
+    if (([self.attributeNamesToHighlight count] == 0) || (self.attributeHighlightColor == nil)) {
+        return;
+    }
+    
+    NSMutableArray<UIView *> * newHighlightViews = [[NSMutableArray alloc] init];
+    NSSet * attributesToHighlightSet = [[NSSet alloc] initWithArray:self.attributeNamesToHighlight];
+    
+    [self.attributedText enumerateAttributesInRange:NSMakeRange(0, [self.attributedText length]) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+        NSSet * theseAttributes = [[NSSet alloc] initWithArray:[attrs allKeys]];
+        if (![theseAttributes intersectsSet:attributesToHighlightSet]) {
+            return;
+        }
+        
+        NSArray<NSValue *> * rectValues = [self rectsForTextInRange:range];
+        
+        for (NSValue * rectValue in rectValues) {
+            UIView * highlight = [[UIView alloc] initWithFrame:[rectValue CGRectValue]];
+            highlight.backgroundColor = self.attributeHighlightColor;
+            highlight.layer.cornerRadius = self.attributeHighlightCornerRadius;
+            [newHighlightViews addObject:highlight];
+            [self insertSubview:highlight atIndex:0];
+        }
+    }];
+    
+    highlightViews = newHighlightViews;
 }
 
 - (NSDictionary *) placeholderAttributes

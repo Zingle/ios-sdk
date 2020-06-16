@@ -227,6 +227,7 @@ enum ZNGConversationSections
     
     [self setupBannerContainer];
     
+    self.inputToolbar.contentView.textView.attributeNamesToHighlight = @[ZNGEventMentionAttribute];
     self.inputToolbar.contentView.textView.placeHolder = @"Type a reply";
     [self.inputToolbar setCurrentChannel:self.conversation.channel];
     
@@ -1816,10 +1817,40 @@ enum ZNGConversationSections
         } else if (startingNewMention) {
             mentionInProgressRange = NSMakeRange(range.location, [text length]);
             [self setMentionTypeAheadText:text];
+        } else if (isDeletion) {
+            // We will handle the deletion ourselves in case an entire mention needs to be deleted in one go
+            [self deleteInputTextInRange:range];
+            [textView.delegate textViewDidChange:textView];
+            return NO;  // We deleted it ourselves
         }
     }
     
     return [super textView:textView shouldChangeTextInRange:range replacementText:text];
+}
+
+- (void) deleteInputTextInRange:(NSRange)specifiedDeletionRange
+{
+    if ((specifiedDeletionRange.location == NSNotFound) || (specifiedDeletionRange.length == 0)) {
+        return;
+    }
+    
+    UITextView * textView = self.inputToolbar.contentView.textView;
+    __block NSRange totalDeletionRange = specifiedDeletionRange;
+    
+    // If the deletion range includes part of a mention(s), expand `totalDeletionRange` to include the entire mention(s)
+    [textView.attributedText enumerateAttribute:ZNGEventMentionAttribute inRange:specifiedDeletionRange options:0 usingBlock:^(id  _Nullable value, NSRange attributeRange, BOOL * _Nonnull stop) {
+        if (value != nil) {
+            NSRange effectiveRange;
+            [textView.attributedText attribute:ZNGEventMentionAttribute atIndex:attributeRange.location effectiveRange:&effectiveRange];
+            totalDeletionRange = NSUnionRange(totalDeletionRange, effectiveRange);
+        }
+    }];
+    
+    NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
+    [mutableText deleteCharactersInRange:totalDeletionRange];
+    UIFont * font = textView.font;
+    textView.attributedText = mutableText;
+    textView.font = font;
 }
 
 - (void) _textChanged

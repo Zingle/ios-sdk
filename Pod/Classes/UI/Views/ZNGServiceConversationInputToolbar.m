@@ -285,6 +285,7 @@
 - (IBAction)didPressMessageModeButton:(id)sender
 {
     self.toolbarMode = TOOLBAR_MODE_MESSAGE;
+    [self.contentView.textView becomeFirstResponder];
 }
 
 - (IBAction)didPressUseTemplate:(id)sender
@@ -318,6 +319,7 @@
 - (IBAction)didPressAddNote:(id)sender
 {
     self.toolbarMode = TOOLBAR_MODE_INTERNAL_NOTE;
+    [self.contentView.textView becomeFirstResponder];
 }
 
 - (IBAction)didPressChannelSelectButton:(id)sender

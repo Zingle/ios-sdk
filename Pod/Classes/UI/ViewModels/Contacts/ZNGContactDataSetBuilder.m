@@ -32,6 +32,7 @@
     self.assignedUserId = baseDataSet.assignedUserId;
     self.assignedTeamId = baseDataSet.assignedTeamId;
     self.assignedRelevantToUserId = baseDataSet.assignedRelevantToUserId;
+    self.mentionFilter = baseDataSet.mentionFilter;
     self.searchText = baseDataSet.searchText;
     self.searchMessageBodies = baseDataSet.searchMessageBodies;
     self.allowContactsWithNoMessages = baseDataSet.allowContactsWithNoMessages;

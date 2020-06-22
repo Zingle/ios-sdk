@@ -86,6 +86,12 @@
 @property (nonatomic, copy, nullable) NSString * assignedRelevantToUserId;
 
 /**
+ * If set to a value other than `ZNGInboxDataSetMentionFilterNone`, allows filtering by unread mentions or all mentions.
+ * Defaults to `ZNGInboxDataSetMentionFilterNone`.
+ */
+@property (nonatomic, assign) ZNGInboxDataSetMentionFilter mentionFilter;
+
+/**
  *  Search text.  searchMessageBodies determines whether this searches only contact fields or also message contents to/from that contact.
  */
 @property (nonatomic, copy, nullable) NSString * searchText;

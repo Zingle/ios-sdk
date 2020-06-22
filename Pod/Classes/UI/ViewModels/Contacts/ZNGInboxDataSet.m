@@ -27,6 +27,7 @@ static NSString * const ParameterKeyUnassigned             = @"is_unassigned";
 static NSString * const ParameterKeyAssignedUserId         = @"assigned_to_user_id";
 static NSString * const ParameterKeyAssignedTeamId         = @"assigned_to_team_id";
 static NSString * const ParameterKeyRelevantUserId         = @"relative_user_id";
+static NSString * const ParameterKeyMentions               = @"mentions";
 static NSString * const ParameterKeyLabelId                = @"label_id";
 static NSString * const ParameterKeyGroupId                = @"contact_group_id";
 static NSString * const ParameterKeyQuery                  = @"query";
@@ -34,6 +35,8 @@ static NSString * const ParameterKeySearchMessageBodies    = @"search_message_bo
 static NSString * const ParameterValueTrue                 = @"true";
 static NSString * const ParameterValueFalse                = @"false";
 static NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
+static NSString * const ParameterValueMentionsAll          = @"all";
+static NSString * const ParameterValueMentionsUnread       = @"unread";
 
 NSString * const ZNGInboxDataSetSortFieldContactCreatedAt = @"created_at";
 NSString * const ZNGInboxDataSetSortFieldLastMessageCreatedAt = @"last_message_created_at";
@@ -101,6 +104,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         _searchText = builder.searchText;
         _searchMessageBodies = builder.searchMessageBodies;
         _unassigned = builder.unassigned;
+        _mentionFilter = builder.mentionFilter;
         
         if (!_unassigned) {
             _assignedTeamId = builder.assignedTeamId;
@@ -204,6 +208,12 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         [words addObject:@"Searching group(s)"];
     }
     
+    if (self.mentionFilter == ZNGInboxDataSetMentionFilterAll) {
+        [words addObject:@"Mentions"];
+    } else if (self.mentionFilter == ZNGInboxDataSetMentionFilterUnread) {
+        [words addObject:@"Unread mentions"];
+    }
+    
     return words;
 }
 
@@ -228,6 +238,7 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
     builder.assignedTeamId = self.assignedTeamId;
     builder.assignedUserId = self.assignedUserId;
     builder.assignedRelevantToUserId = self.assignedRelevantToUserId;
+    builder.mentionFilter = self.mentionFilter;
     builder.searchText = self.searchText;
     builder.searchMessageBodies = self.searchMessageBodies;
     builder.contactClient = self.contactClient;
@@ -273,6 +284,12 @@ NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";
         }
         
         parameters[ParameterKeyGroupId] = [self.groupIds firstObject];
+    }
+    
+    if (self.mentionFilter == ZNGInboxDataSetMentionFilterUnread) {
+        parameters[ParameterKeyMentions] = ParameterValueMentionsUnread;
+    } else if (self.mentionFilter == ZNGInboxDataSetMentionFilterAll) {
+        parameters[ParameterKeyMentions] = ParameterValueMentionsAll;
     }
     
     if (self.unassigned) {

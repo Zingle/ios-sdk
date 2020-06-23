@@ -60,6 +60,7 @@
              NSStringFromSelector(@selector(assignedTeamId)): NSStringFromSelector(@selector(assignedTeamId)),
              NSStringFromSelector(@selector(assignedUserId)): NSStringFromSelector(@selector(assignedUserId)),
              NSStringFromSelector(@selector(assignedRelevantToUserId)): NSStringFromSelector(@selector(assignedRelevantToUserId)),
+             NSStringFromSelector(@selector(mentionFilter)): NSStringFromSelector(@selector(mentionFilter)),
              NSStringFromSelector(@selector(searchText)): NSStringFromSelector(@selector(searchText)),
              NSStringFromSelector(@selector(searchMessageBodies)): NSStringFromSelector(@selector(searchMessageBodies)),
              };

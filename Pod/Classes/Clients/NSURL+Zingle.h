@@ -44,4 +44,9 @@
  */
 - (NSURL * _Nullable)webAppUrl;
 
+/**
+ *  Returns the URL used as the final successful redirect target for OAuth logins to the mobile app, using the "zingle://" scheme.
+ */
++ (NSURL * _Nonnull)nativeLoginUrl;
+
 @end

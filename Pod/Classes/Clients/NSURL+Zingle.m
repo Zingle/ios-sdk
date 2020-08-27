@@ -110,4 +110,9 @@
     return [NSURL URLWithString:path];
 }
 
++ (NSURL * _Nonnull)nativeLoginUrl
+{
+    return [NSURL URLWithString:@"zingle://login"];
+}
+
 @end

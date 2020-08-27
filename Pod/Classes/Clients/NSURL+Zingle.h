@@ -39,4 +39,9 @@
  */
 - (NSURL * _Nullable)socketUrl;
 
+/**
+ *  Returns the web app URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.
+ */
+- (NSURL * _Nullable)webAppUrl;
+
 @end

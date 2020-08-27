@@ -98,4 +98,16 @@
     return [NSURL URLWithString:path];
 }
 
+- (NSURL *)webAppUrl
+{
+    NSString * prefix = [self zingleServerPrefix];
+    
+    if (prefix == nil) {
+        return nil;
+    }
+    
+    NSString * path = ([prefix length] > 0) ? [NSString stringWithFormat:@"https://%@-app.zingle.me/", prefix] : @"https://app.zingle.me/";
+    return [NSURL URLWithString:path];
+}
+
 @end

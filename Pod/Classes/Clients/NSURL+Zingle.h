@@ -39,4 +39,14 @@
  */
 - (NSURL * _Nullable)socketUrl;
 
+/**
+ *  Returns the web app URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.
+ */
+- (NSURL * _Nullable)webAppUrl;
+
+/**
+ *  Returns the URL used as the final successful redirect target for OAuth logins to the mobile app, using the "zingle://" scheme.
+ */
++ (NSURL * _Nonnull)nativeLoginUrl;
+
 @end

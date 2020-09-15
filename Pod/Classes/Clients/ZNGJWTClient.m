@@ -36,6 +36,30 @@
     return session.baseURL;
 }
 
+- (void) acquireJwtFromOauthProvider:(NSString *)oauthProvider
+                               token:(NSString *)token
+                             success:(void (^_Nullable)(NSString * jwt))success
+                             failure:(void (^_Nullable)(NSError * error))failure
+{
+    AFHTTPSessionManager * authedSession = [session copy];
+    NSDictionary * parameters = @{
+        @"provider": oauthProvider,
+        @"token": token,
+    };
+    
+    _requestPending = YES;
+    [authedSession POST:@"oauth/exchange" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        [self handleJwtSuccess:task responseObject:responseObject success:success failure:failure];
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        self->_requestPending = NO;
+        SBLogError(@"Failed to acquire a JWT from %@ token", oauthProvider);
+        
+        if (failure != nil) {
+            failure(error);
+        }
+    }];
+}
+
 // Somewhere consistent to handle the JWT sanity checking code
 - (void) handleJwtSuccess:(NSURLSessionDataTask * _Nonnull)task
            responseObject:(id _Nullable)responseObject

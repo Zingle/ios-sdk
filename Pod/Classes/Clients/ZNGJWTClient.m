@@ -36,6 +36,32 @@
     return session.baseURL;
 }
 
+// Somewhere consistent to handle the JWT sanity checking code
+- (void) handleJwtSuccess:(NSURLSessionDataTask * _Nonnull)task
+           responseObject:(id _Nullable)responseObject
+                  success:(void (^_Nullable)(NSString * jwt))success
+                  failure:(void (^_Nullable)(NSError * error))failure
+{
+    self->_requestPending = NO;
+    NSString * jwt = responseObject[@"token"];
+    
+    if ([jwt length] == 0) {
+        NSString * errorDescription = [NSString stringWithFormat:@"Server returned 200 when a JWT was requested, but there is no \"token\" in the response: %@", responseObject];
+        SBLogError(@"%@", errorDescription);
+        
+        if (failure != nil) {
+            failure([NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: errorDescription}]);
+        }
+        
+        return;
+    }
+    
+    SBLogInfo(@"Received a %ud-byte JWT", (unsigned int)[jwt length]);
+    if (success != nil) {
+        success(jwt);
+    }
+}
+
 - (void) acquireJwtForUser:(NSString *)user
                   password:(NSString *)password
                    success:(void (^_Nullable)(NSString * jwt))success
@@ -46,24 +72,7 @@
     
     _requestPending = YES;
     [authedSession POST:@"token" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        self->_requestPending = NO;
-        NSString * jwt = responseObject[@"token"];
-        
-        if ([jwt length] == 0) {
-            NSString * errorDescription = [NSString stringWithFormat:@"Server returned 200 when a JWT was requested, but there is no \"token\" in the response: %@", responseObject];
-            SBLogError(@"%@", errorDescription);
-            
-            if (failure != nil) {
-                failure([NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: errorDescription}]);
-            }
-            
-            return;
-        }
-        
-        SBLogInfo(@"Received a %ud-byte JWT", (unsigned int)[jwt length]);
-        if (success != nil) {
-            success(jwt);
-        }
+        [self handleJwtSuccess:task responseObject:responseObject success:success failure:failure];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         self->_requestPending = NO;
         SBLogError(@"Failed to acquire a JWT for %@: %@", user, [error localizedDescription]);
@@ -107,26 +116,7 @@
     _requestPending = YES;
     
     [authedSession GET:@"token/refresh" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        self->_requestPending = NO;
-        
-        NSString * jwt = responseObject[@"token"];
-        
-        if ([jwt length] == 0) {
-            NSString * errorDescription = @"JWT refresh returned 200, but no token could be found in the response.";
-            SBLogError(@"%@", errorDescription);
-            
-            if (failure != nil) {
-                failure([NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: errorDescription}]);
-            }
-            
-            return;
-        }
-        
-        SBLogInfo(@"Received %u byte refreshed JWT", (unsigned int)[jwt length]);
-        
-        if (success != nil) {
-            success(jwt);
-        }
+        [self handleJwtSuccess:task responseObject:responseObject success:success failure:failure];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         SBLogError(@"Unable to refresh JWT: %@", [error localizedDescription]);
         self->_requestPending = NO;

@@ -30,7 +30,40 @@ static NSString * const ManySubdomainsAppPath = @"https://app.things.stuff.place
 @end
 
 
+// Publicly define an interface for some private, internal methods to NSURL+Zingle
+@interface NSURL (PrivateZingleURLMethods)
+- (NSString *)_zingleServerPrefix;
+- (NSString *)_multipleSubdomainInstanceName;
+@end
+
+
 @implementation TestURLParsing
+
+- (void) testProductionUrlDetection
+{
+    NSURL * nonZingleUrl = [NSURL URLWithString:NonZinglePath];
+    NSURL * nonProductionApi = [NSURL URLWithString:CiApiPath];
+    NSURL * nonProductionWebApp = [NSURL URLWithString:CiAppPath];
+    NSURL * productionApi = [NSURL URLWithString:ProductionApiPath];
+    NSURL * productionWebApp = [NSURL URLWithString:ProductionAppPath];
+    
+    XCTAssertFalse([nonZingleUrl isZingleProduction], @"`isZingleProduction` should be `NO` for a non-Zingle URL");
+    XCTAssertFalse([nonProductionApi isZingleProduction], @"`isZingleProduction` should be `NO` for a non production API URL");
+    XCTAssertFalse([nonProductionWebApp isZingleProduction], @"`isZingleProduction` should be `NO` for a non production web app URL");
+    XCTAssertTrue([productionApi isZingleProduction], @"`isZingleProduction` should be `YES` for a production API URL");
+    XCTAssertTrue([productionWebApp isZingleProduction], @"`isZingleProduction` should be `YES` for a production web app URL");
+}
+
+- (void) testPrefixDetection
+{
+    NSURL * production = [NSURL URLWithString:ProductionApiPath];
+    NSURL * ci = [NSURL URLWithString:CiApiPath];
+    NSURL * manySubdomains = [NSURL URLWithString:ManySubdomainsApiPath];
+    
+    XCTAssertEqualObjects([production _zingleServerPrefix], @"", @"Production server prefix should be an empty string");
+    XCTAssertEqualObjects([ci _zingleServerPrefix], @"ci", @"Hyphenated instance should return proper Zingle instance name");
+    XCTAssertNil([manySubdomains _zingleServerPrefix], @"Newer, non-hyphenated instance naming should return `nil` for `_zingleServerPrefix`");
+}
 
 - (void) testApiFromAppUrl
 {

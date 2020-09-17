@@ -20,6 +20,9 @@ static NSString * const CiAuthPath = @"https://ci-app.zingle.me/auth";
 static NSString * const CiSocketPath = @"https://ci-app.zingle.me:8000/";
 static NSString * const CiAppPath = @"https://ci-app.zingle.me/";
 static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart/";
+static NSString * const ManySubdomainsApiPath = @"https://api.things.stuff.places.zingle.me/v1";
+static NSString * const ManySubdomainsSocketPath = @"https://app.things.stuff.places.zingle.me:8000/";
+static NSString * const ManySubdomainsAppPath = @"https://app.things.stuff.places.zingle.me/";
 
 
 @interface TestURLParsing : XCTestCase
@@ -100,6 +103,16 @@ static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart
     NSURL * expectedSocketUrl = [NSURL URLWithString:CiSocketPath];
     
     XCTAssertEqualObjects([apiUrl socketUrl], expectedSocketUrl, @"`socketUrl` from API URL should produce %@", expectedSocketUrl);
+}
+
+- (void) testManySubdomainHosts
+{
+    NSURL * webApp = [NSURL URLWithString:ManySubdomainsAppPath];
+    NSURL * v1Api = [NSURL URLWithString:ManySubdomainsApiPath];
+    NSURL * socket = [NSURL URLWithString:ManySubdomainsSocketPath];
+    
+    XCTAssertEqualObjects([webApp apiUrlV1], v1Api, @"`apiUrlV1` should return full v1 API URL from a web app URL with many subdomains");
+    XCTAssertEqualObjects([webApp socketUrl], socket, @"`apiUrlV1` should return full v1 API URL from a web app URL with many subdomains");
 }
 
 @end

@@ -10,11 +10,17 @@
 
 @implementation NSURL (Zingle)
 
-- (NSString *)zingleServerPrefix
+- (BOOL) isZingleProduction
+{
+    // A non-nil, empty string indicates production
+    return [[self _zingleServerPrefix] isEqualToString:@""];
+}
+
+- (NSString *)_zingleServerPrefix
 {
     NSURLComponents * components = [NSURLComponents componentsWithURL:self resolvingAgainstBaseURL:YES];
     NSString * host = components.host;
-    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^((\\w+)-)?\\w+.zingle.me$" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^((\\w+)-)?\\w+\\.zingle.me$" options:NSRegularExpressionCaseInsensitive error:nil];
     NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:host options:0 range:NSMakeRange(0, [host length])];
     NSTextCheckingResult * match = [matches firstObject];
     
@@ -39,9 +45,35 @@
     return [host substringWithRange:prefixRange];
 }
 
+/**
+ *  Returns the instance name from a Zingle URL with multiple subdomains, e.g. `qa05` from `https://qa05.qa.denver.zingle.me/`.
+ *  Returns nil for a non-Zingle URL or a Zingle URL of the old, hyphenated form, e.g. `https://qa-app.zingle.me/`
+ */
+- (NSString *)_multipleSubdomainInstanceName
+{
+    NSURLComponents * components = [NSURLComponents componentsWithURL:self resolvingAgainstBaseURL:YES];
+    NSString * host = components.host;
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^(\\w+).(\\w+\\.)+zingle.me$" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:host options:0 range:NSMakeRange(0, [host length])];
+    NSTextCheckingResult * match = [matches firstObject];
+    
+    if (match.numberOfRanges < 2) {
+        return nil;
+    }
+    
+    NSRange instanceNameRange = [match rangeAtIndex:1];
+    
+    if (instanceNameRange.location == NSNotFound) {
+        // Something has gone wacky
+        return nil;
+    }
+    
+    return [host substringWithRange:instanceNameRange];
+}
+
 - (NSURL * _Nullable)apiUrlV1
 {
-    NSString * prefix = [self zingleServerPrefix];
+    NSString * prefix = [self _zingleServerPrefix];
     
     if (prefix == nil) {
         return nil;
@@ -53,7 +85,7 @@
 
 - (NSURL * _Nullable)apiUrlV2
 {
-    NSString * prefix = [self zingleServerPrefix];
+    NSString * prefix = [self _zingleServerPrefix];
     
     if (prefix == nil) {
         return nil;
@@ -65,7 +97,7 @@
 
 - (NSURL * _Nullable)authUrl
 {
-    NSString * prefix = [self zingleServerPrefix];
+    NSString * prefix = [self _zingleServerPrefix];
     
     if (prefix == nil) {
         return nil;
@@ -83,7 +115,7 @@
 
 - (NSURL *)socketUrl
 {
-    NSString * prefix = [self zingleServerPrefix];
+    NSString * prefix = [self _zingleServerPrefix];
     
     if (prefix == nil) {
         return nil;
@@ -100,7 +132,7 @@
 
 - (NSURL *)webAppUrl
 {
-    NSString * prefix = [self zingleServerPrefix];
+    NSString * prefix = [self _zingleServerPrefix];
     
     if (prefix == nil) {
         return nil;

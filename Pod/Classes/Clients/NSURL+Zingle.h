@@ -11,13 +11,9 @@
 @interface NSURL (Zingle)
 
 /**
- *  Returns the environment prefix for a Zingle URL.
- *
- *  For a URL such as "https://qa-api.zingle.me/" or "https://qa-secure.zingle.me/" this will return "qa"
- *  In the case of a production Zingle URL with no prefix, such as "https://secure.zingle.me/" this will return an empty string
- *  In the case of a non-Zingle URL such as "https://thing-stuff-place.something.poop" this will return nil
+ *  Returns `YES` if the URL is a production Zingle URL.
  */
-- (NSString * _Nullable)zingleServerPrefix;
+- (BOOL) isZingleProduction;
 
 /**
  *  Returns the v1 API URL corresponding to the current Zingle URL.  Nil if the current URL does not appear to be a Zingle URL.

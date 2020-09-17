@@ -14,12 +14,16 @@ static NSString * const ProductionApiV2Path = @"https://api.zingle.me/v2";
 static NSString * const ProductionAuthPath = @"https://app.zingle.me/auth";
 static NSString * const ProductionSocketPath = @"https://socket.zingle.me/";
 static NSString * const ProductionAppPath = @"https://app.zingle.me/";
+
 static NSString * const CiApiPath = @"https://ci-api.zingle.me/v1";
 static NSString * const CiApiV2Path = @"https://ci-api.zingle.me/v2";
 static NSString * const CiAuthPath = @"https://ci-app.zingle.me/auth";
 static NSString * const CiSocketPath = @"https://ci-app.zingle.me:8000/";
 static NSString * const CiAppPath = @"https://ci-app.zingle.me/";
+
 static NSString * const NonZinglePath = @"https://something-else.clownpenis.fart/";
+
+static NSString * const ManySubdomainsInstanceName = @"things.stuff.places";
 static NSString * const ManySubdomainsApiPath = @"https://api.things.stuff.places.zingle.me/v1";
 static NSString * const ManySubdomainsSocketPath = @"https://app.things.stuff.places.zingle.me:8000/";
 static NSString * const ManySubdomainsAppPath = @"https://app.things.stuff.places.zingle.me/";
@@ -63,6 +67,17 @@ static NSString * const ManySubdomainsAppPath = @"https://app.things.stuff.place
     XCTAssertEqualObjects([production _zingleServerPrefix], @"", @"Production server prefix should be an empty string");
     XCTAssertEqualObjects([ci _zingleServerPrefix], @"ci", @"Hyphenated instance should return proper Zingle instance name");
     XCTAssertNil([manySubdomains _zingleServerPrefix], @"Newer, non-hyphenated instance naming should return `nil` for `_zingleServerPrefix`");
+}
+
+- (void) testSubdomainDetection
+{
+    NSURL * production = [NSURL URLWithString:ProductionApiPath];
+    NSURL * ci = [NSURL URLWithString:CiApiPath];
+    NSURL * manySubdomains = [NSURL URLWithString:ManySubdomainsApiPath];
+    
+    XCTAssertNil([production _multipleSubdomainInstanceName], @"Production URL should return `nil` for `_multipleSubdomainInstanceName`");
+    XCTAssertNil([ci _multipleSubdomainInstanceName], @"CI URL (old, hyphenated-style instance naming) should return `nil` for `_multipleSubdomainInstanceName`");
+    XCTAssertEqualObjects([manySubdomains _multipleSubdomainInstanceName], ManySubdomainsInstanceName, @"Instance name should be resolved correctly from a multiple subdomain instance, e.g. `qa05.denver` for `api.qa05.denver.zingle.me`)");
 }
 
 - (void) testApiFromAppUrl

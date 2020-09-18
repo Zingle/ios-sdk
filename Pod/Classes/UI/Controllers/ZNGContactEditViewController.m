@@ -664,7 +664,7 @@ static NSString * const EventCellId = @"event";
             header.sectionImage.image = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionOptionalCustomFields:
-            header.sectionLabel.text = @"CUSTOM FIELDS";
+            header.sectionLabel.text = @"CONTACT FIELDS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconCustomFields" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         default:

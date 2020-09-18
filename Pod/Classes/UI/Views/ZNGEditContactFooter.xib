@@ -16,7 +16,6 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ks5-5S-GbB">
                     <rect key="frame" x="0.0" y="0.0" width="472" height="12"/>
-                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </view>
             </subviews>
             <constraints>
@@ -30,9 +29,4 @@
             <point key="canvasLocation" x="382" y="67"/>
         </view>
     </objects>
-    <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-    </resources>
 </document>

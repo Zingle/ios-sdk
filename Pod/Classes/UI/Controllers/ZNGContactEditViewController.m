@@ -679,7 +679,10 @@ static NSString * const EventCellId = @"event";
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
+    UIView * footer = [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
+    footer.tintColor = [UIColor clearColor];
+    
+    return footer;
 }
 
 #pragma mark - Table view data source

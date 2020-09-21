@@ -664,7 +664,7 @@ static NSString * const EventCellId = @"event";
             header.sectionImage.image = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionOptionalCustomFields:
-            header.sectionLabel.text = @"CUSTOM FIELDS";
+            header.sectionLabel.text = @"CONTACT FIELDS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconCustomFields" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         default:
@@ -679,7 +679,10 @@ static NSString * const EventCellId = @"event";
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
+    UIView * footer = [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
+    footer.tintColor = [UIColor clearColor];
+    
+    return footer;
 }
 
 #pragma mark - Table view data source

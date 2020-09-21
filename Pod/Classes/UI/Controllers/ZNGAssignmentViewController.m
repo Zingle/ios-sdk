@@ -198,6 +198,10 @@ enum TopSectionRows {
         UITableViewHeaderFooterView * header = (UITableViewHeaderFooterView *)view;
         header.textLabel.textAlignment = NSTextAlignmentCenter;
         header.textLabel.textColor = [UIColor colorWithWhite:0.75 alpha:1.0];
+        
+        if (@available(iOS 13, *)) {
+            header.textLabel.textColor = [UIColor secondaryLabelColor];
+        }
     }
 }
 

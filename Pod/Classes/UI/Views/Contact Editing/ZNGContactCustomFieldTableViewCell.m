@@ -153,6 +153,11 @@
         [self setupTimeFormatters];
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
+        
+        if (@available(iOS 13.4, *)) {
+            datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+        }
+        
         datePicker.datePickerMode = UIDatePickerModeTime;
         datePicker.minuteInterval = 5;
         [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
@@ -166,6 +171,11 @@
     } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
+        
+        if (@available(iOS 13.4, *)) {
+            datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
+        }
+        
         datePicker.datePickerMode = UIDatePickerModeDate;
         datePicker.locale = [NSLocale localeWithLocaleIdentifier:@"en_US_POSIX"];
         datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];

@@ -82,7 +82,7 @@
     sessionManager.responseSerializer = responseSerializer;
     sessionManager.requestSerializer = requestSerializer;
     
-    [sessionManager GET:[self hotsosIssuePathForTerm:term] parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSXMLParser * _Nullable responseObject) {
+    [sessionManager GET:[self hotsosIssuePathForTerm:term] parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, NSXMLParser * _Nullable responseObject) {
         responseObject.delegate = self;
         [responseObject parse];
         SBLogInfo(@"HotSOS returned %llu issues matching \"%%%@%%\"", (unsigned long long)[self->matchingIssueNames count], term);

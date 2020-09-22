@@ -48,7 +48,7 @@
     };
     
     _requestPending = YES;
-    [authedSession POST:@"oauth/exchange" parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [authedSession POST:@"oauth/exchange" parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [self handleJwtSuccess:task responseObject:responseObject success:success failure:failure];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         self->_requestPending = NO;
@@ -95,7 +95,7 @@
     [authedSession.requestSerializer setAuthorizationHeaderFieldWithUsername:user password:password];
     
     _requestPending = YES;
-    [authedSession POST:@"token" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [authedSession POST:@"token" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [self handleJwtSuccess:task responseObject:responseObject success:success failure:failure];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         self->_requestPending = NO;
@@ -139,7 +139,7 @@
     
     _requestPending = YES;
     
-    [authedSession GET:@"token/refresh" parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [authedSession GET:@"token/refresh" parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         [self handleJwtSuccess:task responseObject:responseObject success:success failure:failure];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         SBLogError(@"Unable to refresh JWT: %@", [error localizedDescription]);

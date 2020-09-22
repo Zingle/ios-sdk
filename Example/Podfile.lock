@@ -1,11 +1,11 @@
 PODS:
-  - AFNetworking/NSURLSession (3.2.1):
+  - AFNetworking/NSURLSession (4.0.1):
     - AFNetworking/Reachability
     - AFNetworking/Security
     - AFNetworking/Serialization
-  - AFNetworking/Reachability (3.2.1)
-  - AFNetworking/Security (3.2.1)
-  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/Reachability (4.0.1)
+  - AFNetworking/Security (4.0.1)
+  - AFNetworking/Serialization (4.0.1)
   - Analytics (3.6.10)
   - JSQMessagesViewController (7.3.5):
     - JSQMessagesViewController/include-cell-xibs (= 7.3.5)
@@ -35,7 +35,7 @@ PODS:
   - Starscream (3.1.0)
   - SwiftyBeaver (1.4.4)
   - ZingleSDK (1.1.0):
-    - AFNetworking/NSURLSession
+    - AFNetworking/NSURLSession (~> 4)
     - Analytics (~> 3.0)
     - JSQMessagesViewController/xibs-without-cells
     - JVFloatLabeledTextField
@@ -44,7 +44,7 @@ PODS:
     - SBObjectiveCWrapper
     - SDWebImage (~> 5.0)
     - Shimmer
-    - Socket.IO-Client-Swift
+    - Socket.IO-Client-Swift (~> 15)
 
 DEPENDENCIES:
   - JSQMessagesViewController (from `JSQMessagesViewController`)
@@ -72,7 +72,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   Analytics: 63744ad4afa65c3bcdcdb7a94b62515bde5b3900
   JSQMessagesViewController: b0b7d079f4e5acc0809ec49ea65fad6c7501235a
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
@@ -85,8 +85,8 @@ SPEC CHECKSUMS:
   Socket.IO-Client-Swift: 7cb44c0ffb86e158cee32d0642d30ec5fdcf8f61
   Starscream: 08172b481e145289c4930cb567230fb55897cfa4
   SwiftyBeaver: 25bd76281f49ca989ec2e3cbde9af89c15bc1432
-  ZingleSDK: f08f0a4707b45b182c7cffa9de4b9ee4f6deb81d
+  ZingleSDK: acc345a57bd117288faa6c136e39df70fb7838ae
 
 PODFILE CHECKSUM: 4acf5554cb6d894601667ecb2a86f2c0707c353e
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.3

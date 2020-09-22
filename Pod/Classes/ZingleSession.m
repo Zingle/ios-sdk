@@ -416,7 +416,7 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
     NSString * path = @"reset-password";
     NSDictionary * parameters = @{ @"email" : emailMinusWhitespace };
     
-    [session POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
+    [session POST:path parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nonnull responseObject) {
         NSDictionary* statusDict = responseObject[@"status"];
         ZNGStatus *status = [MTLJSONAdapter modelOfClass:[ZNGStatus class] fromJSONDictionary:statusDict error:nil];
         

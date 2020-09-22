@@ -32,7 +32,7 @@
 {
     NSString * path = [NSString stringWithFormat:@"saml/idps/lookup?domainCode=%@", [code stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     
-    [session GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [session GET:path parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSURL * signOnUrl = [NSURL URLWithString:responseObject[@"signOnUri"]];
         
         if (signOnUrl == nil) {

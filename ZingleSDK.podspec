@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes/**/*.{h,m}'
   s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
 
-  s.dependency 'AFNetworking/NSURLSession'
+  s.dependency 'AFNetworking/NSURLSession', '~> 4'
   s.dependency 'JVFloatLabeledTextField'  
   s.dependency 'Mantle'
   s.dependency 'SBObjectiveCWrapper'

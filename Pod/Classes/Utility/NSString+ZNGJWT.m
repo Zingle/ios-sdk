@@ -9,6 +9,10 @@
 
 @import SBObjectiveCWrapper;
 
+static NSString * const JwtPayloadKeyExpirationDate = @"exp";
+static NSString * const JwtPayloadKeyIssueDate = @"iat";
+static NSString * const JwtPayloadKeyIssuingUrl = @"iss";
+
 @implementation NSString (ZNGJWT)
 
 - (NSDictionary<NSString *, id> * _Nullable) jwtPayload
@@ -40,7 +44,7 @@
 
 - (NSDate * _Nullable) jwtExpiration
 {
-    NSNumber * expNumber = [self jwtPayload][@"exp"];
+    NSNumber * expNumber = [self jwtPayload][JwtPayloadKeyExpirationDate];
     
     if ([expNumber doubleValue] == 0.0) {
         return nil;
@@ -51,7 +55,7 @@
 
 - (NSDate * _Nullable) jwtIssueDate
 {
-    NSNumber * iatNumber = [self jwtPayload][@"iat"];
+    NSNumber * iatNumber = [self jwtPayload][JwtPayloadKeyIssueDate];
     
     if ([iatNumber doubleValue] == 0.0) {
         return nil;
@@ -74,7 +78,7 @@
 
 - (NSURL * _Nullable) jwtIssuingUrl
 {
-    return [NSURL URLWithString:[self jwtPayload][@"iss"]];
+    return [NSURL URLWithString:[self jwtPayload][JwtPayloadKeyIssuingUrl]];
 }
 
 @end

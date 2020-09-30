@@ -12,6 +12,8 @@
 static NSString * const JwtPayloadKeyExpirationDate = @"exp";
 static NSString * const JwtPayloadKeyIssueDate = @"iat";
 static NSString * const JwtPayloadKeyIssuingUrl = @"iss";
+static NSString * const JwtPayloadKeyStaffUser = @"staff";
+static NSString * const JwtPayloadKeyHipaaUser = @"hipaa";
 
 @implementation NSString (ZNGJWT)
 
@@ -79,6 +81,16 @@ static NSString * const JwtPayloadKeyIssuingUrl = @"iss";
 - (NSURL * _Nullable) jwtIssuingUrl
 {
     return [NSURL URLWithString:[self jwtPayload][JwtPayloadKeyIssuingUrl]];
+}
+
+- (BOOL) isStaffUser
+{
+    return [[self jwtPayload][JwtPayloadKeyStaffUser] boolValue];
+}
+
+- (BOOL) isHipaaUser
+{
+    return [[self jwtPayload][JwtPayloadKeyHipaaUser] boolValue];
 }
 
 @end

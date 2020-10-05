@@ -143,9 +143,15 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
 
 - (void) logout
 {
+    [self logoutPreservingPushNotifications:NO];
+}
+
+- (void) logoutPreservingPushNotifications:(BOOL)keepPushSubscriptions
+{
     [_conversationCache removeAllObjects];
     [self.socketClient disconnect];
-    [super logout];
+    
+    [super logoutPreservingPushNotifications:keepPushSubscriptions];
 }
 
 - (void) cache:(NSCache *)cache willEvictObject:(id)obj

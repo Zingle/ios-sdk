@@ -234,7 +234,14 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 
 - (void) logout
 {
-    [self _unregisterForAllPushNotifications];
+    [self logoutPreservingPushNotifications:NO];
+}
+
+- (void) logoutPreservingPushNotifications:(BOOL)keepPushSubscriptions
+{
+    if (!keepPushSubscriptions) {
+        [self _unregisterForAllPushNotifications];
+    }
 }
 
 - (void) setUrlString:(NSString *)urlString

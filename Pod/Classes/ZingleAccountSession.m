@@ -141,11 +141,6 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     [self retrieveAvailableAccounts];
 }
 
-- (void) logout
-{
-    [self logoutPreservingPushNotifications:NO];
-}
-
 - (void) logoutPreservingPushNotifications:(BOOL)keepPushSubscriptions
 {
     [_conversationCache removeAllObjects];

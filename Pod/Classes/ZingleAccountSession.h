@@ -86,6 +86,12 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 @property (nonatomic, strong, nullable) ZNGUserAuthorization * userAuthorization;
 
 /**
+ *  How long is this user allowed to be idle before requiring re-authentication? `0.0` indicates no idle time limit.
+ *  This is generally 20 minutes for HIPAA users and `0.0` otherwise.
+ */
+@property (readonly) NSTimeInterval idleTimeLimit;
+
+/**
  *  If set, the service object will be refreshed whenever returning from the background (but no more often than every ten minutes.)
  *
  *  Defaults to YES.

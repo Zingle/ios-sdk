@@ -33,6 +33,7 @@
 #import "ZNGUserSettings.h"
 #import "ZNGJWTClient.h"
 #import "ZNGUserV2.h"
+#import "NSString+ZNGJWT.h"
 
 @import AFNetworking;
 @import SBObjectiveCWrapper;
@@ -43,6 +44,8 @@ NSString * const ZingleUserChangedDetailedEventsPreferenceNotification = @"Zingl
 NSString * const ZingleConversationDataArrivedNotification = @"ZingleConversationDataArrivedNotification";
 NSString * const ZingleConversationNotificationContactIdKey = @"contactId";
 NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListShouldBeRefreshedNotification";
+
+static NSTimeInterval const HipaaUserIdleTimeout = 20.0 * 60.0;  // 20 minutes
 
 // Override readonly properties with strong properties to get proper KVO
 @interface ZingleAccountSession ()
@@ -764,6 +767,11 @@ NSString * const ZingleFeedListShouldBeRefreshedNotification = @"ZingleFeedListS
     }
     
     return nil;
+}
+
+- (NSTimeInterval) idleTimeLimit
+{
+    return ([self.jwt isHipaaUser]) ? HipaaUserIdleTimeout : 0.0;
 }
 
 #pragma mark - Messaging

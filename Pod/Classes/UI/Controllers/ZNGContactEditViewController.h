@@ -49,6 +49,14 @@
 
 @property (nonatomic, assign) BOOL useDefaultTransition;
 
+/**
+ *  Optionally hide all contact and messaging data when the app is entering the background.
+ *  This will prevent contact data from appearing in the app switcher.
+ *
+ *  Defaults to NO.
+ */
+@property (nonatomic, assign) BOOL hideContactDataInBackground;
+
 @property (nonatomic, weak) id <ZNGContactEditDelegate> delegate;
 
 - (IBAction)pressedCancel:(id)sender;

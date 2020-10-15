@@ -41,6 +41,7 @@
 /**
  *  Optionally hide all contact and messaging data when the app is entering the background.
  *  This will prevent contact data from appearing in the app switcher.
+ *  This will also propogate to any contact edit, event, and assignment view controllers presented by this conversation view.
  *
  *  Defaults to NO.
  */

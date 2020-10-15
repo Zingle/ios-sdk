@@ -1767,6 +1767,7 @@ enum ZNGConversationSections
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
+        vc.hideContactDataInBackground = self.hideContactDataInBackground;
     } else if ([segue.identifier isEqualToString:@"forward"]) {
         // Build a list of all services available to the current account other than the current one
         NSMutableArray<ZNGService *> * availableServices = [[NSMutableArray alloc] initWithCapacity:[self.conversation.session.availableServices count]];

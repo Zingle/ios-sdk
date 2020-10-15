@@ -32,6 +32,14 @@
 @property (nonatomic, strong, nullable) ZingleAccountSession * session;
 @property (nonatomic, strong, nullable) ZNGContact * contact;
 
+/**
+ *  Optionally hide the contact name when the app is entering the background.
+ *  This will prevent contact name from appearing in the app switcher.
+ *
+ *  Defaults to NO.
+ */
+@property (nonatomic, assign) BOOL hideContactDataInBackground;
+
 @property (nonatomic, weak, nullable) IBOutlet UITableView * tableView;
 
 @property (nonatomic, weak, nullable) NSObject <ZNGAssignmentDelegate> * delegate;

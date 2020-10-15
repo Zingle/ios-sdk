@@ -1112,6 +1112,7 @@ static NSString * const EventCellId = @"event";
         assignView.session = (ZingleAccountSession *)self.contactClient.session;
         assignView.contact = self.contact;
         assignView.delegate = self;
+        assignView.hideContactDataInBackground = self.hideContactDataInBackground;
     } else if ([segue.identifier isEqualToString:EventsSegueIdentifier]) {
         ZNGContactEventsViewController * eventsView = segue.destinationViewController;
         eventsView.conversation = self.conversation;

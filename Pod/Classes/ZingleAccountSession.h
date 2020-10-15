@@ -86,6 +86,12 @@ extern NSString * const ZingleFeedListShouldBeRefreshedNotification;
 @property (nonatomic, strong, nullable) ZNGUserAuthorization * userAuthorization;
 
 /**
+ *  YES if the current user has access to one or more HIPAA services. Note that the current service may or
+ *  may not itself be a HIPAA service.
+ */
+@property (readonly) BOOL userHasHipaaAccess;
+
+/**
  *  How long is this user allowed to be idle before requiring re-authentication? `0.0` indicates no idle time limit.
  *  This is generally 20 minutes for HIPAA users and `0.0` otherwise.
  */

@@ -769,9 +769,14 @@ static NSTimeInterval const HipaaUserIdleTimeout = 20.0 * 60.0;  // 20 minutes
     return nil;
 }
 
+- (BOOL) userHasHipaaAccess
+{
+    return ([self.jwt isHipaaUser]);
+}
+
 - (NSTimeInterval) idleTimeLimit
 {
-    return ([self.jwt isHipaaUser]) ? HipaaUserIdleTimeout : 0.0;
+    return ([self userHasHipaaAccess]) ? HipaaUserIdleTimeout : 0.0;
 }
 
 #pragma mark - Messaging

@@ -1115,6 +1115,7 @@ static NSString * const EventCellId = @"event";
     } else if ([segue.identifier isEqualToString:EventsSegueIdentifier]) {
         ZNGContactEventsViewController * eventsView = segue.destinationViewController;
         eventsView.conversation = self.conversation;
+        eventsView.hideContactDataInBackground = self.hideContactDataInBackground;
     }
 }
 

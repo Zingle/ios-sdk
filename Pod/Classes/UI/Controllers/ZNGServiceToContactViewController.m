@@ -152,6 +152,8 @@ enum ZNGConversationSections
 - (void) setupKVO
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNetworkStatusChanged:) name:ZNGNetworkLookoutStatusChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactCustomFieldsPath options:NSKeyValueObservingOptionNew context:KVOContext];
@@ -613,6 +615,23 @@ enum ZNGConversationSections
         SBLogInfo(@"Marking conversation as read on load.");
         [conversation.contact confirm];
     }
+}
+
+#pragma mark - Foreground/background life cycle
+- (void) notifyAppDidEnterBackground:(NSNotification *)notification
+{
+    if (self.hideContactDataInBackground) {
+        self.collectionView.hidden = YES;
+        self.inputToolbar.contentView.channelSelectButton.hidden = YES;
+        self.navigationItem.titleView.hidden = YES;
+    }
+}
+
+- (void) notifyAppWillEnterForeground:(NSNotification *)notification
+{
+    self.collectionView.hidden = NO;
+    self.inputToolbar.contentView.channelSelectButton.hidden = NO;
+    self.navigationItem.titleView.hidden = NO;
 }
 
 #pragma mark - Easter eggs
@@ -1748,6 +1767,7 @@ enum ZNGConversationSections
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
+        vc.hideContactDataInBackground = self.hideContactDataInBackground;
     } else if ([segue.identifier isEqualToString:@"forward"]) {
         // Build a list of all services available to the current account other than the current one
         NSMutableArray<ZNGService *> * availableServices = [[NSMutableArray alloc] initWithCapacity:[self.conversation.session.availableServices count]];

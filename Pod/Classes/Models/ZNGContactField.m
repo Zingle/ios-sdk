@@ -14,6 +14,7 @@ NSString * const ZNGContactFieldDataTypeNumber = @"number";
 NSString * const ZNGContactFieldDataTypeBool = @"boolean";
 NSString * const ZNGContactFieldDataTypeDate = @"date";
 NSString * const ZNGContactFieldDataTypeTime = @"time";
+NSString * const ZNGContactFieldDataTypeDateTime = @"datetime";
 NSString * const ZNGContactFieldDataTypeSingleSelect = @"single_select_options";
 
 @implementation ZNGContactField

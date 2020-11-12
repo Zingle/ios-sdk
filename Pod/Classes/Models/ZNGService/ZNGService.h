@@ -28,6 +28,7 @@
 extern NSString * _Nonnull const ZNGServiceFeatureTeams;
 extern NSString * _Nonnull const ZNGServiceFeatureAssignment;
 extern NSString * _Nonnull const ZNGServiceFeatureCalendarEvents;
+extern NSString * _Nonnull const ZNGServiceFeatureHipaa;
 
 @interface ZNGService : MTLModel<MTLJSONSerializing>
 
@@ -56,6 +57,7 @@ extern NSString * _Nonnull const ZNGServiceFeatureCalendarEvents;
 - (NSArray<ZNGAutomation *> * _Nullable) activeAutomations;
 
 - (BOOL) isTextRelay;
+- (BOOL) isHipaa;
 
 - (ZNGChannelType * _Nullable)phoneNumberChannelType;
 - (ZNGChannelType * _Nullable)channelTypeWithDisplayName:(NSString * _Nonnull)channelDisplayName;

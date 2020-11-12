@@ -1749,7 +1749,7 @@ enum ZNGConversationSections
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
     // TODO: Replace this ugly HIPAA code (ugly fix ZIN-1809, good fix coming in ZIN-1811)
-    if ([self.conversation.session userHasHipaaAccess]) {
+    if ([self.conversation.session.service isHipaa]) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Attachments Disabled" message:@"This service does not allow image attachments, per HIPAA guidelines." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
         [alert addAction:ok];

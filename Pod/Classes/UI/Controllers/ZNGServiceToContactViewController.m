@@ -1748,6 +1748,15 @@ enum ZNGConversationSections
 // Our super implementation of this is fine, but we must first ensure that there is a channel selected
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
+    // TODO: Replace this ugly HIPAA code (ugly fix ZIN-1809, good fix coming in ZIN-1811)
+    if ([self.conversation.session.service isHipaa]) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Attachments Disabled" message:@"This service does not allow image attachments, per HIPAA guidelines." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    
     if (self.conversation.channel == nil) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please select a channel" message:@"A channel must be selected before sending an image." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];

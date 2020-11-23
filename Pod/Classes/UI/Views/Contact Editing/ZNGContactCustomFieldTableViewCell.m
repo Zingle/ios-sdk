@@ -22,6 +22,7 @@
     NSDateFormatter * dateFormatter;
     NSDateFormatter * timeFormatter24Hour;
     NSDateFormatter * timeFormatter12HourAMPM;
+    NSDateFormatter * dateAndTimeFormatter;
     
     UIColor * defaultTextFieldBackgroundColor;
     UIColor * lockedBackgroundColor;
@@ -52,14 +53,12 @@
 
 - (NSString *) displayStringForDate:(NSDate *)date
 {
-    if (dateFormatter == nil) {
-        dateFormatter = [[NSDateFormatter alloc] init];
-        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-        dateFormatter.dateStyle = NSDateFormatterShortStyle;
-        dateFormatter.timeStyle = NSDateFormatterNoStyle;
+    if ([self isDateType]) {
+        return [dateFormatter stringFromDate:date];
     }
     
-    return [dateFormatter stringFromDate:date];
+    // else we're datetime
+    return [dateAndTimeFormatter stringFromDate:date];
 }
 
 - (void) setEditingLocked:(BOOL)editingLocked
@@ -89,6 +88,8 @@
     
     if ([self isTimeType]) {
         date = [self dateObjectForTimeString:self.customFieldValue.value];
+    } else if ([self isDateAndTimeType]) {
+        date = [dateAndTimeFormatter dateFromString:self.customFieldValue.value];
     } else {
         double dateUTCDouble = [self.customFieldValue.value doubleValue];
         
@@ -108,7 +109,9 @@
     self.textField.backgroundColor = (self.editingLocked) ? lockedBackgroundColor : defaultTextFieldBackgroundColor;
     self.textField.placeholder = self.customFieldValue.customField.displayName;
     
-    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
+    BOOL isDateOrDateTime = ([self isDateType] || [self isDateAndTimeType]);
+    
+    if (isDateOrDateTime) {
         if ([self.customFieldValue.value length] > 0) {
             double dateUTCDouble = [self.customFieldValue.value doubleValue];
             NSDate * date = [NSDate dateWithTimeIntervalSince1970:dateUTCDouble];
@@ -117,10 +120,9 @@
             self.textField.text = @"";
         }
     } else {
-        
         NSString * value = self.customFieldValue.value;
         
-        if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
+        if ([self isTimeType]) {
             NSDate * date = [self dateObjectForTimeString:self.customFieldValue.value];
             value = [timeFormatter12HourAMPM stringFromDate:date];
         } else {
@@ -149,7 +151,7 @@
     BOOL optionsExist = [self.customFieldValue.customField.options count] > 0;
     
     // Do we need a picker?
-    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime]) {
+    if ([self isTimeType] || [self isDateAndTimeType]) {
         [self setupTimeFormatters];
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
@@ -158,9 +160,10 @@
             datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
         }
         
-        datePicker.datePickerMode = UIDatePickerModeTime;
+        datePicker.datePickerMode = ([self isTimeType]) ? UIDatePickerModeTime : UIDatePickerModeDateAndTime;
         datePicker.minuteInterval = 5;
-        [datePicker addTarget:self action:@selector(datePickerSelectedTime:) forControlEvents:UIControlEventValueChanged];
+        SEL selectionSelector = [self isTimeType] ? @selector(datePickerSelectedTime:) : @selector(datePickerSelectedDate:);
+        [datePicker addTarget:self action:selectionSelector forControlEvents:UIControlEventValueChanged];
         self.textField.inputView = datePicker;
         
         // Immediately changing a time picker's time zone causes the UIDatePicker to be disabled and unusable for Apple reasons.
@@ -168,7 +171,8 @@
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             self->datePicker.timeZone = [NSTimeZone localTimeZone];
         });
-    } else if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDate]) {
+    } else if ([self isDateType]) {
+        [self setupTimeFormatters];
         self.textField.clearButtonMode = UITextFieldViewModeAlways;
         datePicker = [[UIDatePicker alloc] init];
         
@@ -216,12 +220,25 @@
         timeFormatter12HourAMPM.dateStyle = NSDateFormatterNoStyle;
         timeFormatter12HourAMPM.timeStyle = NSDateFormatterShortStyle;
     }
+    
+    if (dateAndTimeFormatter == nil) {
+        dateAndTimeFormatter = [[NSDateFormatter alloc] init];
+        dateAndTimeFormatter.dateStyle = NSDateFormatterShortStyle;
+        dateAndTimeFormatter.timeStyle = NSDateFormatterShortStyle;
+    }
+    
+    if (dateFormatter == nil) {
+        dateFormatter = [[NSDateFormatter alloc] init];
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        dateFormatter.dateStyle = NSDateFormatterShortStyle;
+        dateFormatter.timeStyle = NSDateFormatterNoStyle;
+    }
 }
 
 #pragma mark - Data type
 - (BOOL) isDateOrTimeType
 {
-    return ([self isDateType] || [self isTimeType]);
+    return ([self isDateType] || [self isTimeType] || [self isDateAndTimeType]);
 }
 
 - (BOOL) isDateType
@@ -233,6 +250,11 @@
 - (BOOL) isTimeType
 {
     return [self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeTime];
+}
+
+- (BOOL) isDateAndTimeType
+{
+    return [self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeDateTime];
 }
 
 - (NSUInteger) indexOfCurrentValue
@@ -265,18 +287,19 @@
 
 - (void) datePickerSelectedTime:(UIDatePicker *)sender
 {
-    [self selectTime:datePicker.date];
+    [self selectTime:sender.date];
 }
 
 - (void) selectTime:(NSDate *)time
 {
-    self.customFieldValue.value = [timeFormatter24Hour stringFromDate:time];
+    NSDateFormatter * dateFormatter = ([self isTimeType]) ? timeFormatter24Hour : dateAndTimeFormatter;
+    self.customFieldValue.value = [dateFormatter stringFromDate:time];
     [self updateDisplay];
 }
 
 - (void) datePickerSelectedDate:(UIDatePicker *)sender
 {
-    [self selectDate:datePicker.date];
+    [self selectDate:sender.date];
 }
 
 - (void) selectDate:(NSDate *)date
@@ -414,7 +437,7 @@
 {
     if ([self isTimeType]) {
         [self selectInitialTime];
-    } else if ([self isDateType]) {
+    } else if (([self isDateType]) || ([self isDateAndTimeType])) {
         [self selectInitialDate];
     } else {
         [self selectInitialPickerValue];

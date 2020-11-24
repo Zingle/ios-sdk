@@ -43,7 +43,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="32"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="900" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2Hh-Uf-Tjj">
-                                                <rect key="frame" x="315" y="1" width="45" height="30"/>
+                                                <rect key="frame" x="313" y="1" width="47" height="30"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <state key="normal" title="Cancel">
                                                     <color key="titleColor" systemColor="lightTextColor"/>
@@ -53,7 +53,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="In automation: None" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uwr-ad-H0w">
-                                                <rect key="frame" x="36" y="7" width="271" height="18"/>
+                                                <rect key="frame" x="36" y="7" width="269" height="18"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                 <color key="textColor" systemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -94,7 +94,7 @@
                                         <rect key="frame" x="0.0" y="32" width="375" height="32"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2 more messages" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1p-JT-Rr6">
-                                                <rect key="frame" x="123.5" y="4" width="128.5" height="20"/>
+                                                <rect key="frame" x="120" y="4" width="135" height="20"/>
                                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                                 <color key="textColor" systemColor="lightTextColor"/>
                                                 <nil key="highlightedColor"/>
@@ -667,7 +667,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IYt-3Q-GWh">
-                                <rect key="frame" x="50" y="71.5" width="46" height="33"/>
+                                <rect key="frame" x="50" y="72" width="48" height="32"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                 <state key="normal" title="Select">
                                     <color key="titleColor" name="ZNGLinkText"/>
@@ -677,7 +677,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sb2-wd-LW9">
-                                <rect key="frame" x="106" y="77" width="14" height="22"/>
+                                <rect key="frame" x="108" y="77" width="14" height="22"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" image="chevronRight"/>
                                 <connections>
@@ -685,7 +685,7 @@
                                 </connections>
                             </button>
                             <textField hidden="YES" opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ZNP-BR-bAW">
-                                <rect key="frame" x="139" y="71" width="220" height="34"/>
+                                <rect key="frame" x="141" y="71" width="218" height="34"/>
                                 <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no"/>
                                 <connections>
@@ -693,10 +693,10 @@
                                 </connections>
                             </textField>
                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="raY-Ot-4yE">
-                                <rect key="frame" x="0.0" y="122.5" width="375" height="88"/>
+                                <rect key="frame" x="0.0" y="122" width="375" height="88"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SVm-1k-Gft">
-                                        <rect key="frame" x="312" y="-1" width="51" height="33"/>
+                                        <rect key="frame" x="309" y="0.5" width="54" height="32"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Search">
                                             <color key="titleColor" name="ZNGLinkText"/>
@@ -706,7 +706,7 @@
                                         </connections>
                                     </button>
                                     <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="j1t-J3-wcW">
-                                        <rect key="frame" x="327.5" y="5.5" width="20" height="20"/>
+                                        <rect key="frame" x="326" y="6.5" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Room number" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="6v7-ZW-0uV" customClass="JVFloatLabeledTextField">
                                         <rect key="frame" x="16" y="42" width="110" height="46"/>
@@ -726,7 +726,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" horizontalHuggingPriority="100" horizontalCompressionResistancePriority="100" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="HotSOS issue name" textAlignment="natural" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="wk5-1s-9rR" customClass="ZNGContactEditFloatLabeledTextField">
-                                        <rect key="frame" x="16" y="0.0" width="284" height="34"/>
+                                        <rect key="frame" x="16" y="0.0" width="281" height="34"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
                                         <userDefinedRuntimeAttributes>
@@ -930,7 +930,7 @@
                                 <rect key="frame" x="0.0" y="44" width="375" height="32"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Locked Contact" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="liU-S1-boT">
-                                        <rect key="frame" x="129.5" y="6" width="116" height="20"/>
+                                        <rect key="frame" x="126.5" y="6" width="122" height="20"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
@@ -1070,7 +1070,7 @@
                                             <outlet property="titleField" destination="7pc-rO-cRK" id="LBB-Hr-D2Q"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="customField" rowHeight="62" id="B6y-R7-CYB" customClass="ZNGContactCustomFieldTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="fieldText" rowHeight="62" id="B6y-R7-CYB" customClass="ZNGContactTextFieldTableViewCell">
                                         <rect key="frame" x="0.0" y="200" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B6y-R7-CYB" id="Atk-yN-GZd">
@@ -1109,8 +1109,86 @@
                                             <outlet property="textField" destination="Aqf-Zt-MOZ" id="8o5-lB-PoJ"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" rowHeight="62" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="fieldPicker" rowHeight="62" id="Bsu-2c-E5s" customClass="ZNGContactSingleSelectFieldTableViewCell">
                                         <rect key="frame" x="0.0" y="262" width="375" height="62"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bsu-2c-E5s" id="mWt-21-bjR">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="uWk-Xk-0lG" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="45" y="11" width="314" height="40"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="Bsu-2c-E5s" id="Kwd-rg-NlP"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="uWk-Xk-0lG" firstAttribute="trailing" secondItem="mWt-21-bjR" secondAttribute="trailingMargin" id="6X4-mp-kiO"/>
+                                                <constraint firstItem="uWk-Xk-0lG" firstAttribute="centerY" secondItem="mWt-21-bjR" secondAttribute="centerY" id="IYv-2s-sJx"/>
+                                                <constraint firstItem="uWk-Xk-0lG" firstAttribute="top" secondItem="mWt-21-bjR" secondAttribute="topMargin" id="Mms-5C-Ono"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="uWk-Xk-0lG" secondAttribute="bottom" id="XuW-Hd-R68"/>
+                                                <constraint firstItem="uWk-Xk-0lG" firstAttribute="leading" secondItem="mWt-21-bjR" secondAttribute="leadingMargin" constant="29" id="g8I-FS-Xm1"/>
+                                                <constraint firstItem="uWk-Xk-0lG" firstAttribute="leading" secondItem="mWt-21-bjR" secondAttribute="leadingMargin" constant="25" id="kVh-ue-zvX"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="kVh-ue-zvX"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="textField" destination="uWk-Xk-0lG" id="kdm-Gz-03T"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="fieldDateOrTime" rowHeight="62" id="rCn-WO-l5R" customClass="ZNGContactDateOrTimeFieldTableViewCell">
+                                        <rect key="frame" x="0.0" y="324" width="375" height="62"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rCn-WO-l5R" id="WK3-lM-bj1">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OMW-DG-zxY" customClass="ZNGContactEditFloatLabeledTextField">
+                                                    <rect key="frame" x="45" y="11" width="314" height="40"/>
+                                                    <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits"/>
+                                                    <userDefinedRuntimeAttributes>
+                                                        <userDefinedRuntimeAttribute type="number" keyPath="floatingLabelYPadding">
+                                                            <real key="value" value="4"/>
+                                                        </userDefinedRuntimeAttribute>
+                                                    </userDefinedRuntimeAttributes>
+                                                    <connections>
+                                                        <outlet property="delegate" destination="rCn-WO-l5R" id="Lf2-v6-svi"/>
+                                                    </connections>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottomMargin" secondItem="OMW-DG-zxY" secondAttribute="bottom" id="GcP-dj-pOx"/>
+                                                <constraint firstItem="OMW-DG-zxY" firstAttribute="centerY" secondItem="WK3-lM-bj1" secondAttribute="centerY" id="eRq-Uu-i5G"/>
+                                                <constraint firstItem="OMW-DG-zxY" firstAttribute="leading" secondItem="WK3-lM-bj1" secondAttribute="leadingMargin" constant="25" id="phP-Ux-3Y6"/>
+                                                <constraint firstItem="OMW-DG-zxY" firstAttribute="trailing" secondItem="WK3-lM-bj1" secondAttribute="trailingMargin" id="tjw-hA-hKW"/>
+                                                <constraint firstItem="OMW-DG-zxY" firstAttribute="top" secondItem="WK3-lM-bj1" secondAttribute="topMargin" id="vet-tn-gkN"/>
+                                                <constraint firstItem="OMW-DG-zxY" firstAttribute="leading" secondItem="WK3-lM-bj1" secondAttribute="leadingMargin" constant="29" id="wjG-6l-E6J"/>
+                                            </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="phP-Ux-3Y6"/>
+                                                </mask>
+                                            </variation>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="textField" destination="OMW-DG-zxY" id="4j9-3s-kQP"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" rowHeight="62" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
+                                        <rect key="frame" x="0.0" y="386" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lGA-Qd-2RU" id="dZr-Pi-g0x">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -1146,7 +1224,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" rowHeight="62" id="B8x-FV-499">
-                                        <rect key="frame" x="0.0" y="324" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="448" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -1156,7 +1234,7 @@
                                                     <rect key="frame" x="45" y="20" width="22" height="22"/>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="add phone" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fER-8C-5A9">
-                                                    <rect key="frame" x="79" y="22" width="70" height="18"/>
+                                                    <rect key="frame" x="79" y="22" width="72.5" height="18"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="15"/>
                                                     <color key="textColor" name="ZNGLinkText"/>
                                                     <nil key="highlightedColor"/>
@@ -1171,7 +1249,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" rowHeight="62" id="yxw-oU-69S" customClass="ZNGContactPhoneNumberTableViewCell">
-                                        <rect key="frame" x="0.0" y="386" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="510" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yxw-oU-69S" id="kv6-um-SBV">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -1215,7 +1293,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="groups" rowHeight="52" id="Bmi-Oy-7yf" userLabel="groups" customClass="ZNGContactLabelsTableViewCell">
-                                        <rect key="frame" x="0.0" y="448" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="572" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bmi-Oy-7yf" id="vl4-ZA-LlU">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1249,7 +1327,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="labels" rowHeight="52" id="Gtr-ud-SDp" customClass="ZNGContactLabelsTableViewCell">
-                                        <rect key="frame" x="0.0" y="500" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="624" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gtr-ud-SDp" id="fa7-Yj-Urf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1283,20 +1361,20 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="teamAssignment" rowHeight="52" id="Abg-95-nf1" customClass="ZNGAssignTeamTableViewCell">
-                                        <rect key="frame" x="0.0" y="552" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="676" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Abg-95-nf1" id="IQA-Ro-SLd">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😬" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vOQ-wT-pfx">
-                                                    <rect key="frame" x="45" y="9" width="28" height="34"/>
+                                                    <rect key="frame" x="45" y="9.5" width="28" height="33"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="28"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6uA-D6-pXP">
-                                                    <rect key="frame" x="92" y="15" width="93.5" height="22"/>
+                                                    <rect key="frame" x="92" y="15.5" width="96" height="21"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1325,14 +1403,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="userAssignment" rowHeight="52" id="xjR-dj-t9B" customClass="ZNGAssignUserTableViewCell">
-                                        <rect key="frame" x="0.0" y="604" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="728" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xjR-dj-t9B" id="8SJ-xk-dU0">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Team Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0jS-BD-iG2">
-                                                    <rect key="frame" x="100" y="15" width="93.5" height="22"/>
+                                                    <rect key="frame" x="100" y="15.5" width="96" height="21"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1369,14 +1447,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="unassigned" rowHeight="52" id="7zD-nJ-pvM" customClass="ZNGAssignUserTableViewCell">
-                                        <rect key="frame" x="0.0" y="656" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="780" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7zD-nJ-pvM" id="fWO-Zj-3Wo">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Unassigned" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qKD-A7-hvH">
-                                                    <rect key="frame" x="100" y="15" width="91" height="22"/>
+                                                    <rect key="frame" x="100" y="15.5" width="95.5" height="21"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="18"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
@@ -1411,14 +1489,14 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="noEvents" rowHeight="30" id="rWt-gE-abB" customClass="ZNGContactEventTableViewCell">
-                                        <rect key="frame" x="0.0" y="708" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="832" width="375" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rWt-gE-abB" id="bJK-ww-iGq">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="388-gi-zcm">
-                                                    <rect key="frame" x="46" y="3" width="62.5" height="24"/>
+                                                    <rect key="frame" x="46" y="3" width="63.5" height="24"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
@@ -1433,19 +1511,19 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="moreEvents" rowHeight="30" id="ZOZ-ni-cPE" customClass="ZNGContactMoreEventsTableViewCell">
-                                        <rect key="frame" x="0.0" y="738" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="862" width="375" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZOZ-ni-cPE" id="Bik-Fc-hlz">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="View more events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t2m-hG-qfW">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="View more events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t2m-hG-qfW">
                                                     <rect key="frame" x="140" y="8" width="95" height="14"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="12"/>
                                                     <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="c38-fj-bfu">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="chevronRight" translatesAutoresizingMaskIntoConstraints="NO" id="c38-fj-bfu">
                                                     <rect key="frame" x="345" y="8" width="14" height="14"/>
                                                 </imageView>
                                             </subviews>
@@ -1487,13 +1565,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Contact" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsLetterSpacingToFitWidth="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ci6-Gc-8Uf">
-                                        <rect key="frame" x="156" y="10" width="63" height="22"/>
+                                        <rect key="frame" x="155.5" y="11" width="64.5" height="21"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5j-nJ-1Sw">
-                                        <rect key="frame" x="16" y="5" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="6" width="53" height="32"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1503,7 +1581,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="900" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EkH-fL-ci7">
-                                        <rect key="frame" x="324" y="5" width="35" height="33"/>
+                                        <rect key="frame" x="321" y="6" width="38" height="32"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Save">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1588,13 +1666,13 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select Tag" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M5h-kA-dBV">
-                                        <rect key="frame" x="147.5" y="10" width="80" height="22"/>
+                                        <rect key="frame" x="145.5" y="11" width="84" height="21"/>
                                         <fontDescription key="fontDescription" name="Lato-Semibold" family="Lato" pointSize="18"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fYS-Oy-CKN">
-                                        <rect key="frame" x="16" y="5" width="51" height="33"/>
+                                        <rect key="frame" x="16" y="6" width="53" height="32"/>
                                         <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="17"/>
                                         <state key="normal" title="Cancel">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1758,25 +1836,13 @@
     </scenes>
     <designables>
         <designable name="6v7-ZW-0uV">
-            <size key="intrinsicContentSize" width="115" height="34"/>
+            <size key="intrinsicContentSize" width="117.5" height="50"/>
         </designable>
-        <designable name="7pc-rO-cRK">
-            <size key="intrinsicContentSize" width="55.5" height="34"/>
-        </designable>
-        <designable name="Aqf-Zt-MOZ">
+        <designable name="OMW-DG-zxY">
             <size key="intrinsicContentSize" width="32" height="34"/>
         </designable>
-        <designable name="Ljm-8I-NYe">
-            <size key="intrinsicContentSize" width="95.5" height="34"/>
-        </designable>
-        <designable name="Mvs-lL-jd2">
+        <designable name="uWk-Xk-0lG">
             <size key="intrinsicContentSize" width="32" height="34"/>
-        </designable>
-        <designable name="kbt-DW-Nbq">
-            <size key="intrinsicContentSize" width="93.5" height="34"/>
-        </designable>
-        <designable name="wk5-1s-9rR">
-            <size key="intrinsicContentSize" width="149.5" height="34"/>
         </designable>
     </designables>
     <inferredMetricsTieBreakers>

@@ -421,9 +421,9 @@ static NSString * const EventCellId = @"event";
 #pragma mark - IBActions
 - (void) saveAnyEditsInProgress
 {
-    for (ZNGContactEditTableViewCell * cell in [self.tableView visibleCells]) {
-        if ([cell isKindOfClass:[ZNGContactEditTableViewCell class]]) {
-            [cell applyChangesIfFirstResponder];
+    for (ZNGContactCustomFieldTableViewCell * cell in [self.tableView visibleCells]) {
+        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
+            [cell applyInProgressChanges];
         }
     }
 }
@@ -920,8 +920,9 @@ static NSString * const EventCellId = @"event";
         {
             NSArray<ZNGContactFieldValue *> * customFields = (indexPath.section == ContactSectionDefaultCustomFields) ? defaultCustomFields : optionalCustomFields;
             
-            ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
             ZNGContactFieldValue * customFieldValue = customFields[indexPath.row];
+            NSString * cellId = [[ZNGContactCustomFieldTableViewCell class] cellReuseIdForCustomFieldValue:customFieldValue];
+            ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
             cell.customFieldValue = customFieldValue;
             cell.editingLocked = [self.contact editingCustomFieldIsLocked:customFieldValue];
             return cell;

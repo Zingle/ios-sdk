@@ -10,10 +10,30 @@
 @class JVFloatLabeledTextField;
 @class ZNGContactFieldValue;
 
-@interface ZNGContactCustomFieldTableViewCell : ZNGContactEditTableViewCell <UITextFieldDelegate, UIPickerViewDelegate, UIPickerViewDataSource>
+@protocol ZNGContactFieldEditDelegate <NSObject>
+- (void) contactFieldCell:(ZNGContactEditTableViewCell * _Nonnull)cell valueChanged:(ZNGContactFieldValue * _Nonnull)contactFieldValue;
+@end
 
-@property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
+@interface ZNGContactCustomFieldTableViewCell : ZNGContactEditTableViewCell
 
-@property (nonatomic, strong) ZNGContactFieldValue * customFieldValue;
++ (NSString * _Nonnull) cellReuseIdForCustomFieldValue:(ZNGContactFieldValue * _Nonnull)fieldValue;
+
+@property (nonatomic, weak, nullable) id <ZNGContactFieldEditDelegate> delegate;
+@property (nonatomic, strong, nullable) ZNGContactFieldValue * customFieldValue;
+
+/**
+ *  Instructs the cell to write any in-progress (read: input is first responder) changes.
+ */
+- (void) applyInProgressChanges;
+
+/**
+ *  Called whenever the custom field value object is set (NOT when the text `.value` is changed)
+ */
+- (void) configureInput;
+
+/**
+ *  Updates UI to reflect current value of `self.customFieldValue.value`
+ */
+- (void) updateDisplay;
 
 @end

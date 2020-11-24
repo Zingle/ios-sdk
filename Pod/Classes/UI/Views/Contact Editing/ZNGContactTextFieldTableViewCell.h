@@ -5,11 +5,11 @@
 //  Created by Jason Neel on 11/23/20.
 //
 
-#import <ZingleSDK/ZingleSDK.h>
+#import "ZNGContactCustomFieldTableViewCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZNGContactTextFieldTableViewCell : ZNGContactCustomFieldTableViewCell
+@interface ZNGContactTextFieldTableViewCell : ZNGContactCustomFieldTableViewCell <UITextFieldDelegate>
 
 @property (nonatomic, strong) IBOutlet JVFloatLabeledTextField * textField;
 

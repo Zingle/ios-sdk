@@ -186,7 +186,6 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self repairStupidBrokenDatePicker:datePicker];
-    [self userSelectedDateOrTime:datePicker];
 }
 
 // There is some Apple-style wackiness going on in iOS 11 where time UIDatePickers become disabled and unusable

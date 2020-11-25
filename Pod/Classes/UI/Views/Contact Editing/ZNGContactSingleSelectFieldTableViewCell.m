@@ -84,7 +84,6 @@
     }
     
     [pickerView selectRow:initialIndex inComponent:0 animated:NO];
-    [self pickerView:pickerView didSelectRow:initialIndex inComponent:0];
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField

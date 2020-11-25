@@ -44,7 +44,8 @@ static NSString * const CellIdIos14DateOrTime = @"fieldDateOrTime_iOS14";
     NSArray <NSString *> * dateOrTimeTypes = @[
         ZNGContactFieldDataTypeDate,
         ZNGContactFieldDataTypeTime,
-        ZNGContactFieldDataTypeDateTime
+        ZNGContactFieldDataTypeDateTime,
+        ZNGContactFieldDataTypeAnniversary,
     ];
     
     if ([spinnyTypes containsObject:type]) {

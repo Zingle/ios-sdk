@@ -14,6 +14,7 @@ extern NSString * const ZNGContactFieldDataTypeString;
 extern NSString * const ZNGContactFieldDataTypeNumber;
 extern NSString * const ZNGContactFieldDataTypeBool;
 extern NSString * const ZNGContactFieldDataTypeDate;
+extern NSString * const ZNGContactFieldDataTypeAnniversary;
 extern NSString * const ZNGContactFieldDataTypeTime;
 extern NSString * const ZNGContactFieldDataTypeDateTime;
 extern NSString * const ZNGContactFieldDataTypeSingleSelect;

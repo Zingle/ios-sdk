@@ -27,7 +27,7 @@
     
     self.textField.placeholder = self.customFieldValue.customField.displayName;
     self.textField.enabled = !self.editingLocked;
-    self.textField.clearButtonMode = UITextFieldViewModeNever;
+    self.textField.clearButtonMode = UITextFieldViewModeAlways;
     
     if ([self numericOnly]) {
         self.textField.keyboardType = UIKeyboardTypeNumberPad;

@@ -26,7 +26,6 @@
     pickerView.dataSource = self;
     self.textField.inputView = pickerView;
     self.textField.clearButtonMode = UITextFieldViewModeAlways;
-
 }
 
 - (void) updateDisplay
@@ -34,10 +33,22 @@
     [super updateDisplay];
     
     NSUInteger index = [self indexOfCurrentValue];
-    
-    if (index != NSNotFound) {
-        [pickerView selectRow:index inComponent:0 animated:NO];
+
+    if (index == NSNotFound) {
+        self.textField.text = nil;
+        [pickerView selectRow:0 inComponent:0 animated:NO];
+        return;
     }
+    
+    NSArray <NSString *> * options = [self availableDisplayNames];
+    
+    if (index >= [options count]) {
+        SBLogWarning(@"Out of bounds showing selection #(%d) from %d available options for %@", (int)index, (int)[options count], self.customFieldValue.customField.displayName);
+        return;
+    }
+    
+    [pickerView selectRow:index inComponent:0 animated:NO];
+    self.textField.text = options[index];
 }
 
 - (void) configureInput
@@ -58,13 +69,22 @@
 #pragma mark - Text field delegate
 - (void) textFieldDidBeginEditing:(UITextField *)textField
 {
-    if ([self.customFieldValue.value length] == 0) {
-        NSUInteger selectionIndex = [self indexOfCurrentValue];
+    if ([[self availableDisplayNames] count] == 0) {
+        return;
+    }
+    
+    NSUInteger initialIndex = 0;
+    
+    if ([self.customFieldValue.value length] > 0) {
+        NSUInteger currentIndex = [self indexOfCurrentValue];
         
-        if (selectionIndex != NSNotFound) {
-            [pickerView selectRow:selectionIndex inComponent:0 animated:NO];
+        if (currentIndex != NSNotFound) {
+            initialIndex = currentIndex;
         }
     }
+    
+    [pickerView selectRow:initialIndex inComponent:0 animated:NO];
+    [self pickerView:pickerView didSelectRow:initialIndex inComponent:0];
 }
 
 - (void) textFieldDidEndEditing:(UITextField *)textField
@@ -74,7 +94,34 @@
     }
 }
 
+- (BOOL) textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string
+{
+    // Disallow manual typing since we have enumerated options
+    return NO;
+}
+
 #pragma mark - UIPickerView handling
+- (NSArray <NSString *> *) availableDisplayNames
+{
+    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
+        return [self booleanSelections];
+    }
+    
+    NSArray <ZNGFieldOption *> * options = self.customFieldValue.customField.options;
+    
+    if ([options count] == 0) {
+        return @[];
+    }
+    
+    NSMutableArray <NSString *> * optionNames = [[NSMutableArray alloc] initWithCapacity:[options count]];
+    
+    [options enumerateObjectsUsingBlock:^(ZNGFieldOption * _Nonnull option, NSUInteger i, BOOL * _Nonnull stop) {
+        [optionNames addObject:option.displayName ?: @""];
+    }];
+    
+    return optionNames;
+}
+
 - (NSUInteger) indexOfCurrentValue
 {
     if ([self.customFieldValue.value length] == 0) {
@@ -103,21 +150,24 @@
     return @[@"No", @"Yes"];
 }
 
-// When the user starts editing a bool custom field with no existing value, what should we show before they move the picker?
-- (NSString *) initialBooleanSelection
-{
-    return @"Yes";
-}
-
 - (void) pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
+    NSArray <NSString *> * optionNames = [self availableDisplayNames];
+    
+    if (row >= [optionNames count]) {
+        self.customFieldValue.value = nil;
+        [self updateDisplay];
+        return;
+    }
+    
     NSString * value;
     
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        value = [self booleanSelections][row];
+        value = ([optionNames[row] boolValue]) ? @"true" : @"false";
     } else {
-        value = [self.customFieldValue.customField.options[row] value];
-        self.customFieldValue.selectedCustomFieldOptionId = [self.customFieldValue.customField.options[row] optionId];
+        ZNGFieldOption * option = self.customFieldValue.customField.options[row];
+        self.customFieldValue.selectedCustomFieldOptionId = option.optionId;
+        value = option.value;
     }
     
     self.customFieldValue.value = value;
@@ -131,25 +181,19 @@
 
 - (NSInteger) pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        return [[self booleanSelections] count];
-    }
-    
-    return [self.customFieldValue.customField.options count];
+    return [[self availableDisplayNames] count];
 }
 
 - (NSString *) pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        return [self booleanSelections][row];
-    }
+    NSArray <NSString *> * options = [self availableDisplayNames];
     
-    if (row >= [self.customFieldValue.customField.options count]) {
-        SBLogError(@"Out of bounds when retrieving single select custom field picker options.  %lld >= our total of %llu options", (long long)row, (unsigned long long)[self.customFieldValue.customField.options count]);
+    if (row >= [options count]) {
+        SBLogError(@"Out of bounds when retrieving single select custom field picker options.  %lld >= our total of %llu options", (long long)row, (unsigned long long)[options count]);
         return nil;
     }
     
-    return [self.customFieldValue.customField.options[row] displayName];
+    return options[row];
 }
 
 @end

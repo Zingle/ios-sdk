@@ -43,8 +43,8 @@
     timeFormatterReadable.timeStyle = NSDateFormatterShortStyle;
     
     dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-    dateFormatter.timeStyle = NSDateFormatterMediumStyle;
+    dateFormatter.dateStyle = NSDateFormatterLongStyle;
+    dateFormatter.timeStyle = NSDateFormatterShortStyle;
     
     self.textField.inputView = datePicker;
 }
@@ -65,13 +65,13 @@
     //  decision to represent dates as epoch timestamps in the contact field API.
     
     if ([type isEqualToString:ZNGContactFieldDataTypeDate]) {
-        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.dateStyle = NSDateFormatterLongStyle;
         dateFormatter.timeStyle = NSDateFormatterNoStyle;
         dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         datePicker.datePickerMode = UIDatePickerModeDate;
     } else if ([type isEqualToString:ZNGContactFieldDataTypeAnniversary]) {
-        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.dateStyle = NSDateFormatterLongStyle;
         dateFormatter.timeStyle = NSDateFormatterNoStyle;
         dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
@@ -79,12 +79,14 @@
     } else if ([type isEqualToString:ZNGContactFieldDataTypeTime]) {
         datePicker.datePickerMode = UIDatePickerModeTime;
         datePicker.timeZone = [NSTimeZone localTimeZone];
-    } else {
+    } else if ([type isEqualToString:ZNGContactFieldDataTypeDateTime]) {
         dateFormatter.dateStyle = NSDateFormatterMediumStyle;
-        dateFormatter.timeStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterShortStyle;
         dateFormatter.timeZone = [NSTimeZone localTimeZone];
         datePicker.datePickerMode = UIDatePickerModeDateAndTime;
         datePicker.timeZone = [NSTimeZone localTimeZone];
+    } else {
+        SBLogWarning(@"Unrecognized date or time data type: %@", type);
     }
     
     [self updateDisplay];
@@ -119,6 +121,18 @@
     }
     
     [self repairStupidBrokenDatePicker:datePicker];
+}
+
+- (void) applyInProgressChanges
+{
+    // Override super behavior (that applies the text field value) with a no-op since we are
+    //  manually handling the value via UIDatePicker methods.
+}
+
+- (void) textFieldDidEndEditing:(UITextField *)textField
+{
+    // Override super behavior (that applies the text field value) with a no-op since we are
+    //  manually handling the value via UIDatePicker methods.
 }
 
 // Try multiple methods of parsing the current value as a date
@@ -172,28 +186,31 @@
 - (void)textFieldDidBeginEditing:(UITextField *)textField
 {
     [self repairStupidBrokenDatePicker:datePicker];
+    [self userSelectedDateOrTime:datePicker];
 }
 
 // There is some Apple-style wackiness going on in iOS 11 where time UIDatePickers become disabled and unusable
 //  if their date value is changed or the time zone changed in certain circumstances.  Flopping the date picker
 //  mode back and forth resolves this, though it also blows away the minuteInterval property.
 // The life of an iOS developer is one of shame and terror.
+//
+// As an extra nugget of happiness and sanity, removing this 0 second delay causes the date picker to freeze
+//  itself, but only when a date (not time) field is immediately above the time field, and the IQKeyboardManager-Swift
+//  down arrow is used to access this time field.  It does not happen upward, only downward, and does not happen
+//  for custom fields of any other type.
+// Delaying this magical date picker mode toggle to the next run loop cycle fixes this.
+// I think I need a shower.
 - (void) repairStupidBrokenDatePicker:(UIDatePicker *)datePicker
 {
-    if (datePicker.datePickerMode == UIDatePickerModeTime) {
-        // As an extra nugget of happiness and sanity, removing this 0 second delay causes the date picker to freeze
-        //  itself, but only when a date (not time) field is immediately above the time field, and the IQKeyboardManager-Swift
-        //  down arrow is used to access this time field.  It does not happen upward, only downward, and does not happen
-        //  for custom fields of any other type.
-        // Delaying this magical date picker mode toggle to the next run loop cycle fixes this.
-        // I think I need a shower.
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSInteger interval = datePicker.minuteInterval;
-            datePicker.datePickerMode = UIDatePickerModeDate;
-            datePicker.datePickerMode = UIDatePickerModeTime;
-            datePicker.minuteInterval = interval;
-        });
-    }
+    UIDatePickerMode mode = datePicker.datePickerMode;
+    UIDatePickerMode otherMode = (mode == UIDatePickerModeDate) ? UIDatePickerModeTime : UIDatePickerModeDate;
+    
+    dispatch_after(DISPATCH_TIME_NOW, dispatch_get_main_queue(), ^{
+        NSInteger interval = datePicker.minuteInterval;
+        datePicker.datePickerMode = otherMode;
+        datePicker.datePickerMode = mode;
+        datePicker.minuteInterval = interval;
+    });
 }
 
 @end

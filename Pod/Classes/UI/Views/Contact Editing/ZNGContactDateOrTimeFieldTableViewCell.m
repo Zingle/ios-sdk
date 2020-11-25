@@ -43,8 +43,8 @@
     timeFormatterReadable.timeStyle = NSDateFormatterShortStyle;
     
     dateFormatter = [[NSDateFormatter alloc] init];
-    dateFormatter.dateStyle = NSDateFormatterShortStyle;
-    dateFormatter.timeStyle = NSDateFormatterShortStyle;
+    dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+    dateFormatter.timeStyle = NSDateFormatterMediumStyle;
     
     self.textField.inputView = datePicker;
 }
@@ -61,18 +61,33 @@
     
     NSString * type = self.customFieldValue.customField.dataType;
     
+    // Note that both dates and anniversaries use UTC time zone due to the bizarre
+    //  decision to represent dates as epoch timestamps in the contact field API.
+    
     if ([type isEqualToString:ZNGContactFieldDataTypeDate]) {
-        // The API weirdly uses UTC timestamps for naked dates.
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
         dateFormatter.timeStyle = NSDateFormatterNoStyle;
         dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        datePicker.datePickerMode = UIDatePickerModeDate;
+    } else if ([type isEqualToString:ZNGContactFieldDataTypeAnniversary]) {
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterNoStyle;
+        dateFormatter.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+        datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         datePicker.datePickerMode = UIDatePickerModeDate;
     } else if ([type isEqualToString:ZNGContactFieldDataTypeTime]) {
         datePicker.datePickerMode = UIDatePickerModeTime;
+        datePicker.timeZone = [NSTimeZone localTimeZone];
     } else {
-        dateFormatter.timeStyle = NSDateFormatterShortStyle;
+        dateFormatter.dateStyle = NSDateFormatterMediumStyle;
+        dateFormatter.timeStyle = NSDateFormatterMediumStyle;
         dateFormatter.timeZone = [NSTimeZone localTimeZone];
         datePicker.datePickerMode = UIDatePickerModeDateAndTime;
+        datePicker.timeZone = [NSTimeZone localTimeZone];
     }
+    
+    [self updateDisplay];
 }
 
 - (void) updateDisplay
@@ -88,7 +103,7 @@
             self.textField.text = displayText;
         } else {
             // Do a formatting sanity check to keep styling consistent, if possible.
-            NSDate * date = [dateFormatter dateFromString:self.customFieldValue.value];
+            NSDate * date = [self ambitiouslyInterpretedDate];
             
             if (date != nil) {
                 self.textField.text = [dateFormatter stringFromDate:date];
@@ -102,6 +117,28 @@
         datePicker.date = [NSDate date];
         self.textField.text = nil;
     }
+    
+    [self repairStupidBrokenDatePicker:datePicker];
+}
+
+// Try multiple methods of parsing the current value as a date
+- (NSDate *) ambitiouslyInterpretedDate
+{
+    NSDate * date = [dateFormatter dateFromString:self.customFieldValue.value];
+    
+    if (date == nil) {
+        date = [timeFormatter24Hour dateFromString:self.customFieldValue.value];
+    }
+    
+    if (date == nil) {
+        long long epochNumber = [self.customFieldValue.value longLongValue];
+        
+        if (epochNumber > 0) {
+            date = [NSDate dateWithTimeIntervalSince1970:epochNumber];
+        }
+    }
+    
+    return date;
 }
 
 - (void) userSelectedDateOrTime:(UIDatePicker *)picker
@@ -121,7 +158,8 @@
     NSString * type = self.customFieldValue.customField.dataType;
     
     if (([type isEqualToString:ZNGContactFieldDataTypeDate])
-        || ([type isEqualToString:ZNGContactFieldDataTypeDateTime])) {
+        || ([type isEqualToString:ZNGContactFieldDataTypeDateTime])
+        || ([type isEqualToString:ZNGContactFieldDataTypeAnniversary])) {
         
         // Return epoch seconds in string form
         return [@((NSUInteger)[date timeIntervalSince1970]) stringValue];

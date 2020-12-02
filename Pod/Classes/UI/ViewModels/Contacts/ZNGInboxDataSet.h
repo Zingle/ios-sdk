@@ -19,6 +19,7 @@ typedef enum {
 
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldContactCreatedAt;
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastMessageCreatedAt;
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldUnconfirmedAt;
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastName;
 extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionAscending;
 extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionDescending;

@@ -37,6 +37,7 @@ static NSString * const ParameterValueGreaterThanZero      = @"greater_than(0)";
 
 NSString * const ZNGInboxDataSetSortFieldContactCreatedAt = @"created_at";
 NSString * const ZNGInboxDataSetSortFieldLastMessageCreatedAt = @"last_message_created_at";
+NSString * const ZNGInboxDataSetSortFieldUnconfirmedAt = @"unconfirmed_at";
 NSString * const ZNGInboxDataSetSortFieldLastName = @"last_name";
 NSString * const ZNGInboxDataSetSortDirectionAscending = @"asc";
 NSString * const ZNGInboxDataSetSortDirectionDescending = @"desc";

@@ -137,17 +137,19 @@
             
             if (uuidRange.location != NSNotFound) {
                 NSString * fieldUuid = [sortField substringWithRange:uuidRange];
+                BOOL foundThisField = NO;
                 
                 for (ZNGContactField * field in session.service.contactCustomFields) {
                     if ([field.contactFieldId isEqualToString:fieldUuid]) {
-                        // We found this field. Continue to next sortField.
-                        continue;
+                        foundThisField = YES;
+                        break;
                     }
                 }
                 
-                // We have a contact field UUID but could not find any field with that UUID in this service.
-                SBLogInfo(@"Field %@ does not exist in the current service, so it can no longer be used for sorting.", fieldUuid);
-                return NO;
+                if (!foundThisField) {
+                    SBLogInfo(@"Field %@ does not exist in the current service, so it can no longer be used for sorting.", fieldUuid);
+                    return NO;
+                }
             }
         }
     }

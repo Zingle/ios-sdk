@@ -371,12 +371,14 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         case NSKeyValueChangeRemoval:
             SBLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
             
-            if (([paths count] == 1) && (!pendingReloadBlockedBySwipe)) {
-                [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
-                [self retainSelection];
-            } else {
+            // TODO: Restore deleteRowsAtIndexPaths:withRowAnimation: after resolving the crash regression
+            //  added with priority inbox/sorting.
+//            if (([paths count] == 1) && (!pendingReloadBlockedBySwipe)) {
+//                [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+//                [self retainSelection];
+//            } else {
                 [self reloadTableData];
-            }
+//            }
 
             break;
             

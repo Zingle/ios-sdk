@@ -180,6 +180,7 @@ static NSString * const HostPropertyName = @"Host";
     NSString * event = @"Inbox filter changed";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"inboxType"] = [inboxData description];
+    properties[@"sorting"] = [inboxData sortFields];
     
     [self _track:event properties:properties];
 }

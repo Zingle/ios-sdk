@@ -45,6 +45,11 @@
 
 - (void)refresh:(nullable UIRefreshControl *)refreshControl;
 
+// Internal method used to delete rows. Can be overriden by subclasses with more table data to manage.
+// This is some pain that comes from having a split implementation, with the subclass managing empty states
+//  via new table sections.
+- (void) deleteRowsAtPaths:(NSArray <NSIndexPath *> * _Nonnull)paths withAnimation:(UITableViewRowAnimation)animation;
+
 /**
  *  The data set that will be used if the view appears without any current data.  Defaults to a new ZNGInboxDataSet.
  */

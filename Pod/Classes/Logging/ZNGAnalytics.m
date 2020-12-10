@@ -187,7 +187,7 @@ static NSString * const HostPropertyName = @"Host";
 
 - (void) _trackSelectedInboxSort:(NSString *)type
 {
-    NSString * event = @"Inbox sort order changed";
+    NSString * event = @"Inbox sorted";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"type"] = type;
     
@@ -211,7 +211,7 @@ static NSString * const HostPropertyName = @"Host";
 
 - (void) trackToggledOpenFilter:(BOOL)open
 {
-    NSString * event = @"Open/closed filter toggled";
+    NSString * event = @"Conversation status tab selected";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"toOpen"] = @(open);
     
@@ -220,7 +220,7 @@ static NSString * const HostPropertyName = @"Host";
 
 - (void) trackToggledUnreadFilter:(BOOL)unread
 {
-    NSString * event = @"Unread filter toggled";
+    NSString * event = @"Unread toggled";
     NSMutableDictionary * properties = [self defaultProperties];
     properties[@"on"] = @(unread);
     

@@ -1187,8 +1187,66 @@
                                             <outlet property="textField" destination="OMW-DG-zxY" id="4j9-3s-kQP"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" rowHeight="62" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="fieldInlineDateOrTime" rowHeight="62" id="bWO-tv-ua4" customClass="ZNGContactDateOrTimeInlineTableViewCell">
                                         <rect key="frame" x="0.0" y="386" width="375" height="62"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="bWO-tv-ua4" id="Pxt-wQ-cZM">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xQZ-Te-RVI">
+                                                    <rect key="frame" x="45" y="11" width="314" height="40"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Field Name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1ep-PL-sqm">
+                                                            <rect key="frame" x="6" y="0.0" width="60" height="3.5"/>
+                                                            <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="12"/>
+                                                            <color key="textColor" systemColor="secondaryLabelColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                        <datePicker contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" datePickerMode="dateAndTime" minuteInterval="1" style="compact" translatesAutoresizingMaskIntoConstraints="NO" id="YI9-29-ppM">
+                                                            <rect key="frame" x="0.0" y="6" width="306" height="34"/>
+                                                            <connections>
+                                                                <action selector="userSelectedDate:" destination="bWO-tv-ua4" eventType="valueChanged" id="C3i-Gz-Y45"/>
+                                                            </connections>
+                                                        </datePicker>
+                                                        <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vL9-HT-Mji">
+                                                            <rect key="frame" x="110" y="53" width="20" height="22"/>
+                                                            <color key="tintColor" systemColor="tertiaryLabelColor"/>
+                                                            <state key="normal" image="clear" catalog="system"/>
+                                                            <connections>
+                                                                <action selector="userPressedClear:" destination="bWO-tv-ua4" eventType="touchUpInside" id="4L5-ZQ-SnT"/>
+                                                            </connections>
+                                                        </button>
+                                                    </subviews>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="bottom" secondItem="YI9-29-ppM" secondAttribute="bottom" id="D8I-Yy-wRo"/>
+                                                        <constraint firstItem="vL9-HT-Mji" firstAttribute="centerY" secondItem="YI9-29-ppM" secondAttribute="centerY" id="L1j-ko-9VT"/>
+                                                        <constraint firstItem="1ep-PL-sqm" firstAttribute="top" secondItem="xQZ-Te-RVI" secondAttribute="top" id="Olh-CI-AYR"/>
+                                                        <constraint firstItem="YI9-29-ppM" firstAttribute="trailing" secondItem="vL9-HT-Mji" secondAttribute="leading" constant="12" id="VYu-6T-cVE"/>
+                                                        <constraint firstItem="YI9-29-ppM" firstAttribute="leading" secondItem="xQZ-Te-RVI" secondAttribute="leading" id="Wrd-VW-NYC"/>
+                                                        <constraint firstAttribute="trailing" secondItem="vL9-HT-Mji" secondAttribute="trailing" id="cG1-uO-8pP"/>
+                                                        <constraint firstItem="1ep-PL-sqm" firstAttribute="leading" secondItem="xQZ-Te-RVI" secondAttribute="leading" constant="6" id="xmg-bD-SlO"/>
+                                                        <constraint firstItem="YI9-29-ppM" firstAttribute="top" secondItem="1ep-PL-sqm" secondAttribute="bottom" constant="2" id="z72-74-v8b"/>
+                                                    </constraints>
+                                                </view>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="xQZ-Te-RVI" secondAttribute="trailing" id="1fU-dj-aTP"/>
+                                                <constraint firstItem="xQZ-Te-RVI" firstAttribute="leading" secondItem="Pxt-wQ-cZM" secondAttribute="leadingMargin" constant="29" id="gKJ-b3-2NH"/>
+                                                <constraint firstItem="xQZ-Te-RVI" firstAttribute="top" secondItem="Pxt-wQ-cZM" secondAttribute="topMargin" id="hEr-jz-BRZ"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="xQZ-Te-RVI" secondAttribute="bottom" id="rNI-df-kvL"/>
+                                                <constraint firstItem="xQZ-Te-RVI" firstAttribute="centerY" secondItem="Pxt-wQ-cZM" secondAttribute="centerY" id="tRS-m7-ptH"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="clearButton" destination="vL9-HT-Mji" id="hh1-7d-ea9"/>
+                                            <outlet property="datePicker" destination="YI9-29-ppM" id="10e-fd-zLv"/>
+                                            <outlet property="fieldNameLabel" destination="1ep-PL-sqm" id="mw0-1K-bc7"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="channel" rowHeight="62" id="lGA-Qd-2RU" userLabel="channel" customClass="ZNGContactChannelTableViewCell">
+                                        <rect key="frame" x="0.0" y="448" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="lGA-Qd-2RU" id="dZr-Pi-g0x">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -1224,7 +1282,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="addPhone" rowHeight="62" id="B8x-FV-499">
-                                        <rect key="frame" x="0.0" y="448" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="510" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="B8x-FV-499" id="eLJ-YR-g9r">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -1249,7 +1307,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="phone" rowHeight="62" id="yxw-oU-69S" customClass="ZNGContactPhoneNumberTableViewCell">
-                                        <rect key="frame" x="0.0" y="510" width="375" height="62"/>
+                                        <rect key="frame" x="0.0" y="572" width="375" height="62"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="yxw-oU-69S" id="kv6-um-SBV">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="62"/>
@@ -1293,7 +1351,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="groups" rowHeight="52" id="Bmi-Oy-7yf" userLabel="groups" customClass="ZNGContactLabelsTableViewCell">
-                                        <rect key="frame" x="0.0" y="572" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="634" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Bmi-Oy-7yf" id="vl4-ZA-LlU">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1327,7 +1385,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="labels" rowHeight="52" id="Gtr-ud-SDp" customClass="ZNGContactLabelsTableViewCell">
-                                        <rect key="frame" x="0.0" y="624" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="686" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gtr-ud-SDp" id="fa7-Yj-Urf">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1361,7 +1419,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="teamAssignment" rowHeight="52" id="Abg-95-nf1" customClass="ZNGAssignTeamTableViewCell">
-                                        <rect key="frame" x="0.0" y="676" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="738" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Abg-95-nf1" id="IQA-Ro-SLd">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1403,7 +1461,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="userAssignment" rowHeight="52" id="xjR-dj-t9B" customClass="ZNGAssignUserTableViewCell">
-                                        <rect key="frame" x="0.0" y="728" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="790" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="xjR-dj-t9B" id="8SJ-xk-dU0">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1447,7 +1505,7 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="unassigned" rowHeight="52" id="7zD-nJ-pvM" customClass="ZNGAssignUserTableViewCell">
-                                        <rect key="frame" x="0.0" y="780" width="375" height="52"/>
+                                        <rect key="frame" x="0.0" y="842" width="375" height="52"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7zD-nJ-pvM" id="fWO-Zj-3Wo">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="52"/>
@@ -1489,13 +1547,13 @@
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="noEvents" rowHeight="30" id="rWt-gE-abB" customClass="ZNGContactEventTableViewCell">
-                                        <rect key="frame" x="0.0" y="832" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="894" width="375" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rWt-gE-abB" id="bJK-ww-iGq">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="388-gi-zcm">
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="No events" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="388-gi-zcm">
                                                     <rect key="frame" x="46" y="3" width="62.5" height="24"/>
                                                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -1511,7 +1569,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="moreEvents" rowHeight="30" id="ZOZ-ni-cPE" customClass="ZNGContactMoreEventsTableViewCell">
-                                        <rect key="frame" x="0.0" y="862" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="924" width="375" height="30"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ZOZ-ni-cPE" id="Bik-Fc-hlz">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
@@ -1869,6 +1927,7 @@
     <resources>
         <image name="anonymousAvatarBig" width="64" height="64"/>
         <image name="chevronRight" width="14" height="14"/>
+        <image name="clear" catalog="system" width="128" height="114"/>
         <image name="minusCircle" width="22" height="22"/>
         <image name="plusCircle" width="22" height="22"/>
         <namedColor name="ZNGBrightBackground">
@@ -1895,8 +1954,14 @@
         <systemColor name="lightTextColor">
             <color white="1" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="tertiaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiarySystemFillColor">
             <color red="0.46274509803921571" green="0.46274509803921571" blue="0.50196078431372548" alpha="0.12" colorSpace="custom" customColorSpace="sRGB"/>

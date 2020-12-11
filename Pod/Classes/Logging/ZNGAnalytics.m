@@ -185,6 +185,48 @@ static NSString * const HostPropertyName = @"Host";
     [self _track:event properties:properties];
 }
 
+- (void) _trackSelectedInboxSort:(NSString *)type
+{
+    NSString * event = @"Inbox sorted";
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"type"] = type;
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackSelectedInboxSortNewest
+{
+    [self _trackSelectedInboxSort:@"newest"];
+}
+
+- (void) trackSelectedInboxSortOldest
+{
+    [self _trackSelectedInboxSort:@"oldest"];
+}
+
+- (void) trackSelectedInboxSortCustomField:(NSString *)fieldId
+{
+    [self _trackSelectedInboxSort:@"custom"];
+}
+
+- (void) trackToggledOpenFilter:(BOOL)open
+{
+    NSString * event = @"Conversation status tab selected";
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"toOpen"] = @(open);
+    
+    [self _track:event properties:properties];
+}
+
+- (void) trackToggledUnreadFilter:(BOOL)unread
+{
+    NSString * event = @"Unread toggled";
+    NSMutableDictionary * properties = [self defaultProperties];
+    properties[@"on"] = @(unread);
+    
+    [self _track:event properties:properties];
+}
+
 #pragma mark - Conversation events
 - (void) trackInsertedCustomField:(ZNGContactField *)customField intoConversation:(ZNGConversationServiceToContact *)conversation
 {

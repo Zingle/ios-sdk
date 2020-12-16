@@ -79,7 +79,7 @@
     [super updateDisplay];
     
     self.textField.text = [inputManager displayValue];
-    datePicker.date = [inputManager valueAsDate];
+    datePicker.date = [inputManager valueAsDate] ?: [NSDate date];
     
     [self repairStupidBrokenDatePicker:datePicker];
 }

@@ -17,7 +17,7 @@
 static NSString * const CellIdSpinnySelect = @"fieldPicker";
 static NSString * const CellIdFreeText = @"fieldText";
 static NSString * const CellIdDateOrTime = @"fieldDateOrTime";
-static NSString * const CellIdIos14DateOrTime = @"fieldDateOrTime_iOS14";
+static NSString * const CellIdInlineDateOrTime = @"fieldInlineDateOrTime";
 
 @implementation ZNGContactCustomFieldTableViewCell
 {
@@ -51,10 +51,9 @@ static NSString * const CellIdIos14DateOrTime = @"fieldDateOrTime_iOS14";
     if ([spinnyTypes containsObject:type]) {
         return CellIdSpinnySelect;
     } else if ([dateOrTimeTypes containsObject:type]) {
-        // TODO: Implement in-line pickers
-//        if (@available(iOS 14.0, *)) {
-//            return CellIdIos14DateOrTime;
-//        }
+        if (@available(iOS 14.0, *)) {
+            return CellIdInlineDateOrTime;
+        }
         
         return CellIdDateOrTime;
     }

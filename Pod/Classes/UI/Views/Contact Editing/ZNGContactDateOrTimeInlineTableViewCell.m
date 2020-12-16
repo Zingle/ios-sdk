@@ -9,7 +9,7 @@
 #import "ZNGContactDateOrTimeInputManager.h"
 #import "ZNGContactFieldValue.h"
 
-static const CGFloat noValueAlpha = 0.33;
+static const CGFloat NoValueAlpha = 0.33;
 
 @import SBObjectiveCWrapper;
 
@@ -34,7 +34,6 @@ static const CGFloat noValueAlpha = 0.33;
     
     // Note that both dates and anniversaries use UTC time zone due to the bizarre
     //  decision to represent dates as epoch timestamps in the contact field API.
-    
     if ([type isEqualToString:ZNGContactFieldDataTypeDate]) {
         self.datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         self.datePicker.datePickerMode = UIDatePickerModeDate;
@@ -42,11 +41,11 @@ static const CGFloat noValueAlpha = 0.33;
         self.datePicker.timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
         self.datePicker.datePickerMode = UIDatePickerModeDate;
     } else if ([type isEqualToString:ZNGContactFieldDataTypeTime]) {
+        self.datePicker.timeZone = [NSTimeZone localTimeZone];
         self.datePicker.datePickerMode = UIDatePickerModeTime;
-        self.datePicker.timeZone = [NSTimeZone localTimeZone];
     } else if ([type isEqualToString:ZNGContactFieldDataTypeDateTime]) {
-        self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
         self.datePicker.timeZone = [NSTimeZone localTimeZone];
+        self.datePicker.datePickerMode = UIDatePickerModeDateAndTime;
     } else {
         SBLogWarning(@"Unrecognized date or time data type: %@", type);
     }
@@ -60,13 +59,13 @@ static const CGFloat noValueAlpha = 0.33;
     
     NSDate * date = inputManager.valueAsDate;
     self.datePicker.date = date;
-    self.datePicker.alpha = (date != nil) ? 1.0 : noValueAlpha;
+    self.datePicker.alpha = (date != nil) ? 1.0 : NoValueAlpha;
     self.clearButton.hidden = (date == nil);
 }
 
 - (void) applyInProgressChanges
 {
-    
+    // No-op. We update our value via `userSelectedDate:`.
 }
 
 - (IBAction) userSelectedDate:(UIDatePicker *)datePicker

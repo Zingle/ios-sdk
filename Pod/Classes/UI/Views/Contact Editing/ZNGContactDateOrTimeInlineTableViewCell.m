@@ -58,7 +58,7 @@ static const CGFloat NoValueAlpha = 0.33;
     [super updateDisplay];
     
     NSDate * date = inputManager.valueAsDate;
-    self.datePicker.date = date;
+    self.datePicker.date = date ?: [NSDate date];
     self.datePicker.alpha = (date != nil) ? 1.0 : NoValueAlpha;
     self.clearButton.hidden = (date == nil);
 }

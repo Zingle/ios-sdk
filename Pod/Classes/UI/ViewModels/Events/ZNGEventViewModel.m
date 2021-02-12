@@ -156,7 +156,7 @@ NSString * const ZNGEventTeamMentionAttribute = @"ZNGEventTeamMentionAttribute";
             [text addAttribute:ZNGEventTeamMentionAttribute value:uuid range:range];
         }
         
-        if (self.extraSpaceAroundMentions > 0.0) {
+        if ((self.extraSpaceAroundMentions > 0.0) && (range.length > 0)) {
             // Extra space before the mention
             if (range.location > 0) {
                 [text addAttribute:NSKernAttributeName value:@(self.extraSpaceAroundMentions) range:NSMakeRange(range.location - 1, 1)];

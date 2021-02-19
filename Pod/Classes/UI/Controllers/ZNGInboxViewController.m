@@ -372,7 +372,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
             SBLogVerbose(@"Removing %ld items", (unsigned long)[paths count]);
             
             if (([paths count] == 1) && (!pendingReloadBlockedBySwipe)) {
-                [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
+                [self deleteRowsAtPaths:paths withAnimation:UITableViewRowAnimationTop];
                 [self retainSelection];
             } else {
                 [self reloadTableData];
@@ -394,6 +394,11 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
             // For either an unknown change or a whole array replacement (which we do not expect with non-empty data,) blow away the table and reload it
             [self reloadTableData];
     }
+}
+
+- (void) deleteRowsAtPaths:(NSArray <NSIndexPath *> * _Nonnull)paths withAnimation:(UITableViewRowAnimation)animation
+{
+    [self.tableView deleteRowsAtIndexPaths:paths withRowAnimation:UITableViewRowAnimationTop];
 }
 
 /**

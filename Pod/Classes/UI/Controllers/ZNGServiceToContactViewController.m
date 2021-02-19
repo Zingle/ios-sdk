@@ -161,6 +161,8 @@ enum ZNGConversationSections
 - (void) setupKVO
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyNetworkStatusChanged:) name:ZNGNetworkLookoutStatusChanged object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     [self addObserver:self forKeyPath:KVOLoadedInitialDataPath options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:KVOContext];
     [self addObserver:self forKeyPath:KVOContactChannelsPath options:NSKeyValueObservingOptionNew context:KVOContext];
@@ -671,6 +673,23 @@ enum ZNGConversationSections
             });
         }
     }
+}
+
+#pragma mark - Foreground/background life cycle
+- (void) notifyAppDidEnterBackground:(NSNotification *)notification
+{
+    if (self.hideContactDataInBackground) {
+        self.collectionView.hidden = YES;
+        self.inputToolbar.contentView.channelSelectButton.hidden = YES;
+        self.navigationItem.titleView.hidden = YES;
+    }
+}
+
+- (void) notifyAppWillEnterForeground:(NSNotification *)notification
+{
+    self.collectionView.hidden = NO;
+    self.inputToolbar.contentView.channelSelectButton.hidden = NO;
+    self.navigationItem.titleView.hidden = NO;
 }
 
 #pragma mark - Easter eggs
@@ -1946,6 +1965,15 @@ enum ZNGConversationSections
 // Our super implementation of this is fine, but we must first ensure that there is a channel selected
 - (void) inputToolbar:(ZNGServiceConversationInputToolbar *)toolbar didPressAttachImageButton:(id)sender
 {
+    // TODO: Replace this ugly HIPAA code (ugly fix ZIN-1809, good fix coming in ZIN-1811)
+    if ([self.conversation.session.service isHipaa]) {
+        UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Attachments Disabled" message:@"This service does not allow image attachments, per HIPAA guidelines." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:ok];
+        [self presentViewController:alert animated:YES completion:nil];
+        return;
+    }
+    
     if (self.conversation.channel == nil) {
         UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"Please select a channel" message:@"A channel must be selected before sending an image." preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction * ok = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
@@ -1965,6 +1993,7 @@ enum ZNGConversationSections
         vc.contactClient = self.conversation.contactClient;
         vc.service = self.conversation.service;
         vc.contact = self.conversation.contact;
+        vc.hideContactDataInBackground = self.hideContactDataInBackground;
     } else if ([segue.identifier isEqualToString:@"forward"]) {
         // Build a list of all services available to the current account other than the current one
         NSMutableArray<ZNGService *> * availableServices = [[NSMutableArray alloc] initWithCapacity:[self.conversation.session.availableServices count]];

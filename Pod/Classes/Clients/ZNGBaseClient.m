@@ -61,7 +61,7 @@ NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     SBLogDebug(@"Sending request to %@%@, expecting [%@] in response", self.session.sessionManager.baseURL, path, responseClass);
     SBLogVerbose(@"... with parameters: %@", parameters);
     
-    return [self.session.sessionManager GET:path parameters:parameters progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager GET:path parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -125,7 +125,7 @@ NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 {
     SBLogDebug(@"Sending request to %@%@, expecting %@ in response", self.session.sessionManager.baseURL, path, responseClass);
     
-    return [self.session.sessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager GET:path parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -200,7 +200,7 @@ NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     SBLogDebug(@"PUTting to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
     SBLogVerbose(@"... with parameters: %@", parameters);
     
-    return [self.session.sessionManager PUT:path parameters:parameters success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
+    return [self.session.sessionManager PUT:path parameters:parameters headers:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
         
         NSError* error = nil;
         
@@ -287,7 +287,7 @@ NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
         }
     }
     
-    return [self.session.sessionManager POST:path parameters:params progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager POST:path parameters:params headers:nil progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -352,7 +352,7 @@ NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
     SBLogDebug(@"POSTing to %@%@, expecting %@", self.session.sessionManager.baseURL, path, responseClass);
     SBLogVerbose(@"... with parameters: %@", parameters);
     
-    return [self.session.sessionManager POST:path parameters:parameters progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
+    return [self.session.sessionManager POST:path parameters:parameters headers:nil progress:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nonnull responseObject) {
         
         NSError* error = nil;
         
@@ -416,7 +416,7 @@ NSString * const kJSONParseErrorDomain = @"JSON PARSE ERROR";
 {
     SBLogDebug(@"Sending DELETE to %@%@", self.session.sessionManager.baseURL, path);
     
-    return [self.session.sessionManager DELETE:path parameters:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
+    return [self.session.sessionManager DELETE:path parameters:nil headers:nil success:^(NSURLSessionDataTask* _Nonnull task, id _Nullable responseObject) {
         dispatch_async(self->jsonProcessingQueue, ^{
             NSError* error = nil;
             NSDictionary* statusDict = responseObject[kBaseClientStatus];

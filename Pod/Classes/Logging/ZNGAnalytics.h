@@ -47,6 +47,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Inbox
 - (void) trackConversationFilterSwitch:(ZNGInboxDataSet *)inboxData;
+- (void) trackSelectedInboxSortNewest;
+- (void) trackSelectedInboxSortOldest;
+- (void) trackSelectedInboxSortCustomField:(NSString *)fieldId;
+- (void) trackToggledOpenFilter:(BOOL)open;
+- (void) trackToggledUnreadFilter:(BOOL)unread;
 
 #pragma mark - Conversation events
 - (void) trackInsertedCustomField:(ZNGContactField *)customField intoConversation:(ZNGConversationServiceToContact * __nullable)conversation;

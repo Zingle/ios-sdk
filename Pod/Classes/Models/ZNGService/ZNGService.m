@@ -31,6 +31,7 @@
 NSString * const ZNGServiceFeatureTeams = @"teams";
 NSString * const ZNGServiceFeatureAssignment = @"assignment";
 NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
+NSString * const ZNGServiceFeatureHipaa = @"hipaa";
 
 @implementation ZNGService
 
@@ -78,6 +79,11 @@ NSString * const ZNGServiceFeatureCalendarEvents = @"calendar_events";
 - (BOOL) isTextRelay
 {
     return [self.plan isTextRelay];
+}
+
+- (BOOL) isHipaa
+{
+    return [self.features containsObject:ZNGServiceFeatureHipaa];
 }
 
 + (NSValueTransformer*)accountJSONTransformer

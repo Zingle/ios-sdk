@@ -30,4 +30,14 @@
  */
 - (NSURL * _Nullable) jwtIssuingUrl;
 
+/**
+ *  Is the current user a staff user?
+ */
+- (BOOL) isStaffUser;
+
+/**
+ *  Is the current user a HIPAA user?
+ */
+- (BOOL) isHipaaUser;
+
 @end

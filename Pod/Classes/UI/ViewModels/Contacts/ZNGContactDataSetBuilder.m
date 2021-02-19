@@ -12,6 +12,8 @@
 #import "ZNGLabel.h"
 #import "ZNGContactGroup.h"
 
+@import SBObjectiveCWrapper;
+
 @implementation ZNGContactDataSetBuilder
 
 - (ZNGInboxDataSet *)build
@@ -121,6 +123,36 @@
         
         if (matchingGroupIndex == NSNotFound) {
             return NO;
+        }
+    }
+    
+    // Use a regex just strict enough to identify contact field UUIDs vs. named fields like `last_message_at`
+    NSString * uuidPattern = @"^([-0-9a-f]{8,64})(\\s+(asc)|(desc)\\.?)$";
+    NSRegularExpression * uuidRegex = [[NSRegularExpression alloc] initWithPattern:uuidPattern options:NSRegularExpressionCaseInsensitive error:nil];
+    
+    // Check each sort field to ensure that every field referenced by UUID exists in this session
+    for (NSString * sortField in self.sortFields) {
+        NSTextCheckingResult * result = [uuidRegex firstMatchInString:sortField options:0 range:NSMakeRange(0, [sortField length])];
+        
+        if (result != nil) {
+            NSRange uuidRange = [result rangeAtIndex:1];  // Capture group 1 is the UUID itself without asc/desc
+            
+            if (uuidRange.location != NSNotFound) {
+                NSString * fieldUuid = [sortField substringWithRange:uuidRange];
+                BOOL foundThisField = NO;
+                
+                for (ZNGContactField * field in session.service.contactCustomFields) {
+                    if ([field.contactFieldId isEqualToString:fieldUuid]) {
+                        foundThisField = YES;
+                        break;
+                    }
+                }
+                
+                if (!foundThisField) {
+                    SBLogInfo(@"Field %@ does not exist in the current service, so it can no longer be used for sorting.", fieldUuid);
+                    return NO;
+                }
+            }
         }
     }
     

@@ -236,7 +236,7 @@
     [httpSession applyJwt:self.session.jwt];
     
     NSString * path = [NSString stringWithFormat:@"services/%@", session.service.serviceId];
-    [httpSession GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [httpSession GET:path parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         if (([responseObject isKindOfClass:[NSDictionary class]]) && ([responseObject[@"id"] isKindOfClass:[NSNumber class]])) {
             // We found an ID!
             self->currentServiceNumericId = [responseObject[@"id"] intValue];

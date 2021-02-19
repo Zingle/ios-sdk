@@ -1,7 +1,10 @@
+# NOTICE: Deprecated - DO NOT USE
+**This SDK is deprecated.  It is no longer maintained nor supported for customer use.**
+
+See the [zingle-chat-ios](https://github.com/Zingle/zingle-chat-ios) repository for the current version of the iOS in-app chat SDK.
+
 # Zingle iOS SDK
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/ZingleSDK.svg)](https://img.shields.io/cocoapods/v/ZingleSDK.svg)
-[![Platform](https://img.shields.io/cocoapods/p/ZingleSDK.svg?style=flat)](http://cocoadocs.org/docsets/ZingleSDK)
-[![Twitter](https://img.shields.io/badge/twitter-@zingleme-blue.svg?style=flat)](https://twitter.com/zingleme)
 
 ## Overview
 
@@ -71,13 +74,13 @@ session = [ZingleSDK contactSessionWithToken:myToken
 					 	   			     key:myKey
 							   channelTypeId:channelId
 							    channelValue:username];
-								
+
 // Optionally set an error-handling block.
 // (You may alternatively use the completion block with its error property if you only wish to explicitly handle connection errors.)
 session.errorHandler = ^(ZNGError * _Nonnull error) {
     // Do something with the error
 };
-	
+
 // Connect, optionally providing a block to be called once all available contact services have been found
 [session connectWithContactServiceChooser:^ZNGContactService * _Nullable(NSArray<ZNGContactService *> * _Nonnull availableContactServices) {
     // Choose a contact service and return it immediately or present the user with a choice and return nil
@@ -99,7 +102,7 @@ void userDidSelectContactService:(ZNGContactService *)selectedContactService
 			// Something went wrong
 		} else {
 			// You did it!
-			
+
 			// If you would like to access the data directly, you may grab a conversation object.
 		    ZNGConversation * conversation = session.conversation;
 
@@ -145,7 +148,7 @@ void userDidSelectContactService:(ZNGContactService *)selectedContactService
 			NSLog(@"Something went wrong")
 		} else {
 			// You did it!
-			
+
 			// If you would like to access the data directly, you may grab a conversation object.
 		    ZNGConversation * conversation = session.conversation;
 

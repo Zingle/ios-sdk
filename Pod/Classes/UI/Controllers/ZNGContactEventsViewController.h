@@ -18,6 +18,13 @@
  */
 @property (nonatomic, strong, nullable) ZNGConversationServiceToContact * conversation;
 
+/**
+ *  Optionally hide all contact data when the app is entering the background.
+ *
+ *  Defaults to NO.
+ */
+@property (nonatomic, assign) BOOL hideContactDataInBackground;
+
 @property (nonatomic, strong, nullable) IBOutlet UILabel * titleLabel;
 @property (nonatomic, strong, nullable) IBOutlet UITableView * tableView;
 

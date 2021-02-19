@@ -74,14 +74,20 @@ enum TopSectionRows {
         self.tableView.tableHeaderView = searchController.searchBar;
     }
     
-    if ([[self.contact fullName] length] > 0) {
-        self.title = [NSString stringWithFormat:@"Assign %@", [self.contact fullName]];
-    }
-    
+    [self updateTitle];
     [self updateDataForSearchText:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyKeyboardFrameChanged:) name:UIKeyboardDidChangeFrameNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyKeyboardWillDismiss:) name:UIKeyboardWillHideNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void) updateTitle
+{
+    if ([[self.contact fullName] length] > 0) {
+        self.title = [NSString stringWithFormat:@"Assign %@", [self.contact fullName]];
+    }
 }
 
 - (void) dealloc
@@ -89,6 +95,20 @@ enum TopSectionRows {
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
+#pragma mark - Foreground/background life cycle
+- (void) notifyAppDidEnterBackground:(NSNotification *)notification
+{
+    if (self.hideContactDataInBackground) {
+        self.title = nil;
+    }
+}
+
+- (void) notifyAppWillEnterForeground:(NSNotification *)notification
+{
+    [self updateTitle];
+}
+
+#pragma mark - Keyboard/Inset sizing
 - (void) notifyKeyboardFrameChanged:(NSNotification *)notification
 {
     CGSize keyboardSize = [notification.userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
@@ -107,6 +127,7 @@ enum TopSectionRows {
     self.tableView.scrollIndicatorInsets = self.tableView.contentInset;
 }
 
+#pragma mark -
 - (void) updateDataForSearchText:(NSString *)searchText
 {
     if ([searchText length] == 0) {
@@ -198,6 +219,10 @@ enum TopSectionRows {
         UITableViewHeaderFooterView * header = (UITableViewHeaderFooterView *)view;
         header.textLabel.textAlignment = NSTextAlignmentCenter;
         header.textLabel.textColor = [UIColor colorWithWhite:0.75 alpha:1.0];
+        
+        if (@available(iOS 13, *)) {
+            header.textLabel.textColor = [UIColor secondaryLabelColor];
+        }
     }
 }
 

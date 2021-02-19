@@ -19,6 +19,7 @@ typedef enum {
 
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldContactCreatedAt;
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastMessageCreatedAt;
+extern NSString * _Nonnull const ZNGInboxDataSetSortFieldUnconfirmedAt;
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastName;
 extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionAscending;
 extern NSString * _Nonnull const ZNGInboxDataSetSortDirectionDescending;
@@ -88,8 +89,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL allowContactsWithNoMessages;
 
 /**
- *  The fields used to sort contacts.  May include "asc" or "desc" after a space to define order.
- *  e.g. "last_name asc", "created_at desc"
+ *  The fields (by name for some stock options or UUID for any date/datetime contact field) used to sort contacts.
+ *  May include "asc" or "desc" after a space to define order.
+ *  e.g. "last_name asc", "created_at desc", "264da6d4-f555-4e35-bf86-c42f8dc47357 asc"
  *
  *  Defaults to ["last_message_created_at desc"]
  */

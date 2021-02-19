@@ -27,6 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
                    success:(void (^_Nullable)(NSString * jwt))success
                    failure:(void (^_Nullable)(NSError * error))failure;
 
+- (void) acquireJwtFromOauthProvider:(NSString *)oauthProvider
+                               token:(NSString *)token
+                             success:(void (^_Nullable)(NSString * jwt))success
+                             failure:(void (^_Nullable)(NSError * error))failure;
+
 - (void) refreshJwt:(NSString *)jwt
             success:(void (^_Nullable)(NSString * jwt))success
             failure:(void (^_Nullable)(NSError * error))failure;

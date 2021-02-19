@@ -114,6 +114,11 @@
 - (void) logout NS_REQUIRES_SUPER;
 
 /**
+ *  Ends the current session, optionally keeping push notifications working.
+ */
+- (void) logoutPreservingPushNotifications:(BOOL)keepPushSubscriptions NS_REQUIRES_SUPER;
+
+/**
  *  Reset the password associated with the provided email address.
  */
 + (void) resetPasswordForEmail:(nonnull NSString *)email completion:(void (^_Nullable)(BOOL success))completion;

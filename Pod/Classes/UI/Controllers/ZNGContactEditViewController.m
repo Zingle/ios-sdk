@@ -134,6 +134,14 @@ static NSString * const EventCellId = @"event";
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.tableView.bounds.size.width, 10.0)];
     
     [self updateUIForNewContact];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 // WITCHCRAFT WARNING
@@ -241,11 +249,16 @@ static NSString * const EventCellId = @"event";
     [self showOrHideLockedContactBar];
     NSString * saveOrCreate = (originalContact != nil) ? @"Save" : @"Create";
     [self.saveButton setTitle:saveOrCreate forState:UIControlStateNormal];
-    NSString * name = [self.conversation remoteName];
-    self.titleLabel.text = ([name length] > 0) ? name : @"Create Contact";
+    [self updateTitle];
     
     [self generateDataArrays];
     [self.tableView reloadData];
+}
+
+- (void) updateTitle
+{
+    NSString * name = [self.conversation remoteName];
+    self.titleLabel.text = ([name length] > 0) ? name : @"Create Contact";
 }
 
 - (void) setService:(ZNGService *)service
@@ -390,12 +403,27 @@ static NSString * const EventCellId = @"event";
     return [[ZNGEditContactExitTransition alloc] init];
 }
 
+#pragma mark - Foreground/background life cycle
+- (void) notifyAppDidEnterBackground:(NSNotification *)notification
+{
+    if (self.hideContactDataInBackground) {
+        self.tableView.hidden = YES;
+        self.titleLabel.text = nil;
+    }
+}
+
+- (void) notifyAppWillEnterForeground:(NSNotification *)notification
+{
+    self.tableView.hidden = NO;
+    [self updateTitle];
+}
+
 #pragma mark - IBActions
 - (void) saveAnyEditsInProgress
 {
-    for (ZNGContactEditTableViewCell * cell in [self.tableView visibleCells]) {
-        if ([cell isKindOfClass:[ZNGContactEditTableViewCell class]]) {
-            [cell applyChangesIfFirstResponder];
+    for (ZNGContactCustomFieldTableViewCell * cell in [self.tableView visibleCells]) {
+        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
+            [cell applyInProgressChanges];
         }
     }
 }
@@ -664,7 +692,7 @@ static NSString * const EventCellId = @"event";
             header.sectionImage.image = [UIImage imageNamed:@"editIconLabels" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         case ContactSectionOptionalCustomFields:
-            header.sectionLabel.text = @"CUSTOM FIELDS";
+            header.sectionLabel.text = @"CONTACT FIELDS";
             header.sectionImage.image = [UIImage imageNamed:@"editIconCustomFields" inBundle:bundle compatibleWithTraitCollection:nil];
             break;
         default:
@@ -679,7 +707,10 @@ static NSString * const EventCellId = @"event";
 
 - (UIView *) tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    return [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
+    UIView * footer = [tableView dequeueReusableHeaderFooterViewWithIdentifier:FooterReuseIdentifier];
+    footer.tintColor = [UIColor clearColor];
+    
+    return footer;
 }
 
 #pragma mark - Table view data source
@@ -889,8 +920,9 @@ static NSString * const EventCellId = @"event";
         {
             NSArray<ZNGContactFieldValue *> * customFields = (indexPath.section == ContactSectionDefaultCustomFields) ? defaultCustomFields : optionalCustomFields;
             
-            ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"customField" forIndexPath:indexPath];
             ZNGContactFieldValue * customFieldValue = customFields[indexPath.row];
+            NSString * cellId = [[ZNGContactCustomFieldTableViewCell class] cellReuseIdForCustomFieldValue:customFieldValue];
+            ZNGContactCustomFieldTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:cellId forIndexPath:indexPath];
             cell.customFieldValue = customFieldValue;
             cell.editingLocked = [self.contact editingCustomFieldIsLocked:customFieldValue];
             return cell;
@@ -1081,9 +1113,11 @@ static NSString * const EventCellId = @"event";
         assignView.session = (ZingleAccountSession *)self.contactClient.session;
         assignView.contact = self.contact;
         assignView.delegate = self;
+        assignView.hideContactDataInBackground = self.hideContactDataInBackground;
     } else if ([segue.identifier isEqualToString:EventsSegueIdentifier]) {
         ZNGContactEventsViewController * eventsView = segue.destinationViewController;
         eventsView.conversation = self.conversation;
+        eventsView.hideContactDataInBackground = self.hideContactDataInBackground;
     }
 }
 

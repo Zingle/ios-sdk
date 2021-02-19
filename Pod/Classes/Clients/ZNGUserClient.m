@@ -34,7 +34,7 @@
 {
     NSString * path = [NSString stringWithFormat:@"services/%@/users", serviceId];
     
-    [self.session.v2SessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.session.v2SessionManager GET:path parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         NSError * serializationError = nil;
         NSArray<ZNGUserV2 *> * users = [MTLJSONAdapter modelsOfClass:[ZNGUserV2 class] fromJSONArray:responseObject error:&serializationError];
         

@@ -1,0 +1,39 @@
+---
+format_version: 1.3.1
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+trigger_map:
+- push_branch: "*"
+  workflow: primary
+workflows:
+  primary:
+    steps:
+    - activate-ssh-key:
+        run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+    - github-status:
+        inputs:
+        - set_specific_status: pending
+        - auth_token: "$GITHUB_STATUS_TOKEN"
+    - git-clone: {}
+    - certificate-and-profile-installer: {}
+    - cocoapods-install: {}
+    - xcode-test: {}
+    - github-status:
+        inputs:
+        - auth_token: "$GITHUB_STATUS_TOKEN"
+    - deploy-to-bitrise-io:
+        inputs:
+        - is_enable_public_page: 'false'
+        is_always_run: false
+    before_run: 
+    after_run: 
+app:
+  envs:
+  - opts:
+      is_expand: false
+    BITRISE_PROJECT_PATH: Example/ZingleSDK.xcworkspace
+  - opts:
+      is_expand: false
+    BITRISE_SCHEME: ZingleSDK_Example
+meta:
+  bitrise.io:
+    machine_type: standard

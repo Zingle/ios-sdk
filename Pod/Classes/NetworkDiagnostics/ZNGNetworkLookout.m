@@ -101,13 +101,8 @@ NSString * const ZNGNetworkLookoutStatusChanged = @"ZNGNetworkLookoutStatusChang
 
 - (void) _setStatusToConnected
 {
-    NSString * nonProductionPrefix = [self.session.sessionManager.baseURL zingleServerPrefix];
-    
-    if ([nonProductionPrefix length] > 0) {
-        self.status = ZNGNetworkStatusConnectedToDevelopmentInstance;
-    } else {
-        self.status = ZNGNetworkStatusConnected;
-    }
+    BOOL isProduction = [self.session.sessionManager.baseURL isZingleProduction];
+    self.status = (isProduction) ? ZNGNetworkStatusConnected : ZNGNetworkStatusConnectedToDevelopmentInstance;
 }
 
 - (void) recordSocketConnected

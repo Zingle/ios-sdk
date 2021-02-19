@@ -68,12 +68,16 @@ static const CGFloat LeftMarginSize = 16.0;
     eventCategorizationFormatter.dateStyle = NSDateFormatterLongStyle;
     eventCategorizationFormatter.timeStyle = NSDateFormatterNoStyle;
     
-    if (self.conversation != nil) {
-        // Update title
-        self.titleLabel.text = [NSString stringWithFormat:@"%@'s events", [self.conversation remoteName]];
-    }
-    
+    [self updateTitle];
     [self parseEvents];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notifyAppWillEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void) dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -88,6 +92,29 @@ static const CGFloat LeftMarginSize = 16.0;
             [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:NSNotFound inSection:todayIndex] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         });
     }
+}
+
+- (void) updateTitle
+{
+    if (self.conversation != nil) {
+        // Update title
+        self.titleLabel.text = [NSString stringWithFormat:@"%@'s events", [self.conversation remoteName]];
+    }
+}
+
+#pragma mark - Foreground/background app life cycle
+- (void) notifyAppDidEnterBackground:(NSNotification *)notification
+{
+    if (self.hideContactDataInBackground) {
+        self.tableView.hidden = YES;
+        self.titleLabel.text = nil;
+    }
+}
+
+- (void) notifyAppWillEnterForeground:(NSNotification *)notification
+{
+    self.tableView.hidden = NO;
+    [self updateTitle];
 }
 
 #pragma mark - Date crunching

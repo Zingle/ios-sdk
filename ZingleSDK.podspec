@@ -26,14 +26,14 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/Classes/**/*.{h,m,swift}'
   s.resources = ['Pod/Assets/**/*', 'Pod/Classes/UI/**/*.{xib,storyboard}']
 
-  s.dependency 'AFNetworking/NSURLSession', '~> 3.0'
-  s.dependency 'JVFloatLabeledTextField'  
-  s.dependency 'Mantle'
-  s.dependency 'SBObjectiveCWrapper'
+  s.dependency 'AFNetworking/NSURLSession', '~> 4'
+  s.dependency 'JVFloatLabeledTextField', '~> 1' 
+  s.dependency 'Mantle', '~> 2'
+  s.dependency 'SBObjectiveCWrapper', '~> 1'
   s.dependency 'JSQMessagesViewController/xibs-without-cells'
   s.dependency 'Analytics', '~> 3.0'
-  s.dependency 'MGSwipeTableCell'
+  s.dependency 'MGSwipeTableCell', '~> 1'
   s.dependency 'SDWebImage', '~> 5.0'
-  s.dependency 'Socket.IO-Client-Swift'
-  s.dependency 'Shimmer'
+  s.dependency 'Socket.IO-Client-Swift', '~> 15'
+  s.dependency 'Shimmer', '~> 1'
 end

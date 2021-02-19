@@ -20,7 +20,7 @@
 {
     NSString * path = [NSString stringWithFormat:@"notification/%@/preferences", userId];
     
-    [self.session.v2SessionManager GET:path parameters:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.session.v2SessionManager GET:path parameters:nil headers:nil progress:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(self->jsonProcessingQueue, ^{
             NSError * error = nil;
             ZNGNotificationSettings * settings = [MTLJSONAdapter modelOfClass:[ZNGNotificationSettings class] fromJSONDictionary:responseObject error:&error];
@@ -56,7 +56,7 @@
                                   @"mobile": @(settings.mobileMask),
                                   };
     
-    [self.session.v2SessionManager PUT:path parameters:parameters success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+    [self.session.v2SessionManager PUT:path parameters:parameters headers:nil success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_async(self->jsonProcessingQueue, ^{
             NSError * error = nil;
             ZNGNotificationSettings * settings = [MTLJSONAdapter modelOfClass:[ZNGNotificationSettings class] fromJSONDictionary:responseObject error:&error];

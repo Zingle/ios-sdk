@@ -136,7 +136,7 @@
     else {
         [self disconnect];
         //It's a good idea to raise this error into application to have a chance log it to Firebase, for example.
-        SBLogError(@"Unexpected empty token. Session: %@. JWT: %@. Unable to continue. Connection shutdown.", self.session, self.session.jwt);
+        SBLogError(@"Unexpected empty JWT token. Session: %@. User: %@. Unable to continue. Connection shutdown.", self.session, self.session.token);
         return;
     }
     

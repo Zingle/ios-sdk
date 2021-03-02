@@ -126,7 +126,19 @@
     
     NSMutableDictionary<NSString *, id> * config = [[NSMutableDictionary alloc] init];
     config[@"log"] = @NO;
-    config[@"connectParams"] = @{@"token": self.session.jwt};
+    
+    // Sometimes this call produces a crash that reported in the Firebase.
+    // This happened from onConnect event callback (SocketIO reconnection) and on "_scheduleBindRetryTimer".
+    // Crash caused because of using the shorthand @{key, value} and if value is nil.
+    if (self.session.jwt != nil) {
+        config[@"connectParams"] = @{@"token": self.session.jwt};
+    }
+    else {
+        [self disconnect];
+        //It's a good idea to raise this error into application to have a chance log it to Firebase, for example.
+        SBLogError(@"Unexpected empty JWT token. Session: %@. User: %@. Unable to continue. Connection shutdown.", self.session, self.session.token);
+        return;
+    }
     
     if (self.userAgent != nil) {
         config[@"extraHeaders"] = @{@"User-Agent": self.userAgent};

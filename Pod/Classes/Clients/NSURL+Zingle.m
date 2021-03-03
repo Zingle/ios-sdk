@@ -145,7 +145,7 @@
     
     // Special socket case for local dev/ngrok
     if ((subdomain != nil) && ([@[@"ngrok", @"dev"] containsObject:subdomain])) {
-        return [NSURL URLWithString:@"https://dev-socket.zingle.me:8000/"];
+        return [NSURL URLWithString:@"https://socket.ngrok.zingle.me:7999/"];
     }
     
     // Otherwise, generally socket lives on the web app URL at port 8000

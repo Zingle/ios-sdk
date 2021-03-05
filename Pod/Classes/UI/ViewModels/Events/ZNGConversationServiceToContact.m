@@ -249,6 +249,7 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
 {
     ZNGParticipant * participant = [[ZNGParticipant alloc] init];
     participant.channelValue = self.channel.value;
+    participant.channelId = self.channel.channelId;
     return participant;
 }
 

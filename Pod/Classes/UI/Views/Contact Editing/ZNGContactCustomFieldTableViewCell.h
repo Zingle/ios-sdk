@@ -17,11 +17,6 @@
 @property (nonatomic, strong, nullable) ZNGContactFieldValue * customFieldValue;
 
 /**
- *  Instructs the cell to write any in-progress (read: input is first responder) changes.
- */
-- (void) applyInProgressChanges;
-
-/**
  *  Called whenever the custom field value object is set (NOT when the text `.value` is changed)
  */
 - (void) configureInput;

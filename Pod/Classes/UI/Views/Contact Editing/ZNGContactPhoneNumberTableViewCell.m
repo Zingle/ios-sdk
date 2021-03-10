@@ -63,7 +63,7 @@
     self.textField.text = value;
 }
 
-- (void) applyChangesIfFirstResponder
+- (void) applyInProgressChanges
 {
     if ([self.textField isFirstResponder]) {
         [self.channel setValueFromTextEntry:self.textField.text];

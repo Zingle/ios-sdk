@@ -62,7 +62,9 @@
 {
     // We only need to handle bools. Other cases set values automatically when UIPickerView values change.
     if ([self.customFieldValue.customField.dataType isEqualToString:ZNGContactFieldDataTypeBool]) {
-        self.customFieldValue.value = ([self.customFieldValue.value boolValue]) ? @"true" : @"false";
+        if ([self.customFieldValue.value length] > 0) {
+            self.customFieldValue.value = ([self.customFieldValue.value boolValue]) ? @"true" : @"false";
+        }
     }
 }
 

@@ -13,7 +13,7 @@
 /**
  *  Abstract method that should be implemented by subclasses
  */
-- (void) applyChangesIfFirstResponder;
+- (void) applyInProgressChanges;
 
 @property (nonatomic) BOOL editingLocked;
 

@@ -149,7 +149,7 @@
 }
 
 #pragma mark -
-- (void) applyChangesIfFirstResponder
+- (void) applyInProgressChanges
 {
     if (self.firstNameField.isFirstResponder) {
         self.firstNameFieldValue.value = self.firstNameField.text;

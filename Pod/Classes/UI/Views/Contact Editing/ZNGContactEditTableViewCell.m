@@ -10,7 +10,7 @@
 
 @implementation ZNGContactEditTableViewCell
 
-- (void) applyChangesIfFirstResponder
+- (void) applyInProgressChanges
 {
     // Abstract implementation
 }

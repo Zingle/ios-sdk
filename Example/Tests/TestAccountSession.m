@@ -18,6 +18,13 @@
 #import "ZNGMockUserClient.h"
 #import "NSData+HexString.h"
 
+
+@interface ZingleAccountSession (privateTestableMethods)
+- (void) setAvailableServices:(NSArray<ZNGService *> * _Nullable)availableServices;
+- (ZNGNewMessage *) _messageToContacts:(NSArray<ZNGContact *> *)contacts withUUID:(NSString *)uuid;
+@end
+
+
 @interface TestAccountSession : XCTestCase
 
 @end
@@ -104,6 +111,12 @@
     contact1.customFieldValues = @[firstName, lastName];
     contact1.contactId = @"00000000-0000-0000-0000-1234abcd1234";
     
+    ZNGChannel * channel = [[ZNGChannel alloc] init];
+    channel.channelType = [account1service1 phoneNumberChannelType];
+    channel.channelId = @"77777777-7777-7777-0000-1234abcd1234";
+    channel.value = @"+12025550136";
+    channel.formattedValue = @"(202) 555-0136";
+    contact1.channels = @[channel];
     
     user1 = [[ZNGUser alloc] init];
     user1.firstName = [[contact1 firstNameFieldValue] value];
@@ -459,6 +472,15 @@
     
     // Did we unregister from notifications with the legacy token?
     XCTAssertTrue([notificationsClient.unsubscribedDeviceIds containsObject:legacyDeviceTokenString], @"Legacy APNS token should be unsubscribed when using Firebase tokens.");
+}
+
+- (void) testMessagesToContactsIncludeChannelId
+{
+    ZingleAccountSession * session = [ZingleSDK accountSessionWithToken:@"token" key:@"key"];
+    [session setAvailableServices:@[account1service1]];
+    session.service = account1service1;
+    ZNGNewMessage * message = [session _messageToContacts:@[contact1] withUUID:@"55555555-55555555-55555555-555555555555"];
+    XCTAssertEqualObjects(message.recipients[0].channelId, contact1.channels[0].channelId, @"Outgoing message to contacts includes channel ID");
 }
 
 @end

@@ -12,7 +12,11 @@
 
 + (NSDictionary*)JSONKeyPathsByPropertyKey
 {
-    return @{ @"participantId" : @"id", @"channelValue" : @"channel_value" };
+    return @{
+        @"participantId" : @"id",
+        @"channelValue" : @"channel_value",
+        @"channelId" : @"channel_id",
+    };
 }
 
 + (ZNGParticipant *)participantForServiceId:(NSString *)serviceId withServiceChannelValue:(NSString *)serviceChannelValue

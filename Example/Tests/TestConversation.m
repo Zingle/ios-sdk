@@ -16,6 +16,8 @@
 #import "ZNGMockServiceClient.h"
 #import "ZNGMockEventClient.h"
 
+static NSString * const channelId = @"AAAA-22222222222-333333333333-DDDD";
+
 @interface TestConversation : XCTestCase
 
 @end
@@ -31,6 +33,7 @@
     ZNGChannelType * channelType = [[ZNGChannelType alloc] init];
     channelType.channelTypeId = @"1111-22222222222-333333333333-4444";
     channel.channelType = channelType;
+    channel.channelId = channelId;
     
     ZNGMockMessageClient * messageClient = [[ZNGMockMessageClient alloc] init];
     
@@ -173,6 +176,12 @@
             NSLog(@"Actual value of events array is: %@", conversation.events);
         }
     }];
+}
+
+- (void) testOutboundMessagesSendByChannelUuid
+{
+    ZNGConversationServiceToContact * conversation = [self freshConversation];
+    XCTAssertEqualObjects([conversation receiver].channelId, channelId, @"Service-to-contact conversation sends channel UUID in outbound messages.");
 }
 
 @end

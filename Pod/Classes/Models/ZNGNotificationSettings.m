@@ -11,6 +11,7 @@ enum {
     NOTIFICATION_MASK_UNASSIGNED = 1 << 0,
     NOTIFICATION_MASK_ASSIGNED_TO_YOU = 1 << 1,
     NOTIFICATION_MASK_ALL_RELEVANT_TEAMS = 1 << 2,
+    NOTIFICATION_MASK_MENTIONS_OF_YOU = 1 << 3,
 };
 
 @implementation ZNGNotificationSettings
@@ -39,6 +40,11 @@ enum {
     return (self.mobileMask & NOTIFICATION_MASK_ALL_RELEVANT_TEAMS);
 }
 
+- (BOOL)receiveMobileMentionsOfYou
+{
+    return (self.mobileMask & NOTIFICATION_MASK_MENTIONS_OF_YOU);
+}
+
 - (void) setReceiveMobileAssignedToYou:(BOOL)receiveMobileOthers
 {
     self.mobileMask = [self _valueFrom:self.mobileMask settingBitsBehindMask:NOTIFICATION_MASK_ASSIGNED_TO_YOU toValue:receiveMobileOthers];
@@ -52,6 +58,11 @@ enum {
 - (void) setReceiveMobileAllRelevantTeams:(BOOL)receiveMobileAllRelevantTeams
 {
     self.mobileMask = [self _valueFrom:self.mobileMask settingBitsBehindMask:NOTIFICATION_MASK_ALL_RELEVANT_TEAMS toValue:receiveMobileAllRelevantTeams];
+}
+
+- (void) setReceiveMobileMentionsOfYou:(BOOL)receiveMobileMentionsOfYou
+{
+    self.mobileMask = [self _valueFrom:self.mobileMask settingBitsBehindMask:NOTIFICATION_MASK_MENTIONS_OF_YOU toValue:receiveMobileMentionsOfYou];
 }
 
 - (uint32_t) _valueFrom:(uint32_t)value settingBitsBehindMask:(uint32_t)mask toValue:(BOOL)set

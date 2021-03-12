@@ -1098,6 +1098,7 @@ static NSTimeInterval const HipaaUserIdleTimeout = 20.0 * 60.0;  // 20 minutes
         ZNGParticipant * recipient = [[ZNGParticipant alloc] init];
         recipient.participantId = contact.contactId;
         recipient.channelValue = channel.value;
+        recipient.channelId = channel.channelId;
         
         [recipients addObject:recipient];
     }

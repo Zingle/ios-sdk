@@ -422,7 +422,7 @@ static NSString * const EventCellId = @"event";
 - (void) saveAnyEditsInProgress
 {
     for (ZNGContactCustomFieldTableViewCell * cell in [self.tableView visibleCells]) {
-        if ([cell isKindOfClass:[ZNGContactCustomFieldTableViewCell class]]) {
+        if ([cell isKindOfClass:[ZNGContactEditTableViewCell class]]) {
             [cell applyInProgressChanges];
         }
     }

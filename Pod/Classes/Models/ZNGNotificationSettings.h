@@ -15,5 +15,6 @@
 @property (nonatomic, assign) BOOL receiveMobileUnassigned;
 @property (nonatomic, assign) BOOL receiveMobileAllRelevantTeams;
 @property (nonatomic, assign) BOOL receiveMobileAssignedToYou;
+@property (nonatomic, assign) BOOL receiveMobileMentionsOfYou;
 
 @end

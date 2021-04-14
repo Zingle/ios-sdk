@@ -386,7 +386,7 @@
     [user setValue:conversation.session.userAuthorization.firstName forKey:@"first_name"];
     [user setValue:conversation.session.userAuthorization.lastName forKey:@"last_name"];
     [user setValue:conversation.session.userAuthorization.email forKey:@"username"];
-    [user setValue:[conversation.session.userAuthorization displayName] forKey:@"display_name"];
+    [user setValue:[conversation.session.userAuthorization displayName] forKey:@"displayName"];
     [user setValue:[conversation.session.userAuthorization.avatarUri absoluteString] forKey:@"avatar_asset"];
     
     NSMutableDictionary * payload = [[NSMutableDictionary alloc] init];

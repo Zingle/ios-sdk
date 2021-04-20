@@ -60,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void) trackSentSavedImageToConversation:(ZNGConversation *)conversation;
 - (void) trackSentCameraImageToConversation:(ZNGConversation *)conversation;
 - (void) trackAddedNote:(NSString *)note toConversation:(ZNGConversationServiceToContact *)conversation;
+- (void) trackAddedNoteSource:(NSString *)source;
 - (void) trackSentMessage:(ZNGMessage *)message inConversation:(ZNGConversation *)conversation;
 - (void) trackSentMessage:(NSString *)messageBody toContact:(ZNGContact *)contact;
 - (void) trackSentMessage:(NSString *)messageBody toMultipleContacts:(NSArray<ZNGContact *> *)contacts;

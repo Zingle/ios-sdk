@@ -280,6 +280,15 @@ static NSString * const HostPropertyName = @"Host";
     [self _track:event properties:properties];
 }
 
+- (void) trackAddedNoteSource:(NSString *)source
+{
+    NSString * event = @"Mention";
+    NSMutableDictionary * properties = [self defaultProperties];
+    
+    properties[@"Source"] = source;
+    [self _track:event properties:properties];
+}
+
 - (void) trackSentMessage:(ZNGMessage *)message inConversation:(ZNGConversation *)conversation
 {
     NSString * event = @"Sent a message";

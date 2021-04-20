@@ -117,6 +117,9 @@ enum ZNGConversationSections
     
     ZNGMentionSelectionController * mentionSelectionController;
     NSRange mentionInProgressRange;  // The range of an edit in progress or a range with .location == NSNotFound if none is in progress
+    
+    // Used for Analytics segmentation
+    BOOL _isNoteToTeam;
 }
 
 @dynamic conversation;
@@ -1855,15 +1858,20 @@ enum ZNGConversationSections
     
     UITextView * textView = self.inputToolbar.contentView.textView;
     __block NSRange totalDeletionRange = specifiedDeletionRange;
-    
+    __block BOOL isMention = NO;
     // If the deletion range includes part of a mention(s), expand `totalDeletionRange` to include the entire mention(s)
     [textView.attributedText enumerateAttribute:ZNGEventMentionAttribute inRange:specifiedDeletionRange options:0 usingBlock:^(id  _Nullable value, NSRange attributeRange, BOOL * _Nonnull stop) {
         if (value != nil) {
             NSRange effectiveRange;
             [textView.attributedText attribute:ZNGEventMentionAttribute atIndex:attributeRange.location effectiveRange:&effectiveRange];
             totalDeletionRange = NSUnionRange(totalDeletionRange, effectiveRange);
+            isMention = YES;
         }
     }];
+    
+    if (isMention) {
+        _isNoteToTeam = NO;
+    }
     
     NSMutableAttributedString * mutableText = [textView.attributedText mutableCopy];
     [mutableText deleteCharactersInRange:totalDeletionRange];
@@ -1883,6 +1891,7 @@ enum ZNGConversationSections
     NSDictionary * attributes = @{ZNGEventTeamMentionAttribute: team.teamId, ZNGEventMentionAttribute: team.teamId};
     NSAttributedString * text = [[NSAttributedString alloc] initWithString:team.displayName attributes:attributes];
     [self replaceMentionInProgressWithText:text];
+    _isNoteToTeam = YES;
 }
 
 - (void) mentionSelectionController:(ZNGMentionSelectionController *)selectionController didSelectUser:(ZNGUser *)user
@@ -2110,11 +2119,15 @@ enum ZNGConversationSections
     self.inputToolbar.sendButton.enabled = NO;
     [self scrollToBottomAnimated:YES];
     
+    BOOL sendingToTeam = _isNoteToTeam;
+    _isNoteToTeam = NO;
     [self.conversation addInternalNote:note success:^(ZNGStatus * _Nonnull status) {
         weakSelf.inputToolbar.inputEnabled = YES;
         [weakSelf scrollToBottomAnimated:YES];
-        [[ZNGAnalytics sharedAnalytics] trackAddedNote:note toConversation:weakSelf.conversation];
         
+        ZNGAnalytics * analytics = [ZNGAnalytics sharedAnalytics];
+        [analytics trackAddedNote:note toConversation:weakSelf.conversation];
+        [analytics trackAddedNoteSource:(sendingToTeam ? @"team" : @"user")];
         [weakSelf finishSendingMessageAnimated:YES];
     } failure:^(ZNGError * _Nonnull error) {
         weakSelf.inputToolbar.inputEnabled = YES;

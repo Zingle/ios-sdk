@@ -9,6 +9,7 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
+#import "ZNGEventViewModel.h"
 #import "ZNGContactClient.h"
 #import "ZNGPrinter.h"
 #import "ZNGAnalytics.h"
@@ -324,11 +325,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return self.contact.channels[channelIndex];
 }
 
-- (void) addInternalNote:(NSString *)rawNoteString
+- (void) addInternalNote:(NSAttributedString *)rawNoteString
                  success:(void (^)(ZNGStatus* status))success
                  failure:(void (^)(ZNGError *error))failure
 {
-    NSString * noteString = [rawNoteString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString * noteString = [rawNoteString.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if ([noteString length] == 0) {
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedFailureReasonErrorKey : @"Cannot add an empty note" }];
@@ -341,7 +342,31 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     
     [self appendEvents:@[outgoingNote]];
     
-    [self.eventClient postInternalNote:noteString toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+    // We must replace Mentions' attributes here because of displaying sending the message
+    NSMutableString * formattedNote = rawNoteString.string.mutableCopy;
+    [rawNoteString enumerateAttributesInRange:NSMakeRange(0, rawNoteString.string.length)
+                             options:NSAttributedStringEnumerationReverse
+                          usingBlock:^(NSDictionary *attributes, NSRange range, BOOL *stop)
+    {
+        if ([attributes.allKeys containsObject:ZNGEventMentionAttribute]) {
+            NSString * replacementString;
+            NSString * userUuid = attributes[ZNGEventUserMentionAttribute];
+            if (userUuid.length) {
+                replacementString = [NSString stringWithFormat:@"{u@%@}", userUuid];
+            } else {
+                NSString * teamUuid = attributes[ZNGEventTeamMentionAttribute];
+                if (teamUuid.length) {
+                    replacementString = [NSString stringWithFormat:@"{t@%@}", teamUuid];
+                }
+            }
+            if (replacementString.length) {
+                [formattedNote replaceCharactersInRange:range withString:replacementString];
+            }
+        }
+    }];
+    NSString * trimmedNote = [formattedNote stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    [self.eventClient postInternalNote:trimmedNote toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
         // Slight delay to allow our silly elastic server to index elastically
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self _loadRecentEventsErasing:NO removingSendingEvents:YES success:^(ZNGStatus * _Nullable loadStatus) {

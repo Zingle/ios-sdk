@@ -50,6 +50,10 @@
 //  via new table sections.
 - (void) deleteRowsAtPaths:(NSArray <NSIndexPath *> * _Nonnull)paths withAnimation:(UITableViewRowAnimation)animation;
 
+// Internal method used to locate the contacts section. Default implementation is 0.
+// This can be overridden to support additional sections.
+- (NSInteger) contactDataSectionIndex;
+
 /**
  *  The data set that will be used if the view appears without any current data.  Defaults to a new ZNGInboxDataSet.
  */

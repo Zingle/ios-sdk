@@ -351,7 +351,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
     NSIndexSet * changeIndexes = change[NSKeyValueChangeIndexesKey];
     NSMutableArray<NSIndexPath *> * paths = [[NSMutableArray alloc] initWithCapacity:[changeIndexes count]];
     [changeIndexes enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
-        [paths addObject:[NSIndexPath indexPathForRow:idx inSection:0]];
+        [paths addObject:[NSIndexPath indexPathForRow:idx inSection:[self contactDataSectionIndex]]];
     }];
     
     // This check for isRefreshing seems redundant, but calling endRefreshing while the refreshControl is not refreshing causes the scroll view to stop.
@@ -560,6 +560,11 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
 
 #pragma mark - UITableViewDataSource
 
+- (NSInteger) contactDataSectionIndex
+{
+    return 0;
+}
+
 - (ZNGContact *) contactAtIndexPath:(NSIndexPath *)indexPath
 {
     return (indexPath.row < [self.data.contacts count]) ? self.data.contacts[indexPath.row] : nil;
@@ -577,7 +582,7 @@ static NSString * const AssignmentSwipeActionUIType = @"inbox swipe action";
         return nil;
     }
     
-    return [NSIndexPath indexPathForRow:index inSection:0];
+    return [NSIndexPath indexPathForRow:index inSection:[self contactDataSectionIndex]];
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section

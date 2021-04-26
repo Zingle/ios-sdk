@@ -17,6 +17,12 @@ typedef enum {
     ZNGInboxDataSetOpenStatusBoth
 } ZNGInboxDataSetOpenStatus;
 
+typedef enum {
+    ZNGInboxDataSetMentionFilterNone,
+    ZNGInboxDataSetMentionFilterUnread,
+    ZNGInboxDataSetMentionFilterAll
+} ZNGInboxDataSetMentionFilter;
+
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldContactCreatedAt;
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldLastMessageCreatedAt;
 extern NSString * _Nonnull const ZNGInboxDataSetSortFieldUnconfirmedAt;
@@ -111,6 +117,12 @@ NS_ASSUME_NONNULL_BEGIN
  *  If this flag is set, only unassigned conversations will be returned.
  */
 @property (nonatomic, readonly) BOOL unassigned;
+
+/**
+ * If set to a value other than `ZNGInboxDataSetMentionFilterNone`, allows filtering by unread mentions or all mentions.
+ * Defaults to `ZNGInboxDataSetMentionFilterNone`.
+ */
+@property (nonatomic, assign) ZNGInboxDataSetMentionFilter mentionFilter;
 
 /**
  *  The team ID to which all returned contacts are assigned

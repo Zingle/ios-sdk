@@ -2113,8 +2113,22 @@ enum ZNGConversationSections
     [self.conversation addInternalNote:note success:^(ZNGStatus * _Nonnull status) {
         weakSelf.inputToolbar.inputEnabled = YES;
         [weakSelf scrollToBottomAnimated:YES];
-        [[ZNGAnalytics sharedAnalytics] trackAddedNote:note.string toConversation:weakSelf.conversation];
+
+        ZNGAnalytics * analytics = [ZNGAnalytics sharedAnalytics];
+        [analytics trackAddedNote:note.string toConversation:weakSelf.conversation];
         
+        __block BOOL sendingToTeam = NO;
+        [note enumerateAttributesInRange:NSMakeRange(0, note.length)
+                                 options:NSAttributedStringEnumerationReverse
+                              usingBlock:^(NSDictionary *attributes, NSRange range, BOOL *stop)
+         {
+            if ([attributes.allKeys containsObject:ZNGEventTeamMentionAttribute]) {
+                sendingToTeam = YES;
+                *stop = YES;
+            }
+        }];
+        [analytics trackAddedNoteSource:(sendingToTeam ? @"team" : @"user")];
+
         [weakSelf finishSendingMessageAnimated:YES];
     } failure:^(ZNGError * _Nonnull error) {
         weakSelf.inputToolbar.inputEnabled = YES;

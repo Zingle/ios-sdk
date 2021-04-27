@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) userClearedInput;
 
-- (void) addInternalNote:(NSString *)note
+- (void) addInternalNote:(NSAttributedString *)rawNoteString
                  success:(void (^ _Nullable)(ZNGStatus* status))success
                  failure:(void (^ _Nullable) (ZNGError *error))failure;
 

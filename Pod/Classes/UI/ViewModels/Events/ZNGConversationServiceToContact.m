@@ -9,7 +9,6 @@
 #import "ZNGConversationServiceToContact.h"
 #import "ZNGEvent.h"
 #import "ZNGEventClient.h"
-#import "ZNGEventViewModel.h"
 #import "ZNGContactClient.h"
 #import "ZNGPrinter.h"
 #import "ZNGAnalytics.h"
@@ -17,6 +16,7 @@
 #import "ZNGSocketClient.h"
 #import "ZingleAccountSession.h"
 #import "ZNGUserAuthorization.h"
+#import "NSAttributedString+Mentions.h"
 
 @import SBObjectiveCWrapper;
 
@@ -339,34 +339,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     
     ZNGEvent * outgoingNote = [self pendingEventForOutgoingNote:noteString];
     self.loading = YES;
-    
     [self appendEvents:@[outgoingNote]];
     
-    // We must replace Mentions' attributes here because of displaying sending the message
-    NSMutableString * formattedNote = rawNoteString.string.mutableCopy;
-    [rawNoteString enumerateAttributesInRange:NSMakeRange(0, rawNoteString.string.length)
-                             options:NSAttributedStringEnumerationReverse
-                          usingBlock:^(NSDictionary *attributes, NSRange range, BOOL *stop)
-    {
-        if ([attributes.allKeys containsObject:ZNGEventMentionAttribute]) {
-            NSString * replacementString;
-            NSString * userUuid = attributes[ZNGEventUserMentionAttribute];
-            if (userUuid.length) {
-                replacementString = [NSString stringWithFormat:@"{u@%@}", userUuid];
-            } else {
-                NSString * teamUuid = attributes[ZNGEventTeamMentionAttribute];
-                if (teamUuid.length) {
-                    replacementString = [NSString stringWithFormat:@"{t@%@}", teamUuid];
-                }
-            }
-            if (replacementString.length) {
-                [formattedNote replaceCharactersInRange:range withString:replacementString];
-            }
-        }
-    }];
-    NSString * trimmedNote = [formattedNote stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString * formattedNote = [[rawNoteString formattedMentionForAPI] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
-    [self.eventClient postInternalNote:trimmedNote toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+    [self.eventClient postInternalNote:formattedNote toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
         // Slight delay to allow our silly elastic server to index elastically
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self _loadRecentEventsErasing:NO removingSendingEvents:YES success:^(ZNGStatus * _Nullable loadStatus) {

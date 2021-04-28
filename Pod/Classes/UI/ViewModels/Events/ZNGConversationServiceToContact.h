@@ -64,6 +64,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) userClearedInput;
 
+/**
+ *  Tell the server that the user wants to notify someone by sending internal note.
+ *  @discussion Any mention of a user or team should has @code ZNGEventViewModel.ZNGEventMentionAttribute @endcode and a value is the UUID of the referenced entity.
+ *  @discussion Any mention of a user shoud has @code ZNGEventViewModel.ZNGEventUserMentionAttribute @endcode and a value is the UUID of the referenced user.
+ *  @discussion Any mention of a team shoul has @code ZNGEventViewModel.ZNGEventTeamMentionAttribute @endcode and a value is the UUID of the referenced team.
+ *  @param rawNoteStrind An attributed string that marks mentioning person or team.
+ */
 - (void) addInternalNote:(NSAttributedString *)rawNoteString
                  success:(void (^ _Nullable)(ZNGStatus* status))success
                  failure:(void (^ _Nullable) (ZNGError *error))failure;

@@ -64,6 +64,13 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void) userClearedInput;
 
+/**
+ *  Add an internal note, optionally including mentions of users or teams via text attributes.
+ *  @discussion Any mention of a user or team should have @code ZNGEventViewModel.ZNGEventMentionAttribute @endcode with a string value for the UUID of the user or team.
+ *  @discussion Any mention of a user should have @code ZNGEventViewModel.ZNGEventUserMentionAttribute @endcode with a string value for the UUID of the mentioned user.
+ *  @discussion Any mention of a team should have @code ZNGEventViewModel.ZNGEventTeamMentionAttribute @endcode with a string value for the UUID of the mentioned team.
+ *  @param rawNoteString An attributed string that marks mentioning person or team.
+ */
 - (void) addInternalNote:(NSAttributedString *)rawNoteString
                  success:(void (^ _Nullable)(ZNGStatus* status))success
                  failure:(void (^ _Nullable) (ZNGError *error))failure;

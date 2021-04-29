@@ -36,4 +36,22 @@
     return formattedNote;
 }
 
+- (NSString *)mentionedContactType
+{
+    __block NSString * mentionedContactType = @"";
+    [self enumerateAttributesInRange:NSMakeRange(0, self.length)
+                             options:NSAttributedStringEnumerationReverse
+                          usingBlock:^(NSDictionary *attributes, NSRange range, BOOL *stop)
+     {
+        NSArray * allKeys = attributes.allKeys;
+        if ([allKeys containsObject:ZNGEventTeamMentionAttribute]) {
+            mentionedContactType = @"team";
+        }
+        else if ([allKeys containsObject:ZNGEventUserMentionAttribute]) {
+            mentionedContactType = @"user";
+        }
+    }];
+    return mentionedContactType;
+}
+
 @end

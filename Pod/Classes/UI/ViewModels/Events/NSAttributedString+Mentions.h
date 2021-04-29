@@ -16,6 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (NSString *)formattedMentionForAPI;
 
+/**
+ *  @return @"team" if the target contains 'team mention' attribute
+ *  @return @"user" if the target not contains 'team' but 'user mention' attribute
+ *  @return Empty string elsewhen.
+ */
+- (NSString *)mentionedContactType;
+
+
 @end
 
 NS_ASSUME_NONNULL_END

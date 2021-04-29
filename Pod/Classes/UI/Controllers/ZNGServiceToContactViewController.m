@@ -35,6 +35,7 @@
 #import "ZNGAssignmentViewController.h"
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
+#import "NSAttributedString+Mentions.h"
 
 @import SBObjectiveCWrapper;
 @import SDWebImage;
@@ -2117,17 +2118,10 @@ enum ZNGConversationSections
         ZNGAnalytics * analytics = [ZNGAnalytics sharedAnalytics];
         [analytics trackAddedNote:note.string toConversation:weakSelf.conversation];
         
-        __block BOOL sendingToTeam = NO;
-        [note enumerateAttributesInRange:NSMakeRange(0, note.length)
-                                 options:NSAttributedStringEnumerationReverse
-                              usingBlock:^(NSDictionary *attributes, NSRange range, BOOL *stop)
-         {
-            if ([attributes.allKeys containsObject:ZNGEventTeamMentionAttribute]) {
-                sendingToTeam = YES;
-                *stop = YES;
-            }
-        }];
-        [analytics trackAddedNoteSource:(sendingToTeam ? @"team" : @"user")];
+        NSString * contactType = [note mentionedContactType];
+        if (contactType.length > 0) {
+            [analytics trackAddedNoteSource:contactType];
+        }
 
         [weakSelf finishSendingMessageAnimated:YES];
     } failure:^(ZNGError * _Nonnull error) {

@@ -56,7 +56,7 @@ static NSString * const noteMessage = @" mentioned ";
     NSAttributedString * testNote = [self noteTeamMentioned];
 
     // Expected result: @"team"
-    NSString * expectedString = @"team";
+    NSString * expectedString = kMentionContactTypeTeam;
     XCTAssertEqualObjects([testNote mentionedContactType], expectedString);
 }
 
@@ -65,7 +65,7 @@ static NSString * const noteMessage = @" mentioned ";
     NSAttributedString * testNote = [self noteUserMentioned];
 
     // Expected result: @"user"
-    NSString * expectedString = @"user";
+    NSString * expectedString = kMentionContactTypeUser;
     XCTAssertEqualObjects([testNote mentionedContactType], expectedString);
 }
 

@@ -8,7 +8,13 @@
 #import "NSAttributedString+Mentions.h"
 #import "ZNGEventViewModel.h"
 
+NSString * const kMentionContactTypeUser = @"user";
+NSString * const kMentionContactTypeTeam = @"team";
+
 @implementation NSAttributedString (Mentions)
+
+static NSString * const userMentionApiFormat = @"{u@%@}";
+static NSString * const teamMentionApiFormat = @"{t@%@}";
 
 - (NSString *)formattedMentionForAPI
 {
@@ -21,11 +27,11 @@
             NSString * replacementString;
             NSString * userUuid = attributes[ZNGEventUserMentionAttribute];
             if (userUuid.length) {
-                replacementString = [NSString stringWithFormat:@"{u@%@}", userUuid];
+                replacementString = [NSString stringWithFormat:userMentionApiFormat, userUuid];
             } else {
                 NSString * teamUuid = attributes[ZNGEventTeamMentionAttribute];
                 if (teamUuid.length) {
-                    replacementString = [NSString stringWithFormat:@"{t@%@}", teamUuid];
+                    replacementString = [NSString stringWithFormat:teamMentionApiFormat, teamUuid];
                 }
             }
             if (replacementString.length) {
@@ -45,10 +51,10 @@
      {
         NSArray * allKeys = attributes.allKeys;
         if ([allKeys containsObject:ZNGEventTeamMentionAttribute]) {
-            mentionedContactType = @"team";
+            mentionedContactType = kMentionContactTypeTeam;
         }
         else if ([allKeys containsObject:ZNGEventUserMentionAttribute]) {
-            mentionedContactType = @"user";
+            mentionedContactType = kMentionContactTypeUser;
         }
     }];
     return mentionedContactType;

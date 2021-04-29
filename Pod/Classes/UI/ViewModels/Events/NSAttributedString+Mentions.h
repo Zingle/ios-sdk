@@ -9,10 +9,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+FOUNDATION_EXPORT NSString * const kMentionContactTypeUser;
+FOUNDATION_EXPORT NSString * const kMentionContactTypeTeam;
+
 @interface NSAttributedString (Mentions)
 
 /**
- *  Returns plain string having replaced 'Mention' attributes with API-ready '{}'-format
+ *  @return Plain string having replaced 'Mention' attributes with API-ready '{}'-format
  */
 - (NSString *)formattedMentionForAPI;
 

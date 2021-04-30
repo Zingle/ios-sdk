@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22A757D4263843D000DB2B1B /* TestAttributedStringMentions.m in Sources */ = {isa = PBXBuildFile; fileRef = 22A757D3263843D000DB2B1B /* TestAttributedStringMentions.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -68,6 +69,7 @@
 		00F151038FA60F28399F5FB1 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		0D8C3C6FC1A49FA41EBEAE08 /* ZingleSDK.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ZingleSDK.podspec; path = ../ZingleSDK.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1F47A441C722F00F2C8F11C2 /* Pods-ZingleSDK_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Example/Pods-ZingleSDK_Example.release.xcconfig"; sourceTree = "<group>"; };
+		22A757D3263843D000DB2B1B /* TestAttributedStringMentions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TestAttributedStringMentions.m; sourceTree = "<group>"; };
 		269B5C471DED5569A2933C18 /* Pods-Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Tests/Pods-Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		2D5063AA9D5D6B3D0BF9AE52 /* Pods-ZingleSDK_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		329CF923A35B2FA2555E8159 /* Pods-ZingleSDK_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZingleSDK_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ZingleSDK_Tests/Pods-ZingleSDK_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -256,6 +258,7 @@
 				967032D61F798DD100E87B3D /* TestUser.m */,
 				96C61E5F1E03434E00A38B5F /* TestURLParsing.m */,
 				9624FB8D202CD98E000191B0 /* TestAttributedStringGrouping.m */,
+				22A757D3263843D000DB2B1B /* TestAttributedStringMentions.m */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -586,6 +589,7 @@
 				96C5E7E61DB7F9C7005A17AC /* TestInboxDataSet.m in Sources */,
 				964E99C81DCAACA000A22CD5 /* ZNGMockNotificationsClient.m in Sources */,
 				96A05BCE1DCBA68700E0E6D8 /* TestAccountSession.m in Sources */,
+				22A757D4263843D000DB2B1B /* TestAttributedStringMentions.m in Sources */,
 				967032D71F798DD100E87B3D /* TestUser.m in Sources */,
 				9622B3591DC2BA2600957C5F /* ZNGMockAccountClient.m in Sources */,
 				96C79DCD22DFD32F00CDC0CC /* ZNGMockJWTClient.m in Sources */,

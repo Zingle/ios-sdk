@@ -16,6 +16,7 @@
 #import "ZNGSocketClient.h"
 #import "ZingleAccountSession.h"
 #import "ZNGUserAuthorization.h"
+#import "NSAttributedString+Mentions.h"
 
 @import SBObjectiveCWrapper;
 
@@ -324,11 +325,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     return self.contact.channels[channelIndex];
 }
 
-- (void) addInternalNote:(NSString *)rawNoteString
+- (void) addInternalNote:(NSAttributedString *)rawNoteString
                  success:(void (^)(ZNGStatus* status))success
                  failure:(void (^)(ZNGError *error))failure
 {
-    NSString * noteString = [rawNoteString stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    NSString * noteString = [rawNoteString.string stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
     if ([noteString length] == 0) {
         ZNGError * error = [[ZNGError alloc] initWithDomain:kZingleErrorDomain code:0 userInfo:@{ NSLocalizedFailureReasonErrorKey : @"Cannot add an empty note" }];
@@ -338,10 +339,11 @@ static NSString * const ChannelsKVOPath = @"contact.channels";
     
     ZNGEvent * outgoingNote = [self pendingEventForOutgoingNote:noteString];
     self.loading = YES;
-    
     [self appendEvents:@[outgoingNote]];
     
-    [self.eventClient postInternalNote:noteString toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
+    NSString * formattedNote = [[rawNoteString formattedMentionForAPI] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    [self.eventClient postInternalNote:formattedNote toContact:self.contact success:^(ZNGEvent *note, ZNGStatus *status) {
         // Slight delay to allow our silly elastic server to index elastically
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.0 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self _loadRecentEventsErasing:NO removingSendingEvents:YES success:^(ZNGStatus * _Nullable loadStatus) {

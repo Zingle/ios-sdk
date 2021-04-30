@@ -35,6 +35,7 @@
 #import "ZNGAssignmentViewController.h"
 #import "ZNGTeam.h"
 #import "ZNGUser.h"
+#import "NSAttributedString+Mentions.h"
 
 @import SBObjectiveCWrapper;
 @import SDWebImage;
@@ -1942,7 +1943,8 @@ enum ZNGConversationSections
     textViewChangeTimer = nil;
     
     if (self.inputToolbar.toolbarMode == TOOLBAR_MODE_INTERNAL_NOTE) {
-        [self addInternalNote:text];
+        NSAttributedString * attributedText = self.inputToolbar.contentView.textView.attributedText;
+        [self addInternalNote:attributedText];
     } else {
         [super didPressSendButton:button withMessageText:text senderId:senderId senderDisplayName:senderDisplayName date:date];
     }
@@ -2102,19 +2104,25 @@ enum ZNGConversationSections
     }];
 }
 
-- (void) addInternalNote:(NSString *)note
+- (void) addInternalNote:(NSAttributedString *)note
 {
-    __weak ZNGServiceToContactViewController * weakSelf = self;
-    
     self.inputToolbar.inputEnabled = NO;
     self.inputToolbar.sendButton.enabled = NO;
     [self scrollToBottomAnimated:YES];
     
+    __weak ZNGServiceToContactViewController * weakSelf = self;
     [self.conversation addInternalNote:note success:^(ZNGStatus * _Nonnull status) {
         weakSelf.inputToolbar.inputEnabled = YES;
         [weakSelf scrollToBottomAnimated:YES];
-        [[ZNGAnalytics sharedAnalytics] trackAddedNote:note toConversation:weakSelf.conversation];
+
+        ZNGAnalytics * analytics = [ZNGAnalytics sharedAnalytics];
+        [analytics trackAddedNote:note.string toConversation:weakSelf.conversation];
         
+        NSString * contactType = [note mentionedContactType];
+        if (contactType.length > 0) {
+            [analytics trackAddedNoteSource:contactType];
+        }
+
         [weakSelf finishSendingMessageAnimated:YES];
     } failure:^(ZNGError * _Nonnull error) {
         weakSelf.inputToolbar.inputEnabled = YES;

@@ -169,7 +169,7 @@
             <connections>
                 <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
                 <outlet property="channelSelectButton" destination="Ppu-y2-IOa" id="0sf-Uy-Bw7"/>
-                <outlet property="hipaaNoteRequeredConstraint" destination="PcW-fr-Vvf" id="vMW-7M-UM3"/>
+                <outlet property="hipaaNoteRequiredConstraint" destination="PcW-fr-Vvf" id="AWH-EC-jrD"/>
                 <outlet property="imageButton" destination="EBX-4C-zka" id="ViF-hY-8T6"/>
                 <outlet property="noteButton" destination="Udp-Uc-I4X" id="Daz-tM-9cZ"/>
                 <outlet property="revealButton" destination="unL-0Q-ERy" id="GKU-B2-SSC"/>

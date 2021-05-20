@@ -13,7 +13,7 @@
 
 @implementation ZNGConversationToolbarContentView
 {
-    __weak IBOutlet NSLayoutConstraint *hipaaNoteRequeredConstraint;
+    __weak IBOutlet NSLayoutConstraint *hipaaNoteRequiredConstraint;
 }
 
 @dynamic textView;
@@ -46,7 +46,7 @@
 
 - (void) configureForHipaa
 {
-    hipaaNoteRequeredConstraint.priority = UILayoutPriorityRequired;
+    hipaaNoteRequiredConstraint.priority = UILayoutPriorityRequired;
     self.imageButton.hidden = YES;
 }
 

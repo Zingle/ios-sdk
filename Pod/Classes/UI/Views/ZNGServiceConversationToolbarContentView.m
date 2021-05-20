@@ -34,7 +34,7 @@
                              };
     
     
-    NSString * expandedVisualFormat = @"H:[templateButton]-(16)-[automationButton]-(17)-[imageButton]-(22)-[noteButton]-(22)-[textView]";
+    NSString * expandedVisualFormat = @"H:[templateButton]-(16)-[automationButton]-(17)-[imageButton]-(22@750)-[noteButton]-(22)-[textView]";
     NSArray<NSLayoutConstraint *> * expandedVisibleButtonConstraints = [NSLayoutConstraint constraintsWithVisualFormat:expandedVisualFormat
                                                                                                                options:0
                                                                                                                metrics:0
@@ -54,7 +54,7 @@
     [self addConstraints:expandedButtonsConstraints];
     
     
-    NSString * collapsedButtonsFormat = @"H:[templateButton]-(16)-[automationButton]-(17)-[imageButton]-(22)-[noteButton]";
+    NSString * collapsedButtonsFormat = @"H:[templateButton]-(16)-[automationButton]-(17)-[imageButton]-(22@750)-[noteButton]";
     
     NSArray<NSLayoutConstraint *> * buttonSpacingConstraints = [NSLayoutConstraint constraintsWithVisualFormat:collapsedButtonsFormat
                                                                                                        options:0

@@ -186,10 +186,7 @@
 
 - (void)configureForHipaaUser
 {
-    UIButton *imageButton = self.contentView.imageButton;
-    [imageButton setEnabled:NO];
-    [imageButton setHidden:YES];
-    [imageButton removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
+    [self.contentView configureForHipaa];
 }
 
 @end

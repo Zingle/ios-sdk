@@ -114,26 +114,6 @@
         return;
     }
     
-    NSDate * refreshExpiration = [jwt jwtRefreshExpiration];
-    
-    if (refreshExpiration == nil) {
-        SBLogWarning(@"Unable to determine refrehs window for the refreshing JWT.  This may fail.");
-    } else {
-        if ([refreshExpiration timeIntervalSinceNow] <= 0.0) {
-            NSString * description = [NSString stringWithFormat:@"Unable to refresh JWT.  Its refresh window closed at %@", refreshExpiration];
-            SBLogWarning(@"%@", description);
-            
-            if (failure != nil) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
-                    failure(error);
-                });
-            }
-            
-            return;
-        }
-    }
-    
     AFHTTPSessionManager * authedSession = [session copy];
     [authedSession.requestSerializer setValue:[NSString stringWithFormat:@"Bearer %@", jwt] forHTTPHeaderField:@"Authorization"];
     

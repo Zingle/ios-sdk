@@ -310,18 +310,6 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
         return;
     }
     
-    if (![self jwtIsRefreshable]) {
-        SBLogWarning(@"refreshJwt: was called, but a JWT is either missing or too old to refresh.");
-        
-        if (completion != nil) {
-            NSString * description = [NSString stringWithFormat:@"Unable to refresh an existing JWT (%ud bytes)", (unsigned int)[self.jwt length]];
-            NSError * error = [NSError errorWithDomain:NSCocoaErrorDomain code:0 userInfo:@{NSLocalizedDescriptionKey: description}];
-            completion(nil, error);
-        }
-        
-        return;
-    }
-    
     NSURLComponents * desiredUrlComponents = [NSURLComponents componentsWithURL:self.sessionManager.baseURL resolvingAgainstBaseURL:YES];
     NSURLComponents * currentUrlComponents = (self.jwtClient != nil) ? [NSURLComponents componentsWithURL:self.jwtClient.url resolvingAgainstBaseURL:YES] : nil;
     
@@ -364,17 +352,15 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 {
     NSDate * issueDate = [self.jwt jwtIssueDate];
     NSDate * expiration = [self.jwt jwtExpiration];
-    NSDate * refreshExpiration = [self.jwt jwtRefreshExpiration];
 
-    if ((issueDate == nil) || (expiration == nil) || (refreshExpiration == nil)) {
+    if ((issueDate == nil) || (expiration == nil)) {
         return nil;
     }
 
     NSTimeInterval totalLifetime = [expiration timeIntervalSinceDate:issueDate];
-    NSTimeInterval totalRefreshLifetime = [refreshExpiration timeIntervalSinceDate:issueDate];
 
-    // We'll aim to refresh at either 25% of JWT lifetime or refresh lifetime
-    NSTimeInterval lifetimeBeforeRefresh = MIN(totalLifetime * 0.25, totalRefreshLifetime * 0.25);
+    // We'll aim to refresh at 25% of JWT lifetime
+    NSTimeInterval lifetimeBeforeRefresh = totalLifetime * 0.25;
 
     return [issueDate dateByAddingTimeInterval:lifetimeBeforeRefresh];
 }
@@ -382,12 +368,6 @@ void __userNotificationWillPresent(id self, SEL _cmd, id notificationCenter, id 
 - (BOOL) jwtIsValid
 {
     NSDate * expiration = [self.jwt jwtExpiration];
-    return ([expiration timeIntervalSinceNow] > 0.0);
-}
-
-- (BOOL) jwtIsRefreshable
-{
-    NSDate * expiration = [self.jwt jwtRefreshExpiration];
     return ([expiration timeIntervalSinceNow] > 0.0);
 }
 

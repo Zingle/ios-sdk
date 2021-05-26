@@ -66,18 +66,6 @@ static NSString * const JwtPayloadKeyHipaaUser = @"hipaa";
     return [NSDate dateWithTimeIntervalSince1970:[iatNumber doubleValue]];
 }
 
-- (NSDate * _Nullable) jwtRefreshExpiration
-{
-    NSDate * issueDate = [self jwtIssueDate];
-    
-    if (issueDate == nil) {
-        return nil;
-    }
-    
-    NSTimeInterval fourteenDays = 14.0 * 24.0 * 60.0 * 60.0;
-    return [NSDate dateWithTimeInterval:fourteenDays sinceDate:issueDate];
-}
-
 - (NSURL * _Nullable) jwtIssuingUrl
 {
     return [NSURL URLWithString:[self jwtPayload][JwtPayloadKeyIssuingUrl]];

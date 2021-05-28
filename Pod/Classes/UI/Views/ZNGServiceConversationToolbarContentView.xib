@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <customFonts key="customFonts">
@@ -21,21 +22,21 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UUf-uA-RfU">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="33"/>
-                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor" red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="secondarySystemBackgroundColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="33" id="kAd-Ud-86t"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aXg-DS-vF9" userLabel="Top Bar">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="1"/>
-                    <color key="backgroundColor" systemColor="quaternaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="quaternaryLabelColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="Wz0-fs-4by"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yAc-fE-ozc" userLabel="Mid Bar">
                     <rect key="frame" x="0.0" y="32" width="320" height="1"/>
-                    <color key="backgroundColor" systemColor="quaternaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+                    <color key="backgroundColor" systemColor="quaternaryLabelColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="B6Z-Rc-2UG"/>
                     </constraints>
@@ -87,22 +88,22 @@
                         <action selector="didPressAttachImage:" destination="-2" eventType="touchUpInside" id="HDM-LU-3uL"/>
                     </connections>
                 </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppu-y2-IOa">
-                    <rect key="frame" x="12" y="1" width="56" height="29"/>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ppu-y2-IOa">
+                    <rect key="frame" x="12" y="1" width="54" height="29"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="29" id="35x-S5-S0X"/>
                     </constraints>
                     <fontDescription key="fontDescription" name="Lato-Regular" family="Lato" pointSize="14"/>
                     <state key="normal" title="Reply to:">
-                        <color key="titleColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="titleColor" systemColor="secondaryLabelColor"/>
                     </state>
                     <connections>
                         <action selector="didPressChannelSelectButton:" destination="-2" eventType="touchUpInside" id="onQ-Oe-AQg"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTt-oP-Tqy">
-                    <rect key="frame" x="84" y="2.5" width="24" height="26"/>
-                    <color key="tintColor" systemColor="secondaryLabelColor" red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                    <rect key="frame" x="82" y="4.5" width="12" height="22"/>
+                    <color key="tintColor" systemColor="secondaryLabelColor"/>
                     <state key="normal" image="chevronUp"/>
                     <connections>
                         <action selector="didPressChannelSelectButton:" destination="-2" eventType="touchUpInside" id="C6K-76-sng"/>
@@ -128,10 +129,11 @@
                     <state key="normal" image="reveal"/>
                 </button>
             </subviews>
-            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+            <viewLayoutGuide key="safeArea" id="TAH-O8-daK"/>
+            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
                 <constraint firstItem="dm4-NT-mvr" firstAttribute="top" secondItem="1" secondAttribute="top" constant="41" id="1XA-2D-nMZ"/>
-                <constraint firstItem="Udp-Uc-I4X" firstAttribute="leading" secondItem="EBX-4C-zka" secondAttribute="trailing" constant="22" placeholder="YES" identifier="imageToNoteSpacing" id="31p-OL-fJl"/>
+                <constraint firstItem="Udp-Uc-I4X" firstAttribute="leading" secondItem="EBX-4C-zka" secondAttribute="trailing" priority="751" constant="22" placeholder="YES" identifier="imageToNoteSpacing" id="31p-OL-fJl"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="leading" secondItem="dm4-NT-mvr" secondAttribute="trailing" constant="8" id="7Ld-5r-Hp3"/>
                 <constraint firstAttribute="trailing" secondItem="UUf-uA-RfU" secondAttribute="trailing" id="8cJ-41-U1S"/>
                 <constraint firstAttribute="trailing" secondItem="aXg-DS-vF9" secondAttribute="trailing" id="9jy-eQ-0Pc"/>
@@ -143,6 +145,7 @@
                 <constraint firstItem="UUf-uA-RfU" firstAttribute="top" secondItem="1" secondAttribute="top" id="L3l-C0-jVd"/>
                 <constraint firstItem="yAc-fE-ozc" firstAttribute="top" secondItem="Ppu-y2-IOa" secondAttribute="bottom" constant="2" id="LPm-pf-52w"/>
                 <constraint firstItem="unL-0Q-ERy" firstAttribute="leading" secondItem="Udp-Uc-I4X" secondAttribute="trailing" constant="22" placeholder="YES" id="Odz-DR-1uM"/>
+                <constraint firstItem="Udp-Uc-I4X" firstAttribute="leading" secondItem="0Mh-pU-v2i" secondAttribute="trailing" priority="750" constant="17" id="PcW-fr-Vvf"/>
                 <constraint firstAttribute="bottom" secondItem="yZv-vI-ArA" secondAttribute="bottom" constant="11" id="Te8-MJ-WaM"/>
                 <constraint firstItem="Udp-Uc-I4X" firstAttribute="centerY" secondItem="EBX-4C-zka" secondAttribute="centerY" constant="-1" id="Uzj-AW-kUM"/>
                 <constraint firstItem="Myo-1S-Vg1" firstAttribute="height" secondItem="dm4-NT-mvr" secondAttribute="height" priority="900" id="VBt-ph-ej0"/>
@@ -163,10 +166,10 @@
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <viewLayoutGuide key="safeArea" id="TAH-O8-daK"/>
             <connections>
                 <outlet property="automationButton" destination="0Mh-pU-v2i" id="FL8-x7-tZ4"/>
                 <outlet property="channelSelectButton" destination="Ppu-y2-IOa" id="0sf-Uy-Bw7"/>
+                <outlet property="hipaaNoteRequiredConstraint" destination="PcW-fr-Vvf" id="AWH-EC-jrD"/>
                 <outlet property="imageButton" destination="EBX-4C-zka" id="ViF-hY-8T6"/>
                 <outlet property="noteButton" destination="Udp-Uc-I4X" id="Daz-tM-9cZ"/>
                 <outlet property="revealButton" destination="unL-0Q-ERy" id="GKU-B2-SSC"/>
@@ -176,7 +179,7 @@
                 <outlet property="templateButton" destination="yZv-vI-ArA" id="f46-DX-oig"/>
                 <outlet property="textView" destination="dm4-NT-mvr" id="PFw-HO-oT8"/>
             </connections>
-            <point key="canvasLocation" x="388.40579710144931" y="357.25446428571428"/>
+            <point key="canvasLocation" x="387.19999999999999" y="356.67166416791605"/>
         </view>
     </objects>
     <resources>
@@ -186,5 +189,17 @@
         <image name="insertTemplate" width="28" height="28"/>
         <image name="reveal" width="22" height="19"/>
         <image name="triggerAutomation" width="28" height="28"/>
+        <systemColor name="quaternaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.17999999999999999" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondaryLabelColor">
+            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="secondarySystemBackgroundColor">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
     </resources>
 </document>

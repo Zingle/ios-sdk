@@ -184,4 +184,9 @@
     [self.contentView collapseButtons:YES];
 }
 
+- (void)configureForHipaaUser
+{
+    [self.contentView configureForHipaa];
+}
+
 @end

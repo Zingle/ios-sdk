@@ -10,7 +10,11 @@
 #import "UIColor+ZingleSDK.h"
 #import "UIFont+Lato.h"
 
+
 @implementation ZNGConversationToolbarContentView
+{
+    __weak IBOutlet NSLayoutConstraint *hipaaNoteRequiredConstraint;
+}
 
 @dynamic textView;
 
@@ -40,6 +44,11 @@
     self.noteButton.enabled = enabled;
 }
 
+- (void) configureForHipaa
+{
+    hipaaNoteRequiredConstraint.priority = UILayoutPriorityRequired;
+    self.imageButton.hidden = YES;
+}
 
 - (void) collapseButtons:(BOOL)animated
 {

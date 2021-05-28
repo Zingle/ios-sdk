@@ -53,6 +53,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (IBAction)didPressChannelSelectButton:(id)sender;
 
 - (void) collapseInputButtons;
+- (void) configureForHipaaUser;
 
 NS_ASSUME_NONNULL_END
 

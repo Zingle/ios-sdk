@@ -21,6 +21,10 @@
 
 @property (weak, nonatomic, readonly, nullable) ZNGConversationTextView * textView;
 
+/**
+ * This method made changes related for HIPAA restrictions (e.g. disable attachments)
+ */
+- (void) configureForHipaa;
 - (void) collapseButtons:(BOOL)animated;
 - (void) expandButtons:(BOOL)animated;
 

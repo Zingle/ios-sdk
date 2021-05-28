@@ -12,35 +12,57 @@
 
 - (BOOL) isZingleProduction
 {
-    // A non-nil, empty string indicates production
-    return [[self _zingleServerPrefix] isEqualToString:@""];
+    NSString * host = self.host;
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^\\w+(?:-\\d)?\\.zingle\\.(?:me|medallia\\.com)$"
+                                                                            options:NSRegularExpressionCaseInsensitive
+                                                                              error:nil];
+    NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:host options:0 range:NSMakeRange(0, [host length])];
+    return (matches.count == 1);
 }
 
+/**
+ * Newer kind of Zingle URLs uses service name with suffix by a hyphen. (https://app-3.zingle.den.medallia.com)
+ */
+- (NSString *)_zingleServerSuffix
+{
+    NSString * host = self.host;
+    NSString * regexPattern = @"^\\w+(?:-(\\d))\\.zingle(?:\\.den)?\\.medallia\\.com$";
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:regexPattern
+                                                                            options:NSRegularExpressionCaseInsensitive
+                                                                              error:nil];
+    NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:host options:0 range:NSMakeRange(0, [host length])];
+    if (matches.count != 1) {
+        // This does not appear to be a newer kind of Zingle URL
+        return nil;
+    }
+    
+    // We found a suffix. Return it.
+    NSTextCheckingResult * match = matches[0];
+    NSRange prefixRange = [match rangeAtIndex:1];
+
+    return [host substringWithRange:prefixRange];
+}
+
+
+/**
+ * For now, we have prefixes only for QA and CI environments  (https://qa-api.zingle.me and https://ci-api.zingle.me)
+ */
 - (NSString *)_zingleServerPrefix
 {
     NSURLComponents * components = [NSURLComponents componentsWithURL:self resolvingAgainstBaseURL:YES];
     NSString * host = components.host;
-    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^((\\w+)-)?\\w+\\.zingle.me$" options:NSRegularExpressionCaseInsensitive error:nil];
+    NSRegularExpression * regex = [NSRegularExpression regularExpressionWithPattern:@"^(\\w+)-\\w+\\.zingle.me$"
+                                                                            options:NSRegularExpressionCaseInsensitive
+                                                                              error:nil];
     NSArray<NSTextCheckingResult *> * matches = [regex matchesInString:host options:0 range:NSMakeRange(0, [host length])];
-    NSTextCheckingResult * match = [matches firstObject];
-    
-    if (match == nil) {
-        // This does not appear to be a hyphenated or production Zingle URL
+    if (matches.count != 1) {
+        // This does not appear to be a hyphenated Zingle URL
         return nil;
     }
     
-    if (match.numberOfRanges < 3) {
-        // We did not find capture group 2.  This indicates a production Zingle URL with no prefix.
-        return @"";
-    }
-    
-    // We found a prefix.  Return it.
-    NSRange prefixRange = [match rangeAtIndex:2];
-    
-    if (prefixRange.location == NSNotFound) {
-        // We did not find capture group 2.  This indicates a production Zingle URL with no prefix.
-        return @"";
-    }
+    // We found a prefix. Return it.
+    NSTextCheckingResult * match = matches[0];
+    NSRange prefixRange = [match rangeAtIndex:1];
     
     return [host substringWithRange:prefixRange];
 }
@@ -74,19 +96,26 @@
 - (NSURL *) _urlForService:(NSString *)service
 {
     NSString * prefix = [self _zingleServerPrefix];
-    NSString * instanceSubdomain = [self _multipleSubdomainInstanceName];
-    
-    if (prefix != nil) {
-        if ([prefix length] > 0) {
-            return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@-%@.zingle.me/", prefix, service]];
-        }
-        
-        // Production!
-        return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.zingle.me/", service]];
+    if ([prefix length] > 0) {
+        return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@-%@.zingle.me/", prefix, service]];
     }
     
+    NSString * instanceSubdomain = [self _multipleSubdomainInstanceName];
     if ([instanceSubdomain length] > 0) {
         return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.%@.zingle.me/", service, instanceSubdomain]];
+    }
+
+    NSString * suffix = [self _zingleServerSuffix];
+    if ([suffix length] > 0) {
+        if ([self isZingleProduction]) {
+            return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@-%@.zingle.medallia.com/", service, suffix]];
+        } else {
+            return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@-%@.zingle.den.medallia.com/", service, suffix]];
+        }
+    }
+
+    if ([self isZingleProduction]) {
+        return [NSURL URLWithString:[NSString stringWithFormat:@"https://%@.zingle.me/", service]];
     }
     
     // Non-Zingle
@@ -137,6 +166,12 @@
 
 - (NSURL *)socketUrl
 {
+    NSString * suffix = [self _zingleServerSuffix];
+    if (suffix.length > 0) {
+        // Newer kind server URL (app-3.zingle.den.medallia.com)
+        return [self _urlForService:@"socket"];
+    }
+    
     if ([self isZingleProduction]) {
         return [NSURL URLWithString:@"https://socket.zingle.me/"];
     }

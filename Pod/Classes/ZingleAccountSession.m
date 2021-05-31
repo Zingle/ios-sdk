@@ -184,9 +184,9 @@ static NSTimeInterval const HipaaUserIdleTimeout = 20.0 * 60.0;  // 20 minutes
     BOOL countUnassigned = ((assignmentDisabled) || ([self.userAuthorization.settings.showUnassignedConversations boolValue]));
     ZNGInboxStatsEntry * totalStats = [self.inboxStatistician combinedStatsForUser:self.userAuthorization teams:[self teamsToWhichCurrentUserBelongs] includeUnassigned:countUnassigned];
     
-    if (self.totalUnreadCount != totalStats.unreadCount) {
+    if (self.totalUnreadCount != totalStats.totalUnreadCount) {
         SBLogDebug(@"Badge count changed from %llu to %llu", (unsigned long long)self.totalUnreadCount, (unsigned long long)totalStats.unreadCount);
-        self.totalUnreadCount = totalStats.unreadCount;
+        self.totalUnreadCount = totalStats.totalUnreadCount;
     }
 }
 

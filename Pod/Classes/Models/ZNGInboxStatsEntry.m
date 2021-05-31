@@ -15,6 +15,7 @@
     return @{
              NSStringFromSelector(@selector(openCount)): @"open",
              NSStringFromSelector(@selector(unreadCount)): @"unread",
+             NSStringFromSelector(@selector(mentionsCount)): @"mentions",
              NSStringFromSelector(@selector(oldestUnconfirmed)): @"oldestUnconfirmed",
              };
 }
@@ -26,7 +27,8 @@
     for (ZNGInboxStatsEntry * entry in entries) {
         totaledEntry.openCount = totaledEntry.openCount + entry.openCount;
         totaledEntry.unreadCount = totaledEntry.unreadCount + entry.unreadCount;
-        
+        totaledEntry.mentionsCount = totaledEntry.mentionsCount + entry.mentionsCount;
+
         if (totaledEntry.oldestUnconfirmed == nil) {
             // We do not yet have an unconfirmed time.  Use any present in this entry as the current oldest.
             totaledEntry.oldestUnconfirmed = entry.oldestUnconfirmed;
@@ -61,6 +63,11 @@
 + (NSValueTransformer *)oldestUnconfirmedJSONTransformer
 {
     return [ZingleValueTransformers millisecondDateValueTransformer];
+}
+
+- (NSUInteger) getTotalUnreadCount
+{
+    return self.unreadCount + self.mentionsCount;
 }
 
 @end
